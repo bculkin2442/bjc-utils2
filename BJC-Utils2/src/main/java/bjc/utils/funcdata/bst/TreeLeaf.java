@@ -1,4 +1,4 @@
-package bjc.utils.data.bst;
+package bjc.utils.funcdata.bst;
 
 import java.util.Comparator;
 import java.util.function.BiFunction;

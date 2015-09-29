@@ -1,11 +1,11 @@
-package bjc.utils.data.bst;
+package bjc.utils.funcdata.bst;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 
-import bjc.utils.data.bst.ITreePart.TreeLinearizationMethod;
+import bjc.utils.funcdata.bst.ITreePart.TreeLinearizationMethod;
 
 /**
  * A binary search tree, with some mild support for functional traversal.

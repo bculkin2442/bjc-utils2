@@ -1,4 +1,4 @@
-package bjc.utils.data.bst;
+package bjc.utils.funcdata.bst;
 
 /**
  * Represents a function for doing a directed walk of a binary tree.
