@@ -99,7 +99,7 @@ public class FunctionalList<E> {
 	 * @param p The predicate to use for checking.
 	 * @return Whether any element in the list matches the provided predicate.
 	 */
-	public boolean anyMatches(Predicate<E> p) {
+	public boolean anyMatch(Predicate<E> p) {
 		for (E item : wrap) {
 			if (p.test(item)) {
 				return true;
