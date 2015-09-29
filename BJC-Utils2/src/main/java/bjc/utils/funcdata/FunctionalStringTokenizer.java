@@ -52,4 +52,13 @@ public class FunctionalStringTokenizer {
 
 		return r;
 	}
+	
+	/**
+	 * Create a new tokenizer from the specified string.
+	 * @param s The string to create a tokenizer from.
+	 * @return A new tokenizer that splits the provided string on spaces.
+	 */
+	public static FunctionalStringTokenizer fromString(String s) {
+		return new FunctionalStringTokenizer(new StringTokenizer(s, " "));
+	}
 }

@@ -1,17 +1,21 @@
 package bjc.utils.examples;
 
-import java.util.StringTokenizer;
-
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.FunctionalStringTokenizer;
 import bjc.utils.gen.WeightedGrammar;
 
+/**
+ * Example showing how to use the weighted random number generator.
+ * 
+ * @author ben
+ *
+ */
 public class DiabloItemGen {
 	private static WeightedGrammar<String> parts = new WeightedGrammar<>();
 
 	private static void addCase(String rn, int prob, String prts) {
-		parts.addCase(rn, prob, new FunctionalStringTokenizer(
-				new StringTokenizer(prts, " ")).toList(s -> s));
+		parts.addCase(rn, prob,
+				FunctionalStringTokenizer.fromString(prts).toList(s -> s));
 	}
 
 	private static void addInfixRules() {

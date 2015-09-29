@@ -1,7 +1,5 @@
 package bjc.utils.examples;
 
-import java.util.StringTokenizer;
-
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.FunctionalStringTokenizer;
 import bjc.utils.gen.RandomGrammar;
@@ -47,9 +45,9 @@ public class RandomStringExamples {
 	private static void addRule(String rule, String... cases) {
 		FunctionalList<FunctionalList<String>> cses = new FunctionalList<>();
 
-		for (String string : cases) {
-			cses.add(new FunctionalStringTokenizer(
-					new StringTokenizer(string, " ")).toList(s -> s));
+		for (String strang : cases) {
+			cses.add(FunctionalStringTokenizer.fromString(strang)
+					.toList(s -> s));
 		}
 
 		rg.makeRule(rule, cses);
