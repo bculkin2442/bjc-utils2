@@ -6,6 +6,7 @@ import java.util.function.Function;
 
 /**
  * A string tokenizer that exposes a functional interface
+ * 
  * @author ben
  *
  */
@@ -14,35 +15,46 @@ public class FunctionalStringTokenizer {
 
 	/**
 	 * Create a functional string tokenizer from a non-functional one
-	 * @param inp The non-functional string tokenizer to wrap
+	 * 
+	 * @param inp
+	 *            The non-functional string tokenizer to wrap
 	 */
 	public FunctionalStringTokenizer(StringTokenizer inp) {
 		this.inp = inp;
 	}
-	
+
+	public FunctionalStringTokenizer(String inp) {
+		this.inp = new StringTokenizer(inp);
+	}
+
 	/**
 	 * Execute a provided action for each of the remaining tokens
-	 * @param f The action to execute for each token
+	 * 
+	 * @param f
+	 *            The action to execute for each token
 	 */
 	public void forEachToken(Consumer<String> f) {
-		while(inp.hasMoreTokens()) {
+		while (inp.hasMoreTokens()) {
 			f.accept(inp.nextToken());
 		}
 	}
-	
+
 	/**
-	 * Return the next token from the tokenizer
-	 * 		Returns null if no more tokens are available
+	 * Return the next token from the tokenizer Returns null if no more
+	 * tokens are available
+	 * 
 	 * @return The next token from the tokenizer
 	 */
 	public String nextToken() {
 		return inp.hasMoreTokens() ? inp.nextToken() : null;
 	}
-	
+
 	/**
-	 * Convert the contents of this tokenizer into a list.
-	 *		Consumes all of the input from this tokenizer.
-	 * @param f The function to use to convert tokens.
+	 * Convert the contents of this tokenizer into a list. Consumes all of
+	 * the input from this tokenizer.
+	 * 
+	 * @param f
+	 *            The function to use to convert tokens.
 	 * @return A list containing all of the converted tokens.
 	 */
 	public <E> FunctionalList<E> toList(Function<String, E> f) {
@@ -52,10 +64,12 @@ public class FunctionalStringTokenizer {
 
 		return r;
 	}
-	
+
 	/**
 	 * Create a new tokenizer from the specified string.
-	 * @param s The string to create a tokenizer from.
+	 * 
+	 * @param s
+	 *            The string to create a tokenizer from.
 	 * @return A new tokenizer that splits the provided string on spaces.
 	 */
 	public static FunctionalStringTokenizer fromString(String s) {
