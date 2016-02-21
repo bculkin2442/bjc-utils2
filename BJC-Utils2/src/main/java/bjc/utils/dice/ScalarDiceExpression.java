@@ -1,12 +1,33 @@
 package bjc.utils.dice;
 
-public class ScalarDiceExpression implements DiceExpression {
+/**
+ * A dice expression that combines a scalar and a dice
+ * 
+ * @author ben
+ *
+ */
+public class ScalarDiceExpression implements IDiceExpression {
+	/**
+	 * The operation to combine with
+	 */
 	private DiceExpressionType	det;
-	private DiceExpression		exp;
+	/**
+	 * The expression to be combined
+	 */
+	private IDiceExpression		exp;
 
+	/**
+	 * The scalar to be combined
+	 */
 	private int					scalar;
 
-	public ScalarDiceExpression(DiceExpression dex, int scalr,
+	/**
+	 * Create a dice expression with a scalar
+	 * @param dex The dice to use
+	 * @param scalr The scalar to use
+	 * @param dt The operation to combine with
+	 */
+	public ScalarDiceExpression(IDiceExpression dex, int scalr,
 			DiceExpressionType dt) {
 		exp = dex;
 		scalar = scalr;
