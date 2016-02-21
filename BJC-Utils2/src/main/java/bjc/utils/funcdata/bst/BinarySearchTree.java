@@ -12,15 +12,28 @@ import bjc.utils.funcdata.bst.ITreePart.TreeLinearizationMethod;
  * 
  * @author ben
  *
- * @param <T> The data type stored in the node.
+ * @param <T>
+ *            The data type stored in the node.
  */
 public class BinarySearchTree<T> {
+	/**
+	 * The comparator for use in ordering items
+	 */
 	private Comparator<T>	comp;
+
+	/**
+	 * The current count of elements in the tree
+	 */
 	private int				nCount;
+
+	/**
+	 * The root element of the tree
+	 */
 	private ITreePart<T>	root;
 
 	/**
 	 * Create a new tree using the specified way to compare elements.
+	 * 
 	 * @param cmp
 	 */
 	public BinarySearchTree(Comparator<T> cmp) {
@@ -30,7 +43,9 @@ public class BinarySearchTree<T> {
 
 	/**
 	 * Add a node to the binary search tree.
-	 * @param dat The data to add to the binary search tree.
+	 * 
+	 * @param dat
+	 *            The data to add to the binary search tree.
 	 */
 	public void addNode(T dat) {
 		nCount++;
@@ -42,49 +57,51 @@ public class BinarySearchTree<T> {
 	}
 
 	/**
-	 * Balance the tree, and remove soft-deleted nodes for free.
-	 * 		Takes O(N) time, but also O(N) space.
+	 * Balance the tree, and remove soft-deleted nodes for free. Takes O(N)
+	 * time, but also O(N) space.
 	 */
 	public void balance() {
 		ArrayList<T> elms = new ArrayList<>(nCount);
-		
+
 		root.forEach(TreeLinearizationMethod.INORDER, e -> elms.add(e));
-		
+
 		root = null;
-		
+
 		int piv = elms.size() / 2;
 		int adj = 0;
-		
-		while((piv - adj) >= 0 && (piv + adj) < elms.size()) {
-			if(root == null) {
+
+		while ((piv - adj) >= 0 && (piv + adj) < elms.size()) {
+			if (root == null) {
 				root = new TreeNode<T>(elms.get(piv), null, null);
 			} else {
 				root.add(elms.get(piv + adj), comp);
 				root.add(elms.get(piv - adj), comp);
 			}
-			
+
 			adj++;
 		}
-		
-		if((piv - adj) >= 0) {
+
+		if ((piv - adj) >= 0) {
 			root.add(elms.get(piv - adj), comp);
-		} else if((piv + adj) < elms.size()) {
+		} else if ((piv + adj) < elms.size()) {
 			root.add(elms.get(piv + adj), comp);
 		}
 	}
 
 	/**
 	 * Get the root of the tree.
+	 * 
 	 * @return The root of the tree.
 	 */
 	public ITreePart<T> getRoot() {
 		return root;
 	}
-	
+
 	/**
-	 * Soft-delete a node from the tree.
-	 * 		Soft-deleted nodes stay in the tree until trim()/balance() is invoked,
-	 * 		and are not included in traversals/finds.
+	 * Soft-delete a node from the tree. Soft-deleted nodes stay in the
+	 * tree until trim()/balance() is invoked, and are not included in
+	 * traversals/finds.
+	 * 
 	 * @param dat
 	 */
 	public void deleteNode(T dat) {
@@ -94,7 +111,9 @@ public class BinarySearchTree<T> {
 
 	/**
 	 * Check if a node is in the tree
-	 * @param dat The node to check the presence of for the tree.
+	 * 
+	 * @param dat
+	 *            The node to check the presence of for the tree.
 	 * @return Whether or not the node is in the tree.
 	 */
 	public boolean isInTree(T dat) {
@@ -103,8 +122,11 @@ public class BinarySearchTree<T> {
 
 	/**
 	 * Traverse the tree in a specified way until the function fails
-	 * @param tlm The way to linearize the tree for traversal
-	 * @param p The function to use until it fails
+	 * 
+	 * @param tlm
+	 *            The way to linearize the tree for traversal
+	 * @param p
+	 *            The function to use until it fails
 	 */
 	public void traverse(TreeLinearizationMethod tlm, Predicate<T> p) {
 		root.forEach(tlm, p);

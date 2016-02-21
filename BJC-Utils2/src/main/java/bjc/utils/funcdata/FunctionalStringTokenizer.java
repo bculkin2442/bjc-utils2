@@ -11,6 +11,9 @@ import java.util.function.Function;
  *
  */
 public class FunctionalStringTokenizer {
+	/**
+	 * The string tokenizer being driven
+	 */
 	private StringTokenizer inp;
 
 	/**
@@ -23,6 +26,12 @@ public class FunctionalStringTokenizer {
 		this.inp = inp;
 	}
 
+	/**
+	 * Create a functional string tokenizer from a given string
+	 * 
+	 * @param inp
+	 *            The string to tokenize
+	 */
 	public FunctionalStringTokenizer(String inp) {
 		this.inp = new StringTokenizer(inp);
 	}

@@ -9,19 +9,32 @@ import java.util.function.Predicate;
 
 /**
  * A binary node in a tree.
+ * 
  * @author ben
  *
- * @param <T> The data type stored in the tree.
+ * @param <T>
+ *            The data type stored in the tree.
  */
 public class TreeNode<T> extends TreeLeaf<T> {
+	/**
+	 * The left child of this node
+	 */
 	private ITreePart<T>	left;
+
+	/**
+	 * The right child of this node
+	 */
 	private ITreePart<T>	right;
 
 	/**
 	 * Create a new node with the specified data and children.
-	 * @param data The data to store in this node.
-	 * @param left The left child of this node.
-	 * @param right The right child of this node.
+	 * 
+	 * @param data
+	 *            The data to store in this node.
+	 * @param left
+	 *            The left child of this node.
+	 * @param right
+	 *            The right child of this node.
 	 */
 	public TreeNode(T data, ITreePart<T> left, ITreePart<T> right) {
 		super(data);
@@ -30,9 +43,10 @@ public class TreeNode<T> extends TreeLeaf<T> {
 	}
 
 	/*
-	 * Either adds it to the left/right, or undeletes itself.
-	 * (non-Javadoc)
-	 * @see bjc.utils.data.bst.TreeLeaf#add(java.lang.Object, java.util.Comparator)
+	 * Either adds it to the left/right, or undeletes itself. (non-Javadoc)
+	 * 
+	 * @see bjc.utils.data.bst.TreeLeaf#add(java.lang.Object,
+	 * java.util.Comparator)
 	 */
 	@Override
 	public void add(T dat, Comparator<T> comp) {
@@ -71,7 +85,7 @@ public class TreeNode<T> extends TreeLeaf<T> {
 				return bf.apply(tm, left.collapse(f, bf));
 			}
 		} else {
-			if(right != null) {
+			if (right != null) {
 				return bf.apply(tm, right.collapse(f, bf));
 			} else {
 				return tm;

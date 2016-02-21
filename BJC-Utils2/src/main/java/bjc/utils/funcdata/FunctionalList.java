@@ -26,6 +26,9 @@ import bjc.utils.data.Pair;
  *            The type in this list
  */
 public class FunctionalList<E> implements Cloneable {
+	/**
+	 * The list used as a backing store
+	 */
 	private List<E> wrap;
 
 	/**
@@ -92,14 +95,6 @@ public class FunctionalList<E> implements Cloneable {
 	public boolean add(E item) {
 		return wrap.add(item);
 	}
-	
-	/**
-	 * Prepend an item to the list
-	 * @param item The item to prepend to the list
-	 */
-	public void prepend(E item) {
-		wrap.add(0, item);
-	}
 
 	/**
 	 * Check if all of the elements of this list match the specified
@@ -136,6 +131,17 @@ public class FunctionalList<E> implements Cloneable {
 		return false;
 	}
 
+	@Override
+	public FunctionalList<E> clone() {
+		FunctionalList<E> fl = new FunctionalList<>();
+
+		for (E ele : wrap) {
+			fl.add(ele);
+		}
+
+		return fl;
+	}
+
 	/**
 	 * Combine this list with another one into a new list and merge the
 	 * results. Works sort of like a combined zip/map over resulting pairs.
@@ -162,6 +168,17 @@ public class FunctionalList<E> implements Cloneable {
 		}
 
 		return r;
+	}
+
+	/**
+	 * Check if the list contains the specified item
+	 * 
+	 * @param item
+	 *            The item to see if it is contained
+	 * @return Whether or not the specified item is in the list
+	 */
+	public boolean contains(E item) {
+		return this.anyMatch(item::equals);
 	}
 
 	/**
@@ -240,6 +257,25 @@ public class FunctionalList<E> implements Cloneable {
 	}
 
 	/**
+	 * Retrieve a list containing all elements matching a predicate
+	 * 
+	 * @param matchPred
+	 *            The predicate to match by
+	 * @return A list containing all elements that match the predicate
+	 */
+	public FunctionalList<E> getMatching(Predicate<E> matchPred) {
+		FunctionalList<E> fl = new FunctionalList<>();
+
+		this.forEach((elem) -> {
+			if (matchPred.test(elem)) {
+				fl.add(elem);
+			}
+		});
+
+		return fl;
+	}
+
+	/**
 	 * Check if this list is empty.
 	 * 
 	 * @return Whether or not this list is empty.
@@ -262,6 +298,28 @@ public class FunctionalList<E> implements Cloneable {
 		forEach(e -> fl.add(f.apply(e)));
 
 		return fl;
+	}
+
+	/**
+	 * Zip two lists into a list of pairs
+	 * 
+	 * @param fl
+	 *            The list to use as the left side of the pair
+	 * @return A list containing pairs of this element and the specified
+	 *         list
+	 */
+	public <T> FunctionalList<Pair<E, T>> pairWith(FunctionalList<T> fl) {
+		return combineWith(fl, Pair<E, T>::new);
+	}
+
+	/**
+	 * Prepend an item to the list
+	 * 
+	 * @param item
+	 *            The item to prepend to the list
+	 */
+	public void prepend(E item) {
+		wrap.add(0, item);
 	}
 
 	/**
@@ -302,6 +360,17 @@ public class FunctionalList<E> implements Cloneable {
 	}
 
 	/**
+	 * Remove all elements that match a given predicate
+	 * 
+	 * @param remPred
+	 *            The predicate to use to determine elements to delete
+	 * @return Whether there was anything that satisfied the predicate
+	 */
+	public boolean removeIf(Predicate<E> remPred) {
+		return wrap.removeIf(remPred);
+	}
+
+	/**
 	 * Perform a binary search for the specified key using the provided
 	 * means of comparing elements. Since this IS a binary search, the list
 	 * must have been sorted before hand.
@@ -329,6 +398,14 @@ public class FunctionalList<E> implements Cloneable {
 		Collections.sort(wrap, cmp);
 	}
 
+	/**
+	 * Convert the list into a iterable
+	 * @return An iterable view onto the list
+	 */
+	public Iterable<E> toIterable() {
+		return wrap;
+	}
+
 	/*
 	 * Reduce this item to a form useful for looking at in the debugger.
 	 * (non-Javadoc)
@@ -344,20 +421,5 @@ public class FunctionalList<E> implements Cloneable {
 		sb.append(")");
 
 		return sb.toString();
-	}
-
-	public <T> FunctionalList<Pair<E, T>> pairWith(FunctionalList<T> fl) {
-		return combineWith(fl, Pair<E, T>::new);
-	}
-
-	@Override
-	public FunctionalList<E> clone() {
-		FunctionalList<E> fl = new FunctionalList<>();
-
-		for (E ele : wrap) {
-			fl.add(ele);
-		}
-
-		return fl;
 	}
 }
