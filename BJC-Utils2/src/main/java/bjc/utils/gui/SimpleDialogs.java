@@ -49,6 +49,52 @@ public class SimpleDialogs {
 	}
 
 	/**
+	 * Asks the user to pick an option from a series of choices.
+	 * 
+	 * @param parent
+	 *            The parent frame for this dialog
+	 * @param title
+	 *            The title of this dialog
+	 * @param question
+	 *            The question being asked
+	 * @param choices
+	 *            The available choices for the question
+	 * @return The choice the user picked, or null if they didn't pick one
+	 */
+	@SuppressWarnings("unchecked")
+	public static <E> E getChoice(Frame parent, String title,
+			String question, E... choices) {
+		JDialog jd = new JDialog(parent, title, true);
+		jd.setLayout(new VLayout(2));
+
+		JPanel questionPane = new JPanel();
+
+		JLabel questionText = new JLabel(question);
+		JComboBox<E> questionChoices = new JComboBox<>(choices);
+
+		questionPane.add(questionText);
+		questionPane.add(questionChoices);
+
+		JPanel buttonPane = new JPanel();
+
+		JButton okButton = new JButton("Ok");
+		okButton.addActionListener(e -> jd.dispose());
+		JButton cancelButton = new JButton("Cancel");
+		cancelButton.addActionListener(e -> jd.dispose());
+
+		buttonPane.add(cancelButton);
+		buttonPane.add(okButton);
+
+		jd.add(questionPane);
+		jd.add(buttonPane);
+
+		jd.pack();
+		jd.setVisible(true);
+
+		return (E) questionChoices.getSelectedItem();
+	}
+
+	/**
 	 * Get a integer from the user
 	 * 
 	 * @param parent
@@ -149,52 +195,6 @@ public class SimpleDialogs {
 				JOptionPane.YES_NO_OPTION);
 
 		return (res == JOptionPane.YES_OPTION ? true : false);
-	}
-
-	/**
-	 * Asks the user to pick an option from a series of choices.
-	 * 
-	 * @param parent
-	 *            The parent frame for this dialog
-	 * @param title
-	 *            The title of this dialog
-	 * @param question
-	 *            The question being asked
-	 * @param choices
-	 *            The availible choices for the question
-	 * @return The choice the user picked, or null if they didn't pick one
-	 */
-	@SuppressWarnings("unchecked")
-	public static <E> E getChoice(Frame parent, String title,
-			String question, E... choices) {
-		JDialog jd = new JDialog(parent, title, true);
-		jd.setLayout(new VLayout(2));
-
-		JPanel questionPane = new JPanel();
-
-		JLabel questionText = new JLabel(question);
-		JComboBox<E> questionChoices = new JComboBox<>(choices);
-
-		questionPane.add(questionText);
-		questionPane.add(questionChoices);
-
-		JPanel buttonPane = new JPanel();
-
-		JButton okButton = new JButton("Ok");
-		okButton.addActionListener(e -> jd.dispose());
-		JButton cancelButton = new JButton("Cancel");
-		cancelButton.addActionListener(e -> jd.dispose());
-
-		buttonPane.add(cancelButton);
-		buttonPane.add(okButton);
-
-		jd.add(questionPane);
-		jd.add(buttonPane);
-
-		jd.pack();
-		jd.setVisible(true);
-
-		return (E) questionChoices.getSelectedItem();
 	}
 
 	/**

@@ -3,7 +3,7 @@ package bjc.utils.gui;
 import java.io.IOException;
 
 /**
- * Represents the user not choosing a file.
+ * Represents the user failing to choose a file.
  * @author ben
  *
  */
