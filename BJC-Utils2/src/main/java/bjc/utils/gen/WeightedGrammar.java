@@ -19,9 +19,24 @@ import bjc.utils.funcdata.FunctionalList;
  *            The values that make up sentances of this grammar.
  */
 public class WeightedGrammar<E> {
+	/**
+	 * The initial rule of the grammar
+	 */
 	protected String									initRule;
+
+	/**
+	 * The rules currently in this grammar
+	 */
 	protected Map<E, WeightedRandom<FunctionalList<E>>>	rules;
+
+	/**
+	 * The random number generator used for random numbers
+	 */
 	private Random										sr;
+
+	/**
+	 * All of the subgrammars of this grammar
+	 */
 	protected Map<E, WeightedGrammar<E>>				subgrammars;
 
 	/**
@@ -57,6 +72,15 @@ public class WeightedGrammar<E> {
 		rn.addProb(prob, cse);
 	}
 
+	/**
+	 * Add a alias for an existing subgrammar
+	 * 
+	 * @param name
+	 *            The name of the subgrammar to alias
+	 * @param alias
+	 *            The alias of the subgrammar
+	 * @return Whether the alias was succesfully created
+	 */
 	public boolean addGrammarAlias(E name, E alias) {
 		if (subgrammars.containsKey(alias)) {
 			return false;
@@ -234,6 +258,18 @@ public class WeightedGrammar<E> {
 		});
 	}
 
+	/**
+	 * Prefix a given rule with a token multiple times
+	 * 
+	 * @param rName
+	 *            The name of the rule to prefix
+	 * @param prefixToken
+	 *            The token to prefix to the rules
+	 * @param addProb
+	 *            The additional probability of the tokens
+	 * @param nTimes
+	 *            The number of times to prefix the token
+	 */
 	public void multiPrefixRule(E rName, E prefixToken, int addProb,
 			int nTimes) {
 		WeightedRandom<FunctionalList<E>> rule = rules.get(rName);
@@ -302,10 +338,25 @@ public class WeightedGrammar<E> {
 		return rules.keySet();
 	}
 
+	/**
+	 * Set the initial rule of the graphic
+	 * 
+	 * @param initRule
+	 */
 	public void setInitRule(String initRule) {
 		this.initRule = initRule;
 	}
 
+	/**
+	 * Suffix a token to a rule
+	 * 
+	 * @param rName
+	 *            The rule to suffix
+	 * @param prefixToken
+	 *            The token to prefix to the rule
+	 * @param addProb
+	 *            Additional probability of the prefixed rule
+	 */
 	public void suffixRule(E rName, E prefixToken, int addProb) {
 		WeightedRandom<FunctionalList<E>> rule = rules.get(rName);
 
@@ -323,6 +374,11 @@ public class WeightedGrammar<E> {
 		});
 	}
 
+	/**
+	 * Check if this grammar has an initial rule
+	 * 
+	 * @return Whether or not this grammar has an initial rule
+	 */
 	public boolean hasInitRule() {
 		return initRule != null && !initRule.equalsIgnoreCase("");
 	}
