@@ -6,33 +6,85 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.function.Function;
 
+import bjc.utils.data.IPrecedent;
 import bjc.utils.funcdata.FunctionalList;
 
+/**
+ * Utility to run the shunting yard algorithm on a bunch of tokens
+ * 
+ * @author ben
+ *
+ * @param <E>
+ *            The type of tokens being shunted
+ */
 public class ShuntingYard<E> {
 
-	private enum Operator {
-		ADD(1), SUBTRACT(2), MULTIPLY(3), DIVIDE(4);
-		final int precedence;
+	private static enum Operator implements IPrecedent {
+		ADD(1), DIVIDE(4), MULTIPLY(3), SUBTRACT(2);
 
-		Operator(int p) {
+		private final int precedence;
+
+		private Operator(int p) {
 			precedence = p;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see bjc.utils.parserutils.IPrecedent#getPrecedence()
+		 */
+		@Override
+		public int getPrecedence() {
+			return precedence;
 		}
 	}
 
-	private static Map<String, Operator> ops = new HashMap<String, Operator>();
-
 	static {
+	}
+
+	/**
+	 * Holds all the shuntable operations
+	 */
+	private Map<String, IPrecedent> ops;
+
+	/**
+	 * Create a new shunting yard with a default set of operators
+	 */
+	public ShuntingYard() {
+		ops = new HashMap<>();
+
 		ops.put("+", Operator.ADD);
 		ops.put("-", Operator.SUBTRACT);
 		ops.put("*", Operator.MULTIPLY);
 		ops.put("/", Operator.DIVIDE);
 	}
 
-	private boolean isHigherPrec(String op, String sub) {
-		return (ops.containsKey(sub)
-				&& ops.get(sub).precedence >= ops.get(op).precedence);
+	/**
+	 * Add an operator to the list of shuntable operators
+	 * 
+	 * @param tok
+	 *            The token representing the operator
+	 * @param prec
+	 *            The precedence of the operator
+	 */
+	public void addOp(String tok, IPrecedent prec) {
+		ops.put(tok, prec);
 	}
 
+	private boolean isHigherPrec(String op, String sub) {
+		return (ops.containsKey(sub) && ops.get(sub).getPrecedence() >= ops
+				.get(op).getPrecedence());
+	}
+
+	/**
+	 * Transform a string of tokens from infix notation to postfix
+	 * 
+	 * @param inp
+	 *            The string to transform
+	 * @param transform
+	 *            The function to use to transform strings to tokens
+	 * @return A list of tokens in postfix notation
+	 */
 	public FunctionalList<E> postfix(FunctionalList<String> inp,
 			Function<String, E> transform) {
 		FunctionalList<E> outp = new FunctionalList<>();
@@ -66,4 +118,23 @@ public class ShuntingYard<E> {
 		return outp;
 	}
 
+	/**
+	 * Remove an operator from the list of shuntable operators
+	 * 
+	 * @param tok
+	 *            The token representing the operator
+	 */
+	public void removeOp(String tok) {
+		ops.remove(tok);
+	}
+
+	/**
+	 * Add an operator to the list of shuntable operators
+	 * 
+	 * @param tok
+	 *            The token representing the operator
+	 */
+	public void addOp(String tok, int i) {
+		this.addOp(tok, IPrecedent.newSimplePrecedent(i));
+	}
 }
