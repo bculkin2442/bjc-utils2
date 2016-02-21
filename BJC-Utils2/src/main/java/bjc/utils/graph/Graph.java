@@ -13,6 +13,8 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 
+import bjc.utils.data.GenHolder;
+
 /**
  * A directed weighted graph, where the vertices have some arbitrary label
  * 
@@ -23,6 +25,9 @@ import java.util.function.BiPredicate;
  */
 public class Graph<T> {
 
+	/**
+	 * The backing representation of the graph
+	 */
 	private final Map<T, Map<T, Integer>> graph;
 
 	/**
@@ -165,6 +170,11 @@ public class Graph<T> {
 		return minEdges;
 	}
 
+	/**
+	 * Get the count of the vertices in this graph
+	 * 
+	 * @return A count of the vertices in this graph
+	 */
 	public int getVertexCount() {
 		return graph.size();
 	}
@@ -225,6 +235,13 @@ public class Graph<T> {
 		return aMap;
 	}
 
+	/**
+	 * Create a graph from a list of edges
+	 * 
+	 * @param edges
+	 *            The list of edges to build from
+	 * @return A graph built from the provided edge-list
+	 */
 	public static <E> Graph<E> fromEdgeList(List<Edge<E>> edges) {
 		Graph<E> g = new Graph<>();
 
