@@ -37,6 +37,17 @@ public class FunctionalStringTokenizer {
 	}
 
 	/**
+	 * Create a functional string tokenizer from a given string and set of
+	 * seperators
+	 * 
+	 * @param inp The string to tokenize
+	 * @param seps The string to use for splitting
+	 */
+	public FunctionalStringTokenizer(String inp, String seps) {
+		this.inp = new StringTokenizer(inp, seps);
+	}
+
+	/**
 	 * Execute a provided action for each of the remaining tokens
 	 * 
 	 * @param f
@@ -83,5 +94,13 @@ public class FunctionalStringTokenizer {
 	 */
 	public static FunctionalStringTokenizer fromString(String s) {
 		return new FunctionalStringTokenizer(new StringTokenizer(s, " "));
+	}
+	
+	/**
+	 * Get the string tokenizer encapsuled by this
+	 * @return The encapsulated tokenizer
+	 */
+	public StringTokenizer getInternal() {
+		return inp;
 	}
 }
