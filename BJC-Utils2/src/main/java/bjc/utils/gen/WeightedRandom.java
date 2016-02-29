@@ -72,17 +72,18 @@ public class WeightedRandom<E> {
 		GenHolder<Boolean> bl = new GenHolder<>(true);
 
 		probs.forEachIndexed((i, p) -> {
-			if (bl.held) {
-				if (v.held < p) {
-					res.held = results.getByIndex(i);
-					bl.held = false;
+			if (bl.unwrap(vl -> vl)) {
+				if (v.unwrap((vl) -> vl < p)) {
+					res.transform((vl) -> results.getByIndex(i));
+
+					bl.transform((vl) -> false);
 				} else {
-					v.held -= p;
+					v.transform((vl) -> vl - p);
 				}
 			}
 		});
 
-		return res.held;
+		return res.unwrap((vl) -> vl);
 	}
 
 	/**

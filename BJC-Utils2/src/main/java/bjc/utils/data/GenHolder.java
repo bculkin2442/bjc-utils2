@@ -16,7 +16,7 @@ public class GenHolder<T> {
 	/**
 	 * The state this holder is responsible for.
 	 */
-	public T held;
+	private T held;
 
 	/**
 	 * Creates a new empty holder, with its state set to null

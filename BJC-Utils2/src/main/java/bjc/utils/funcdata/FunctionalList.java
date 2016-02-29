@@ -352,11 +352,9 @@ public class FunctionalList<E> implements Cloneable {
 			Function<T, F> finl) {
 		GenHolder<T> acum = new GenHolder<>(val);
 
-		wrap.forEach(e -> {
-			acum.held = bf.apply(e, acum.held);
-		});
+		wrap.forEach(e -> acum.transform((vl) -> bf.apply(e, vl)));
 
-		return finl.apply(acum.held);
+		return acum.unwrap(finl);
 	}
 
 	/**
@@ -400,6 +398,7 @@ public class FunctionalList<E> implements Cloneable {
 
 	/**
 	 * Convert the list into a iterable
+	 * 
 	 * @return An iterable view onto the list
 	 */
 	public Iterable<E> toIterable() {
@@ -421,5 +420,11 @@ public class FunctionalList<E> implements Cloneable {
 		sb.append(")");
 
 		return sb.toString();
+	}
+
+	public void removeMatching(E obj) {
+		removeIf((ele) -> {
+			return ele.equals(obj);
+		});
 	}
 }

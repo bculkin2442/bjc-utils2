@@ -48,12 +48,13 @@ public class AdjacencyMap<T> {
 			int col = 0;
 
 			for (String part : parts) {
-				aMap.setWeight(row.held, col, Integer.parseInt(part));
+				aMap.setWeight(row.unwrap(vl -> vl), col,
+						Integer.parseInt(part));
 
 				col++;
 			}
 
-			row.held++;
+			row.transform((vl) -> vl + 1);
 		});
 
 		scn.close();
@@ -96,11 +97,11 @@ public class AdjacencyMap<T> {
 					int rhs = adjMap.get(tgt.getKey()).get(src.getKey());
 
 					if (lhs != rhs) {
-						res.held = false;
+						res.transform((vl) -> false);
 					}
 				}));
 
-		return res.held;
+		return res.unwrap(vl -> vl);
 	}
 
 	/**

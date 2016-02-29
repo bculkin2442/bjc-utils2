@@ -137,34 +137,36 @@ public class Graph<T> {
 
 		// Start at the initial vertex and visit it
 		GenHolder<T> src = new GenHolder<>(getInitial());
-		visited.add(src.held);
+		visited.add(src.unwrap(vl -> vl));
 
 		// Make sure we visit all the nodes
 		while (visited.size() != getVertexCount()) {
 			// Grab all edges adjacent to the provided edge
 
-			forAllEdgesMatchingAt(src.held,
+			forAllEdgesMatchingAt(src.unwrap(vl -> vl),
 					(tgt, weight) -> !visited.contains(tgt),
-					(tgt, weight) -> availEdges
-							.add(new Edge<T>(src.held, tgt, weight)));
+					(tgt, weight) -> availEdges.add(new Edge<T>(
+							src.unwrap(vl -> vl), tgt, weight)));
 
 			// Get the edge with the minimum distance
-			Edge<T> minEdge = availEdges.poll();
+			GenHolder<Edge<T>> minEdge = new GenHolder<>(
+					availEdges.poll());
 
 			// Only consider edges where we haven't visited the target of
 			// the edge
-			while (visited.contains(minEdge.getTarget())) {
-				minEdge = availEdges.poll();
+			while (visited
+					.contains(minEdge.unwrap(vl -> vl.getTarget()))) {
+				minEdge.transform((vl) -> availEdges.poll());
 			}
 
 			// Add it to our MST
-			minEdges.add(minEdge);
+			minEdges.add(minEdge.unwrap(vl -> vl));
 
 			// Advance to the next node
-			src.held = minEdge.getTarget();
+			src.transform((vl) -> minEdge.unwrap(vl1 -> vl1.getTarget()));
 
 			// Visit this node
-			visited.add(src.held);
+			visited.add(src.unwrap(vl -> vl));
 		}
 
 		return minEdges;
