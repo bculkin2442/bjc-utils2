@@ -1,5 +1,6 @@
 package bjc.utils.data;
 
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -17,12 +18,12 @@ public class Pair<L, R> {
 	/**
 	 * The left value of the pair
 	 */
-	public L	l;
+	private L	l;
 
 	/**
 	 * The right value of the pair
 	 */
-	public R	r;
+	private R	r;
 
 	/**
 	 * Create a new pair that holds two nulls.
@@ -69,5 +70,9 @@ public class Pair<L, R> {
 	 */
 	public <E> E merge(BiFunction<L, R, E> bf) {
 		return bf.apply(l, r);
+	}
+	
+	public void doWith(BiConsumer<L, R> bc) {
+		bc.accept(l, r);
 	}
 }

@@ -247,15 +247,16 @@ public class WeightedGrammar<E> {
 		FunctionalList<Pair<Integer, FunctionalList<E>>> newResults = new FunctionalList<>();
 
 		rule.getValues().forEach((par) -> {
-			FunctionalList<E> nl = par.r.clone();
+			FunctionalList<E> nl = par
+					.merge((left, right) -> right.clone());
 			nl.prepend(prefixToken);
 
-			newResults.add(new Pair<>(par.l + addProb, nl));
+			newResults.add(new Pair<>(
+					par.merge((left, right) -> left) + addProb, nl));
 		});
 
-		newResults.forEach((par) -> {
-			addCase(rName, par.l, par.r);
-		});
+		newResults.forEach((par) -> par
+				.doWith((left, right) -> addCase(rName, left, right)));
 	}
 
 	/**
@@ -281,7 +282,8 @@ public class WeightedGrammar<E> {
 
 			// TODO bugtest this. if it works, write multiSuffixWith
 			for (int i = 1; i <= nTimes; i++) {
-				FunctionalList<E> nl = par.r.clone();
+				FunctionalList<E> nl = par
+						.merge((left, right) -> right.clone());
 
 				for (int j = 1; j <= i; j++) {
 					nl.prepend(prefixToken);
@@ -291,12 +293,15 @@ public class WeightedGrammar<E> {
 			}
 
 			nls.forEach((ls) -> {
-				newResults.add(new Pair<>(par.l + addProb, ls));
+				newResults.add(new Pair<>(
+						par.merge((left, right) -> left) + addProb, ls));
 			});
 		});
 
 		newResults.forEach((par) -> {
-			addCase(rName, par.l, par.r);
+			par.doWith((left, right) -> {
+				addCase(rName, left, right);
+			});
 		});
 	}
 
@@ -363,14 +368,18 @@ public class WeightedGrammar<E> {
 		FunctionalList<Pair<Integer, FunctionalList<E>>> newResults = new FunctionalList<>();
 
 		rule.getValues().forEach((par) -> {
-			FunctionalList<E> nl = par.r.clone();
+			FunctionalList<E> nl = par
+					.merge((left, right) -> right.clone());
 			nl.add(prefixToken);
 
-			newResults.add(new Pair<>(par.l + addProb, nl));
+			newResults.add(new Pair<>(
+					par.merge((left, right) -> left) + addProb, nl));
 		});
 
 		newResults.forEach((par) -> {
-			addCase(rName, par.l, par.r);
+			par.doWith((left, right) -> {
+				addCase(rName, left, right);
+			});
 		});
 	}
 
