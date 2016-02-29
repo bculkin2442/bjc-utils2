@@ -1,3 +1,4 @@
+
 package bjc.utils.funcdata;
 
 import java.util.ArrayList;
@@ -433,5 +434,30 @@ public class FunctionalList<E> implements Cloneable {
 	 */
 	public int getSize() {
 		return wrap.size();
+	}
+
+	/**
+	 * Partition this list into a list of sublists
+	 * 
+	 * @param nPerPart
+	 *            The size of elements to put into each one of the sublists
+	 * @return A list partitioned into partitions of size nPerPart
+	 */
+	public FunctionalList<FunctionalList<E>> partition(int nPerPart) {
+		FunctionalList<FunctionalList<E>> ret = new FunctionalList<>();
+
+		GenHolder<FunctionalList<E>> currPart = new GenHolder<>(
+				new FunctionalList<>());
+
+		this.forEach((val) -> {
+			if (currPart.unwrap((vl) -> vl.getSize() >= nPerPart)) {
+				ret.add(currPart.unwrap((vl) -> vl));
+				currPart.transform((vl) -> new FunctionalList<>());
+			} else {
+				currPart.unwrap((vl) -> vl.add(val));
+			}
+		});
+
+		return ret;
 	}
 }
