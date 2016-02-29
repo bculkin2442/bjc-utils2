@@ -14,6 +14,7 @@ import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 
 import bjc.utils.data.GenHolder;
+import bjc.utils.data.IHolder;
 
 /**
  * A directed weighted graph, where the vertices have some arbitrary label
@@ -136,7 +137,7 @@ public class Graph<T> {
 		Set<T> visited = new HashSet<T>();
 
 		// Start at the initial vertex and visit it
-		GenHolder<T> src = new GenHolder<>(getInitial());
+		IHolder<T> src = new GenHolder<>(getInitial());
 		visited.add(src.unwrap(vl -> vl));
 
 		// Make sure we visit all the nodes
@@ -149,7 +150,7 @@ public class Graph<T> {
 							src.unwrap(vl -> vl), tgt, weight)));
 
 			// Get the edge with the minimum distance
-			GenHolder<Edge<T>> minEdge = new GenHolder<>(
+			IHolder<Edge<T>> minEdge = new GenHolder<>(
 					availEdges.poll());
 
 			// Only consider edges where we haven't visited the target of

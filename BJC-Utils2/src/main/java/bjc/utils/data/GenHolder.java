@@ -7,12 +7,14 @@ import java.util.function.Function;
  * references to data, and more specifically for accessing non-final
  * variables from a lambda. AKA the identity monad
  * 
+ * This is an eager variant of {@link IHolder}
+ * 
  * @author ben
  *
  * @param <T>
  *            The type of the data being held
  */
-public class GenHolder<T> {
+public class GenHolder<T> implements IHolder<T> {
 	/**
 	 * The state this holder is responsible for.
 	 */
@@ -36,39 +38,34 @@ public class GenHolder<T> {
 		held = hld;
 	}
 
-	/**
-	 * Return the result of applying the given transformation to the held
-	 * value Doesn't change the held value
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param f
-	 *            The transformation to apply
-	 * @return A holder with the transformed value
+	 * @see bjc.utils.data.IHolder#map(java.util.function.Function)
 	 */
-	public <NewT> GenHolder<NewT> map(Function<T, NewT> f) {
+	@Override
+	public <NewT> IHolder<NewT> map(Function<T, NewT> f) {
 		return new GenHolder<NewT>(f.apply(held));
 	}
 
-	/**
-	 * Apply the given transformation to the held value. Returns the holder
-	 * for allowing chaining of transforms
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param f
-	 *            The transform to apply to the value
-	 * @return The holder
+	 * @see bjc.utils.data.IHolder#transform(java.util.function.Function)
 	 */
-	public GenHolder<T> transform(Function<T, T> f) {
+	@Override
+	public IHolder<T> transform(Function<T, T> f) {
 		held = f.apply(held);
 
 		return this;
 	}
 
-	/**
-	 * Returns a raw mapped value, not contained in a GenHolder
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param f
-	 *            The function to use for mapping the value
-	 * @return The mapped value outside of a GenHolder
+	 * @see bjc.utils.data.IHolder#unwrap(java.util.function.Function)
 	 */
+	@Override
 	public <E> E unwrap(Function<T, E> f) {
 		return f.apply(held);
 	}

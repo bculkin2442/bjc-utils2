@@ -13,6 +13,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import bjc.utils.data.GenHolder;
+import bjc.utils.data.IHolder;
 import bjc.utils.data.Pair;
 
 /**
@@ -350,7 +351,7 @@ public class FunctionalList<E> implements Cloneable {
 	 */
 	public <T, F> F reduceAux(T val, BiFunction<E, T, T> bf,
 			Function<T, F> finl) {
-		GenHolder<T> acum = new GenHolder<>(val);
+		IHolder<T> acum = new GenHolder<>(val);
 
 		wrap.forEach(e -> acum.transform((vl) -> bf.apply(e, vl)));
 

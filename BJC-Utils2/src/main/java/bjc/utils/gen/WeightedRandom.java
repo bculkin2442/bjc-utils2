@@ -3,6 +3,7 @@ package bjc.utils.gen;
 import java.util.Random;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.data.GenHolder;
+import bjc.utils.data.IHolder;
 import bjc.utils.data.Pair;
 
 /**
@@ -68,7 +69,7 @@ public class WeightedRandom<E> {
 	 */
 	public E genVal() {
 		GenHolder<Integer> v = new GenHolder<>(src.nextInt(totalChance));
-		GenHolder<E> res = new GenHolder<E>();
+		IHolder<E> res = new GenHolder<E>();
 		GenHolder<Boolean> bl = new GenHolder<>(true);
 
 		probs.forEachIndexed((i, p) -> {
