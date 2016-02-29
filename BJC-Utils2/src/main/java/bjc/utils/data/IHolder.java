@@ -21,7 +21,7 @@ public interface IHolder<T> {
 	 *            The transformation to apply
 	 * @return A holder with the transformed value
 	 */
-	<NewT> IHolder<NewT> map(Function<T, NewT> f);
+	public <NewT> IHolder<NewT> map(Function<T, NewT> f);
 
 	/**
 	 * Apply the given transformation to the held value. Returns the holder
@@ -31,7 +31,7 @@ public interface IHolder<T> {
 	 *            The transform to apply to the value
 	 * @return The holder
 	 */
-	IHolder<T> transform(Function<T, T> f);
+	public IHolder<T> transform(Function<T, T> f);
 
 	/**
 	 * Returns a raw mapped value, not contained in a GenHolder
@@ -40,6 +40,6 @@ public interface IHolder<T> {
 	 *            The function to use for mapping the value
 	 * @return The mapped value outside of a GenHolder
 	 */
-	<E> E unwrap(Function<T, E> f);
+	public <E> E unwrap(Function<T, E> f);
 
 }

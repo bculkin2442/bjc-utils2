@@ -53,6 +53,7 @@ public class WeightedGrammar<E> {
 	 */
 	public WeightedGrammar(Random src) {
 		this();
+
 		sr = src;
 	}
 
@@ -67,9 +68,7 @@ public class WeightedGrammar<E> {
 	 *            The case being added.
 	 */
 	public void addCase(E rule, int prob, FunctionalList<E> cse) {
-		WeightedRandom<FunctionalList<E>> rn = rules.get(rule);
-
-		rn.addProb(prob, cse);
+		rules.get(rule).addProb(prob, cse);
 	}
 
 	/**
@@ -231,32 +230,12 @@ public class WeightedGrammar<E> {
 	}
 
 	/**
-	 * Create a series of alternatives for a rule by prefixing them with a
-	 * given token
+	 * Check if this grammar has an initial rule
 	 * 
-	 * @param addProb
-	 *            The amount to adjust the probability by
-	 * @param rName
-	 *            The name of the rule to prefix
-	 * @param prefixToken
-	 *            The token to prefix to the rule
+	 * @return Whether or not this grammar has an initial rule
 	 */
-	public void prefixRule(E rName, E prefixToken, int addProb) {
-		WeightedRandom<FunctionalList<E>> rule = rules.get(rName);
-
-		FunctionalList<Pair<Integer, FunctionalList<E>>> newResults = new FunctionalList<>();
-
-		rule.getValues().forEach((par) -> {
-			FunctionalList<E> nl = par
-					.merge((left, right) -> right.clone());
-			nl.prepend(prefixToken);
-
-			newResults.add(new Pair<>(
-					par.merge((left, right) -> left) + addProb, nl));
-		});
-
-		newResults.forEach((par) -> par
-				.doWith((left, right) -> addCase(rName, left, right)));
+	public boolean hasInitRule() {
+		return initRule != null && !initRule.equalsIgnoreCase("");
 	}
 
 	/**
@@ -292,17 +271,41 @@ public class WeightedGrammar<E> {
 				nls.add(nl);
 			}
 
-			nls.forEach((ls) -> {
-				newResults.add(new Pair<>(
-						par.merge((left, right) -> left) + addProb, ls));
-			});
+			nls.forEach((ls) -> newResults.add(new Pair<>(
+					par.merge((left, right) -> left) + addProb, ls)));
 		});
 
-		newResults.forEach((par) -> {
-			par.doWith((left, right) -> {
-				addCase(rName, left, right);
-			});
+		newResults.forEach((par) -> par
+				.doWith((left, right) -> addCase(rName, left, right)));
+	}
+
+	/**
+	 * Create a series of alternatives for a rule by prefixing them with a
+	 * given token
+	 * 
+	 * @param addProb
+	 *            The amount to adjust the probability by
+	 * @param rName
+	 *            The name of the rule to prefix
+	 * @param prefixToken
+	 *            The token to prefix to the rule
+	 */
+	public void prefixRule(E rName, E prefixToken, int addProb) {
+		WeightedRandom<FunctionalList<E>> rule = rules.get(rName);
+
+		FunctionalList<Pair<Integer, FunctionalList<E>>> newResults = new FunctionalList<>();
+
+		rule.getValues().forEach((par) -> {
+			FunctionalList<E> nl = par
+					.merge((left, right) -> right.clone());
+			nl.prepend(prefixToken);
+
+			newResults.add(new Pair<>(
+					par.merge((left, right) -> left) + addProb, nl));
 		});
+
+		newResults.forEach((par) -> par
+				.doWith((left, right) -> addCase(rName, left, right)));
 	}
 
 	/**
@@ -376,19 +379,7 @@ public class WeightedGrammar<E> {
 					par.merge((left, right) -> left) + addProb, nl));
 		});
 
-		newResults.forEach((par) -> {
-			par.doWith((left, right) -> {
-				addCase(rName, left, right);
-			});
-		});
-	}
-
-	/**
-	 * Check if this grammar has an initial rule
-	 * 
-	 * @return Whether or not this grammar has an initial rule
-	 */
-	public boolean hasInitRule() {
-		return initRule != null && !initRule.equalsIgnoreCase("");
+		newResults.forEach((par) -> par
+				.doWith((left, right) -> addCase(rName, left, right)));
 	}
 }

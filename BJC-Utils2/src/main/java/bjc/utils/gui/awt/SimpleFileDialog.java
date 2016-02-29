@@ -23,6 +23,19 @@ public class SimpleFileDialog {
 	 *            The parent of the file picker
 	 * @param title
 	 *            The title of the file picker
+	 * @return The file the user picked
+	 */
+	public static File getOpenFile(Frame par, String title) {
+		return getOpenFile(par, title, (String[]) null);
+	}
+
+	/**
+	 * Prompt the user to pick a file to open
+	 * 
+	 * @param par
+	 *            The parent of the file picker
+	 * @param title
+	 *            The title of the file picker
 	 * @param extensions
 	 *            The extensions to accept as valid
 	 * @return The file the user picked
@@ -48,7 +61,7 @@ public class SimpleFileDialog {
 	}
 
 	/**
-	 * Prompt the user to pick a file to open
+	 * Prompt the user to pick a file to save
 	 * 
 	 * @param par
 	 *            The parent of the file picker
@@ -56,8 +69,8 @@ public class SimpleFileDialog {
 	 *            The title of the file picker
 	 * @return The file the user picked
 	 */
-	public static File getOpenFile(Frame par, String title) {
-		return getOpenFile(par, title, (String[]) null);
+	public static File getSaveFile(Frame par, String title) {
+		return getSaveFile(par, title, (String[]) null);
 	}
 
 	/**
@@ -89,18 +102,5 @@ public class SimpleFileDialog {
 		}
 
 		return fd.getFiles()[0];
-	}
-
-	/**
-	 * Prompt the user to pick a file to save
-	 * 
-	 * @param par
-	 *            The parent of the file picker
-	 * @param title
-	 *            The title of the file picker
-	 * @return The file the user picked
-	 */
-	public static File getSaveFile(Frame par, String title) {
-		return getSaveFile(par, title, (String[]) null);
 	}
 }

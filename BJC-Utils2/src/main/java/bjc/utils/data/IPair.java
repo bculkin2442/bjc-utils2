@@ -16,7 +16,8 @@ public interface IPair<L, R> {
 	 *            The function to apply to the right value.
 	 * @return A new pair containing the two modified values.
 	 */
-	<L2, R2> IPair<L2, R2> apply(Function<L, L2> lf, Function<R, R2> rf);
+	public <L2, R2> IPair<L2, R2> apply(Function<L, L2> lf,
+			Function<R, R2> rf);
 
 	/**
 	 * Collapse this pair to a single value. Does not change the internal
@@ -26,8 +27,14 @@ public interface IPair<L, R> {
 	 *            The function to use to collapse the pair.
 	 * @return The collapsed value.
 	 */
-	<E> E merge(BiFunction<L, R, E> bf);
+	public <E> E merge(BiFunction<L, R, E> bf);
 
-	void doWith(BiConsumer<L, R> bc);
-
+	/**
+	 * Execute an action with the values of this pair. Has no effect on the
+	 * internal contents
+	 * 
+	 * @param bc
+	 *            The action to execute on the values
+	 */
+	public void doWith(BiConsumer<L, R> bc);
 }

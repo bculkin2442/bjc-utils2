@@ -78,8 +78,9 @@ public class SimpleDialogs {
 		JPanel buttonPane = new JPanel();
 
 		JButton okButton = new JButton("Ok");
-		okButton.addActionListener(e -> jd.dispose());
 		JButton cancelButton = new JButton("Cancel");
+
+		okButton.addActionListener(e -> jd.dispose());
 		cancelButton.addActionListener(e -> jd.dispose());
 
 		buttonPane.add(cancelButton);

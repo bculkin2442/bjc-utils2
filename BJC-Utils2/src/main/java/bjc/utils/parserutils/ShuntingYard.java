@@ -19,7 +19,7 @@ import bjc.utils.funcdata.FunctionalList;
  */
 public class ShuntingYard<E> {
 
-	private static enum Operator implements IPrecedent {
+	public static enum Operator implements IPrecedent {
 		ADD(1), DIVIDE(4), MULTIPLY(3), SUBTRACT(2);
 
 		private final int precedence;
@@ -39,9 +39,6 @@ public class ShuntingYard<E> {
 		}
 	}
 
-	static {
-	}
-
 	/**
 	 * Holds all the shuntable operations
 	 */
@@ -57,6 +54,16 @@ public class ShuntingYard<E> {
 		ops.put("-", Operator.SUBTRACT);
 		ops.put("*", Operator.MULTIPLY);
 		ops.put("/", Operator.DIVIDE);
+	}
+
+	/**
+	 * Add an operator to the list of shuntable operators
+	 * 
+	 * @param tok
+	 *            The token representing the operator
+	 */
+	public void addOp(String tok, int i) {
+		this.addOp(tok, IPrecedent.newSimplePrecedent(i));
 	}
 
 	/**
@@ -126,15 +133,5 @@ public class ShuntingYard<E> {
 	 */
 	public void removeOp(String tok) {
 		ops.remove(tok);
-	}
-
-	/**
-	 * Add an operator to the list of shuntable operators
-	 * 
-	 * @param tok
-	 *            The token representing the operator
-	 */
-	public void addOp(String tok, int i) {
-		this.addOp(tok, IPrecedent.newSimplePrecedent(i));
 	}
 }

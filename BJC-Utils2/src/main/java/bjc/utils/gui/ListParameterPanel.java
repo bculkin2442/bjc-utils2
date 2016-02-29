@@ -72,15 +72,14 @@ public class ListParameterPanel<E> extends JPanel {
 		buttonPanel.setLayout(new HLayout(3));
 
 		JButton addParam = new JButton("Add...");
+		JButton editParam = new JButton("Edit...");
+		JButton removeParam = new JButton("Remove...");
+
 		addParam.addActionListener(
 				(ev) -> ((DefaultListModel<E>) list.getModel())
 						.addElement(addAct.get()));
-
-		JButton editParam = new JButton("Edit...");
 		editParam.addActionListener(
 				(ev) -> editAct.accept(list.getSelectedValue()));
-
-		JButton removeParam = new JButton("Remove...");
 		removeParam.addActionListener((ev) -> removeAct
 				.accept(((DefaultListModel<E>) list.getModel())
 						.remove(list.getSelectedIndex())));

@@ -111,20 +111,17 @@ public class TreeNode<T> extends TreeLeaf<T> {
 
 	@Override
 	public void delete(T dat, Comparator<T> cmp) {
-		directedWalk(new DirectedWalkFunction<T>() {
-			@Override
-			public DirectedWalkResult walk(T ds) {
-				switch (cmp.compare(data, dat)) {
-					case -1:
-						return left == null ? FAILURE : LEFT;
-					case 0:
-						deleted = true;
-						return FAILURE;
-					case 1:
-						return right == null ? FAILURE : RIGHT;
-					default:
-						return DirectedWalkResult.FAILURE;
-				}
+		directedWalk(ds -> {
+			switch (cmp.compare(data, dat)) {
+				case -1:
+					return left == null ? FAILURE : LEFT;
+				case 0:
+					deleted = true;
+					return FAILURE;
+				case 1:
+					return right == null ? FAILURE : RIGHT;
+				default:
+					return FAILURE;
 			}
 		});
 	}

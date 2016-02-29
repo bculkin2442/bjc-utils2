@@ -129,6 +129,7 @@ public class FunctionalList<E> implements Cloneable {
 				return true;
 			}
 		}
+
 		return false;
 	}
 
@@ -203,11 +204,7 @@ public class FunctionalList<E> implements Cloneable {
 	public <T> FunctionalList<T> flatMap(Function<E, List<T>> f) {
 		FunctionalList<T> fl = new FunctionalList<>(this.wrap.size());
 
-		forEach(e -> {
-			f.apply(e).forEach(e2 -> {
-				fl.add(e2);
-			});
-		});
+		forEach(e -> f.apply(e).forEach(fl::add));
 
 		return fl;
 	}
@@ -230,11 +227,13 @@ public class FunctionalList<E> implements Cloneable {
 	 *            index.
 	 */
 	public void forEachIndexed(BiConsumer<Integer, E> c) {
-		int i = 0;
+		GenHolder<Integer> i = new GenHolder<>(0);
 
-		for (E e : wrap) {
-			c.accept(i++, e);
-		}
+		wrap.forEach((val) -> {
+			c.accept(i.unwrap(vl -> vl), val);
+
+			i.transform((vl) -> vl + 1);
+		});
 	}
 
 	/**
@@ -267,7 +266,7 @@ public class FunctionalList<E> implements Cloneable {
 	public FunctionalList<E> getMatching(Predicate<E> matchPred) {
 		FunctionalList<E> fl = new FunctionalList<>();
 
-		this.forEach((elem) -> {
+		wrap.forEach((elem) -> {
 			if (matchPred.test(elem)) {
 				fl.add(elem);
 			}
@@ -369,6 +368,10 @@ public class FunctionalList<E> implements Cloneable {
 		return wrap.removeIf(remPred);
 	}
 
+	public void removeMatching(E obj) {
+		removeIf((ele) -> ele.equals(obj));
+	}
+
 	/**
 	 * Perform a binary search for the specified key using the provided
 	 * means of comparing elements. Since this IS a binary search, the list
@@ -423,9 +426,12 @@ public class FunctionalList<E> implements Cloneable {
 		return sb.toString();
 	}
 
-	public void removeMatching(E obj) {
-		removeIf((ele) -> {
-			return ele.equals(obj);
-		});
+	/**
+	 * Retrieve the size of the wrapped list
+	 * 
+	 * @return The size of the wrapped list
+	 */
+	public int getSize() {
+		return wrap.size();
 	}
 }

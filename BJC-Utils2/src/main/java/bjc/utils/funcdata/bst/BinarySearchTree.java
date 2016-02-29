@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 
+import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.bst.ITreePart.TreeLinearizationMethod;
 
 /**
@@ -49,6 +50,7 @@ public class BinarySearchTree<T> {
 	 */
 	public void addNode(T dat) {
 		nCount++;
+
 		if (root == null) {
 			root = new TreeNode<T>(dat, null, null);
 		} else {
@@ -61,40 +63,31 @@ public class BinarySearchTree<T> {
 	 * time, but also O(N) space.
 	 */
 	public void balance() {
-		ArrayList<T> elms = new ArrayList<>(nCount);
+		FunctionalList<T> elms = new FunctionalList<>();
 
 		root.forEach(TreeLinearizationMethod.INORDER, e -> elms.add(e));
 
 		root = null;
 
-		int piv = elms.size() / 2;
+		int piv = elms.getSize() / 2;
 		int adj = 0;
 
-		while ((piv - adj) >= 0 && (piv + adj) < elms.size()) {
+		while ((piv - adj) >= 0 && (piv + adj) < elms.getSize()) {
 			if (root == null) {
-				root = new TreeNode<T>(elms.get(piv), null, null);
+				root = new TreeNode<T>(elms.getByIndex(piv), null, null);
 			} else {
-				root.add(elms.get(piv + adj), comp);
-				root.add(elms.get(piv - adj), comp);
+				root.add(elms.getByIndex(piv + adj), comp);
+				root.add(elms.getByIndex(piv - adj), comp);
 			}
 
 			adj++;
 		}
 
 		if ((piv - adj) >= 0) {
-			root.add(elms.get(piv - adj), comp);
-		} else if ((piv + adj) < elms.size()) {
-			root.add(elms.get(piv + adj), comp);
+			root.add(elms.getByIndex(piv - adj), comp);
+		} else if ((piv + adj) < elms.getSize()) {
+			root.add(elms.getByIndex(piv + adj), comp);
 		}
-	}
-
-	/**
-	 * Get the root of the tree.
-	 * 
-	 * @return The root of the tree.
-	 */
-	public ITreePart<T> getRoot() {
-		return root;
 	}
 
 	/**
@@ -106,7 +99,17 @@ public class BinarySearchTree<T> {
 	 */
 	public void deleteNode(T dat) {
 		nCount--;
+
 		root.delete(dat, comp);
+	}
+
+	/**
+	 * Get the root of the tree.
+	 * 
+	 * @return The root of the tree.
+	 */
+	public ITreePart<T> getRoot() {
+		return root;
 	}
 
 	/**

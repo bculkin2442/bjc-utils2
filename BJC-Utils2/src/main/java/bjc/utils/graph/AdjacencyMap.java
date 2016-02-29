@@ -148,6 +148,7 @@ public class AdjacencyMap<T> {
 					.forEach(tgt -> ps.printf("%d ", tgt.getValue()));
 			ps.println();
 		});
+
 		ps.close();
 	}
 }

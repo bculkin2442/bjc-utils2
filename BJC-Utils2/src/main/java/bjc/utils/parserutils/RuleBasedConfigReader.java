@@ -20,11 +20,11 @@ import bjc.utils.funcdata.FunctionalStringTokenizer;
  *            type of the state object to use
  */
 public class RuleBasedConfigReader<E> {
-	private Map<String, BiConsumer<FunctionalStringTokenizer, E>>	pragmas;
-
 	private BiConsumer<FunctionalStringTokenizer, Pair<String, E>>	startRule;
 	private BiConsumer<FunctionalStringTokenizer, E>				continueRule;
 	private Consumer<E>												endRule;
+
+	private Map<String, BiConsumer<FunctionalStringTokenizer, E>>	pragmas;
 
 	/**
 	 * Create a new rule-based config reader
@@ -43,8 +43,13 @@ public class RuleBasedConfigReader<E> {
 		this.startRule = startRule;
 		this.continueRule = continueRule;
 		this.endRule = endRule;
-		
+
 		this.pragmas = new HashMap<>();
+	}
+
+	public void addPragma(String pragName,
+			BiConsumer<FunctionalStringTokenizer, E> pragAct) {
+		pragmas.put(pragName, pragAct);
 	}
 
 	public E fromStream(InputStream is, E initState) {
@@ -67,7 +72,7 @@ public class RuleBasedConfigReader<E> {
 
 				String nxtToken = stk.nextToken();
 				if (nxtToken.equals("#")) {
-
+					// Do nothing, this is a comment
 				} else if (nxtToken.equals("pragma")) {
 					String tk = stk.nextToken();
 
@@ -87,16 +92,6 @@ public class RuleBasedConfigReader<E> {
 		return stat;
 	}
 
-	public void addPragma(String pragName,
-			BiConsumer<FunctionalStringTokenizer, E> pragAct) {
-		pragmas.put(pragName, pragAct);
-	}
-
-	public void setStartRule(
-			BiConsumer<FunctionalStringTokenizer, Pair<String, E>> startRule) {
-		this.startRule = startRule;
-	}
-
 	public void setContinueRule(
 			BiConsumer<FunctionalStringTokenizer, E> continueRule) {
 		this.continueRule = continueRule;
@@ -104,5 +99,10 @@ public class RuleBasedConfigReader<E> {
 
 	public void setEndRule(Consumer<E> endRule) {
 		this.endRule = endRule;
+	}
+
+	public void setStartRule(
+			BiConsumer<FunctionalStringTokenizer, Pair<String, E>> startRule) {
+		this.startRule = startRule;
 	}
 }
