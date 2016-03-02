@@ -1,5 +1,6 @@
 package bjc.utils.data;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -68,5 +69,14 @@ public class GenHolder<T> implements IHolder<T> {
 	@Override
 	public <E> E unwrap(Function<T, E> f) {
 		return f.apply(held);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see bjc.utils.data.IHolder#doWith(java.util.function.Consumer)
+	 */
+	public void doWith(Consumer<T> f) {
+		f.accept(held);
 	}
 }

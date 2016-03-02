@@ -1,8 +1,10 @@
-package bjc.utils.data;
+package bjc.utils.data.lazy;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import bjc.utils.data.IHolder;
 import bjc.utils.funcdata.FunctionalList;
 
 /**
@@ -85,6 +87,15 @@ public class LazyHolder<T> implements IHolder<T> {
 		actions.forEach((act) -> held = act.apply(held));
 
 		return f.apply(held);
+	}
+
+	@Override
+	public void doWith(Consumer<T> f) {
+		transform((val) -> {
+			f.accept(val);
+
+			return val;
+		});
 	}
 
 }

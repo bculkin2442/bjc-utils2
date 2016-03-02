@@ -1,5 +1,6 @@
 package bjc.utils.data;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -42,4 +43,11 @@ public interface IHolder<T> {
 	 */
 	public <E> E unwrap(Function<T, E> f);
 
+	/**
+	 * Call a provided function with the value being held
+	 * 
+	 * @param f
+	 *            The function to call
+	 */
+	public void doWith(Consumer<T> f);
 }
