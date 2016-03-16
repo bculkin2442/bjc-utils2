@@ -8,7 +8,7 @@ import bjc.utils.data.IPair;
 import bjc.utils.data.Pair;
 
 public class LazyPair<L, R> implements IPair<L, R> {
-	private LazyHolder<Pair<L, R>> del;
+	protected LazyHolder<IPair<L, R>> del;
 
 	@Override
 	public <L2, R2> IPair<L2, R2> apply(Function<L, L2> lf,
