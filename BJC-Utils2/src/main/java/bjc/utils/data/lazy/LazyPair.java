@@ -5,7 +5,6 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import bjc.utils.data.IPair;
-import bjc.utils.data.Pair;
 
 public class LazyPair<L, R> implements IPair<L, R> {
 	protected LazyHolder<IPair<L, R>> del;
