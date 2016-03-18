@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.bst.ITreePart.TreeLinearizationMethod;
+import bjc.utils.funcdata.ITreePart;
+import bjc.utils.funcdata.ITreePart.TreeLinearizationMethod;
 
 /**
  * A binary search tree, with some mild support for functional traversal.
@@ -52,7 +53,7 @@ public class BinarySearchTree<T> {
 		nCount++;
 
 		if (root == null) {
-			root = new TreeNode<T>(dat, null, null);
+			root = new BinarySearchTreeNode<T>(dat, null, null);
 		} else {
 			root.add(dat, comp);
 		}
@@ -74,7 +75,7 @@ public class BinarySearchTree<T> {
 
 		while ((piv - adj) >= 0 && (piv + adj) < elms.getSize()) {
 			if (root == null) {
-				root = new TreeNode<T>(elms.getByIndex(piv), null, null);
+				root = new BinarySearchTreeNode<T>(elms.getByIndex(piv), null, null);
 			} else {
 				root.add(elms.getByIndex(piv + adj), comp);
 				root.add(elms.getByIndex(piv - adj), comp);

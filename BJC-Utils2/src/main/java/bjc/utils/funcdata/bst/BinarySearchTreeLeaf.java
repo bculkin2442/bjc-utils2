@@ -5,6 +5,8 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import bjc.utils.funcdata.ITreePart;
+
 /**
  * A leaf in a tree.
  * 
@@ -13,7 +15,7 @@ import java.util.function.Predicate;
  * @param <T>
  *            The data stored in the tree.
  */
-public class TreeLeaf<T> implements ITreePart<T> {
+public class BinarySearchTreeLeaf<T> implements ITreePart<T> {
 	/**
 	 * The data held in this tree leaf
 	 */
@@ -30,7 +32,7 @@ public class TreeLeaf<T> implements ITreePart<T> {
 	 * @param dat
 	 *            The data for the leaf to hold.
 	 */
-	public TreeLeaf(T dat) {
+	public BinarySearchTreeLeaf(T dat) {
 		data = dat;
 	}
 

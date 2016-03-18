@@ -7,6 +7,8 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import bjc.utils.funcdata.ITreePart;
+
 /**
  * A binary node in a tree.
  * 
@@ -15,7 +17,7 @@ import java.util.function.Predicate;
  * @param <T>
  *            The data type stored in the tree.
  */
-public class TreeNode<T> extends TreeLeaf<T> {
+public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 	/**
 	 * The left child of this node
 	 */
@@ -36,7 +38,7 @@ public class TreeNode<T> extends TreeLeaf<T> {
 	 * @param right
 	 *            The right child of this node.
 	 */
-	public TreeNode(T data, ITreePart<T> left, ITreePart<T> right) {
+	public BinarySearchTreeNode(T data, ITreePart<T> left, ITreePart<T> right) {
 		super(data);
 		this.left = left;
 		this.right = right;
@@ -53,7 +55,7 @@ public class TreeNode<T> extends TreeLeaf<T> {
 		switch (comp.compare(data, dat)) {
 			case -1:
 				if (left == null) {
-					left = new TreeNode<T>(dat, null, null);
+					left = new BinarySearchTreeNode<T>(dat, null, null);
 				} else {
 					left.add(dat, comp);
 				}
@@ -66,7 +68,7 @@ public class TreeNode<T> extends TreeLeaf<T> {
 				}
 			case 1:
 				if (right == null) {
-					right = new TreeNode<T>(dat, null, null);
+					right = new BinarySearchTreeNode<T>(dat, null, null);
 				} else {
 					right.add(dat, comp);
 				}
