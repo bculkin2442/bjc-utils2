@@ -1,4 +1,4 @@
-package bjc.utils.examples;
+package bjc.utils.examples.parsing;
 
 import java.util.Scanner;
 import java.util.function.Predicate;

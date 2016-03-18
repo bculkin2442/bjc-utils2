@@ -1,4 +1,4 @@
-package bjc.utils.examples;
+package bjc.utils.examples.rangen;
 
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.FunctionalStringTokenizer;
