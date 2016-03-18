@@ -14,8 +14,8 @@ public class PolyhedralDice {
 	 *            The number of ten-sided dice to produce
 	 * @return A group of ten-sided dice of the specified size
 	 */
-	public static LazyDice d10(int nDice) {
-		return new LazyDice(nDice, 10);
+	public static IDiceExpression d10(int nDice) {
+		return new ComplexDice(nDice, 10);
 	}
 
 	/**
@@ -25,8 +25,8 @@ public class PolyhedralDice {
 	 *            The number of hundred-sided dice to produce
 	 * @return A group of hundred-sided dice of the specified size
 	 */
-	public static LazyDice d100(int nDice) {
-		return new LazyDice(nDice, 100);
+	public static IDiceExpression d100(int nDice) {
+		return new ComplexDice(nDice, 100);
 	}
 
 	/**
@@ -36,8 +36,8 @@ public class PolyhedralDice {
 	 *            The number of twelve-sided dice to produce
 	 * @return A group of twelve-sided dice of the specified size
 	 */
-	public static LazyDice d12(int nDice) {
-		return new LazyDice(nDice, 12);
+	public static IDiceExpression d12(int nDice) {
+		return new ComplexDice(nDice, 12);
 	}
 
 	/**
@@ -47,8 +47,8 @@ public class PolyhedralDice {
 	 *            The number of twenty-sided dice to produce
 	 * @return A group of twenty-sided dice of the specified size
 	 */
-	public static LazyDice d20(int nDice) {
-		return new LazyDice(nDice, 20);
+	public static IDiceExpression d20(int nDice) {
+		return new ComplexDice(nDice, 20);
 	}
 
 	/**
@@ -58,8 +58,8 @@ public class PolyhedralDice {
 	 *            The number of ten-sided dice to produce
 	 * @return A group of ten-sided dice of the specified size
 	 */
-	public static LazyDice d4(int nDice) {
-		return new LazyDice(nDice, 4);
+	public static IDiceExpression d4(int nDice) {
+		return new ComplexDice(nDice, 4);
 	}
 
 	/**
@@ -69,8 +69,8 @@ public class PolyhedralDice {
 	 *            The number of ten-sided dice to produce
 	 * @return A group of ten-sided dice of the specified size
 	 */
-	public static LazyDice d6(int nDice) {
-		return new LazyDice(nDice, 6);
+	public static IDiceExpression d6(int nDice) {
+		return new ComplexDice(nDice, 6);
 	}
 
 	/**
@@ -80,7 +80,7 @@ public class PolyhedralDice {
 	 *            The number of ten-sided dice to produce
 	 * @return A group of ten-sided dice of the specified size
 	 */
-	public static LazyDice d8(int nDice) {
-		return new LazyDice(nDice, 8);
+	public static IDiceExpression d8(int nDice) {
+		return new ComplexDice(nDice, 8);
 	}
 }

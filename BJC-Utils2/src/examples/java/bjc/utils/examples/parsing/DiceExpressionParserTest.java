@@ -1,5 +1,6 @@
 package bjc.utils.examples.parsing;
 
+import java.util.HashMap;
 import java.util.Scanner;
 
 import bjc.utils.dice.DiceExpressionParser;
@@ -43,7 +44,7 @@ public class DiceExpressionParserTest {
 		 */
 		DiceExpressionParser dep = new DiceExpressionParser();
 
-		IDiceExpression dexp = dep.parse(exp);
+		IDiceExpression dexp = dep.parse(exp, new HashMap<>());
 
 		/*
 		 * Roll the dice a specified amount of times

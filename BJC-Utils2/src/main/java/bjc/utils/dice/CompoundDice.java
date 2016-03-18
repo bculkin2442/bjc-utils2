@@ -40,4 +40,8 @@ public class CompoundDice implements IDiceExpression {
 		return Integer.parseInt(l.roll() + "" + r.roll());
 	}
 
+	@Override
+	public String toString() {
+		return "compound[l=" + l.toString() + ", r=" + r.toString() + "]";
+	}
 }

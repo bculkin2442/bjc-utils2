@@ -1,6 +1,9 @@
 package bjc.utils.dice;
 
+import java.util.Map;
 import java.util.Stack;
+
+import org.apache.commons.lang3.StringUtils;
 
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.FunctionalStringTokenizer;
@@ -20,7 +23,8 @@ public class DiceExpressionParser {
 	 *            The string to parse an expression from
 	 * @return The parsed dice expression
 	 */
-	public IDiceExpression parse(String exp) {
+	public IDiceExpression parse(String exp,
+			Map<String, IDiceExpression> env) {
 		/*
 		 * Create a tokenizer over the strings
 		 */
@@ -38,6 +42,8 @@ public class DiceExpressionParser {
 							// size dice groups
 		yard.addOp("c", 6); // compound operator: use for creating compound
 							// dice from expressions
+		yard.addOp(":=", 0); // binding operator: Bind a name to a variable
+								// expression
 
 		/*
 		 * Shunt the expression to postfix form
@@ -57,16 +63,19 @@ public class DiceExpressionParser {
 			/*
 			 * Handle compound dice
 			 */
-			if (tok.contains("c") && !tok.equalsIgnoreCase("c")) {
+			if (StringUtils.countMatches(tok, 'c') == 1
+					&& !tok.equalsIgnoreCase("c")) {
 				String[] strangs = tok.split("c");
 
-				dexps.push(new CompoundDice(LazyDice.fromString(strangs[0]),
-						LazyDice.fromString(strangs[1])));
-			} else if (tok.contains("d") && !tok.equalsIgnoreCase("d")) {
+				dexps.push(new CompoundDice(
+						ComplexDice.fromString(strangs[0]),
+						ComplexDice.fromString(strangs[1])));
+			} else if (StringUtils.countMatches(tok, 'd') == 1
+					&& !tok.equalsIgnoreCase("d")) {
 				/*
 				 * Handle dice groups
 				 */
-				dexps.push(LazyDice.fromString(tok));
+				dexps.push(ComplexDice.fromString(tok));
 			} else {
 				try {
 					/*
@@ -75,45 +84,68 @@ public class DiceExpressionParser {
 					dexps.push(new ScalarDie(Integer.parseInt(tok)));
 				} catch (NumberFormatException nfex) {
 
-					/*
-					 * Apply an operation to two dice
-					 */
-					IDiceExpression l = dexps.pop();
-					IDiceExpression r = dexps.pop();
+					if (dexps.size() >= 2) {
+						/*
+						 * Apply an operation to two dice
+						 */
+						IDiceExpression r = dexps.pop();
+						IDiceExpression l = dexps.pop();
+						switch (tok) {
+							case ":=":
+								dexps.push(
+										new BindingDiceExpression(
+												((ReferenceDiceExpression) l)
+														.getName(),
+												r, env));
+								break;
+							case "+":
+								dexps.push(new CompoundDiceExpression(r, l,
+										DiceExpressionType.ADD));
+								break;
+							case "-":
+								dexps.push(new CompoundDiceExpression(r, l,
+										DiceExpressionType.SUBTRACT));
+								break;
+							case "*":
+								dexps.push(new CompoundDiceExpression(r, l,
+										DiceExpressionType.MULTIPLY));
+								break;
+							case "/":
+								dexps.push(new CompoundDiceExpression(r, l,
+										DiceExpressionType.DIVIDE));
+								break;
+							case "c":
+								dexps.push(new CompoundDice(l, r));
+								break;
+							case "d":
+								dexps.push(new ComplexDice(l, r));
+								break;
+							default:
+								/*
+								 * Parse it as a variable reference
+								 * 
+								 * Make sure to restore popped variables
+								 */
+								dexps.push(l);
+								dexps.push(r);
 
-					switch (tok) {
-						case "+":
-							dexps.push(new CompoundDiceExpression(l, r,
-									DiceExpressionType.ADD));
-							break;
-						case "-":
-							dexps.push(new CompoundDiceExpression(l, r,
-									DiceExpressionType.SUBTRACT));
-							break;
-						case "*":
-							dexps.push(new CompoundDiceExpression(l, r,
-									DiceExpressionType.MULTIPLY));
-							break;
-						case "/":
-							dexps.push(new CompoundDiceExpression(l, r,
-									DiceExpressionType.DIVIDE));
-							break;
-						case "c":
-							dexps.push(new CompoundDice(l, r));
-							break;
-						case "d":
-							dexps.push(new LazyDice(l, r));
-							break;
-						default:
-							/*
-							 * Tell the user the operator is invalid
-							 */
-							throw new IllegalStateException(
-									"Detected invalid operator " + tok);
+								dexps.push(new ReferenceDiceExpression(tok,
+										env));
+						}
+					} else {
+						/*
+						 * Parse it as a variable reference
+						 */
+						dexps.push(new ReferenceDiceExpression(tok, env));
 					}
 				}
 			}
 		});
+
+		if (dexps.size() != 1) {
+			System.err.println(
+					"WARNING: Leftovers found on dice expression stack. Remember, := is assignment.");
+		}
 
 		/*
 		 * Return the built expression

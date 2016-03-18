@@ -23,9 +23,13 @@ public class ScalarDiceExpression implements IDiceExpression {
 
 	/**
 	 * Create a dice expression with a scalar
-	 * @param dex The dice to use
-	 * @param scalr The scalar to use
-	 * @param dt The operation to combine with
+	 * 
+	 * @param dex
+	 *            The dice to use
+	 * @param scalr
+	 *            The scalar to use
+	 * @param dt
+	 *            The operation to combine with
 	 */
 	public ScalarDiceExpression(IDiceExpression dex, int scalr,
 			DiceExpressionType dt) {
@@ -50,5 +54,11 @@ public class ScalarDiceExpression implements IDiceExpression {
 						"Got passed  a invalid ScalarExpressionType "
 								+ det);
 		}
+	}
+
+	@Override
+	public String toString() {
+		return "scalar-exp[type=" + det + ", l=" + scalar + ", r="
+				+ exp.toString() + "]";
 	}
 }

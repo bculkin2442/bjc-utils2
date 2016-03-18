@@ -7,7 +7,7 @@ package bjc.utils.dice;
  * @author ben
  *
  */
-public class LazyDice implements IDiceExpression {
+public class ComplexDice implements IDiceExpression {
 	/**
 	 * The die being rolled
 	 */
@@ -26,7 +26,7 @@ public class LazyDice implements IDiceExpression {
 	 * @param de
 	 *            The type of dice the collection is composed of
 	 */
-	public LazyDice(IDiceExpression nDce, IDiceExpression de) {
+	public ComplexDice(IDiceExpression nDce, IDiceExpression de) {
 		nDice = nDce;
 		die = de;
 	}
@@ -39,7 +39,7 @@ public class LazyDice implements IDiceExpression {
 	 * @param de
 	 *            The type of dice the collection is composed of
 	 */
-	public LazyDice(int nSides, int de) {
+	public ComplexDice(int nSides, int de) {
 		nDice = new ScalarDie(nSides);
 		die = new Die(de);
 	}
@@ -67,7 +67,7 @@ public class LazyDice implements IDiceExpression {
 	 *            The string to parse the dice from
 	 * @return A dice group parsed from the string
 	 */
-	public static LazyDice fromString(String dice) {
+	public static ComplexDice fromString(String dice) {
 		/*
 		 * Split it on the dice type marker
 		 */
@@ -77,17 +77,27 @@ public class LazyDice implements IDiceExpression {
 			/*
 			 * Create the actual dice
 			 */
-			return new LazyDice(
+			return new ComplexDice(
 					new ScalarDie(Integer.parseInt(strangs[0])),
 					new Die(Integer.parseInt(strangs[1])));
 		} catch (NumberFormatException nfex) {
 			/*
 			 * Tell the user the expression is invalid
 			 */
-			throw new IllegalStateException(
+			throw new IllegalArgumentException(
 					"Attempted to create a dice using something that's not"
 							+ " an integer: " + strangs[0] + " and "
 							+ strangs[1] + " are likely culprits.");
+		}
+	}
+
+	@Override
+	public String toString() {
+		if (nDice instanceof ScalarDie && die instanceof Die) {
+			return nDice.toString() + die.toString();
+		} else {
+			return "complex[n=" + nDice.toString() + ", d="
+					+ die.toString() + "]";
 		}
 	}
 }

@@ -20,7 +20,7 @@ public class DiceExpressionBuilder {
 	 * @param firstDice
 	 *            The dice to use as a seed
 	 */
-	public DiceExpressionBuilder(LazyDice firstDice) {
+	public DiceExpressionBuilder(ComplexDice firstDice) {
 		baking = firstDice;
 	}
 
@@ -43,7 +43,7 @@ public class DiceExpressionBuilder {
 	 *            The number of dice in the group
 	 */
 	public DiceExpressionBuilder(int nSides, int nDice) {
-		baking = new LazyDice(nSides, nDice);
+		baking = new ComplexDice(nSides, nDice);
 	}
 
 	/**

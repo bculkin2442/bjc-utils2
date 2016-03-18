@@ -53,15 +53,21 @@ public class CompoundDiceExpression implements IDiceExpression {
 				return right.roll() * left.roll();
 			case DIVIDE:
 				/*
-				 * Round to keep results as integers.
-				 * We don't really have any need for floating-point dice
+				 * Round to keep results as integers. We don't really have
+				 * any need for floating-point dice
 				 */
 				return Math.round(right.roll() / left.roll());
 			default:
-				throw new IllegalStateException(
-						"Got passed  a invalid ScalarExpressionType "
-								+ det + ". WAT");
+				throw new IllegalArgumentException(
+						"Got passed  a invalid ScalarExpressionType " + det
+								+ ". WAT");
 
 		}
+	}
+
+	@Override
+	public String toString() {
+		return "dice-exp[type=" + det + ", l=" + left.toString() + ", r="
+				+ right.toString() + "]";
 	}
 }
