@@ -1,4 +1,4 @@
-package bjc.utils.gui;
+package bjc.utils.exceptions;
 
 import java.io.IOException;
 

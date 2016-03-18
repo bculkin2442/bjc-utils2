@@ -1,4 +1,4 @@
-package bjc.utils.parserutils;
+package bjc.utils.exceptions;
 
 import java.util.InputMismatchException;
 

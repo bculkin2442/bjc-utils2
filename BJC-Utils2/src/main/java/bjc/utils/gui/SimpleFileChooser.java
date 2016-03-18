@@ -5,6 +5,8 @@ import java.io.File;
 
 import javax.swing.JFileChooser;
 
+import bjc.utils.exceptions.FileNotChosenException;
+
 /**
  * Utility class for easily prompting user for files.
  * 

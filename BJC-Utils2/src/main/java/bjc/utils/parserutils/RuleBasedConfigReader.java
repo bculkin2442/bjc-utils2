@@ -8,6 +8,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import bjc.utils.data.Pair;
+import bjc.utils.exceptions.UnknownPragmaException;
 import bjc.utils.funcdata.FunctionalStringTokenizer;
 
 /**
