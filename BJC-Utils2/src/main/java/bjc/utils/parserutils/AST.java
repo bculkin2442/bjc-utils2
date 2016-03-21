@@ -4,6 +4,8 @@ import java.util.Map;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 
 import bjc.utils.funcdata.ITreePart.TreeLinearizationMethod;
 
@@ -119,6 +121,14 @@ public class AST<T> {
 		return sb.toString();
 	}
 
+	/**
+	 * Internal version of toString for proper rendering
+	 * 
+	 * @param sb
+	 *            The string rendering being built
+	 * @param indentLevel
+	 *            The current level to indent the tree
+	 */
 	private void internalToString(StringBuilder sb, int indentLevel) {
 		indentNLevels(sb, indentLevel);
 
@@ -131,23 +141,67 @@ public class AST<T> {
 			sb.append(token.toString());
 			sb.append("\n");
 
-			// indentNLevels(sb, indentLevel + 2);
-			//
-			// sb.append("Left: \n");
-
 			left.internalToString(sb, indentLevel + 2);
-			//
-			// indentNLevels(sb, indentLevel + 2);
-			//
-			// sb.append("Right: \n");
-
 			right.internalToString(sb, indentLevel + 2);
 		}
 	}
 
+	/**
+	 * Indent a string n levels
+	 * 
+	 * @param sb
+	 *            The string to indent
+	 * @param n
+	 *            The number of levels to indent
+	 */
 	private void indentNLevels(StringBuilder sb, int n) {
 		for (int i = 0; i <= n; i++) {
 			sb.append("\t");
 		}
+	}
+
+	/**
+	 * Execute a transform on selective nodes of the tree
+	 * 
+	 * @param transformPred
+	 *            The predicate to pick nodes to transform
+	 * @param transformer
+	 *            The thing to use to transform the nodes
+	 */
+	public void selectiveTransform(Predicate<T> transformPred,
+			UnaryOperator<T> transformer) {
+		if (transformPred.test(token)) {
+			token = transformer.apply(token);
+		}
+
+		if (left != null) {
+			left.selectiveTransform(transformPred, transformer);
+		}
+
+		if (right != null) {
+			right.selectiveTransform(transformPred, transformer);
+		}
+	}
+
+	/**
+	 * Transmute the tokens in an AST into a different sort of token
+	 * 
+	 * @param tokenTransformer
+	 *            The transform to run on the tokens
+	 * @return The AST with transformed tokens
+	 */
+	public <E> AST<E> transmuteAST(Function<T, E> tokenTransformer) {
+		AST<E> l = null;
+		AST<E> r = null;
+
+		if (left != null) {
+			l = left.transmuteAST(tokenTransformer);
+		}
+
+		if (right != null) {
+			r = right.transmuteAST(tokenTransformer);
+		}
+
+		return new AST<E>(tokenTransformer.apply(token), l, r);
 	}
 }
