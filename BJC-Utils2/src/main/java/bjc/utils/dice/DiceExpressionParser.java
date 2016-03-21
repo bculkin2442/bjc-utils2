@@ -92,11 +92,8 @@ public class DiceExpressionParser {
 						IDiceExpression l = dexps.pop();
 						switch (tok) {
 							case ":=":
-								dexps.push(
-										new BindingDiceExpression(
-												((ReferenceDiceExpression) l)
-														.getName(),
-												r, env));
+								dexps.push(new BindingDiceExpression(l, r,
+										env));
 								break;
 							case "+":
 								dexps.push(new CompoundDiceExpression(r, l,

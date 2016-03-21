@@ -31,6 +31,11 @@ public class BindingDiceExpression implements IDiceExpression {
 		env.put(name, exp);
 	}
 
+	public BindingDiceExpression(IDiceExpression left,
+			IDiceExpression right, Map<String, IDiceExpression> env) {
+		this(((ReferenceDiceExpression) left).getName(), right, env);
+	}
+
 	@Override
 	public int roll() {
 		return exp.roll();

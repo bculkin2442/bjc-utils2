@@ -35,7 +35,7 @@ public class Die implements IDiceExpression {
 	 * @return The result of rolling the dice
 	 */
 	public int roll() {
-		return rng.nextInt(nSides + 1);
+		return rng.nextInt(nSides) + 1;
 	}
 
 	@Override
