@@ -7,15 +7,17 @@ import java.util.function.BiConsumer;
 
 import bjc.utils.dice.DiceExpressionParser;
 import bjc.utils.dice.IDiceExpression;
+import bjc.utils.dice.ast.DiceASTFlattener;
+import bjc.utils.dice.ast.DiceASTParser;
 
-public class DiceLanguageTest {
+public class DiceASTLanguageTest {
 	private static Map<String, BiConsumer<String, DiceLanguageState>> acts;
 
 	static {
 		acts = new HashMap<>();
 
-		acts.put("roll", DiceLanguageTest::rollReference);
-		acts.put("env", DiceLanguageTest::printEnv);
+		acts.put("roll", DiceASTLanguageTest::rollReference);
+		acts.put("env", DiceASTLanguageTest::printEnv);
 	}
 
 	public static void printEnv(String ln, DiceLanguageState stat) {
@@ -50,6 +52,8 @@ public class DiceLanguageTest {
 		System.out.print("dice-lang-" + i + "> ");
 		String ln = scn.nextLine();
 
+		DiceASTParser dap = new DiceASTParser();
+
 		DiceExpressionParser dep = new DiceExpressionParser();
 		Map<String, IDiceExpression> env = new HashMap<>();
 		DiceLanguageState state = new DiceLanguageState(dep, env);
@@ -60,11 +64,13 @@ public class DiceLanguageTest {
 			if (acts.containsKey(header)) {
 				acts.get(header).accept(ln, state);
 			} else {
-				IDiceExpression exp = dep.parse(ln, env);
+
+				IDiceExpression exp = DiceASTFlattener
+						.flatten(dap.buildAST(ln), env);
 
 				System.out.println("\tParsed: " + exp.toString());
 				System.out.println("\tSample Roll: " + exp.roll());
-				
+
 				env.put("last", exp);
 			}
 
