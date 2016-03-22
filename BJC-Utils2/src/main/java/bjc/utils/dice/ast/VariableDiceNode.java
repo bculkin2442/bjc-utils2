@@ -20,4 +20,9 @@ public class VariableDiceNode implements IDiceASTNode {
 	public String getVariable() {
 		return var;
 	}
+	
+	@Override
+	public String toString() {
+		return var;
+	}
 }

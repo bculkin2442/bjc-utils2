@@ -29,7 +29,7 @@ public class DiceASTFlattener {
 				return new ReferenceDiceExpression(
 						((VariableDiceNode) nod).getVariable(), env);
 			}
-		} , opCollapsers, (r) -> r);
+		} , opCollapsers::get, (r) -> r);
 	}
 
 	private static Map<IDiceASTNode, BinaryOperator<IDiceExpression>> buildOperations(

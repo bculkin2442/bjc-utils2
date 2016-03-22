@@ -1,8 +1,12 @@
 package bjc.utils.dice.ast;
 
+// The following classes need to be changed upon addition of a new operator
+// 1. DiceASTExpression
+// 2. DiceASTFlattener
+// 3. DiceASTParser
 public enum OperatorDiceNode implements IDiceASTNode {
 	ASSIGN, ADD, SUBTRACT, MULTIPLY, DIVIDE, GROUP, COMPOUND;
-
+	
 	@Override
 	public boolean isOperator() {
 		return true;
