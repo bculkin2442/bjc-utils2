@@ -54,25 +54,30 @@ public class AST<T> {
 	}
 
 	public void traverse(TreeLinearizationMethod tlm, Consumer<T> con) {
-		switch (tlm) {
-			case INORDER:
-				left.traverse(tlm, con);
-				con.accept(token);
-				right.traverse(tlm, con);
-				break;
-			case POSTORDER:
-				left.traverse(tlm, con);
-				right.traverse(tlm, con);
-				con.accept(token);
-				break;
-			case PREORDER:
-				con.accept(token);
-				left.traverse(tlm, con);
-				right.traverse(tlm, con);
-				break;
-			default:
-				throw new IllegalArgumentException(
-						"Got a invalid tree linearizer " + tlm + ". WAT");
+		if (left != null && right != null) {
+			switch (tlm) {
+				case INORDER:
+					left.traverse(tlm, con);
+					con.accept(token);
+					right.traverse(tlm, con);
+					break;
+				case POSTORDER:
+					left.traverse(tlm, con);
+					right.traverse(tlm, con);
+					con.accept(token);
+					break;
+				case PREORDER:
+					con.accept(token);
+					left.traverse(tlm, con);
+					right.traverse(tlm, con);
+					break;
+				default:
+					throw new IllegalArgumentException(
+							"Got a invalid tree linearizer " + tlm
+									+ ". WAT");
+			}
+		} else {
+			con.accept(token);
 		}
 	}
 
@@ -102,10 +107,10 @@ public class AST<T> {
 		if (left == null && right == null) {
 			return tokenTransform.apply(token);
 		} else {
-			T2 leftCollapsed = left.internalCollapse(tokenTransform,
-					nodeTransform);
-			T2 rightCollapsed = right.internalCollapse(tokenTransform,
-					nodeTransform);
+			T2 leftCollapsed =
+					left.internalCollapse(tokenTransform, nodeTransform);
+			T2 rightCollapsed =
+					right.internalCollapse(tokenTransform, nodeTransform);
 
 			return nodeTransform.apply(token).apply(leftCollapsed,
 					rightCollapsed);
