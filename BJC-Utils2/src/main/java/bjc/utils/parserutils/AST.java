@@ -88,7 +88,7 @@ public class AST<T> {
 	 * @return The collapsed value of the tree
 	 */
 	public <E, T2> E collapse(Function<T, T2> tokenTransform,
-			Map<T, BinaryOperator<T2>> nodeTransform,
+			Function<T, BinaryOperator<T2>> nodeTransform,
 			Function<T2, E> resultTransform) {
 		return resultTransform
 				.apply(internalCollapse(tokenTransform, nodeTransform));
@@ -98,7 +98,7 @@ public class AST<T> {
 	 * Internal recursive collapser
 	 */
 	private <T2> T2 internalCollapse(Function<T, T2> tokenTransform,
-			Map<T, BinaryOperator<T2>> nodeTransform) {
+			Function<T, BinaryOperator<T2>> nodeTransform) {
 		if (left == null && right == null) {
 			return tokenTransform.apply(token);
 		} else {
@@ -107,7 +107,7 @@ public class AST<T> {
 			T2 rightCollapsed = right.internalCollapse(tokenTransform,
 					nodeTransform);
 
-			return nodeTransform.get(token).apply(leftCollapsed,
+			return nodeTransform.apply(token).apply(leftCollapsed,
 					rightCollapsed);
 		}
 	}

@@ -67,9 +67,7 @@ public class DiceExpressionParser {
 					&& !tok.equalsIgnoreCase("c")) {
 				String[] strangs = tok.split("c");
 
-				dexps.push(new CompoundDice(
-						ComplexDice.fromString(strangs[0]),
-						ComplexDice.fromString(strangs[1])));
+				dexps.push(new CompoundDice(strangs));
 			} else if (StringUtils.countMatches(tok, 'd') == 1
 					&& !tok.equalsIgnoreCase("d")) {
 				/*

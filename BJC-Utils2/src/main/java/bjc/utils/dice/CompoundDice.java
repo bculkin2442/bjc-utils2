@@ -33,8 +33,11 @@ public class CompoundDice implements IDiceExpression {
 	}
 
 	public CompoundDice(String l, String r) {
-		this.l = ComplexDice.fromString(l);
-		this.r = ComplexDice.fromString(r);
+		this(ComplexDice.fromString(l), ComplexDice.fromString(r));
+	}
+
+	public CompoundDice(String[] exps) {
+		this(exps[0], exps[1]);
 	}
 
 	@Override

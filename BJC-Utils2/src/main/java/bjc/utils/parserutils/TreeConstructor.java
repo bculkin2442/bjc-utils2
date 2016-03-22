@@ -31,8 +31,8 @@ public class TreeConstructor {
 	 */
 	public static <T> AST<T> constructTree(FunctionalList<T> toks,
 			Predicate<T> opPredicate) {
-		GenHolder<Pair<Deque<AST<T>>, AST<T>>> initState = new GenHolder<>(
-				new Pair<>(new LinkedList<>(), null));
+		GenHolder<Pair<Deque<AST<T>>, AST<T>>> initState =
+				new GenHolder<>(new Pair<>(new LinkedList<>(), null));
 
 		toks.forEach((ele) -> {
 			if (opPredicate.test(ele)) {
@@ -46,18 +46,26 @@ public class TreeConstructor {
 						AST<T> newAST = new AST<T>(ele, left, right);
 
 						deq.push(newAST);
-						
+
 						return newAST;
 					});
 
-					Pair<Deque<AST<T>>, AST<T>> newPair = new Pair<>(lft,
-							mergedAST);
+					Pair<Deque<AST<T>>, AST<T>> newPair =
+							new Pair<>(lft, mergedAST);
 
 					return newPair;
 				});
 			} else {
-				initState.doWith((par) -> par
-						.doWith((deq, ast) -> deq.push(new AST<>(ele))));
+				AST<T> newAST = new AST<>(ele);
+
+				initState.doWith((par) -> par.doWith((deq, ast) -> {
+					deq.push(newAST);
+				}));
+				
+				initState.transform((par) -> {
+					return (Pair<Deque<AST<T>>, AST<T>>) par
+							.apply((d) -> d, (a) -> newAST);
+				});
 			}
 		});
 
