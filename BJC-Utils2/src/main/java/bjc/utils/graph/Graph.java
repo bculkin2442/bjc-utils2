@@ -237,7 +237,9 @@ public class Graph<T> {
 
 	/**
 	 * Create a graph from a list of edges
-	 * @param <E> The type of data stored in the edges
+	 * 
+	 * @param <E>
+	 *            The type of data stored in the edges
 	 * 
 	 * @param edges
 	 *            The list of edges to build from

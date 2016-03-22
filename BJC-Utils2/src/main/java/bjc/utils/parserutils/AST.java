@@ -90,8 +90,10 @@ public class AST<T> {
 
 	/**
 	 * Collapse this tree into a single node
-	 * @param <E> The final value of the collapsed tree
-	 * @param <T2> 
+	 * 
+	 * @param <E>
+	 *            The final value of the collapsed tree
+	 * @param <T2>
 	 * 
 	 * @param tokenTransform
 	 *            The function to transform nodes into data
@@ -199,7 +201,9 @@ public class AST<T> {
 
 	/**
 	 * Transmute the tokens in an AST into a different sort of token
-	 * @param <E> The type of the transformed tokens
+	 * 
+	 * @param <E>
+	 *            The type of the transformed tokens
 	 * 
 	 * @param tokenTransformer
 	 *            The transform to run on the tokens

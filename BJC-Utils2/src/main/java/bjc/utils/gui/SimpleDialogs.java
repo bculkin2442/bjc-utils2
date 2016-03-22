@@ -140,7 +140,9 @@ public class SimpleDialogs {
 
 	/**
 	 * Get a value parsable from a string from the user.
-	 * @param <E> The type of the value parsed from the string
+	 * 
+	 * @param <E>
+	 *            The type of the value parsed from the string
 	 * 
 	 * @param parent
 	 *            The parent component for dialogs.

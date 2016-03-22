@@ -38,7 +38,8 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 	 * @param right
 	 *            The right child of this node.
 	 */
-	public BinarySearchTreeNode(T data, ITreePart<T> left, ITreePart<T> right) {
+	public BinarySearchTreeNode(T data, ITreePart<T> left,
+			ITreePart<T> right) {
 		super(data);
 		this.left = left;
 		this.right = right;

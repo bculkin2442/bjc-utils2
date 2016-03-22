@@ -31,6 +31,7 @@ public class Die implements IDiceExpression {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see bjc.utils.dice.IDiceExpression#roll()
 	 */
 	@Override
@@ -40,6 +41,7 @@ public class Die implements IDiceExpression {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

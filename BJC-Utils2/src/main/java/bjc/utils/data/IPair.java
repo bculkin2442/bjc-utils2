@@ -46,7 +46,9 @@ public interface IPair<L, R> {
 	/**
 	 * Collapse this pair to a single value. Does not change the internal
 	 * contents of this pair.
-	 * @param <E> The resulting type after merging
+	 * 
+	 * @param <E>
+	 *            The resulting type after merging
 	 * 
 	 * @param bf
 	 *            The function to use to collapse the pair.

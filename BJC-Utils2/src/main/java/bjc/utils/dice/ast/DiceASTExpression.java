@@ -162,6 +162,7 @@ public class DiceASTExpression implements IDiceExpression {
 
 	/**
 	 * Get the AST bound to this expression
+	 * 
 	 * @return the ast
 	 */
 	public AST<IDiceASTNode> getAst() {
@@ -170,6 +171,7 @@ public class DiceASTExpression implements IDiceExpression {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see bjc.utils.dice.IDiceExpression#roll()
 	 */
 	@Override
@@ -183,6 +185,7 @@ public class DiceASTExpression implements IDiceExpression {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

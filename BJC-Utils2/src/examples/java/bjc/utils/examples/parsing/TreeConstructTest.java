@@ -11,13 +11,16 @@ import bjc.utils.parserutils.TreeConstructor;
 
 /**
  * Test of tree constructor
+ * 
  * @author ben
  *
  */
 public class TreeConstructTest {
 	/**
 	 * Main method
-	 * @param args Unused CLI args
+	 * 
+	 * @param args
+	 *            Unused CLI args
 	 */
 	public static void main(String[] args) {
 		Scanner scn = new Scanner(System.in);
@@ -33,8 +36,8 @@ public class TreeConstructTest {
 
 		System.out.println("Shunted: " + ls.toString());
 
-		AST<String> ast = TreeConstructor.constructTree(ls,
-				new Predicate<String>() {
+		AST<String> ast =
+				TreeConstructor.constructTree(ls, new Predicate<String>() {
 					@Override
 					public boolean test(String tok) {
 						switch (tok) {

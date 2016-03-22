@@ -82,7 +82,8 @@ public class ShuntingYard<E> {
 	 * 
 	 * @param tok
 	 *            The token representing the operator
-	 * @param i The precedence of the operator to add
+	 * @param i
+	 *            The precedence of the operator to add
 	 */
 	public void addOp(String tok, int i) {
 		this.addOp(tok, IPrecedent.newSimplePrecedent(i));

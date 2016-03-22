@@ -14,7 +14,9 @@ import bjc.utils.funcdata.bst.BinarySearchTree;
 public class BinarySearcher {
 	/**
 	 * Main method of class
-	 * @param args Unused CLI args
+	 * 
+	 * @param args
+	 *            Unused CLI args
 	 */
 	public static void main(String[] args) {
 		Scanner s = new Scanner(System.in);
@@ -23,8 +25,8 @@ public class BinarySearcher {
 
 		char c = 'n';
 
-		BinarySearchTree<Character> bst = new BinarySearchTree<>(
-				(o1, o2) -> o1 - o2);
+		BinarySearchTree<Character> bst =
+				new BinarySearchTree<>((o1, o2) -> o1 - o2);
 
 		while (c != 'e') {
 			System.out.print("Enter a command (m for help): ");
