@@ -8,7 +8,16 @@ import bjc.utils.parserutils.AST;
 import bjc.utils.parserutils.ShuntingYard;
 import bjc.utils.parserutils.TreeConstructor;
 
+/**
+ * Create an AST from a string expression
+ * 
+ * @author ben
+ *
+ */
 public class DiceASTParser {
+	/**
+	 * The yard to use for shunting expressions
+	 */
 	private static ShuntingYard<String> yard;
 
 	static {
@@ -22,14 +31,21 @@ public class DiceASTParser {
 		// expression
 	}
 
+	/**
+	 * Build an AST from a string expression
+	 * 
+	 * @param exp
+	 *            The string to build from
+	 * @return An AST built from the passed in string
+	 */
 	public AST<IDiceASTNode> buildAST(String exp) {
-		FunctionalList<String> tokens = FunctionalStringTokenizer
-				.fromString(exp).toList((s) -> s);
+		FunctionalList<String> tokens =
+				FunctionalStringTokenizer.fromString(exp).toList((s) -> s);
 
 		FunctionalList<String> shunted = yard.postfix(tokens, (s) -> s);
 
-		AST<String> rawAST = TreeConstructor.constructTree(shunted,
-				this::isOperator);
+		AST<String> rawAST =
+				TreeConstructor.constructTree(shunted, this::isOperator);
 
 		AST<IDiceASTNode> bakedAST = rawAST.transmuteAST((tok) -> {
 			if (isOperator(tok)) {
@@ -44,22 +60,14 @@ public class DiceASTParser {
 		return bakedAST;
 	}
 
-	private boolean isOperator(String tok) {
-		switch (tok) {
-			case ":=":
-			case "+":
-			case "-":
-			case "*":
-			case "/":
-			case "c":
-			case "d":
-				return true;
-			default:
-				return false;
-		}
-	}
-
-	private boolean isLiteral(String tok) {
+	/**
+	 * Check if a token represents a literal
+	 * 
+	 * @param tok
+	 *            The token to check
+	 * @return Whether or not the token represents a literal
+	 */
+	private static boolean isLiteral(String tok) {
 		if (StringUtils.countMatches(tok, 'c') == 1
 				&& !tok.equalsIgnoreCase("c")) {
 			return true;
@@ -73,6 +81,28 @@ public class DiceASTParser {
 			} catch (NumberFormatException nfx) {
 				return false;
 			}
+		}
+	}
+
+	/**
+	 * Check if a token represents an operator
+	 * 
+	 * @param tok
+	 *            The token to check if it represents an operator
+	 * @return Whether or not the token represents an operator
+	 */
+	private boolean isOperator(String tok) {
+		switch (tok) {
+			case ":=":
+			case "+":
+			case "-":
+			case "*":
+			case "/":
+			case "c":
+			case "d":
+				return true;
+			default:
+				return false;
 		}
 	}
 }

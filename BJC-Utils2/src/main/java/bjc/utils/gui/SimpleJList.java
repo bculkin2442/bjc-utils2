@@ -14,16 +14,22 @@ public class SimpleJList {
 	/**
 	 * Create a new JList from a given list.
 	 * 
+	 * @param <E>
+	 *            The type of data in the JList
+	 * 
 	 * @param ls
 	 *            The list to populate the JList with.
 	 * @return A JList populated with the elements from ls.
 	 */
 	public static <E> JList<E> buildFromList(Iterable<E> ls) {
-		return new JList<E>(buildModel(ls));
+		return new JList<>(buildModel(ls));
 	}
 
 	/**
 	 * Create a new list model from a given list.
+	 * 
+	 * @param <E>
+	 *            The type of data in the list model
 	 * 
 	 * @param ls
 	 *            The list to fill the list model from.

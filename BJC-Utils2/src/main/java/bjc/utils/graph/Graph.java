@@ -35,7 +35,7 @@ public class Graph<T> {
 	 * Create a new graph
 	 */
 	public Graph() {
-		graph = new HashMap<T, Map<T, Integer>>();
+		graph = new HashMap<>();
 	}
 
 	/**
@@ -121,20 +121,18 @@ public class Graph<T> {
 	 * Uses Prim's algorothm to calculate a MST for the graph. If the graph
 	 * is non-connected, this will lead to unpredictable results.
 	 * 
-	 * @param graph
-	 *            a connected graph.
 	 * @return a list of edges that constitute the MST
 	 */
 	public List<Edge<T>> getMinSpanTree() {
 		// Set of all of the currently available edges
-		Queue<Edge<T>> availEdges = new PriorityQueue<Edge<T>>(10,
+		Queue<Edge<T>> availEdges = new PriorityQueue<>(10,
 				(e1, e2) -> e1.getDistance() - e2.getDistance());
 
 		// The MST of the graph
-		List<Edge<T>> minEdges = new ArrayList<Edge<T>>();
+		List<Edge<T>> minEdges = new ArrayList<>();
 
 		// The set of all of the visited vertices.
-		Set<T> visited = new HashSet<T>();
+		Set<T> visited = new HashSet<>();
 
 		// Start at the initial vertex and visit it
 		IHolder<T> src = new GenHolder<>(getInitial());
@@ -146,12 +144,11 @@ public class Graph<T> {
 
 			forAllEdgesMatchingAt(src.unwrap(vl -> vl),
 					(tgt, weight) -> !visited.contains(tgt),
-					(tgt, weight) -> availEdges.add(new Edge<T>(
+					(tgt, weight) -> availEdges.add(new Edge<>(
 							src.unwrap(vl -> vl), tgt, weight)));
 
 			// Get the edge with the minimum distance
-			IHolder<Edge<T>> minEdge = new GenHolder<>(
-					availEdges.poll());
+			IHolder<Edge<T>> minEdge = new GenHolder<>(availEdges.poll());
 
 			// Only consider edges where we haven't visited the target of
 			// the edge
@@ -240,6 +237,7 @@ public class Graph<T> {
 
 	/**
 	 * Create a graph from a list of edges
+	 * @param <E> The type of data stored in the edges
 	 * 
 	 * @param edges
 	 *            The list of edges to build from

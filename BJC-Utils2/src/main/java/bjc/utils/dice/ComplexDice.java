@@ -9,58 +9,6 @@ package bjc.utils.dice;
  */
 public class ComplexDice implements IDiceExpression {
 	/**
-	 * The die being rolled
-	 */
-	private IDiceExpression	die;
-
-	/**
-	 * The number of the specified die to roll
-	 */
-	private IDiceExpression	nDice;
-
-	/**
-	 * Create a new collection of dice
-	 * 
-	 * @param nDce
-	 *            The number of dice in the collection
-	 * @param de
-	 *            The type of dice the collection is composed of
-	 */
-	public ComplexDice(IDiceExpression nDce, IDiceExpression de) {
-		nDice = nDce;
-		die = de;
-	}
-
-	/**
-	 * Create a new collection of dice
-	 * 
-	 * @param nDce
-	 *            The number of dice in the collection
-	 * @param de
-	 *            The type of dice the collection is composed of
-	 */
-	public ComplexDice(int nSides, int de) {
-		nDice = new ScalarDie(nSides);
-		die = new Die(de);
-	}
-
-	@Override
-	public int roll() {
-		int res = 0;
-
-		/*
-		 * Add the results of rolling each die
-		 */
-		int nRoll = nDice.roll();
-
-		for (int i = 0; i < nRoll; i++) {
-			res += die.roll();
-		}
-
-		return res;
-	}
-
-	/**
 	 * Create a dice from a string expression
 	 * 
 	 * @param dice
@@ -91,6 +39,68 @@ public class ComplexDice implements IDiceExpression {
 		}
 	}
 
+	/**
+	 * The die being rolled
+	 */
+	private IDiceExpression	die;
+
+	/**
+	 * The number of the specified die to roll
+	 */
+	private IDiceExpression	nDice;
+
+	/**
+	 * Create a new collection of dice
+	 * 
+	 * @param nDce
+	 *            The number of dice in the collection
+	 * @param de
+	 *            The type of dice the collection is composed of
+	 */
+	public ComplexDice(IDiceExpression nDce, IDiceExpression de) {
+		nDice = nDce;
+		die = de;
+	}
+
+	/**
+	 * Create a new collection of dice
+	 * 
+	 * @param nSides
+	 *            The number of dice in the collection
+	 * @param de
+	 *            The type of dice the collection is composed of
+	 */
+	public ComplexDice(int nSides, int de) {
+		nDice = new ScalarDie(nSides);
+		die = new Die(de);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see bjc.utils.dice.IDiceExpression#roll()
+	 */
+	@Override
+	public int roll() {
+		int res = 0;
+
+		/*
+		 * Add the results of rolling each die
+		 */
+		int nRoll = nDice.roll();
+
+		for (int i = 0; i < nRoll; i++) {
+			res += die.roll();
+		}
+
+		return res;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		if (nDice instanceof ScalarDie && die instanceof Die) {

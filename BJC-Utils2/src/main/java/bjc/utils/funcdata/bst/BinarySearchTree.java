@@ -53,7 +53,7 @@ public class BinarySearchTree<T> {
 		nCount++;
 
 		if (root == null) {
-			root = new BinarySearchTreeNode<T>(dat, null, null);
+			root = new BinarySearchTreeNode<>(dat, null, null);
 		} else {
 			root.add(dat, comp);
 		}
@@ -75,7 +75,8 @@ public class BinarySearchTree<T> {
 
 		while ((piv - adj) >= 0 && (piv + adj) < elms.getSize()) {
 			if (root == null) {
-				root = new BinarySearchTreeNode<T>(elms.getByIndex(piv), null, null);
+				root = new BinarySearchTreeNode<>(elms.getByIndex(piv),
+						null, null);
 			} else {
 				root.add(elms.getByIndex(piv + adj), comp);
 				root.add(elms.getByIndex(piv - adj), comp);

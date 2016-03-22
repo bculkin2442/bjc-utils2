@@ -51,6 +51,9 @@ public class SimpleDialogs {
 	/**
 	 * Asks the user to pick an option from a series of choices.
 	 * 
+	 * @param <E>
+	 *            The type of choices for the user to pick
+	 * 
 	 * @param parent
 	 *            The parent frame for this dialog
 	 * @param title
@@ -137,6 +140,7 @@ public class SimpleDialogs {
 
 	/**
 	 * Get a value parsable from a string from the user.
+	 * @param <E> The type of the value parsed from the string
 	 * 
 	 * @param parent
 	 *            The parent component for dialogs.

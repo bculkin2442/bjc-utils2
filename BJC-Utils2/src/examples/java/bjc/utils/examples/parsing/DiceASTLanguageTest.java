@@ -17,6 +17,12 @@ import bjc.utils.dice.ast.VariableDiceNode;
 import bjc.utils.funcdata.ITreePart.TreeLinearizationMethod;
 import bjc.utils.parserutils.AST;
 
+/**
+ * A test of the AST based dice language
+ * 
+ * @author ben
+ *
+ */
 public class DiceASTLanguageTest {
 	private static final class LastChecker
 			implements Consumer<IDiceASTNode> {
@@ -59,14 +65,19 @@ public class DiceASTLanguageTest {
 		});
 	}
 
-	public static void printEnv(String ln, DiceASTLanguageState stat) {
+	/**
+	 * @param ln
+	 *            Unused parameter, kept in place to conform to expected
+	 *            type sig
+	 */
+	private static void printEnv(String ln, DiceASTLanguageState stat) {
 		System.out.println("Printing enviroment for debugging purposes.");
 
 		stat.doWith((dep, env) -> env.forEach((key, exp) -> System.out
 				.println("\tKey: " + key + "\tExp: " + exp.toString())));
 	}
 
-	public static void rollReference(String ln,
+	private static void rollReference(String ln,
 			DiceASTLanguageState stat) {
 		String[] strangs = ln.split(" ");
 
@@ -85,6 +96,12 @@ public class DiceASTLanguageTest {
 		}
 	}
 
+	/**
+	 * Main method of class
+	 * 
+	 * @param args
+	 *            Unused CLI args
+	 */
 	public static void main(String[] args) {
 		Scanner scn = new Scanner(System.in);
 		int i = 0;

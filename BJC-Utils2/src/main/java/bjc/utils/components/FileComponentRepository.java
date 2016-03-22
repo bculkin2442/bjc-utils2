@@ -86,5 +86,4 @@ public class FileComponentRepository<E extends IDescribedComponent>
 	public String getSource() {
 		return "Read from directory " + sourcePath + ".";
 	}
-
 }

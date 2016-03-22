@@ -9,12 +9,18 @@ import java.io.IOException;
  *
  */
 public class FileNotChosenException extends IOException {
+	/**
+	 * Version ID for serialization
+	 */
 	private static final long serialVersionUID = -8753348705210831096L;
 
+	/**
+	 * Create a new exception
+	 */
 	public FileNotChosenException() {
 		super();
 	}
-	
+
 	/**
 	 * Create a new exception with the given cause
 	 * 

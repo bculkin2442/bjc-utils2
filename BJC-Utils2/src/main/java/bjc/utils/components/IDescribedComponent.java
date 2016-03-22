@@ -9,13 +9,15 @@ package bjc.utils.components;
  */
 public interface IDescribedComponent {
 	/**
-	 * Get the name of this component.
+	 * Get the author of this component
 	 * 
-	 * This is the only thing required of all components
+	 * Providing this is optional, with "Anonymous" as the default author
 	 * 
-	 * @return The name of the component
+	 * @return The author of the component
 	 */
-	public String getName();
+	public default String getAuthor() {
+		return "Anonymous";
+	}
 
 	/**
 	 * Get the description of this component
@@ -30,15 +32,13 @@ public interface IDescribedComponent {
 	}
 
 	/**
-	 * Get the author of this component
+	 * Get the name of this component.
 	 * 
-	 * Providing this is optional, with "Anonymous" as the default author
+	 * This is the only thing required of all components
 	 * 
-	 * @return The author of the component
+	 * @return The name of the component
 	 */
-	public default String getAuthor() {
-		return "Anonymous";
-	}
+	public String getName();
 
 	/**
 	 * Get the version of this component

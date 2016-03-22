@@ -7,6 +7,8 @@ import java.util.function.Function;
 /**
  * Holds a pair of values of two different types.
  * 
+ * Is an eager variant of {@link IPair}
+ * 
  * @author ben
  *
  * @param <L>
@@ -45,28 +47,35 @@ public class Pair<L, R> implements IPair<L, R> {
 		r = right;
 	}
 
-	/* (non-Javadoc)
-	 * @see bjc.utils.data.IPair#apply(java.util.function.Function, java.util.function.Function)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see bjc.utils.data.IPair#apply(java.util.function.Function,
+	 * java.util.function.Function)
 	 */
 	@Override
 	public <L2, R2> IPair<L2, R2> apply(Function<L, L2> lf,
 			Function<R, R2> rf) {
-		return new Pair<L2, R2>(lf.apply(l), rf.apply(r));
+		return new Pair<>(lf.apply(l), rf.apply(r));
 	}
 
-	/* (non-Javadoc)
-	 * @see bjc.utils.data.IPair#merge(java.util.function.BiFunction)
-	 */
-	@Override
-	public <E> E merge(BiFunction<L, R, E> bf) {
-		return bf.apply(l, r);
-	}
-	
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see bjc.utils.data.IPair#doWith(java.util.function.BiConsumer)
 	 */
 	@Override
 	public void doWith(BiConsumer<L, R> bc) {
 		bc.accept(l, r);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see bjc.utils.data.IPair#merge(java.util.function.BiFunction)
+	 */
+	@Override
+	public <E> E merge(BiFunction<L, R, E> bf) {
+		return bf.apply(l, r);
 	}
 }

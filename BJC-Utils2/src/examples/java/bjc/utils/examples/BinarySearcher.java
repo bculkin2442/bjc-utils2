@@ -12,6 +12,10 @@ import bjc.utils.funcdata.bst.BinarySearchTree;
  *
  */
 public class BinarySearcher {
+	/**
+	 * Main method of class
+	 * @param args Unused CLI args
+	 */
 	public static void main(String[] args) {
 		Scanner s = new Scanner(System.in);
 

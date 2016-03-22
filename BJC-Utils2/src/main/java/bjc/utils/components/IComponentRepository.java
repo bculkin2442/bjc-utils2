@@ -9,6 +9,8 @@ import bjc.utils.funcdata.FunctionalList;
  * 
  * @author ben
  *
+ * @param <E>
+ *            The type of components contained in this repository
  */
 public interface IComponentRepository<E extends IDescribedComponent> {
 	/**

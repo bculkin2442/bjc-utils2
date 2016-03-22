@@ -69,7 +69,7 @@ public class WeightedRandom<E> {
 	 */
 	public E genVal() {
 		GenHolder<Integer> v = new GenHolder<>(src.nextInt(totalChance));
-		IHolder<E> res = new GenHolder<E>();
+		IHolder<E> res = new GenHolder<>();
 		GenHolder<Boolean> bl = new GenHolder<>(true);
 
 		probs.forEachIndexed((i, p) -> {

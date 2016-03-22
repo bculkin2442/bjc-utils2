@@ -13,8 +13,6 @@ import bjc.utils.funcdata.FunctionalList;
  * 
  * @author ben
  *
- * @param <T>
- *            The elements of the parse tree
  */
 public class TreeConstructor {
 	/**
@@ -22,6 +20,8 @@ public class TreeConstructor {
 	 * 
 	 * Only binary operators are accepted.
 	 * 
+	 * @param <T>
+	 *            The elements of the parse tree
 	 * @param toks
 	 *            The list of tokens to build a tree from
 	 * @param opPredicate
@@ -43,7 +43,7 @@ public class TreeConstructor {
 						AST<T> right = deq.pop();
 						AST<T> left = deq.pop();
 
-						AST<T> newAST = new AST<T>(ele, left, right);
+						AST<T> newAST = new AST<>(ele, left, right);
 
 						deq.push(newAST);
 
@@ -61,7 +61,7 @@ public class TreeConstructor {
 				initState.doWith((par) -> par.doWith((deq, ast) -> {
 					deq.push(newAST);
 				}));
-				
+
 				initState.transform((par) -> {
 					return (Pair<Deque<AST<T>>, AST<T>>) par
 							.apply((d) -> d, (a) -> newAST);

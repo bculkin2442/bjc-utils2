@@ -21,6 +21,8 @@ public class DiceExpressionParser {
 	 * 
 	 * @param exp
 	 *            The string to parse an expression from
+	 * @param env
+	 *            The enviroment to use when parsing expressions
 	 * @return The parsed dice expression
 	 */
 	public IDiceExpression parse(String exp,
@@ -48,8 +50,8 @@ public class DiceExpressionParser {
 		/*
 		 * Shunt the expression to postfix form
 		 */
-		FunctionalList<String> ls = yard.postfix(fst.toList(s -> s),
-				s -> s);
+		FunctionalList<String> ls =
+				yard.postfix(fst.toList(s -> s), s -> s);
 
 		/*
 		 * Create a stack for building an expression from parts

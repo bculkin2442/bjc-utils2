@@ -62,6 +62,12 @@ public class DiabloItemGen {
 		addCase(rn, 10, "of Ability");
 	}
 
+	/**
+	 * Main Method
+	 * 
+	 * @param args
+	 *            Unused CLI args
+	 */
 	public static void main(String[] args) {
 		parts.addRule("<item>");
 		addItemRules();

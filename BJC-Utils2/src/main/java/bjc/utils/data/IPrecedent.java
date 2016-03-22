@@ -6,14 +6,8 @@ package bjc.utils.data;
  * @author ben
  *
  */
+@FunctionalInterface
 public interface IPrecedent {
-	/**
-	 * Get the precedence of the attached object
-	 * 
-	 * @return The precedence of the attached object
-	 */
-	public int getPrecedence();
-
 	/**
 	 * Create a new object with set precedence
 	 * 
@@ -24,4 +18,11 @@ public interface IPrecedent {
 	public static IPrecedent newSimplePrecedent(int prec) {
 		return () -> prec;
 	}
+
+	/**
+	 * Get the precedence of the attached object
+	 * 
+	 * @return The precedence of the attached object
+	 */
+	public int getPrecedence();
 }

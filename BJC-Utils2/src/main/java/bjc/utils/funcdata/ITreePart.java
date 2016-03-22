@@ -55,6 +55,9 @@ public interface ITreePart<T> {
 	 * Collapses this tree part into a single value. Does not change the
 	 * underlying tree.
 	 * 
+	 * @param <E>
+	 *            The type of the final collapsed value
+	 * 
 	 * @param f
 	 *            The function to use to transform data into mapped form.
 	 * @param bf

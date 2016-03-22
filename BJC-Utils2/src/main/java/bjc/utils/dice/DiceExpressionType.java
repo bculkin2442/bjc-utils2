@@ -1,11 +1,35 @@
 package bjc.utils.dice;
 
-/*
+/**
  * Enumeration for basic dice expression operators
  */
 public enum DiceExpressionType {
-	ADD, DIVIDE, MULTIPLY, SUBTRACT;
+	/**
+	 * Add two expressions
+	 */
+	ADD,
 
+	/**
+	 * Divide two expressions
+	 */
+	DIVIDE,
+
+	/**
+	 * Multiply two expressions
+	 */
+	MULTIPLY,
+
+	/**
+	 * Subtract two expressions
+	 */
+	SUBTRACT;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Enum#toString()
+	 */
+	@Override
 	public String toString() {
 		switch (this) {
 			case ADD:

@@ -1,8 +1,23 @@
 package bjc.utils.dice.ast;
 
+/**
+ * A AST node that represents a literal value
+ * 
+ * @author ben
+ *
+ */
 public class LiteralDiceNode implements IDiceASTNode {
+	/**
+	 * The value contained by this node
+	 */
 	private String data;
 
+	/**
+	 * Create a new node with the given value
+	 * 
+	 * @param data
+	 *            The value to be in this node
+	 */
 	public LiteralDiceNode(String data) {
 		this.data = data;
 	}
@@ -20,7 +35,12 @@ public class LiteralDiceNode implements IDiceASTNode {
 	public String getData() {
 		return data;
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return data;

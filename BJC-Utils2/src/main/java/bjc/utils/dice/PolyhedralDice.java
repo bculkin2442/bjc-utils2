@@ -1,7 +1,7 @@
 package bjc.utils.dice;
 
 /**
- * Class that produces common polyhedral dice
+ * Utility class that produces common polyhedral dice
  * 
  * @author ben
  *
@@ -52,33 +52,33 @@ public class PolyhedralDice {
 	}
 
 	/**
-	 * Produce the specified number of 10-sided dice
+	 * Produce the specified number of 4-sided dice
 	 * 
 	 * @param nDice
-	 *            The number of ten-sided dice to produce
-	 * @return A group of ten-sided dice of the specified size
+	 *            The number of four-sided dice to produce
+	 * @return A group of four-sided dice of the specified size
 	 */
 	public static IDiceExpression d4(int nDice) {
 		return new ComplexDice(nDice, 4);
 	}
 
 	/**
-	 * Produce the specified number of 10-sided dice
+	 * Produce the specified number of 6-sided dice
 	 * 
 	 * @param nDice
-	 *            The number of ten-sided dice to produce
-	 * @return A group of ten-sided dice of the specified size
+	 *            The number of six-sided dice to produce
+	 * @return A group of six-sided dice of the specified size
 	 */
 	public static IDiceExpression d6(int nDice) {
 		return new ComplexDice(nDice, 6);
 	}
 
 	/**
-	 * Produce the specified number of 10-sided dice
+	 * Produce the specified number of 8-sided dice
 	 * 
 	 * @param nDice
-	 *            The number of ten-sided dice to produce
-	 * @return A group of ten-sided dice of the specified size
+	 *            The number of eight-sided dice to produce
+	 * @return A group of eight-sided dice of the specified size
 	 */
 	public static IDiceExpression d8(int nDice) {
 		return new ComplexDice(nDice, 8);

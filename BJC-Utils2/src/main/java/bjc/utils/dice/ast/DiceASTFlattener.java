@@ -16,25 +16,25 @@ import bjc.utils.dice.ReferenceDiceExpression;
 import bjc.utils.dice.ScalarDie;
 import bjc.utils.parserutils.AST;
 
+/**
+ * Flatten an {@link AST} of {@link IDiceASTNode} into a
+ * {@link IDiceExpression}
+ * 
+ * @author ben
+ *
+ */
 public class DiceASTFlattener {
-	public static IDiceExpression flatten(AST<IDiceASTNode> ast,
-			Map<String, IDiceExpression> env) {
-		Map<IDiceASTNode, BinaryOperator<IDiceExpression>> opCollapsers = buildOperations(
-				env);
-
-		return ast.collapse((nod) -> {
-			if (nod instanceof LiteralDiceNode) {
-				return expFromLiteral((LiteralDiceNode) nod);
-			} else {
-				return new ReferenceDiceExpression(
-						((VariableDiceNode) nod).getVariable(), env);
-			}
-		} , opCollapsers::get, (r) -> r);
-	}
-
-	private static Map<IDiceASTNode, BinaryOperator<IDiceExpression>> buildOperations(
-			Map<String, IDiceExpression> env) {
-		Map<IDiceASTNode, BinaryOperator<IDiceExpression>> opCollapsers = new HashMap<>();
+	/**
+	 * Build the operations to use for tree flattening
+	 * 
+	 * @param env
+	 *            The enviroment the tree will be flattened against
+	 * @return The operations needed for tree flattening
+	 */
+	private static Map<IDiceASTNode, BinaryOperator<IDiceExpression>>
+			buildOperations(Map<String, IDiceExpression> env) {
+		Map<IDiceASTNode, BinaryOperator<IDiceExpression>> opCollapsers =
+				new HashMap<>();
 		opCollapsers.put(OperatorDiceNode.ADD, (left, right) -> {
 			return new CompoundDiceExpression(right, left,
 					DiceExpressionType.ADD);
@@ -64,6 +64,13 @@ public class DiceASTFlattener {
 		return opCollapsers;
 	}
 
+	/**
+	 * Create a dice expression from a literal token
+	 * 
+	 * @param tok
+	 *            The token to convert to an expression
+	 * @return The dice expression represented by the token
+	 */
 	private static IDiceExpression expFromLiteral(LiteralDiceNode tok) {
 		String data = tok.getData();
 
@@ -79,5 +86,29 @@ public class DiceASTFlattener {
 		} else {
 			return new ScalarDie(Integer.parseInt(data));
 		}
+	}
+
+	/**
+	 * Flatten a AST into a dice expression
+	 * 
+	 * @param ast
+	 *            The AST to flatten
+	 * @param env
+	 *            The enviroment to flatten against
+	 * @return The AST, flattened into a dice expression
+	 */
+	public static IDiceExpression flatten(AST<IDiceASTNode> ast,
+			Map<String, IDiceExpression> env) {
+		Map<IDiceASTNode, BinaryOperator<IDiceExpression>> opCollapsers =
+				buildOperations(env);
+
+		return ast.collapse((nod) -> {
+			if (nod instanceof LiteralDiceNode) {
+				return expFromLiteral((LiteralDiceNode) nod);
+			} else {
+				return new ReferenceDiceExpression(
+						((VariableDiceNode) nod).getVariable(), env);
+			}
+		} , opCollapsers::get, (r) -> r);
 	}
 }

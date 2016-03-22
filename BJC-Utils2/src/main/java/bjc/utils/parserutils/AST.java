@@ -1,6 +1,5 @@
 package bjc.utils.parserutils;
 
-import java.util.Map;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -41,9 +40,9 @@ public class AST<T> {
 	 * 
 	 * @param tokn
 	 *            The token in this node
-	 * @param left
+	 * @param lft
 	 *            The left child of this AST
-	 * @param right
+	 * @param rght
 	 *            The right child of this AST
 	 */
 	public AST(T tokn, AST<T> lft, AST<T> rght) {
@@ -53,6 +52,14 @@ public class AST<T> {
 		right = rght;
 	}
 
+	/**
+	 * Traverse an AST
+	 * 
+	 * @param tlm
+	 *            The way to traverse the tree
+	 * @param con
+	 *            The function to call on each traversed element
+	 */
 	public void traverse(TreeLinearizationMethod tlm, Consumer<T> con) {
 		if (left != null && right != null) {
 			switch (tlm) {
@@ -83,6 +90,8 @@ public class AST<T> {
 
 	/**
 	 * Collapse this tree into a single node
+	 * @param <E> The final value of the collapsed tree
+	 * @param <T2> 
 	 * 
 	 * @param tokenTransform
 	 *            The function to transform nodes into data
@@ -159,7 +168,7 @@ public class AST<T> {
 	 * @param n
 	 *            The number of levels to indent
 	 */
-	private void indentNLevels(StringBuilder sb, int n) {
+	private static void indentNLevels(StringBuilder sb, int n) {
 		for (int i = 0; i <= n; i++) {
 			sb.append("\t");
 		}
@@ -190,6 +199,7 @@ public class AST<T> {
 
 	/**
 	 * Transmute the tokens in an AST into a different sort of token
+	 * @param <E> The type of the transformed tokens
 	 * 
 	 * @param tokenTransformer
 	 *            The transform to run on the tokens
@@ -207,6 +217,6 @@ public class AST<T> {
 			r = right.transmuteAST(tokenTransformer);
 		}
 
-		return new AST<E>(tokenTransformer.apply(token), l, r);
+		return new AST<>(tokenTransformer.apply(token), l, r);
 	}
 }

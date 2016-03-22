@@ -66,8 +66,8 @@ public class BinarySearchTreeLeaf<T> implements ITreePart<T> {
 	 * java.util.Comparator)
 	 */
 	@Override
-	public boolean contains(T data, Comparator<T> cmp) {
-		return this.data.equals(data);
+	public boolean contains(T dat, Comparator<T> cmp) {
+		return this.data.equals(dat);
 	}
 
 	/*
@@ -117,6 +117,7 @@ public class BinarySearchTreeLeaf<T> implements ITreePart<T> {
 	 * bjc.utils.data.bst.ITreePart#forEach(bjc.utils.data.bst.ITreePart.
 	 * TreeLinearizationMethod, java.util.function.Predicate)
 	 */
+	@Override
 	public boolean forEach(TreeLinearizationMethod tlm, Predicate<T> c) {
 		return c.test(data);
 	}

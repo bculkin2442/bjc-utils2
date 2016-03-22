@@ -4,9 +4,21 @@ import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.FunctionalStringTokenizer;
 import bjc.utils.gen.RandomGrammar;
 
+/**
+ * Examples of random grammar
+ * 
+ * @author ben
+ *
+ */
 public class RandomStringExamples {
 	private static RandomGrammar<String> rg;
 
+	/**
+	 * Main method
+	 * 
+	 * @param args
+	 *            Unused CLI args
+	 */
 	public static void main(String[] args) {
 		rg = new RandomGrammar<>();
 
@@ -43,7 +55,8 @@ public class RandomStringExamples {
 	}
 
 	private static void addRule(String rule, String... cases) {
-		FunctionalList<FunctionalList<String>> cses = new FunctionalList<>();
+		FunctionalList<FunctionalList<String>> cses =
+				new FunctionalList<>();
 
 		for (String strang : cases) {
 			cses.add(FunctionalStringTokenizer.fromString(strang)

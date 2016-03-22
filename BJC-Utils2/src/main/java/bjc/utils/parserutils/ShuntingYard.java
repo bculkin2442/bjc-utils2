@@ -19,8 +19,29 @@ import bjc.utils.funcdata.FunctionalList;
  */
 public class ShuntingYard<E> {
 
+	/**
+	 * A enum representing the fundamental operator types
+	 * 
+	 * @author ben
+	 *
+	 */
 	public static enum Operator implements IPrecedent {
-		ADD(1), DIVIDE(4), MULTIPLY(3), SUBTRACT(2);
+		/**
+		 * Represents addition
+		 */
+		ADD(1),
+		/**
+		 * Represents division
+		 */
+		DIVIDE(4),
+		/**
+		 * Represents multiplication
+		 */
+		MULTIPLY(3),
+		/**
+		 * Represents subtraction
+		 */
+		SUBTRACT(2);
 
 		private final int precedence;
 
@@ -61,6 +82,7 @@ public class ShuntingYard<E> {
 	 * 
 	 * @param tok
 	 *            The token representing the operator
+	 * @param i The precedence of the operator to add
 	 */
 	public void addOp(String tok, int i) {
 		this.addOp(tok, IPrecedent.newSimplePrecedent(i));

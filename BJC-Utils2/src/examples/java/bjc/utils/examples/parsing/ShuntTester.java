@@ -6,7 +6,19 @@ import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.FunctionalStringTokenizer;
 import bjc.utils.parserutils.ShuntingYard;
 
+/**
+ * Test of shunting yard
+ * 
+ * @author ben
+ *
+ */
 public class ShuntTester {
+	/**
+	 * Main method
+	 * 
+	 * @param args
+	 *            Unused CLI args
+	 */
 	public static void main(String[] args) {
 		Scanner scn = new Scanner(System.in);
 

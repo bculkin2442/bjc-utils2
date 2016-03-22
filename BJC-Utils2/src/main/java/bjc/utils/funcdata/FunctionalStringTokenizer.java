@@ -12,19 +12,20 @@ import java.util.function.Function;
  */
 public class FunctionalStringTokenizer {
 	/**
+	 * Create a new tokenizer from the specified string.
+	 * 
+	 * @param s
+	 *            The string to create a tokenizer from.
+	 * @return A new tokenizer that splits the provided string on spaces.
+	 */
+	public static FunctionalStringTokenizer fromString(String s) {
+		return new FunctionalStringTokenizer(new StringTokenizer(s, " "));
+	}
+
+	/**
 	 * The string tokenizer being driven
 	 */
 	private StringTokenizer inp;
-
-	/**
-	 * Create a functional string tokenizer from a non-functional one
-	 * 
-	 * @param inp
-	 *            The non-functional string tokenizer to wrap
-	 */
-	public FunctionalStringTokenizer(StringTokenizer inp) {
-		this.inp = inp;
-	}
 
 	/**
 	 * Create a functional string tokenizer from a given string
@@ -40,11 +41,23 @@ public class FunctionalStringTokenizer {
 	 * Create a functional string tokenizer from a given string and set of
 	 * seperators
 	 * 
-	 * @param inp The string to tokenize
-	 * @param seps The string to use for splitting
+	 * @param inp
+	 *            The string to tokenize
+	 * @param seps
+	 *            The string to use for splitting
 	 */
 	public FunctionalStringTokenizer(String inp, String seps) {
 		this.inp = new StringTokenizer(inp, seps);
+	}
+
+	/**
+	 * Create a functional string tokenizer from a non-functional one
+	 * 
+	 * @param inp
+	 *            The non-functional string tokenizer to wrap
+	 */
+	public FunctionalStringTokenizer(StringTokenizer inp) {
+		this.inp = inp;
 	}
 
 	/**
@@ -57,6 +70,15 @@ public class FunctionalStringTokenizer {
 		while (inp.hasMoreTokens()) {
 			f.accept(inp.nextToken());
 		}
+	}
+
+	/**
+	 * Get the string tokenizer encapsuled by this
+	 * 
+	 * @return The encapsulated tokenizer
+	 */
+	public StringTokenizer getInternal() {
+		return inp;
 	}
 
 	/**
@@ -73,6 +95,9 @@ public class FunctionalStringTokenizer {
 	 * Convert the contents of this tokenizer into a list. Consumes all of
 	 * the input from this tokenizer.
 	 * 
+	 * @param <E>
+	 *            The type of the converted tokens
+	 * 
 	 * @param f
 	 *            The function to use to convert tokens.
 	 * @return A list containing all of the converted tokens.
@@ -83,24 +108,5 @@ public class FunctionalStringTokenizer {
 		forEachToken(tk -> r.add(f.apply(tk)));
 
 		return r;
-	}
-
-	/**
-	 * Create a new tokenizer from the specified string.
-	 * 
-	 * @param s
-	 *            The string to create a tokenizer from.
-	 * @return A new tokenizer that splits the provided string on spaces.
-	 */
-	public static FunctionalStringTokenizer fromString(String s) {
-		return new FunctionalStringTokenizer(new StringTokenizer(s, " "));
-	}
-	
-	/**
-	 * Get the string tokenizer encapsuled by this
-	 * @return The encapsulated tokenizer
-	 */
-	public StringTokenizer getInternal() {
-		return inp;
 	}
 }

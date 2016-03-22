@@ -39,6 +39,11 @@ public class CompoundDiceExpression implements IDiceExpression {
 		this.det = det;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see bjc.utils.dice.IDiceExpression#roll()
+	 */
 	@Override
 	public int roll() {
 		/*
@@ -65,6 +70,11 @@ public class CompoundDiceExpression implements IDiceExpression {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return "dice-exp[type=" + det + ", l=" + left.toString() + ", r="

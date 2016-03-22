@@ -9,7 +9,16 @@ import bjc.utils.parserutils.AST;
 import bjc.utils.parserutils.ShuntingYard;
 import bjc.utils.parserutils.TreeConstructor;
 
+/**
+ * Test of tree constructor
+ * @author ben
+ *
+ */
 public class TreeConstructTest {
+	/**
+	 * Main method
+	 * @param args Unused CLI args
+	 */
 	public static void main(String[] args) {
 		Scanner scn = new Scanner(System.in);
 

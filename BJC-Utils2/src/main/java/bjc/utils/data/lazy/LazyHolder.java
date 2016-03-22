@@ -21,9 +21,9 @@ import bjc.utils.funcdata.FunctionalList;
  */
 public class LazyHolder<T> implements IHolder<T> {
 	/**
-	 * The source for a value held by this lazy holder
+	 * List of queued actions to be performed on realized values
 	 */
-	private Supplier<T>						heldSrc;
+	private FunctionalList<Function<T, T>>	actions;
 
 	/**
 	 * The value internally held by this lazy holder
@@ -31,9 +31,9 @@ public class LazyHolder<T> implements IHolder<T> {
 	private T								held;
 
 	/**
-	 * List of queued actions to be performed on realized values
+	 * The source for a value held by this lazy holder
 	 */
-	private FunctionalList<Function<T, T>>	actions;
+	private Supplier<T>						heldSrc;
 
 	/**
 	 * Create a new lazy holder with the given supplier
@@ -58,8 +58,17 @@ public class LazyHolder<T> implements IHolder<T> {
 	}
 
 	@Override
+	public void doWith(Consumer<T> f) {
+		transform((val) -> {
+			f.accept(val);
+
+			return val;
+		});
+	}
+
+	@Override
 	public <NewT> IHolder<NewT> map(Function<T, NewT> f) {
-		return new LazyHolder<NewT>(() -> {
+		return new LazyHolder<>(() -> {
 			if (held == null) {
 				return actions.reduceAux(heldSrc.get(),
 						Function<T, T>::apply, f::apply);
@@ -87,15 +96,6 @@ public class LazyHolder<T> implements IHolder<T> {
 		actions.forEach((act) -> held = act.apply(held));
 
 		return f.apply(held);
-	}
-
-	@Override
-	public void doWith(Consumer<T> f) {
-		transform((val) -> {
-			f.accept(val);
-
-			return val;
-		});
 	}
 
 }

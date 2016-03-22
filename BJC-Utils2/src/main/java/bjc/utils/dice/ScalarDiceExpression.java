@@ -11,6 +11,7 @@ public class ScalarDiceExpression implements IDiceExpression {
 	 * The operation to combine with
 	 */
 	private DiceExpressionType	det;
+	
 	/**
 	 * The expression to be combined
 	 */
@@ -38,6 +39,10 @@ public class ScalarDiceExpression implements IDiceExpression {
 		det = dt;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see bjc.utils.dice.IDiceExpression#roll()
+	 */
 	@Override
 	public int roll() {
 		switch (det) {
@@ -56,6 +61,10 @@ public class ScalarDiceExpression implements IDiceExpression {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return "scalar-exp[type=" + det + ", l=" + scalar + ", r="

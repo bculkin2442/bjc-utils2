@@ -4,16 +4,51 @@ package bjc.utils.dice.ast;
 // 1. DiceASTExpression
 // 2. DiceASTFlattener
 // 3. DiceASTParser
+/**
+ * A node that represents an operator
+ * 
+ * @author ben
+ *
+ */
 public enum OperatorDiceNode implements IDiceASTNode {
-	ASSIGN, ADD, SUBTRACT, MULTIPLY, DIVIDE, GROUP, COMPOUND;
-	
-	@Override
-	public boolean isOperator() {
-		return true;
-	}
-	
+	/**
+	 * Represents adding two nodes
+	 */
+	ADD,
+	/**
+	 * Represents assigning one node to another
+	 */
+	ASSIGN,
+	/**
+	 * Representings combining two node values together
+	 */
+	COMPOUND,
+	/**
+	 * Represents dividing two nodes
+	 */
+	DIVIDE,
+	/**
+	 * Represents using one node a variable number of times
+	 */
+	GROUP,
+	/**
+	 * Represents multiplying two nodes
+	 */
+	MULTIPLY,
+	/**
+	 * Represents subtracting two nodes
+	 */
+	SUBTRACT;
+
+	/**
+	 * Create a operator node from a string
+	 * 
+	 * @param s
+	 *            The string to convert to a node
+	 * @return The operator corresponding to the node
+	 */
 	public static OperatorDiceNode fromString(String s) {
-		switch(s) {
+		switch (s) {
 			case ":=":
 				return ASSIGN;
 			case "+":
@@ -29,7 +64,18 @@ public enum OperatorDiceNode implements IDiceASTNode {
 			case "c":
 				return COMPOUND;
 			default:
-				throw new IllegalArgumentException(s + " is not a valid operator node");
+				throw new IllegalArgumentException(
+						s + " is not a valid operator node");
 		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see bjc.utils.dice.ast.IDiceASTNode#isOperator()
+	 */
+	@Override
+	public boolean isOperator() {
+		return true;
 	}
 }

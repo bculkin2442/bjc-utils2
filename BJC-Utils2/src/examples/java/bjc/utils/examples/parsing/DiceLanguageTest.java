@@ -8,6 +8,12 @@ import java.util.function.BiConsumer;
 import bjc.utils.dice.DiceExpressionParser;
 import bjc.utils.dice.IDiceExpression;
 
+/**
+ * Test of dice language
+ * 
+ * @author ben
+ *
+ */
 public class DiceLanguageTest {
 	private static Map<String, BiConsumer<String, DiceLanguageState>> acts;
 
@@ -18,14 +24,18 @@ public class DiceLanguageTest {
 		acts.put("env", DiceLanguageTest::printEnv);
 	}
 
-	public static void printEnv(String ln, DiceLanguageState stat) {
+	/**
+	 * @param ln
+	 *            Unused parameter, kept to comply with expected type sig
+	 */
+	private static void printEnv(String ln, DiceLanguageState stat) {
 		System.out.println("Printing enviroment for debugging purposes.");
 
 		stat.doWith((dep, env) -> env.forEach((key, exp) -> System.out
 				.println("\tKey: " + key + "\tExp: " + exp.toString())));
 	}
 
-	public static void rollReference(String ln, DiceLanguageState stat) {
+	private static void rollReference(String ln, DiceLanguageState stat) {
 		String[] strangs = ln.split(" ");
 
 		System.out.println("\tRolling dice expression " + strangs[1] + " "
@@ -33,8 +43,8 @@ public class DiceLanguageTest {
 
 		int nRolls = Integer.parseInt(strangs[2]);
 
-		IDiceExpression dexp = stat
-				.merge((dep, env) -> env.get(strangs[1]));
+		IDiceExpression dexp =
+				stat.merge((dep, env) -> env.get(strangs[1]));
 
 		for (int i = 1; i <= nRolls; i++) {
 			int roll = dexp.roll();
@@ -43,6 +53,12 @@ public class DiceLanguageTest {
 		}
 	}
 
+	/**
+	 * Main method
+	 * 
+	 * @param args
+	 *            Unused CLI args
+	 */
 	public static void main(String[] args) {
 		Scanner scn = new Scanner(System.in);
 		int i = 0;
@@ -64,7 +80,7 @@ public class DiceLanguageTest {
 
 				System.out.println("\tParsed: " + exp.toString());
 				System.out.println("\tSample Roll: " + exp.roll());
-				
+
 				env.put("last", exp);
 			}
 

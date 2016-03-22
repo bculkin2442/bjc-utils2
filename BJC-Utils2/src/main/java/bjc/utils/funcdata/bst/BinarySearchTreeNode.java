@@ -55,7 +55,7 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 		switch (comp.compare(data, dat)) {
 			case -1:
 				if (left == null) {
-					left = new BinarySearchTreeNode<T>(dat, null, null);
+					left = new BinarySearchTreeNode<>(dat, null, null);
 				} else {
 					left.add(dat, comp);
 				}
@@ -68,7 +68,7 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 				}
 			case 1:
 				if (right == null) {
-					right = new BinarySearchTreeNode<T>(dat, null, null);
+					right = new BinarySearchTreeNode<>(dat, null, null);
 				} else {
 					right.add(dat, comp);
 				}
@@ -96,9 +96,9 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 	}
 
 	@Override
-	public boolean contains(T data, Comparator<T> cmp) {
+	public boolean contains(T dat, Comparator<T> cmp) {
 		return directedWalk(ds -> {
-			switch (cmp.compare(data, ds)) {
+			switch (cmp.compare(dat, ds)) {
 				case -1:
 					return LEFT;
 				case 0:

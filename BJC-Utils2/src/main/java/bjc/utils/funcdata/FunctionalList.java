@@ -153,6 +153,11 @@ public class FunctionalList<E> implements Cloneable {
 	 * NOTE: The returned list will have the length of the shorter of this
 	 * list and the combined one.
 	 * 
+	 * @param <T>
+	 *            The type of the second list
+	 * @param <F>
+	 *            The type of the combined list
+	 * 
 	 * @param l
 	 *            The list to combine with
 	 * @param bf
@@ -196,6 +201,9 @@ public class FunctionalList<E> implements Cloneable {
 	/**
 	 * Apply a function to each member of the list, then flatten the
 	 * results. Does not change the underlying list.
+	 * 
+	 * @param <T>
+	 *            The type of the flattened list
 	 * 
 	 * @param f
 	 *            The function to apply to each member of the list.
@@ -277,6 +285,15 @@ public class FunctionalList<E> implements Cloneable {
 	}
 
 	/**
+	 * Retrieve the size of the wrapped list
+	 * 
+	 * @return The size of the wrapped list
+	 */
+	public int getSize() {
+		return wrap.size();
+	}
+
+	/**
 	 * Check if this list is empty.
 	 * 
 	 * @return Whether or not this list is empty.
@@ -288,6 +305,9 @@ public class FunctionalList<E> implements Cloneable {
 	/**
 	 * Create a new list by applying the given function to each element in
 	 * the list. Does not change the underlying list.
+	 * 
+	 * @param <T>
+	 *            The type of the transformed list
 	 * 
 	 * @param f
 	 *            The function to apply to each element in the list
@@ -304,6 +324,9 @@ public class FunctionalList<E> implements Cloneable {
 	/**
 	 * Zip two lists into a list of pairs
 	 * 
+	 * @param <T>
+	 *            The type of the second list
+	 * 
 	 * @param fl
 	 *            The list to use as the left side of the pair
 	 * @return A list containing pairs of this element and the specified
@@ -311,6 +334,31 @@ public class FunctionalList<E> implements Cloneable {
 	 */
 	public <T> FunctionalList<Pair<E, T>> pairWith(FunctionalList<T> fl) {
 		return combineWith(fl, Pair<E, T>::new);
+	}
+
+	/**
+	 * Partition this list into a list of sublists
+	 * 
+	 * @param nPerPart
+	 *            The size of elements to put into each one of the sublists
+	 * @return A list partitioned into partitions of size nPerPart
+	 */
+	public FunctionalList<FunctionalList<E>> partition(int nPerPart) {
+		FunctionalList<FunctionalList<E>> ret = new FunctionalList<>();
+
+		GenHolder<FunctionalList<E>> currPart =
+				new GenHolder<>(new FunctionalList<>());
+
+		this.forEach((val) -> {
+			if (currPart.unwrap((vl) -> vl.getSize() >= nPerPart)) {
+				ret.add(currPart.unwrap((vl) -> vl));
+				currPart.transform((vl) -> new FunctionalList<>());
+			} else {
+				currPart.unwrap((vl) -> vl.add(val));
+			}
+		});
+
+		return ret;
 	}
 
 	/**
@@ -337,6 +385,11 @@ public class FunctionalList<E> implements Cloneable {
 
 	/**
 	 * Reduce this list to a single value, using a accumulative approach.
+	 * 
+	 * @param <T>
+	 *            The in-between type of the values
+	 * @param <F>
+	 *            The final value type
 	 * 
 	 * @param val
 	 *            The initial value of the accumulative state.
@@ -369,6 +422,12 @@ public class FunctionalList<E> implements Cloneable {
 		return wrap.removeIf(remPred);
 	}
 
+	/**
+	 * Remove all parameters that match a given parameter
+	 * 
+	 * @param obj
+	 *            The object to remove all matching copies of
+	 */
 	public void removeMatching(E obj) {
 		removeIf((ele) -> ele.equals(obj));
 	}
@@ -416,6 +475,7 @@ public class FunctionalList<E> implements Cloneable {
 	 * 
 	 * @see java.lang.Object#toString()
 	 */
+	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder("(");
 
@@ -425,39 +485,5 @@ public class FunctionalList<E> implements Cloneable {
 		sb.append(")");
 
 		return sb.toString();
-	}
-
-	/**
-	 * Retrieve the size of the wrapped list
-	 * 
-	 * @return The size of the wrapped list
-	 */
-	public int getSize() {
-		return wrap.size();
-	}
-
-	/**
-	 * Partition this list into a list of sublists
-	 * 
-	 * @param nPerPart
-	 *            The size of elements to put into each one of the sublists
-	 * @return A list partitioned into partitions of size nPerPart
-	 */
-	public FunctionalList<FunctionalList<E>> partition(int nPerPart) {
-		FunctionalList<FunctionalList<E>> ret = new FunctionalList<>();
-
-		GenHolder<FunctionalList<E>> currPart = new GenHolder<>(
-				new FunctionalList<>());
-
-		this.forEach((val) -> {
-			if (currPart.unwrap((vl) -> vl.getSize() >= nPerPart)) {
-				ret.add(currPart.unwrap((vl) -> vl));
-				currPart.transform((vl) -> new FunctionalList<>());
-			} else {
-				currPart.unwrap((vl) -> vl.add(val));
-			}
-		});
-
-		return ret;
 	}
 }

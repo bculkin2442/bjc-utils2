@@ -32,7 +32,7 @@ public class GenHolder<T> implements IHolder<T> {
 	 * Creates a new holder, with its state initialized to the provided
 	 * value
 	 * 
-	 * @param held
+	 * @param hld
 	 *            The state to initialize this holder to.
 	 */
 	public GenHolder(T hld) {
@@ -42,11 +42,21 @@ public class GenHolder<T> implements IHolder<T> {
 	/*
 	 * (non-Javadoc)
 	 * 
+	 * @see bjc.utils.data.IHolder#doWith(java.util.function.Consumer)
+	 */
+	@Override
+	public void doWith(Consumer<T> f) {
+		f.accept(held);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see bjc.utils.data.IHolder#map(java.util.function.Function)
 	 */
 	@Override
 	public <NewT> IHolder<NewT> map(Function<T, NewT> f) {
-		return new GenHolder<NewT>(f.apply(held));
+		return new GenHolder<>(f.apply(held));
 	}
 
 	/*
@@ -69,14 +79,5 @@ public class GenHolder<T> implements IHolder<T> {
 	@Override
 	public <E> E unwrap(Function<T, E> f) {
 		return f.apply(held);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see bjc.utils.data.IHolder#doWith(java.util.function.Consumer)
-	 */
-	public void doWith(Consumer<T> f) {
-		f.accept(held);
 	}
 }

@@ -71,6 +71,9 @@ public class ListUtils {
 	 * Partition a list into a list of lists, where each element can count
 	 * for more than one element in a partition
 	 * 
+	 * @param <E>
+	 *            The type of elements in the list to partition
+	 * 
 	 * @param list
 	 *            The list to partition
 	 * @param eleCount
@@ -90,8 +93,8 @@ public class ListUtils {
 		/*
 		 * List that holds current partition
 		 */
-		GenHolder<FunctionalList<E>> currPart = new GenHolder<>(
-				new FunctionalList<>());
+		GenHolder<FunctionalList<E>> currPart =
+				new GenHolder<>(new FunctionalList<>());
 		/*
 		 * List that holds elements rejected during current pass
 		 */
@@ -107,7 +110,7 @@ public class ListUtils {
 		 */
 		for (int nIterations = 0; nIterations < MAX_NTRIESPART
 				&& !rejects.isEmpty(); nIterations++) {
-			list.forEach(new GroupPartIteration<E>(ret, currPart, rejects,
+			list.forEach(new GroupPartIteration<>(ret, currPart, rejects,
 					numInCurrPart, nPerPart, eleCount));
 
 			if (rejects.isEmpty()) {

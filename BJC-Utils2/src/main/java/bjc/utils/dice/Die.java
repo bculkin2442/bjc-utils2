@@ -29,15 +29,19 @@ public class Die implements IDiceExpression {
 		this.nSides = nSides;
 	}
 
-	/**
-	 * Roll this dice once
-	 * 
-	 * @return The result of rolling the dice
+	/*
+	 * (non-Javadoc)
+	 * @see bjc.utils.dice.IDiceExpression#roll()
 	 */
+	@Override
 	public int roll() {
 		return rng.nextInt(nSides) + 1;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return "d" + nSides;
