@@ -4,16 +4,39 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
+import bjc.utils.data.GenHolder;
 import bjc.utils.dice.DiceExpressionParser;
 import bjc.utils.dice.IDiceExpression;
 import bjc.utils.dice.ast.DiceASTExpression;
 import bjc.utils.dice.ast.DiceASTFreezer;
 import bjc.utils.dice.ast.DiceASTParser;
 import bjc.utils.dice.ast.IDiceASTNode;
+import bjc.utils.dice.ast.VariableDiceNode;
+import bjc.utils.funcdata.ITreePart.TreeLinearizationMethod;
 import bjc.utils.parserutils.AST;
 
 public class DiceASTLanguageTest {
+	private static final class LastChecker
+			implements Consumer<IDiceASTNode> {
+		private GenHolder<Boolean> canUpdateLast;
+
+		public LastChecker(GenHolder<Boolean> canUpdateLast) {
+			this.canUpdateLast = canUpdateLast;
+		}
+
+		@Override
+		public void accept(IDiceASTNode tn) {
+			if (tn instanceof VariableDiceNode && ((VariableDiceNode) tn)
+					.getVariable().equals("last")) {
+				canUpdateLast.transform((s) -> false);
+			} else {
+				canUpdateLast.transform((s) -> true);
+			}
+		}
+	}
+
 	private static Map<String, BiConsumer<String, DiceASTLanguageState>> acts;
 
 	static {
@@ -89,7 +112,14 @@ public class DiceASTLanguageTest {
 				System.out.println("\tParsed: " + exp.toString());
 				System.out.println("\tSample Roll: " + exp.roll());
 
-				env.put("last", exp);
+				GenHolder<Boolean> canUpdateLast = new GenHolder<>(false);
+
+				exp.getAst().traverse(TreeLinearizationMethod.PREORDER,
+						new LastChecker(canUpdateLast));
+
+				if (canUpdateLast.unwrap((s) -> s)) {
+					env.put("last", exp);
+				}
 			}
 
 			i++;
