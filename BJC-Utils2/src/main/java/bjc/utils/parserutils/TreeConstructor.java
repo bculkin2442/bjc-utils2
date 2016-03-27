@@ -2,6 +2,7 @@ package bjc.utils.parserutils;
 
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import bjc.utils.data.GenHolder;
@@ -28,9 +29,42 @@ public class TreeConstructor {
 	 *            The predicate to use to determine if something is a
 	 *            operator
 	 * @return A AST from the expression
+	 * 
+	 * @deprecated Use
+	 *             {@link TreeConstructor#constructTree(FunctionalList, Predicate, Predicate, Function)}
+	 *             instead
 	 */
 	public static <T> AST<T> constructTree(FunctionalList<T> toks,
 			Predicate<T> opPredicate) {
+		return constructTree(toks, opPredicate, (op) -> false, null);
+	}
+
+	/**
+	 * Construct a tree from a list of tokens in postfix notation
+	 * 
+	 * Only binary operators are accepted.
+	 * 
+	 * @param <T>
+	 *            The elements of the parse tree
+	 * @param toks
+	 *            The list of tokens to build a tree from
+	 * @param opPredicate
+	 *            The predicate to use to determine if something is a
+	 *            operator
+	 * @param isSpecialOp
+	 *            The predicate to use to determine if an operator needs
+	 *            special handling
+	 * @param handleSpecialOp
+	 *            The function to use to handle special case operators
+	 * @return A AST from the expression
+	 * 
+	 *         FIXME The handleSpecialOp function seems like an ugly
+	 *         interface. Maybe there's a better way to express how that
+	 *         works
+	 */
+	public static <T> AST<T> constructTree(FunctionalList<T> toks,
+			Predicate<T> opPredicate, Predicate<T> isSpecialOp,
+			Function<Deque<AST<T>>, AST<T>> handleSpecialOp) {
 		GenHolder<Pair<Deque<AST<T>>, AST<T>>> initState =
 				new GenHolder<>(new Pair<>(new LinkedList<>(), null));
 
@@ -40,13 +74,17 @@ public class TreeConstructor {
 					Deque<AST<T>> lft = par.merge((deq, ast) -> deq);
 
 					AST<T> mergedAST = par.merge((deq, ast) -> {
-						AST<T> right = deq.pop();
-						AST<T> left = deq.pop();
+						AST<T> newAST;
 
-						AST<T> newAST = new AST<>(ele, left, right);
+						if (isSpecialOp.test(ele)) {
+							newAST = handleSpecialOp.apply(deq);
+						} else {
+							AST<T> right = deq.pop();
+							AST<T> left = deq.pop();
+							newAST = new AST<>(ele, left, right);
+						}
 
 						deq.push(newAST);
-
 						return newAST;
 					});
 
