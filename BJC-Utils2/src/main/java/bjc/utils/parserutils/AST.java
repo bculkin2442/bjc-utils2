@@ -113,15 +113,15 @@ public class AST<T> {
 	/*
 	 * Internal recursive collapser
 	 */
-	private <T2> T2 internalCollapse(Function<T, T2> tokenTransform,
+	protected <T2> T2 internalCollapse(Function<T, T2> tokenTransform,
 			Function<T, BinaryOperator<T2>> nodeTransform) {
 		if (left == null && right == null) {
 			return tokenTransform.apply(token);
 		} else {
-			T2 leftCollapsed =
-					left.internalCollapse(tokenTransform, nodeTransform);
-			T2 rightCollapsed =
-					right.internalCollapse(tokenTransform, nodeTransform);
+			T2 leftCollapsed = left.internalCollapse(tokenTransform,
+					nodeTransform);
+			T2 rightCollapsed = right.internalCollapse(tokenTransform,
+					nodeTransform);
 
 			return nodeTransform.apply(token).apply(leftCollapsed,
 					rightCollapsed);
@@ -145,7 +145,7 @@ public class AST<T> {
 	 * @param indentLevel
 	 *            The current level to indent the tree
 	 */
-	private void internalToString(StringBuilder sb, int indentLevel) {
+	protected void internalToString(StringBuilder sb, int indentLevel) {
 		indentNLevels(sb, indentLevel);
 
 		if (left == null && right == null) {
@@ -170,7 +170,7 @@ public class AST<T> {
 	 * @param n
 	 *            The number of levels to indent
 	 */
-	private static void indentNLevels(StringBuilder sb, int n) {
+	protected static void indentNLevels(StringBuilder sb, int n) {
 		for (int i = 0; i <= n; i++) {
 			sb.append("\t");
 		}
