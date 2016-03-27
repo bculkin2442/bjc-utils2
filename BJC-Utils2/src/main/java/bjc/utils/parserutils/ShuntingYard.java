@@ -18,7 +18,7 @@ import bjc.utils.funcdata.FunctionalList;
  *            The type of tokens being shunted
  */
 public class ShuntingYard<E> {
-
+	
 	/**
 	 * A enum representing the fundamental operator types
 	 * 

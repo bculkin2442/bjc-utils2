@@ -50,7 +50,7 @@ public class TreeConstructTest {
 								return false;
 						}
 					}
-				});
+				}, (op) -> false, null);
 
 		System.out.println("AST: " + ast.toString());
 

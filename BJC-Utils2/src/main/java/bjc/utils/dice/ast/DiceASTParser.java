@@ -39,13 +39,13 @@ public class DiceASTParser {
 	 * @return An AST built from the passed in string
 	 */
 	public AST<IDiceASTNode> buildAST(String exp) {
-		FunctionalList<String> tokens =
-				FunctionalStringTokenizer.fromString(exp).toList((s) -> s);
+		FunctionalList<String> tokens = FunctionalStringTokenizer
+				.fromString(exp).toList((s) -> s);
 
 		FunctionalList<String> shunted = yard.postfix(tokens, (s) -> s);
 
-		AST<String> rawAST =
-				TreeConstructor.constructTree(shunted, this::isOperator);
+		AST<String> rawAST = TreeConstructor.constructTree(shunted,
+				this::isOperator, (op) -> false, null);
 
 		AST<IDiceASTNode> bakedAST = rawAST.transmuteAST((tok) -> {
 			if (isOperator(tok)) {
