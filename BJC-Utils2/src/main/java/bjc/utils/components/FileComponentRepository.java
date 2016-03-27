@@ -1,9 +1,6 @@
 package bjc.utils.components;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -41,8 +38,7 @@ public class FileComponentRepository<E extends IDescribedComponent>
 	 * @param reader
 	 *            The function to use to convert files to components
 	 */
-	public FileComponentRepository(File dir,
-			Function<InputStream, E> reader) {
+	public FileComponentRepository(File dir, Function<File, E> reader) {
 		comps = new HashMap<>();
 		sourcePath = dir.getAbsolutePath();
 
@@ -51,17 +47,9 @@ public class FileComponentRepository<E extends IDescribedComponent>
 				// Do nothing with directories. They probably contain
 				// support files for components
 			} else {
-				try {
-					E comp = reader.apply(new FileInputStream(fle));
+				E comp = reader.apply(fle);
 
-					comps.put(comp.getName(), comp);
-				} catch (FileNotFoundException fnfx) {
-					System.err.println("Couldn't read component file: "
-							+ fle.getAbsolutePath() + "\nReason: "
-							+ fnfx.getMessage());
-
-					fnfx.printStackTrace(System.err);
-				}
+				comps.put(comp.getName(), comp);
 			}
 		}
 	}
