@@ -80,4 +80,9 @@ public class GenHolder<T> implements IHolder<T> {
 	public <E> E unwrap(Function<T, E> f) {
 		return f.apply(held);
 	}
+
+	@Override
+	public String toString() {
+		return held.toString();
+	}
 }
