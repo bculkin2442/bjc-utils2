@@ -1,9 +1,11 @@
 package bjc.utils.funcutils;
 
+import java.util.Deque;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 import bjc.utils.data.GenHolder;
+import bjc.utils.data.Pair;
 import bjc.utils.funcdata.FunctionalList;
 
 /**
@@ -127,5 +129,90 @@ public class ListUtils {
 				+ rejects.toString() + "\nCurrent group in formation: "
 				+ currPart.unwrap((vl) -> vl.toString())
 				+ "\nPreviously formed groups: " + ret.toString());
+	}
+
+	/**
+	 * Split tokens in a list of tokens into multiple tokens.
+	 * 
+	 * The intended use is for expression parsers so that you can enter
+	 * something like 1+1 instead of 1 + 1.
+	 * 
+	 * @param input
+	 *            The tokens to split
+	 * @param ops
+	 *            The operators to split on.
+	 * @return A list of tokens split on all the operators
+	 */
+	public static FunctionalList<String> splitTokens(
+			FunctionalList<String> input,
+			Deque<Pair<String, String>> ops) {
+		GenHolder<FunctionalList<String>> ret = new GenHolder<>(input);
+
+		ops.forEach(
+				(op) -> ret.transform((oldRet) -> oldRet.flatMap((tok) -> {
+					return op.merge((opName, opRegex) -> {
+						if (tok.contains(opName)) {
+							FunctionalList<String> splitTokens =
+									new FunctionalList<>(
+											tok.split(opRegex));
+
+							FunctionalList<String> rt =
+									new FunctionalList<>();
+
+							int tkSize = splitTokens.getSize();
+							splitTokens.forEachIndexed((idx, tk) -> {
+
+								if (idx != tkSize && idx != 0) {
+									rt.add(opName);
+									rt.add(tk);
+
+								} else {
+									rt.add(tk);
+
+								}
+							});
+
+							return rt;
+						} else {
+							return new FunctionalList<>(tok);
+						}
+					});
+				})));
+
+		return ret.unwrap((l) -> l);
+	}
+
+	/**
+	 * Split off affixes from tokens
+	 * 
+	 * @param input
+	 *            The tokens to deaffix
+	 * @param ops
+	 *            The affixes to remove
+	 * @return The tokens that have been deaffixed
+	 */
+	@SuppressWarnings("unchecked")
+	public static FunctionalList<String> deAffixTokens(
+			FunctionalList<String> input,
+			Deque<Pair<String, String>> ops) {
+		GenHolder<FunctionalList<String>> ret = new GenHolder<>(input);
+
+		ops.forEach(
+				(op) -> ret.transform((oldRet) -> oldRet.flatMap((tok) -> {
+					return (FunctionalList<String>) op
+							.merge((opName, opRegex) -> {
+						if (tok.startsWith(opName)) {
+							return new FunctionalList<>(op,
+									tok.split(opRegex)[1]);
+						} else if (tok.endsWith(opName)) {
+							return new FunctionalList<>(
+									tok.split(opRegex)[0], op);
+						} else {
+							return new FunctionalList<>(tok);
+						}
+					});
+				})));
+
+		return ret.unwrap((l) -> l);
 	}
 }
