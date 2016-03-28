@@ -210,7 +210,8 @@ public class FunctionalList<E> implements Cloneable {
 	 * @return A new list containing the flattened results of applying the
 	 *         provided function.
 	 */
-	public <T> FunctionalList<T> flatMap(Function<E, List<T>> f) {
+	public <T> FunctionalList<T>
+			flatMap(Function<E, FunctionalList<T>> f) {
 		FunctionalList<T> fl = new FunctionalList<>(this.wrap.size());
 
 		forEach(e -> f.apply(e).forEach(fl::add));
