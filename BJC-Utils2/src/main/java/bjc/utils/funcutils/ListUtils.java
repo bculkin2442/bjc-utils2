@@ -95,8 +95,8 @@ public class ListUtils {
 		/*
 		 * List that holds current partition
 		 */
-		GenHolder<FunctionalList<E>> currPart =
-				new GenHolder<>(new FunctionalList<>());
+		GenHolder<FunctionalList<E>> currPart = new GenHolder<>(
+				new FunctionalList<>());
 		/*
 		 * List that holds elements rejected during current pass
 		 */
@@ -152,12 +152,10 @@ public class ListUtils {
 				(op) -> ret.transform((oldRet) -> oldRet.flatMap((tok) -> {
 					return op.merge((opName, opRegex) -> {
 						if (tok.contains(opName)) {
-							FunctionalList<String> splitTokens =
-									new FunctionalList<>(
-											tok.split(opRegex));
+							FunctionalList<String> splitTokens = new FunctionalList<>(
+									tok.split(opRegex));
 
-							FunctionalList<String> rt =
-									new FunctionalList<>();
+							FunctionalList<String> rt = new FunctionalList<>();
 
 							int tkSize = splitTokens.getSize();
 							splitTokens.forEachIndexed((idx, tk) -> {
@@ -201,18 +199,31 @@ public class ListUtils {
 				(op) -> ret.transform((oldRet) -> oldRet.flatMap((tok) -> {
 					return (FunctionalList<String>) op
 							.merge((opName, opRegex) -> {
-						if (tok.startsWith(opName)) {
-							return new FunctionalList<>(op,
-									tok.split(opRegex)[1]);
-						} else if (tok.endsWith(opName)) {
-							return new FunctionalList<>(
-									tok.split(opRegex)[0], op);
-						} else {
-							return new FunctionalList<>(tok);
-						}
-					});
+								if (tok.startsWith(opName)) {
+									return new FunctionalList<>(op,
+											tok.split(opRegex)[1]);
+								} else if (tok.endsWith(opName)) {
+									return new FunctionalList<>(
+											tok.split(opRegex)[0], op);
+								} else {
+									return new FunctionalList<>(tok);
+								}
+							});
 				})));
 
 		return ret.unwrap((l) -> l);
+	}
+
+	/**
+	 * Collapse a string of tokens into a single string without adding any
+	 * spaces
+	 * 
+	 * @param input
+	 *            The list of tokens to collapse
+	 * @return The collapsed string of tokens
+	 */
+	public static String collapseTokens(FunctionalList<String> input) {
+		return input.reduceAux("",
+				(currString, state) -> state + currString, (s) -> s);
 	}
 }
