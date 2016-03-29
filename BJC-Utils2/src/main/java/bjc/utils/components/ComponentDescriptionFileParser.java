@@ -47,7 +47,7 @@ public class ComponentDescriptionFileParser {
 	 *            The stream to parse from
 	 * @return The description parsed from the stream
 	 */
-	public ComponentDescription fromStream(InputStream is) {
+	public static ComponentDescription fromStream(InputStream is) {
 		return reader.fromStream(is, new ComponentDescriptionState())
 				.toDescription();
 	}

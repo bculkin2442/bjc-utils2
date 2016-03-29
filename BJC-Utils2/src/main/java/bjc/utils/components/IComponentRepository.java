@@ -24,7 +24,7 @@ public interface IComponentRepository<E extends IDescribedComponent> {
 	 * Get all of the components this repository knows about
 	 * 
 	 * @return A map from component name to component, containing all of
-	 *         the components in the repositorys
+	 *         the components in the repositories
 	 */
 	public Map<String, E> getComponents();
 
