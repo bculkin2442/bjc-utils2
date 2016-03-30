@@ -14,18 +14,19 @@ public class FunctionalStringTokenizer {
 	/**
 	 * Create a new tokenizer from the specified string.
 	 * 
-	 * @param s
+	 * @param strang
 	 *            The string to create a tokenizer from.
 	 * @return A new tokenizer that splits the provided string on spaces.
 	 */
-	public static FunctionalStringTokenizer fromString(String s) {
-		return new FunctionalStringTokenizer(new StringTokenizer(s, " "));
+	public static FunctionalStringTokenizer fromString(String strang) {
+		return new FunctionalStringTokenizer(
+				new StringTokenizer(strang, " "));
 	}
 
 	/**
 	 * The string tokenizer being driven
 	 */
-	private StringTokenizer inp;
+	private StringTokenizer input;
 
 	/**
 	 * Create a functional string tokenizer from a given string
@@ -34,51 +35,52 @@ public class FunctionalStringTokenizer {
 	 *            The string to tokenize
 	 */
 	public FunctionalStringTokenizer(String inp) {
-		this.inp = new StringTokenizer(inp);
+		this.input = new StringTokenizer(inp);
 	}
 
 	/**
 	 * Create a functional string tokenizer from a given string and set of
 	 * seperators
 	 * 
-	 * @param inp
+	 * @param inputString
 	 *            The string to tokenize
-	 * @param seps
-	 *            The string to use for splitting
+	 * @param seperators
+	 *            The set of separating tokens to use for splitting
 	 */
-	public FunctionalStringTokenizer(String inp, String seps) {
-		this.inp = new StringTokenizer(inp, seps);
+	public FunctionalStringTokenizer(String inputString,
+			String seperators) {
+		this.input = new StringTokenizer(inputString, seperators);
 	}
 
 	/**
 	 * Create a functional string tokenizer from a non-functional one
 	 * 
-	 * @param inp
+	 * @param wrap
 	 *            The non-functional string tokenizer to wrap
 	 */
-	public FunctionalStringTokenizer(StringTokenizer inp) {
-		this.inp = inp;
+	public FunctionalStringTokenizer(StringTokenizer wrap) {
+		this.input = wrap;
 	}
 
 	/**
 	 * Execute a provided action for each of the remaining tokens
 	 * 
-	 * @param f
+	 * @param action
 	 *            The action to execute for each token
 	 */
-	public void forEachToken(Consumer<String> f) {
-		while (inp.hasMoreTokens()) {
-			f.accept(inp.nextToken());
+	public void forEachToken(Consumer<String> action) {
+		while (input.hasMoreTokens()) {
+			action.accept(input.nextToken());
 		}
 	}
 
 	/**
-	 * Get the string tokenizer encapsuled by this
+	 * Get the string tokenizer encapsuled by this tokenizer
 	 * 
 	 * @return The encapsulated tokenizer
 	 */
 	public StringTokenizer getInternal() {
-		return inp;
+		return input;
 	}
 
 	/**
@@ -88,7 +90,13 @@ public class FunctionalStringTokenizer {
 	 * @return The next token from the tokenizer
 	 */
 	public String nextToken() {
-		return inp.hasMoreTokens() ? inp.nextToken() : null;
+		if (input.hasMoreTokens()) {
+			// Return the next availible token
+			return input.nextToken();
+		} else {
+			// Return no token
+			return null;
+		}
 	}
 
 	/**
@@ -103,11 +111,16 @@ public class FunctionalStringTokenizer {
 	 * @return A list containing all of the converted tokens.
 	 */
 	public <E> FunctionalList<E> toList(Function<String, E> f) {
-		FunctionalList<E> r = new FunctionalList<>();
+		FunctionalList<E> returnList = new FunctionalList<>();
 
-		forEachToken(tk -> r.add(f.apply(tk)));
+		// Add each token to the list after transforming it
+		forEachToken(tk -> {
+			E transformedToken = f.apply(tk);
+			
+			returnList.add(transformedToken);
+		});
 
-		return r;
+		return returnList;
 	}
 
 	/**
@@ -116,6 +129,6 @@ public class FunctionalStringTokenizer {
 	 * @return Whether or not this tokenizer has more tokens
 	 */
 	public boolean hasMoreTokens() {
-		return inp.hasMoreTokens();
+		return input.hasMoreTokens();
 	}
 }

@@ -1,4 +1,3 @@
-
 package bjc.utils.funcdata;
 
 import java.util.ArrayList;
@@ -31,13 +30,13 @@ public class FunctionalList<E> implements Cloneable {
 	/**
 	 * The list used as a backing store
 	 */
-	private List<E> wrap;
+	private List<E> wrappedList;
 
 	/**
 	 * Create a new empty functional list.
 	 */
 	public FunctionalList() {
-		wrap = new ArrayList<>();
+		wrappedList = new ArrayList<>();
 	}
 
 	/**
@@ -48,10 +47,10 @@ public class FunctionalList<E> implements Cloneable {
 	 */
 	@SafeVarargs
 	public FunctionalList(E... items) {
-		wrap = new ArrayList<>(items.length);
+		wrappedList = new ArrayList<>(items.length);
 
 		for (E item : items) {
-			wrap.add(item);
+			wrappedList.add(item);
 		}
 	}
 
@@ -59,32 +58,37 @@ public class FunctionalList<E> implements Cloneable {
 	 * Create a functional list using the same backing list as the provided
 	 * list.
 	 * 
-	 * @param fl
+	 * @param sourceList
 	 *            The source for a backing list
 	 */
-	public FunctionalList(FunctionalList<E> fl) {
-		// TODO Find out if this should make a copy of fl.wrap instead.
-		wrap = fl.wrap;
+	public FunctionalList(FunctionalList<E> sourceList) {
+		// Find out if this should make a copy of the source's wrapped list
+		// instead.
+		//
+		// I've decided it shouldn't. Call clone() if that's what you want.
+		// This method just creates another list that refers to the
+		// source's backing list
+		wrappedList = sourceList.wrappedList;
 	}
 
 	/**
 	 * Create a new functional list with the specified size.
 	 * 
-	 * @param sz
+	 * @param size
 	 *            The size of the backing list .
 	 */
-	private FunctionalList(int sz) {
-		wrap = new ArrayList<>(sz);
+	private FunctionalList(int size) {
+		wrappedList = new ArrayList<>(size);
 	}
 
 	/**
 	 * Create a new functional list as a wrapper of a existing list.
 	 * 
-	 * @param l
+	 * @param backingList
 	 *            The list to use as a backing list.
 	 */
-	public FunctionalList(List<E> l) {
-		wrap = l;
+	public FunctionalList(List<E> backingList) {
+		wrappedList = backingList;
 	}
 
 	/**
@@ -95,54 +99,59 @@ public class FunctionalList<E> implements Cloneable {
 	 * @return Whether the item was added to the list succesfully.
 	 */
 	public boolean add(E item) {
-		return wrap.add(item);
+		return wrappedList.add(item);
 	}
 
 	/**
 	 * Check if all of the elements of this list match the specified
 	 * predicate.
 	 * 
-	 * @param p
+	 * @param matchPredicate
 	 *            The predicate to use for checking.
 	 * @return Whether all of the elements of the list match the specified
 	 *         predicate.
 	 */
-	public boolean allMatch(Predicate<E> p) {
-		for (E item : wrap) {
-			if (!p.test(item)) {
+	public boolean allMatch(Predicate<E> matchPredicate) {
+		for (E item : wrappedList) {
+			if (!matchPredicate.test(item)) {
+				// We've found a non-matching item
 				return false;
 			}
 		}
+
+		// All of the items matched
 		return true;
 	}
 
 	/**
 	 * Check if any of the elements in this list match the specified list.
 	 * 
-	 * @param p
+	 * @param matchPredicate
 	 *            The predicate to use for checking.
 	 * @return Whether any element in the list matches the provided
 	 *         predicate.
 	 */
-	public boolean anyMatch(Predicate<E> p) {
-		for (E item : wrap) {
-			if (p.test(item)) {
+	public boolean anyMatch(Predicate<E> matchPredicate) {
+		for (E item : wrappedList) {
+			if (matchPredicate.test(item)) {
+				// We've found a matching item
 				return true;
 			}
 		}
 
+		// We didn't find a matching item
 		return false;
 	}
 
 	@Override
 	public FunctionalList<E> clone() {
-		FunctionalList<E> fl = new FunctionalList<>();
+		FunctionalList<E> clonedList = new FunctionalList<>();
 
-		for (E ele : wrap) {
-			fl.add(ele);
+		for (E element : wrappedList) {
+			clonedList.add(element);
 		}
 
-		return fl;
+		return clonedList;
 	}
 
 	/**
@@ -158,24 +167,31 @@ public class FunctionalList<E> implements Cloneable {
 	 * @param <F>
 	 *            The type of the combined list
 	 * 
-	 * @param l
+	 * @param rightList
 	 *            The list to combine with
-	 * @param bf
+	 * @param itemCombiner
 	 *            The function to use for combining element pairs.
 	 * @return A new list containing the merged pairs of lists.
 	 */
-	public <T, F> FunctionalList<F> combineWith(FunctionalList<T> l,
-			BiFunction<E, T, F> bf) {
-		FunctionalList<F> r = new FunctionalList<>();
+	public <T, F> FunctionalList<F> combineWith(
+			FunctionalList<T> rightList,
+			BiFunction<E, T, F> itemCombiner) {
+		FunctionalList<F> returnedList = new FunctionalList<>();
 
-		Iterator<T> i2 = l.wrap.iterator();
+		// Get the iterator for the other list
+		Iterator<T> rightIterator = rightList.toIterable().iterator();
 
-		for (Iterator<E> i1 = wrap.iterator(); i1.hasNext()
-				&& i2.hasNext();) {
-			r.add(bf.apply(i1.next(), i2.next()));
+		for (Iterator<E> leftIterator =
+				wrappedList.iterator(); leftIterator.hasNext()
+						&& rightIterator.hasNext();) {
+			// Add the transformed items to the result list
+			E leftVal = leftIterator.next();
+			T rightVal = rightIterator.next();
+
+			returnedList.add(itemCombiner.apply(leftVal, rightVal));
 		}
 
-		return r;
+		return returnedList;
 	}
 
 	/**
@@ -186,6 +202,7 @@ public class FunctionalList<E> implements Cloneable {
 	 * @return Whether or not the specified item is in the list
 	 */
 	public boolean contains(E item) {
+		// Check if any items in the list match the provided item
 		return this.anyMatch(item::equals);
 	}
 
@@ -195,7 +212,7 @@ public class FunctionalList<E> implements Cloneable {
 	 * @return The first element in this list.
 	 */
 	public E first() {
-		return wrap.get(0);
+		return wrappedList.get(0);
 	}
 
 	/**
@@ -205,56 +222,67 @@ public class FunctionalList<E> implements Cloneable {
 	 * @param <T>
 	 *            The type of the flattened list
 	 * 
-	 * @param f
+	 * @param elementExpander
 	 *            The function to apply to each member of the list.
 	 * @return A new list containing the flattened results of applying the
 	 *         provided function.
 	 */
 	public <T> FunctionalList<T>
-			flatMap(Function<E, FunctionalList<T>> f) {
-		FunctionalList<T> fl = new FunctionalList<>(this.wrap.size());
+			flatMap(Function<E, FunctionalList<T>> elementExpander) {
+		FunctionalList<T> returnedList =
+				new FunctionalList<>(this.wrappedList.size());
 
-		forEach(e -> f.apply(e).forEach(fl::add));
+		forEach(element -> {
+			FunctionalList<T> expandedElement =
+					elementExpander.apply(element);
 
-		return fl;
+			// Add each element to the returned list
+			expandedElement.forEach(returnedList::add);
+		});
+
+		return returnedList;
 	}
 
 	/**
 	 * Apply a given action for each member of the list
 	 * 
-	 * @param c
+	 * @param action
 	 *            The action to apply to each member of the list.
 	 */
-	public void forEach(Consumer<E> c) {
-		wrap.forEach(c);
+	public void forEach(Consumer<E> action) {
+		wrappedList.forEach(action);
 	}
 
 	/**
 	 * Apply a given function to each element in the list and its index.
 	 * 
-	 * @param c
+	 * @param indexedAction
 	 *            The function to apply to each element in the list and its
 	 *            index.
 	 */
-	public void forEachIndexed(BiConsumer<Integer, E> c) {
-		GenHolder<Integer> i = new GenHolder<>(0);
+	public void forEachIndexed(BiConsumer<Integer, E> indexedAction) {
+		// This is held b/c ref'd variables must be final/effectively final
+		GenHolder<Integer> currentIndex = new GenHolder<>(0);
 
-		wrap.forEach((val) -> {
-			c.accept(i.unwrap(vl -> vl), val);
+		wrappedList.forEach((element) -> {
+			// Call the action with the index and the value
+			indexedAction.accept(currentIndex.unwrap(index -> index),
+					element);
 
-			i.transform((vl) -> vl + 1);
+			// Increment the value
+			currentIndex.transform((index) -> index + 1);
 		});
 	}
 
 	/**
 	 * Retrieve a value in the list by its index.
 	 * 
-	 * @param i
+	 * @param index
 	 *            The index to retrieve a value from.
 	 * @return The value at the specified index in the list.
 	 */
-	public E getByIndex(int i) {
-		return wrap.get(i);
+	public E getByIndex(int index) {
+		return wrappedList.get(index);
 	}
 
 	/**
@@ -263,26 +291,27 @@ public class FunctionalList<E> implements Cloneable {
 	 * @return The backing list this list is based off of.
 	 */
 	public List<E> getInternal() {
-		return wrap;
+		return wrappedList;
 	}
 
 	/**
 	 * Retrieve a list containing all elements matching a predicate
 	 * 
-	 * @param matchPred
+	 * @param matchPredicate
 	 *            The predicate to match by
 	 * @return A list containing all elements that match the predicate
 	 */
-	public FunctionalList<E> getMatching(Predicate<E> matchPred) {
-		FunctionalList<E> fl = new FunctionalList<>();
+	public FunctionalList<E> getMatching(Predicate<E> matchPredicate) {
+		FunctionalList<E> returnedList = new FunctionalList<>();
 
-		wrap.forEach((elem) -> {
-			if (matchPred.test(elem)) {
-				fl.add(elem);
+		wrappedList.forEach((element) -> {
+			if (matchPredicate.test(element)) {
+				// The item matches, so add it to the returned list
+				returnedList.add(element);
 			}
 		});
 
-		return fl;
+		return returnedList;
 	}
 
 	/**
@@ -291,7 +320,7 @@ public class FunctionalList<E> implements Cloneable {
 	 * @return The size of the wrapped list
 	 */
 	public int getSize() {
-		return wrap.size();
+		return wrappedList.size();
 	}
 
 	/**
@@ -300,7 +329,7 @@ public class FunctionalList<E> implements Cloneable {
 	 * @return Whether or not this list is empty.
 	 */
 	public boolean isEmpty() {
-		return wrap.isEmpty();
+		return wrappedList.isEmpty();
 	}
 
 	/**
@@ -310,16 +339,20 @@ public class FunctionalList<E> implements Cloneable {
 	 * @param <T>
 	 *            The type of the transformed list
 	 * 
-	 * @param f
+	 * @param elementTransformer
 	 *            The function to apply to each element in the list
 	 * @return A new list containing the mapped elements of this list.
 	 */
-	public <T> FunctionalList<T> map(Function<E, T> f) {
-		FunctionalList<T> fl = new FunctionalList<>(this.wrap.size());
+	public <T> FunctionalList<T> map(Function<E, T> elementTransformer) {
+		FunctionalList<T> returnedList =
+				new FunctionalList<>(this.wrappedList.size());
 
-		forEach(e -> fl.add(f.apply(e)));
+		forEach(element -> {
+			// Add the transformed item to the result
+			returnedList.add(elementTransformer.apply(element));
+		});
 
-		return fl;
+		return returnedList;
 	}
 
 	/**
@@ -328,38 +361,58 @@ public class FunctionalList<E> implements Cloneable {
 	 * @param <T>
 	 *            The type of the second list
 	 * 
-	 * @param fl
+	 * @param rightList
 	 *            The list to use as the left side of the pair
 	 * @return A list containing pairs of this element and the specified
 	 *         list
 	 */
-	public <T> FunctionalList<Pair<E, T>> pairWith(FunctionalList<T> fl) {
-		return combineWith(fl, Pair<E, T>::new);
+	public <T> FunctionalList<Pair<E, T>>
+			pairWith(FunctionalList<T> rightList) {
+		return combineWith(rightList, Pair<E, T>::new);
 	}
 
 	/**
 	 * Partition this list into a list of sublists
 	 * 
-	 * @param nPerPart
+	 * @param numberPerPartition
 	 *            The size of elements to put into each one of the sublists
 	 * @return A list partitioned into partitions of size nPerPart
 	 */
-	public FunctionalList<FunctionalList<E>> partition(int nPerPart) {
-		FunctionalList<FunctionalList<E>> ret = new FunctionalList<>();
+	public FunctionalList<FunctionalList<E>>
+			partition(int numberPerPartition) {
+		FunctionalList<FunctionalList<E>> returnedList =
+				new FunctionalList<>();
 
-		GenHolder<FunctionalList<E>> currPart =
+		// The current partition being filled
+		GenHolder<FunctionalList<E>> currentPartition =
 				new GenHolder<>(new FunctionalList<>());
 
-		this.forEach((val) -> {
-			if (currPart.unwrap((vl) -> vl.getSize() >= nPerPart)) {
-				ret.add(currPart.unwrap((vl) -> vl));
-				currPart.transform((vl) -> new FunctionalList<>());
+		this.forEach((element) -> {
+			if (isPartitionFull(numberPerPartition, currentPartition)) {
+				// Add the partition to the list
+				returnedList.add(
+						currentPartition.unwrap((partition) -> partition));
+
+				// Start a new partition
+				currentPartition
+						.transform((partition) -> new FunctionalList<>());
 			} else {
-				currPart.unwrap((vl) -> vl.add(val));
+				// Add the element to the current partition
+				currentPartition
+						.unwrap((partition) -> partition.add(element));
 			}
 		});
 
-		return ret;
+		return returnedList;
+	}
+
+	/*
+	 * Check if a partition has room for another item
+	 */
+	private Boolean isPartitionFull(int numberPerPartition,
+			GenHolder<FunctionalList<E>> currentPartition) {
+		return currentPartition.unwrap(
+				(partition) -> partition.getSize() >= numberPerPartition);
 	}
 
 	/**
@@ -369,7 +422,7 @@ public class FunctionalList<E> implements Cloneable {
 	 *            The item to prepend to the list
 	 */
 	public void prepend(E item) {
-		wrap.add(0, item);
+		wrappedList.add(0, item);
 	}
 
 	/**
@@ -381,7 +434,9 @@ public class FunctionalList<E> implements Cloneable {
 	 * @return A random element from this list.
 	 */
 	public E randItem(Random rnd) {
-		return wrap.get(rnd.nextInt(wrap.size()));
+		int randomIndex = rnd.nextInt(wrappedList.size());
+
+		return wrappedList.get(randomIndex);
 	}
 
 	/**
@@ -392,45 +447,52 @@ public class FunctionalList<E> implements Cloneable {
 	 * @param <F>
 	 *            The final value type
 	 * 
-	 * @param val
+	 * @param initialValue
 	 *            The initial value of the accumulative state.
-	 * @param bf
+	 * @param stateAccumulator
 	 *            The function to use to combine a list element with the
 	 *            accumulative state.
-	 * @param finl
+	 * @param resultTransformer
 	 *            The function to use to convert the accumulative state
 	 *            into a final result.
 	 * @return A single value condensed from this list and transformed into
 	 *         its final state.
 	 */
-	public <T, F> F reduceAux(T val, BiFunction<E, T, T> bf,
-			Function<T, F> finl) {
-		IHolder<T> acum = new GenHolder<>(val);
+	public <T, F> F reduceAux(T initialValue,
+			BiFunction<E, T, T> stateAccumulator,
+			Function<T, F> resultTransformer) {
+		// The current collapsed list
+		IHolder<T> currentState = new GenHolder<>(initialValue);
 
-		wrap.forEach(e -> acum.transform((vl) -> bf.apply(e, vl)));
+		wrappedList.forEach(element -> {
+			// Accumulate a new value into the state
+			currentState.transform(
+					(state) -> stateAccumulator.apply(element, state));
+		});
 
-		return acum.unwrap(finl);
+		// Convert the state to its final value
+		return currentState.unwrap(resultTransformer);
 	}
 
 	/**
 	 * Remove all elements that match a given predicate
 	 * 
-	 * @param remPred
+	 * @param removePredicate
 	 *            The predicate to use to determine elements to delete
 	 * @return Whether there was anything that satisfied the predicate
 	 */
-	public boolean removeIf(Predicate<E> remPred) {
-		return wrap.removeIf(remPred);
+	public boolean removeIf(Predicate<E> removePredicate) {
+		return wrappedList.removeIf(removePredicate);
 	}
 
 	/**
 	 * Remove all parameters that match a given parameter
 	 * 
-	 * @param obj
+	 * @param desiredElement
 	 *            The object to remove all matching copies of
 	 */
-	public void removeMatching(E obj) {
-		removeIf((ele) -> ele.equals(obj));
+	public void removeMatching(E desiredElement) {
+		removeIf((element) -> element.equals(desiredElement));
 	}
 
 	/**
@@ -438,27 +500,35 @@ public class FunctionalList<E> implements Cloneable {
 	 * means of comparing elements. Since this IS a binary search, the list
 	 * must have been sorted before hand.
 	 * 
-	 * @param key
+	 * @param searchKey
 	 *            The key to search for.
-	 * @param cmp
+	 * @param comparator
 	 *            The way to compare elements for searching
 	 * @return The element if it is in this list, or null if it is not.
 	 */
-	public E search(E key, Comparator<E> cmp) {
-		int res = Collections.binarySearch(wrap, key, cmp);
+	public E search(E searchKey, Comparator<E> comparator) {
+		// Search our internal list
+		int foundIndex = Collections.binarySearch(wrappedList, searchKey,
+				comparator);
 
-		return (res >= 0) ? wrap.get(res) : null;
+		if (foundIndex >= 0) {
+			// We found a matching element
+			return wrappedList.get(foundIndex);
+		} else {
+			// We didn't find an element
+			return null;
+		}
 	}
 
 	/**
 	 * Sort the elements of this list using the provided way of comparing
 	 * elements. Does change the underlying list.
 	 * 
-	 * @param cmp
+	 * @param comparator
 	 *            The way to compare elements for sorting.
 	 */
-	public void sort(Comparator<E> cmp) {
-		Collections.sort(wrap, cmp);
+	public void sort(Comparator<E> comparator) {
+		Collections.sort(wrappedList, comparator);
 	}
 
 	/**
@@ -467,7 +537,7 @@ public class FunctionalList<E> implements Cloneable {
 	 * @return An iterable view onto the list
 	 */
 	public Iterable<E> toIterable() {
-		return wrap;
+		return wrappedList;
 	}
 
 	/*
@@ -480,9 +550,13 @@ public class FunctionalList<E> implements Cloneable {
 	public String toString() {
 		StringBuilder sb = new StringBuilder("(");
 
+		// Append the string form of each element
 		forEach(s -> sb.append(s + ", "));
 
+		// Remove trailing space and comma
 		sb.deleteCharAt(sb.length() - 1);
+		sb.deleteCharAt(sb.length() - 2);
+
 		sb.append(")");
 
 		return sb.toString();
