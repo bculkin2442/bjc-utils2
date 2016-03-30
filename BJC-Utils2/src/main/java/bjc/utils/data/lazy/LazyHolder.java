@@ -20,6 +20,33 @@ import bjc.utils.funcdata.FunctionalList;
  *            The type of the data being held
  */
 public class LazyHolder<T> implements IHolder<T> {
+	private final class LazyHolderSupplier<NewT>
+			implements Supplier<NewT> {
+		private FunctionalList<Function<T, T>>	pendingActions;
+		private Function<T, NewT>				f;
+
+		public LazyHolderSupplier(FunctionalList<Function<T, T>> actons,
+				Function<T, NewT> f) {
+			// Resolve latent bug I just realized. After a map, adding new
+			// actions to the original holder could've resulted in changes
+			// to all unactualized mapped values from that holder
+			pendingActions = actons.clone();
+
+			this.f = f;
+		}
+
+		@Override
+		public NewT get() {
+			if (held == null) {
+				return pendingActions.reduceAux(heldSrc.get(),
+						Function<T, T>::apply, f::apply);
+			} else {
+				return pendingActions.reduceAux(held,
+						Function<T, T>::apply, f::apply);
+			}
+		}
+	}
+
 	/**
 	 * List of queued actions to be performed on realized values
 	 */
@@ -60,27 +87,23 @@ public class LazyHolder<T> implements IHolder<T> {
 	@Override
 	public void doWith(Consumer<T> f) {
 		transform((val) -> {
+			// Do the action with the value
 			f.accept(val);
 
+			// Return the untransformed value
 			return val;
 		});
 	}
 
 	@Override
 	public <NewT> IHolder<NewT> map(Function<T, NewT> f) {
-		return new LazyHolder<>(() -> {
-			if (held == null) {
-				return actions.reduceAux(heldSrc.get(),
-						Function<T, T>::apply, f::apply);
-			} else {
-				return actions.reduceAux(held, Function<T, T>::apply,
-						f::apply);
-			}
-		});
+		// Don't actually map until we need to
+		return new LazyHolder<>(new LazyHolderSupplier<>(actions, f));
 	}
 
 	@Override
 	public IHolder<T> transform(Function<T, T> f) {
+		// Queue the transform until we need to apply it
 		actions.add(f);
 
 		return this;
@@ -93,6 +116,7 @@ public class LazyHolder<T> implements IHolder<T> {
 			held = heldSrc.get();
 		}
 
+		// Apply all pending transforms
 		actions.forEach((act) -> held = act.apply(held));
 
 		return f.apply(held);
