@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.slf4j.LoggerFactory;
+
 import bjc.utils.funcdata.FunctionalList;
 
 /**
@@ -33,6 +35,10 @@ public class FileComponentRepository<E extends IDescribedComponent>
 	 * Create a new component repository sourcing components from files in
 	 * a directory
 	 * 
+	 * An exception thrown during the loading of a component will only
+	 * cause the loading of that component to fail, but a warning will be
+	 * logged.
+	 * 
 	 * @param dir
 	 *            The directory to read component files from
 	 * @param reader
@@ -47,9 +53,17 @@ public class FileComponentRepository<E extends IDescribedComponent>
 				// Do nothing with directories. They probably contain
 				// support files for components
 			} else {
-				E comp = reader.apply(fle);
+				try {
+					E comp = reader.apply(fle);
 
-				comps.put(comp.getName(), comp);
+					comps.put(comp.getName(), comp);
+				} catch (Exception ex) {
+					LoggerFactory.getLogger(getClass())
+							.warn("Error found reading component from file "
+									+ fle.toString()
+									+ ". This component will not be loaded");
+				}
+
 			}
 		}
 	}
@@ -58,9 +72,7 @@ public class FileComponentRepository<E extends IDescribedComponent>
 	public FunctionalList<E> getComponentList() {
 		FunctionalList<E> ret = new FunctionalList<>();
 
-		comps.forEach((name, comp) -> {
-			ret.add(comp);
-		});
+		comps.forEach((name, comp) -> ret.add(comp));
 
 		return ret;
 	}
@@ -72,6 +84,6 @@ public class FileComponentRepository<E extends IDescribedComponent>
 
 	@Override
 	public String getSource() {
-		return "Read from directory " + sourcePath + ".";
+		return "Components read from directory " + sourcePath + ".";
 	}
 }
