@@ -95,8 +95,8 @@ public class ListUtils {
 		/*
 		 * List that holds current partition
 		 */
-		GenHolder<FunctionalList<E>> currPart = new GenHolder<>(
-				new FunctionalList<>());
+		GenHolder<FunctionalList<E>> currPart =
+				new GenHolder<>(new FunctionalList<>());
 		/*
 		 * List that holds elements rejected during current pass
 		 */
@@ -142,6 +142,7 @@ public class ListUtils {
 	 * @param ops
 	 *            The operators to split on.
 	 * @return A list of tokens split on all the operators
+	 * 
 	 */
 	public static FunctionalList<String> splitTokens(
 			FunctionalList<String> input,
@@ -152,25 +153,28 @@ public class ListUtils {
 				(op) -> ret.transform((oldRet) -> oldRet.flatMap((tok) -> {
 					return op.merge((opName, opRegex) -> {
 						if (tok.contains(opName)) {
-							FunctionalList<String> splitTokens = new FunctionalList<>(
-									tok.split(opRegex));
+							if (StringUtils.containsOnly(tok, opRegex)) {
+								return new FunctionalList<>(tok);
+							} else {
+								FunctionalList<String> splitTokens =
+										new FunctionalList<>(
+												tok.split(opRegex));
+								FunctionalList<String> rt =
+										new FunctionalList<>();
+								int tkSize = splitTokens.getSize();
+								splitTokens.forEachIndexed((idx, tk) -> {
 
-							FunctionalList<String> rt = new FunctionalList<>();
+									if (idx != tkSize && idx != 0) {
+										rt.add(opName);
+										rt.add(tk);
 
-							int tkSize = splitTokens.getSize();
-							splitTokens.forEachIndexed((idx, tk) -> {
+									} else {
+										rt.add(tk);
 
-								if (idx != tkSize && idx != 0) {
-									rt.add(opName);
-									rt.add(tk);
-
-								} else {
-									rt.add(tk);
-
-								}
-							});
-
-							return rt;
+									}
+								});
+								return rt;
+							}
 						} else {
 							return new FunctionalList<>(tok);
 						}
@@ -188,6 +192,7 @@ public class ListUtils {
 	 * @param ops
 	 *            The affixes to remove
 	 * @return The tokens that have been deaffixed
+	 * 
 	 */
 	@SuppressWarnings("unchecked")
 	public static FunctionalList<String> deAffixTokens(
@@ -199,7 +204,10 @@ public class ListUtils {
 				(op) -> ret.transform((oldRet) -> oldRet.flatMap((tok) -> {
 					return (FunctionalList<String>) op
 							.merge((opName, opRegex) -> {
-								if (tok.startsWith(opName)) {
+								if (StringUtils.containsOnly(tok,
+										opRegex)) {
+									return new FunctionalList<>(tok);
+								} else if (tok.startsWith(opName)) {
 									return new FunctionalList<>(op,
 											tok.split(opRegex)[1]);
 								} else if (tok.endsWith(opName)) {
