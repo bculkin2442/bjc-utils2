@@ -4,10 +4,12 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import bjc.utils.data.IPrecedent;
 import bjc.utils.funcdata.FunctionalList;
+import bjc.utils.funcutils.StringUtils;
 
 /**
  * Utility to run the shunting yard algorithm on a bunch of tokens
@@ -18,7 +20,42 @@ import bjc.utils.funcdata.FunctionalList;
  *            The type of tokens being shunted
  */
 public class ShuntingYard<E> {
-	
+
+	private final class TokenShunter implements Consumer<String> {
+		private FunctionalList<E>	outp;
+		private Deque<String>		stack;
+		private Function<String, E>	transform;
+
+		public TokenShunter(FunctionalList<E> outp, Deque<String> stack,
+				Function<String, E> transform) {
+			this.outp = outp;
+			this.stack = stack;
+			this.transform = transform;
+		}
+
+		@Override
+		public void accept(String token) {
+			if (ops.containsKey(token)) {
+				while (!stack.isEmpty()
+						&& isHigherPrec(token, stack.peek())) {
+					outp.add(transform.apply(stack.pop()));
+				}
+
+				stack.push(token);
+			} else if (StringUtils.containsOnly(token, "\\(")) {
+				stack.push(token);
+			} else if (StringUtils.containsOnly(token, "\\)")) {
+				while (stack.peek().equals(token.replace(')', '('))) {
+					outp.add(transform.apply(stack.pop()));
+				}
+
+				stack.pop();
+			} else {
+				outp.add(transform.apply(token));
+			}
+		}
+	}
+
 	/**
 	 * A enum representing the fundamental operator types
 	 * 
@@ -120,26 +157,7 @@ public class ShuntingYard<E> {
 		FunctionalList<E> outp = new FunctionalList<>();
 		Deque<String> stack = new LinkedList<>();
 
-		inp.forEach((token) -> {
-			if (ops.containsKey(token)) {
-				while (!stack.isEmpty()
-						&& isHigherPrec(token, stack.peek())) {
-					outp.add(transform.apply(stack.pop()));
-				}
-
-				stack.push(token);
-			} else if (token.equals("(")) {
-				stack.push(token);
-			} else if (token.equals(")")) {
-				while (!stack.peek().equals("(")) {
-					outp.add(transform.apply(stack.pop()));
-				}
-
-				stack.pop();
-			} else {
-				outp.add(transform.apply(token));
-			}
-		});
+		inp.forEach(new TokenShunter(outp, stack, transform));
 
 		while (!stack.isEmpty()) {
 			outp.add(transform.apply(stack.pop()));
