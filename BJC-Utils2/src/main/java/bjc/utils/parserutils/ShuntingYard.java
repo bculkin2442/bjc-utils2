@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import bjc.utils.data.IPrecedent;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcutils.StringUtils;
 

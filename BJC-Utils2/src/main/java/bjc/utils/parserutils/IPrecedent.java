@@ -1,4 +1,4 @@
-package bjc.utils.data;
+package bjc.utils.parserutils;
 
 /**
  * Represents something that has a set precedence
