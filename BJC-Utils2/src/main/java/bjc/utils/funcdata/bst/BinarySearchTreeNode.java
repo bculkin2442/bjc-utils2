@@ -7,8 +7,6 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import bjc.utils.funcdata.ITreePart;
-
 /**
  * A binary node in a tree.
  * 

@@ -1,11 +1,9 @@
-package bjc.utils.funcdata;
+package bjc.utils.funcdata.bst;
 
 import java.util.Comparator;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
-
-import bjc.utils.funcdata.bst.DirectedWalkFunction;
 
 /**
  * A interface for the fundamental things that want to be part of a tree.
