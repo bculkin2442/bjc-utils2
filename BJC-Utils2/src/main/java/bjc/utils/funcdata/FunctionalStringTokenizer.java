@@ -109,4 +109,13 @@ public class FunctionalStringTokenizer {
 
 		return r;
 	}
+
+	/**
+	 * Check if this tokenizer has more tokens
+	 * 
+	 * @return Whether or not this tokenizer has more tokens
+	 */
+	public boolean hasMoreTokens() {
+		return inp.hasMoreTokens();
+	}
 }
