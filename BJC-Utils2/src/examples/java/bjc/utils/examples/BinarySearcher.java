@@ -19,20 +19,20 @@ public class BinarySearcher {
 	 *            Unused CLI args
 	 */
 	public static void main(String[] args) {
-		Scanner s = new Scanner(System.in);
+		Scanner inputSource = new Scanner(System.in);
 
 		System.out.println("Binary Tree Constructor/Searcher");
 
-		char c = 'n';
+		char command = ' ';
 
-		BinarySearchTree<Character> bst =
+		BinarySearchTree<Character> searchTree =
 				new BinarySearchTree<>((o1, o2) -> o1 - o2);
 
-		while (c != 'e') {
+		while (command != 'e') {
 			System.out.print("Enter a command (m for help): ");
-			c = s.nextLine().charAt(0);
+			command = inputSource.nextLine().charAt(0);
 
-			switch (c) {
+			switch (command) {
 				case 'm':
 					System.out.println("Valid commands: ");
 					System.out.println("\tm: Display this help message.");
@@ -53,55 +53,62 @@ public class BinarySearcher {
 				case 'a':
 					System.out.print(
 							"Enter the letter to add to the binary tree: ");
-					c = s.nextLine().charAt(0);
+					command = inputSource.nextLine().charAt(0);
 
-					bst.addNode(c);
+					searchTree.addNode(command);
 					break;
+
 				case 'r':
 					System.out.print(
 							"Enter the letter to add to the binary tree: ");
-					c = s.nextLine().charAt(0);
+					command = inputSource.nextLine().charAt(0);
 
-					bst.deleteNode(c);
+					searchTree.deleteNode(command);
 					break;
+
 				case 'd':
-					displayTree(bst, s);
+					displayTree(searchTree, inputSource);
 					break;
+
 				case 'f':
 					System.out.print(
 							"Enter the letter to add to the binary tree: ");
-					c = s.nextLine().charAt(0);
+					command = inputSource.nextLine().charAt(0);
 
-					System.out.println("Node " + c + " was "
-							+ (bst.isInTree(c) ? "" : "not ") + "found");
+					System.out.println("Node " + command + " was "
+							+ (searchTree.isInTree(command) ? "" : "not ")
+							+ "found");
 					break;
+
 				case 't':
-					bst.trim();
+					searchTree.trim();
 					break;
+
 				case 'b':
-					bst.balance();
+					searchTree.balance();
 					break;
+
 				default:
 					System.out.println("ERROR: Unrecognized command.");
 			}
-
 		}
-		s.close();
+
+		inputSource.close();
 	}
 
-	private static void displayTree(BinarySearchTree<Character> bst,
-			Scanner s) {
+	private static void displayTree(BinarySearchTree<Character> tree,
+			Scanner inputSource) {
 		System.out.print(
 				"What order would you like the tree to be printed in (m for options): ");
 
-		char c;
+		char command;
 
 		while (true) {
-			c = s.nextLine().charAt(0);
+			command = inputSource.nextLine().charAt(0);
 
-			TreeLinearizationMethod tlm = null;
+			TreeLinearizationMethod linearizationMethod = null;
 
-			switch (c) {
+			switch (command) {
 				case 'm':
 					System.out.println("Possible tree printing methods: ");
 					System.out.println(
@@ -111,24 +118,30 @@ public class BinarySearcher {
 					System.out.println(
 							"\to: Postorder printing (print left first, then right & parent).");
 					break;
+
 				case 'p':
-					tlm = TreeLinearizationMethod.PREORDER;
+					linearizationMethod = TreeLinearizationMethod.PREORDER;
 					break;
+
 				case 'i':
-					tlm = TreeLinearizationMethod.INORDER;
+					linearizationMethod = TreeLinearizationMethod.INORDER;
 					break;
+
 				case 'o':
-					tlm = TreeLinearizationMethod.POSTORDER;
+					linearizationMethod =
+							TreeLinearizationMethod.POSTORDER;
 					break;
+
 				default:
 					System.out.println("ERROR: Unknown command.");
 			}
 
-			if (tlm != null) {
-				bst.traverse(tlm, ch -> {
-					System.out.println("Node: " + ch);
+			if (linearizationMethod != null) {
+				tree.traverse(linearizationMethod, (element) -> {
+					System.out.println("Node: " + element);
 					return true;
 				});
+
 				return;
 			}
 

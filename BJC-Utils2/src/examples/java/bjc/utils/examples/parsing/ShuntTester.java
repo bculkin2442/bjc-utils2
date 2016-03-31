@@ -20,19 +20,19 @@ public class ShuntTester {
 	 *            Unused CLI args
 	 */
 	public static void main(String[] args) {
-		Scanner scn = new Scanner(System.in);
+		Scanner inputSource = new Scanner(System.in);
 
 		System.out.print("Enter a expression to shunt: ");
-		String ln = scn.nextLine();
+		String line = inputSource.nextLine();
 
 		ShuntingYard<String> yard = new ShuntingYard<>();
 
-		FunctionalList<String> ls = yard.postfix(
-				new FunctionalStringTokenizer(ln).toList((s) -> s),
-				(s) -> s);
+		FunctionalList<String> shuntedTokens =
+				yard.postfix(new FunctionalStringTokenizer(line)
+						.toList((strang) -> strang), (strang) -> strang);
 
-		System.out.println(ls.toString());
+		System.out.println(shuntedTokens.toString());
 
-		scn.close();
+		inputSource.close();
 	}
 }

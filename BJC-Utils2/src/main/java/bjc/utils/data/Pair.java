@@ -20,12 +20,12 @@ public class Pair<L, R> implements IPair<L, R> {
 	/**
 	 * The left value of the pair
 	 */
-	protected L	l;
+	protected L	leftValue;
 
 	/**
 	 * The right value of the pair
 	 */
-	protected R	r;
+	protected R	rightValue;
 
 	/**
 	 * Create a new pair that holds two nulls.
@@ -43,8 +43,8 @@ public class Pair<L, R> implements IPair<L, R> {
 	 *            The value to hold on the right.
 	 */
 	public Pair(L left, R right) {
-		l = left;
-		r = right;
+		leftValue = left;
+		rightValue = right;
 	}
 
 	/*
@@ -54,9 +54,10 @@ public class Pair<L, R> implements IPair<L, R> {
 	 * java.util.function.Function)
 	 */
 	@Override
-	public <L2, R2> IPair<L2, R2> apply(Function<L, L2> lf,
-			Function<R, R2> rf) {
-		return new Pair<>(lf.apply(l), rf.apply(r));
+	public <L2, R2> IPair<L2, R2> apply(Function<L, L2> leftTransformer,
+			Function<R, R2> rightTransformer) {
+		return new Pair<>(leftTransformer.apply(leftValue),
+				rightTransformer.apply(rightValue));
 	}
 
 	/*
@@ -65,8 +66,8 @@ public class Pair<L, R> implements IPair<L, R> {
 	 * @see bjc.utils.data.IPair#doWith(java.util.function.BiConsumer)
 	 */
 	@Override
-	public void doWith(BiConsumer<L, R> bc) {
-		bc.accept(l, r);
+	public void doWith(BiConsumer<L, R> action) {
+		action.accept(leftValue, rightValue);
 	}
 
 	/*
@@ -75,7 +76,7 @@ public class Pair<L, R> implements IPair<L, R> {
 	 * @see bjc.utils.data.IPair#merge(java.util.function.BiFunction)
 	 */
 	@Override
-	public <E> E merge(BiFunction<L, R, E> bf) {
-		return bf.apply(l, r);
+	public <E> E merge(BiFunction<L, R, E> merger) {
+		return merger.apply(leftValue, rightValue);
 	}
 }

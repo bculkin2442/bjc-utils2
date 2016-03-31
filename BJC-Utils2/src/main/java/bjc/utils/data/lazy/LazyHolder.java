@@ -23,26 +23,26 @@ public class LazyHolder<T> implements IHolder<T> {
 	private final class LazyHolderSupplier<NewT>
 			implements Supplier<NewT> {
 		private FunctionalList<Function<T, T>>	pendingActions;
-		private Function<T, NewT>				f;
+		private Function<T, NewT>				pendingTransform;
 
 		public LazyHolderSupplier(FunctionalList<Function<T, T>> actons,
-				Function<T, NewT> f) {
+				Function<T, NewT> transform) {
 			// Resolve latent bug I just realized. After a map, adding new
 			// actions to the original holder could've resulted in changes
 			// to all unactualized mapped values from that holder
 			pendingActions = actons.clone();
 
-			this.f = f;
+			this.pendingTransform = transform;
 		}
 
 		@Override
 		public NewT get() {
-			if (held == null) {
-				return pendingActions.reduceAux(heldSrc.get(),
-						Function<T, T>::apply, f::apply);
+			if (heldValue == null) {
+				return pendingActions.reduceAux(heldSource.get(),
+						Function<T, T>::apply, pendingTransform::apply);
 			} else {
-				return pendingActions.reduceAux(held,
-						Function<T, T>::apply, f::apply);
+				return pendingActions.reduceAux(heldValue,
+						Function<T, T>::apply, pendingTransform::apply);
 			}
 		}
 	}
@@ -50,76 +50,78 @@ public class LazyHolder<T> implements IHolder<T> {
 	/**
 	 * List of queued actions to be performed on realized values
 	 */
-	private FunctionalList<Function<T, T>>	actions;
+	private FunctionalList<Function<T, T>>	actions	=
+			new FunctionalList<>();
 
 	/**
 	 * The value internally held by this lazy holder
 	 */
-	private T								held;
+	private T								heldValue;
 
 	/**
 	 * The source for a value held by this lazy holder
 	 */
-	private Supplier<T>						heldSrc;
+	private Supplier<T>						heldSource;
 
 	/**
 	 * Create a new lazy holder with the given supplier
 	 * 
-	 * @param src
+	 * @param source
 	 *            The supplier for a value when it is neededs
 	 */
-	public LazyHolder(Supplier<T> src) {
-		heldSrc = src;
+	public LazyHolder(Supplier<T> source) {
+		heldSource = source;
 
-		held = null;
+		heldValue = null;
 	}
 
 	/**
 	 * Create a new lazy holder with the given value
 	 * 
-	 * @param val
+	 * @param value
 	 *            The value held in the holder
 	 */
-	public LazyHolder(T val) {
-		held = val;
+	public LazyHolder(T value) {
+		heldValue = value;
 	}
 
 	@Override
-	public void doWith(Consumer<T> f) {
-		transform((val) -> {
+	public void doWith(Consumer<T> action) {
+		transform((value) -> {
 			// Do the action with the value
-			f.accept(val);
+			action.accept(value);
 
 			// Return the untransformed value
-			return val;
+			return value;
 		});
 	}
 
 	@Override
-	public <NewT> IHolder<NewT> map(Function<T, NewT> f) {
+	public <NewT> IHolder<NewT> map(Function<T, NewT> transform) {
 		// Don't actually map until we need to
-		return new LazyHolder<>(new LazyHolderSupplier<>(actions, f));
+		return new LazyHolder<>(
+				new LazyHolderSupplier<>(actions, transform));
 	}
 
 	@Override
-	public IHolder<T> transform(Function<T, T> f) {
+	public IHolder<T> transform(Function<T, T> transform) {
 		// Queue the transform until we need to apply it
-		actions.add(f);
+		actions.add(transform);
 
 		return this;
 	}
 
 	@Override
-	public <E> E unwrap(Function<T, E> f) {
+	public <E> E unwrap(Function<T, E> unwrapper) {
 		// Actualize ourselves
-		if (held == null) {
-			held = heldSrc.get();
+		if (heldValue == null) {
+			heldValue = heldSource.get();
 		}
 
 		// Apply all pending transforms
-		actions.forEach((act) -> held = act.apply(held));
+		actions.forEach((action) -> heldValue = action.apply(heldValue));
 
-		return f.apply(held);
+		return unwrapper.apply(heldValue);
 	}
 
 }

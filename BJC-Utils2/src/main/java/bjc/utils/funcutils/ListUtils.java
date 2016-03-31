@@ -1,6 +1,7 @@
 package bjc.utils.funcutils;
 
 import java.util.Deque;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -18,6 +19,74 @@ import bjc.utils.funcdata.FunctionalList;
 public class ListUtils {
 	private static final int MAX_NTRIESPART = 50;
 
+	private static final class TokenDeaffixer
+			implements BiFunction<String, String, FunctionalList<String>> {
+		private String token;
+
+		public TokenDeaffixer(String tok) {
+			token = tok;
+		}
+
+		@Override
+		public FunctionalList<String> apply(String opName,
+				String opRegex) {
+			if (StringUtils.containsOnly(token, opRegex)) {
+				return new FunctionalList<>(token);
+			} else if (token.startsWith(opName)) {
+				return new FunctionalList<>(opName,
+						token.split(opRegex)[1]);
+			} else if (token.endsWith(opName)) {
+				return new FunctionalList<>(token.split(opRegex)[0],
+						opName);
+			} else {
+				return new FunctionalList<>(token);
+			}
+		}
+	}
+
+	private static final class TokenSplitter
+			implements BiFunction<String, String, FunctionalList<String>> {
+		private String tokenToSplit;
+
+		public TokenSplitter(String tok) {
+			this.tokenToSplit = tok;
+		}
+
+		@Override
+		public FunctionalList<String> apply(String operatorName,
+				String operatorRegex) {
+			if (tokenToSplit.contains(operatorName)) {
+				if (StringUtils.containsOnly(tokenToSplit,
+						operatorRegex)) {
+					return new FunctionalList<>(tokenToSplit);
+				} else {
+					FunctionalList<String> splitTokens =
+							new FunctionalList<>(
+									tokenToSplit.split(operatorRegex));
+
+					FunctionalList<String> result = new FunctionalList<>();
+
+					int tokenExpansionSize = splitTokens.getSize();
+
+					splitTokens.forEachIndexed((tokenIndex, token) -> {
+
+						if (tokenIndex != tokenExpansionSize
+								&& tokenIndex != 0) {
+							result.add(operatorName);
+							result.add(token);
+						} else {
+							result.add(token);
+						}
+					});
+
+					return result;
+				}
+			} else {
+				return new FunctionalList<>(tokenToSplit);
+			}
+		}
+	}
+
 	/**
 	 * Implements a single group partitioning pass on a list
 	 * 
@@ -28,42 +97,48 @@ public class ListUtils {
 	 */
 	private static final class GroupPartIteration<E>
 			implements Consumer<E> {
-		private FunctionalList<FunctionalList<E>>	ret;
-		private GenHolder<FunctionalList<E>>		currPart;
-		private FunctionalList<E>					rejects;
-		private GenHolder<Integer>					numInCurrPart;
-		private int									nPerPart;
-		private Function<E, Integer>				eleCount;
+		private FunctionalList<FunctionalList<E>>	returnedList;
+		private GenHolder<FunctionalList<E>>		currentPartition;
+		private FunctionalList<E>					rejectedItems;
+		private GenHolder<Integer>					numberInCurrentPartition;
+		private int									numberPerPartition;
+		private Function<E, Integer>				elementCounter;
 
-		public GroupPartIteration(FunctionalList<FunctionalList<E>> ret,
+		public GroupPartIteration(
+				FunctionalList<FunctionalList<E>> returned,
 				GenHolder<FunctionalList<E>> currPart,
 				FunctionalList<E> rejects,
 				GenHolder<Integer> numInCurrPart, int nPerPart,
 				Function<E, Integer> eleCount) {
-			this.ret = ret;
-			this.currPart = currPart;
-			this.rejects = rejects;
-			this.numInCurrPart = numInCurrPart;
-			this.nPerPart = nPerPart;
-			this.eleCount = eleCount;
+			this.returnedList = returned;
+			this.currentPartition = currPart;
+			this.rejectedItems = rejects;
+			this.numberInCurrentPartition = numInCurrPart;
+			this.numberPerPartition = nPerPart;
+			this.elementCounter = eleCount;
 		}
 
 		@Override
-		public void accept(E val) {
-			if (numInCurrPart.unwrap((vl) -> vl >= nPerPart)) {
-				ret.add(currPart.unwrap((vl) -> vl));
+		public void accept(E value) {
+			if (numberInCurrentPartition
+					.unwrap((number) -> number >= numberPerPartition)) {
+				returnedList.add(
+						currentPartition.unwrap((partition) -> partition));
 
-				currPart.transform((vl) -> new FunctionalList<>());
-				numInCurrPart.transform((vl) -> 0);
+				currentPartition
+						.transform((partition) -> new FunctionalList<>());
+				numberInCurrentPartition.transform((number) -> 0);
 			} else {
-				int vCount = eleCount.apply(val);
+				int currentElementCount = elementCounter.apply(value);
 
-				if (numInCurrPart
-						.unwrap((vl) -> (vl + vCount) >= nPerPart)) {
-					rejects.add(val);
+				if (numberInCurrentPartition.unwrap((number) -> (number
+						+ currentElementCount) >= numberPerPartition)) {
+					rejectedItems.add(value);
 				} else {
-					currPart.unwrap((vl) -> vl.add(val));
-					numInCurrPart.transform((vl) -> vl + vCount);
+					currentPartition
+							.unwrap((partition) -> partition.add(value));
+					numberInCurrentPartition.transform(
+							(number) -> number + currentElementCount);
 				}
 			}
 		}
@@ -76,59 +151,66 @@ public class ListUtils {
 	 * @param <E>
 	 *            The type of elements in the list to partition
 	 * 
-	 * @param list
+	 * @param input
 	 *            The list to partition
-	 * @param eleCount
+	 * @param elementCounter
 	 *            The function to determine the count for each element for
-	 * @param nPerPart
+	 * @param numberPerPartition
 	 *            The number of elements to put in each partition
 	 * @return A list partitioned according to the above rules
 	 */
 	public static <E> FunctionalList<FunctionalList<E>> groupPartition(
-			FunctionalList<E> list, Function<E, Integer> eleCount,
-			int nPerPart) {
+			FunctionalList<E> input, Function<E, Integer> elementCounter,
+			int numberPerPartition) {
 		/*
 		 * List that holds our results
 		 */
-		FunctionalList<FunctionalList<E>> ret = new FunctionalList<>();
+		FunctionalList<FunctionalList<E>> returnedList =
+				new FunctionalList<>();
 
 		/*
 		 * List that holds current partition
 		 */
-		GenHolder<FunctionalList<E>> currPart =
+		GenHolder<FunctionalList<E>> currentPartition =
 				new GenHolder<>(new FunctionalList<>());
 		/*
 		 * List that holds elements rejected during current pass
 		 */
-		FunctionalList<E> rejects = new FunctionalList<>();
+		FunctionalList<E> rejectedElements = new FunctionalList<>();
 
 		/*
 		 * The effective number of elements in the current partitition
 		 */
-		GenHolder<Integer> numInCurrPart = new GenHolder<>(0);
+		GenHolder<Integer> numberInCurrentPartition = new GenHolder<>(0);
 
 		/*
 		 * Run up to a certain number of passes
 		 */
-		for (int nIterations = 0; nIterations < MAX_NTRIESPART
-				&& !rejects.isEmpty(); nIterations++) {
-			list.forEach(new GroupPartIteration<>(ret, currPart, rejects,
-					numInCurrPart, nPerPart, eleCount));
+		for (int numberOfIterations =
+				0; numberOfIterations < MAX_NTRIESPART
+						&& !rejectedElements
+								.isEmpty(); numberOfIterations++) {
+			input.forEach(new GroupPartIteration<>(returnedList,
+					currentPartition, rejectedElements,
+					numberInCurrentPartition, numberPerPartition,
+					elementCounter));
 
-			if (rejects.isEmpty()) {
+			if (rejectedElements.isEmpty()) {
 				// Nothing was rejected, so we're done
-				return ret;
+				return returnedList;
 			}
 		}
 
-		throw new IllegalArgumentException("Heuristic (more than "
-				+ MAX_NTRIESPART
-				+ " iterations of partitioning) detected unpartitionable list "
-				+ list.toString()
-				+ "\nThe following elements were not partitioned: "
-				+ rejects.toString() + "\nCurrent group in formation: "
-				+ currPart.unwrap((vl) -> vl.toString())
-				+ "\nPreviously formed groups: " + ret.toString());
+		throw new IllegalArgumentException(
+				"Heuristic (more than " + MAX_NTRIESPART
+						+ " iterations of partitioning) detected unpartitionable list "
+						+ input.toString()
+						+ "\nThe following elements were not partitioned: "
+						+ rejectedElements.toString()
+						+ "\nCurrent group in formation: "
+						+ currentPartition.unwrap((vl) -> vl.toString())
+						+ "\nPreviously formed groups: "
+						+ returnedList.toString());
 	}
 
 	/**
@@ -139,49 +221,23 @@ public class ListUtils {
 	 * 
 	 * @param input
 	 *            The tokens to split
-	 * @param ops
-	 *            The operators to split on.
+	 * @param operators
+	 *            Pairs of operators to split on and regexes that match
+	 *            those operators
 	 * @return A list of tokens split on all the operators
 	 * 
 	 */
 	public static FunctionalList<String> splitTokens(
 			FunctionalList<String> input,
-			Deque<Pair<String, String>> ops) {
+			Deque<Pair<String, String>> operators) {
 		GenHolder<FunctionalList<String>> ret = new GenHolder<>(input);
 
-		ops.forEach(
+		operators.forEach(
 				(op) -> ret.transform((oldRet) -> oldRet.flatMap((tok) -> {
-					return op.merge((opName, opRegex) -> {
-						if (tok.contains(opName)) {
-							if (StringUtils.containsOnly(tok, opRegex)) {
-								return new FunctionalList<>(tok);
-							} else {
-								FunctionalList<String> splitTokens =
-										new FunctionalList<>(
-												tok.split(opRegex));
-								FunctionalList<String> rt =
-										new FunctionalList<>();
-								int tkSize = splitTokens.getSize();
-								splitTokens.forEachIndexed((idx, tk) -> {
-
-									if (idx != tkSize && idx != 0) {
-										rt.add(opName);
-										rt.add(tk);
-
-									} else {
-										rt.add(tk);
-
-									}
-								});
-								return rt;
-							}
-						} else {
-							return new FunctionalList<>(tok);
-						}
-					});
+					return op.merge(new TokenSplitter(tok));
 				})));
 
-		return ret.unwrap((l) -> l);
+		return ret.unwrap((list) -> list);
 	}
 
 	/**
@@ -194,32 +250,18 @@ public class ListUtils {
 	 * @return The tokens that have been deaffixed
 	 * 
 	 */
-	@SuppressWarnings("unchecked")
 	public static FunctionalList<String> deAffixTokens(
 			FunctionalList<String> input,
 			Deque<Pair<String, String>> ops) {
-		GenHolder<FunctionalList<String>> ret = new GenHolder<>(input);
+		GenHolder<FunctionalList<String>> returnedList =
+				new GenHolder<>(input);
 
-		ops.forEach(
-				(op) -> ret.transform((oldRet) -> oldRet.flatMap((tok) -> {
-					return (FunctionalList<String>) op
-							.merge((opName, opRegex) -> {
-								if (StringUtils.containsOnly(tok,
-										opRegex)) {
-									return new FunctionalList<>(tok);
-								} else if (tok.startsWith(opName)) {
-									return new FunctionalList<>(op,
-											tok.split(opRegex)[1]);
-								} else if (tok.endsWith(opName)) {
-									return new FunctionalList<>(
-											tok.split(opRegex)[0], op);
-								} else {
-									return new FunctionalList<>(tok);
-								}
-							});
+		ops.forEach((op) -> returnedList
+				.transform((oldRet) -> oldRet.flatMap((tok) -> {
+					return op.merge(new TokenDeaffixer(tok));
 				})));
 
-		return ret.unwrap((l) -> l);
+		return returnedList.unwrap((list) -> list);
 	}
 
 	/**
@@ -232,6 +274,7 @@ public class ListUtils {
 	 */
 	public static String collapseTokens(FunctionalList<String> input) {
 		return input.reduceAux("",
-				(currString, state) -> state + currString, (s) -> s);
+				(currentString, state) -> state + currentString,
+				(strang) -> strang);
 	}
 }

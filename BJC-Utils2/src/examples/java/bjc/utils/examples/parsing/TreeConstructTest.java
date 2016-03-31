@@ -23,24 +23,24 @@ public class TreeConstructTest {
 	 *            Unused CLI args
 	 */
 	public static void main(String[] args) {
-		Scanner scn = new Scanner(System.in);
+		Scanner inputSource = new Scanner(System.in);
 
 		System.out.print("Enter a expression to parse: ");
-		String ln = scn.nextLine();
+		String line = inputSource.nextLine();
 
 		ShuntingYard<String> yard = new ShuntingYard<>();
 
-		FunctionalList<String> ls = yard.postfix(
-				new FunctionalStringTokenizer(ln).toList((s) -> s),
-				(s) -> s);
+		FunctionalList<String> shuntedTokens =
+				yard.postfix(new FunctionalStringTokenizer(line)
+						.toList((strang) -> strang), (s) -> s);
 
-		System.out.println("Shunted: " + ls.toString());
+		System.out.println("Shunted: " + shuntedTokens.toString());
 
-		AST<String> ast =
-				TreeConstructor.constructTree(ls, new Predicate<String>() {
+		AST<String> constructedTree = TreeConstructor
+				.constructTree(shuntedTokens, new Predicate<String>() {
 					@Override
-					public boolean test(String tok) {
-						switch (tok) {
+					public boolean test(String token) {
+						switch (token) {
 							case "+":
 							case "-":
 							case "*":
@@ -50,10 +50,10 @@ public class TreeConstructTest {
 								return false;
 						}
 					}
-				}, (op) -> false, null);
+				}, (operator) -> false, null);
 
-		System.out.println("AST: " + ast.toString());
+		System.out.println("AST: " + constructedTree.toString());
 
-		scn.close();
+		inputSource.close();
 	}
 }

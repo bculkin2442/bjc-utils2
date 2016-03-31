@@ -25,23 +25,23 @@ public interface IPair<L, R> {
 	 * @param <R2>
 	 *            The new right type of the pair
 	 * 
-	 * @param lf
+	 * @param leftTransformer
 	 *            The function to apply to the left value.
-	 * @param rf
+	 * @param rightTransformer
 	 *            The function to apply to the right value.
 	 * @return A new pair containing the two modified values.
 	 */
-	public <L2, R2> IPair<L2, R2> apply(Function<L, L2> lf,
-			Function<R, R2> rf);
+	public <L2, R2> IPair<L2, R2> apply(Function<L, L2> leftTransformer,
+			Function<R, R2> rightTransformer);
 
 	/**
 	 * Execute an action with the values of this pair. Has no effect on the
 	 * internal contents
 	 * 
-	 * @param bc
+	 * @param action
 	 *            The action to execute on the values
 	 */
-	public void doWith(BiConsumer<L, R> bc);
+	public void doWith(BiConsumer<L, R> action);
 
 	/**
 	 * Collapse this pair to a single value. Does not change the internal
@@ -50,9 +50,9 @@ public interface IPair<L, R> {
 	 * @param <E>
 	 *            The resulting type after merging
 	 * 
-	 * @param bf
+	 * @param merger
 	 *            The function to use to collapse the pair.
 	 * @return The collapsed value.
 	 */
-	public <E> E merge(BiFunction<L, R, E> bf);
+	public <E> E merge(BiFunction<L, R, E> merger);
 }

@@ -6,6 +6,7 @@ import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.IntStream;
@@ -29,43 +30,44 @@ public class AdjacencyMap<T> {
 	 * @return An adjacency map defined by the text
 	 */
 	public static AdjacencyMap<Integer> fromStream(InputStream stream) {
-		Scanner scn = new Scanner(stream);
-		scn.useDelimiter("\n");
+		Scanner inputSource = new Scanner(stream);
+		inputSource.useDelimiter("\n");
 
 		// First, read in number of vertices
-		int numVertices = Integer.parseInt(scn.next());
+		int numVertices = Integer.parseInt(inputSource.next());
 
 		Set<Integer> vertices = new HashSet<>();
-		IntStream.range(0, numVertices).forEach(e -> vertices.add(e));
+		IntStream.range(0, numVertices)
+				.forEach(element -> vertices.add(element));
 
 		// Create the adjacency map
-		AdjacencyMap<Integer> aMap = new AdjacencyMap<>(vertices);
+		AdjacencyMap<Integer> adjacencyMap = new AdjacencyMap<>(vertices);
 
 		GenHolder<Integer> row = new GenHolder<>(0);
 
-		scn.forEachRemaining((strang) -> {
+		inputSource.forEachRemaining((strang) -> {
 			String[] parts = strang.split(" ");
-			int col = 0;
+			int column = 0;
 
 			for (String part : parts) {
-				aMap.setWeight(row.unwrap(vl -> vl), col,
-						Integer.parseInt(part));
+				adjacencyMap.setWeight(row.unwrap(number -> number),
+						column, Integer.parseInt(part));
 
-				col++;
+				column++;
 			}
 
-			row.transform((vl) -> vl + 1);
+			row.transform((number) -> number + 1);
 		});
 
-		scn.close();
+		inputSource.close();
 
-		return aMap;
+		return adjacencyMap;
 	}
 
 	/**
 	 * The backing storage of the map
 	 */
-	private Map<T, Map<T, Integer>> adjMap;
+	private Map<T, Map<T, Integer>> adjacencyMap = new HashMap<>();
 
 	/**
 	 * Create a new map from a set of vertices
@@ -74,12 +76,13 @@ public class AdjacencyMap<T> {
 	 *            The set of vertices to create a map from
 	 */
 	public AdjacencyMap(Set<T> vertices) {
-		vertices.forEach(src -> {
-			Map<T, Integer> srcRow = new HashMap<>();
+		vertices.forEach(vertex -> {
+			Map<T, Integer> vertexRow = new HashMap<>();
 
-			vertices.forEach(tgt -> srcRow.put(tgt, 0));
+			vertices.forEach(
+					targetVertex -> vertexRow.put(targetVertex, 0));
 
-			adjMap.put(src, srcRow);
+			adjacencyMap.put(vertex, vertexRow);
 		});
 	}
 
@@ -89,33 +92,37 @@ public class AdjacencyMap<T> {
 	 * @return Whether or not the graph is directed
 	 */
 	public boolean isDirected() {
-		GenHolder<Boolean> res = new GenHolder<>(true);
+		GenHolder<Boolean> result = new GenHolder<>(true);
 
-		adjMap.entrySet()
-				.forEach(src -> src.getValue().entrySet().forEach(tgt -> {
-					int lhs = tgt.getValue();
-					int rhs = adjMap.get(tgt.getKey()).get(src.getKey());
+		adjacencyMap.entrySet().forEach(mapEntry -> {
+			Set<Entry<T, Integer>> entryVertices =
+					mapEntry.getValue().entrySet();
+			entryVertices.forEach(targetVertex -> {
+				int leftValue = targetVertex.getValue();
+				int rightValue = adjacencyMap.get(targetVertex.getKey())
+						.get(mapEntry.getKey());
 
-					if (lhs != rhs) {
-						res.transform((vl) -> false);
-					}
-				}));
+				if (leftValue != rightValue) {
+					result.transform((bool) -> false);
+				}
+			});
+		});
 
-		return res.unwrap(vl -> vl);
+		return result.unwrap(bool -> bool);
 	}
 
 	/**
 	 * Set the weight of an edge
 	 * 
-	 * @param src
+	 * @param sourceVertex
 	 *            The source node of the edge
-	 * @param tgt
+	 * @param targetVertex
 	 *            The target node of the edge
-	 * @param weight
+	 * @param edgeWeight
 	 *            The weight of the edge
 	 */
-	public void setWeight(T src, T tgt, int weight) {
-		adjMap.get(src).put(tgt, weight);
+	public void setWeight(T sourceVertex, T targetVertex, int edgeWeight) {
+		adjacencyMap.get(sourceVertex).put(targetVertex, edgeWeight);
 	}
 
 	/**
@@ -124,31 +131,33 @@ public class AdjacencyMap<T> {
 	 * @return The new representation of this graph
 	 */
 	public Graph<T> toGraph() {
-		Graph<T> ret = new Graph<>();
+		Graph<T> returnedGraph = new Graph<>();
 
-		adjMap.entrySet()
-				.forEach(src -> src.getValue().entrySet()
-						.forEach(tgt -> ret.addEdge(src.getKey(),
-								tgt.getKey(), tgt.getValue())));
+		adjacencyMap.entrySet().forEach(sourceVertex -> sourceVertex
+				.getValue().entrySet()
+				.forEach(targetVertex -> returnedGraph.addEdge(
+						sourceVertex.getKey(), targetVertex.getKey(),
+						targetVertex.getValue())));
 
-		return ret;
+		return returnedGraph;
 	}
 
 	/**
 	 * Convert an adjacency map back into a stream
 	 * 
-	 * @param os
+	 * @param outputSource
 	 *            The stream to convert to
 	 */
-	public void toStream(OutputStream os) {
-		PrintStream ps = new PrintStream(os);
+	public void toStream(OutputStream outputSource) {
+		PrintStream outputPrinter = new PrintStream(outputSource);
 
-		adjMap.entrySet().forEach(src -> {
-			src.getValue().entrySet()
-					.forEach(tgt -> ps.printf("%d ", tgt.getValue()));
-			ps.println();
+		adjacencyMap.entrySet().forEach(sourceVertex -> {
+			sourceVertex.getValue().entrySet()
+					.forEach(targetVertex -> outputPrinter.printf("%d ",
+							targetVertex.getValue()));
+			outputPrinter.println();
 		});
 
-		ps.close();
+		outputPrinter.close();
 	}
 }

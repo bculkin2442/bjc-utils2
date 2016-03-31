@@ -31,8 +31,8 @@ public class RandomGrammar<E> extends WeightedGrammar<E> {
 	 */
 	@SafeVarargs
 	public final void addCases(E rule, FunctionalList<E>... cases) {
-		for (FunctionalList<E> cse : cases) {
-			super.addCase(rule, 1, cse);
+		for (FunctionalList<E> currentCase : cases) {
+			super.addCase(rule, 1, currentCase);
 		}
 	}
 
@@ -48,8 +48,8 @@ public class RandomGrammar<E> extends WeightedGrammar<E> {
 	public final void makeRule(E rule, FunctionalList<E>... cases) {
 		super.addRule(rule);
 
-		for (FunctionalList<E> cse : cases) {
-			super.addCase(rule, 1, cse);
+		for (FunctionalList<E> currentCase : cases) {
+			super.addCase(rule, 1, currentCase);
 		}
 	}
 
@@ -64,6 +64,6 @@ public class RandomGrammar<E> extends WeightedGrammar<E> {
 	public void makeRule(E rule, FunctionalList<FunctionalList<E>> cases) {
 		super.addRule(rule);
 
-		cases.forEach(cse -> super.addCase(rule, 1, cse));
+		cases.forEach(currentCase -> super.addCase(rule, 1, currentCase));
 	}
 }

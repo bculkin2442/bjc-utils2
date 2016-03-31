@@ -29,44 +29,47 @@ public class Graph<T> {
 	/**
 	 * The backing representation of the graph
 	 */
-	private final Map<T, Map<T, Integer>> graph;
+	private final Map<T, Map<T, Integer>> backingGraph;
 
 	/**
 	 * Create a new graph
 	 */
 	public Graph() {
-		graph = new HashMap<>();
+		backingGraph = new HashMap<>();
 	}
 
 	/**
 	 * Add a edge to the graph
 	 * 
-	 * @param source
+	 * @param sourceVertex
 	 *            The source vertex for this edge
-	 * @param target
+	 * @param targetVertex
 	 *            The target vertex for this edge
 	 * @param distance
 	 *            The distance from the source vertex to the target vertex
 	 */
-	public void addEdge(T source, T target, int distance) {
+	public void addEdge(T sourceVertex, T targetVertex, int distance) {
 		// Can't add edges with a null source or target
-		if (source == null) {
-			throw new NullPointerException("The vertex 1 cannot be null");
+		if (sourceVertex == null) {
+			throw new NullPointerException(
+					"The source vertex cannot be null");
 		}
-		if (target == null) {
-			throw new NullPointerException("The vertex 2 cannot be null");
+
+		if (targetVertex == null) {
+			throw new NullPointerException(
+					"The target vertex cannot be null");
 		}
 
 		// Initialize adjacency list for vertices if necessary
-		if (!graph.containsKey(source)) {
-			graph.put(source, new HashMap<T, Integer>());
+		if (!backingGraph.containsKey(sourceVertex)) {
+			backingGraph.put(sourceVertex, new HashMap<T, Integer>());
 		}
-		if (!graph.containsKey(target)) {
-			graph.put(target, new HashMap<T, Integer>());
+		if (!backingGraph.containsKey(targetVertex)) {
+			backingGraph.put(targetVertex, new HashMap<T, Integer>());
 		}
 
 		// Add the edge to the graph
-		graph.get(source).put(target, distance);
+		backingGraph.get(sourceVertex).put(targetVertex, distance);
 
 		// Uncomment this to make the graph undirected
 		// graph.get(target).put(source, distance);
@@ -78,16 +81,17 @@ public class Graph<T> {
 	 * 
 	 * @param source
 	 *            The vertex to test edges for
-	 * @param bp
+	 * @param edgeMatcher
 	 *            The conditions an edge must match
-	 * @param bc
+	 * @param edgeAction
 	 *            The action to execute for matching edges
 	 */
-	public void forAllEdgesMatchingAt(T source, BiPredicate<T, Integer> bp,
-			BiConsumer<T, Integer> bc) {
+	public void forAllEdgesMatchingAt(T source,
+			BiPredicate<T, Integer> edgeMatcher,
+			BiConsumer<T, Integer> edgeAction) {
 		getEdges(source).forEach((tgt, weight) -> {
-			if (bp.test(tgt, weight)) {
-				bc.accept(tgt, weight);
+			if (edgeMatcher.test(tgt, weight)) {
+				edgeAction.accept(tgt, weight);
 			}
 		});
 	}
@@ -105,7 +109,7 @@ public class Graph<T> {
 			throw new NullPointerException("The source cannot be null.");
 		}
 
-		return Collections.unmodifiableMap(graph.get(source));
+		return Collections.unmodifiableMap(backingGraph.get(source));
 	}
 
 	/**
@@ -114,7 +118,7 @@ public class Graph<T> {
 	 * @return The initial vertex of the graph
 	 */
 	public T getInitial() {
-		return graph.keySet().iterator().next();
+		return backingGraph.keySet().iterator().next();
 	}
 
 	/**
@@ -123,51 +127,59 @@ public class Graph<T> {
 	 * 
 	 * @return a list of edges that constitute the MST
 	 */
-	public List<Edge<T>> getMinSpanTree() {
+	public List<Edge<T>> getMinimumSpanningTree() {
 		// Set of all of the currently available edges
-		Queue<Edge<T>> availEdges = new PriorityQueue<>(10,
-				(e1, e2) -> e1.getDistance() - e2.getDistance());
+		Queue<Edge<T>> availableEdges = new PriorityQueue<>(10,
+				(leftEdge, rightEdge) -> leftEdge.getDistance()
+						- rightEdge.getDistance());
 
 		// The MST of the graph
-		List<Edge<T>> minEdges = new ArrayList<>();
+		List<Edge<T>> minimumEdges = new ArrayList<>();
 
 		// The set of all of the visited vertices.
-		Set<T> visited = new HashSet<>();
+		Set<T> visitedVertexes = new HashSet<>();
 
 		// Start at the initial vertex and visit it
-		IHolder<T> src = new GenHolder<>(getInitial());
-		visited.add(src.unwrap(vl -> vl));
+		IHolder<T> sourceVertex = new GenHolder<>(getInitial());
+
+		visitedVertexes.add(sourceVertex.unwrap(vertex -> vertex));
 
 		// Make sure we visit all the nodes
-		while (visited.size() != getVertexCount()) {
+		while (visitedVertexes.size() != getVertexCount()) {
 			// Grab all edges adjacent to the provided edge
 
-			forAllEdgesMatchingAt(src.unwrap(vl -> vl),
-					(tgt, weight) -> !visited.contains(tgt),
-					(tgt, weight) -> availEdges.add(new Edge<>(
-							src.unwrap(vl -> vl), tgt, weight)));
+			forAllEdgesMatchingAt(sourceVertex.unwrap(vertex -> vertex),
+					(targetVertex,
+							vertexWeight) -> !visitedVertexes
+									.contains(targetVertex),
+					(targetVertex,
+							vertexWeight) -> availableEdges.add(new Edge<>(
+									sourceVertex.unwrap(vertex -> vertex),
+									targetVertex, vertexWeight)));
 
 			// Get the edge with the minimum distance
-			IHolder<Edge<T>> minEdge = new GenHolder<>(availEdges.poll());
+			IHolder<Edge<T>> minimumEdge =
+					new GenHolder<>(availableEdges.poll());
 
 			// Only consider edges where we haven't visited the target of
 			// the edge
-			while (visited
-					.contains(minEdge.unwrap(vl -> vl.getTarget()))) {
-				minEdge.transform((vl) -> availEdges.poll());
+			while (visitedVertexes.contains(
+					minimumEdge.unwrap(vertex -> vertex.getTarget()))) {
+				minimumEdge.transform((edge) -> availableEdges.poll());
 			}
 
 			// Add it to our MST
-			minEdges.add(minEdge.unwrap(vl -> vl));
+			minimumEdges.add(minimumEdge.unwrap(edge -> edge));
 
 			// Advance to the next node
-			src.transform((vl) -> minEdge.unwrap(vl1 -> vl1.getTarget()));
+			sourceVertex.transform((vertex) -> minimumEdge
+					.unwrap(edge -> edge.getTarget()));
 
 			// Visit this node
-			visited.add(src.unwrap(vl -> vl));
+			visitedVertexes.add(sourceVertex.unwrap(vertex -> vertex));
 		}
 
-		return minEdges;
+		return minimumEdges;
 	}
 
 	/**
@@ -176,7 +188,7 @@ public class Graph<T> {
 	 * @return A count of the vertices in this graph
 	 */
 	public int getVertexCount() {
-		return graph.size();
+		return backingGraph.size();
 	}
 
 	/**
@@ -185,37 +197,40 @@ public class Graph<T> {
 	 * @return A unmodifiable set of all the vertices in the graph.
 	 */
 	public Set<T> getVertices() {
-		return Collections.unmodifiableSet(graph.keySet());
+		return Collections.unmodifiableSet(backingGraph.keySet());
 	}
 
 	/**
 	 * Remove the edge starting at the source and ending at the target
 	 * 
-	 * @param source
+	 * @param sourceVertex
 	 *            The source vertex for the edge
-	 * @param target
+	 * @param targetVertex
 	 *            The target vertex for the edge
 	 */
-	public void removeEdge(T source, T target) {
+	public void removeEdge(T sourceVertex, T targetVertex) {
 		// Can't remove things w/ null vertices
-		if (source == null) {
-			throw new NullPointerException("The vertex 1 cannot be null");
+		if (sourceVertex == null) {
+			throw new NullPointerException(
+					"The source vertex cannot be null");
 		}
-		if (target == null) {
-			throw new NullPointerException("The vertex 2 cannot be null");
+		if (targetVertex == null) {
+			throw new NullPointerException(
+					"The target vertex cannot be null");
 		}
 
 		// Can't remove if one vertice doesn't exists
-		if (!graph.containsKey(source)) {
+		if (!backingGraph.containsKey(sourceVertex)) {
 			throw new NoSuchElementException(
-					"vertex " + source + " does not exist.");
-		}
-		if (!graph.containsKey(target)) {
-			throw new NoSuchElementException(
-					"vertex " + target + " does not exist.");
+					"vertex " + sourceVertex + " does not exist.");
 		}
 
-		graph.get(source).remove(target);
+		if (!backingGraph.containsKey(targetVertex)) {
+			throw new NoSuchElementException(
+					"vertex " + targetVertex + " does not exist.");
+		}
+
+		backingGraph.get(sourceVertex).remove(targetVertex);
 
 		// Uncomment this to turn the graph undirected
 		// graph.get(target).remove(source);
@@ -226,13 +241,17 @@ public class Graph<T> {
 	 * 
 	 * @return A adjacency map representing this graph
 	 */
-	public AdjacencyMap<T> toMap() {
-		AdjacencyMap<T> aMap = new AdjacencyMap<>(graph.keySet());
+	public AdjacencyMap<T> toAdjacencyMap() {
+		AdjacencyMap<T> adjacencyMap =
+				new AdjacencyMap<>(backingGraph.keySet());
 
-		graph.entrySet().forEach(src -> src.getValue().forEach((tgt,
-				weight) -> aMap.setWeight(src.getKey(), tgt, weight)));
+		backingGraph.entrySet().forEach(sourceVertex -> sourceVertex
+				.getValue()
+				.forEach((targetVertex, vertexWeight) -> adjacencyMap
+						.setWeight(sourceVertex.getKey(), targetVertex,
+								vertexWeight)));
 
-		return aMap;
+		return adjacencyMap;
 	}
 
 	/**

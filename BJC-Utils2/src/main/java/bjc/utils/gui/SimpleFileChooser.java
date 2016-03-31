@@ -16,7 +16,7 @@ import bjc.utils.exceptions.FileNotChosenException;
  *
  */
 public class SimpleFileChooser {
-	private static File doOpenFile(Component par, String title,
+	private static File doOpenFile(Component parent, String title,
 			JFileChooser files) {
 		files.setDialogTitle(title);
 
@@ -24,11 +24,11 @@ public class SimpleFileChooser {
 
 		while (!success) {
 			try {
-				maybeDoOpenFile(par, files);
+				maybeDoOpenFile(parent, files);
 
 				success = true;
 			} catch (FileNotChosenException e) {
-				SimpleDialogs.showError(par, "I/O Error",
+				SimpleDialogs.showError(parent, "I/O Error",
 						"Please pick a file to open");
 			}
 		}
@@ -36,7 +36,7 @@ public class SimpleFileChooser {
 		return files.getSelectedFile();
 	}
 
-	private static File doSaveFile(Component par, String title,
+	private static File doSaveFile(Component parent, String title,
 			JFileChooser files) {
 		files.setDialogTitle(title);
 
@@ -44,11 +44,11 @@ public class SimpleFileChooser {
 
 		while (!success) {
 			try {
-				maybeDoSaveFile(par, files);
+				maybeDoSaveFile(parent, files);
 
 				return files.getSelectedFile();
 			} catch (FileNotChosenException e) {
-				SimpleDialogs.showError(par, "I/O Error",
+				SimpleDialogs.showError(parent, "I/O Error",
 						"Please pick a file to save to");
 			}
 		}
@@ -60,23 +60,23 @@ public class SimpleFileChooser {
 	 * Prompt the user with a "Open File..." dialog. Keeps prompting them
 	 * until they pick a file.
 	 * 
-	 * @param par
+	 * @param parent
 	 *            The component to use as the parent for the dialog.
 	 * @param title
 	 *            The title of the dialog to prompt with.
 	 * @return The file the user has chosen.
 	 */
-	public static File getOpenFile(Component par, String title) {
+	public static File getOpenFile(Component parent, String title) {
 		JFileChooser files = new JFileChooser();
 
-		return doOpenFile(par, title, files);
+		return doOpenFile(parent, title, files);
 	}
 
 	/**
 	 * Prompt the user with a "Open File..." dialog. Keeps prompting them
 	 * until they pick a file.
 	 * 
-	 * @param par
+	 * @param parent
 	 *            The component to use as the parent for the dialog.
 	 * @param title
 	 *            The title of the dialog to prompt with.
@@ -84,33 +84,33 @@ public class SimpleFileChooser {
 	 *            The list of file extensions the file should have.
 	 * @return The file the user has chosen.
 	 */
-	public static File getOpenFile(Component par, String title,
+	public static File getOpenFile(Component parent, String title,
 			String... extensions) {
 		JFileChooser files = new JFileChooser();
 		files.addChoosableFileFilter(new ExtensionFileFilter(extensions));
 
-		return doOpenFile(par, title, files);
+		return doOpenFile(parent, title, files);
 	}
 
 	/**
 	 * Prompt the user with a "Save File..." dialog.
 	 * 
-	 * @param par
+	 * @param parent
 	 *            The component to use as the parent for the dialog.
 	 * @param title
 	 *            The title of the dialog to prompt with.
 	 * @return The file the user chose.
 	 */
-	public static File getSaveFile(Component par, String title) {
+	public static File getSaveFile(Component parent, String title) {
 		JFileChooser files = new JFileChooser();
 
-		return doSaveFile(par, title, files);
+		return doSaveFile(parent, title, files);
 	}
 
 	/**
 	 * Prompt the user with a "Save File..." dialog.
 	 * 
-	 * @param par
+	 * @param parent
 	 *            The component to use as the parent for the dialog.
 	 * @param title
 	 *            The title of the dialog to prompt with.
@@ -118,30 +118,28 @@ public class SimpleFileChooser {
 	 *            The extensions of the files the user can choose.
 	 * @return The file the user chose.
 	 */
-	public static File getSaveFile(Component par, String title,
+	public static File getSaveFile(Component parent, String title,
 			String... extensions) {
 		JFileChooser files = new JFileChooser();
 		files.addChoosableFileFilter(new ExtensionFileFilter(extensions));
 
-		return doSaveFile(par, title, files);
+		return doSaveFile(parent, title, files);
 	}
 
-	private static void maybeDoOpenFile(Component par, JFileChooser files)
-			throws FileNotChosenException {
-		int res = files.showSaveDialog(par);
+	private static void maybeDoOpenFile(Component parent,
+			JFileChooser files) throws FileNotChosenException {
+		int dialogResult = files.showSaveDialog(parent);
 
-		if (res != JFileChooser.APPROVE_OPTION) {
+		if (dialogResult != JFileChooser.APPROVE_OPTION) {
 			throw new FileNotChosenException();
 		}
 	}
 
-	private static void maybeDoSaveFile(Component par, JFileChooser files)
-			throws FileNotChosenException {
-		int res = files.showSaveDialog(par);
+	private static void maybeDoSaveFile(Component parent,
+			JFileChooser files) throws FileNotChosenException {
+		int dialogResult = files.showSaveDialog(parent);
 
-		System.out.println("Result: " + res);
-
-		if (res != JFileChooser.APPROVE_OPTION) {
+		if (dialogResult != JFileChooser.APPROVE_OPTION) {
 			throw new FileNotChosenException();
 		}
 	}
@@ -149,18 +147,18 @@ public class SimpleFileChooser {
 	/**
 	 * Prompt the user with a "Open File..." dialog.
 	 * 
-	 * @param par
+	 * @param parent
 	 *            The component to use as the parent for the dialog.
 	 * @param title
 	 *            The title of the dialog to prompt with.
 	 * @return The file if the user chose one or null if they didn't.
 	 */
-	public static File maybeOpenFile(Component par, String title) {
+	public static File maybeOpenFile(Component parent, String title) {
 		JFileChooser files = new JFileChooser();
 		files.setDialogTitle(title);
 
 		try {
-			maybeDoOpenFile(par, files);
+			maybeDoOpenFile(parent, files);
 		} catch (FileNotChosenException e) {
 		}
 
@@ -170,18 +168,18 @@ public class SimpleFileChooser {
 	/**
 	 * Prompt the user with a "Save File..." dialog.
 	 * 
-	 * @param par
+	 * @param parent
 	 *            The component to use as the parent for the dialog.
 	 * @param title
 	 *            The title of the dialog to prompt with.
 	 * @return The file if the user chose one or null if they didn't.
 	 */
-	public static File maybeSaveFile(Component par, String title) {
+	public static File maybeSaveFile(Component parent, String title) {
 		JFileChooser files = new JFileChooser();
 		files.setDialogTitle(title);
 
 		try {
-			maybeDoSaveFile(par, files);
+			maybeDoSaveFile(parent, files);
 		} catch (FileNotChosenException e) {
 		}
 

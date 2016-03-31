@@ -55,11 +55,11 @@ public class FunctionalStringTokenizer {
 	/**
 	 * Create a functional string tokenizer from a non-functional one
 	 * 
-	 * @param wrap
+	 * @param toWrap
 	 *            The non-functional string tokenizer to wrap
 	 */
-	public FunctionalStringTokenizer(StringTokenizer wrap) {
-		this.input = wrap;
+	public FunctionalStringTokenizer(StringTokenizer toWrap) {
+		this.input = toWrap;
 	}
 
 	/**
@@ -106,16 +106,16 @@ public class FunctionalStringTokenizer {
 	 * @param <E>
 	 *            The type of the converted tokens
 	 * 
-	 * @param f
+	 * @param tokenTransformer
 	 *            The function to use to convert tokens.
 	 * @return A list containing all of the converted tokens.
 	 */
-	public <E> FunctionalList<E> toList(Function<String, E> f) {
+	public <E> FunctionalList<E> toList(Function<String, E> tokenTransformer) {
 		FunctionalList<E> returnList = new FunctionalList<>();
 
 		// Add each token to the list after transforming it
-		forEachToken(tk -> {
-			E transformedToken = f.apply(tk);
+		forEachToken(token -> {
+			E transformedToken = tokenTransformer.apply(token);
 			
 			returnList.add(transformedToken);
 		});

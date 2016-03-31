@@ -42,8 +42,8 @@ public class ExtensionFileFilter extends FileFilter {
 	public ExtensionFileFilter(String... exts) {
 		extensions = new FunctionalList<>(new ArrayList<>(exts.length));
 
-		for (String ext : exts) {
-			extensions.add(ext);
+		for (String extension : exts) {
+			extensions.add(extension);
 		}
 	}
 
@@ -56,5 +56,4 @@ public class ExtensionFileFilter extends FileFilter {
 	public String getDescription() {
 		return extensions.toString();
 	}
-
 }

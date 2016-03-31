@@ -19,24 +19,24 @@ public class GenHolder<T> implements IHolder<T> {
 	/**
 	 * The state this holder is responsible for.
 	 */
-	private T held;
+	private T heldValue;
 
 	/**
 	 * Creates a new empty holder, with its state set to null
 	 */
 	public GenHolder() {
-		held = null;
+		heldValue = null;
 	}
 
 	/**
 	 * Creates a new holder, with its state initialized to the provided
 	 * value
 	 * 
-	 * @param hld
+	 * @param held
 	 *            The state to initialize this holder to.
 	 */
-	public GenHolder(T hld) {
-		held = hld;
+	public GenHolder(T held) {
+		heldValue = held;
 	}
 
 	/*
@@ -45,8 +45,8 @@ public class GenHolder<T> implements IHolder<T> {
 	 * @see bjc.utils.data.IHolder#doWith(java.util.function.Consumer)
 	 */
 	@Override
-	public void doWith(Consumer<T> f) {
-		f.accept(held);
+	public void doWith(Consumer<T> action) {
+		action.accept(heldValue);
 	}
 
 	/*
@@ -55,8 +55,8 @@ public class GenHolder<T> implements IHolder<T> {
 	 * @see bjc.utils.data.IHolder#map(java.util.function.Function)
 	 */
 	@Override
-	public <NewT> IHolder<NewT> map(Function<T, NewT> f) {
-		return new GenHolder<>(f.apply(held));
+	public <NewT> IHolder<NewT> map(Function<T, NewT> transformer) {
+		return new GenHolder<>(transformer.apply(heldValue));
 	}
 
 	/*
@@ -65,8 +65,8 @@ public class GenHolder<T> implements IHolder<T> {
 	 * @see bjc.utils.data.IHolder#transform(java.util.function.Function)
 	 */
 	@Override
-	public IHolder<T> transform(Function<T, T> f) {
-		held = f.apply(held);
+	public IHolder<T> transform(Function<T, T> transformer) {
+		heldValue = transformer.apply(heldValue);
 
 		return this;
 	}
@@ -77,12 +77,12 @@ public class GenHolder<T> implements IHolder<T> {
 	 * @see bjc.utils.data.IHolder#unwrap(java.util.function.Function)
 	 */
 	@Override
-	public <E> E unwrap(Function<T, E> f) {
-		return f.apply(held);
+	public <E> E unwrap(Function<T, E> unwrapper) {
+		return unwrapper.apply(heldValue);
 	}
 
 	@Override
 	public String toString() {
-		return held.toString();
+		return heldValue.toString();
 	}
 }

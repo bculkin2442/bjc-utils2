@@ -10,9 +10,7 @@ import java.awt.GridLayout;
  *
  */
 public class AutosizeLayout extends GridLayout {
-	/**
-	 * Version id for serialization
-	 */
+	// Version id for serialization
 	private static final long serialVersionUID = -2495693595953396924L;
 
 	/**

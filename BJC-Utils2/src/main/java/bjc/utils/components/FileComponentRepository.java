@@ -1,10 +1,12 @@
 package bjc.utils.components;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import bjc.utils.funcdata.FunctionalList;
@@ -21,15 +23,18 @@ import bjc.utils.funcdata.FunctionalList;
 public class FileComponentRepository<E extends IDescribedComponent>
 		implements IComponentRepository<E> {
 
+	private static final Logger	CLASS_LOGGER	=
+			LoggerFactory.getLogger(FileComponentRepository.class);
+
 	/**
 	 * The internal storage of components
 	 */
-	private Map<String, E>	comps;
+	private Map<String, E>		components;
 
 	/**
 	 * The path that all the components came from
 	 */
-	private String			sourcePath;
+	private Path				sourceDirectory;
 
 	/**
 	 * Create a new component repository sourcing components from files in
@@ -39,28 +44,54 @@ public class FileComponentRepository<E extends IDescribedComponent>
 	 * cause the loading of that component to fail, but a warning will be
 	 * logged.
 	 * 
-	 * @param dir
+	 * @param directory
 	 *            The directory to read component files from
-	 * @param reader
+	 * @param componentReader
 	 *            The function to use to convert files to components
 	 */
-	public FileComponentRepository(File dir, Function<File, E> reader) {
-		comps = new HashMap<>();
-		sourcePath = dir.getAbsolutePath();
+	public FileComponentRepository(File directory,
+			Function<File, E> componentReader) {
+		if (!directory.isDirectory()) {
+			throw new IllegalArgumentException("File " + directory
+					+ " is not a directory.\n"
+					+ "Components can only be read from a directory");
+		}
 
-		for (File fle : dir.listFiles()) {
-			if (fle.isDirectory()) {
+		components = new HashMap<>();
+		sourceDirectory = directory.toPath().toAbsolutePath();
+
+		File[] listFiles = directory.listFiles();
+
+		if (listFiles == null) {
+			throw new IllegalArgumentException("File " + directory
+					+ " is not a valid directory.\n"
+					+ "Components can only be read from a directory");
+		}
+
+		for (File componentFile : listFiles) {
+			if (componentFile.isDirectory()) {
 				// Do nothing with directories. They probably contain
 				// support files for components
 			} else {
 				try {
-					E comp = reader.apply(fle);
+					E component = componentReader.apply(componentFile);
 
-					comps.put(comp.getName(), comp);
+					if (component == null) {
+						throw new NullPointerException(
+								"Component reader read null component");
+					} else if (!components
+							.containsKey(component.getName())) {
+						components.put(component.getName(), component);
+					} else {
+						CLASS_LOGGER.warn("Found a duplicate component.\n"
+								+ "Multiple versions of the same component are not currently supported.\n"
+								+ "The component" + component
+								+ " will not be registered .");
+					}
 				} catch (Exception ex) {
-					LoggerFactory.getLogger(getClass())
+					CLASS_LOGGER
 							.warn("Error found reading component from file "
-									+ fle.toString()
+									+ componentFile.toString()
 									+ ". This component will not be loaded");
 				}
 
@@ -70,20 +101,26 @@ public class FileComponentRepository<E extends IDescribedComponent>
 
 	@Override
 	public FunctionalList<E> getComponentList() {
-		FunctionalList<E> ret = new FunctionalList<>();
+		FunctionalList<E> returnedList = new FunctionalList<>();
 
-		comps.forEach((name, comp) -> ret.add(comp));
+		components
+				.forEach((name, component) -> returnedList.add(component));
 
-		return ret;
+		return returnedList;
 	}
 
 	@Override
 	public Map<String, E> getComponents() {
-		return comps;
+		return components;
 	}
 
 	@Override
 	public String getSource() {
-		return "Components read from directory " + sourcePath + ".";
+		return "Components read from directory " + sourceDirectory + ".";
+	}
+
+	@Override
+	public E getComponentByName(String name) {
+		return components.get(name);
 	}
 }

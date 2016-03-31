@@ -14,10 +14,10 @@ public class PragmaFormatException extends InputMismatchException {
 
 	/**
 	 * Create a new exception with the given message
-	 * @param msg The message to explain why the exception was thrown
+	 * @param message The message to explain why the exception was thrown
 	 */
-	public PragmaFormatException(String msg) {
-		super(msg);
+	public PragmaFormatException(String message) {
+		super(message);
 	}
 	
 	/**

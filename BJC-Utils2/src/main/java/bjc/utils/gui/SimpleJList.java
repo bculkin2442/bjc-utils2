@@ -17,12 +17,12 @@ public class SimpleJList {
 	 * @param <E>
 	 *            The type of data in the JList
 	 * 
-	 * @param ls
+	 * @param listSource
 	 *            The list to populate the JList with.
 	 * @return A JList populated with the elements from ls.
 	 */
-	public static <E> JList<E> buildFromList(Iterable<E> ls) {
-		return new JList<>(buildModel(ls));
+	public static <E> JList<E> buildFromList(Iterable<E> listSource) {
+		return new JList<>(buildModel(listSource));
 	}
 
 	/**
@@ -31,15 +31,15 @@ public class SimpleJList {
 	 * @param <E>
 	 *            The type of data in the list model
 	 * 
-	 * @param ls
+	 * @param listSource
 	 *            The list to fill the list model from.
 	 * @return A list model populated with the elements from ls.
 	 */
-	public static <E> ListModel<E> buildModel(Iterable<E> ls) {
-		DefaultListModel<E> dlm = new DefaultListModel<>();
+	public static <E> ListModel<E> buildModel(Iterable<E> listSource) {
+		DefaultListModel<E> defaultModel = new DefaultListModel<>();
 
-		ls.forEach(dlm::addElement);
+		listSource.forEach(defaultModel::addElement);
 
-		return dlm;
+		return defaultModel;
 	}
 }

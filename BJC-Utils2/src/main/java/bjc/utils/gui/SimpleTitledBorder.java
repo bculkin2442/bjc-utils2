@@ -10,9 +10,7 @@ import javax.swing.border.TitledBorder;
  *
  */
 public class SimpleTitledBorder extends TitledBorder {
-	/**
-	 * Version ID for serialization
-	 */
+	// Version ID for serialization
 	private static final long serialVersionUID = -5655969079949148487L;
 
 	/**

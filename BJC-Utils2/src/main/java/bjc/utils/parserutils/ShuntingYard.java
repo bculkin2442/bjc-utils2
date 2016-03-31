@@ -21,23 +21,23 @@ import bjc.utils.funcutils.StringUtils;
 public class ShuntingYard<E> {
 
 	private final class TokenShunter implements Consumer<String> {
-		private FunctionalList<E>	outp;
+		private FunctionalList<E>	output;
 		private Deque<String>		stack;
 		private Function<String, E>	transform;
 
-		public TokenShunter(FunctionalList<E> outp, Deque<String> stack,
+		public TokenShunter(FunctionalList<E> outpt, Deque<String> stack,
 				Function<String, E> transform) {
-			this.outp = outp;
+			this.output = outpt;
 			this.stack = stack;
 			this.transform = transform;
 		}
 
 		@Override
 		public void accept(String token) {
-			if (ops.containsKey(token)) {
+			if (operators.containsKey(token)) {
 				while (!stack.isEmpty()
 						&& isHigherPrec(token, stack.peek())) {
-					outp.add(transform.apply(stack.pop()));
+					output.add(transform.apply(stack.pop()));
 				}
 
 				stack.push(token);
@@ -45,12 +45,12 @@ public class ShuntingYard<E> {
 				stack.push(token);
 			} else if (StringUtils.containsOnly(token, "\\)")) {
 				while (stack.peek().equals(token.replace(')', '('))) {
-					outp.add(transform.apply(stack.pop()));
+					output.add(transform.apply(stack.pop()));
 				}
 
 				stack.pop();
 			} else {
-				outp.add(transform.apply(token));
+				output.add(transform.apply(token));
 			}
 		}
 	}
@@ -81,8 +81,8 @@ public class ShuntingYard<E> {
 
 		private final int precedence;
 
-		private Operator(int p) {
-			precedence = p;
+		private Operator(int prec) {
+			precedence = prec;
 		}
 
 		/*
@@ -99,70 +99,72 @@ public class ShuntingYard<E> {
 	/**
 	 * Holds all the shuntable operations
 	 */
-	private Map<String, IPrecedent> ops;
+	private Map<String, IPrecedent> operators;
 
 	/**
 	 * Create a new shunting yard with a default set of operators
 	 */
 	public ShuntingYard() {
-		ops = new HashMap<>();
+		operators = new HashMap<>();
 
-		ops.put("+", Operator.ADD);
-		ops.put("-", Operator.SUBTRACT);
-		ops.put("*", Operator.MULTIPLY);
-		ops.put("/", Operator.DIVIDE);
+		operators.put("+", Operator.ADD);
+		operators.put("-", Operator.SUBTRACT);
+		operators.put("*", Operator.MULTIPLY);
+		operators.put("/", Operator.DIVIDE);
 	}
 
 	/**
 	 * Add an operator to the list of shuntable operators
 	 * 
-	 * @param tok
+	 * @param operatorToken
 	 *            The token representing the operator
-	 * @param i
+	 * @param precedence
 	 *            The precedence of the operator to add
 	 */
-	public void addOp(String tok, int i) {
-		this.addOp(tok, IPrecedent.newSimplePrecedent(i));
+	public void addOp(String operatorToken, int precedence) {
+		this.addOp(operatorToken,
+				IPrecedent.newSimplePrecedent(precedence));
 	}
 
 	/**
 	 * Add an operator to the list of shuntable operators
 	 * 
-	 * @param tok
+	 * @param token
 	 *            The token representing the operator
-	 * @param prec
+	 * @param precedence
 	 *            The precedence of the operator
 	 */
-	public void addOp(String tok, IPrecedent prec) {
-		ops.put(tok, prec);
+	public void addOp(String token, IPrecedent precedence) {
+		operators.put(token, precedence);
 	}
 
-	private boolean isHigherPrec(String op, String sub) {
-		return (ops.containsKey(sub) && ops.get(sub).getPrecedence() >= ops
-				.get(op).getPrecedence());
+	private boolean isHigherPrec(String operator, String rightOperator) {
+		return (operators.containsKey(rightOperator) && operators
+				.get(rightOperator).getPrecedence() >= operators
+						.get(operator).getPrecedence());
 	}
 
 	/**
 	 * Transform a string of tokens from infix notation to postfix
 	 * 
-	 * @param inp
+	 * @param input
 	 *            The string to transform
-	 * @param transform
+	 * @param tokenTransformer
 	 *            The function to use to transform strings to tokens
 	 * @return A list of tokens in postfix notation
 	 */
-	public FunctionalList<E> postfix(FunctionalList<String> inp,
-			Function<String, E> transform) {
-		FunctionalList<E> outp = new FunctionalList<>();
+	public FunctionalList<E> postfix(FunctionalList<String> input,
+			Function<String, E> tokenTransformer) {
+		FunctionalList<E> output = new FunctionalList<>();
 		Deque<String> stack = new LinkedList<>();
 
-		inp.forEach(new TokenShunter(outp, stack, transform));
+		input.forEach(new TokenShunter(output, stack, tokenTransformer));
 
 		while (!stack.isEmpty()) {
-			outp.add(transform.apply(stack.pop()));
+			output.add(tokenTransformer.apply(stack.pop()));
 		}
 
-		return outp;
+		return output;
 	}
 
 	/**
@@ -172,6 +174,6 @@ public class ShuntingYard<E> {
 	 *            The token representing the operator
 	 */
 	public void removeOp(String tok) {
-		ops.remove(tok);
+		operators.remove(tok);
 	}
 }

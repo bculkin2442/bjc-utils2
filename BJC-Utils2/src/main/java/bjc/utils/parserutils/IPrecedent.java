@@ -11,12 +11,12 @@ public interface IPrecedent {
 	/**
 	 * Create a new object with set precedence
 	 * 
-	 * @param prec
+	 * @param precedence
 	 *            The precedence of the object to handle
 	 * @return A new object with set precedence
 	 */
-	public static IPrecedent newSimplePrecedent(int prec) {
-		return () -> prec;
+	public static IPrecedent newSimplePrecedent(int precedence) {
+		return () -> precedence;
 	}
 
 	/**

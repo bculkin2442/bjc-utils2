@@ -17,10 +17,10 @@ public interface IHolder<T> {
 	/**
 	 * Call a provided function with the value being held
 	 * 
-	 * @param f
+	 * @param action
 	 *            The function to call
 	 */
-	public void doWith(Consumer<T> f);
+	public void doWith(Consumer<T> action);
 
 	/**
 	 * Return the result of applying the given transformation to the held
@@ -29,21 +29,21 @@ public interface IHolder<T> {
 	 * @param <NewT>
 	 *            The new type of the held value
 	 * 
-	 * @param f
+	 * @param transformer
 	 *            The transformation to apply
 	 * @return A holder with the transformed value
 	 */
-	public <NewT> IHolder<NewT> map(Function<T, NewT> f);
+	public <NewT> IHolder<NewT> map(Function<T, NewT> transformer);
 
 	/**
 	 * Apply the given transformation to the held value. Returns the holder
 	 * for allowing chaining of transforms
 	 * 
-	 * @param f
+	 * @param transformer
 	 *            The transform to apply to the value
 	 * @return The holder
 	 */
-	public IHolder<T> transform(Function<T, T> f);
+	public IHolder<T> transform(Function<T, T> transformer);
 
 	/**
 	 * Returns a raw mapped value, not contained in a GenHolder
@@ -51,9 +51,9 @@ public interface IHolder<T> {
 	 * @param <E>
 	 *            The type of the value that is the end result
 	 * 
-	 * @param f
+	 * @param unwrapper
 	 *            The function to use for mapping the value
 	 * @return The mapped value outside of a GenHolder
 	 */
-	public <E> E unwrap(Function<T, E> f);
+	public <E> E unwrap(Function<T, E> unwrapper);
 }

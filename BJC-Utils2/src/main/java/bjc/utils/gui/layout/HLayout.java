@@ -10,18 +10,16 @@ import java.awt.GridLayout;
  *
  */
 public class HLayout extends GridLayout {
-	/**
-	 * Version id for serialization
-	 */
+	// Version ID for serialization
 	private static final long serialVersionUID = 1244964456966270026L;
 
 	/**
 	 * Create a new horizontal layout with the specified number of columns.
 	 * 
-	 * @param cols
+	 * @param columns
 	 *            The number of columns in this layout.
 	 */
-	public HLayout(int cols) {
-		super(1, cols);
+	public HLayout(int columns) {
+		super(1, columns);
 	}
 }

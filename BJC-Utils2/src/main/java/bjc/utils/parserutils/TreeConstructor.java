@@ -23,9 +23,9 @@ public class TreeConstructor {
 	 * 
 	 * @param <T>
 	 *            The elements of the parse tree
-	 * @param toks
+	 * @param tokens
 	 *            The list of tokens to build a tree from
-	 * @param opPredicate
+	 * @param operatorPredicate
 	 *            The predicate to use to determine if something is a
 	 *            operator
 	 * @return A AST from the expression
@@ -34,9 +34,10 @@ public class TreeConstructor {
 	 *             {@link TreeConstructor#constructTree(FunctionalList, Predicate, Predicate, Function)}
 	 *             instead
 	 */
-	public static <T> AST<T> constructTree(FunctionalList<T> toks,
-			Predicate<T> opPredicate) {
-		return constructTree(toks, opPredicate, (op) -> false, null);
+	public static <T> AST<T> constructTree(FunctionalList<T> tokens,
+			Predicate<T> operatorPredicate) {
+		return constructTree(tokens, operatorPredicate, (op) -> false,
+				null);
 	}
 
 	/**
@@ -46,15 +47,15 @@ public class TreeConstructor {
 	 * 
 	 * @param <T>
 	 *            The elements of the parse tree
-	 * @param toks
+	 * @param tokens
 	 *            The list of tokens to build a tree from
-	 * @param opPredicate
+	 * @param operatorPredicate
 	 *            The predicate to use to determine if something is a
 	 *            operator
-	 * @param isSpecialOp
+	 * @param isSpecialOperator
 	 *            The predicate to use to determine if an operator needs
 	 *            special handling
-	 * @param handleSpecialOp
+	 * @param handleSpecialOperator
 	 *            The function to use to handle special case operators
 	 * @return A AST from the expression
 	 * 
@@ -62,51 +63,55 @@ public class TreeConstructor {
 	 *         interface. Maybe there's a better way to express how that
 	 *         works
 	 */
-	public static <T> AST<T> constructTree(FunctionalList<T> toks,
-			Predicate<T> opPredicate, Predicate<T> isSpecialOp,
-			Function<Deque<AST<T>>, AST<T>> handleSpecialOp) {
-		GenHolder<Pair<Deque<AST<T>>, AST<T>>> initState =
+	public static <T> AST<T> constructTree(FunctionalList<T> tokens,
+			Predicate<T> operatorPredicate, Predicate<T> isSpecialOperator,
+			Function<Deque<AST<T>>, AST<T>> handleSpecialOperator) {
+		GenHolder<Pair<Deque<AST<T>>, AST<T>>> initialState =
 				new GenHolder<>(new Pair<>(new LinkedList<>(), null));
 
-		toks.forEach((ele) -> {
-			if (opPredicate.test(ele)) {
-				initState.transform((par) -> {
-					Deque<AST<T>> lft = par.merge((deq, ast) -> deq);
+		tokens.forEach((element) -> {
+			if (operatorPredicate.test(element)) {
+				initialState.transform((pair) -> {
+					Deque<AST<T>> queuedASTs =
+							pair.merge((queue, currentAST) -> queue);
 
-					AST<T> mergedAST = par.merge((deq, ast) -> {
+					AST<T> mergedAST = pair.merge((queue, currentAST) -> {
 						AST<T> newAST;
 
-						if (isSpecialOp.test(ele)) {
-							newAST = handleSpecialOp.apply(deq);
+						if (isSpecialOperator.test(element)) {
+							newAST = handleSpecialOperator.apply(queue);
 						} else {
-							AST<T> right = deq.pop();
-							AST<T> left = deq.pop();
-							newAST = new AST<>(ele, left, right);
+							AST<T> rightAST = queue.pop();
+							AST<T> leftAST = queue.pop();
+
+							newAST = new AST<>(element, leftAST, rightAST);
 						}
 
-						deq.push(newAST);
+						queue.push(newAST);
 						return newAST;
 					});
 
 					Pair<Deque<AST<T>>, AST<T>> newPair =
-							new Pair<>(lft, mergedAST);
+							new Pair<>(queuedASTs, mergedAST);
 
 					return newPair;
 				});
 			} else {
-				AST<T> newAST = new AST<>(ele);
+				AST<T> newAST = new AST<>(element);
 
-				initState.doWith((par) -> par.doWith((deq, ast) -> {
-					deq.push(newAST);
-				}));
+				initialState.doWith(
+						(pair) -> pair.doWith((queue, currentAST) -> {
+							queue.push(newAST);
+						}));
 
-				initState.transform((par) -> {
-					return (Pair<Deque<AST<T>>, AST<T>>) par
-							.apply((d) -> d, (a) -> newAST);
+				initialState.transform((pair) -> {
+					return (Pair<Deque<AST<T>>, AST<T>>) pair.apply(
+							(queue) -> queue, (currentAST) -> newAST);
 				});
 			}
 		});
 
-		return initState.unwrap((par) -> par.merge((deq, ast) -> ast));
+		return initialState.unwrap(
+				(pair) -> pair.merge((queue, currentAST) -> currentAST));
 	}
 }

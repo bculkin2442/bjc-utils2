@@ -22,16 +22,16 @@ public class BinarySearchTreeLeaf<T> implements ITreePart<T> {
 	/**
 	 * Whether this node is soft-deleted or not
 	 */
-	protected boolean	deleted;
+	protected boolean	isDeleted;
 
 	/**
 	 * Create a new leaf holding the specified data.
 	 * 
-	 * @param dat
+	 * @param element
 	 *            The data for the leaf to hold.
 	 */
-	public BinarySearchTreeLeaf(T dat) {
-		data = dat;
+	public BinarySearchTreeLeaf(T element) {
+		data = element;
 	}
 
 	/*
@@ -41,7 +41,7 @@ public class BinarySearchTreeLeaf<T> implements ITreePart<T> {
 	 * java.util.Comparator)
 	 */
 	@Override
-	public void add(T dat, Comparator<T> comp) {
+	public void add(T element, Comparator<T> comparator) {
 		throw new IllegalArgumentException("Can't add to a leaf.");
 	}
 
@@ -53,8 +53,9 @@ public class BinarySearchTreeLeaf<T> implements ITreePart<T> {
 	 * java.util.function.BiFunction)
 	 */
 	@Override
-	public <E> E collapse(Function<T, E> f, BiFunction<E, E, E> bf) {
-		return f.apply(data);
+	public <E> E collapse(Function<T, E> leafTransformer,
+			BiFunction<E, E, E> branchCollapser) {
+		return leafTransformer.apply(data);
 	}
 
 	/*
@@ -64,8 +65,8 @@ public class BinarySearchTreeLeaf<T> implements ITreePart<T> {
 	 * java.util.Comparator)
 	 */
 	@Override
-	public boolean contains(T dat, Comparator<T> cmp) {
-		return this.data.equals(dat);
+	public boolean contains(T element, Comparator<T> comparator) {
+		return this.data.equals(element);
 	}
 
 	/*
@@ -85,9 +86,9 @@ public class BinarySearchTreeLeaf<T> implements ITreePart<T> {
 	 * java.util.Comparator)
 	 */
 	@Override
-	public void delete(T dat, Comparator<T> cmp) {
-		if (data.equals(dat)) {
-			deleted = true;
+	public void delete(T element, Comparator<T> comparator) {
+		if (data.equals(element)) {
+			isDeleted = true;
 		}
 	}
 
@@ -99,8 +100,8 @@ public class BinarySearchTreeLeaf<T> implements ITreePart<T> {
 	 * DirectedWalkFunction)
 	 */
 	@Override
-	public boolean directedWalk(DirectedWalkFunction<T> ds) {
-		switch (ds.walk(data)) {
+	public boolean directedWalk(DirectedWalkFunction<T> treeWalker) {
+		switch (treeWalker.walk(data)) {
 			case SUCCESS:
 				return true;
 			default:
@@ -116,7 +117,8 @@ public class BinarySearchTreeLeaf<T> implements ITreePart<T> {
 	 * TreeLinearizationMethod, java.util.function.Predicate)
 	 */
 	@Override
-	public boolean forEach(TreeLinearizationMethod tlm, Predicate<T> c) {
-		return c.test(data);
+	public boolean forEach(TreeLinearizationMethod linearizationMethod,
+			Predicate<T> traversalPredicate) {
+		return traversalPredicate.test(data);
 	}
 }

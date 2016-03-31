@@ -40,9 +40,9 @@ public interface DirectedWalkFunction<T> {
 	/**
 	 * Perform a directed walk on a node of a tree.
 	 * 
-	 * @param data
+	 * @param element
 	 *            The data stored in the node currently being visited
 	 * @return The way the function wants the walk to go next.
 	 */
-	public DirectedWalkResult walk(T data);
+	public DirectedWalkResult walk(T element);
 }

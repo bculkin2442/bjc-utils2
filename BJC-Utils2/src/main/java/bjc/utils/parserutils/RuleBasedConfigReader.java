@@ -51,62 +51,63 @@ public class RuleBasedConfigReader<E> {
 	/**
 	 * Add a pragma to this reader
 	 * 
-	 * @param pragName
+	 * @param pragmaName
 	 *            The name of the pragma to add
-	 * @param pragAct
+	 * @param pragmaAction
 	 *            The function to execute when this pragma is read
 	 */
-	public void addPragma(String pragName,
-			BiConsumer<FunctionalStringTokenizer, E> pragAct) {
-		pragmas.put(pragName, pragAct);
+	public void addPragma(String pragmaName,
+			BiConsumer<FunctionalStringTokenizer, E> pragmaAction) {
+		pragmas.put(pragmaName, pragmaAction);
 	}
 
 	/**
 	 * Run a stream through this reader
 	 * 
-	 * @param is
+	 * @param inputStream
 	 *            The stream to get input
-	 * @param initState
+	 * @param initialState
 	 *            The initial state of the reader
 	 * @return The final state of the reader
 	 */
-	public E fromStream(InputStream is, E initState) {
-		Scanner scn = new Scanner(is);
+	public E fromStream(InputStream inputStream, E initialState) {
+		Scanner inputSource = new Scanner(inputStream);
 
-		E stat = initState;
+		E state = initialState;
 
-		while (scn.hasNextLine()) {
-			String ln = scn.nextLine();
+		while (inputSource.hasNextLine()) {
+			String line = inputSource.nextLine();
 
-			if (ln.equals("")) {
-				endRule.accept(stat);
+			if (line.equals("")) {
+				endRule.accept(state);
 				continue;
-			} else if (ln.startsWith("\t")) {
+			} else if (line.startsWith("\t")) {
 				continueRule.accept(new FunctionalStringTokenizer(
-						ln.substring(1), " "), stat);
+						line.substring(1), " "), state);
 			} else {
-				FunctionalStringTokenizer stk =
-						new FunctionalStringTokenizer(ln, " ");
+				FunctionalStringTokenizer tokenizer =
+						new FunctionalStringTokenizer(line, " ");
 
-				String nxtToken = stk.nextToken();
-				if (nxtToken.equals("#")) {
+				String nextToken = tokenizer.nextToken();
+				if (nextToken.equals("#")) {
 					// Do nothing, this is a comment
-				} else if (nxtToken.equals("pragma")) {
-					String tk = stk.nextToken();
+				} else if (nextToken.equals("pragma")) {
+					String token = tokenizer.nextToken();
 
-					pragmas.getOrDefault(tk, (strk, ras) -> {
+					pragmas.getOrDefault(token, (tokenzer, stat) -> {
 						throw new UnknownPragmaException(
-								"Unknown pragma " + tk);
-					}).accept(stk, stat);
+								"Unknown pragma " + token);
+					}).accept(tokenizer, state);
 				} else {
-					startRule.accept(stk, new Pair<>(nxtToken, stat));
+					startRule.accept(tokenizer,
+							new Pair<>(nextToken, state));
 				}
 			}
 		}
 
-		scn.close();
+		inputSource.close();
 
-		return stat;
+		return state;
 	}
 
 	/**

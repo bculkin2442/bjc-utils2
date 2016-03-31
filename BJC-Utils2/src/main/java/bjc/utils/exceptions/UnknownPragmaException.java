@@ -9,19 +9,17 @@ import java.util.InputMismatchException;
  *
  */
 public class UnknownPragmaException extends InputMismatchException {
-	/**
-	 * Version id for serialization
-	 */
+	// Version ID for serialization
 	private static final long serialVersionUID = -4277573484926638662L;
 
 	/**
 	 * Create a new exception with the given cause
 	 * 
-	 * @param m
+	 * @param cause
 	 *            The cause for throwing this exception
 	 */
-	public UnknownPragmaException(String m) {
-		super(m);
+	public UnknownPragmaException(String cause) {
+		super(cause);
 	}
 
 }

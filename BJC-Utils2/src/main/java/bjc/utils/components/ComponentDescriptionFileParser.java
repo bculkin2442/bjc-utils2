@@ -18,50 +18,50 @@ public class ComponentDescriptionFileParser {
 	static {
 		// This reader works entirely off of pragmas, so no need to handle
 		// rules
-		reader = new RuleBasedConfigReader<>((fst, par) -> {
-		}, (fst, stat) -> {
-		}, (stat) -> {
+		reader = new RuleBasedConfigReader<>((tokenizer, statePair) -> {
+		}, (tokenizer, state) -> {
+		}, (state) -> {
 		});
 
-		reader.addPragma("name", (fst, stat) -> {
-			if (!fst.hasMoreTokens()) {
+		reader.addPragma("name", (tokenizer, state) -> {
+			if (!tokenizer.hasMoreTokens()) {
 				throw new PragmaFormatException(
 						"Pragma name requires at least one argument");
 			} else {
-				stat.setName(
-						ListUtils.collapseTokens(fst.toList((s) -> s)));
+				state.setName(ListUtils.collapseTokens(
+						tokenizer.toList((strang) -> strang)));
 			}
 		});
 
-		reader.addPragma("author", (fst, stat) -> {
-			if (!fst.hasMoreTokens()) {
+		reader.addPragma("author", (tokenizer, state) -> {
+			if (!tokenizer.hasMoreTokens()) {
 				throw new PragmaFormatException(
 						"Pragma author requires at least one argument");
 			} else {
-				stat.setAuthor(
-						ListUtils.collapseTokens(fst.toList((s) -> s)));
+				state.setAuthor(ListUtils.collapseTokens(
+						tokenizer.toList((strang) -> strang)));
 			}
 		});
 
-		reader.addPragma("description", (fst, stat) -> {
-			if (!fst.hasMoreTokens()) {
+		reader.addPragma("description", (tokenizer, state) -> {
+			if (!tokenizer.hasMoreTokens()) {
 				throw new PragmaFormatException(
 						"Pragma description requires at least one argument");
 			} else {
-				stat.setDescription(
-						ListUtils.collapseTokens(fst.toList((s) -> s)));
+				state.setDescription(ListUtils.collapseTokens(
+						tokenizer.toList((strang) -> strang)));
 			}
 		});
 
-		reader.addPragma("version", (fst, stat) -> {
-			if (!fst.hasMoreTokens()) {
+		reader.addPragma("version", (tokenizer, state) -> {
+			if (!tokenizer.hasMoreTokens()) {
 				throw new PragmaFormatException(
 						"Pragma name requires at least one argument");
 			} else {
-				String token = fst.nextToken();
+				String token = tokenizer.nextToken();
 
 				try {
-					stat.setVersion(Integer.parseInt(token));
+					state.setVersion(Integer.parseInt(token));
 				} catch (NumberFormatException nfex) {
 					throw new PragmaFormatException("Argument " + token
 							+ " to version pragma isn't a valid integer. "
@@ -74,12 +74,15 @@ public class ComponentDescriptionFileParser {
 	/**
 	 * Parse a component description from a stream
 	 * 
-	 * @param is
+	 * @param inputSource
 	 *            The stream to parse from
 	 * @return The description parsed from the stream
 	 */
-	public static ComponentDescription fromStream(InputStream is) {
-		return reader.fromStream(is, new ComponentDescriptionState())
-				.toDescription();
+	public static ComponentDescription
+			fromStream(InputStream inputSource) {
+		ComponentDescriptionState readState = reader
+				.fromStream(inputSource, new ComponentDescriptionState());
+
+		return readState.toDescription();
 	}
 }

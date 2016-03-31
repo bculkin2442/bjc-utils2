@@ -22,16 +22,16 @@ public class Edge<T> {
 	/**
 	 * Create a new edge with set parameters
 	 * 
-	 * @param node1
+	 * @param initialNode
 	 *            The initial node of the edge
-	 * @param node2
+	 * @param terminalNode
 	 *            The terminal node of the edge
 	 * @param distance
 	 *            The distance between initial and terminal edge
 	 */
-	public Edge(T node1, T node2, int distance) {
-		this.source = node1;
-		this.target = node2;
+	public Edge(T initialNode, T terminalNode, int distance) {
+		this.source = initialNode;
+		this.target = terminalNode;
 		this.distance = distance;
 	}
 

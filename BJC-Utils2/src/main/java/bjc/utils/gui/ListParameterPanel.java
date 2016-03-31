@@ -22,46 +22,45 @@ import bjc.utils.gui.layout.VLayout;
  *            The type of data stored in the list
  */
 public class ListParameterPanel<E> extends JPanel {
-	/**
-	 * Version id for serialization
-	 */
+	// Version id for serialization
 	private static final long serialVersionUID = 3442971104975491571L;
 
 	/**
 	 * Create a new panel using the specified actions for doing things
 	 * 
-	 * @param addAct
+	 * @param addAction
 	 *            The action that provides items
-	 * @param editAct
+	 * @param editAction
 	 *            The action that edits items
-	 * @param removeAct
+	 * @param removeAction
 	 *            The action that removes items
 	 */
-	public ListParameterPanel(Supplier<E> addAct, Consumer<E> editAct,
-			Consumer<E> removeAct) {
-		this(addAct, editAct, removeAct, null);
+	public ListParameterPanel(Supplier<E> addAction,
+			Consumer<E> editAction, Consumer<E> removeAction) {
+		this(addAction, editAction, removeAction, null);
 	}
 
 	/**
 	 * Create a new panel using the specified actions for doing things
 	 * 
-	 * @param addAct
+	 * @param addAction
 	 *            The action that provides items
-	 * @param editAct
+	 * @param editAction
 	 *            The action that edits items
-	 * @param removeAct
+	 * @param removeAction
 	 *            The action that removes items
-	 * @param defVals
+	 * @param defaultValues
 	 *            The default values to put in the list
 	 */
-	public ListParameterPanel(Supplier<E> addAct, Consumer<E> editAct,
-			Consumer<E> removeAct, FunctionalList<E> defVals) {
+	public ListParameterPanel(Supplier<E> addAction,
+			Consumer<E> editAction, Consumer<E> removeAction,
+			FunctionalList<E> defaultValues) {
 		setLayout(new VLayout(2));
 
 		JList<E> list;
 
-		if (defVals != null) {
-			list = SimpleJList.buildFromList(defVals.toIterable());
+		if (defaultValues != null) {
+			list = SimpleJList.buildFromList(defaultValues.toIterable());
 		} else {
 			list = new JList<>(new DefaultListModel<>());
 		}
@@ -76,11 +75,11 @@ public class ListParameterPanel<E> extends JPanel {
 		JButton removeParam = new JButton("Remove...");
 
 		addParam.addActionListener(
-				(ev) -> ((DefaultListModel<E>) list.getModel())
-						.addElement(addAct.get()));
+				(event) -> ((DefaultListModel<E>) list.getModel())
+						.addElement(addAction.get()));
 		editParam.addActionListener(
-				(ev) -> editAct.accept(list.getSelectedValue()));
-		removeParam.addActionListener((ev) -> removeAct
+				(event) -> editAction.accept(list.getSelectedValue()));
+		removeParam.addActionListener((event) -> removeAction
 				.accept(((DefaultListModel<E>) list.getModel())
 						.remove(list.getSelectedIndex())));
 

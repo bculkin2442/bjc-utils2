@@ -10,9 +10,7 @@ import java.awt.GridLayout;
  *
  */
 public class VLayout extends GridLayout {
-	/**
-	 * Version id for serialization
-	 */
+	// Version ID for serializations
 	private static final long serialVersionUID = -6417962941602322663L;
 
 	/**

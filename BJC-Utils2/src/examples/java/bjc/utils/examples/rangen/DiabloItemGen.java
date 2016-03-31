@@ -11,11 +11,12 @@ import bjc.utils.gen.WeightedGrammar;
  *
  */
 public class DiabloItemGen {
-	private static WeightedGrammar<String> parts = new WeightedGrammar<>();
+	private static WeightedGrammar<String> rules = new WeightedGrammar<>();
 
-	private static void addCase(String rn, int prob, String prts) {
-		parts.addCase(rn, prob,
-				FunctionalStringTokenizer.fromString(prts).toList(s -> s));
+	private static void addCase(String ruleName, int probability,
+			String ruleParts) {
+		rules.addCase(ruleName, probability, FunctionalStringTokenizer
+				.fromString(ruleParts).toList(s -> s));
 	}
 
 	private static void addInfixRules() {
@@ -69,20 +70,21 @@ public class DiabloItemGen {
 	 *            Unused CLI args
 	 */
 	public static void main(String[] args) {
-		parts.addRule("<item>");
+		rules.addRule("<item>");
 		addItemRules();
 
-		parts.addRule("<suffix>");
+		rules.addRule("<suffix>");
 		addSuffixRules();
 
-		parts.addRule("<prefix>");
+		rules.addRule("<prefix>");
 		addPrefixRules();
 
-		parts.addRule("<infix>");
+		rules.addRule("<infix>");
 		addInfixRules();
 
 		for (int i = 0; i < 100; i++) {
-			FunctionalList<String> ls = parts.genList("<item>", " ");
+			FunctionalList<String> ls =
+					rules.generateListValues("<item>", " ");
 
 			StringBuilder sb = new StringBuilder();
 

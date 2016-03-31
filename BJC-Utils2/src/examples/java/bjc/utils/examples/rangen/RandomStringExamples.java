@@ -44,7 +44,7 @@ public class RandomStringExamples {
 				"<object>");
 
 		for (int i = 0; i < 10; i++) {
-			FunctionalList<String> ls = rg.genList("<sentance>", " ");
+			FunctionalList<String> ls = rg.generateListValues("<sentance>", " ");
 
 			StringBuilder sb = new StringBuilder();
 

@@ -29,6 +29,16 @@ public interface IComponentRepository<E extends IDescribedComponent> {
 	public Map<String, E> getComponents();
 
 	/**
+	 * Get a component with a specific name
+	 * 
+	 * @param name
+	 *            The name of the component to retrieve
+	 * @return The named component, or null if no component with that name
+	 *         exists
+	 */
+	public E getComponentByName(String name);
+
+	/**
 	 * Get the source from which these components came
 	 * 
 	 * @return The source from which these components came

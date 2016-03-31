@@ -30,22 +30,22 @@ public class SimpleDialogs {
 	 *            The title for the dialogs.
 	 * @param prompt
 	 *            The prompt to tell the user what to enter.
-	 * @param lower
+	 * @param lowerBound
 	 *            The lower integer bound to accept.
-	 * @param upper
+	 * @param upperBound
 	 *            The upper integer bound to accept.
 	 * @return A int within the specified bounds.
 	 */
 	public static int getBoundedInt(Component parent, String title,
-			String prompt, int lower, int upper) {
-		return getValue(parent, title, prompt, s -> {
+			String prompt, int lowerBound, int upperBound) {
+		return getValue(parent, title, prompt, strang -> {
 			try {
-				int n = Integer.parseInt(s);
-				return (n < upper) && (n > lower);
+				int value = Integer.parseInt(strang);
+				return (value < upperBound) && (value > lowerBound);
 			} catch (NumberFormatException nfe) {
 				return false;
 			}
-		} , Integer::parseInt);
+		}, Integer::parseInt);
 	}
 
 	/**
@@ -67,8 +67,8 @@ public class SimpleDialogs {
 	@SuppressWarnings("unchecked")
 	public static <E> E getChoice(Frame parent, String title,
 			String question, E... choices) {
-		JDialog jd = new JDialog(parent, title, true);
-		jd.setLayout(new VLayout(2));
+		JDialog mainDialog = new JDialog(parent, title, true);
+		mainDialog.setLayout(new VLayout(2));
 
 		JPanel questionPane = new JPanel();
 
@@ -83,17 +83,17 @@ public class SimpleDialogs {
 		JButton okButton = new JButton("Ok");
 		JButton cancelButton = new JButton("Cancel");
 
-		okButton.addActionListener(e -> jd.dispose());
-		cancelButton.addActionListener(e -> jd.dispose());
+		okButton.addActionListener((event) -> mainDialog.dispose());
+		cancelButton.addActionListener((event) -> mainDialog.dispose());
 
 		buttonPane.add(cancelButton);
 		buttonPane.add(okButton);
 
-		jd.add(questionPane);
-		jd.add(buttonPane);
+		mainDialog.add(questionPane);
+		mainDialog.add(buttonPane);
 
-		jd.pack();
-		jd.setVisible(true);
+		mainDialog.pack();
+		mainDialog.setVisible(true);
 
 		return (E) questionChoices.getSelectedItem();
 	}
@@ -111,14 +111,14 @@ public class SimpleDialogs {
 	 */
 	public static int getInt(Component parent, String title,
 			String prompt) {
-		return getValue(parent, title, prompt, s -> {
+		return getValue(parent, title, prompt, strang -> {
 			try {
-				Integer.parseInt(s);
+				Integer.parseInt(strang);
 				return true;
 			} catch (NumberFormatException nfe) {
 				return false;
 			}
-		} , Integer::parseInt);
+		}, Integer::parseInt);
 	}
 
 	/**
@@ -150,23 +150,24 @@ public class SimpleDialogs {
 	 *            The title for dialogs.
 	 * @param prompt
 	 *            The prompt to tell the user what to enter.
-	 * @param p
+	 * @param inputValidator
 	 *            A predicate to determine if a input is valid.
-	 * @param f
+	 * @param inputTransformer
 	 *            The function to transform the string into a value.
 	 * @return The value parsed from a string.
 	 */
 	public static <E> E getValue(Component parent, String title,
-			String prompt, Predicate<String> p, Function<String, E> f) {
-		String inp = getString(parent, title, prompt);
+			String prompt, Predicate<String> inputValidator,
+			Function<String, E> inputTransformer) {
+		String inputString = getString(parent, title, prompt);
 
-		while (!p.test(inp)) {
+		while (!inputValidator.test(inputString)) {
 			showError(parent, "I/O Error", "Please enter a valid value");
 
-			inp = getString(parent, title, prompt);
+			inputString = getString(parent, title, prompt);
 		}
 
-		return f.apply(inp);
+		return inputTransformer.apply(inputString);
 	}
 
 	/**
@@ -198,10 +199,10 @@ public class SimpleDialogs {
 	 */
 	public static boolean getYesNo(Component parent, String title,
 			String question) {
-		int res = JOptionPane.showConfirmDialog(parent, question, title,
-				JOptionPane.YES_NO_OPTION);
+		int dialogResult = JOptionPane.showConfirmDialog(parent, question,
+				title, JOptionPane.YES_NO_OPTION);
 
-		return (res == JOptionPane.YES_OPTION ? true : false);
+		return (dialogResult == JOptionPane.YES_OPTION ? true : false);
 	}
 
 	/**
@@ -211,12 +212,12 @@ public class SimpleDialogs {
 	 *            The parent component for dialogs.
 	 * @param title
 	 *            The title for dialogs.
-	 * @param err
+	 * @param errorMessage
 	 *            The error to show the user.
 	 */
 	public static void showError(Component parent, String title,
-			String err) {
-		JOptionPane.showMessageDialog(parent, err, title,
+			String errorMessage) {
+		JOptionPane.showMessageDialog(parent, errorMessage, title,
 				JOptionPane.ERROR_MESSAGE);
 	}
 }

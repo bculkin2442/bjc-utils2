@@ -42,13 +42,13 @@ public class ExtensionFileFilter implements FilenameFilter {
 	public ExtensionFileFilter(String... exts) {
 		extensions = new FunctionalList<>(new ArrayList<>(exts.length));
 
-		for (String ext : exts) {
-			extensions.add(ext);
+		for (String extension : exts) {
+			extensions.add(extension);
 		}
 	}
 
 	@Override
-	public boolean accept(File dir, String name) {
+	public boolean accept(File directory, String name) {
 		return extensions.anyMatch(name::endsWith);
 	}
 }

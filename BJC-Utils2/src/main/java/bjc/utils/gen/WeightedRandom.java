@@ -19,7 +19,7 @@ public class WeightedRandom<E> {
 	/**
 	 * The list of probabilities for each result
 	 */
-	private FunctionalList<Integer>	probs;
+	private FunctionalList<Integer>	probabilities;
 
 	/**
 	 * The list of possible results to pick from
@@ -29,7 +29,7 @@ public class WeightedRandom<E> {
 	/**
 	 * The source for any needed random numbers
 	 */
-	private Random					src;
+	private Random					source;
 
 	private int						totalChance;
 
@@ -37,14 +37,14 @@ public class WeightedRandom<E> {
 	 * Create a new weighted random generator with the specified source of
 	 * randomness
 	 * 
-	 * @param sr
+	 * @param src
 	 *            The source of randomness to use.
 	 */
-	public WeightedRandom(Random sr) {
-		probs = new FunctionalList<>();
+	public WeightedRandom(Random src) {
+		probabilities = new FunctionalList<>();
 		results = new FunctionalList<>();
 
-		src = sr;
+		source = src;
 	}
 
 	/**
@@ -52,12 +52,12 @@ public class WeightedRandom<E> {
 	 * 
 	 * @param chance
 	 *            The chance to get this result.
-	 * @param res
+	 * @param result
 	 *            The result to get when the chance comes up.
 	 */
-	public void addProb(int chance, E res) {
-		probs.add(chance);
-		results.add(res);
+	public void addProbability(int chance, E result) {
+		probabilities.add(chance);
+		results.add(result);
 
 		totalChance += chance;
 	}
@@ -67,24 +67,28 @@ public class WeightedRandom<E> {
 	 * 
 	 * @return A random value selected in a weighted fashion.
 	 */
-	public E genVal() {
-		GenHolder<Integer> v = new GenHolder<>(src.nextInt(totalChance));
-		IHolder<E> res = new GenHolder<>();
-		GenHolder<Boolean> bl = new GenHolder<>(true);
+	public E generateValue() {
+		GenHolder<Integer> randomValue =
+				new GenHolder<>(source.nextInt(totalChance));
+		IHolder<E> currentResult = new GenHolder<>();
+		GenHolder<Boolean> valuePicked = new GenHolder<>(true);
 
-		probs.forEachIndexed((i, p) -> {
-			if (bl.unwrap(vl -> vl)) {
-				if (v.unwrap((vl) -> vl < p)) {
-					res.transform((vl) -> results.getByIndex(i));
+		probabilities.forEachIndexed((itemIndex, itemProbability) -> {
+			if (valuePicked.unwrap(bool -> bool)) {
+				if (randomValue
+						.unwrap((number) -> number < itemProbability)) {
+					currentResult.transform(
+							(result) -> results.getByIndex(itemIndex));
 
-					bl.transform((vl) -> false);
+					valuePicked.transform((bool) -> false);
 				} else {
-					v.transform((vl) -> vl - p);
+					randomValue.transform(
+							(number) -> number - itemProbability);
 				}
 			}
 		});
 
-		return res.unwrap((vl) -> vl);
+		return currentResult.unwrap((result) -> result);
 	}
 
 	/**
@@ -103,6 +107,6 @@ public class WeightedRandom<E> {
 	 * @return A list of pairs of values and value probabilities
 	 */
 	public FunctionalList<Pair<Integer, E>> getValues() {
-		return probs.pairWith(results);
+		return probabilities.pairWith(results);
 	}
 }

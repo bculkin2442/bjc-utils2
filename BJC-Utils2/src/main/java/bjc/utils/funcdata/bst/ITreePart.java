@@ -41,13 +41,13 @@ public interface ITreePart<T> {
 	/**
 	 * Add a element below this tree part somewhere.
 	 * 
-	 * @param dat
+	 * @param element
 	 *            The element to add below this tree part
-	 * @param comp
+	 * @param comparator
 	 *            The thing to use for comparing values to find where to
 	 *            insert the tree part.
 	 */
-	public void add(T dat, Comparator<T> comp);
+	public void add(T element, Comparator<T> comparator);
 
 	/**
 	 * Collapses this tree part into a single value. Does not change the
@@ -56,26 +56,27 @@ public interface ITreePart<T> {
 	 * @param <E>
 	 *            The type of the final collapsed value
 	 * 
-	 * @param f
+	 * @param nodeCollapser
 	 *            The function to use to transform data into mapped form.
-	 * @param bf
+	 * @param branchCollapser
 	 *            The function to use to collapse data in mapped form into
 	 *            a single value.
 	 * @return A single value from collapsing the tree.
 	 */
-	public <E> E collapse(Function<T, E> f, BiFunction<E, E, E> bf);
+	public <E> E collapse(Function<T, E> nodeCollapser,
+			BiFunction<E, E, E> branchCollapser);
 
 	/**
 	 * Check if this tre part or below it contains the specified data item
 	 * 
-	 * @param data
+	 * @param element
 	 *            The data item to look for.
-	 * @param cmp
+	 * @param comparator
 	 *            The comparator to use to search for the data item
 	 * @return Whether or not the given item is contained in this tree part
 	 *         or its children.
 	 */
-	public boolean contains(T data, Comparator<T> cmp);
+	public boolean contains(T element, Comparator<T> comparator);
 
 	/**
 	 * Get the data associated with this tree part.
@@ -87,32 +88,33 @@ public interface ITreePart<T> {
 	/**
 	 * Remove the given node from this tree part and any of its children.
 	 * 
-	 * @param dat
+	 * @param element
 	 *            The data item to remove.
-	 * @param cmp
+	 * @param comparator
 	 *            The comparator to use to search for the data item.
 	 */
-	public void delete(T dat, Comparator<T> cmp);
+	public void delete(T element, Comparator<T> comparator);
 
 	/**
 	 * Execute a directed walk through the tree.
 	 * 
-	 * @param ds
+	 * @param treeWalker
 	 *            The function to use to direct the walk through the tree.
 	 * @return Whether the directed walk finished successfully.
 	 */
-	public boolean directedWalk(DirectedWalkFunction<T> ds);
+	public boolean directedWalk(DirectedWalkFunction<T> treeWalker);
 
 	/**
 	 * Execute a provided function for each element of tree it succesfully
 	 * completes for
 	 * 
-	 * @param tlm
+	 * @param linearizationMethod
 	 *            The way to linearize the tree for executing
-	 * @param c
+	 * @param traversalPredicate
 	 *            The function to apply to each element, where it returning
 	 *            false terminates traversal early
 	 * @return Whether the traversal finished succesfully
 	 */
-	public boolean forEach(TreeLinearizationMethod tlm, Predicate<T> c);
+	public boolean forEach(TreeLinearizationMethod linearizationMethod,
+			Predicate<T> traversalPredicate);
 }

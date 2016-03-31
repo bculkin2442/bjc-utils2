@@ -6,7 +6,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
-import bjc.utils.funcdata.ITreePart.TreeLinearizationMethod;
+import bjc.utils.funcdata.bst.ITreePart.TreeLinearizationMethod;
 
 /**
  * A simple binary tree meant for use as an AST
@@ -55,36 +55,37 @@ public class AST<T> {
 	/**
 	 * Traverse an AST
 	 * 
-	 * @param tlm
+	 * @param linearizationMethod
 	 *            The way to traverse the tree
-	 * @param con
+	 * @param action
 	 *            The function to call on each traversed element
 	 */
-	public void traverse(TreeLinearizationMethod tlm, Consumer<T> con) {
+	public void traverse(TreeLinearizationMethod linearizationMethod,
+			Consumer<T> action) {
 		if (left != null && right != null) {
-			switch (tlm) {
+			switch (linearizationMethod) {
 				case INORDER:
-					left.traverse(tlm, con);
-					con.accept(token);
-					right.traverse(tlm, con);
+					left.traverse(linearizationMethod, action);
+					action.accept(token);
+					right.traverse(linearizationMethod, action);
 					break;
 				case POSTORDER:
-					left.traverse(tlm, con);
-					right.traverse(tlm, con);
-					con.accept(token);
+					left.traverse(linearizationMethod, action);
+					right.traverse(linearizationMethod, action);
+					action.accept(token);
 					break;
 				case PREORDER:
-					con.accept(token);
-					left.traverse(tlm, con);
-					right.traverse(tlm, con);
+					action.accept(token);
+					left.traverse(linearizationMethod, action);
+					right.traverse(linearizationMethod, action);
 					break;
 				default:
 					throw new IllegalArgumentException(
-							"Got a invalid tree linearizer " + tlm
-									+ ". WAT");
+							"Got a invalid tree linearizer "
+									+ linearizationMethod + ". WAT");
 			}
 		} else {
-			con.accept(token);
+			action.accept(token);
 		}
 	}
 
@@ -95,107 +96,131 @@ public class AST<T> {
 	 *            The final value of the collapsed tree
 	 * @param <T2>
 	 * 
-	 * @param tokenTransform
+	 * @param tokenTransformer
 	 *            The function to transform nodes into data
-	 * @param nodeTransform
+	 * @param nodeTransformer
 	 *            A map of functions for operator collapsing
-	 * @param resultTransform
+	 * @param resultTransformer
 	 *            The function for transforming the result
 	 * @return The collapsed value of the tree
 	 */
-	public <E, T2> E collapse(Function<T, T2> tokenTransform,
-			Function<T, BinaryOperator<T2>> nodeTransform,
-			Function<T2, E> resultTransform) {
-		return resultTransform
-				.apply(internalCollapse(tokenTransform, nodeTransform));
+	public <E, T2> E collapse(Function<T, T2> tokenTransformer,
+			Function<T, BinaryOperator<T2>> nodeTransformer,
+			Function<T2, E> resultTransformer) {
+		return resultTransformer.apply(
+				internalCollapse(tokenTransformer, nodeTransformer));
 	}
 
 	/*
 	 * Internal recursive collapser
 	 */
-	protected <T2> T2 internalCollapse(Function<T, T2> tokenTransform,
-			Function<T, BinaryOperator<T2>> nodeTransform) {
+	protected <T2> T2 internalCollapse(Function<T, T2> tokenTransformer,
+			Function<T, BinaryOperator<T2>> nodeTransformer) {
 		if (left == null && right == null) {
-			return tokenTransform.apply(token);
+			return tokenTransformer.apply(token);
 		} else {
-			T2 leftCollapsed = left.internalCollapse(tokenTransform,
-					nodeTransform);
-			T2 rightCollapsed = right.internalCollapse(tokenTransform,
-					nodeTransform);
+			T2 leftCollapsed;
 
-			return nodeTransform.apply(token).apply(leftCollapsed,
+			if (left == null) {
+				leftCollapsed = null;
+			} else {
+				leftCollapsed = left.internalCollapse(tokenTransformer,
+						nodeTransformer);
+			}
+
+			T2 rightCollapsed;
+			if (right == null) {
+				rightCollapsed = null;
+			} else {
+				rightCollapsed = right.internalCollapse(tokenTransformer,
+						nodeTransformer);
+			}
+
+			return nodeTransformer.apply(token).apply(leftCollapsed,
 					rightCollapsed);
 		}
 	}
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
+		StringBuilder builder = new StringBuilder();
 
-		internalToString(sb, -1);
+		internalToString(builder, -1);
 
-		return sb.toString();
+		return builder.toString();
 	}
 
 	/**
 	 * Internal version of toString for proper rendering
 	 * 
-	 * @param sb
+	 * @param builder
 	 *            The string rendering being built
 	 * @param indentLevel
 	 *            The current level to indent the tree
 	 */
-	protected void internalToString(StringBuilder sb, int indentLevel) {
-		indentNLevels(sb, indentLevel);
+	protected void internalToString(StringBuilder builder,
+			int indentLevel) {
+		indentNLevels(builder, indentLevel);
 
 		if (left == null && right == null) {
-			sb.append("Node: ");
-			sb.append(token.toString());
-			sb.append("\n");
+			builder.append("Node: ");
+			builder.append(token.toString());
+			builder.append("\n");
 		} else {
-			sb.append("Node: ");
-			sb.append(token.toString());
-			sb.append("\n");
+			builder.append("Node: ");
+			builder.append(token.toString());
+			builder.append("\n");
 
-			left.internalToString(sb, indentLevel + 2);
-			right.internalToString(sb, indentLevel + 2);
+			if (left != null) {
+				left.internalToString(builder, indentLevel + 2);
+			} else {
+				indentNLevels(builder, indentLevel + 2);
+				builder.append("No left node\n");
+			}
+			if (right != null) {
+				right.internalToString(builder, indentLevel + 2);
+			} else {
+				indentNLevels(builder, indentLevel + 2);
+				builder.append("No right node\n");
+			}
 		}
 	}
 
 	/**
 	 * Indent a string n levels
 	 * 
-	 * @param sb
+	 * @param builder
 	 *            The string to indent
-	 * @param n
+	 * @param levels
 	 *            The number of levels to indent
 	 */
-	protected static void indentNLevels(StringBuilder sb, int n) {
-		for (int i = 0; i <= n; i++) {
-			sb.append("\t");
+	protected static void indentNLevels(StringBuilder builder,
+			int levels) {
+		for (int i = 0; i <= levels; i++) {
+			builder.append("\t");
 		}
 	}
 
 	/**
 	 * Execute a transform on selective nodes of the tree
 	 * 
-	 * @param transformPred
+	 * @param transformerPredicate
 	 *            The predicate to pick nodes to transform
 	 * @param transformer
 	 *            The thing to use to transform the nodes
 	 */
-	public void selectiveTransform(Predicate<T> transformPred,
+	public void selectiveTransform(Predicate<T> transformerPredicate,
 			UnaryOperator<T> transformer) {
-		if (transformPred.test(token)) {
+		if (transformerPredicate.test(token)) {
 			token = transformer.apply(token);
 		}
 
 		if (left != null) {
-			left.selectiveTransform(transformPred, transformer);
+			left.selectiveTransform(transformerPredicate, transformer);
 		}
 
 		if (right != null) {
-			right.selectiveTransform(transformPred, transformer);
+			right.selectiveTransform(transformerPredicate, transformer);
 		}
 	}
 
@@ -210,17 +235,18 @@ public class AST<T> {
 	 * @return The AST with transformed tokens
 	 */
 	public <E> AST<E> transmuteAST(Function<T, E> tokenTransformer) {
-		AST<E> l = null;
-		AST<E> r = null;
+		AST<E> leftBranch = null;
+		AST<E> rightBranch = null;
 
 		if (left != null) {
-			l = left.transmuteAST(tokenTransformer);
+			leftBranch = left.transmuteAST(tokenTransformer);
 		}
 
 		if (right != null) {
-			r = right.transmuteAST(tokenTransformer);
+			rightBranch = right.transmuteAST(tokenTransformer);
 		}
 
-		return new AST<>(tokenTransformer.apply(token), l, r);
+		return new AST<>(tokenTransformer.apply(token), leftBranch,
+				rightBranch);
 	}
 }

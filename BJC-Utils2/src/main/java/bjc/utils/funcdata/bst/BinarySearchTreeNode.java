@@ -19,28 +19,28 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 	/**
 	 * The left child of this node
 	 */
-	private ITreePart<T>	left;
+	private ITreePart<T>	leftBranch;
 
 	/**
 	 * The right child of this node
 	 */
-	private ITreePart<T>	right;
+	private ITreePart<T>	rightBranch;
 
 	/**
 	 * Create a new node with the specified data and children.
 	 * 
-	 * @param data
+	 * @param element
 	 *            The data to store in this node.
 	 * @param left
 	 *            The left child of this node.
 	 * @param right
 	 *            The right child of this node.
 	 */
-	public BinarySearchTreeNode(T data, ITreePart<T> left,
+	public BinarySearchTreeNode(T element, ITreePart<T> left,
 			ITreePart<T> right) {
-		super(data);
-		this.left = left;
-		this.right = right;
+		super(element);
+		this.leftBranch = left;
+		this.rightBranch = right;
 	}
 
 	/*
@@ -50,58 +50,74 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 	 * java.util.Comparator)
 	 */
 	@Override
-	public void add(T dat, Comparator<T> comp) {
-		switch (comp.compare(data, dat)) {
+	public void add(T element, Comparator<T> comparator) {
+		switch (comparator.compare(data, element)) {
 			case -1:
-				if (left == null) {
-					left = new BinarySearchTreeNode<>(dat, null, null);
+				if (leftBranch == null) {
+					leftBranch = new BinarySearchTreeNode<>(element, null,
+							null);
 				} else {
-					left.add(dat, comp);
+					leftBranch.add(element, comparator);
 				}
 			case 0:
-				if (deleted) {
-					deleted = false;
+				if (isDeleted) {
+					isDeleted = false;
 				} else {
 					throw new IllegalArgumentException(
 							"Can't add duplicate values");
 				}
 			case 1:
-				if (right == null) {
-					right = new BinarySearchTreeNode<>(dat, null, null);
+				if (rightBranch == null) {
+					rightBranch = new BinarySearchTreeNode<>(element, null,
+							null);
 				} else {
-					right.add(dat, comp);
+					rightBranch.add(element, comparator);
 				}
 		}
 	}
 
 	@Override
-	public <E> E collapse(Function<T, E> f, BiFunction<E, E, E> bf) {
-		E tm = f.apply(data);
+	public <E> E collapse(Function<T, E> nodeCollapser,
+			BiFunction<E, E, E> branchCollapser) {
+		E collapsedNode = nodeCollapser.apply(data);
 
-		if (left != null) {
-			if (right != null) {
-				return bf.apply(tm, bf.apply(left.collapse(f, bf),
-						right.collapse(f, bf)));
+		if (leftBranch != null) {
+			E collapsedLeftBranch =
+					leftBranch.collapse(nodeCollapser, branchCollapser);
+			if (rightBranch != null) {
+				E collapsedRightBranch = rightBranch
+						.collapse(nodeCollapser, branchCollapser);
+
+				E collapsedBranches = branchCollapser
+						.apply(collapsedLeftBranch, collapsedRightBranch);
+
+				return branchCollapser.apply(collapsedNode,
+						collapsedBranches);
 			} else {
-				return bf.apply(tm, left.collapse(f, bf));
+				return branchCollapser.apply(collapsedNode,
+						collapsedLeftBranch);
 			}
 		} else {
-			if (right != null) {
-				return bf.apply(tm, right.collapse(f, bf));
+			if (rightBranch != null) {
+				E collapsedRightBranch = rightBranch
+						.collapse(nodeCollapser, branchCollapser);
+
+				return branchCollapser.apply(collapsedNode,
+						collapsedRightBranch);
 			} else {
-				return tm;
+				return collapsedNode;
 			}
 		}
 	}
 
 	@Override
-	public boolean contains(T dat, Comparator<T> cmp) {
-		return directedWalk(ds -> {
-			switch (cmp.compare(dat, ds)) {
+	public boolean contains(T element, Comparator<T> comparator) {
+		return directedWalk(currentElement -> {
+			switch (comparator.compare(element, currentElement)) {
 				case -1:
 					return LEFT;
 				case 0:
-					return deleted ? FAILURE : SUCCESS;
+					return isDeleted ? FAILURE : SUCCESS;
 				case 1:
 					return RIGHT;
 				default:
@@ -111,16 +127,16 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 	}
 
 	@Override
-	public void delete(T dat, Comparator<T> cmp) {
-		directedWalk(ds -> {
-			switch (cmp.compare(data, dat)) {
+	public void delete(T element, Comparator<T> comparator) {
+		directedWalk(currentElement -> {
+			switch (comparator.compare(data, element)) {
 				case -1:
-					return left == null ? FAILURE : LEFT;
+					return leftBranch == null ? FAILURE : LEFT;
 				case 0:
-					deleted = true;
+					isDeleted = true;
 					return FAILURE;
 				case 1:
-					return right == null ? FAILURE : RIGHT;
+					return rightBranch == null ? FAILURE : RIGHT;
 				default:
 					return FAILURE;
 			}
@@ -128,14 +144,14 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 	}
 
 	@Override
-	public boolean directedWalk(DirectedWalkFunction<T> ds) {
-		switch (ds.walk(data)) {
+	public boolean directedWalk(DirectedWalkFunction<T> treeWalker) {
+		switch (treeWalker.walk(data)) {
 			case SUCCESS:
 				return true;
 			case LEFT:
-				return left.directedWalk(ds);
+				return leftBranch.directedWalk(treeWalker);
 			case RIGHT:
-				return right.directedWalk(ds);
+				return rightBranch.directedWalk(treeWalker);
 			case FAILURE:
 				return false;
 			default:
@@ -144,42 +160,119 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 	}
 
 	@Override
-	public boolean forEach(TreeLinearizationMethod tlm, Predicate<T> c) {
-		switch (tlm) {
+	public boolean forEach(TreeLinearizationMethod linearizationMethod,
+			Predicate<T> traversalPredicate) {
+		switch (linearizationMethod) {
 			case PREORDER:
-				return preorderTraverse(tlm, c);
+				return preorderTraverse(linearizationMethod,
+						traversalPredicate);
 			case INORDER:
-				return inorderTraverse(tlm, c);
+				return inorderTraverse(linearizationMethod,
+						traversalPredicate);
 			case POSTORDER:
-				return postorderTraverse(tlm, c);
+				return postorderTraverse(linearizationMethod,
+						traversalPredicate);
 			default:
 				throw new IllegalArgumentException(
-						"Passed an incorrect TreeLinearizationMethod.");
+						"Passed an incorrect TreeLinearizationMethod "
+								+ linearizationMethod + ". WAT");
 		}
 	}
 
-	private boolean inorderTraverse(TreeLinearizationMethod tlm,
-			Predicate<T> c) {
+	private boolean inorderTraverse(
+			TreeLinearizationMethod linearizationMethod,
+			Predicate<T> traversalPredicate) {
 
-		return ((left == null ? true : left.forEach(tlm, c))
-				&& (deleted ? true : c.test(data))
-				&& (right == null ? true : right.forEach(tlm, c)));
+		if (!traverseLeftBranch(linearizationMethod, traversalPredicate)) {
+			return false;
+		}
+
+		if (!traverseElement(traversalPredicate)) {
+			return false;
+		}
+
+		if (!traverseRightBranch(linearizationMethod,
+				traversalPredicate)) {
+			return false;
+		}
+
+		return true;
 	}
 
-	private boolean postorderTraverse(TreeLinearizationMethod tlm,
-			Predicate<T> c) {
+	private boolean postorderTraverse(
+			TreeLinearizationMethod linearizationMethod,
+			Predicate<T> traversalPredicate) {
 
-		return ((left == null ? true : left.forEach(tlm, c))
-				&& (right == null ? true : right.forEach(tlm, c))
-				&& (deleted ? true : c.test(data)));
+		if (!traverseLeftBranch(linearizationMethod, traversalPredicate)) {
+			return false;
+		}
+
+		if (!traverseRightBranch(linearizationMethod,
+				traversalPredicate)) {
+			return false;
+		}
+
+		if (!traverseElement(traversalPredicate)) {
+			return false;
+		}
+
+		return true;
 
 	}
 
-	private boolean preorderTraverse(TreeLinearizationMethod tlm,
-			Predicate<T> c) {
+	private boolean preorderTraverse(
+			TreeLinearizationMethod linearizationMethod,
+			Predicate<T> traversalPredicate) {
 
-		return ((deleted ? true : c.test(data))
-				&& (left == null ? true : left.forEach(tlm, c))
-				&& (right == null ? true : right.forEach(tlm, c)));
+		if (!traverseElement(traversalPredicate)) {
+			return false;
+		}
+
+		if (!traverseLeftBranch(linearizationMethod, traversalPredicate)) {
+			return false;
+		}
+
+		if (!traverseRightBranch(linearizationMethod,
+				traversalPredicate)) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private boolean traverseElement(Predicate<T> traversalPredicate) {
+		boolean nodeSuccesfullyTraversed;
+		if (isDeleted) {
+			nodeSuccesfullyTraversed = true;
+		} else {
+			nodeSuccesfullyTraversed = traversalPredicate.test(data);
+		}
+		return nodeSuccesfullyTraversed;
+	}
+
+	private boolean traverseLeftBranch(
+			TreeLinearizationMethod linearizationMethod,
+			Predicate<T> traversalPredicate) {
+		boolean leftSuccesfullyTraversed;
+		if (leftBranch == null) {
+			leftSuccesfullyTraversed = true;
+		} else {
+			leftSuccesfullyTraversed = leftBranch
+					.forEach(linearizationMethod, traversalPredicate);
+		}
+		return leftSuccesfullyTraversed;
+	}
+
+	private boolean traverseRightBranch(
+			TreeLinearizationMethod linearizationMethod,
+			Predicate<T> traversalPredicate) {
+		boolean rightSuccesfullyTraversed;
+		if (rightBranch == null) {
+			rightSuccesfullyTraversed = true;
+		} else {
+			rightSuccesfullyTraversed = rightBranch
+					.forEach(linearizationMethod, traversalPredicate);
+		}
+		return rightSuccesfullyTraversed;
 	}
 }

@@ -551,7 +551,7 @@ public class FunctionalList<E> implements Cloneable {
 		StringBuilder sb = new StringBuilder("(");
 
 		// Append the string form of each element
-		forEach(s -> sb.append(s + ", "));
+		forEach(strang -> sb.append(strang + ", "));
 
 		// Remove trailing space and comma
 		sb.deleteCharAt(sb.length() - 1);
