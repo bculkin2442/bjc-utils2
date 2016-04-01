@@ -284,7 +284,9 @@ public class ListUtils {
 	 */
 	public static String collapseTokens(FunctionalList<String> input,
 			String sep) {
-		if (input.getSize() <= 1) {
+		if (input.getSize() < 1) {
+			return "";
+		} else if (input.getSize() == 1) {
 			return input.first();
 		} else {
 			return input.reduceAux("",
