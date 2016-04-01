@@ -60,9 +60,8 @@ public class ListUtils {
 						operatorRegex)) {
 					return new FunctionalList<>(tokenToSplit);
 				} else {
-					FunctionalList<String> splitTokens =
-							new FunctionalList<>(
-									tokenToSplit.split(operatorRegex));
+					FunctionalList<String> splitTokens = new FunctionalList<>(
+							tokenToSplit.split(operatorRegex));
 
 					FunctionalList<String> result = new FunctionalList<>();
 
@@ -165,14 +164,13 @@ public class ListUtils {
 		/*
 		 * List that holds our results
 		 */
-		FunctionalList<FunctionalList<E>> returnedList =
-				new FunctionalList<>();
+		FunctionalList<FunctionalList<E>> returnedList = new FunctionalList<>();
 
 		/*
 		 * List that holds current partition
 		 */
-		GenHolder<FunctionalList<E>> currentPartition =
-				new GenHolder<>(new FunctionalList<>());
+		GenHolder<FunctionalList<E>> currentPartition = new GenHolder<>(
+				new FunctionalList<>());
 		/*
 		 * List that holds elements rejected during current pass
 		 */
@@ -186,10 +184,8 @@ public class ListUtils {
 		/*
 		 * Run up to a certain number of passes
 		 */
-		for (int numberOfIterations =
-				0; numberOfIterations < MAX_NTRIESPART
-						&& !rejectedElements
-								.isEmpty(); numberOfIterations++) {
+		for (int numberOfIterations = 0; numberOfIterations < MAX_NTRIESPART
+				&& !rejectedElements.isEmpty(); numberOfIterations++) {
 			input.forEach(new GroupPartIteration<>(returnedList,
 					currentPartition, rejectedElements,
 					numberInCurrentPartition, numberPerPartition,
@@ -253,8 +249,8 @@ public class ListUtils {
 	public static FunctionalList<String> deAffixTokens(
 			FunctionalList<String> input,
 			Deque<Pair<String, String>> ops) {
-		GenHolder<FunctionalList<String>> returnedList =
-				new GenHolder<>(input);
+		GenHolder<FunctionalList<String>> returnedList = new GenHolder<>(
+				input);
 
 		ops.forEach((op) -> returnedList
 				.transform((oldRet) -> oldRet.flatMap((tok) -> {
@@ -273,8 +269,30 @@ public class ListUtils {
 	 * @return The collapsed string of tokens
 	 */
 	public static String collapseTokens(FunctionalList<String> input) {
-		return input.reduceAux("",
-				(currentString, state) -> state + currentString,
-				(strang) -> strang);
+		return collapseTokens(input, "");
+	}
+
+	/**
+	 * Collapse a string of tokens into a single string, adding the desired
+	 * seperator after each token
+	 * 
+	 * @param input
+	 *            The list of tokens to collapse
+	 * @param sep
+	 *            The seperator to use for seperating tokens
+	 * @return The collapsed string of tokens
+	 */
+	public static String collapseTokens(FunctionalList<String> input,
+			String sep) {
+		if (input.getSize() <= 1) {
+			return input.first();
+		} else {
+			return input.reduceAux("",
+					(currentString, state) -> state + currentString + sep,
+					(strang) -> {
+						return strang.substring(0,
+								strang.length() - sep.length());
+					});
+		}
 	}
 }
