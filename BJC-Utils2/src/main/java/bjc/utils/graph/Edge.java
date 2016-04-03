@@ -30,6 +30,14 @@ public class Edge<T> {
 	 *            The distance between initial and terminal edge
 	 */
 	public Edge(T initialNode, T terminalNode, int distance) {
+		if (initialNode == null) {
+			throw new NullPointerException(
+					"Initial node must not be null");
+		} else if (terminalNode == null) {
+			throw new NullPointerException(
+					"Terminal node must not be null");
+		}
+
 		this.source = initialNode;
 		this.target = terminalNode;
 		this.distance = distance;
@@ -67,5 +75,59 @@ public class Edge<T> {
 	public String toString() {
 		return " first vertex " + source + " to vertex " + target
 				+ " with distance: " + distance;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + distance;
+		result = prime * result
+				+ ((source == null) ? 0 : source.hashCode());
+		result = prime * result
+				+ ((target == null) ? 0 : target.hashCode());
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		} else if (obj == null) {
+			return false;
+		} else if (getClass() != obj.getClass()) {
+			return false;
+		} else {
+
+			Edge<?> other = (Edge<?>) obj;
+
+			if (distance != other.distance) {
+				return false;
+			} else if (source == null) {
+				if (other.source != null) {
+					return false;
+				}
+			} else if (!source.equals(other.source)) {
+				return false;
+			} else if (target == null) {
+				if (other.target != null) {
+					return false;
+				}
+			} else if (!target.equals(other.target)) {
+				return false;
+			}
+
+			return true;
+		}
 	}
 }

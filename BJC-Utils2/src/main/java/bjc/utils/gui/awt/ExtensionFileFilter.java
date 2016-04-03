@@ -29,6 +29,10 @@ public class ExtensionFileFilter implements FilenameFilter {
 	 *            The extensions to show in this filter.
 	 */
 	public ExtensionFileFilter(List<String> exts) {
+		if (exts == null) {
+			throw new NullPointerException("Extensions must not be null");
+		}
+
 		extensions = new FunctionalList<>(exts);
 	}
 

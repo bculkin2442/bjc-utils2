@@ -62,6 +62,10 @@ public class RandomGrammar<E> extends WeightedGrammar<E> {
 	 *            The cases to add for this rule.
 	 */
 	public void makeRule(E rule, FunctionalList<FunctionalList<E>> cases) {
+		if (cases == null) {
+			throw new NullPointerException("Cases must not be null");
+		}
+
 		super.addRule(rule);
 
 		cases.forEach(currentCase -> super.addCase(rule, 1, currentCase));

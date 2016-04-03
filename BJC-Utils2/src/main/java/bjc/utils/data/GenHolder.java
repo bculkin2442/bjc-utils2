@@ -46,6 +46,10 @@ public class GenHolder<T> implements IHolder<T> {
 	 */
 	@Override
 	public void doWith(Consumer<T> action) {
+		if (action == null) {
+			throw new NullPointerException("Action must be non-null");
+		}
+
 		action.accept(heldValue);
 	}
 
@@ -56,6 +60,10 @@ public class GenHolder<T> implements IHolder<T> {
 	 */
 	@Override
 	public <NewT> IHolder<NewT> map(Function<T, NewT> transformer) {
+		if (transformer == null) {
+			throw new NullPointerException("Transformer must be non-null");
+		}
+
 		return new GenHolder<>(transformer.apply(heldValue));
 	}
 
@@ -66,6 +74,10 @@ public class GenHolder<T> implements IHolder<T> {
 	 */
 	@Override
 	public IHolder<T> transform(Function<T, T> transformer) {
+		if (transformer == null) {
+			throw new NullPointerException("Transformer must be non-null");
+		}
+
 		heldValue = transformer.apply(heldValue);
 
 		return this;
@@ -78,11 +90,19 @@ public class GenHolder<T> implements IHolder<T> {
 	 */
 	@Override
 	public <E> E unwrap(Function<T, E> unwrapper) {
+		if (unwrapper == null) {
+			throw new NullPointerException("Unwrapper must be null");
+		}
+
 		return unwrapper.apply(heldValue);
 	}
 
 	@Override
 	public String toString() {
+		if (heldValue == null) {
+			return "(null)";
+		}
+
 		return heldValue.toString();
 	}
 }

@@ -49,6 +49,10 @@ public class ExtensionFileFilter extends FileFilter {
 
 	@Override
 	public boolean accept(File pathname) {
+		if (pathname == null) {
+			throw new NullPointerException("Pathname must not be null");
+		}
+
 		return extensions.anyMatch(pathname.getName()::endsWith);
 	}
 

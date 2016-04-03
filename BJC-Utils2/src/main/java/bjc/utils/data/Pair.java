@@ -56,6 +56,11 @@ public class Pair<L, R> implements IPair<L, R> {
 	@Override
 	public <L2, R2> IPair<L2, R2> apply(Function<L, L2> leftTransformer,
 			Function<R, R2> rightTransformer) {
+		if (leftTransformer == null || rightTransformer == null) {
+			throw new NullPointerException(
+					"Transformers must be non-null");
+		}
+
 		return new Pair<>(leftTransformer.apply(leftValue),
 				rightTransformer.apply(rightValue));
 	}
@@ -67,6 +72,10 @@ public class Pair<L, R> implements IPair<L, R> {
 	 */
 	@Override
 	public void doWith(BiConsumer<L, R> action) {
+		if (action == null) {
+			throw new NullPointerException("Action must be non-null");
+		}
+
 		action.accept(leftValue, rightValue);
 	}
 
@@ -77,6 +86,10 @@ public class Pair<L, R> implements IPair<L, R> {
 	 */
 	@Override
 	public <E> E merge(BiFunction<L, R, E> merger) {
+		if (merger == null) {
+			throw new NullPointerException("Merger must be non-null");
+		}
+
 		return merger.apply(leftValue, rightValue);
 	}
 }

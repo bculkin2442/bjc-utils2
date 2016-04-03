@@ -42,6 +42,12 @@ public class SimpleFileDialog {
 	 */
 	public static File getOpenFile(Frame parent, String title,
 			String... extensions) {
+		if (parent == null) {
+			throw new NullPointerException("Parent must not be null");
+		} else if (title == null) {
+			throw new NullPointerException("Title must not be null");
+		}
+
 		FileDialog fileDialog =
 				new FileDialog(parent, title, FileDialog.LOAD);
 
@@ -87,6 +93,12 @@ public class SimpleFileDialog {
 	 */
 	public static File getSaveFile(Frame parent, String title,
 			String... extensions) {
+		if (parent == null) {
+			throw new NullPointerException("Parent must not be null");
+		} else if (title == null) {
+			throw new NullPointerException("Title must not be null");
+		}
+
 		FileDialog fileDialog =
 				new FileDialog(parent, title, FileDialog.SAVE);
 

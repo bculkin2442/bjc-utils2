@@ -19,42 +19,6 @@ import bjc.utils.funcutils.StringUtils;
  *            The type of tokens being shunted
  */
 public class ShuntingYard<E> {
-
-	private final class TokenShunter implements Consumer<String> {
-		private FunctionalList<E>	output;
-		private Deque<String>		stack;
-		private Function<String, E>	transform;
-
-		public TokenShunter(FunctionalList<E> outpt, Deque<String> stack,
-				Function<String, E> transform) {
-			this.output = outpt;
-			this.stack = stack;
-			this.transform = transform;
-		}
-
-		@Override
-		public void accept(String token) {
-			if (operators.containsKey(token)) {
-				while (!stack.isEmpty()
-						&& isHigherPrec(token, stack.peek())) {
-					output.add(transform.apply(stack.pop()));
-				}
-
-				stack.push(token);
-			} else if (StringUtils.containsOnly(token, "\\(")) {
-				stack.push(token);
-			} else if (StringUtils.containsOnly(token, "\\)")) {
-				while (stack.peek().equals(token.replace(')', '('))) {
-					output.add(transform.apply(stack.pop()));
-				}
-
-				stack.pop();
-			} else {
-				output.add(transform.apply(token));
-			}
-		}
-	}
-
 	/**
 	 * A enum representing the fundamental operator types
 	 * 
@@ -96,6 +60,58 @@ public class ShuntingYard<E> {
 		}
 	}
 
+	private final class TokenShunter implements Consumer<String> {
+		private FunctionalList<E>	output;
+		private Deque<String>		stack;
+		private Function<String, E>	transform;
+
+		public TokenShunter(FunctionalList<E> outpt, Deque<String> stack,
+				Function<String, E> transform) {
+			this.output = outpt;
+			this.stack = stack;
+			this.transform = transform;
+		}
+
+		@Override
+		public void accept(String token) {
+			if (operators.containsKey(token)) {
+				while (!stack.isEmpty()
+						&& isHigherPrec(token, stack.peek())) {
+					output.add(transform.apply(stack.pop()));
+				}
+
+				stack.push(token);
+			} else if (StringUtils.containsOnly(token, "\\(")) {
+				// Handle groups of parenthesis for multiple nesting levels
+				stack.push(token);
+			} else if (StringUtils.containsOnly(token, "\\)")) {
+				// Handle groups of parenthesis for multiple nesting levels
+				while (stack.peek().equals(token.replace(')', '('))) {
+					output.add(transform.apply(stack.pop()));
+				}
+
+				stack.pop();
+			} else {
+				output.add(transform.apply(token));
+			}
+		}
+	}
+
+	private static boolean shouldConfigureBasicOperators = true;
+
+	/**
+	 * Set whether the shunter should configure the four basic math
+	 * operators
+	 * 
+	 * @param configureBasicOperators
+	 *            Whether or not the four basic math operators should be
+	 *            configured
+	 */
+	public static void setBasicOperatorConfiguration(
+			boolean configureBasicOperators) {
+		shouldConfigureBasicOperators = configureBasicOperators;
+	}
+
 	/**
 	 * Holds all the shuntable operations
 	 */
@@ -107,10 +123,12 @@ public class ShuntingYard<E> {
 	public ShuntingYard() {
 		operators = new HashMap<>();
 
-		operators.put("+", Operator.ADD);
-		operators.put("-", Operator.SUBTRACT);
-		operators.put("*", Operator.MULTIPLY);
-		operators.put("/", Operator.DIVIDE);
+		if (shouldConfigureBasicOperators) {
+			operators.put("+", Operator.ADD);
+			operators.put("-", Operator.SUBTRACT);
+			operators.put("*", Operator.MULTIPLY);
+			operators.put("/", Operator.DIVIDE);
+		}
 	}
 
 	/**
@@ -129,13 +147,17 @@ public class ShuntingYard<E> {
 	/**
 	 * Add an operator to the list of shuntable operators
 	 * 
-	 * @param token
+	 * @param operatorToken
 	 *            The token representing the operator
 	 * @param precedence
 	 *            The precedence of the operator
 	 */
-	public void addOp(String token, IPrecedent precedence) {
-		operators.put(token, precedence);
+	public void addOp(String operatorToken, IPrecedent precedence) {
+		if (operatorToken == null) {
+			throw new NullPointerException("Operator must not be null");
+		}
+
+		operators.put(operatorToken, precedence);
 	}
 
 	private boolean isHigherPrec(String operator, String rightOperator) {
@@ -155,7 +177,14 @@ public class ShuntingYard<E> {
 	 */
 	public FunctionalList<E> postfix(FunctionalList<String> input,
 			Function<String, E> tokenTransformer) {
+		if (input == null) {
+			throw new NullPointerException("Input must not be null");
+		} else if (tokenTransformer == null) {
+			throw new NullPointerException("Transformer must not be null");
+		}
+
 		FunctionalList<E> output = new FunctionalList<>();
+
 		Deque<String> stack = new LinkedList<>();
 
 		input.forEach(new TokenShunter(output, stack, tokenTransformer));
@@ -174,6 +203,10 @@ public class ShuntingYard<E> {
 	 *            The token representing the operator
 	 */
 	public void removeOp(String tok) {
+		if (tok == null) {
+			throw new NullPointerException("Token must not be null");
+		}
+
 		operators.remove(tok);
 	}
 }

@@ -28,16 +28,24 @@ public class ListUtils {
 		}
 
 		@Override
-		public FunctionalList<String> apply(String opName,
-				String opRegex) {
-			if (StringUtils.containsOnly(token, opRegex)) {
+		public FunctionalList<String> apply(String operatorName,
+				String operatorRegex) {
+			if (operatorName == null) {
+				throw new NullPointerException(
+						"Operator name must not be null");
+			} else if (operatorRegex == null) {
+				throw new NullPointerException(
+						"Operator regex must not be null");
+			}
+
+			if (StringUtils.containsOnly(token, operatorRegex)) {
 				return new FunctionalList<>(token);
-			} else if (token.startsWith(opName)) {
-				return new FunctionalList<>(opName,
-						token.split(opRegex)[1]);
-			} else if (token.endsWith(opName)) {
-				return new FunctionalList<>(token.split(opRegex)[0],
-						opName);
+			} else if (token.startsWith(operatorName)) {
+				return new FunctionalList<>(operatorName,
+						token.split(operatorRegex)[1]);
+			} else if (token.endsWith(operatorName)) {
+				return new FunctionalList<>(token.split(operatorRegex)[0],
+						operatorName);
 			} else {
 				return new FunctionalList<>(token);
 			}
@@ -55,13 +63,22 @@ public class ListUtils {
 		@Override
 		public FunctionalList<String> apply(String operatorName,
 				String operatorRegex) {
+			if (operatorName == null) {
+				throw new NullPointerException(
+						"Operator name must not be null");
+			} else if (operatorRegex == null) {
+				throw new NullPointerException(
+						"Operator regex must not be null");
+			}
+
 			if (tokenToSplit.contains(operatorName)) {
 				if (StringUtils.containsOnly(tokenToSplit,
 						operatorRegex)) {
 					return new FunctionalList<>(tokenToSplit);
 				} else {
-					FunctionalList<String> splitTokens = new FunctionalList<>(
-							tokenToSplit.split(operatorRegex));
+					FunctionalList<String> splitTokens =
+							new FunctionalList<>(
+									tokenToSplit.split(operatorRegex));
 
 					FunctionalList<String> result = new FunctionalList<>();
 
@@ -161,16 +178,29 @@ public class ListUtils {
 	public static <E> FunctionalList<FunctionalList<E>> groupPartition(
 			FunctionalList<E> input, Function<E, Integer> elementCounter,
 			int numberPerPartition) {
+		if (input == null) {
+			throw new NullPointerException("Input list must not be null");
+		} else if (elementCounter == null) {
+			throw new NullPointerException("Counter must not be null");
+		} else if (numberPerPartition < 1
+				|| numberPerPartition > input.getSize()) {
+			throw new IllegalArgumentException(
+					"" + numberPerPartition + " is not a valid"
+							+ " partition size. Must be between 1 and "
+							+ input.getSize());
+		}
+
 		/*
 		 * List that holds our results
 		 */
-		FunctionalList<FunctionalList<E>> returnedList = new FunctionalList<>();
+		FunctionalList<FunctionalList<E>> returnedList =
+				new FunctionalList<>();
 
 		/*
 		 * List that holds current partition
 		 */
-		GenHolder<FunctionalList<E>> currentPartition = new GenHolder<>(
-				new FunctionalList<>());
+		GenHolder<FunctionalList<E>> currentPartition =
+				new GenHolder<>(new FunctionalList<>());
 		/*
 		 * List that holds elements rejected during current pass
 		 */
@@ -184,8 +214,10 @@ public class ListUtils {
 		/*
 		 * Run up to a certain number of passes
 		 */
-		for (int numberOfIterations = 0; numberOfIterations < MAX_NTRIESPART
-				&& !rejectedElements.isEmpty(); numberOfIterations++) {
+		for (int numberOfIterations =
+				0; numberOfIterations < MAX_NTRIESPART
+						&& !rejectedElements
+								.isEmpty(); numberOfIterations++) {
 			input.forEach(new GroupPartIteration<>(returnedList,
 					currentPartition, rejectedElements,
 					numberInCurrentPartition, numberPerPartition,
@@ -226,14 +258,22 @@ public class ListUtils {
 	public static FunctionalList<String> splitTokens(
 			FunctionalList<String> input,
 			Deque<Pair<String, String>> operators) {
-		GenHolder<FunctionalList<String>> ret = new GenHolder<>(input);
+		if (input == null) {
+			throw new NullPointerException("Input must not be null");
+		} else if (operators == null) {
+			throw new NullPointerException(
+					"Set of operators must not be null");
+		}
 
-		operators.forEach(
-				(op) -> ret.transform((oldRet) -> oldRet.flatMap((tok) -> {
-					return op.merge(new TokenSplitter(tok));
+		GenHolder<FunctionalList<String>> returnedList =
+				new GenHolder<>(input);
+
+		operators.forEach((operator) -> returnedList
+				.transform((oldReturn) -> oldReturn.flatMap((token) -> {
+					return operator.merge(new TokenSplitter(token));
 				})));
 
-		return ret.unwrap((list) -> list);
+		return returnedList.unwrap((list) -> list);
 	}
 
 	/**
@@ -241,20 +281,27 @@ public class ListUtils {
 	 * 
 	 * @param input
 	 *            The tokens to deaffix
-	 * @param ops
+	 * @param operators
 	 *            The affixes to remove
 	 * @return The tokens that have been deaffixed
 	 * 
 	 */
 	public static FunctionalList<String> deAffixTokens(
 			FunctionalList<String> input,
-			Deque<Pair<String, String>> ops) {
-		GenHolder<FunctionalList<String>> returnedList = new GenHolder<>(
-				input);
+			Deque<Pair<String, String>> operators) {
+		if (input == null) {
+			throw new NullPointerException("Input must not be null");
+		} else if (operators == null) {
+			throw new NullPointerException(
+					"Set of operators must not be null");
+		}
 
-		ops.forEach((op) -> returnedList
-				.transform((oldRet) -> oldRet.flatMap((tok) -> {
-					return op.merge(new TokenDeaffixer(tok));
+		GenHolder<FunctionalList<String>> returnedList =
+				new GenHolder<>(input);
+
+		operators.forEach((operator) -> returnedList
+				.transform((oldReturn) -> oldReturn.flatMap((token) -> {
+					return operator.merge(new TokenDeaffixer(token));
 				})));
 
 		return returnedList.unwrap((list) -> list);
@@ -269,6 +316,10 @@ public class ListUtils {
 	 * @return The collapsed string of tokens
 	 */
 	public static String collapseTokens(FunctionalList<String> input) {
+		if (input == null) {
+			throw new NullPointerException("Input must not be null");
+		}
+
 		return collapseTokens(input, "");
 	}
 
@@ -278,23 +329,29 @@ public class ListUtils {
 	 * 
 	 * @param input
 	 *            The list of tokens to collapse
-	 * @param sep
+	 * @param seperator
 	 *            The seperator to use for seperating tokens
 	 * @return The collapsed string of tokens
 	 */
 	public static String collapseTokens(FunctionalList<String> input,
-			String sep) {
+			String seperator) {
+		if (input == null) {
+			throw new NullPointerException("Input must not be null");
+		} else if (seperator == null) {
+			throw new NullPointerException("Seperator must not be null");
+		}
+
 		if (input.getSize() < 1) {
 			return "";
 		} else if (input.getSize() == 1) {
 			return input.first();
 		} else {
-			return input.reduceAux("",
-					(currentString, state) -> state + currentString + sep,
-					(strang) -> {
-						return strang.substring(0,
-								strang.length() - sep.length());
-					});
+			return input.reduceAux("", (currentString, state) -> {
+				return state + currentString + seperator;
+			}, (strang) -> {
+				return strang.substring(0,
+						strang.length() - seperator.length());
+			});
 		}
 	}
 }

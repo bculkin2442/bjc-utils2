@@ -51,6 +51,10 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 	 */
 	@Override
 	public void add(T element, Comparator<T> comparator) {
+		if (comparator == null) {
+			throw new NullPointerException("Comparator must not be null");
+		}
+
 		switch (comparator.compare(data, element)) {
 			case -1:
 				if (leftBranch == null) {
@@ -79,6 +83,10 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 	@Override
 	public <E> E collapse(Function<T, E> nodeCollapser,
 			BiFunction<E, E, E> branchCollapser) {
+		if (nodeCollapser == null || branchCollapser == null) {
+			throw new NullPointerException("Collapser must not be null");
+		}
+
 		E collapsedNode = nodeCollapser.apply(data);
 
 		if (leftBranch != null) {
@@ -112,6 +120,10 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 
 	@Override
 	public boolean contains(T element, Comparator<T> comparator) {
+		if (comparator == null) {
+			throw new NullPointerException("Comparator must not be null");
+		}
+
 		return directedWalk(currentElement -> {
 			switch (comparator.compare(element, currentElement)) {
 				case -1:
@@ -128,6 +140,10 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 
 	@Override
 	public void delete(T element, Comparator<T> comparator) {
+		if (comparator == null) {
+			throw new NullPointerException("Comparator must not be null");
+		}
+
 		directedWalk(currentElement -> {
 			switch (comparator.compare(data, element)) {
 				case -1:
@@ -145,6 +161,10 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 
 	@Override
 	public boolean directedWalk(DirectedWalkFunction<T> treeWalker) {
+		if (treeWalker == null) {
+			throw new NullPointerException("Walker must not be null");
+		}
+
 		switch (treeWalker.walk(data)) {
 			case SUCCESS:
 				return true;
@@ -162,6 +182,13 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 	@Override
 	public boolean forEach(TreeLinearizationMethod linearizationMethod,
 			Predicate<T> traversalPredicate) {
+		if (linearizationMethod == null) {
+			throw new NullPointerException(
+					"Linearization method must not be null");
+		} else if (traversalPredicate == null) {
+			throw new NullPointerException("Predicate must not be null");
+		}
+		
 		switch (linearizationMethod) {
 			case PREORDER:
 				return preorderTraverse(linearizationMethod,

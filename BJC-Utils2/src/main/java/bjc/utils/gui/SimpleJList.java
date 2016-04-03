@@ -22,6 +22,10 @@ public class SimpleJList {
 	 * @return A JList populated with the elements from ls.
 	 */
 	public static <E> JList<E> buildFromList(Iterable<E> listSource) {
+		if (listSource == null) {
+			throw new NullPointerException("Source must not be null");
+		}
+
 		return new JList<>(buildModel(listSource));
 	}
 
@@ -36,6 +40,10 @@ public class SimpleJList {
 	 * @return A list model populated with the elements from ls.
 	 */
 	public static <E> ListModel<E> buildModel(Iterable<E> listSource) {
+		if (listSource == null) {
+			throw new NullPointerException("Source must not be null");
+		}
+
 		DefaultListModel<E> defaultModel = new DefaultListModel<>();
 
 		listSource.forEach(defaultModel::addElement);

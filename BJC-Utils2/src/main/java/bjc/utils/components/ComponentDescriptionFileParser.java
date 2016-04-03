@@ -26,7 +26,7 @@ public class ComponentDescriptionFileParser {
 		reader.addPragma("name", (tokenizer, state) -> {
 			if (!tokenizer.hasMoreTokens()) {
 				throw new PragmaFormatException(
-						"Pragma name requires at least one argument");
+						"Pragma name requires one string argument");
 			} else {
 				state.setName(ListUtils.collapseTokens(
 						tokenizer.toList((strang) -> strang)));
@@ -36,7 +36,7 @@ public class ComponentDescriptionFileParser {
 		reader.addPragma("author", (tokenizer, state) -> {
 			if (!tokenizer.hasMoreTokens()) {
 				throw new PragmaFormatException(
-						"Pragma author requires at least one argument");
+						"Pragma author requires one string argument");
 			} else {
 				state.setAuthor(ListUtils.collapseTokens(
 						tokenizer.toList((strang) -> strang)));
@@ -46,7 +46,7 @@ public class ComponentDescriptionFileParser {
 		reader.addPragma("description", (tokenizer, state) -> {
 			if (!tokenizer.hasMoreTokens()) {
 				throw new PragmaFormatException(
-						"Pragma description requires at least one argument");
+						"Pragma description requires one string argument");
 			} else {
 				state.setDescription(ListUtils.collapseTokens(
 						tokenizer.toList((strang) -> strang)));
@@ -56,7 +56,7 @@ public class ComponentDescriptionFileParser {
 		reader.addPragma("version", (tokenizer, state) -> {
 			if (!tokenizer.hasMoreTokens()) {
 				throw new PragmaFormatException(
-						"Pragma name requires at least one argument");
+						"Pragma name requires one integer argument");
 			} else {
 				String token = tokenizer.nextToken();
 

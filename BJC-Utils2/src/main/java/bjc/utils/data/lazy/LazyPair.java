@@ -21,11 +21,14 @@ import bjc.utils.data.Pair;
  * @param <R>
  *            The type of value stored on the right side of the pair
  */
-public class LazyPair<L, R> implements IPair<L, R> {
+public class LazyPair<L, R> implements IPair<L, R>, ILazy {
 	/**
 	 * The backing store for this pair
 	 */
-	protected IHolder<IPair<L, R>> delegatePair;
+	protected IHolder<IPair<L, R>>	delegatePair;
+
+	private boolean					materialized	= false;
+	private boolean					pendingActions	= false;
 
 	/**
 	 * Create a new blank lazy pair
@@ -43,6 +46,8 @@ public class LazyPair<L, R> implements IPair<L, R> {
 	 *            The initial value for the right side of the pair
 	 */
 	public LazyPair(L leftValue, R rightValue) {
+		materialized = true;
+
 		delegatePair = new LazyHolder<>(new Pair<>(leftValue, rightValue));
 	}
 
@@ -56,6 +61,10 @@ public class LazyPair<L, R> implements IPair<L, R> {
 	 */
 	public LazyPair(Supplier<L> leftValueSource,
 			Supplier<R> rightValueSource) {
+		if (leftValueSource == null || rightValueSource == null) {
+			throw new NullPointerException("Sources must be non-null");
+		}
+
 		delegatePair = new LazyHolder<>(() -> {
 			return new Pair<>(leftValueSource.get(),
 					rightValueSource.get());
@@ -68,7 +77,11 @@ public class LazyPair<L, R> implements IPair<L, R> {
 	 * @param delegate
 	 *            The internal delegate for the pair
 	 */
-	private LazyPair(IHolder<IPair<L, R>> delegate) {
+	private LazyPair(IHolder<IPair<L, R>> delegate, boolean mater,
+			boolean pend) {
+		materialized = mater;
+		pendingActions = pend;
+
 		delegatePair = delegate;
 	}
 
@@ -81,10 +94,15 @@ public class LazyPair<L, R> implements IPair<L, R> {
 	@Override
 	public <L2, R2> IPair<L2, R2> apply(Function<L, L2> leftTransform,
 			Function<R, R2> rightTransform) {
-		IHolder<IPair<L2, R2>> newPair = delegatePair
-				.map((currentPair) -> currentPair.apply(leftTransform, rightTransform));
+		if (leftTransform == null || rightTransform == null) {
+			throw new NullPointerException("Transforms must be non-null");
+		}
 
-		return new LazyPair<>(newPair);
+		IHolder<IPair<L2, R2>> newPair =
+				delegatePair.map((currentPair) -> currentPair
+						.apply(leftTransform, rightTransform));
+
+		return new LazyPair<>(newPair, materialized, true);
 	}
 
 	/*
@@ -94,6 +112,12 @@ public class LazyPair<L, R> implements IPair<L, R> {
 	 */
 	@Override
 	public void doWith(BiConsumer<L, R> action) {
+		if (action == null) {
+			throw new NullPointerException("Action must be non-null");
+		}
+
+		pendingActions = true;
+
 		delegatePair.doWith((currentPair) -> {
 			currentPair.doWith(action);
 		});
@@ -106,6 +130,43 @@ public class LazyPair<L, R> implements IPair<L, R> {
 	 */
 	@Override
 	public <E> E merge(BiFunction<L, R, E> merger) {
-		return delegatePair.unwrap((currentPair) -> currentPair.merge(merger));
+		if (merger == null) {
+			throw new NullPointerException("Merger must be non-null");
+		}
+
+		materialized = true;
+		pendingActions = false;
+
+		return delegatePair
+				.unwrap((currentPair) -> currentPair.merge(merger));
+	}
+
+	@Override
+	public boolean isMaterialized() {
+		return materialized;
+	}
+
+	@Override
+	public boolean hasPendingActions() {
+		return pendingActions;
+	}
+
+	/*
+	 * Note: Materializing will also apply all currently pending actions
+	 */
+	@Override
+	public void materialize() {
+		merge((left, right) -> null);
+
+		materialized = true;
+		pendingActions = false;
+	}
+
+	@Override
+	public void applyPendingActions() {
+		merge((left, right) -> null);
+
+		materialized = true;
+		pendingActions = false;
 	}
 }

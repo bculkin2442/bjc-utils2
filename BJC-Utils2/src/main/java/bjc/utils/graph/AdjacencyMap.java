@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.InputMismatchException;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
@@ -30,36 +31,79 @@ public class AdjacencyMap<T> {
 	 * @return An adjacency map defined by the text
 	 */
 	public static AdjacencyMap<Integer> fromStream(InputStream stream) {
-		Scanner inputSource = new Scanner(stream);
-		inputSource.useDelimiter("\n");
-
-		// First, read in number of vertices
-		int numVertices = Integer.parseInt(inputSource.next());
-
-		Set<Integer> vertices = new HashSet<>();
-		IntStream.range(0, numVertices)
-				.forEach(element -> vertices.add(element));
+		if (stream == null) {
+			throw new NullPointerException(
+					"Input source must not be null");
+		}
 
 		// Create the adjacency map
-		AdjacencyMap<Integer> adjacencyMap = new AdjacencyMap<>(vertices);
+		AdjacencyMap<Integer> adjacencyMap;
 
-		GenHolder<Integer> row = new GenHolder<>(0);
+		try (Scanner inputSource = new Scanner(stream)) {
+			inputSource.useDelimiter("\n");
 
-		inputSource.forEachRemaining((strang) -> {
-			String[] parts = strang.split(" ");
-			int column = 0;
+			int numVertices;
 
-			for (String part : parts) {
-				adjacencyMap.setWeight(row.unwrap(number -> number),
-						column, Integer.parseInt(part));
+			String possibleVertices = inputSource.next();
 
-				column++;
+			try {
+				// First, read in number of vertices
+				numVertices = Integer.parseInt(possibleVertices);
+			} catch (NumberFormatException nfex) {
+				throw new InputMismatchException(
+						"The first line must contain the number of vertices. "
+								+ possibleVertices
+								+ " is not a valid number");
 			}
 
-			row.transform((number) -> number + 1);
-		});
+			if (numVertices <= 0) {
+				throw new InputMismatchException(
+						"The number of vertices must be greater than 0");
+			}
 
-		inputSource.close();
+			Set<Integer> vertices = new HashSet<>();
+
+			IntStream.range(0, numVertices)
+					.forEach(element -> vertices.add(element));
+
+			adjacencyMap = new AdjacencyMap<>(vertices);
+
+			GenHolder<Integer> row = new GenHolder<>(0);
+
+			inputSource.forEachRemaining((strang) -> {
+				String[] parts = strang.split(" ");
+
+				if (parts.length != numVertices) {
+					throw new InputMismatchException(
+							"Must specify a weight for all " + numVertices
+									+ " vertices");
+				}
+
+				int column = 0;
+
+				for (String part : parts) {
+					int columnWeight;
+
+					try {
+						columnWeight = Integer.parseInt(part);
+					} catch (NumberFormatException nfex) {
+						throw new InputMismatchException(
+								"" + part + " is not a valid weight.");
+					}
+
+					adjacencyMap.setWeight(row.unwrap(number -> number),
+							column, columnWeight);
+
+					column++;
+				}
+
+				row.transform((number) -> {
+					int newNumber = number + 1;
+
+					return newNumber;
+				});
+			});
+		}
 
 		return adjacencyMap;
 	}
@@ -76,6 +120,10 @@ public class AdjacencyMap<T> {
 	 *            The set of vertices to create a map from
 	 */
 	public AdjacencyMap(Set<T> vertices) {
+		if (vertices == null) {
+			throw new NullPointerException("Vertices must not be null");
+		}
+
 		vertices.forEach(vertex -> {
 			Map<T, Integer> vertexRow = new HashMap<>();
 
@@ -97,6 +145,7 @@ public class AdjacencyMap<T> {
 		adjacencyMap.entrySet().forEach(mapEntry -> {
 			Set<Entry<T, Integer>> entryVertices =
 					mapEntry.getValue().entrySet();
+
 			entryVertices.forEach(targetVertex -> {
 				int leftValue = targetVertex.getValue();
 				int rightValue = adjacencyMap.get(targetVertex.getKey())
@@ -122,6 +171,22 @@ public class AdjacencyMap<T> {
 	 *            The weight of the edge
 	 */
 	public void setWeight(T sourceVertex, T targetVertex, int edgeWeight) {
+		if (sourceVertex == null) {
+			throw new NullPointerException(
+					"Source vertex must not be null");
+		} else if (targetVertex == null) {
+			throw new NullPointerException(
+					"Target vertex must not be null");
+		}
+
+		if (!adjacencyMap.containsKey(sourceVertex)) {
+			throw new IllegalArgumentException("Source vertex "
+					+ sourceVertex + " isn't present in map");
+		} else if (!adjacencyMap.containsKey(targetVertex)) {
+			throw new IllegalArgumentException("Target vertex "
+					+ targetVertex + " isn't present in map");
+		}
+
 		adjacencyMap.get(sourceVertex).put(targetVertex, edgeWeight);
 	}
 
@@ -145,11 +210,16 @@ public class AdjacencyMap<T> {
 	/**
 	 * Convert an adjacency map back into a stream
 	 * 
-	 * @param outputSource
+	 * @param outputSink
 	 *            The stream to convert to
 	 */
-	public void toStream(OutputStream outputSource) {
-		PrintStream outputPrinter = new PrintStream(outputSource);
+	public void toStream(OutputStream outputSink) {
+		if (outputSink == null) {
+			throw new NullPointerException(
+					"Output source must not be null");
+		}
+
+		PrintStream outputPrinter = new PrintStream(outputSink);
 
 		adjacencyMap.entrySet().forEach(sourceVertex -> {
 			sourceVertex.getValue().entrySet()

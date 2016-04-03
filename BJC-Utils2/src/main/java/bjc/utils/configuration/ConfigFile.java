@@ -19,6 +19,7 @@ public class ConfigFile {
 
 	/**
 	 * A category in a configuration file
+	 * 
 	 * @author ben
 	 *
 	 */
@@ -32,6 +33,14 @@ public class ConfigFile {
 			children = new HashMap<>();
 		}
 
+		/**
+		 * Add a child category to this category
+		 * 
+		 * @param childName
+		 *            The name of the child
+		 * @param child
+		 *            The child category
+		 */
 		public void addChild(String childName, ConfigCategory child) {
 			children.put(childName, child);
 		}
@@ -64,14 +73,16 @@ public class ConfigFile {
 				continue;
 			} else if (SourceVersion.isName(currentTokens[0])
 					&& currentTokens[1].equals("{")) {
-				topLevelCategories.put(currentTokens[0], parseCategory(currentTokens[0], scn));
+				topLevelCategories.put(currentTokens[0],
+						parseCategory(currentTokens[0], scn));
 			}
 		}
 
 		return returnedFile;
 	}
 
-	private static ConfigCategory parseCategory(String categoryName,
+	private static ConfigCategory parseCategory(
+			@SuppressWarnings("unused") String categoryName,
 			Scanner inputSource) {
 		ConfigCategory category = new ConfigCategory();
 
@@ -119,7 +130,8 @@ public class ConfigFile {
 		return category;
 	}
 
-	private static void parseEntry(ConfigCategory category,
+	private static void parseEntry(
+			@SuppressWarnings("unused") ConfigCategory category,
 			String[] entryParts) {
 		String entry = String.join("", entryParts);
 
@@ -128,6 +140,7 @@ public class ConfigFile {
 		String[] expSpecifiers = expParts[0].split(":");
 
 		String expType = expSpecifiers[0];
+		@SuppressWarnings("unused")
 		String expName = expSpecifiers[1];
 
 		switch (expType) {

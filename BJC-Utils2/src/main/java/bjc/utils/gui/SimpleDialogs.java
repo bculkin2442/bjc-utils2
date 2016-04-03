@@ -38,9 +38,10 @@ public class SimpleDialogs {
 	 */
 	public static int getBoundedInt(Component parent, String title,
 			String prompt, int lowerBound, int upperBound) {
-		return getValue(parent, title, prompt, strang -> {
+		return getValue(parent, title, prompt, (strang) -> {
 			try {
 				int value = Integer.parseInt(strang);
+
 				return (value < upperBound) && (value > lowerBound);
 			} catch (NumberFormatException nfe) {
 				return false;
@@ -67,6 +68,15 @@ public class SimpleDialogs {
 	@SuppressWarnings("unchecked")
 	public static <E> E getChoice(Frame parent, String title,
 			String question, E... choices) {
+
+		if (parent == null) {
+			throw new NullPointerException("Parent must not be null");
+		} else if (title == null) {
+			throw new NullPointerException("Title must not be null");
+		} else if (question == null) {
+			throw new NullPointerException("Question must not be null");
+		}
+
 		JDialog mainDialog = new JDialog(parent, title, true);
 		mainDialog.setLayout(new VLayout(2));
 
@@ -134,6 +144,14 @@ public class SimpleDialogs {
 	 */
 	public static String getString(Component parent, String title,
 			String prompt) {
+		if (parent == null) {
+			throw new NullPointerException("Parent must not be null");
+		} else if (title == null) {
+			throw new NullPointerException("Title must not be null");
+		} else if (prompt == null) {
+			throw new NullPointerException("Prompt must not be null");
+		}
+
 		return JOptionPane.showInputDialog(parent, prompt, title,
 				JOptionPane.QUESTION_MESSAGE);
 	}
@@ -159,6 +177,12 @@ public class SimpleDialogs {
 	public static <E> E getValue(Component parent, String title,
 			String prompt, Predicate<String> inputValidator,
 			Function<String, E> inputTransformer) {
+		if (inputValidator == null) {
+			throw new NullPointerException("Validator must not be null");
+		} else if (inputTransformer == null) {
+			throw new NullPointerException("Transformer must not be null");
+		}
+
 		String inputString = getString(parent, title, prompt);
 
 		while (!inputValidator.test(inputString)) {
@@ -199,6 +223,14 @@ public class SimpleDialogs {
 	 */
 	public static boolean getYesNo(Component parent, String title,
 			String question) {
+		if (parent == null) {
+			throw new NullPointerException("Parent must not be null");
+		} else if (title == null) {
+			throw new NullPointerException("Title must not be null");
+		} else if (question == null) {
+			throw new NullPointerException("Question must not be null");
+		}
+
 		int dialogResult = JOptionPane.showConfirmDialog(parent, question,
 				title, JOptionPane.YES_NO_OPTION);
 
@@ -217,6 +249,15 @@ public class SimpleDialogs {
 	 */
 	public static void showError(Component parent, String title,
 			String errorMessage) {
+		if (parent == null) {
+			throw new NullPointerException("Parent must not be null");
+		} else if (title == null) {
+			throw new NullPointerException("Title must not be null");
+		} else if (errorMessage == null) {
+			throw new NullPointerException(
+					"Error message must not be null");
+		}
+		
 		JOptionPane.showMessageDialog(parent, errorMessage, title,
 				JOptionPane.ERROR_MESSAGE);
 	}

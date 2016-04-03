@@ -28,6 +28,12 @@ public class StringUtils {
 		 * group is then matched one or more times and the pattern matches
 		 * to the end of the string
 		 */
+		if (input == null) {
+			throw new NullPointerException("Input must not be null");
+		} else if (regex == null) {
+			throw new NullPointerException("Regex must not be null");
+		}
+
 		return input.matches("\\A(?:" + regex + ")+\\Z");
 	}
 

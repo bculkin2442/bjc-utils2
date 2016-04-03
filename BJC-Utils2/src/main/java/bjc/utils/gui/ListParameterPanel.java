@@ -68,24 +68,60 @@ public class ListParameterPanel<E> extends JPanel {
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		JPanel buttonPanel = new JPanel();
-		buttonPanel.setLayout(new HLayout(3));
 
-		JButton addParam = new JButton("Add...");
-		JButton editParam = new JButton("Edit...");
-		JButton removeParam = new JButton("Remove...");
+		int numButtons = 0;
 
-		addParam.addActionListener(
-				(event) -> ((DefaultListModel<E>) list.getModel())
-						.addElement(addAction.get()));
-		editParam.addActionListener(
-				(event) -> editAction.accept(list.getSelectedValue()));
-		removeParam.addActionListener((event) -> removeAction
-				.accept(((DefaultListModel<E>) list.getModel())
-						.remove(list.getSelectedIndex())));
+		if (addAction != null) {
+			numButtons++;
+		}
 
-		buttonPanel.add(addParam);
-		buttonPanel.add(editParam);
-		buttonPanel.add(removeParam);
+		if (editAction != null) {
+			numButtons++;
+		}
+
+		if (removeAction != null) {
+			numButtons++;
+		}
+
+		buttonPanel.setLayout(new HLayout(numButtons));
+
+		JButton addParam = null;
+
+		if (addAction != null) {
+			addParam = new JButton("Add...");
+			addParam.addActionListener(
+					(event) -> ((DefaultListModel<E>) list.getModel())
+							.addElement(addAction.get()));
+		}
+
+		JButton editParam = null;
+
+		if (editAction != null) {
+			editParam = new JButton("Edit...");
+			editParam.addActionListener(
+					(event) -> editAction.accept(list.getSelectedValue()));
+		}
+
+		JButton removeParam = null;
+
+		if (removeAction != null) {
+			removeParam = new JButton("Remove...");
+			removeParam.addActionListener((event) -> removeAction
+					.accept(((DefaultListModel<E>) list.getModel())
+							.remove(list.getSelectedIndex())));
+		}
+
+		if (addAction != null) {
+			buttonPanel.add(addParam);
+		}
+
+		if (editAction != null) {
+			buttonPanel.add(editParam);
+		}
+
+		if (removeAction != null) {
+			buttonPanel.add(removeParam);
+		}
 
 		add(list);
 		add(buttonPanel);

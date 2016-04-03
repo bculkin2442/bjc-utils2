@@ -17,10 +17,25 @@ import bjc.utils.funcdata.bst.ITreePart.TreeLinearizationMethod;
  *            The type of token in this AST
  */
 public class AST<T> {
-	private T		token;
+	/**
+	 * Indent a string n levels
+	 * 
+	 * @param builder
+	 *            The string to indent
+	 * @param levels
+	 *            The number of levels to indent
+	 */
+	protected static void indentNLevels(StringBuilder builder,
+			int levels) {
+		for (int i = 0; i <= levels; i++) {
+			builder.append("\t");
+		}
+	}
 
 	private AST<T>	left;
 	private AST<T>	right;
+
+	private T		token;
 
 	/**
 	 * Create a new leaf AST node
@@ -53,43 +68,6 @@ public class AST<T> {
 	}
 
 	/**
-	 * Traverse an AST
-	 * 
-	 * @param linearizationMethod
-	 *            The way to traverse the tree
-	 * @param action
-	 *            The function to call on each traversed element
-	 */
-	public void traverse(TreeLinearizationMethod linearizationMethod,
-			Consumer<T> action) {
-		if (left != null && right != null) {
-			switch (linearizationMethod) {
-				case INORDER:
-					left.traverse(linearizationMethod, action);
-					action.accept(token);
-					right.traverse(linearizationMethod, action);
-					break;
-				case POSTORDER:
-					left.traverse(linearizationMethod, action);
-					right.traverse(linearizationMethod, action);
-					action.accept(token);
-					break;
-				case PREORDER:
-					action.accept(token);
-					left.traverse(linearizationMethod, action);
-					right.traverse(linearizationMethod, action);
-					break;
-				default:
-					throw new IllegalArgumentException(
-							"Got a invalid tree linearizer "
-									+ linearizationMethod + ". WAT");
-			}
-		} else {
-			action.accept(token);
-		}
-	}
-
-	/**
 	 * Collapse this tree into a single node
 	 * 
 	 * @param <E>
@@ -104,11 +82,44 @@ public class AST<T> {
 	 *            The function for transforming the result
 	 * @return The collapsed value of the tree
 	 */
+	@SuppressWarnings("unchecked")
 	public <E, T2> E collapse(Function<T, T2> tokenTransformer,
 			Function<T, BinaryOperator<T2>> nodeTransformer,
 			Function<T2, E> resultTransformer) {
-		return resultTransformer.apply(
-				internalCollapse(tokenTransformer, nodeTransformer));
+		if (tokenTransformer == null) {
+			throw new NullPointerException(
+					"Token transformer must not be null");
+		} else if (nodeTransformer == null) {
+			throw new NullPointerException(
+					"Node transformer must not be null");
+		}
+
+		if (resultTransformer != null) {
+			return resultTransformer.apply(
+					internalCollapse(tokenTransformer, nodeTransformer));
+		} else {
+			// This is valid because if the user passes null as the last
+			// parameter, E will be inferred as Object, but will actually
+			// be T2
+			return (E) internalCollapse(tokenTransformer, nodeTransformer);
+		}
+	}
+
+	/**
+	 * Expand the nodes in an AST
+	 * 
+	 * @param expander
+	 *            The function to use for expanding nodes
+	 * @return The expanded AST
+	 */
+	public AST<T> expand(Function<T, AST<T>> expander) {
+		if (expander == null) {
+			throw new NullPointerException("Expander must not be null");
+		}
+
+		return collapse(expander, (operator) -> (leftAST, rightAST) -> {
+			return new AST<>(operator, leftAST, rightAST);
+		}, null);
 	}
 
 	/*
@@ -129,6 +140,7 @@ public class AST<T> {
 			}
 
 			T2 rightCollapsed;
+
 			if (right == null) {
 				rightCollapsed = null;
 			} else {
@@ -139,15 +151,6 @@ public class AST<T> {
 			return nodeTransformer.apply(token).apply(leftCollapsed,
 					rightCollapsed);
 		}
-	}
-
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-
-		internalToString(builder, -1);
-
-		return builder.toString();
 	}
 
 	/**
@@ -187,21 +190,6 @@ public class AST<T> {
 	}
 
 	/**
-	 * Indent a string n levels
-	 * 
-	 * @param builder
-	 *            The string to indent
-	 * @param levels
-	 *            The number of levels to indent
-	 */
-	protected static void indentNLevels(StringBuilder builder,
-			int levels) {
-		for (int i = 0; i <= levels; i++) {
-			builder.append("\t");
-		}
-	}
-
-	/**
 	 * Execute a transform on selective nodes of the tree
 	 * 
 	 * @param transformerPredicate
@@ -211,6 +199,12 @@ public class AST<T> {
 	 */
 	public void selectiveTransform(Predicate<T> transformerPredicate,
 			UnaryOperator<T> transformer) {
+		if (transformerPredicate == null) {
+			throw new NullPointerException("Predicate must not be null");
+		} else if (transformer == null) {
+			throw new NullPointerException("Transformer must not be null");
+		}
+
 		if (transformerPredicate.test(token)) {
 			token = transformer.apply(token);
 		}
@@ -224,6 +218,15 @@ public class AST<T> {
 		}
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+
+		internalToString(builder, -1);
+
+		return builder.toString();
+	}
+
 	/**
 	 * Transmute the tokens in an AST into a different sort of token
 	 * 
@@ -235,6 +238,10 @@ public class AST<T> {
 	 * @return The AST with transformed tokens
 	 */
 	public <E> AST<E> transmuteAST(Function<T, E> tokenTransformer) {
+		if (tokenTransformer == null) {
+			throw new NullPointerException("Transformer must not be null");
+		}
+
 		AST<E> leftBranch = null;
 		AST<E> rightBranch = null;
 
@@ -248,5 +255,49 @@ public class AST<T> {
 
 		return new AST<>(tokenTransformer.apply(token), leftBranch,
 				rightBranch);
+	}
+
+	/**
+	 * Traverse an AST
+	 * 
+	 * @param linearizationMethod
+	 *            The way to traverse the tree
+	 * @param action
+	 *            The function to call on each traversed element
+	 */
+	public void traverse(TreeLinearizationMethod linearizationMethod,
+			Consumer<T> action) {
+		if (linearizationMethod == null) {
+			throw new NullPointerException(
+					"Linearization method must not be null");
+		} else if (action == null) {
+			throw new NullPointerException("Action must not be null");
+		}
+
+		if (left != null && right != null) {
+			switch (linearizationMethod) {
+				case INORDER:
+					left.traverse(linearizationMethod, action);
+					action.accept(token);
+					right.traverse(linearizationMethod, action);
+					break;
+				case POSTORDER:
+					left.traverse(linearizationMethod, action);
+					right.traverse(linearizationMethod, action);
+					action.accept(token);
+					break;
+				case PREORDER:
+					action.accept(token);
+					left.traverse(linearizationMethod, action);
+					right.traverse(linearizationMethod, action);
+					break;
+				default:
+					throw new IllegalArgumentException(
+							"Got a invalid tree linearizer "
+									+ linearizationMethod + ". WAT");
+			}
+		} else {
+			action.accept(token);
+		}
 	}
 }

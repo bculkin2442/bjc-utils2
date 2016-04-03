@@ -22,5 +22,4 @@ public class SimpleTitledBorder extends TitledBorder {
 	public SimpleTitledBorder(String title) {
 		super(new EtchedBorder(), title);
 	}
-
 }

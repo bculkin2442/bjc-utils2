@@ -53,9 +53,7 @@ public class Graph<T> {
 		if (sourceVertex == null) {
 			throw new NullPointerException(
 					"The source vertex cannot be null");
-		}
-
-		if (targetVertex == null) {
+		} else if (targetVertex == null) {
 			throw new NullPointerException(
 					"The target vertex cannot be null");
 		}
@@ -79,19 +77,25 @@ public class Graph<T> {
 	 * Execute an action for all edges of a specific vertex matching
 	 * conditions
 	 * 
-	 * @param source
+	 * @param sourceVertex
 	 *            The vertex to test edges for
 	 * @param edgeMatcher
 	 *            The conditions an edge must match
 	 * @param edgeAction
 	 *            The action to execute for matching edges
 	 */
-	public void forAllEdgesMatchingAt(T source,
+	public void forAllEdgesMatchingAt(T sourceVertex,
 			BiPredicate<T, Integer> edgeMatcher,
 			BiConsumer<T, Integer> edgeAction) {
-		getEdges(source).forEach((tgt, weight) -> {
-			if (edgeMatcher.test(tgt, weight)) {
-				edgeAction.accept(tgt, weight);
+		if (edgeMatcher == null) {
+			throw new NullPointerException("Matcher must not be null");
+		} else if (edgeAction == null) {
+			throw new NullPointerException("Action must not be null");
+		}
+
+		getEdges(sourceVertex).forEach((targetVertex, vertexWeight) -> {
+			if (edgeMatcher.test(targetVertex, vertexWeight)) {
+				edgeAction.accept(targetVertex, vertexWeight);
 			}
 		});
 	}
@@ -107,6 +111,9 @@ public class Graph<T> {
 		// Can't find edges for a null source
 		if (source == null) {
 			throw new NullPointerException("The source cannot be null.");
+		} else if (!backingGraph.containsKey(source)) {
+			throw new IllegalArgumentException(
+					"Vertex " + source + " is not in graph");
 		}
 
 		return Collections.unmodifiableMap(backingGraph.get(source));
@@ -213,8 +220,7 @@ public class Graph<T> {
 		if (sourceVertex == null) {
 			throw new NullPointerException(
 					"The source vertex cannot be null");
-		}
-		if (targetVertex == null) {
+		} else if (targetVertex == null) {
 			throw new NullPointerException(
 					"The target vertex cannot be null");
 		}

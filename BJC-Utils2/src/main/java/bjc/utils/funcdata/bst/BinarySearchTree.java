@@ -39,6 +39,10 @@ public class BinarySearchTree<T> {
 	 *            The thing to use for comparing elements
 	 */
 	public BinarySearchTree(Comparator<T> cmp) {
+		if (cmp == null) {
+			throw new NullPointerException("Comparator must not be null");
+		}
+
 		elementCount = 0;
 		comparator = cmp;
 	}
@@ -169,6 +173,13 @@ public class BinarySearchTree<T> {
 	 */
 	public void traverse(TreeLinearizationMethod linearizationMethod,
 			Predicate<T> traversalPredicate) {
+		if (linearizationMethod == null) {
+			throw new NullPointerException(
+					"Linearization method must not be null");
+		} else if (traversalPredicate == null) {
+			throw new NullPointerException("Predicate must not be nulls");
+		}
+		
 		rootElement.forEach(linearizationMethod, traversalPredicate);
 	}
 

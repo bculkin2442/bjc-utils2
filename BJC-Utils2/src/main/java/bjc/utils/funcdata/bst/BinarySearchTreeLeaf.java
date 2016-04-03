@@ -55,6 +55,10 @@ public class BinarySearchTreeLeaf<T> implements ITreePart<T> {
 	@Override
 	public <E> E collapse(Function<T, E> leafTransformer,
 			BiFunction<E, E, E> branchCollapser) {
+		if (leafTransformer == null) {
+			throw new NullPointerException("Transformer must not be null");
+		}
+
 		return leafTransformer.apply(data);
 	}
 
@@ -101,6 +105,10 @@ public class BinarySearchTreeLeaf<T> implements ITreePart<T> {
 	 */
 	@Override
 	public boolean directedWalk(DirectedWalkFunction<T> treeWalker) {
+		if (treeWalker == null) {
+			throw new NullPointerException("Tree walker must not be null");
+		}
+
 		switch (treeWalker.walk(data)) {
 			case SUCCESS:
 				return true;
@@ -119,6 +127,10 @@ public class BinarySearchTreeLeaf<T> implements ITreePart<T> {
 	@Override
 	public boolean forEach(TreeLinearizationMethod linearizationMethod,
 			Predicate<T> traversalPredicate) {
+		if (traversalPredicate == null) {
+			throw new NullPointerException("Predicate must not be null");
+		}
+
 		return traversalPredicate.test(data);
 	}
 }

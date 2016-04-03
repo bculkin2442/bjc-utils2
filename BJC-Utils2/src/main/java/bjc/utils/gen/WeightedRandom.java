@@ -44,6 +44,11 @@ public class WeightedRandom<E> {
 		probabilities = new FunctionalList<>();
 		results = new FunctionalList<>();
 
+		if (src == null) {
+			throw new NullPointerException(
+					"Source of randomness must not be null");
+		}
+
 		source = src;
 	}
 

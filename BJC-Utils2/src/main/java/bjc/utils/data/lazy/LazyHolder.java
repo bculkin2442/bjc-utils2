@@ -19,7 +19,7 @@ import bjc.utils.funcdata.FunctionalList;
  * @param <T>
  *            The type of the data being held
  */
-public class LazyHolder<T> implements IHolder<T> {
+public class LazyHolder<T> implements IHolder<T>, ILazy {
 	private final class LazyHolderSupplier<NewT>
 			implements Supplier<NewT> {
 		private FunctionalList<Function<T, T>>	pendingActions;
@@ -70,8 +70,11 @@ public class LazyHolder<T> implements IHolder<T> {
 	 *            The supplier for a value when it is neededs
 	 */
 	public LazyHolder(Supplier<T> source) {
-		heldSource = source;
+		if (source == null) {
+			throw new NullPointerException("Source must be non-null");
+		}
 
+		heldSource = source;
 		heldValue = null;
 	}
 
@@ -87,6 +90,10 @@ public class LazyHolder<T> implements IHolder<T> {
 
 	@Override
 	public void doWith(Consumer<T> action) {
+		if (action == null) {
+			throw new NullPointerException("Action must be non-null");
+		}
+
 		transform((value) -> {
 			// Do the action with the value
 			action.accept(value);
@@ -98,6 +105,10 @@ public class LazyHolder<T> implements IHolder<T> {
 
 	@Override
 	public <NewT> IHolder<NewT> map(Function<T, NewT> transform) {
+		if (transform == null) {
+			throw new NullPointerException("Transform must be non-null");
+		}
+
 		// Don't actually map until we need to
 		return new LazyHolder<>(
 				new LazyHolderSupplier<>(actions, transform));
@@ -105,6 +116,10 @@ public class LazyHolder<T> implements IHolder<T> {
 
 	@Override
 	public IHolder<T> transform(Function<T, T> transform) {
+		if (transform == null) {
+			throw new NullPointerException("Transform must be non-null");
+		}
+
 		// Queue the transform until we need to apply it
 		actions.add(transform);
 
@@ -113,6 +128,10 @@ public class LazyHolder<T> implements IHolder<T> {
 
 	@Override
 	public <E> E unwrap(Function<T, E> unwrapper) {
+		if (unwrapper == null) {
+			throw new NullPointerException("Unwrapper must be null");
+		}
+
 		// Actualize ourselves
 		if (heldValue == null) {
 			heldValue = heldSource.get();
@@ -124,4 +143,36 @@ public class LazyHolder<T> implements IHolder<T> {
 		return unwrapper.apply(heldValue);
 	}
 
+	@Override
+	public boolean isMaterialized() {
+		if (heldSource != null) {
+			// We're materialized if a value exists
+			return heldValue == null;
+		} else {
+			// We're materialized by default
+			return true;
+		}
+	}
+
+	@Override
+	public boolean hasPendingActions() {
+		return actions.isEmpty();
+	}
+
+	@Override
+	public void materialize() {
+		// Only materialize if we haven't already
+		if (!isMaterialized()) {
+			heldValue = heldSource.get();
+		}
+	}
+
+	@Override
+	public void applyPendingActions() {
+		materialize();
+		
+		actions.forEach((action) -> {
+			heldValue = action.apply(heldValue);
+		});
+	}
 }

@@ -2,10 +2,12 @@ package bjc.utils.parserutils;
 
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 import bjc.utils.data.GenHolder;
+import bjc.utils.data.IPair;
 import bjc.utils.data.Pair;
 import bjc.utils.funcdata.FunctionalList;
 
@@ -16,6 +18,89 @@ import bjc.utils.funcdata.FunctionalList;
  *
  */
 public class TreeConstructor {
+	private static final class TokenTransformer<T> implements Consumer<T> {
+		private final class OperatorHandler implements
+				Function<IPair<Deque<AST<T>>, AST<T>>, IPair<Deque<AST<T>>, AST<T>>> {
+			private T element;
+
+			public OperatorHandler(T element) {
+				this.element = element;
+			}
+
+			@Override
+			public IPair<Deque<AST<T>>, AST<T>>
+					apply(IPair<Deque<AST<T>>, AST<T>> pair) {
+				Deque<AST<T>> queuedASTs =
+						pair.merge((queue, currentAST) -> queue);
+
+				AST<T> mergedAST = pair.merge((queue, currentAST) -> {
+					AST<T> newAST;
+
+					if (isSpecialOperator.test(element)) {
+						newAST = handleSpecialOperator.apply(queue);
+					} else {
+						if (queue.size() < 2) {
+							throw new IllegalStateException(
+									"Attempted to parse binary operator without enough operands");
+						}
+
+						AST<T> rightAST = queue.pop();
+						AST<T> leftAST = queue.pop();
+
+						newAST = new AST<>(element, leftAST, rightAST);
+					}
+
+					queue.push(newAST);
+					return newAST;
+				});
+
+				Pair<Deque<AST<T>>, AST<T>> newPair =
+						new Pair<>(queuedASTs, mergedAST);
+
+				return newPair;
+			}
+		}
+
+		private GenHolder<IPair<Deque<AST<T>>, AST<T>>>	initialState;
+		private Predicate<T>							operatorPredicate;
+		private Predicate<T>							isSpecialOperator;
+		private Function<Deque<AST<T>>, AST<T>>			handleSpecialOperator;
+
+		public TokenTransformer(
+				GenHolder<IPair<Deque<AST<T>>, AST<T>>> initialState,
+				Predicate<T> operatorPredicate,
+				Predicate<T> isSpecialOperator,
+				Function<Deque<AST<T>>, AST<T>> handleSpecialOperator) {
+			this.initialState = initialState;
+			this.operatorPredicate = operatorPredicate;
+			this.isSpecialOperator = isSpecialOperator;
+			this.handleSpecialOperator = handleSpecialOperator;
+		}
+
+		@Override
+		public void accept(T element) {
+			if (operatorPredicate.test(element)) {
+				initialState.transform(new OperatorHandler(element));
+			} else {
+				AST<T> newAST = new AST<>(element);
+
+				initialState.doWith((pair) -> {
+					pair.doWith((queue, currentAST) -> {
+						queue.push(newAST);
+					});
+				});
+
+				initialState.transform((pair) -> {
+					return pair.apply((Deque<AST<T>> queue) -> {
+						return queue;
+					}, (AST<T> currentAST) -> {
+						return newAST;
+					});
+				});
+			}
+		}
+	}
+
 	/**
 	 * Construct a tree from a list of tokens in postfix notation
 	 * 
@@ -29,10 +114,6 @@ public class TreeConstructor {
 	 *            The predicate to use to determine if something is a
 	 *            operator
 	 * @return A AST from the expression
-	 * 
-	 * @deprecated Use
-	 *             {@link TreeConstructor#constructTree(FunctionalList, Predicate, Predicate, Function)}
-	 *             instead
 	 */
 	public static <T> AST<T> constructTree(FunctionalList<T> tokens,
 			Predicate<T> operatorPredicate) {
@@ -43,7 +124,8 @@ public class TreeConstructor {
 	/**
 	 * Construct a tree from a list of tokens in postfix notation
 	 * 
-	 * Only binary operators are accepted.
+	 * Only binary operators are accepted by default. Use the last two
+	 * parameters to handle non-binary operators
 	 * 
 	 * @param <T>
 	 *            The elements of the parse tree
@@ -66,52 +148,25 @@ public class TreeConstructor {
 	public static <T> AST<T> constructTree(FunctionalList<T> tokens,
 			Predicate<T> operatorPredicate, Predicate<T> isSpecialOperator,
 			Function<Deque<AST<T>>, AST<T>> handleSpecialOperator) {
-		GenHolder<Pair<Deque<AST<T>>, AST<T>>> initialState =
+		if (tokens == null) {
+			throw new NullPointerException("Tokens must not be null");
+		} else if (operatorPredicate == null) {
+			throw new NullPointerException(
+					"Operator predicate must not be null");
+		} else if (isSpecialOperator == null) {
+			throw new NullPointerException(
+					"Special operator determiner must not be null");
+		}
+
+		GenHolder<IPair<Deque<AST<T>>, AST<T>>> initialState =
 				new GenHolder<>(new Pair<>(new LinkedList<>(), null));
 
-		tokens.forEach((element) -> {
-			if (operatorPredicate.test(element)) {
-				initialState.transform((pair) -> {
-					Deque<AST<T>> queuedASTs =
-							pair.merge((queue, currentAST) -> queue);
+		tokens.forEach(
+				new TokenTransformer<>(initialState, operatorPredicate,
+						isSpecialOperator, handleSpecialOperator));
 
-					AST<T> mergedAST = pair.merge((queue, currentAST) -> {
-						AST<T> newAST;
-
-						if (isSpecialOperator.test(element)) {
-							newAST = handleSpecialOperator.apply(queue);
-						} else {
-							AST<T> rightAST = queue.pop();
-							AST<T> leftAST = queue.pop();
-
-							newAST = new AST<>(element, leftAST, rightAST);
-						}
-
-						queue.push(newAST);
-						return newAST;
-					});
-
-					Pair<Deque<AST<T>>, AST<T>> newPair =
-							new Pair<>(queuedASTs, mergedAST);
-
-					return newPair;
-				});
-			} else {
-				AST<T> newAST = new AST<>(element);
-
-				initialState.doWith(
-						(pair) -> pair.doWith((queue, currentAST) -> {
-							queue.push(newAST);
-						}));
-
-				initialState.transform((pair) -> {
-					return (Pair<Deque<AST<T>>, AST<T>>) pair.apply(
-							(queue) -> queue, (currentAST) -> newAST);
-				});
-			}
+		return initialState.unwrap((pair) -> {
+			return pair.merge((queue, currentAST) -> currentAST);
 		});
-
-		return initialState.unwrap(
-				(pair) -> pair.merge((queue, currentAST) -> currentAST));
 	}
 }

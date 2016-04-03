@@ -2,6 +2,7 @@ package bjc.utils.parserutils;
 
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.function.BiConsumer;
@@ -58,6 +59,13 @@ public class RuleBasedConfigReader<E> {
 	 */
 	public void addPragma(String pragmaName,
 			BiConsumer<FunctionalStringTokenizer, E> pragmaAction) {
+		if (pragmaName == null) {
+			throw new NullPointerException("Pragma name must not be null");
+		} else if (pragmaAction == null) {
+			throw new NullPointerException(
+					"Pragma action must not be null");
+		}
+
 		pragmas.put(pragmaName, pragmaAction);
 	}
 
@@ -71,41 +79,76 @@ public class RuleBasedConfigReader<E> {
 	 * @return The final state of the reader
 	 */
 	public E fromStream(InputStream inputStream, E initialState) {
-		Scanner inputSource = new Scanner(inputStream);
+		if (inputStream == null) {
+			throw new NullPointerException(
+					"Input stream must not be null");
+		}
 
-		E state = initialState;
+		E state;
 
-		while (inputSource.hasNextLine()) {
-			String line = inputSource.nextLine();
+		try (Scanner inputSource = new Scanner(inputStream)) {
 
-			if (line.equals("")) {
-				endRule.accept(state);
-				continue;
-			} else if (line.startsWith("\t")) {
-				continueRule.accept(new FunctionalStringTokenizer(
-						line.substring(1), " "), state);
-			} else {
-				FunctionalStringTokenizer tokenizer =
-						new FunctionalStringTokenizer(line, " ");
+			state = initialState;
+			boolean ruleOpen = false;
+			while (inputSource.hasNextLine()) {
+				String line = inputSource.nextLine();
 
-				String nextToken = tokenizer.nextToken();
-				if (nextToken.equals("#")) {
-					// Do nothing, this is a comment
-				} else if (nextToken.equals("pragma")) {
-					String token = tokenizer.nextToken();
+				if (line.equals("")) {
+					if (ruleOpen == false) {
+						// Ignore blank line without an open rule
+					}
 
-					pragmas.getOrDefault(token, (tokenzer, stat) -> {
-						throw new UnknownPragmaException(
-								"Unknown pragma " + token);
-					}).accept(tokenizer, state);
+					if (endRule == null) {
+						// Nothing happens on rule end
+					} else {
+						endRule.accept(state);
+					}
+
+					continue;
+				} else if (line.startsWith("\t")) {
+					if (ruleOpen == false) {
+						throw new InputMismatchException(
+								"Can't continue rule with no rule currently open");
+					}
+
+					if (continueRule == null) {
+						throw new InputMismatchException(
+								"Attempted to continue rule with rule continuation disabled."
+										+ " Check for extraneous tabs");
+					}
+
+					continueRule.accept(new FunctionalStringTokenizer(
+							line.substring(1), " "), state);
 				} else {
-					startRule.accept(tokenizer,
-							new Pair<>(nextToken, state));
+					FunctionalStringTokenizer tokenizer =
+							new FunctionalStringTokenizer(line, " ");
+
+					String nextToken = tokenizer.nextToken();
+
+					if (nextToken.equals("#") || nextToken.equals("//")) {
+						// Do nothing, this is a comment
+					} else if (nextToken.equals("pragma")) {
+						String token = tokenizer.nextToken();
+
+						pragmas.getOrDefault(token, (tokenzer, stat) -> {
+							throw new UnknownPragmaException(
+									"Unknown pragma " + token);
+						}).accept(tokenizer, state);
+					} else {
+						if (ruleOpen == true) {
+							throw new InputMismatchException(
+									"Attempted to open a"
+											+ " rule with a rule already open. Make sure rules are"
+											+ " seperated by blank lines");
+						}
+
+						startRule.accept(tokenizer,
+								new Pair<>(nextToken, state));
+						ruleOpen = true;
+					}
 				}
 			}
 		}
-
-		inputSource.close();
 
 		return state;
 	}
@@ -139,6 +182,11 @@ public class RuleBasedConfigReader<E> {
 	 */
 	public void setStartRule(
 			BiConsumer<FunctionalStringTokenizer, Pair<String, E>> startRule) {
+		if (startRule == null) {
+			throw new NullPointerException(
+					"Action on rule start must be non-null");
+		}
+
 		this.startRule = startRule;
 	}
 }
