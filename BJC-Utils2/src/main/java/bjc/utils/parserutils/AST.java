@@ -302,4 +302,55 @@ public class AST<T> {
 			action.accept(token);
 		}
 	}
+
+	/**
+	 * Apply an action to the head node of this AST
+	 * 
+	 * @param <E>
+	 *            The type of the returned value
+	 * @param headAction
+	 *            The action to apply to the head node
+	 * @return The result of applying the action
+	 */
+	public <E> E applyToHead(Function<T, E> headAction) {
+		if (headAction == null) {
+			throw new NullPointerException("Action must not be null");
+		}
+
+		return headAction.apply(token);
+	}
+
+	/**
+	 * Apply an action to the left side of this AST
+	 * 
+	 * @param <E>
+	 *            The type of the returned value
+	 * @param leftAction
+	 *            The action to apply to the left side
+	 * @return The result of applying the action
+	 */
+	public <E> E applyToLeft(Function<AST<T>, E> leftAction) {
+		if (leftAction == null) {
+			throw new NullPointerException("Action must not be null");
+		}
+
+		return leftAction.apply(left);
+	}
+
+	/**
+	 * Apply an action to the right side of this AST
+	 * 
+	 * @param <E>
+	 *            The type of the returned value
+	 * @param rightAction
+	 *            The action to apply to the right side
+	 * @return The result of applying the action
+	 */
+	public <E> E applyToRight(Function<AST<T>, E> rightAction) {
+		if (rightAction == null) {
+			throw new NullPointerException("Action must not be null");
+		}
+
+		return rightAction.apply(right);
+	}
 }

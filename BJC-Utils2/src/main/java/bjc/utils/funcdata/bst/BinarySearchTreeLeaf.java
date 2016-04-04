@@ -112,6 +112,10 @@ public class BinarySearchTreeLeaf<T> implements ITreePart<T> {
 		switch (treeWalker.walk(data)) {
 			case SUCCESS:
 				return true;
+			// We don't have any children to care about
+			case FAILURE:
+			case LEFT:
+			case RIGHT:
 			default:
 				return false;
 		}

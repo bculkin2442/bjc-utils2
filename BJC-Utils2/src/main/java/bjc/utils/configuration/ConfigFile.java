@@ -78,6 +78,8 @@ public class ConfigFile {
 			}
 		}
 
+		scn.close();
+		
 		return returnedFile;
 	}
 
