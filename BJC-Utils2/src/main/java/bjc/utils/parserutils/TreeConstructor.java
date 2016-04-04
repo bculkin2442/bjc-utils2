@@ -41,7 +41,11 @@ public class TreeConstructor {
 					} else {
 						if (queue.size() < 2) {
 							throw new IllegalStateException(
-									"Attempted to parse binary operator without enough operands");
+									"Attempted to parse binary operator without enough operands.\n"
+											+ "Problem operator is "
+											+ element
+											+ "\nPossible operand is: \n\t"
+											+ queue.peek());
 						}
 
 						AST<T> rightAST = queue.pop();

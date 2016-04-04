@@ -32,6 +32,16 @@ public class FunctionalMap<K, V> {
 		public V2 get(K key) {
 			return transformer.apply(mapToTransform.get(key));
 		}
+
+		@Override
+		public boolean containsKey(K key) {
+			return mapToTransform.containsKey(key);
+		}
+
+		@Override
+		public String toString() {
+			return mapToTransform.toString();
+		}
 	}
 
 	private Map<K, V> wrappedMap;
@@ -108,7 +118,7 @@ public class FunctionalMap<K, V> {
 			throw new NullPointerException("Key must not be null");
 		}
 
-		if (wrappedMap.containsKey(wrappedMap)) {
+		if (wrappedMap.containsKey(key)) {
 			return wrappedMap.get(key);
 		} else {
 			throw new IllegalArgumentException(
@@ -147,5 +157,10 @@ public class FunctionalMap<K, V> {
 	 */
 	public boolean containsKey(K key) {
 		return wrappedMap.containsKey(key);
+	}
+
+	@Override
+	public String toString() {
+		return wrappedMap.toString();
 	}
 }
