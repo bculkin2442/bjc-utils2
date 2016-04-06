@@ -118,12 +118,12 @@ public class FunctionalMap<K, V> {
 			throw new NullPointerException("Key must not be null");
 		}
 
-		if (wrappedMap.containsKey(key)) {
-			return wrappedMap.get(key);
-		} else {
+		if (!wrappedMap.containsKey(key)) {
 			throw new IllegalArgumentException(
 					"Key " + key + " is not present in the map");
 		}
+
+		return wrappedMap.get(key);
 	}
 
 	/**
@@ -139,8 +139,8 @@ public class FunctionalMap<K, V> {
 	 *            The function to use to transform values
 	 * @return The map where each value will be transformed after lookup
 	 */
-	public <V2> FunctionalMap<K, V2>
-			mapValues(Function<V, V2> transformer) {
+	public <V2> FunctionalMap<K, V2> mapValues(
+			Function<V, V2> transformer) {
 		if (transformer == null) {
 			throw new NullPointerException("Transformer must not be null");
 		}

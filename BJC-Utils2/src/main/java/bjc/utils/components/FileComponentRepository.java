@@ -92,7 +92,7 @@ public class FileComponentRepository<E extends IDescribedComponent>
 					CLASS_LOGGER
 							.warn("Error found reading component from file "
 									+ componentFile.toString()
-									+ ". This component will not be loaded");
+									+ ". This component will not be loaded", ex);
 				}
 
 			}

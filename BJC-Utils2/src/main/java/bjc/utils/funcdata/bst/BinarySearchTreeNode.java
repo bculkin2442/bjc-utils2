@@ -90,8 +90,8 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 		E collapsedNode = nodeCollapser.apply(data);
 
 		if (leftBranch != null) {
-			E collapsedLeftBranch =
-					leftBranch.collapse(nodeCollapser, branchCollapser);
+			E collapsedLeftBranch = leftBranch.collapse(nodeCollapser,
+					branchCollapser);
 			if (rightBranch != null) {
 				E collapsedRightBranch = rightBranch
 						.collapse(nodeCollapser, branchCollapser);
@@ -101,21 +101,21 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 
 				return branchCollapser.apply(collapsedNode,
 						collapsedBranches);
-			} else {
-				return branchCollapser.apply(collapsedNode,
-						collapsedLeftBranch);
 			}
-		} else {
-			if (rightBranch != null) {
-				E collapsedRightBranch = rightBranch
-						.collapse(nodeCollapser, branchCollapser);
 
-				return branchCollapser.apply(collapsedNode,
-						collapsedRightBranch);
-			} else {
-				return collapsedNode;
-			}
+			return branchCollapser.apply(collapsedNode,
+					collapsedLeftBranch);
 		}
+
+		if (rightBranch != null) {
+			E collapsedRightBranch = rightBranch.collapse(nodeCollapser,
+					branchCollapser);
+
+			return branchCollapser.apply(collapsedNode,
+					collapsedRightBranch);
+		}
+
+		return collapsedNode;
 	}
 
 	@Override
@@ -188,7 +188,7 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 		} else if (traversalPredicate == null) {
 			throw new NullPointerException("Predicate must not be null");
 		}
-		
+
 		switch (linearizationMethod) {
 			case PREORDER:
 				return preorderTraverse(linearizationMethod,

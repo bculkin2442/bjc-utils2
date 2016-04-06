@@ -75,31 +75,30 @@ public class ListUtils {
 				if (StringUtils.containsOnly(tokenToSplit,
 						operatorRegex)) {
 					return new FunctionalList<>(tokenToSplit);
-				} else {
-					FunctionalList<String> splitTokens =
-							new FunctionalList<>(
-									tokenToSplit.split(operatorRegex));
-
-					FunctionalList<String> result = new FunctionalList<>();
-
-					int tokenExpansionSize = splitTokens.getSize();
-
-					splitTokens.forEachIndexed((tokenIndex, token) -> {
-
-						if (tokenIndex != tokenExpansionSize
-								&& tokenIndex != 0) {
-							result.add(operatorName);
-							result.add(token);
-						} else {
-							result.add(token);
-						}
-					});
-
-					return result;
 				}
-			} else {
-				return new FunctionalList<>(tokenToSplit);
+
+				FunctionalList<String> splitTokens = new FunctionalList<>(
+						tokenToSplit.split(operatorRegex));
+
+				FunctionalList<String> result = new FunctionalList<>();
+
+				int tokenExpansionSize = splitTokens.getSize();
+
+				splitTokens.forEachIndexed((tokenIndex, token) -> {
+
+					if (tokenIndex != tokenExpansionSize
+							&& tokenIndex != 0) {
+						result.add(operatorName);
+						result.add(token);
+					} else {
+						result.add(token);
+					}
+				});
+
+				return result;
 			}
+
+			return new FunctionalList<>(tokenToSplit);
 		}
 	}
 
@@ -193,14 +192,13 @@ public class ListUtils {
 		/*
 		 * List that holds our results
 		 */
-		FunctionalList<FunctionalList<E>> returnedList =
-				new FunctionalList<>();
+		FunctionalList<FunctionalList<E>> returnedList = new FunctionalList<>();
 
 		/*
 		 * List that holds current partition
 		 */
-		GenHolder<FunctionalList<E>> currentPartition =
-				new GenHolder<>(new FunctionalList<>());
+		GenHolder<FunctionalList<E>> currentPartition = new GenHolder<>(
+				new FunctionalList<>());
 		/*
 		 * List that holds elements rejected during current pass
 		 */
@@ -214,10 +212,8 @@ public class ListUtils {
 		/*
 		 * Run up to a certain number of passes
 		 */
-		for (int numberOfIterations =
-				0; numberOfIterations < MAX_NTRIESPART
-						&& !rejectedElements
-								.isEmpty(); numberOfIterations++) {
+		for (int numberOfIterations = 0; numberOfIterations < MAX_NTRIESPART
+				&& !rejectedElements.isEmpty(); numberOfIterations++) {
 			input.forEach(new GroupPartIteration<>(returnedList,
 					currentPartition, rejectedElements,
 					numberInCurrentPartition, numberPerPartition,
@@ -265,8 +261,8 @@ public class ListUtils {
 					"Set of operators must not be null");
 		}
 
-		GenHolder<FunctionalList<String>> returnedList =
-				new GenHolder<>(input);
+		GenHolder<FunctionalList<String>> returnedList = new GenHolder<>(
+				input);
 
 		operators.forEach((operator) -> returnedList
 				.transform((oldReturn) -> oldReturn.flatMap((token) -> {
@@ -296,8 +292,8 @@ public class ListUtils {
 					"Set of operators must not be null");
 		}
 
-		GenHolder<FunctionalList<String>> returnedList =
-				new GenHolder<>(input);
+		GenHolder<FunctionalList<String>> returnedList = new GenHolder<>(
+				input);
 
 		operators.forEach((operator) -> returnedList
 				.transform((oldReturn) -> oldReturn.flatMap((token) -> {

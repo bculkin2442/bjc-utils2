@@ -50,10 +50,14 @@ public class AdjacencyMap<T> {
 				// First, read in number of vertices
 				numVertices = Integer.parseInt(possibleVertices);
 			} catch (NumberFormatException nfex) {
-				throw new InputMismatchException(
+				InputMismatchException imex = new InputMismatchException(
 						"The first line must contain the number of vertices. "
 								+ possibleVertices
 								+ " is not a valid number");
+
+				imex.initCause(nfex);
+
+				throw imex;
 			}
 
 			if (numVertices <= 0) {
@@ -87,8 +91,12 @@ public class AdjacencyMap<T> {
 					try {
 						columnWeight = Integer.parseInt(part);
 					} catch (NumberFormatException nfex) {
-						throw new InputMismatchException(
+						InputMismatchException imex = new InputMismatchException(
 								"" + part + " is not a valid weight.");
+
+						imex.initCause(nfex);
+
+						throw imex;
 					}
 
 					adjacencyMap.setWeight(row.unwrap(number -> number),
@@ -143,8 +151,8 @@ public class AdjacencyMap<T> {
 		GenHolder<Boolean> result = new GenHolder<>(true);
 
 		adjacencyMap.entrySet().forEach(mapEntry -> {
-			Set<Entry<T, Integer>> entryVertices =
-					mapEntry.getValue().entrySet();
+			Set<Entry<T, Integer>> entryVertices = mapEntry.getValue()
+					.entrySet();
 
 			entryVertices.forEach(targetVertex -> {
 				int leftValue = targetVertex.getValue();

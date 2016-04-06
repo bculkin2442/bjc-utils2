@@ -40,18 +40,17 @@ public class LazyHolder<T> implements IHolder<T>, ILazy {
 			if (heldValue == null) {
 				return pendingActions.reduceAux(heldSource.get(),
 						Function<T, T>::apply, pendingTransform::apply);
-			} else {
-				return pendingActions.reduceAux(heldValue,
-						Function<T, T>::apply, pendingTransform::apply);
 			}
+
+			return pendingActions.reduceAux(heldValue,
+					Function<T, T>::apply, pendingTransform::apply);
 		}
 	}
 
 	/**
 	 * List of queued actions to be performed on realized values
 	 */
-	private FunctionalList<Function<T, T>>	actions	=
-			new FunctionalList<>();
+	private FunctionalList<Function<T, T>>	actions	= new FunctionalList<>();
 
 	/**
 	 * The value internally held by this lazy holder
@@ -148,10 +147,10 @@ public class LazyHolder<T> implements IHolder<T>, ILazy {
 		if (heldSource != null) {
 			// We're materialized if a value exists
 			return heldValue == null;
-		} else {
-			// We're materialized by default
-			return true;
 		}
+
+		// We're materialized by default
+		return true;
 	}
 
 	@Override
@@ -170,7 +169,7 @@ public class LazyHolder<T> implements IHolder<T>, ILazy {
 	@Override
 	public void applyPendingActions() {
 		materialize();
-		
+
 		actions.forEach((action) -> {
 			heldValue = action.apply(heldValue);
 		});

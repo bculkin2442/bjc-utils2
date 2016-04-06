@@ -19,54 +19,62 @@ public class ComponentDescriptionFileParser {
 		// This reader works entirely off of pragmas, so no need to handle
 		// rules
 		reader = new RuleBasedConfigReader<>((tokenizer, statePair) -> {
+			// Don't need to do anything on rule start
 		}, (tokenizer, state) -> {
+			// Don't need to do anything on rule continuation
 		}, (state) -> {
+			// Don't need to do anything on rule end
 		});
 
 		reader.addPragma("name", (tokenizer, state) -> {
 			if (!tokenizer.hasMoreTokens()) {
 				throw new PragmaFormatException(
 						"Pragma name requires one string argument");
-			} else {
-				state.setName(ListUtils.collapseTokens(
-						tokenizer.toList((strang) -> strang)));
 			}
+
+			state.setName(ListUtils
+					.collapseTokens(tokenizer.toList((strang) -> strang)));
 		});
 
 		reader.addPragma("author", (tokenizer, state) -> {
 			if (!tokenizer.hasMoreTokens()) {
 				throw new PragmaFormatException(
 						"Pragma author requires one string argument");
-			} else {
-				state.setAuthor(ListUtils.collapseTokens(
-						tokenizer.toList((strang) -> strang)));
 			}
+
+			state.setAuthor(ListUtils
+					.collapseTokens(tokenizer.toList((strang) -> strang)));
 		});
 
 		reader.addPragma("description", (tokenizer, state) -> {
 			if (!tokenizer.hasMoreTokens()) {
 				throw new PragmaFormatException(
 						"Pragma description requires one string argument");
-			} else {
-				state.setDescription(ListUtils.collapseTokens(
-						tokenizer.toList((strang) -> strang)));
 			}
+
+			state.setDescription(ListUtils
+					.collapseTokens(tokenizer.toList((strang) -> strang)));
 		});
 
 		reader.addPragma("version", (tokenizer, state) -> {
 			if (!tokenizer.hasMoreTokens()) {
 				throw new PragmaFormatException(
 						"Pragma name requires one integer argument");
-			} else {
-				String token = tokenizer.nextToken();
+			}
 
-				try {
-					state.setVersion(Integer.parseInt(token));
-				} catch (NumberFormatException nfex) {
-					throw new PragmaFormatException("Argument " + token
-							+ " to version pragma isn't a valid integer. "
-							+ "This pragma requires a integer argument");
-				}
+			String token = tokenizer.nextToken();
+
+			try {
+				state.setVersion(Integer.parseInt(token));
+			} catch (NumberFormatException nfex) {
+				PragmaFormatException pfex = new PragmaFormatException(
+						"Argument " + token
+								+ " to version pragma isn't a valid integer. "
+								+ "This pragma requires a integer argument");
+
+				pfex.initCause(nfex);
+
+				throw pfex;
 			}
 		});
 	}
@@ -78,8 +86,8 @@ public class ComponentDescriptionFileParser {
 	 *            The stream to parse from
 	 * @return The description parsed from the stream
 	 */
-	public static ComponentDescription
-			fromStream(InputStream inputSource) {
+	public static ComponentDescription fromStream(
+			InputStream inputSource) {
 		ComponentDescriptionState readState = reader
 				.fromStream(inputSource, new ComponentDescriptionState());
 

@@ -120,10 +120,10 @@ public class FunctionalStringTokenizer {
 		if (input.hasMoreTokens()) {
 			// Return the next availible token
 			return input.nextToken();
-		} else {
-			// Return no token
-			return null;
 		}
+
+		// Return no token
+		return null;
 	}
 
 	/**
@@ -137,8 +137,8 @@ public class FunctionalStringTokenizer {
 	 *            The function to use to convert tokens.
 	 * @return A list containing all of the converted tokens.
 	 */
-	public <E> FunctionalList<E>
-			toList(Function<String, E> tokenTransformer) {
+	public <E> FunctionalList<E> toList(
+			Function<String, E> tokenTransformer) {
 		if (tokenTransformer == null) {
 			throw new NullPointerException("Transformer must not be null");
 		}

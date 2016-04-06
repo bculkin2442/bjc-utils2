@@ -31,7 +31,8 @@ public class SimpleFileChooser {
 				maybeDoOpenFile(parent, files);
 
 				success = true;
-			} catch (FileNotChosenException e) {
+			} catch (@SuppressWarnings("unused") FileNotChosenException fncx) {
+				// We don't care about specifics
 				SimpleDialogs.showError(parent, "I/O Error",
 						"Please pick a file to open");
 			}
@@ -55,7 +56,8 @@ public class SimpleFileChooser {
 				maybeDoSaveFile(parent, files);
 
 				return files.getSelectedFile();
-			} catch (FileNotChosenException e) {
+			} catch (@SuppressWarnings("unused") FileNotChosenException fncex) {
+				// We don't care about specifics
 				SimpleDialogs.showError(parent, "I/O Error",
 						"Please pick a file to save to");
 			}
@@ -187,7 +189,8 @@ public class SimpleFileChooser {
 
 		try {
 			maybeDoOpenFile(parent, files);
-		} catch (FileNotChosenException e) {
+		} catch (@SuppressWarnings("unused") FileNotChosenException fncex) {
+			// We don't care about specifics
 		}
 
 		return files.getSelectedFile();
@@ -212,7 +215,8 @@ public class SimpleFileChooser {
 
 		try {
 			maybeDoSaveFile(parent, files);
-		} catch (FileNotChosenException e) {
+		} catch (@SuppressWarnings("unused") FileNotChosenException fncex) {
+			// We don't care about specifics
 		}
 
 		return files.getSelectedFile();

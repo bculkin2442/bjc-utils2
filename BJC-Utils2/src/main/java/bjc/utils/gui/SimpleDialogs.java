@@ -43,7 +43,9 @@ public class SimpleDialogs {
 				int value = Integer.parseInt(strang);
 
 				return (value < upperBound) && (value > lowerBound);
-			} catch (NumberFormatException nfe) {
+			} catch (@SuppressWarnings("unused") NumberFormatException nfex) {
+				// We don't care about the specifics of the exception, just
+				// that this value isn't good
 				return false;
 			}
 		}, Integer::parseInt);
@@ -125,7 +127,9 @@ public class SimpleDialogs {
 			try {
 				Integer.parseInt(strang);
 				return true;
-			} catch (NumberFormatException nfe) {
+			} catch (@SuppressWarnings("unused") NumberFormatException nfex) {
+				// We don't care about this exception, just mark the value
+				// as not good
 				return false;
 			}
 		}, Integer::parseInt);
@@ -257,7 +261,7 @@ public class SimpleDialogs {
 			throw new NullPointerException(
 					"Error message must not be null");
 		}
-		
+
 		JOptionPane.showMessageDialog(parent, errorMessage, title,
 				JOptionPane.ERROR_MESSAGE);
 	}

@@ -207,8 +207,8 @@ public class FunctionalList<E> implements Cloneable {
 		// Get the iterator for the other list
 		Iterator<T> rightIterator = rightList.toIterable().iterator();
 
-		for (Iterator<E> leftIterator =
-				wrappedList.iterator(); leftIterator.hasNext()
+		for (Iterator<E> leftIterator = wrappedList
+				.iterator(); leftIterator.hasNext()
 						&& rightIterator.hasNext();) {
 			// Add the transformed items to the result list
 			E leftVal = leftIterator.next();
@@ -258,18 +258,18 @@ public class FunctionalList<E> implements Cloneable {
 	 * @return A new list containing the flattened results of applying the
 	 *         provided function.
 	 */
-	public <T> FunctionalList<T>
-			flatMap(Function<E, FunctionalList<T>> elementExpander) {
+	public <T> FunctionalList<T> flatMap(
+			Function<E, FunctionalList<T>> elementExpander) {
 		if (elementExpander == null) {
 			throw new NullPointerException("Expander must not be null");
 		}
 
-		FunctionalList<T> returnedList =
-				new FunctionalList<>(this.wrappedList.size());
+		FunctionalList<T> returnedList = new FunctionalList<>(
+				this.wrappedList.size());
 
 		forEach(element -> {
-			FunctionalList<T> expandedElement =
-					elementExpander.apply(element);
+			FunctionalList<T> expandedElement = elementExpander
+					.apply(element);
 
 			if (expandedElement == null) {
 				throw new NullPointerException(
@@ -400,8 +400,8 @@ public class FunctionalList<E> implements Cloneable {
 			throw new NullPointerException("Transformer must be not null");
 		}
 
-		FunctionalList<T> returnedList =
-				new FunctionalList<>(this.wrappedList.size());
+		FunctionalList<T> returnedList = new FunctionalList<>(
+				this.wrappedList.size());
 
 		forEach(element -> {
 			// Add the transformed item to the result
@@ -422,8 +422,8 @@ public class FunctionalList<E> implements Cloneable {
 	 * @return A list containing pairs of this element and the specified
 	 *         list
 	 */
-	public <T> FunctionalList<Pair<E, T>>
-			pairWith(FunctionalList<T> rightList) {
+	public <T> FunctionalList<Pair<E, T>> pairWith(
+			FunctionalList<T> rightList) {
 		return combineWith(rightList, Pair<E, T>::new);
 	}
 
@@ -434,8 +434,8 @@ public class FunctionalList<E> implements Cloneable {
 	 *            The size of elements to put into each one of the sublists
 	 * @return A list partitioned into partitions of size nPerPart
 	 */
-	public FunctionalList<FunctionalList<E>>
-			partition(int numberPerPartition) {
+	public FunctionalList<FunctionalList<E>> partition(
+			int numberPerPartition) {
 		if (numberPerPartition < 1
 				|| numberPerPartition > wrappedList.size()) {
 			throw new IllegalArgumentException("" + numberPerPartition
@@ -443,12 +443,11 @@ public class FunctionalList<E> implements Cloneable {
 					+ wrappedList.size());
 		}
 
-		FunctionalList<FunctionalList<E>> returnedList =
-				new FunctionalList<>();
+		FunctionalList<FunctionalList<E>> returnedList = new FunctionalList<>();
 
 		// The current partition being filled
-		GenHolder<FunctionalList<E>> currentPartition =
-				new GenHolder<>(new FunctionalList<>());
+		GenHolder<FunctionalList<E>> currentPartition = new GenHolder<>(
+				new FunctionalList<>());
 
 		this.forEach((element) -> {
 			if (isPartitionFull(numberPerPartition, currentPartition)) {
@@ -593,10 +592,10 @@ public class FunctionalList<E> implements Cloneable {
 		if (foundIndex >= 0) {
 			// We found a matching element
 			return wrappedList.get(foundIndex);
-		} else {
-			// We didn't find an element
-			return null;
 		}
+
+		// We didn't find an element
+		return null;
 	}
 
 	/**
