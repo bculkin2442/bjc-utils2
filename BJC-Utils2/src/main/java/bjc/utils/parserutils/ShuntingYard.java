@@ -1,13 +1,14 @@
 package bjc.utils.parserutils;
 
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 import bjc.utils.funcdata.FunctionalList;
+import bjc.utils.funcdata.FunctionalMap;
+import bjc.utils.funcdata.IFunctionalList;
+import bjc.utils.funcdata.IFunctionalMap;
 import bjc.utils.funcutils.StringUtils;
 
 /**
@@ -61,11 +62,11 @@ public class ShuntingYard<E> {
 	}
 
 	private final class TokenShunter implements Consumer<String> {
-		private FunctionalList<E>	output;
+		private IFunctionalList<E>	output;
 		private Deque<String>		stack;
 		private Function<String, E>	transform;
 
-		public TokenShunter(FunctionalList<E> outpt, Deque<String> stack,
+		public TokenShunter(IFunctionalList<E> outpt, Deque<String> stack,
 				Function<String, E> transform) {
 			this.output = outpt;
 			this.stack = stack;
@@ -115,13 +116,13 @@ public class ShuntingYard<E> {
 	/**
 	 * Holds all the shuntable operations
 	 */
-	private Map<String, IPrecedent> operators;
+	private IFunctionalMap<String, IPrecedent> operators;
 
 	/**
 	 * Create a new shunting yard with a default set of operators
 	 */
 	public ShuntingYard() {
-		operators = new HashMap<>();
+		operators = new FunctionalMap<>();
 
 		if (shouldConfigureBasicOperators) {
 			operators.put("+", Operator.ADD);
@@ -175,7 +176,7 @@ public class ShuntingYard<E> {
 	 *            The function to use to transform strings to tokens
 	 * @return A list of tokens in postfix notation
 	 */
-	public FunctionalList<E> postfix(FunctionalList<String> input,
+	public IFunctionalList<E> postfix(IFunctionalList<String> input,
 			Function<String, E> tokenTransformer) {
 		if (input == null) {
 			throw new NullPointerException("Input must not be null");
@@ -183,7 +184,7 @@ public class ShuntingYard<E> {
 			throw new NullPointerException("Transformer must not be null");
 		}
 
-		FunctionalList<E> output = new FunctionalList<>();
+		IFunctionalList<E> output = new FunctionalList<>();
 
 		Deque<String> stack = new LinkedList<>();
 

@@ -1,9 +1,10 @@
 package bjc.utils.cli;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+
+import bjc.utils.funcdata.FunctionalMap;
+import bjc.utils.funcdata.IFunctionalMap;
 
 /**
  * A general command mode, with a customizable set of commands
@@ -16,17 +17,19 @@ import java.util.function.Consumer;
  *
  */
 public class GeneralCommandMode implements ICommandMode {
-	private Map<String, ICommandHandler>	commandHandlers;
-	private String							customPrompt;
+	private IFunctionalMap<String, ICommand>		commandHandlers;
+	private IFunctionalMap<String, ICommand>		defaultHandlers;
 
-	private Map<String, ICommandHandler>	defaultHandlers;
+	private IFunctionalMap<String, ICommandHelp>	helpTopics;
 
-	private Consumer<String>				errorOutput;
-	private String							modeName;
+	private BiConsumer<String, String[]>			unknownCommandHandler;
 
-	private Consumer<String>				normalOutput;
+	private Consumer<String>						errorOutput;
+	private Consumer<String>						normalOutput;
 
-	private BiConsumer<String, String[]>	unknownCommandHandler;
+	private String									modeName;
+
+	private String									customPrompt;
 
 	/**
 	 * Create a new general command mode
@@ -41,20 +44,35 @@ public class GeneralCommandMode implements ICommandMode {
 		this.normalOutput = normalOutput;
 		this.errorOutput = errorOutput;
 
-		commandHandlers = new HashMap<>();
-		defaultHandlers = new HashMap<>();
+		commandHandlers = new FunctionalMap<>();
+		defaultHandlers = new FunctionalMap<>();
 
-		defaultHandlers.put("list", (args) -> {
+		defaultHandlers.put("list", new GenericCommand((args) -> {
 			listCommands();
 
 			return this;
-		});
+		}, "list\tList available command",
+				"Lists all of the commands available in this mode,"
+						+ " as well as the commands that are valid in any mode."));
 
-		defaultHandlers.put("alias", (args) -> {
+		defaultHandlers.put("alias", new GenericCommand((args) -> {
 			aliasCommands(args);
 
 			return this;
-		});
+		}, "alias\tAlias one command to another",
+				"alias gives a command another name it can be invoked by. It is invoked"
+						+ " with two arguments, the name of the command to alias"
+						+ ", and the alias to give that command."));
+
+		defaultHandlers.put("help", new GenericCommand((args) -> {
+			// TODO implement help system
+			return this;
+		}, "help\tConsult the help system",
+				"help consults the internal help system."
+						+ " It can be invoked in two ways. Invoking it with no arguments"
+						+ " causes it to print out all the topics you can ask for details on,"
+						+ " while invoking it with the name of a topic will print the entry"
+						+ " for that topic"));
 	}
 
 	/**
@@ -100,8 +118,7 @@ public class GeneralCommandMode implements ICommandMode {
 	 *             if the specified command already has a handler
 	 *             registered
 	 */
-	public void addCommandHandler(String command,
-			ICommandHandler handler) {
+	public void addCommandHandler(String command, ICommand handler) {
 		if (command == null) {
 			throw new NullPointerException("Command must not be null");
 		} else if (handler == null) {
@@ -162,14 +179,14 @@ public class GeneralCommandMode implements ICommandMode {
 		normalOutput.accept(
 				"The available commands for this mode are as follows:\n");
 
-		commandHandlers.keySet().forEach((commandName) -> {
+		commandHandlers.keyList().forEach((commandName) -> {
 			normalOutput.accept("\t" + commandName);
 		});
 
 		normalOutput.accept(
 				"\nThe following commands are available in all modes:\n");
 
-		defaultHandlers.keySet().forEach((commandName) -> {
+		defaultHandlers.keyList().forEach((commandName) -> {
 			normalOutput.accept("\t" + commandName);
 		});
 
@@ -181,19 +198,21 @@ public class GeneralCommandMode implements ICommandMode {
 		normalOutput.accept("\n");
 
 		if (defaultHandlers.containsKey(command)) {
-			return defaultHandlers.get(command).handle(args);
+			return defaultHandlers.get(command).getHandler().handle(args);
 		} else if (commandHandlers.containsKey(command)) {
-			return commandHandlers.get(command).handle(args);
+			return commandHandlers.get(command).getHandler().handle(args);
 		} else {
-			if (unknownCommandHandler == null) {
-				throw new UnsupportedOperationException(
-						"Command " + command + " is invalid.");
-			} else if (args != null) {
+			if (args != null) {
 				errorOutput.accept("ERROR: Unrecognized command " + command
 						+ String.join(" ", args));
 			} else {
 				errorOutput
 						.accept("ERROR: Unrecognized command " + command);
+			}
+
+			if (unknownCommandHandler == null) {
+				throw new UnsupportedOperationException(
+						"Command " + command + " is invalid.");
 			}
 
 			unknownCommandHandler.accept(command, args);

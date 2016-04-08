@@ -137,13 +137,13 @@ public class FunctionalStringTokenizer {
 	 *            The function to use to convert tokens.
 	 * @return A list containing all of the converted tokens.
 	 */
-	public <E> FunctionalList<E> toList(
+	public <E> IFunctionalList<E> toList(
 			Function<String, E> tokenTransformer) {
 		if (tokenTransformer == null) {
 			throw new NullPointerException("Transformer must not be null");
 		}
 
-		FunctionalList<E> returnList = new FunctionalList<>();
+		IFunctionalList<E> returnList = new FunctionalList<>();
 
 		// Add each token to the list after transforming it
 		forEachToken(token -> {
@@ -160,7 +160,7 @@ public class FunctionalStringTokenizer {
 	 * 
 	 * @return This tokenizer, converted into a list of strings
 	 */
-	public FunctionalList<String> toList() {
+	public IFunctionalList<String> toList() {
 		return toList((String element) -> element);
 	}
 

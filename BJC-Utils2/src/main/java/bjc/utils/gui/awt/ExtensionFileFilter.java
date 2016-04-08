@@ -2,10 +2,10 @@ package bjc.utils.gui.awt;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.util.ArrayList;
 import java.util.List;
 
 import bjc.utils.funcdata.FunctionalList;
+import bjc.utils.funcdata.IFunctionalList;
 
 /**
  * Filter a set of filenames by extension.
@@ -19,7 +19,7 @@ public class ExtensionFileFilter implements FilenameFilter {
 	/**
 	 * The list of extensions to filter
 	 */
-	private FunctionalList<String> extensions;
+	private IFunctionalList<String> extensions;
 
 	/**
 	 * Create a new filter only showing files with the specified
@@ -44,11 +44,7 @@ public class ExtensionFileFilter implements FilenameFilter {
 	 *            The extensions to show in this filter.
 	 */
 	public ExtensionFileFilter(String... exts) {
-		extensions = new FunctionalList<>(new ArrayList<>(exts.length));
-
-		for (String extension : exts) {
-			extensions.add(extension);
-		}
+		extensions = new FunctionalList<>(exts);
 	}
 
 	@Override

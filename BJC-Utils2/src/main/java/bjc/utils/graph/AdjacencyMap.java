@@ -3,16 +3,15 @@ package bjc.utils.graph;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.InputMismatchException;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Scanner;
-import java.util.Set;
 import java.util.stream.IntStream;
 
 import bjc.utils.data.GenHolder;
+import bjc.utils.funcdata.FunctionalList;
+import bjc.utils.funcdata.FunctionalMap;
+import bjc.utils.funcdata.IFunctionalList;
+import bjc.utils.funcdata.IFunctionalMap;
 
 /**
  * An adjacency map representing a graph
@@ -65,7 +64,7 @@ public class AdjacencyMap<T> {
 						"The number of vertices must be greater than 0");
 			}
 
-			Set<Integer> vertices = new HashSet<>();
+			IFunctionalList<Integer> vertices = new FunctionalList<>();
 
 			IntStream.range(0, numVertices)
 					.forEach(element -> vertices.add(element));
@@ -91,8 +90,9 @@ public class AdjacencyMap<T> {
 					try {
 						columnWeight = Integer.parseInt(part);
 					} catch (NumberFormatException nfex) {
-						InputMismatchException imex = new InputMismatchException(
-								"" + part + " is not a valid weight.");
+						InputMismatchException imex =
+								new InputMismatchException("" + part
+										+ " is not a valid weight.");
 
 						imex.initCause(nfex);
 
@@ -119,7 +119,8 @@ public class AdjacencyMap<T> {
 	/**
 	 * The backing storage of the map
 	 */
-	private Map<T, Map<T, Integer>> adjacencyMap = new HashMap<>();
+	private IFunctionalMap<T, IFunctionalMap<T, Integer>> adjacencyMap =
+			new FunctionalMap<>();
 
 	/**
 	 * Create a new map from a set of vertices
@@ -127,13 +128,13 @@ public class AdjacencyMap<T> {
 	 * @param vertices
 	 *            The set of vertices to create a map from
 	 */
-	public AdjacencyMap(Set<T> vertices) {
+	public AdjacencyMap(IFunctionalList<T> vertices) {
 		if (vertices == null) {
 			throw new NullPointerException("Vertices must not be null");
 		}
 
 		vertices.forEach(vertex -> {
-			Map<T, Integer> vertexRow = new HashMap<>();
+			IFunctionalMap<T, Integer> vertexRow = new FunctionalMap<>();
 
 			vertices.forEach(
 					targetVertex -> vertexRow.put(targetVertex, 0));
@@ -150,16 +151,11 @@ public class AdjacencyMap<T> {
 	public boolean isDirected() {
 		GenHolder<Boolean> result = new GenHolder<>(true);
 
-		adjacencyMap.entrySet().forEach(mapEntry -> {
-			Set<Entry<T, Integer>> entryVertices = mapEntry.getValue()
-					.entrySet();
+		adjacencyMap.forEach((key, value) -> {
+			value.forEach((targetKey, targetValue) -> {
+				int inverseValue = adjacencyMap.get(targetKey).get(key);
 
-			entryVertices.forEach(targetVertex -> {
-				int leftValue = targetVertex.getValue();
-				int rightValue = adjacencyMap.get(targetVertex.getKey())
-						.get(mapEntry.getKey());
-
-				if (leftValue != rightValue) {
+				if (targetValue != inverseValue) {
 					result.transform((bool) -> false);
 				}
 			});
@@ -206,11 +202,11 @@ public class AdjacencyMap<T> {
 	public Graph<T> toGraph() {
 		Graph<T> returnedGraph = new Graph<>();
 
-		adjacencyMap.entrySet().forEach(sourceVertex -> sourceVertex
-				.getValue().entrySet()
-				.forEach(targetVertex -> returnedGraph.addEdge(
-						sourceVertex.getKey(), targetVertex.getKey(),
-						targetVertex.getValue())));
+		adjacencyMap.forEach((key, value) -> {
+			value.forEach((targetKey, targetValue) -> {
+				returnedGraph.addEdge(key, targetKey, targetValue, true);
+			});
+		});
 
 		return returnedGraph;
 	}
@@ -229,10 +225,11 @@ public class AdjacencyMap<T> {
 
 		PrintStream outputPrinter = new PrintStream(outputSink);
 
-		adjacencyMap.entrySet().forEach(sourceVertex -> {
-			sourceVertex.getValue().entrySet()
-					.forEach(targetVertex -> outputPrinter.printf("%d ",
-							targetVertex.getValue()));
+		adjacencyMap.forEach((key, value) -> {
+			value.forEach((targetKey, targetValue) -> {
+				outputPrinter.printf("%d", targetValue);
+			});
+
 			outputPrinter.println();
 		});
 

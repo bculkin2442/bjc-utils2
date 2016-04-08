@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import bjc.utils.funcdata.FunctionalList;
+import bjc.utils.funcdata.IFunctionalList;
 import bjc.utils.funcdata.bst.ITreePart.TreeLinearizationMethod;
 
 /**
@@ -68,7 +69,7 @@ public class BinarySearchTree<T> {
 	 * time, but also O(N) space.
 	 */
 	public void balance() {
-		FunctionalList<T> elements = new FunctionalList<>();
+		IFunctionalList<T> elements = new FunctionalList<>();
 
 		// Add each element to the list in sorted order
 		rootElement.forEach(TreeLinearizationMethod.INORDER,
@@ -123,7 +124,7 @@ public class BinarySearchTree<T> {
 	 *            The distance from the pivot
 	 * @return Whether the adjusted pivot is with the list
 	 */
-	private boolean adjustedPivotInBounds(FunctionalList<T> elements,
+	private boolean adjustedPivotInBounds(IFunctionalList<T> elements,
 			int pivot, int pivotAdjustment) {
 		return (pivot - pivotAdjustment) >= 0
 				&& (pivot + pivotAdjustment) < elements.getSize();

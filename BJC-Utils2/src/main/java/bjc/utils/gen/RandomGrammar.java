@@ -1,8 +1,7 @@
 package bjc.utils.gen;
 
-import java.util.HashMap;
-
-import bjc.utils.funcdata.FunctionalList;
+import bjc.utils.funcdata.FunctionalMap;
+import bjc.utils.funcdata.IFunctionalList;
 
 /**
  * A weighted grammar where all the rules have a equal chance of occuring.
@@ -18,7 +17,7 @@ public class RandomGrammar<E> extends WeightedGrammar<E> {
 	 * Create a new random grammar.
 	 */
 	public RandomGrammar() {
-		rules = new HashMap<>();
+		rules = new FunctionalMap<>();
 	}
 
 	/**
@@ -30,8 +29,8 @@ public class RandomGrammar<E> extends WeightedGrammar<E> {
 	 *            The cases to add for this rule.
 	 */
 	@SafeVarargs
-	public final void addCases(E rule, FunctionalList<E>... cases) {
-		for (FunctionalList<E> currentCase : cases) {
+	public final void addCases(E rule, IFunctionalList<E>... cases) {
+		for (IFunctionalList<E> currentCase : cases) {
 			super.addCase(rule, 1, currentCase);
 		}
 	}
@@ -45,10 +44,10 @@ public class RandomGrammar<E> extends WeightedGrammar<E> {
 	 *            The cases to add for this rule.
 	 */
 	@SafeVarargs
-	public final void makeRule(E rule, FunctionalList<E>... cases) {
+	public final void makeRule(E rule, IFunctionalList<E>... cases) {
 		super.addRule(rule);
 
-		for (FunctionalList<E> currentCase : cases) {
+		for (IFunctionalList<E> currentCase : cases) {
 			super.addCase(rule, 1, currentCase);
 		}
 	}
@@ -61,7 +60,8 @@ public class RandomGrammar<E> extends WeightedGrammar<E> {
 	 * @param cases
 	 *            The cases to add for this rule.
 	 */
-	public void makeRule(E rule, FunctionalList<FunctionalList<E>> cases) {
+	public void makeRule(E rule,
+			IFunctionalList<IFunctionalList<E>> cases) {
 		if (cases == null) {
 			throw new NullPointerException("Cases must not be null");
 		}

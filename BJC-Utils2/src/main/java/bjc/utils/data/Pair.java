@@ -92,4 +92,9 @@ public class Pair<L, R> implements IPair<L, R> {
 
 		return merger.apply(leftValue, rightValue);
 	}
+	
+	@Override
+	public String toString() {
+		return "pair[l=" + leftValue.toString() + ", r=" + rightValue.toString() + "]";
+	}
 }

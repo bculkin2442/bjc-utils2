@@ -1,11 +1,8 @@
 package bjc.utils.graph;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -15,6 +12,9 @@ import java.util.function.BiPredicate;
 
 import bjc.utils.data.GenHolder;
 import bjc.utils.data.IHolder;
+import bjc.utils.funcdata.FunctionalMap;
+import bjc.utils.funcdata.IFunctionalList;
+import bjc.utils.funcdata.IFunctionalMap;
 
 /**
  * A directed weighted graph, where the vertices have some arbitrary label
@@ -29,13 +29,13 @@ public class Graph<T> {
 	/**
 	 * The backing representation of the graph
 	 */
-	private final Map<T, Map<T, Integer>> backingGraph;
+	private final IFunctionalMap<T, IFunctionalMap<T, Integer>> backingGraph;
 
 	/**
 	 * Create a new graph
 	 */
 	public Graph() {
-		backingGraph = new HashMap<>();
+		backingGraph = new FunctionalMap<>();
 	}
 
 	/**
@@ -47,8 +47,11 @@ public class Graph<T> {
 	 *            The target vertex for this edge
 	 * @param distance
 	 *            The distance from the source vertex to the target vertex
+	 * @param directed
+	 *            Whether or not
 	 */
-	public void addEdge(T sourceVertex, T targetVertex, int distance) {
+	public void addEdge(T sourceVertex, T targetVertex, int distance,
+			boolean directed) {
 		// Can't add edges with a null source or target
 		if (sourceVertex == null) {
 			throw new NullPointerException(
@@ -60,17 +63,22 @@ public class Graph<T> {
 
 		// Initialize adjacency list for vertices if necessary
 		if (!backingGraph.containsKey(sourceVertex)) {
-			backingGraph.put(sourceVertex, new HashMap<T, Integer>());
-		}
-		if (!backingGraph.containsKey(targetVertex)) {
-			backingGraph.put(targetVertex, new HashMap<T, Integer>());
+			backingGraph.put(sourceVertex,
+					new FunctionalMap<T, Integer>());
 		}
 
 		// Add the edge to the graph
 		backingGraph.get(sourceVertex).put(targetVertex, distance);
 
-		// Uncomment this to make the graph undirected
-		// graph.get(target).put(source, distance);
+		// Handle possible directed edges
+		if (!directed) {
+			if (!backingGraph.containsKey(targetVertex)) {
+				backingGraph.put(targetVertex,
+						new FunctionalMap<T, Integer>());
+			}
+
+			backingGraph.get(targetVertex).put(sourceVertex, distance);
+		}
 	}
 
 	/**
@@ -107,7 +115,7 @@ public class Graph<T> {
 	 *            The vertex to use as a source
 	 * @return All of the edges with the specified vertex as a source
 	 */
-	public Map<T, Integer> getEdges(T source) {
+	public IFunctionalMap<T, Integer> getEdges(T source) {
 		// Can't find edges for a null source
 		if (source == null) {
 			throw new NullPointerException("The source cannot be null.");
@@ -116,7 +124,7 @@ public class Graph<T> {
 					"Vertex " + source + " is not in graph");
 		}
 
-		return Collections.unmodifiableMap(backingGraph.get(source));
+		return backingGraph.get(source);
 	}
 
 	/**
@@ -125,7 +133,7 @@ public class Graph<T> {
 	 * @return The initial vertex of the graph
 	 */
 	public T getInitial() {
-		return backingGraph.keySet().iterator().next();
+		return backingGraph.keyList().first();
 	}
 
 	/**
@@ -195,7 +203,7 @@ public class Graph<T> {
 	 * @return A count of the vertices in this graph
 	 */
 	public int getVertexCount() {
-		return backingGraph.size();
+		return backingGraph.getSize();
 	}
 
 	/**
@@ -203,8 +211,8 @@ public class Graph<T> {
 	 * 
 	 * @return A unmodifiable set of all the vertices in the graph.
 	 */
-	public Set<T> getVertices() {
-		return Collections.unmodifiableSet(backingGraph.keySet());
+	public IFunctionalList<T> getVertices() {
+		return backingGraph.keyList();
 	}
 
 	/**
@@ -249,13 +257,13 @@ public class Graph<T> {
 	 */
 	public AdjacencyMap<T> toAdjacencyMap() {
 		AdjacencyMap<T> adjacencyMap =
-				new AdjacencyMap<>(backingGraph.keySet());
+				new AdjacencyMap<>(backingGraph.keyList());
 
-		backingGraph.entrySet().forEach(sourceVertex -> sourceVertex
-				.getValue()
-				.forEach((targetVertex, vertexWeight) -> adjacencyMap
-						.setWeight(sourceVertex.getKey(), targetVertex,
-								vertexWeight)));
+		backingGraph.forEach((key, value) -> {
+			value.forEach((targetKey, targetValue) -> {
+				adjacencyMap.setWeight(key, targetKey, targetValue);
+			});
+		});
 
 		return adjacencyMap;
 	}
@@ -274,7 +282,7 @@ public class Graph<T> {
 		Graph<E> g = new Graph<>();
 
 		edges.forEach(edge -> g.addEdge(edge.getSource(), edge.getTarget(),
-				edge.getDistance()));
+				edge.getDistance(), true));
 
 		return g;
 	}

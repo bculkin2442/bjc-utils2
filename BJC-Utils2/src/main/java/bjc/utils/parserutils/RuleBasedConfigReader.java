@@ -8,6 +8,7 @@ import java.util.Scanner;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import bjc.utils.data.IPair;
 import bjc.utils.data.Pair;
 import bjc.utils.exceptions.UnknownPragmaException;
 import bjc.utils.funcdata.FunctionalStringTokenizer;
@@ -20,9 +21,10 @@ import bjc.utils.funcdata.FunctionalStringTokenizer;
  *
  * @param <E>
  *            The type of the state object to use
+ * 
  */
 public class RuleBasedConfigReader<E> {
-	private BiConsumer<FunctionalStringTokenizer, Pair<String, E>>	startRule;
+	private BiConsumer<FunctionalStringTokenizer, IPair<String, E>>	startRule;
 	private BiConsumer<FunctionalStringTokenizer, E>				continueRule;
 	private Consumer<E>												endRule;
 
@@ -39,7 +41,7 @@ public class RuleBasedConfigReader<E> {
 	 *            The action to fire when ending a rule
 	 */
 	public RuleBasedConfigReader(
-			BiConsumer<FunctionalStringTokenizer, Pair<String, E>> startRule,
+			BiConsumer<FunctionalStringTokenizer, IPair<String, E>> startRule,
 			BiConsumer<FunctionalStringTokenizer, E> continueRule,
 			Consumer<E> endRule) {
 		this.startRule = startRule;
@@ -90,20 +92,26 @@ public class RuleBasedConfigReader<E> {
 
 			state = initialState;
 			boolean ruleOpen = false;
+
 			while (inputSource.hasNextLine()) {
 				String line = inputSource.nextLine();
 
-				if (line.equals("")) {
+				if (line.startsWith("#") || line.startsWith("//")) {
+					// It's a comment
+					continue;
+				} else if (line.equals("")) {
 					if (ruleOpen == false) {
 						// Ignore blank line without an open rule
-					}
-
-					if (endRule == null) {
-						// Nothing happens on rule end
 					} else {
-						endRule.accept(state);
-					}
+						if (endRule == null) {
+							// Nothing happens on rule end
+							ruleOpen = false;
+						} else {
+							endRule.accept(state);
+						}
 
+						ruleOpen = false;
+					}
 					continue;
 				} else if (line.startsWith("\t")) {
 					if (ruleOpen == false) {
@@ -125,9 +133,7 @@ public class RuleBasedConfigReader<E> {
 
 					String nextToken = tokenizer.nextToken();
 
-					if (nextToken.equals("#") || nextToken.equals("//")) {
-						// Do nothing, this is a comment
-					} else if (nextToken.equals("pragma")) {
+					if (nextToken.equals("pragma")) {
 						String token = tokenizer.nextToken();
 
 						pragmas.getOrDefault(token, (tokenzer, stat) -> {
@@ -181,7 +187,7 @@ public class RuleBasedConfigReader<E> {
 	 *            The action to execute on starting of a rule
 	 */
 	public void setStartRule(
-			BiConsumer<FunctionalStringTokenizer, Pair<String, E>> startRule) {
+			BiConsumer<FunctionalStringTokenizer, IPair<String, E>> startRule) {
 		if (startRule == null) {
 			throw new NullPointerException(
 					"Action on rule start must be non-null");

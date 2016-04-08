@@ -183,11 +183,14 @@ public class AST<T> {
 	/**
 	 * Expand the nodes in an AST
 	 * 
+	 * This is actually equivalent to converting the tree into an ordered
+	 * list, doing a flatMap, and then reconstructing the tree
+	 * 
 	 * @param expander
 	 *            The function to use for expanding nodes
 	 * @return The expanded AST
 	 */
-	public AST<T> expand(Function<T, AST<T>> expander) {
+	public AST<T> flatMapTree(Function<T, AST<T>> expander) {
 		if (expander == null) {
 			throw new NullPointerException("Expander must not be null");
 		}

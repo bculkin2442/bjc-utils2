@@ -2,10 +2,10 @@ package bjc.utils.gui;
 
 import java.io.File;
 import javax.swing.filechooser.FileFilter;
-import java.util.ArrayList;
 import java.util.List;
 
 import bjc.utils.funcdata.FunctionalList;
+import bjc.utils.funcdata.IFunctionalList;
 
 /**
  * A file filter based on extensions.
@@ -19,7 +19,7 @@ public class ExtensionFileFilter extends FileFilter {
 	/**
 	 * The list holding all filtered extensions
 	 */
-	private FunctionalList<String> extensions;
+	private IFunctionalList<String> extensions;
 
 	/**
 	 * Create a new filter only showing files with the specified
@@ -40,11 +40,7 @@ public class ExtensionFileFilter extends FileFilter {
 	 *            The extensions to show in this filter.
 	 */
 	public ExtensionFileFilter(String... exts) {
-		extensions = new FunctionalList<>(new ArrayList<>(exts.length));
-
-		for (String extension : exts) {
-			extensions.add(extension);
-		}
+		extensions = new FunctionalList<>(exts);
 	}
 
 	@Override

@@ -1,8 +1,7 @@
 package bjc.utils.components;
 
-import java.util.Map;
-
-import bjc.utils.funcdata.FunctionalList;
+import bjc.utils.funcdata.IFunctionalList;
+import bjc.utils.funcdata.IFunctionalMap;
 
 /**
  * A collection of implementations of {@link IDescribedComponent}
@@ -18,7 +17,7 @@ public interface IComponentRepository<E extends IDescribedComponent> {
 	 * 
 	 * @return A list of all the registered components
 	 */
-	public FunctionalList<E> getComponentList();
+	public IFunctionalList<E> getComponentList();
 
 	/**
 	 * Get all of the components this repository knows about
@@ -26,7 +25,7 @@ public interface IComponentRepository<E extends IDescribedComponent> {
 	 * @return A map from component name to component, containing all of
 	 *         the components in the repositories
 	 */
-	public Map<String, E> getComponents();
+	public IFunctionalMap<String, E> getComponents();
 
 	/**
 	 * Get a component with a specific name

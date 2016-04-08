@@ -2,9 +2,10 @@ package bjc.utils.gen;
 
 import java.util.Random;
 import bjc.utils.funcdata.FunctionalList;
+import bjc.utils.funcdata.IFunctionalList;
 import bjc.utils.data.GenHolder;
 import bjc.utils.data.IHolder;
-import bjc.utils.data.Pair;
+import bjc.utils.data.IPair;
 
 /**
  * Represents a random number generator where certain results are weighted
@@ -19,12 +20,12 @@ public class WeightedRandom<E> {
 	/**
 	 * The list of probabilities for each result
 	 */
-	private FunctionalList<Integer>	probabilities;
+	private IFunctionalList<Integer>	probabilities;
 
 	/**
 	 * The list of possible results to pick from
 	 */
-	private FunctionalList<E>		results;
+	private IFunctionalList<E>		results;
 
 	/**
 	 * The source for any needed random numbers
@@ -101,7 +102,7 @@ public class WeightedRandom<E> {
 	 * 
 	 * @return A list of all the values that can be generated
 	 */
-	public FunctionalList<E> getResults() {
+	public IFunctionalList<E> getResults() {
 		return results;
 	}
 
@@ -111,7 +112,7 @@ public class WeightedRandom<E> {
 	 * 
 	 * @return A list of pairs of values and value probabilities
 	 */
-	public FunctionalList<Pair<Integer, E>> getValues() {
+	public IFunctionalList<IPair<Integer, E>> getValues() {
 		return probabilities.pairWith(results);
 	}
 }

@@ -9,7 +9,7 @@ import java.util.function.Predicate;
 import bjc.utils.data.GenHolder;
 import bjc.utils.data.IPair;
 import bjc.utils.data.Pair;
-import bjc.utils.funcdata.FunctionalList;
+import bjc.utils.funcdata.IFunctionalList;
 
 /**
  * Creates a parse tree from a postfix expression
@@ -119,7 +119,7 @@ public class TreeConstructor {
 	 *            operator
 	 * @return A AST from the expression
 	 */
-	public static <T> AST<T> constructTree(FunctionalList<T> tokens,
+	public static <T> AST<T> constructTree(IFunctionalList<T> tokens,
 			Predicate<T> operatorPredicate) {
 		return constructTree(tokens, operatorPredicate, (op) -> false,
 				null);
@@ -149,7 +149,7 @@ public class TreeConstructor {
 	 *         interface. Maybe there's a better way to express how that
 	 *         works
 	 */
-	public static <T> AST<T> constructTree(FunctionalList<T> tokens,
+	public static <T> AST<T> constructTree(IFunctionalList<T> tokens,
 			Predicate<T> operatorPredicate, Predicate<T> isSpecialOperator,
 			Function<Deque<AST<T>>, AST<T>> handleSpecialOperator) {
 		if (tokens == null) {

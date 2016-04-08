@@ -2,27 +2,40 @@ package bjc.utils.funcdata;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import bjc.utils.data.Pair;
 
 /**
- * Functional wrapper over map providing some useful things
+ * Basic implementation of {@link IFunctionalMap}
  * 
  * @author ben
- * 
- * @param <K>
- *            The type of this map's keys
- * @param <V>
- *            The type of this map's values
  *
+ * @param <K>
+ *            The type of the map's keys
+ * @param <V>
+ *            The type of the map's values
  */
-public class FunctionalMap<K, V> {
-	private final class TransformedMap<V2> extends FunctionalMap<K, V2> {
-		private FunctionalMap<K, V>	mapToTransform;
-		private Function<V, V2>		transformer;
+public class FunctionalMap<K, V> implements IFunctionalMap<K, V> {
+	/**
+	 * A map that transforms values from one type to another
+	 * 
+	 * @author ben
+	 *
+	 * @param <K>
+	 *            The type of the map's keys
+	 * @param <V>
+	 *            The type of the map's values
+	 * @param <V2>
+	 *            The type of the transformed values
+	 */
+	private static final class TransformedValueMap<K, V, V2>
+			implements IFunctionalMap<K, V2> {
+		private IFunctionalMap<K, V>	mapToTransform;
+		private Function<V, V2>			transformer;
 
-		public TransformedMap(FunctionalMap<K, V> destMap,
+		public TransformedValueMap(IFunctionalMap<K, V> destMap,
 				Function<V, V2> transform) {
 			mapToTransform = destMap;
 			transformer = transform;
@@ -41,6 +54,40 @@ public class FunctionalMap<K, V> {
 		@Override
 		public String toString() {
 			return mapToTransform.toString();
+		}
+
+		@Override
+		public V2 put(K key, V2 val) {
+			throw new UnsupportedOperationException(
+					"Can't add items to transformed map");
+		}
+
+		@Override
+		public <V3> IFunctionalMap<K, V3> mapValues(
+				Function<V2, V3> transform) {
+			return new TransformedValueMap<>(this, transform);
+		}
+
+		@Override
+		public IFunctionalList<K> keyList() {
+			return mapToTransform.keyList();
+		}
+
+		@Override
+		public void forEach(BiConsumer<K, V2> action) {
+			mapToTransform.forEach((key, val) -> {
+				action.accept(key, transformer.apply(val));
+			});
+		}
+
+		@Override
+		public V2 remove(K key) {
+			return transformer.apply(mapToTransform.remove(key));
+		}
+
+		@Override
+		public int getSize() {
+			return mapToTransform.getSize();
 		}
 	}
 
@@ -84,18 +131,12 @@ public class FunctionalMap<K, V> {
 		}
 	}
 
-	/**
-	 * Add an entry to the map
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param key
-	 *            The key to put the value under
-	 * @param val
-	 *            The value to add
-	 * @return The previous value of the key in the map, or null if the key
-	 *         wasn't in the map. However, note that it may also return
-	 *         null if the key was set to null.
-	 * 
+	 * @see bjc.utils.funcdata.IFunctionalMap#put(K, V)
 	 */
+	@Override
 	public V put(K key, V val) {
 		if (key == null) {
 			throw new NullPointerException("Key must not be null");
@@ -104,15 +145,12 @@ public class FunctionalMap<K, V> {
 		return wrappedMap.put(key, val);
 	}
 
-	/**
-	 * Get the value assigned to the given key
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param key
-	 *            The key to look for a value under
-	 * @return The value of the key
-	 * 
-	 * 
+	 * @see bjc.utils.funcdata.IFunctionalMap#get(K)
 	 */
+	@Override
 	public V get(K key) {
 		if (key == null) {
 			throw new NullPointerException("Key must not be null");
@@ -126,35 +164,28 @@ public class FunctionalMap<K, V> {
 		return wrappedMap.get(key);
 	}
 
-	/**
-	 * Transform the values returned by this map.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * NOTE: This transform is applied once for each lookup of a value, so
-	 * the transform passed should be a proper function, or things will
-	 * likely not work as expected.
-	 * 
-	 * @param <V2>
-	 *            The new type of returned values
-	 * @param transformer
-	 *            The function to use to transform values
-	 * @return The map where each value will be transformed after lookup
+	 * @see bjc.utils.funcdata.IFunctionalMap#mapValues(java.util.function.
+	 * Function)
 	 */
-	public <V2> FunctionalMap<K, V2> mapValues(
+	@Override
+	public <V2> IFunctionalMap<K, V2> mapValues(
 			Function<V, V2> transformer) {
 		if (transformer == null) {
 			throw new NullPointerException("Transformer must not be null");
 		}
 
-		return new TransformedMap<>(this, transformer);
+		return new TransformedValueMap<>(this, transformer);
 	}
 
-	/**
-	 * Check if this map contains the specified key
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param key
-	 *            The key to check
-	 * @return Whether or not the map contains the key
+	 * @see bjc.utils.funcdata.IFunctionalMap#containsKey(K)
 	 */
+	@Override
 	public boolean containsKey(K key) {
 		return wrappedMap.containsKey(key);
 	}
@@ -162,5 +193,31 @@ public class FunctionalMap<K, V> {
 	@Override
 	public String toString() {
 		return wrappedMap.toString();
+	}
+
+	@Override
+	public IFunctionalList<K> keyList() {
+		FunctionalList<K> keys = new FunctionalList<>();
+
+		wrappedMap.keySet().forEach((key) -> {
+			keys.add(key);
+		});
+
+		return keys;
+	}
+
+	@Override
+	public void forEach(BiConsumer<K, V> action) {
+		wrappedMap.forEach(action);
+	}
+
+	@Override
+	public V remove(K key) {
+		return wrappedMap.remove(key);
+	}
+
+	@Override
+	public int getSize() {
+		return wrappedMap.size();
 	}
 }

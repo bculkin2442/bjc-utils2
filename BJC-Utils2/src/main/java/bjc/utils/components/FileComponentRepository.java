@@ -2,14 +2,15 @@ package bjc.utils.components;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import bjc.utils.funcdata.FunctionalList;
+import bjc.utils.funcdata.FunctionalMap;
+import bjc.utils.funcdata.IFunctionalList;
+import bjc.utils.funcdata.IFunctionalMap;
 
 /**
  * A component repository that loads its components from files in a
@@ -29,7 +30,7 @@ public class FileComponentRepository<E extends IDescribedComponent>
 	/**
 	 * The internal storage of components
 	 */
-	private Map<String, E>		components;
+	private IFunctionalMap<String, E>		components;
 
 	/**
 	 * The path that all the components came from
@@ -57,7 +58,8 @@ public class FileComponentRepository<E extends IDescribedComponent>
 					+ "Components can only be read from a directory");
 		}
 
-		components = new HashMap<>();
+		components = new FunctionalMap<>();
+		
 		sourceDirectory = directory.toPath().toAbsolutePath();
 
 		File[] listFiles = directory.listFiles();
@@ -100,8 +102,8 @@ public class FileComponentRepository<E extends IDescribedComponent>
 	}
 
 	@Override
-	public FunctionalList<E> getComponentList() {
-		FunctionalList<E> returnedList = new FunctionalList<>();
+	public IFunctionalList<E> getComponentList() {
+		IFunctionalList<E> returnedList = new FunctionalList<>();
 
 		components
 				.forEach((name, component) -> returnedList.add(component));
@@ -110,7 +112,7 @@ public class FileComponentRepository<E extends IDescribedComponent>
 	}
 
 	@Override
-	public Map<String, E> getComponents() {
+	public IFunctionalMap<String, E> getComponents() {
 		return components;
 	}
 

@@ -3,8 +3,8 @@ package bjc.utils.examples.parsing;
 import java.util.Scanner;
 import java.util.function.Predicate;
 
-import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.FunctionalStringTokenizer;
+import bjc.utils.funcdata.IFunctionalList;
 import bjc.utils.parserutils.AST;
 import bjc.utils.parserutils.ShuntingYard;
 import bjc.utils.parserutils.TreeConstructor;
@@ -30,7 +30,7 @@ public class TreeConstructTest {
 
 		ShuntingYard<String> yard = new ShuntingYard<>();
 
-		FunctionalList<String> shuntedTokens =
+		IFunctionalList<String> shuntedTokens =
 				yard.postfix(new FunctionalStringTokenizer(line)
 						.toList((strang) -> strang), (s) -> s);
 

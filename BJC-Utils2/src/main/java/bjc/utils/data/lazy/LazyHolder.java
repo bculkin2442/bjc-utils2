@@ -6,6 +6,7 @@ import java.util.function.Supplier;
 
 import bjc.utils.data.IHolder;
 import bjc.utils.funcdata.FunctionalList;
+import bjc.utils.funcdata.IFunctionalList;
 
 /**
  * Holds a single value of a specific type. This is used for indirect
@@ -22,15 +23,19 @@ import bjc.utils.funcdata.FunctionalList;
 public class LazyHolder<T> implements IHolder<T>, ILazy {
 	private final class LazyHolderSupplier<NewT>
 			implements Supplier<NewT> {
-		private FunctionalList<Function<T, T>>	pendingActions;
+		private IFunctionalList<Function<T, T>>	pendingActions;
 		private Function<T, NewT>				pendingTransform;
 
-		public LazyHolderSupplier(FunctionalList<Function<T, T>> actons,
+		public LazyHolderSupplier(IFunctionalList<Function<T, T>> actons,
 				Function<T, NewT> transform) {
 			// Resolve latent bug I just realized. After a map, adding new
 			// actions to the original holder could've resulted in changes
 			// to all unactualized mapped values from that holder
-			pendingActions = actons.clone();
+			pendingActions = new FunctionalList<>();
+
+			for (Function<T, T> action : actons.toIterable()) {
+				pendingActions.add(action);
+			}
 
 			this.pendingTransform = transform;
 		}
@@ -50,7 +55,7 @@ public class LazyHolder<T> implements IHolder<T>, ILazy {
 	/**
 	 * List of queued actions to be performed on realized values
 	 */
-	private FunctionalList<Function<T, T>>	actions	= new FunctionalList<>();
+	private IFunctionalList<Function<T, T>>	actions	= new FunctionalList<>();
 
 	/**
 	 * The value internally held by this lazy holder
