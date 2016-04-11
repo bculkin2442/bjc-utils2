@@ -173,7 +173,6 @@ public class LazyPair<L, R> implements IPair<L, R>, ILazy {
 	@Override
 	public <L2, R2> IPair<L2, R2> bind(
 			BiFunction<L, R, IPair<L2, R2>> binder) {
-		// TODO Auto-generated method stub
 		IHolder<IPair<L2, R2>> newDelegate = delegatePair
 				.map((pairVal) -> {
 					return pairVal.bind(binder);
@@ -181,5 +180,10 @@ public class LazyPair<L, R> implements IPair<L, R>, ILazy {
 
 		return new LazyPair<>(newDelegate, isMaterialized(),
 				hasPendingActions());
+	}
+
+	@Override
+	public String toString() {
+		return delegatePair.toString();
 	}
 }

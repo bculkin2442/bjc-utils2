@@ -92,15 +92,32 @@ public class Pair<L, R> implements IPair<L, R> {
 
 		return merger.apply(leftValue, rightValue);
 	}
-	
+
 	@Override
 	public String toString() {
-		return "pair[l=" + leftValue.toString() + ", r=" + rightValue.toString() + "]";
+		String leftValueString;
+
+		if (leftValue != null) {
+			leftValueString = leftValue.toString();
+		} else {
+			leftValueString = "(null)";
+		}
+
+		String rightValueString;
+
+		if (rightValue != null) {
+			rightValueString = rightValue.toString();
+		} else {
+			rightValueString = "(null)";
+		}
+		
+		return "pair[l=" + leftValueString + ", r=" + rightValueString
+				+ "]";
 	}
 
 	@Override
-	public <L2, R2> IPair<L2, R2>
-			bind(BiFunction<L, R, IPair<L2, R2>> binder) {
+	public <L2, R2> IPair<L2, R2> bind(
+			BiFunction<L, R, IPair<L2, R2>> binder) {
 		return binder.apply(leftValue, rightValue);
 	}
 }

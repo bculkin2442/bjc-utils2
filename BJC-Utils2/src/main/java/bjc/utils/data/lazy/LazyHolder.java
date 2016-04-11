@@ -79,6 +79,22 @@ public class LazyHolder<T> implements IHolder<T>, ILazy {
 			});
 		}
 
+		@Override
+		public String toString() {
+			if (holderSource == null) {
+				if (holder == null) {
+					return "(null)";
+				}
+
+				return holder.toString();
+			}
+
+			if (holder == null) {
+				return "(unmaterialized values)";
+			}
+
+			return holder.toString();
+		}
 	}
 
 	private static final class LazyHolderSupplier<NewT, T2>
@@ -251,5 +267,18 @@ public class LazyHolder<T> implements IHolder<T>, ILazy {
 		return new LazyHolderHolder<>(() -> {
 			return binder.apply(unwrap((val) -> val));
 		});
+	}
+
+	@Override
+	public String toString() {
+		if (isMaterialized()) {
+			if (hasPendingActions()) {
+				return heldValue.toString() + " (has pending actions)";
+			}
+
+			return heldValue.toString();
+		}
+
+		return "(unmaterialized value)";
 	}
 }
