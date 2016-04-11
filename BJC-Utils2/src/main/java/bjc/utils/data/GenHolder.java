@@ -105,4 +105,9 @@ public class GenHolder<T> implements IHolder<T> {
 
 		return heldValue.toString();
 	}
+
+	@Override
+	public <E> IHolder<E> bind(Function<T, IHolder<E>> binder) {
+		return binder.apply(heldValue);
+	}
 }

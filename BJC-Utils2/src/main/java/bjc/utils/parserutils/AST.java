@@ -361,4 +361,26 @@ public class AST<T> {
 			action.accept(token);
 		}
 	}
+
+	/**
+	 * Change the type of nodes in the tree without changing the structure
+	 * 
+	 * @param <E>
+	 *            The new node type
+	 * @param nodeTransform
+	 *            The transform to apply to leaf nodes
+	 * @param operatorTransform
+	 *            The transform to apply to operator nodes
+	 * @return An AST with the node types transformed
+	 */
+	public <E> AST<E> rebuildTree(Function<T, E> nodeTransform,
+			Function<T, E> operatorTransform) {
+		return collapse((leafNode) -> {
+			E transformedNode = nodeTransform.apply(leafNode);
+			return new AST<>(transformedNode);
+		}, (operator) -> (AST<E> newLeft, AST<E> newRight) -> {
+			return new AST<>(operatorTransform.apply(operator), newLeft,
+					newRight);
+		}, (resultValue) -> resultValue);
+	}
 }

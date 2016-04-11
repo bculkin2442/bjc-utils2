@@ -56,4 +56,15 @@ public interface IHolder<T> {
 	 * @return The mapped value outside of a GenHolder
 	 */
 	public <E> E unwrap(Function<T, E> unwrapper);
+
+	/**
+	 * Bind the value in this holder to a new value
+	 * 
+	 * @param <E>
+	 *            The new type of the held value
+	 * @param binder
+	 *            The function to do the binding with
+	 * @return The bound value
+	 */
+	public <E> IHolder<E> bind(Function<T, IHolder<E>> binder);
 }

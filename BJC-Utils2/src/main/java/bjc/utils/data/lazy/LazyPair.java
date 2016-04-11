@@ -98,9 +98,9 @@ public class LazyPair<L, R> implements IPair<L, R>, ILazy {
 			throw new NullPointerException("Transforms must be non-null");
 		}
 
-		IHolder<IPair<L2, R2>> newPair =
-				delegatePair.map((currentPair) -> currentPair
-						.apply(leftTransform, rightTransform));
+		IHolder<IPair<L2, R2>> newPair = delegatePair
+				.map((currentPair) -> currentPair.apply(leftTransform,
+						rightTransform));
 
 		return new LazyPair<>(newPair, materialized, true);
 	}
@@ -168,5 +168,18 @@ public class LazyPair<L, R> implements IPair<L, R>, ILazy {
 
 		materialized = true;
 		pendingActions = false;
+	}
+
+	@Override
+	public <L2, R2> IPair<L2, R2> bind(
+			BiFunction<L, R, IPair<L2, R2>> binder) {
+		// TODO Auto-generated method stub
+		IHolder<IPair<L2, R2>> newDelegate = delegatePair
+				.map((pairVal) -> {
+					return pairVal.bind(binder);
+				});
+
+		return new LazyPair<>(newDelegate, isMaterialized(),
+				hasPendingActions());
 	}
 }

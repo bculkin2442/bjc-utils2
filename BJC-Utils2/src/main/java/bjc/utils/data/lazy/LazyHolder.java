@@ -21,34 +21,100 @@ import bjc.utils.funcdata.IFunctionalList;
  *            The type of the data being held
  */
 public class LazyHolder<T> implements IHolder<T>, ILazy {
-	private final class LazyHolderSupplier<NewT>
-			implements Supplier<NewT> {
-		private IFunctionalList<Function<T, T>>	pendingActions;
-		private Function<T, NewT>				pendingTransform;
+	private static final class LazyHolderHolder<T2>
+			implements IHolder<T2> {
+		private Supplier<IHolder<T2>>				holderSource;
 
-		public LazyHolderSupplier(IFunctionalList<Function<T, T>> actons,
-				Function<T, NewT> transform) {
+		private IHolder<T2>							holder;
+
+		private IFunctionalList<Function<T2, T2>>	actions	= new FunctionalList<>();
+
+		public LazyHolderHolder(Supplier<IHolder<T2>> source) {
+
+			holderSource = source;
+		}
+
+		@Override
+		public void doWith(Consumer<T2> action) {
+			actions.add((val) -> {
+				action.accept(val);
+
+				return val;
+			});
+		}
+
+		@Override
+		public <NewT> IHolder<NewT> map(Function<T2, NewT> transformer) {
+			// TODO implement me
+			throw new UnsupportedOperationException(
+					"Mapping is not yet supported on bound holders");
+		}
+
+		@Override
+		public IHolder<T2> transform(Function<T2, T2> transformer) {
+			actions.add(transformer);
+
+			return this;
+		}
+
+		@Override
+		public <E> E unwrap(Function<T2, E> unwrapper) {
+			if (holder == null) {
+				holder = holderSource.get();
+			}
+
+			if (!actions.isEmpty()) {
+				actions.forEach((transform) -> {
+					holder.transform(transform);
+				});
+			}
+
+			return holder.unwrap(unwrapper);
+		}
+
+		@Override
+		public <E> IHolder<E> bind(Function<T2, IHolder<E>> binder) {
+			return new LazyHolderHolder<>(() -> {
+				return binder.apply(unwrap((val) -> val));
+			});
+		}
+
+	}
+
+	private static final class LazyHolderSupplier<NewT, T2>
+			implements Supplier<NewT> {
+		private IFunctionalList<Function<T2, T2>>	pendingActions;
+		private Function<T2, NewT>					pendingTransform;
+
+		private T2									heldValue;
+		private Supplier<T2>						heldSource;
+
+		public LazyHolderSupplier(IFunctionalList<Function<T2, T2>> actons,
+				Function<T2, NewT> transform, T2 heldValue,
+				Supplier<T2> heldSource) {
 			// Resolve latent bug I just realized. After a map, adding new
 			// actions to the original holder could've resulted in changes
 			// to all unactualized mapped values from that holder
 			pendingActions = new FunctionalList<>();
 
-			for (Function<T, T> action : actons.toIterable()) {
+			for (Function<T2, T2> action : actons.toIterable()) {
 				pendingActions.add(action);
 			}
 
 			this.pendingTransform = transform;
+			this.heldValue = heldValue;
+			this.heldSource = heldSource;
 		}
 
 		@Override
 		public NewT get() {
 			if (heldValue == null) {
 				return pendingActions.reduceAux(heldSource.get(),
-						Function<T, T>::apply, pendingTransform::apply);
+						Function<T2, T2>::apply, pendingTransform::apply);
 			}
 
 			return pendingActions.reduceAux(heldValue,
-					Function<T, T>::apply, pendingTransform::apply);
+					Function<T2, T2>::apply, pendingTransform::apply);
 		}
 	}
 
@@ -114,8 +180,8 @@ public class LazyHolder<T> implements IHolder<T>, ILazy {
 		}
 
 		// Don't actually map until we need to
-		return new LazyHolder<>(
-				new LazyHolderSupplier<>(actions, transform));
+		return new LazyHolder<>(new LazyHolderSupplier<>(actions,
+				transform, heldValue, heldSource));
 	}
 
 	@Override
@@ -177,6 +243,13 @@ public class LazyHolder<T> implements IHolder<T>, ILazy {
 
 		actions.forEach((action) -> {
 			heldValue = action.apply(heldValue);
+		});
+	}
+
+	@Override
+	public <T2> IHolder<T2> bind(Function<T, IHolder<T2>> binder) {
+		return new LazyHolderHolder<>(() -> {
+			return binder.apply(unwrap((val) -> val));
 		});
 	}
 }

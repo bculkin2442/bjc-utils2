@@ -97,4 +97,10 @@ public class Pair<L, R> implements IPair<L, R> {
 	public String toString() {
 		return "pair[l=" + leftValue.toString() + ", r=" + rightValue.toString() + "]";
 	}
+
+	@Override
+	public <L2, R2> IPair<L2, R2>
+			bind(BiFunction<L, R, IPair<L2, R2>> binder) {
+		return binder.apply(leftValue, rightValue);
+	}
 }

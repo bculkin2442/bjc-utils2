@@ -37,4 +37,24 @@ public class StringUtils {
 		return input.matches("\\A(?:" + regex + ")+\\Z");
 	}
 
+	/**
+	 * Checks if the given expression contains the specified operator in a
+	 * situation that indicates its use as an infix operator.
+	 * 
+	 * @param expression
+	 *            The expression to check
+	 * @param operator
+	 *            The operator to see if it is contained
+	 * @return Whether or not the given expression contains the specified
+	 *         operator as a infix operator
+	 */
+	public static boolean containsInfixOperator(String expression,
+			String operator) {
+		// Bit annoying to have to use a full class name, but what are you
+		// going to do?
+		return org.apache.commons.lang3.StringUtils
+				.countMatches(expression, operator) == 1
+				&& !expression.equalsIgnoreCase(operator)
+				&& !expression.startsWith(operator);
+	}
 }

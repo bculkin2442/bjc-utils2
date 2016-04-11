@@ -368,16 +368,19 @@ public class WeightedGrammar<E> {
 				newRule.add(newCase);
 			}
 
-			newRule.forEach(
-					(list) -> newResults
-							.add(new Pair<>(
-									pair.merge((left, right) -> left)
-											+ additionalProbability,
-									list)));
+			newRule.forEach((list) -> {
+				Integer currentProb = pair.merge((left, right) -> left);
+
+				newResults.add(new Pair<>(
+						currentProb + additionalProbability, list));
+			});
 		});
 
-		newResults.forEach((pair) -> pair
-				.doWith((left, right) -> addCase(ruleName, left, right)));
+		newResults.forEach((pair) -> {
+			pair.doWith((left, right) -> {
+				addCase(ruleName, left, right);
+			});
+		});
 	}
 
 	/**

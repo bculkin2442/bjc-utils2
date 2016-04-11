@@ -28,40 +28,38 @@ public class TreeConstructor {
 			}
 
 			@Override
-			public IPair<Deque<AST<T>>, AST<T>>
-					apply(IPair<Deque<AST<T>>, AST<T>> pair) {
-				Deque<AST<T>> queuedASTs =
-						pair.merge((queue, currentAST) -> queue);
+			public IPair<Deque<AST<T>>, AST<T>> apply(
+					IPair<Deque<AST<T>>, AST<T>> pair) {
+				return pair.bind((queuedASTs, currentAST) -> {
+					return handleOperator(queuedASTs);
+				});
+			}
 
-				AST<T> mergedAST = pair.merge((queue, currentAST) -> {
-					AST<T> newAST;
+			private IPair<Deque<AST<T>>, AST<T>> handleOperator(
+					Deque<AST<T>> queuedASTs) {
+				AST<T> newAST;
 
-					if (isSpecialOperator.test(element)) {
-						newAST = handleSpecialOperator.apply(queue);
-					} else {
-						if (queue.size() < 2) {
-							throw new IllegalStateException(
-									"Attempted to parse binary operator without enough operands.\n"
-											+ "Problem operator is "
-											+ element
-											+ "\nPossible operand is: \n\t"
-											+ queue.peek());
-						}
-
-						AST<T> rightAST = queue.pop();
-						AST<T> leftAST = queue.pop();
-
-						newAST = new AST<>(element, leftAST, rightAST);
+				if (isSpecialOperator.test(element)) {
+					newAST = handleSpecialOperator.apply(queuedASTs);
+				} else {
+					if (queuedASTs.size() < 2) {
+						throw new IllegalStateException(
+								"Attempted to parse binary operator without enough operands.\n"
+										+ "Problem operator is "
+										+ element
+										+ "\nPossible operand is: \n\t"
+										+ queuedASTs.peek());
 					}
 
-					queue.push(newAST);
-					return newAST;
-				});
+					AST<T> rightAST = queuedASTs.pop();
+					AST<T> leftAST = queuedASTs.pop();
 
-				Pair<Deque<AST<T>>, AST<T>> newPair =
-						new Pair<>(queuedASTs, mergedAST);
+					newAST = new AST<>(element, leftAST, rightAST);
+				}
 
-				return newPair;
+				queuedASTs.push(newAST);
+
+				return new Pair<>(queuedASTs, newAST);
 			}
 		}
 
@@ -162,8 +160,8 @@ public class TreeConstructor {
 					"Special operator determiner must not be null");
 		}
 
-		GenHolder<IPair<Deque<AST<T>>, AST<T>>> initialState =
-				new GenHolder<>(new Pair<>(new LinkedList<>(), null));
+		GenHolder<IPair<Deque<AST<T>>, AST<T>>> initialState = new GenHolder<>(
+				new Pair<>(new LinkedList<>(), null));
 
 		tokens.forEach(
 				new TokenTransformer<>(initialState, operatorPredicate,
