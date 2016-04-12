@@ -15,8 +15,11 @@ import java.util.function.UnaryOperator;
 public interface IHolder<ContainedType> {
 	/**
 	 * Bind a function across the value in this container
-	 * @param <BoundType> The type of value in this container
-	 * @param binder The function to bind to the value
+	 * 
+	 * @param <BoundType>
+	 *            The type of value in this container
+	 * @param binder
+	 *            The function to bind to the value
 	 * @return A holder from binding the value
 	 */
 	public <BoundType> IHolder<BoundType> bind(
@@ -82,4 +85,15 @@ public interface IHolder<ContainedType> {
 	 */
 	public <UnwrappedType> UnwrappedType unwrap(
 			Function<ContainedType, UnwrappedType> unwrapper);
+
+	/**
+	 * Replace the held value with a new one
+	 * 
+	 * @param newValue
+	 *            The value to hold instead
+	 * @return The holder itself
+	 */
+	public default IHolder<ContainedType> replace(ContainedType newValue) {
+		return transform((oldValue) -> newValue);
+	}
 }

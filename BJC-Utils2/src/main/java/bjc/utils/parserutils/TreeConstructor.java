@@ -7,6 +7,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import bjc.utils.data.GenHolder;
+import bjc.utils.data.IHolder;
 import bjc.utils.data.IPair;
 import bjc.utils.data.Pair;
 import bjc.utils.funcdata.IFunctionalList;
@@ -45,8 +46,7 @@ public class TreeConstructor {
 					if (queuedASTs.size() < 2) {
 						throw new IllegalStateException(
 								"Attempted to parse binary operator without enough operands.\n"
-										+ "Problem operator is "
-										+ element
+										+ "Problem operator is " + element
 										+ "\nPossible operand is: \n\t"
 										+ queuedASTs.peek());
 					}
@@ -63,13 +63,13 @@ public class TreeConstructor {
 			}
 		}
 
-		private GenHolder<IPair<Deque<AST<T>>, AST<T>>>	initialState;
+		private IHolder<IPair<Deque<AST<T>>, AST<T>>>	initialState;
 		private Predicate<T>							operatorPredicate;
 		private Predicate<T>							isSpecialOperator;
 		private Function<Deque<AST<T>>, AST<T>>			handleSpecialOperator;
 
 		public TokenTransformer(
-				GenHolder<IPair<Deque<AST<T>>, AST<T>>> initialState,
+				IHolder<IPair<Deque<AST<T>>, AST<T>>> initialState,
 				Predicate<T> operatorPredicate,
 				Predicate<T> isSpecialOperator,
 				Function<Deque<AST<T>>, AST<T>> handleSpecialOperator) {
@@ -93,10 +93,8 @@ public class TreeConstructor {
 				});
 
 				initialState.transform((pair) -> {
-					return pair.apply((Deque<AST<T>> queue) -> {
-						return queue;
-					}, (AST<T> currentAST) -> {
-						return newAST;
+					return pair.bind((queue, currentAST) -> {
+						return new Pair<>(queue, newAST);
 					});
 				});
 			}
@@ -160,7 +158,7 @@ public class TreeConstructor {
 					"Special operator determiner must not be null");
 		}
 
-		GenHolder<IPair<Deque<AST<T>>, AST<T>>> initialState = new GenHolder<>(
+		IHolder<IPair<Deque<AST<T>>, AST<T>>> initialState = new GenHolder<>(
 				new Pair<>(new LinkedList<>(), null));
 
 		tokens.forEach(

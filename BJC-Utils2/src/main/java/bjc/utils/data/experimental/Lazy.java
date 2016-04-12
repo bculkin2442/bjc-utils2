@@ -26,8 +26,7 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 
 		private boolean												holderBound;
 
-		private IFunctionalList<UnaryOperator<BoundContainedType>>	actions	=
-				new FunctionalList<>();
+		private IFunctionalList<UnaryOperator<BoundContainedType>>	actions	= new FunctionalList<>();
 
 		public BoundLazy(Supplier<IHolder<OldType>> supp,
 				Function<OldType, IHolder<BoundContainedType>> binder) {
@@ -38,8 +37,7 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 		@Override
 		public <BoundType> IHolder<BoundType> bind(
 				Function<BoundContainedType, IHolder<BoundType>> bindr) {
-			IFunctionalList<UnaryOperator<BoundContainedType>> pendingActions =
-					new FunctionalList<>();
+			IFunctionalList<UnaryOperator<BoundContainedType>> pendingActions = new FunctionalList<>();
 
 			actions.forEach(pendingActions::add);
 
@@ -62,8 +60,7 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 		@Override
 		public <MappedType> IHolder<MappedType> map(
 				Function<BoundContainedType, MappedType> mapper) {
-			IFunctionalList<UnaryOperator<BoundContainedType>> pendingActions =
-					new FunctionalList<>();
+			IFunctionalList<UnaryOperator<BoundContainedType>> pendingActions = new FunctionalList<>();
 
 			actions.forEach(pendingActions::add);
 
@@ -101,12 +98,19 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 			return boundHolder.unwrap(unwrapper);
 		}
 
+		@Override
+		public String toString() {
+			if (holderBound) {
+				return boundHolder.toString();
+			}
+
+			return "(unmaterialized)";
+		}
 	}
 
 	private Supplier<ContainedType>							valueSupplier;
 
-	private IFunctionalList<UnaryOperator<ContainedType>>	actions	=
-			new FunctionalList<>();
+	private IFunctionalList<UnaryOperator<ContainedType>>	actions	= new FunctionalList<>();
 
 	private boolean											valueMaterialized;
 
@@ -146,8 +150,7 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 	@Override
 	public <BoundType> IHolder<BoundType> bind(
 			Function<ContainedType, IHolder<BoundType>> binder) {
-		IFunctionalList<UnaryOperator<ContainedType>> pendingActions =
-				new FunctionalList<>();
+		IFunctionalList<UnaryOperator<ContainedType>> pendingActions = new FunctionalList<>();
 
 		actions.forEach(pendingActions::add);
 
@@ -167,8 +170,7 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 	@Override
 	public <MappedType> IHolder<MappedType> map(
 			Function<ContainedType, MappedType> mapper) {
-		IFunctionalList<UnaryOperator<ContainedType>> pendingActions =
-				new FunctionalList<>();
+		IFunctionalList<UnaryOperator<ContainedType>> pendingActions = new FunctionalList<>();
 
 		actions.forEach(pendingActions::add);
 
@@ -209,5 +211,18 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 		actions = new FunctionalList<>();
 
 		return unwrapper.apply(heldValue);
+	}
+
+	@Override
+	public String toString() {
+		if (valueMaterialized) {
+			if (actions.isEmpty()) {
+				return "value[v='" + heldValue + "']";
+			}
+
+			return "value[v='" + heldValue + "'] (has pending transforms)";
+		}
+
+		return "(unmaterialized)";
 	}
 }

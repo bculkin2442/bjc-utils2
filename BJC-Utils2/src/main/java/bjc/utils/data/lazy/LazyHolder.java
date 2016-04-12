@@ -171,7 +171,7 @@ public class LazyHolder<T> implements IHolder<T>, ILazy {
 	 *            The value held in the holder
 	 */
 	public LazyHolder(T value) {
-		heldValue = value;
+		heldSource = () -> value;
 	}
 
 	@Override

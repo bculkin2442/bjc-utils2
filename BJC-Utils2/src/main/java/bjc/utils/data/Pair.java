@@ -2,7 +2,6 @@ package bjc.utils.data;
 
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 /**
  * Holds a pair of values of two different types.
@@ -50,24 +49,6 @@ public class Pair<L, R> implements IPair<L, R> {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see bjc.utils.data.IPair#apply(java.util.function.Function,
-	 * java.util.function.Function)
-	 */
-	@Override
-	public <L2, R2> IPair<L2, R2> apply(Function<L, L2> leftTransformer,
-			Function<R, R2> rightTransformer) {
-		if (leftTransformer == null || rightTransformer == null) {
-			throw new NullPointerException(
-					"Transformers must be non-null");
-		}
-
-		return new Pair<>(leftTransformer.apply(leftValue),
-				rightTransformer.apply(rightValue));
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see bjc.utils.data.IPair#doWith(java.util.function.BiConsumer)
 	 */
 	@Override
@@ -110,7 +91,7 @@ public class Pair<L, R> implements IPair<L, R> {
 		} else {
 			rightValueString = "(null)";
 		}
-		
+
 		return "pair[l=" + leftValueString + ", r=" + rightValueString
 				+ "]";
 	}

@@ -42,49 +42,6 @@ public class Identity<ContainedType> implements IHolder<ContainedType> {
 		return binder.apply(heldValue);
 	}
 
-	@Override
-	public <MappedType> IHolder<MappedType> map(
-			Function<ContainedType, MappedType> mapper) {
-		return new Identity<>(mapper.apply(heldValue));
-	}
-
-	@Override
-	public IHolder<ContainedType> transform(
-			UnaryOperator<ContainedType> transformer) {
-		heldValue = transformer.apply(heldValue);
-
-		return this;
-	}
-
-	@Override
-	public <UnwrappedType> UnwrappedType unwrap(
-			Function<ContainedType, UnwrappedType> unwrapper) {
-		return unwrapper.apply(heldValue);
-	}
-
-	@Override
-	public String toString() {
-		return "holding[v=" + heldValue + "]";
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-
-		int result = 1;
-
-		int fieldHash = (heldValue == null) ? 0 : heldValue.hashCode();
-
-		result = prime * result + fieldHash;
-
-		return result;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -111,5 +68,48 @@ public class Identity<ContainedType> implements IHolder<ContainedType> {
 		}
 
 		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+
+		int result = 1;
+
+		int fieldHash = (heldValue == null) ? 0 : heldValue.hashCode();
+
+		result = prime * result + fieldHash;
+
+		return result;
+	}
+
+	@Override
+	public <MappedType> IHolder<MappedType> map(
+			Function<ContainedType, MappedType> mapper) {
+		return new Identity<>(mapper.apply(heldValue));
+	}
+
+	@Override
+	public String toString() {
+		return "holding[v=" + heldValue + "]";
+	}
+
+	@Override
+	public IHolder<ContainedType> transform(
+			UnaryOperator<ContainedType> transformer) {
+		heldValue = transformer.apply(heldValue);
+
+		return this;
+	}
+
+	@Override
+	public <UnwrappedType> UnwrappedType unwrap(
+			Function<ContainedType, UnwrappedType> unwrapper) {
+		return unwrapper.apply(heldValue);
 	}
 }

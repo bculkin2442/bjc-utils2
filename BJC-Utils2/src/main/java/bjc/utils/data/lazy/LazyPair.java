@@ -2,7 +2,6 @@ package bjc.utils.data.lazy;
 
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import bjc.utils.data.IHolder;
@@ -83,26 +82,6 @@ public class LazyPair<L, R> implements IPair<L, R>, ILazy {
 		pendingActions = pend;
 
 		delegatePair = delegate;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see bjc.utils.data.IPair#apply(java.util.function.Function,
-	 * java.util.function.Function)
-	 */
-	@Override
-	public <L2, R2> IPair<L2, R2> apply(Function<L, L2> leftTransform,
-			Function<R, R2> rightTransform) {
-		if (leftTransform == null || rightTransform == null) {
-			throw new NullPointerException("Transforms must be non-null");
-		}
-
-		IHolder<IPair<L2, R2>> newPair = delegatePair
-				.map((currentPair) -> currentPair.apply(leftTransform,
-						rightTransform));
-
-		return new LazyPair<>(newPair, materialized, true);
 	}
 
 	/*
