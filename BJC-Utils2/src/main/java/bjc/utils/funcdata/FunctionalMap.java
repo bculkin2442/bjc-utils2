@@ -3,6 +3,7 @@ package bjc.utils.funcdata;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import bjc.utils.data.Pair;
@@ -88,6 +89,18 @@ public class FunctionalMap<K, V> implements IFunctionalMap<K, V> {
 		@Override
 		public int getSize() {
 			return mapToTransform.getSize();
+		}
+
+		@Override
+		public void forEachKey(Consumer<K> action) {
+			mapToTransform.forEachKey(action);
+		}
+
+		@Override
+		public void forEachValue(Consumer<V2> action) {
+			mapToTransform.forEachValue((val) -> {
+				action.accept(transformer.apply(val));
+			});
 		}
 	}
 
@@ -219,5 +232,15 @@ public class FunctionalMap<K, V> implements IFunctionalMap<K, V> {
 	@Override
 	public int getSize() {
 		return wrappedMap.size();
+	}
+
+	@Override
+	public void forEachKey(Consumer<K> action) {
+		wrappedMap.keySet().forEach(action);
+	}
+
+	@Override
+	public void forEachValue(Consumer<V> action) {
+		wrappedMap.values().forEach(action);
 	}
 }

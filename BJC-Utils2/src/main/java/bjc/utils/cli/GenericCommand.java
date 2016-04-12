@@ -7,27 +7,6 @@ package bjc.utils.cli;
  *
  */
 public class GenericCommand implements ICommand {
-	private static class GenericHelp implements ICommandHelp {
-		private String	summary;
-		private String	description;
-
-		public GenericHelp(String summary, String description) {
-			this.summary = summary;
-			this.description = description;
-		}
-
-		@Override
-		public String getSummary() {
-			return summary;
-		}
-
-		@Override
-		public String getDescription() {
-			return description;
-		}
-
-	}
-
 	private ICommandHandler	handler;
 	private ICommandHelp	help;
 

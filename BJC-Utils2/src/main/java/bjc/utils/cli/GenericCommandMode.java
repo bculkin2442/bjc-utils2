@@ -1,5 +1,6 @@
 package bjc.utils.cli;
 
+import java.util.TreeMap;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -16,7 +17,7 @@ import bjc.utils.funcdata.IFunctionalMap;
  * @author ben
  *
  */
-public class GeneralCommandMode implements ICommandMode {
+public class GenericCommandMode implements ICommandMode {
 	private IFunctionalMap<String, ICommand>		commandHandlers;
 	private IFunctionalMap<String, ICommand>		defaultHandlers;
 
@@ -32,20 +33,21 @@ public class GeneralCommandMode implements ICommandMode {
 	private String									customPrompt;
 
 	/**
-	 * Create a new general command mode
+	 * Create a new generic command mode
 	 * 
 	 * @param normalOutput
 	 *            The function to use for normal output
 	 * @param errorOutput
 	 *            The function to use for error output
 	 */
-	public GeneralCommandMode(Consumer<String> normalOutput,
+	public GenericCommandMode(Consumer<String> normalOutput,
 			Consumer<String> errorOutput) {
 		this.normalOutput = normalOutput;
 		this.errorOutput = errorOutput;
 
-		commandHandlers = new FunctionalMap<>();
-		defaultHandlers = new FunctionalMap<>();
+		commandHandlers = new FunctionalMap<>(new TreeMap<>());
+		defaultHandlers = new FunctionalMap<>(new TreeMap<>());
+		helpTopics = new FunctionalMap<>(new TreeMap<>());
 
 		defaultHandlers.put("list", new GenericCommand((args) -> {
 			listCommands();
@@ -65,7 +67,14 @@ public class GeneralCommandMode implements ICommandMode {
 						+ ", and the alias to give that command."));
 
 		defaultHandlers.put("help", new GenericCommand((args) -> {
-			// TODO implement help system
+			if (args == null || args.length == 0) {
+				// Invoke general help
+				helpSummary();
+			} else {
+				// Invoke help for a command
+				helpCommand(args[0]);
+			}
+
 			return this;
 		}, "help\tConsult the help system",
 				"help consults the internal help system."
@@ -73,6 +82,25 @@ public class GeneralCommandMode implements ICommandMode {
 						+ " causes it to print out all the topics you can ask for details on,"
 						+ " while invoking it with the name of a topic will print the entry"
 						+ " for that topic"));
+
+		// Add commands handled in a upper layer
+		defaultHandlers.put("clear", new GenericCommand((args) -> {
+			errorOutput.accept(
+					"ERROR: This is a bug. Please report to the developer");
+
+			return this;
+		}, "clear\tClear the screen",
+				"clear clears the screen of all the text on it,"
+						+ " and prepares a fresh prompt."));
+
+		defaultHandlers.put("exit", new GenericCommand((args) -> {
+			errorOutput.accept(
+					"ERROR: This is a bug. Please report to the developer");
+
+			return this;
+		}, "exit\tExit the game",
+				"exit first prompts the user to make sure they want to exit,"
+						+ " and if they affirm it, it quits the game"));
 	}
 
 	/**
@@ -131,6 +159,18 @@ public class GeneralCommandMode implements ICommandMode {
 		}
 	}
 
+	/**
+	 * Add a help topic to this command mode that isn't tied to a command
+	 * 
+	 * @param topicName
+	 *            The name of the topic
+	 * @param help
+	 *            The contents of the topic
+	 */
+	public void addHelpTopic(String topicName, ICommandHelp help) {
+		helpTopics.put(topicName, help);
+	}
+
 	private void aliasCommands(String[] args) {
 		if (args.length != 2) {
 			errorOutput.accept("ERROR: Alias requires two arguments. "
@@ -173,6 +213,57 @@ public class GeneralCommandMode implements ICommandMode {
 		}
 
 		return ICommandMode.super.getName();
+	}
+
+	private void helpCommand(String commandName) {
+		if (commandHandlers.containsKey(commandName)) {
+			normalOutput.accept("\n" + commandHandlers.get(commandName)
+					.getHelp().getDescription());
+		} else if (defaultHandlers.containsKey(commandName)) {
+			normalOutput.accept("\n" + defaultHandlers.get(commandName)
+					.getHelp().getDescription());
+		} else if (helpTopics.containsKey(commandName)) {
+			normalOutput.accept(
+					"\n" + helpTopics.get(commandName).getDescription());
+		} else {
+			errorOutput
+					.accept("ERROR: I'm sorry, but there is no help available for '"
+							+ commandName + "'");
+		}
+	}
+
+	private void helpSummary() {
+		normalOutput.accept(
+				"Help topics for this command mode are as follows:\n");
+		if (commandHandlers.getSize() > 0) {
+			commandHandlers.forEachValue((command) -> {
+				normalOutput.accept(
+						"\t" + command.getHelp().getSummary() + "\n");
+			});
+		} else {
+			normalOutput.accept("\tNone available\n");
+		}
+
+		normalOutput.accept(
+				"\nHelp topics available in all command modes are as follows\n");
+		if (defaultHandlers.getSize() > 0) {
+			defaultHandlers.forEachValue((command) -> {
+				normalOutput.accept(
+						"\t" + command.getHelp().getSummary() + "\n");
+			});
+		} else {
+			normalOutput.accept("\tNone available\n");
+		}
+
+		normalOutput.accept(
+				"\nHelp topics not associated with a command are as follows\n");
+		if (helpTopics.getSize() > 0) {
+			helpTopics.forEachValue((topic) -> {
+				normalOutput.accept("\t" + topic.getSummary() + "\n");
+			});
+		} else {
+			normalOutput.accept("\tNone available\n");
+		}
 	}
 
 	private void listCommands() {

@@ -1,6 +1,7 @@
 package bjc.utils.funcdata;
 
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -101,4 +102,20 @@ public interface IFunctionalMap<K, V> {
 	 * @return The number of entries in this map
 	 */
 	int getSize();
+
+	/**
+	 * Perform an action for each key in the map
+	 * 
+	 * @param action
+	 *            The action to perform on each key in the map
+	 */
+	void forEachKey(Consumer<K> action);
+
+	/**
+	 * Perform an action for each value in the map
+	 * 
+	 * @param action
+	 *            The action to perform on each value in the map
+	 */
+	void forEachValue(Consumer<V> action);
 }
