@@ -1,16 +1,20 @@
 package bjc.utils.components;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import bjc.utils.data.experimental.IHolder;
+import bjc.utils.data.experimental.Identity;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.FunctionalMap;
 import bjc.utils.funcdata.IFunctionalList;
 import bjc.utils.funcdata.IFunctionalMap;
+import bjc.utils.funcutils.FileUtils;
 
 /**
  * A component repository that loads its components from files in a
@@ -24,18 +28,18 @@ import bjc.utils.funcdata.IFunctionalMap;
 public class FileComponentRepository<E extends IDescribedComponent>
 		implements IComponentRepository<E> {
 
-	private static final Logger	CLASS_LOGGER	=
-			LoggerFactory.getLogger(FileComponentRepository.class);
+	private static final Logger			CLASS_LOGGER	= LoggerFactory
+			.getLogger(FileComponentRepository.class);
 
 	/**
 	 * The internal storage of components
 	 */
-	private IFunctionalMap<String, E>		components;
+	private IFunctionalMap<String, E>	components;
 
 	/**
 	 * The path that all the components came from
 	 */
-	private Path				sourceDirectory;
+	private Path						sourceDirectory;
 
 	/**
 	 * Create a new component repository sourcing components from files in
@@ -59,24 +63,24 @@ public class FileComponentRepository<E extends IDescribedComponent>
 		}
 
 		components = new FunctionalMap<>();
-		
+
 		sourceDirectory = directory.toPath().toAbsolutePath();
 
-		File[] listFiles = directory.listFiles();
+		IHolder<Boolean> isFirstDir = new Identity<>(true);
 
-		if (listFiles == null) {
-			throw new IllegalArgumentException("File " + directory
-					+ " is not a valid directory.\n"
-					+ "Components can only be read from a directory");
-		}
+		try {
+			FileUtils.traverseDirectory(sourceDirectory, (pth, attr) -> {
+				if (attr.isDirectory() && !isFirstDir.getValue()) {
+					// Don't skip the first directory, that's the parent
+					isFirstDir.replace(false);
+					// Skip directories, they probably have component
+					return false;
+				}
 
-		for (File componentFile : listFiles) {
-			if (componentFile.isDirectory()) {
-				// Do nothing with directories. They probably contain
-				// support files for components
-			} else {
+				return true;
+			}, (pth, attr) -> {
 				try {
-					E component = componentReader.apply(componentFile);
+					E component = componentReader.apply(pth.toFile());
 
 					if (component == null) {
 						throw new NullPointerException(
@@ -91,13 +95,19 @@ public class FileComponentRepository<E extends IDescribedComponent>
 								+ " will not be registered .");
 					}
 				} catch (Exception ex) {
-					CLASS_LOGGER
-							.warn("Error found reading component from file "
-									+ componentFile.toString()
-									+ ". This component will not be loaded", ex);
+					CLASS_LOGGER.warn(
+							"Error found reading component from file "
+									+ pth.toString()
+									+ ". This component will not be loaded",
+							ex);
 				}
 
-			}
+				// Keep loading components, even if this one failed
+				return true;
+			});
+		} catch (IOException ioex) {
+			CLASS_LOGGER.warn("Error found reading component from file.",
+					ioex);
 		}
 	}
 
