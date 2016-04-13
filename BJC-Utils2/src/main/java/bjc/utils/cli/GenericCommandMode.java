@@ -90,7 +90,7 @@ public class GenericCommandMode implements ICommandMode {
 		// Add commands handled in a upper layer
 		defaultHandlers.put("clear", new GenericCommand((args) -> {
 			errorOutput.accept(
-					"ERROR: This is a bug. Please report to the developer");
+					"ERROR: This console doesn't support screen clearing");
 
 			return this;
 		}, "clear\tClear the screen",
@@ -99,12 +99,12 @@ public class GenericCommandMode implements ICommandMode {
 
 		defaultHandlers.put("exit", new GenericCommand((args) -> {
 			errorOutput.accept(
-					"ERROR: This is a bug. Please report to the developer");
+					"ERROR: This console doesn't support auto-exiting");
 
 			return this;
 		}, "exit\tExit the game",
 				"exit first prompts the user to make sure they want to exit,"
-						+ " and if they affirm it, it quits the game"));
+						+ " and if they affirm it, it quits"));
 	}
 
 	/**
@@ -242,8 +242,8 @@ public class GenericCommandMode implements ICommandMode {
 		if (commandHandlers.getSize() > 0) {
 			commandHandlers.forEachValue((command) -> {
 				if (!command.isAlias()) {
-					normalOutput.accept("\t"
-							+ command.getHelp().getSummary() + "\n");
+					normalOutput.accept(
+							"\t" + command.getHelp().getSummary() + "\n");
 				}
 			});
 		} else {
@@ -255,8 +255,8 @@ public class GenericCommandMode implements ICommandMode {
 		if (defaultHandlers.getSize() > 0) {
 			defaultHandlers.forEachValue((command) -> {
 				if (!command.isAlias()) {
-					normalOutput.accept("\t"
-							+ command.getHelp().getSummary() + "\n");
+					normalOutput.accept(
+							"\t" + command.getHelp().getSummary() + "\n");
 				}
 			});
 		} else {
