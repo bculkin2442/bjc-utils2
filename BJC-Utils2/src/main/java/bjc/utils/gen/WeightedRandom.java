@@ -1,11 +1,12 @@
 package bjc.utils.gen;
 
 import java.util.Random;
+
+import bjc.utils.data.experimental.IHolder;
+import bjc.utils.data.experimental.IPair;
+import bjc.utils.data.experimental.Identity;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IFunctionalList;
-import bjc.utils.data.GenHolder;
-import bjc.utils.data.IHolder;
-import bjc.utils.data.IPair;
 
 /**
  * Represents a random number generator where certain results are weighted
@@ -25,14 +26,14 @@ public class WeightedRandom<E> {
 	/**
 	 * The list of possible results to pick from
 	 */
-	private IFunctionalList<E>		results;
+	private IFunctionalList<E>			results;
 
 	/**
 	 * The source for any needed random numbers
 	 */
-	private Random					source;
+	private Random						source;
 
-	private int						totalChance;
+	private int							totalChance;
 
 	/**
 	 * Create a new weighted random generator with the specified source of
@@ -74,10 +75,10 @@ public class WeightedRandom<E> {
 	 * @return A random value selected in a weighted fashion.
 	 */
 	public E generateValue() {
-		GenHolder<Integer> randomValue =
-				new GenHolder<>(source.nextInt(totalChance));
-		IHolder<E> currentResult = new GenHolder<>();
-		GenHolder<Boolean> valuePicked = new GenHolder<>(true);
+		IHolder<Integer> randomValue = new Identity<>(
+				source.nextInt(totalChance));
+		IHolder<E> currentResult = new Identity<>();
+		IHolder<Boolean> valuePicked = new Identity<>(true);
 
 		probabilities.forEachIndexed((itemIndex, itemProbability) -> {
 			if (valuePicked.unwrap(bool -> bool)) {

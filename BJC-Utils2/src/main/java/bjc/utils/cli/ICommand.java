@@ -33,5 +33,7 @@ public interface ICommand {
 	 * 
 	 * @return Whether or not this command is an alias of another
 	 */
-	public boolean isAlias();
+	public default boolean isAlias() {
+		return false;
+	}
 }

@@ -28,7 +28,7 @@ public class EnumUtils {
 			Random rnd) {
 		E[] enumValues = enumClass.getEnumConstants();
 
-		return new FunctionalList<>(enumValues).randItem(rnd);
+		return new FunctionalList<>(enumValues).randItem(rnd::nextInt);
 	}
 
 	/**
@@ -54,7 +54,7 @@ public class EnumUtils {
 		int randomValueCount = enumValues.length - nValues;
 
 		for (int i = 0; i <= randomValueCount; i++) {
-			E rDir = valueList.randItem(rnd);
+			E rDir = valueList.randItem(rnd::nextInt);
 
 			valueList.removeMatching(rDir);
 		}

@@ -5,17 +5,16 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Random;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import bjc.utils.data.GenHolder;
-import bjc.utils.data.IHolder;
-import bjc.utils.data.IPair;
-import bjc.utils.data.Pair;
+import bjc.utils.data.experimental.IHolder;
+import bjc.utils.data.experimental.IPair;
+import bjc.utils.data.experimental.Identity;
+import bjc.utils.data.experimental.Pair;
 
 import java.util.ArrayList;
 
@@ -45,6 +44,8 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 	/**
 	 * Create a new functional list containing the specified items.
 	 * 
+	 * Takes O(n) time, where n is the number of items specified
+	 * 
 	 * @param items
 	 *            The items to put into this functional list.
 	 */
@@ -70,6 +71,8 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 	/**
 	 * Create a new functional list as a wrapper of a existing list.
 	 * 
+	 * Takes O(1) time, since it doesn't copy the list.
+	 * 
 	 * @param backingList
 	 *            The list to use as a backing list.
 	 */
@@ -82,7 +85,9 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 		wrappedList = backingList;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see bjc.utils.funcdata.IFunctionalList#add(E)
 	 */
 	@Override
@@ -90,8 +95,11 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 		return wrappedList.add(item);
 	}
 
-	/* (non-Javadoc)
-	 * @see bjc.utils.funcdata.IFunctionalList#allMatch(java.util.function.Predicate)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see bjc.utils.funcdata.IFunctionalList#allMatch(java.util.function.
+	 * Predicate)
 	 */
 	@Override
 	public boolean allMatch(Predicate<E> matchPredicate) {
@@ -110,8 +118,11 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 		return true;
 	}
 
-	/* (non-Javadoc)
-	 * @see bjc.utils.funcdata.IFunctionalList#anyMatch(java.util.function.Predicate)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see bjc.utils.funcdata.IFunctionalList#anyMatch(java.util.function.
+	 * Predicate)
 	 */
 	@Override
 	public boolean anyMatch(Predicate<E> matchPredicate) {
@@ -130,6 +141,13 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 		return false;
 	}
 
+	/**
+	 * Clone this list into a new one, and clone the backing list as well
+	 * 
+	 * Takes O(n) time, where n is the number of elements in the list
+	 * 
+	 * @return A list
+	 */
 	@Override
 	public IFunctionalList<E> clone() {
 		IFunctionalList<E> clonedList = new FunctionalList<>();
@@ -141,8 +159,12 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 		return clonedList;
 	}
 
-	/* (non-Javadoc)
-	 * @see bjc.utils.funcdata.IFunctionalList#combineWith(bjc.utils.funcdata.IFunctionalList, java.util.function.BiFunction)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * bjc.utils.funcdata.IFunctionalList#combineWith(bjc.utils.funcdata.
+	 * IFunctionalList, java.util.function.BiFunction)
 	 */
 	@Override
 	public <T, F> IFunctionalList<F> combineWith(
@@ -173,7 +195,9 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 		return returnedList;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see bjc.utils.funcdata.IFunctionalList#contains(E)
 	 */
 	@Override
@@ -182,7 +206,9 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 		return this.anyMatch(item::equals);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see bjc.utils.funcdata.IFunctionalList#first()
 	 */
 	@Override
@@ -195,8 +221,11 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 		return wrappedList.get(0);
 	}
 
-	/* (non-Javadoc)
-	 * @see bjc.utils.funcdata.IFunctionalList#flatMap(java.util.function.Function)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see bjc.utils.funcdata.IFunctionalList#flatMap(java.util.function.
+	 * Function)
 	 */
 	@Override
 	public <T> IFunctionalList<T> flatMap(
@@ -224,8 +253,11 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 		return returnedList;
 	}
 
-	/* (non-Javadoc)
-	 * @see bjc.utils.funcdata.IFunctionalList#forEach(java.util.function.Consumer)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see bjc.utils.funcdata.IFunctionalList#forEach(java.util.function.
+	 * Consumer)
 	 */
 	@Override
 	public void forEach(Consumer<E> action) {
@@ -236,8 +268,12 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 		wrappedList.forEach(action);
 	}
 
-	/* (non-Javadoc)
-	 * @see bjc.utils.funcdata.IFunctionalList#forEachIndexed(java.util.function.BiConsumer)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * bjc.utils.funcdata.IFunctionalList#forEachIndexed(java.util.function
+	 * .BiConsumer)
 	 */
 	@Override
 	public void forEachIndexed(BiConsumer<Integer, E> indexedAction) {
@@ -246,7 +282,7 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 		}
 
 		// This is held b/c ref'd variables must be final/effectively final
-		GenHolder<Integer> currentIndex = new GenHolder<>(0);
+		IHolder<Integer> currentIndex = new Identity<>(0);
 
 		wrappedList.forEach((element) -> {
 			// Call the action with the index and the value
@@ -258,7 +294,9 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 		});
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see bjc.utils.funcdata.IFunctionalList#getByIndex(int)
 	 */
 	@Override
@@ -275,8 +313,12 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 		return wrappedList;
 	}
 
-	/* (non-Javadoc)
-	 * @see bjc.utils.funcdata.IFunctionalList#getMatching(java.util.function.Predicate)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * bjc.utils.funcdata.IFunctionalList#getMatching(java.util.function.
+	 * Predicate)
 	 */
 	@Override
 	public IFunctionalList<E> getMatching(Predicate<E> matchPredicate) {
@@ -296,7 +338,9 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 		return returnedList;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see bjc.utils.funcdata.IFunctionalList#getSize()
 	 */
 	@Override
@@ -304,7 +348,9 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 		return wrappedList.size();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see bjc.utils.funcdata.IFunctionalList#isEmpty()
 	 */
 	@Override
@@ -312,8 +358,11 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 		return wrappedList.isEmpty();
 	}
 
-	/* (non-Javadoc)
-	 * @see bjc.utils.funcdata.IFunctionalList#map(java.util.function.Function)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * bjc.utils.funcdata.IFunctionalList#map(java.util.function.Function)
 	 */
 	@Override
 	public <T> IFunctionalList<T> map(Function<E, T> elementTransformer) {
@@ -332,8 +381,11 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 		return returnedList;
 	}
 
-	/* (non-Javadoc)
-	 * @see bjc.utils.funcdata.IFunctionalList#pairWith(bjc.utils.funcdata.IFunctionalList)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see bjc.utils.funcdata.IFunctionalList#pairWith(bjc.utils.funcdata.
+	 * IFunctionalList)
 	 */
 	@Override
 	public <T> IFunctionalList<IPair<E, T>> pairWith(
@@ -341,7 +393,9 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 		return combineWith(rightList, Pair<E, T>::new);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see bjc.utils.funcdata.IFunctionalList#partition(int)
 	 */
 	@Override
@@ -357,7 +411,7 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 		IFunctionalList<IFunctionalList<E>> returnedList = new FunctionalList<>();
 
 		// The current partition being filled
-		GenHolder<IFunctionalList<E>> currentPartition = new GenHolder<>(
+		IHolder<IFunctionalList<E>> currentPartition = new Identity<>(
 				new FunctionalList<>());
 
 		this.forEach((element) -> {
@@ -383,12 +437,14 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 	 * Check if a partition has room for another item
 	 */
 	private Boolean isPartitionFull(int numberPerPartition,
-			GenHolder<IFunctionalList<E>> currentPartition) {
+			IHolder<IFunctionalList<E>> currentPartition) {
 		return currentPartition.unwrap(
 				(partition) -> partition.getSize() >= numberPerPartition);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see bjc.utils.funcdata.IFunctionalList#prepend(E)
 	 */
 	@Override
@@ -396,23 +452,28 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 		wrappedList.add(0, item);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see bjc.utils.funcdata.IFunctionalList#randItem(java.util.Random)
 	 */
 	@Override
-	public E randItem(Random rnd) {
+	public E randItem(Function<Integer, Integer> rnd) {
 		if (rnd == null) {
 			throw new NullPointerException(
 					"Random source must not be null");
 		}
 
-		int randomIndex = rnd.nextInt(wrappedList.size());
+		int randomIndex = rnd.apply(wrappedList.size());
 
 		return wrappedList.get(randomIndex);
 	}
 
-	/* (non-Javadoc)
-	 * @see bjc.utils.funcdata.IFunctionalList#reduceAux(T, java.util.function.BiFunction, java.util.function.Function)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see bjc.utils.funcdata.IFunctionalList#reduceAux(T,
+	 * java.util.function.BiFunction, java.util.function.Function)
 	 */
 	@Override
 	public <T, F> F reduceAux(T initialValue,
@@ -425,7 +486,7 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 		}
 
 		// The current collapsed list
-		IHolder<T> currentState = new GenHolder<>(initialValue);
+		IHolder<T> currentState = new Identity<>(initialValue);
 
 		wrappedList.forEach(element -> {
 			// Accumulate a new value into the state
@@ -437,8 +498,11 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 		return currentState.unwrap(resultTransformer);
 	}
 
-	/* (non-Javadoc)
-	 * @see bjc.utils.funcdata.IFunctionalList#removeIf(java.util.function.Predicate)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see bjc.utils.funcdata.IFunctionalList#removeIf(java.util.function.
+	 * Predicate)
 	 */
 	@Override
 	public boolean removeIf(Predicate<E> removePredicate) {
@@ -449,7 +513,9 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 		return wrappedList.removeIf(removePredicate);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see bjc.utils.funcdata.IFunctionalList#removeMatching(E)
 	 */
 	@Override
@@ -457,8 +523,11 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 		removeIf((element) -> element.equals(desiredElement));
 	}
 
-	/* (non-Javadoc)
-	 * @see bjc.utils.funcdata.IFunctionalList#search(E, java.util.Comparator)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see bjc.utils.funcdata.IFunctionalList#search(E,
+	 * java.util.Comparator)
 	 */
 	@Override
 	public E search(E searchKey, Comparator<E> comparator) {
@@ -475,7 +544,9 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 		return null;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see bjc.utils.funcdata.IFunctionalList#sort(java.util.Comparator)
 	 */
 	@Override
@@ -483,7 +554,9 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 		Collections.sort(wrappedList, comparator);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see bjc.utils.funcdata.IFunctionalList#toIterable()
 	 */
 	@Override
@@ -511,5 +584,10 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 		sb.append(")");
 
 		return sb.toString();
+	}
+
+	@Override
+	public E[] toArray(E[] arrType) {
+		return wrappedList.toArray(arrType);
 	}
 }

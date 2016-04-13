@@ -118,4 +118,11 @@ public interface IFunctionalMap<K, V> {
 	 *            The action to perform on each value in the map
 	 */
 	void forEachValue(Consumer<V> action);
+
+	/**
+	 * Get a list of the values in this map
+	 * 
+	 * @return A list of values in this map
+	 */
+	IFunctionalList<V> valueList();
 }

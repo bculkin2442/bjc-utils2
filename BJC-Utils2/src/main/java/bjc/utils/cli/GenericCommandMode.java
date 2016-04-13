@@ -87,6 +87,8 @@ public class GenericCommandMode implements ICommandMode {
 						+ " while invoking it with the name of a topic will print the entry"
 						+ " for that topic"));
 
+		addCommandAlias("help", "man");
+
 		// Add commands handled in a upper layer
 		defaultHandlers.put("clear", new GenericCommand((args) -> {
 			errorOutput.accept(

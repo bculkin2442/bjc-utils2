@@ -1,5 +1,6 @@
 package bjc.utils.data.experimental;
 
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -80,5 +81,17 @@ public interface IPair<LeftType, RightType> {
 	 */
 	public default RightType getRight() {
 		return merge((leftValue, rightValue) -> rightValue);
+	}
+
+	/**
+	 * Immediately perfom the specified action with the contents of this pair
+	 * @param consumer The action to perform on the pair
+	 */
+	public default void doWith(BiConsumer<LeftType, RightType> consumer) {
+		merge((leftValue, rightValue) -> {
+			consumer.accept(leftValue, rightValue);
+			
+			return null;
+		});
 	}
 }

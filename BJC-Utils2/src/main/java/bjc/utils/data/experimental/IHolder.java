@@ -94,6 +94,8 @@ public interface IHolder<ContainedType> {
 	 * @return The holder itself
 	 */
 	public default IHolder<ContainedType> replace(ContainedType newValue) {
-		return transform((oldValue) -> newValue);
+		return transform((oldValue) -> {
+			return newValue;
+		});
 	}
 }

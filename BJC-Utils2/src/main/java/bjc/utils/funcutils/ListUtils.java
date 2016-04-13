@@ -1,5 +1,6 @@
 package bjc.utils.funcutils;
 
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -20,8 +21,8 @@ import bjc.utils.funcdata.IFunctionalList;
 public class ListUtils {
 	private static final int MAX_NTRIESPART = 50;
 
-	private static final class TokenDeaffixer
-			implements BiFunction<String, String, IFunctionalList<String>> {
+	private static final class TokenDeaffixer implements
+			BiFunction<String, String, IFunctionalList<String>> {
 		private String token;
 
 		public TokenDeaffixer(String tok) {
@@ -53,8 +54,8 @@ public class ListUtils {
 		}
 	}
 
-	private static final class TokenSplitter
-			implements BiFunction<String, String, IFunctionalList<String>> {
+	private static final class TokenSplitter implements
+			BiFunction<String, String, IFunctionalList<String>> {
 		private String tokenToSplit;
 
 		public TokenSplitter(String tok) {
@@ -350,5 +351,72 @@ public class ListUtils {
 						strang.length() - seperator.length());
 			});
 		}
+	}
+
+	/**
+	 * Select a number of random items from the list, with replacement
+	 * 
+	 * @param <E>
+	 *            The type of items to select
+	 * @param list
+	 *            The list to select from
+	 * @param numberOfItems
+	 *            The number of items to selet
+	 * @param rng
+	 *            A function that creates a random number from 0 to the
+	 *            desired number
+	 * @return A new list containing the desired number of items randomly
+	 *         selected from the specified list
+	 */
+	public static <E> IFunctionalList<E> drawWithReplacement(
+			IFunctionalList<E> list, int numberOfItems,
+			Function<Integer, Integer> rng) {
+		IFunctionalList<E> selectedItems = new FunctionalList<>(
+				new ArrayList<>(numberOfItems));
+
+		for (int i = 0; i < numberOfItems; i++) {
+			selectedItems.add(list.randItem(rng));
+		}
+
+		return selectedItems;
+	}
+
+	/**
+	 * Select a number of random items from the list without replacement
+	 * 
+	 * @param <E>
+	 *            The type of items to select
+	 * @param list
+	 *            The list to select from
+	 * @param numberOfItems
+	 *            The number of items to selet
+	 * @param rng
+	 *            A function that creates a random number from 0 to the
+	 *            desired number
+	 * @return A new list containing the desired number of items randomly
+	 *         selected from the specified list without replacement
+	 */
+
+	public static <E> IFunctionalList<E> drawWithoutReplacement(
+			IFunctionalList<E> list, int numberOfItems,
+			Function<Integer, Integer> rng) {
+		IFunctionalList<E> selectedItems = new FunctionalList<>(
+				new ArrayList<>(numberOfItems));
+
+		int totalItems = list.getSize();
+
+		list.forEachIndexed((index, element) -> {
+			int winningChance = numberOfItems - selectedItems.getSize();
+			// n - m
+			int totalChance = totalItems - (index - 1);
+			// N - t
+
+			// Probability of selecting the t+1'th element
+			if (NumberUtils.isProbable(winningChance, totalChance, rng)) {
+				selectedItems.add(element);
+			}
+		});
+
+		return selectedItems;
 	}
 }

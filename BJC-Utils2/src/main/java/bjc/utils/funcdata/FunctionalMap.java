@@ -6,7 +6,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import bjc.utils.data.Pair;
+import bjc.utils.data.experimental.IPair;
 
 /**
  * Basic implementation of {@link IFunctionalMap}
@@ -102,6 +102,11 @@ public class FunctionalMap<K, V> implements IFunctionalMap<K, V> {
 				action.accept(transformer.apply(val));
 			});
 		}
+
+		@Override
+		public IFunctionalList<V2> valueList() {
+			return mapToTransform.valueList().map(transformer);
+		}
 	}
 
 	private Map<K, V> wrappedMap;
@@ -134,10 +139,10 @@ public class FunctionalMap<K, V> implements IFunctionalMap<K, V> {
 	 *            The entries to put into the map
 	 */
 	@SafeVarargs
-	public FunctionalMap(Pair<K, V>... entries) {
+	public FunctionalMap(IPair<K, V>... entries) {
 		this();
 
-		for (Pair<K, V> entry : entries) {
+		for (IPair<K, V> entry : entries) {
 			entry.doWith((key, val) -> {
 				wrappedMap.put(key, val);
 			});
@@ -242,5 +247,16 @@ public class FunctionalMap<K, V> implements IFunctionalMap<K, V> {
 	@Override
 	public void forEachValue(Consumer<V> action) {
 		wrappedMap.values().forEach(action);
+	}
+
+	@Override
+	public IFunctionalList<V> valueList() {
+		FunctionalList<V> values = new FunctionalList<>();
+
+		wrappedMap.values().forEach((value) -> {
+			values.add(value);
+		});
+
+		return values;
 	}
 }

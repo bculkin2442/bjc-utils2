@@ -8,6 +8,7 @@ package bjc.utils.components;
  */
 public class ComponentDescriptionState {
 	private String	name;
+	
 	private String	description;
 
 	private String	author;

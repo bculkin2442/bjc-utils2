@@ -17,7 +17,9 @@ public interface IComponentRepository<E extends IDescribedComponent> {
 	 * 
 	 * @return A list of all the registered components
 	 */
-	public IFunctionalList<E> getComponentList();
+	public default IFunctionalList<E> getComponentList() {
+		return getComponents().valueList();
+	}
 
 	/**
 	 * Get all of the components this repository knows about
