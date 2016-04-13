@@ -2,6 +2,9 @@ package bjc.utils.cli;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintStream;
+import java.util.Arrays;
+import java.util.Scanner;
 
 /**
  * Runs a CLI interface from the provided set of streams
@@ -13,6 +16,7 @@ public class CLICommander {
 	private InputStream		input;
 	private OutputStream	output;
 	private OutputStream	error;
+
 	private ICommandMode	initialMode;
 
 	/**
@@ -56,5 +60,49 @@ public class CLICommander {
 		}
 
 		this.initialMode = initialMode;
+	}
+
+	/**
+	 * Run a set of commands through this commander
+	 */
+	public void runCommands() {
+		PrintStream normalOutput = new PrintStream(output);
+		PrintStream errorOutput = new PrintStream(error);
+
+		@SuppressWarnings("resource")
+		// We might use this stream multiple times. Don't close it
+		Scanner inputSource = new Scanner(input);
+
+		ICommandMode currentMode = initialMode;
+
+		while (currentMode != null) {
+			if (currentMode.useCustomPrompt()) {
+				normalOutput.print(currentMode.getCustomPrompt());
+			} else {
+				normalOutput.print(currentMode.getName() + ">> ");
+			}
+
+			String ln = inputSource.nextLine();
+
+			if (currentMode.canHandleCommand(ln)) {
+				String[] commandTokens = ln.split(" ");
+
+				String[] commandArgs;
+
+				if (commandTokens.length > 1) {
+					commandArgs = Arrays.copyOfRange(commandTokens, 1,
+							commandTokens.length);
+				} else {
+					commandArgs = null;
+				}
+
+				currentMode = currentMode.processCommand(commandTokens[0],
+						commandArgs);
+			} else {
+				errorOutput.print("Error: Unrecognized command " + ln);
+			}
+		}
+
+		normalOutput.print("Exiting now.");
 	}
 }

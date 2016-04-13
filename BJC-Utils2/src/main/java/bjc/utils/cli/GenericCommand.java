@@ -7,6 +7,34 @@ package bjc.utils.cli;
  *
  */
 public class GenericCommand implements ICommand {
+	private static class DelegatingCommand implements ICommand {
+		private ICommand delegate;
+
+		public DelegatingCommand(ICommand delegate) {
+			this.delegate = delegate;
+		}
+
+		@Override
+		public ICommandHandler getHandler() {
+			return delegate.getHandler();
+		}
+
+		@Override
+		public ICommandHelp getHelp() {
+			return delegate.getHelp();
+		}
+
+		@Override
+		public ICommand createAlias() {
+			return new DelegatingCommand(delegate);
+		}
+
+		@Override
+		public boolean isAlias() {
+			return true;
+		}
+	}
+
 	private ICommandHandler	handler;
 	private ICommandHelp	help;
 
@@ -34,5 +62,20 @@ public class GenericCommand implements ICommand {
 	@Override
 	public ICommandHelp getHelp() {
 		return help;
+	}
+
+	@Override
+	public boolean isAlias() {
+		return false;
+	}
+
+	/**
+	 * Create a command that is an alias to this one
+	 * 
+	 * @return A command that is an alias to this one
+	 */
+	@Override
+	public ICommand createAlias() {
+		return new DelegatingCommand(this);
 	}
 }

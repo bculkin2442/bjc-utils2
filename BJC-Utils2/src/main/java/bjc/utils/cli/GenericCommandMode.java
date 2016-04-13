@@ -49,6 +49,10 @@ public class GenericCommandMode implements ICommandMode {
 		defaultHandlers = new FunctionalMap<>(new TreeMap<>());
 		helpTopics = new FunctionalMap<>(new TreeMap<>());
 
+		setupDefaultCommands(errorOutput);
+	}
+
+	private void setupDefaultCommands(Consumer<String> errorOutput) {
 		defaultHandlers.put("list", new GenericCommand((args) -> {
 			listCommands();
 
@@ -130,7 +134,7 @@ public class GenericCommandMode implements ICommandMode {
 					+ aliasName + "' to a command with a bound handler");
 		} else {
 			commandHandlers.put(aliasName,
-					commandHandlers.get(commandName));
+					commandHandlers.get(commandName).createAlias());
 		}
 	}
 
@@ -237,8 +241,10 @@ public class GenericCommandMode implements ICommandMode {
 				"Help topics for this command mode are as follows:\n");
 		if (commandHandlers.getSize() > 0) {
 			commandHandlers.forEachValue((command) -> {
-				normalOutput.accept(
-						"\t" + command.getHelp().getSummary() + "\n");
+				if (!command.isAlias()) {
+					normalOutput.accept("\t"
+							+ command.getHelp().getSummary() + "\n");
+				}
 			});
 		} else {
 			normalOutput.accept("\tNone available\n");
@@ -248,8 +254,10 @@ public class GenericCommandMode implements ICommandMode {
 				"\nHelp topics available in all command modes are as follows\n");
 		if (defaultHandlers.getSize() > 0) {
 			defaultHandlers.forEachValue((command) -> {
-				normalOutput.accept(
-						"\t" + command.getHelp().getSummary() + "\n");
+				if (!command.isAlias()) {
+					normalOutput.accept("\t"
+							+ command.getHelp().getSummary() + "\n");
+				}
 			});
 		} else {
 			normalOutput.accept("\tNone available\n");
