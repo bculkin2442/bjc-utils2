@@ -7,7 +7,6 @@ import java.util.function.Predicate;
 
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IFunctionalList;
-import bjc.utils.funcdata.bst.ITreePart.TreeLinearizationMethod;
 
 /**
  * A binary search tree, with some mild support for functional traversal.

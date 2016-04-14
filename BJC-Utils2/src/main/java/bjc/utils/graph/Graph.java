@@ -10,8 +10,8 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 
-import bjc.utils.data.GenHolder;
-import bjc.utils.data.IHolder;
+import bjc.utils.data.experimental.IHolder;
+import bjc.utils.data.experimental.Identity;
 import bjc.utils.funcdata.FunctionalMap;
 import bjc.utils.funcdata.IFunctionalList;
 import bjc.utils.funcdata.IFunctionalMap;
@@ -155,7 +155,7 @@ public class Graph<T> {
 		Set<T> visitedVertexes = new HashSet<>();
 
 		// Start at the initial vertex and visit it
-		IHolder<T> sourceVertex = new GenHolder<>(getInitial());
+		IHolder<T> sourceVertex = new Identity<>(getInitial());
 
 		visitedVertexes.add(sourceVertex.unwrap(vertex -> vertex));
 
@@ -174,7 +174,7 @@ public class Graph<T> {
 
 			// Get the edge with the minimum distance
 			IHolder<Edge<T>> minimumEdge =
-					new GenHolder<>(availableEdges.poll());
+					new Identity<>(availableEdges.poll());
 
 			// Only consider edges where we haven't visited the target of
 			// the edge

@@ -5,11 +5,12 @@ import java.util.LinkedList;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 
-import bjc.utils.data.GenHolder;
-import bjc.utils.data.IHolder;
-import bjc.utils.data.IPair;
-import bjc.utils.data.Pair;
+import bjc.utils.data.experimental.IHolder;
+import bjc.utils.data.experimental.IPair;
+import bjc.utils.data.experimental.Identity;
+import bjc.utils.data.experimental.Pair;
 import bjc.utils.funcdata.IFunctionalList;
 
 /**
@@ -20,8 +21,8 @@ import bjc.utils.funcdata.IFunctionalList;
  */
 public class TreeConstructor {
 	private static final class TokenTransformer<T> implements Consumer<T> {
-		private final class OperatorHandler implements
-				Function<IPair<Deque<AST<T>>, AST<T>>, IPair<Deque<AST<T>>, AST<T>>> {
+		private final class OperatorHandler
+				implements UnaryOperator<IPair<Deque<AST<T>>, AST<T>>> {
 			private T element;
 
 			public OperatorHandler(T element) {
@@ -158,7 +159,7 @@ public class TreeConstructor {
 					"Special operator determiner must not be null");
 		}
 
-		IHolder<IPair<Deque<AST<T>>, AST<T>>> initialState = new GenHolder<>(
+		IHolder<IPair<Deque<AST<T>>, AST<T>>> initialState = new Identity<>(
 				new Pair<>(new LinkedList<>(), null));
 
 		tokens.forEach(

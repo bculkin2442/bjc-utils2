@@ -7,7 +7,8 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.stream.IntStream;
 
-import bjc.utils.data.GenHolder;
+import bjc.utils.data.experimental.IHolder;
+import bjc.utils.data.experimental.Identity;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.FunctionalMap;
 import bjc.utils.funcdata.IFunctionalList;
@@ -71,7 +72,7 @@ public class AdjacencyMap<T> {
 
 			adjacencyMap = new AdjacencyMap<>(vertices);
 
-			GenHolder<Integer> row = new GenHolder<>(0);
+			IHolder<Integer> row = new Identity<>(0);
 
 			inputSource.forEachRemaining((strang) -> {
 				String[] parts = strang.split(" ");
@@ -149,7 +150,7 @@ public class AdjacencyMap<T> {
 	 * @return Whether or not the graph is directed
 	 */
 	public boolean isDirected() {
-		GenHolder<Boolean> result = new GenHolder<>(true);
+		IHolder<Boolean> result = new Identity<>(true);
 
 		adjacencyMap.forEach((key, value) -> {
 			value.forEach((targetKey, targetValue) -> {

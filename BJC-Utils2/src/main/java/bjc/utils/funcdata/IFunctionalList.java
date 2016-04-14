@@ -19,10 +19,10 @@ import bjc.utils.data.experimental.IPair;
  * 
  * @author ben
  *
- * @param <E>
+ * @param <ContainedType>
  *            The type in this list
  */
-public interface IFunctionalList<E> {
+public interface IFunctionalList<ContainedType> {
 
 	/**
 	 * Add an item to this list
@@ -33,7 +33,7 @@ public interface IFunctionalList<E> {
 	 *            The item to add to this list.
 	 * @return Whether the item was added to the list succesfully.
 	 */
-	boolean add(E item);
+	boolean add(ContainedType item);
 
 	/**
 	 * Check if all of the elements of this list match the specified
@@ -48,7 +48,7 @@ public interface IFunctionalList<E> {
 	 * @return Whether all of the elements of the list match the specified
 	 *         predicate.
 	 */
-	boolean allMatch(Predicate<E> matchPredicate);
+	boolean allMatch(Predicate<ContainedType> matchPredicate);
 
 	/**
 	 * Check if any of the elements in this list match the specified list.
@@ -62,7 +62,7 @@ public interface IFunctionalList<E> {
 	 * @return Whether any element in the list matches the provided
 	 *         predicate.
 	 */
-	boolean anyMatch(Predicate<E> matchPredicate);
+	boolean anyMatch(Predicate<ContainedType> matchPredicate);
 
 	/**
 	 * Combine this list with another one into a new list and merge the
@@ -76,9 +76,9 @@ public interface IFunctionalList<E> {
 	 * of this list and the provided one, and c is the running time of the
 	 * combiner.
 	 * 
-	 * @param <T>
+	 * @param <OtherType>
 	 *            The type of the second list
-	 * @param <F>
+	 * @param <CombinedType>
 	 *            The type of the combined list
 	 * 
 	 * @param rightList
@@ -87,8 +87,9 @@ public interface IFunctionalList<E> {
 	 *            The function to use for combining element pairs.
 	 * @return A new list containing the merged pairs of lists.
 	 */
-	<T, F> IFunctionalList<F> combineWith(IFunctionalList<T> rightList,
-			BiFunction<E, T, F> itemCombiner);
+	<OtherType, CombinedType> IFunctionalList<CombinedType> combineWith(
+			IFunctionalList<OtherType> rightList,
+			BiFunction<ContainedType, OtherType, CombinedType> itemCombiner);
 
 	/**
 	 * Check if the list contains the specified item
@@ -99,7 +100,7 @@ public interface IFunctionalList<E> {
 	 *            The item to see if it is contained
 	 * @return Whether or not the specified item is in the list
 	 */
-	boolean contains(E item);
+	boolean contains(ContainedType item);
 
 	/**
 	 * Get the first element in the list
@@ -108,7 +109,7 @@ public interface IFunctionalList<E> {
 	 * 
 	 * @return The first element in this list.
 	 */
-	E first();
+	ContainedType first();
 
 	/**
 	 * Apply a function to each member of the list, then flatten the
@@ -117,7 +118,7 @@ public interface IFunctionalList<E> {
 	 * Takes O(n * m) time, where m is the average number of elements in
 	 * the returned list.
 	 * 
-	 * @param <T>
+	 * @param <MappedType>
 	 *            The type of the flattened list
 	 * 
 	 * @param elementExpander
@@ -125,8 +126,8 @@ public interface IFunctionalList<E> {
 	 * @return A new list containing the flattened results of applying the
 	 *         provided function.
 	 */
-	<T> IFunctionalList<T> flatMap(
-			Function<E, IFunctionalList<T>> elementExpander);
+	<MappedType> IFunctionalList<MappedType> flatMap(
+			Function<ContainedType, IFunctionalList<MappedType>> elementExpander);
 
 	/**
 	 * Apply a given action for each member of the list
@@ -137,7 +138,7 @@ public interface IFunctionalList<E> {
 	 * @param action
 	 *            The action to apply to each member of the list.
 	 */
-	void forEach(Consumer<E> action);
+	void forEach(Consumer<ContainedType> action);
 
 	/**
 	 * Apply a given function to each element in the list and its index.
@@ -149,7 +150,7 @@ public interface IFunctionalList<E> {
 	 *            The function to apply to each element in the list and its
 	 *            index.
 	 */
-	void forEachIndexed(BiConsumer<Integer, E> indexedAction);
+	void forEachIndexed(BiConsumer<Integer, ContainedType> indexedAction);
 
 	/**
 	 * Retrieve a value in the list by its index.
@@ -160,17 +161,19 @@ public interface IFunctionalList<E> {
 	 *            The index to retrieve a value from.
 	 * @return The value at the specified index in the list.
 	 */
-	E getByIndex(int index);
+	ContainedType getByIndex(int index);
 
 	/**
 	 * Retrieve a list containing all elements matching a predicate
 	 * 
 	 * Takes O(n) time, where n is the number of elements in the list
+	 * 
 	 * @param matchPredicate
 	 *            The predicate to match by
 	 * @return A list containing all elements that match the predicate
 	 */
-	IFunctionalList<E> getMatching(Predicate<E> matchPredicate);
+	IFunctionalList<ContainedType> getMatching(
+			Predicate<ContainedType> matchPredicate);
 
 	/**
 	 * Retrieve the size of the wrapped list
@@ -190,19 +193,20 @@ public interface IFunctionalList<E> {
 	 * Create a new list by applying the given function to each element in
 	 * the list. Does not change the underlying list.
 	 * 
-	 * @param <T>
+	 * @param <MappedType>
 	 *            The type of the transformed list
 	 * 
 	 * @param elementTransformer
 	 *            The function to apply to each element in the list
 	 * @return A new list containing the mapped elements of this list.
 	 */
-	<T> IFunctionalList<T> map(Function<E, T> elementTransformer);
+	<MappedType> IFunctionalList<MappedType> map(
+			Function<ContainedType, MappedType> elementTransformer);
 
 	/**
 	 * Zip two lists into a list of pairs
 	 * 
-	 * @param <T>
+	 * @param <OtherType>
 	 *            The type of the second list
 	 * 
 	 * @param rightList
@@ -210,8 +214,8 @@ public interface IFunctionalList<E> {
 	 * @return A list containing pairs of this element and the specified
 	 *         list
 	 */
-	<T> IFunctionalList<IPair<E, T>> pairWith(
-			IFunctionalList<T> rightList);
+	<OtherType> IFunctionalList<IPair<ContainedType, OtherType>> pairWith(
+			IFunctionalList<OtherType> rightList);
 
 	/**
 	 * Partition this list into a list of sublists
@@ -220,7 +224,8 @@ public interface IFunctionalList<E> {
 	 *            The size of elements to put into each one of the sublists
 	 * @return A list partitioned into partitions of size nPerPart
 	 */
-	IFunctionalList<IFunctionalList<E>> partition(int numberPerPartition);
+	IFunctionalList<IFunctionalList<ContainedType>> partition(
+			int numberPerPartition);
 
 	/**
 	 * Prepend an item to the list
@@ -228,7 +233,7 @@ public interface IFunctionalList<E> {
 	 * @param item
 	 *            The item to prepend to the list
 	 */
-	void prepend(E item);
+	void prepend(ContainedType item);
 
 	/**
 	 * Select a random item from this list, using the provided random
@@ -238,14 +243,14 @@ public interface IFunctionalList<E> {
 	 *            The random number generator to use.
 	 * @return A random element from this list.
 	 */
-	E randItem(Function<Integer, Integer> rnd);
+	ContainedType randItem(Function<Integer, Integer> rnd);
 
 	/**
 	 * Reduce this list to a single value, using a accumulative approach.
 	 * 
-	 * @param <T>
+	 * @param <StateType>
 	 *            The in-between type of the values
-	 * @param <F>
+	 * @param <ReducedType>
 	 *            The final value type
 	 * 
 	 * @param initialValue
@@ -259,9 +264,9 @@ public interface IFunctionalList<E> {
 	 * @return A single value condensed from this list and transformed into
 	 *         its final state.
 	 */
-	<T, F> F reduceAux(T initialValue,
-			BiFunction<E, T, T> stateAccumulator,
-			Function<T, F> resultTransformer);
+	<StateType, ReducedType> ReducedType reduceAux(StateType initialValue,
+			BiFunction<ContainedType, StateType, StateType> stateAccumulator,
+			Function<StateType, ReducedType> resultTransformer);
 
 	/**
 	 * Remove all elements that match a given predicate
@@ -270,7 +275,7 @@ public interface IFunctionalList<E> {
 	 *            The predicate to use to determine elements to delete
 	 * @return Whether there was anything that satisfied the predicate
 	 */
-	boolean removeIf(Predicate<E> removePredicate);
+	boolean removeIf(Predicate<ContainedType> removePredicate);
 
 	/**
 	 * Remove all parameters that match a given parameter
@@ -278,7 +283,7 @@ public interface IFunctionalList<E> {
 	 * @param desiredElement
 	 *            The object to remove all matching copies of
 	 */
-	void removeMatching(E desiredElement);
+	void removeMatching(ContainedType desiredElement);
 
 	/**
 	 * Perform a binary search for the specified key using the provided
@@ -292,7 +297,8 @@ public interface IFunctionalList<E> {
 	 *            use the natural ordering for E
 	 * @return The element if it is in this list, or null if it is not.
 	 */
-	E search(E searchKey, Comparator<E> comparator);
+	ContainedType search(ContainedType searchKey,
+			Comparator<ContainedType> comparator);
 
 	/**
 	 * Sort the elements of this list using the provided way of comparing
@@ -302,14 +308,7 @@ public interface IFunctionalList<E> {
 	 *            The way to compare elements for sorting. Pass null to use
 	 *            E's natural ordering
 	 */
-	void sort(Comparator<E> comparator);
-
-	/**
-	 * Convert the list into a iterable
-	 * 
-	 * @return An iterable view onto the list
-	 */
-	Iterable<E> toIterable();
+	void sort(Comparator<ContainedType> comparator);
 
 	/**
 	 * Convert this list into an array
@@ -318,5 +317,12 @@ public interface IFunctionalList<E> {
 	 *            The type of array to return
 	 * @return The list, as an array
 	 */
-	E[] toArray(E[] arrType);
+	ContainedType[] toArray(ContainedType[] arrType);
+
+	/**
+	 * Convert the list into a iterable
+	 * 
+	 * @return An iterable view onto the list
+	 */
+	Iterable<ContainedType> toIterable();
 }

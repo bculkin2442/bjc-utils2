@@ -9,13 +9,13 @@ import java.util.function.Function;
  * 
  * @author ben
  * 
- * @param <K>
+ * @param <KeyType>
  *            The type of this map's keys
- * @param <V>
+ * @param <ValueType>
  *            The type of this map's values
  *
  */
-public interface IFunctionalMap<K, V> {
+public interface IFunctionalMap<KeyType, ValueType> {
 
 	/**
 	 * Add an entry to the map
@@ -32,7 +32,7 @@ public interface IFunctionalMap<K, V> {
 	 *             if the map implementation doesn't support modifying the
 	 *             map
 	 */
-	V put(K key, V val);
+	ValueType put(KeyType key, ValueType val);
 
 	/**
 	 * Get the value assigned to the given key
@@ -43,7 +43,7 @@ public interface IFunctionalMap<K, V> {
 	 * 
 	 * 
 	 */
-	V get(K key);
+	ValueType get(KeyType key);
 
 	/**
 	 * Transform the values returned by this map.
@@ -58,7 +58,7 @@ public interface IFunctionalMap<K, V> {
 	 *            The function to use to transform values
 	 * @return The map where each value will be transformed after lookup
 	 */
-	<V2> IFunctionalMap<K, V2> mapValues(Function<V, V2> transformer);
+	<V2> IFunctionalMap<KeyType, V2> mapValues(Function<ValueType, V2> transformer);
 
 	/**
 	 * Check if this map contains the specified key
@@ -67,14 +67,14 @@ public interface IFunctionalMap<K, V> {
 	 *            The key to check
 	 * @return Whether or not the map contains the key
 	 */
-	boolean containsKey(K key);
+	boolean containsKey(KeyType key);
 
 	/**
 	 * Get a list of all the keys in this map
 	 * 
 	 * @return A list of all the keys in this map
 	 */
-	IFunctionalList<K> keyList();
+	IFunctionalList<KeyType> keyList();
 
 	/**
 	 * Execute an action for each entry in the map
@@ -82,7 +82,7 @@ public interface IFunctionalMap<K, V> {
 	 * @param action
 	 *            the action to execute for each entry in the map
 	 */
-	void forEach(BiConsumer<K, V> action);
+	void forEach(BiConsumer<KeyType, ValueType> action);
 
 	/**
 	 * Remove the value bound to the key
@@ -94,7 +94,7 @@ public interface IFunctionalMap<K, V> {
 	 *         null, doesn't mean the map wasn't changed. It may mean that
 	 *         someone put a null value for that key into the map
 	 */
-	V remove(K key);
+	ValueType remove(KeyType key);
 
 	/**
 	 * Get the number of entries in this map
@@ -109,7 +109,7 @@ public interface IFunctionalMap<K, V> {
 	 * @param action
 	 *            The action to perform on each key in the map
 	 */
-	void forEachKey(Consumer<K> action);
+	void forEachKey(Consumer<KeyType> action);
 
 	/**
 	 * Perform an action for each value in the map
@@ -117,12 +117,12 @@ public interface IFunctionalMap<K, V> {
 	 * @param action
 	 *            The action to perform on each value in the map
 	 */
-	void forEachValue(Consumer<V> action);
+	void forEachValue(Consumer<ValueType> action);
 
 	/**
 	 * Get a list of the values in this map
 	 * 
 	 * @return A list of values in this map
 	 */
-	IFunctionalList<V> valueList();
+	IFunctionalList<ValueType> valueList();
 }

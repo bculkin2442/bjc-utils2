@@ -6,7 +6,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
-import bjc.utils.funcdata.bst.ITreePart.TreeLinearizationMethod;
+import bjc.utils.funcdata.bst.TreeLinearizationMethod;
 
 /**
  * A simple binary tree meant for use as an AST

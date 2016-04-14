@@ -6,8 +6,9 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import bjc.utils.data.GenHolder;
-import bjc.utils.data.IPair;
+import bjc.utils.data.experimental.IHolder;
+import bjc.utils.data.experimental.IPair;
+import bjc.utils.data.experimental.Identity;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IFunctionalList;
 
@@ -115,17 +116,17 @@ public class ListUtils {
 	private static final class GroupPartIteration<E>
 			implements Consumer<E> {
 		private IFunctionalList<IFunctionalList<E>>	returnedList;
-		private GenHolder<IFunctionalList<E>>		currentPartition;
+		private IHolder<IFunctionalList<E>>		currentPartition;
 		private IFunctionalList<E>					rejectedItems;
-		private GenHolder<Integer>					numberInCurrentPartition;
+		private IHolder<Integer>					numberInCurrentPartition;
 		private int									numberPerPartition;
 		private Function<E, Integer>				elementCounter;
 
 		public GroupPartIteration(
 				IFunctionalList<IFunctionalList<E>> returned,
-				GenHolder<IFunctionalList<E>> currPart,
+				IHolder<IFunctionalList<E>> currPart,
 				IFunctionalList<E> rejects,
-				GenHolder<Integer> numInCurrPart, int nPerPart,
+				IHolder<Integer> numInCurrPart, int nPerPart,
 				Function<E, Integer> eleCount) {
 			this.returnedList = returned;
 			this.currentPartition = currPart;
@@ -199,7 +200,7 @@ public class ListUtils {
 		/*
 		 * List that holds current partition
 		 */
-		GenHolder<IFunctionalList<E>> currentPartition = new GenHolder<>(
+		IHolder<IFunctionalList<E>> currentPartition = new Identity<>(
 				new FunctionalList<>());
 		/*
 		 * List that holds elements rejected during current pass
@@ -209,7 +210,7 @@ public class ListUtils {
 		/*
 		 * The effective number of elements in the current partitition
 		 */
-		GenHolder<Integer> numberInCurrentPartition = new GenHolder<>(0);
+		IHolder<Integer> numberInCurrentPartition = new Identity<>(0);
 
 		/*
 		 * Run up to a certain number of passes
@@ -263,7 +264,7 @@ public class ListUtils {
 					"Set of operators must not be null");
 		}
 
-		GenHolder<IFunctionalList<String>> returnedList = new GenHolder<>(
+		IHolder<IFunctionalList<String>> returnedList = new Identity<>(
 				input);
 
 		operators.forEach((operator) -> returnedList
@@ -294,7 +295,7 @@ public class ListUtils {
 					"Set of operators must not be null");
 		}
 
-		GenHolder<IFunctionalList<String>> returnedList = new GenHolder<>(
+		IHolder<IFunctionalList<String>> returnedList = new Identity<>(
 				input);
 
 		operators.forEach((operator) -> returnedList
