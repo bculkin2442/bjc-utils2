@@ -12,6 +12,8 @@ import bjc.utils.data.experimental.IPair;
 import bjc.utils.data.experimental.Identity;
 import bjc.utils.data.experimental.Pair;
 import bjc.utils.funcdata.IFunctionalList;
+import bjc.utils.funcdata.ITree;
+import bjc.utils.funcdata.Tree;
 
 /**
  * Creates a parse tree from a postfix expression
@@ -21,8 +23,8 @@ import bjc.utils.funcdata.IFunctionalList;
  */
 public class TreeConstructor {
 	private static final class TokenTransformer<T> implements Consumer<T> {
-		private final class OperatorHandler
-				implements UnaryOperator<IPair<Deque<AST<T>>, AST<T>>> {
+		private final class OperatorHandler implements
+				UnaryOperator<IPair<Deque<ITree<T>>, ITree<T>>> {
 			private T element;
 
 			public OperatorHandler(T element) {
@@ -30,16 +32,16 @@ public class TreeConstructor {
 			}
 
 			@Override
-			public IPair<Deque<AST<T>>, AST<T>> apply(
-					IPair<Deque<AST<T>>, AST<T>> pair) {
+			public IPair<Deque<ITree<T>>, ITree<T>> apply(
+					IPair<Deque<ITree<T>>, ITree<T>> pair) {
 				return pair.bind((queuedASTs, currentAST) -> {
 					return handleOperator(queuedASTs);
 				});
 			}
 
-			private IPair<Deque<AST<T>>, AST<T>> handleOperator(
-					Deque<AST<T>> queuedASTs) {
-				AST<T> newAST;
+			private IPair<Deque<ITree<T>>, ITree<T>> handleOperator(
+					Deque<ITree<T>> queuedASTs) {
+				ITree<T> newAST;
 
 				if (isSpecialOperator.test(element)) {
 					newAST = handleSpecialOperator.apply(queuedASTs);
@@ -52,10 +54,10 @@ public class TreeConstructor {
 										+ queuedASTs.peek());
 					}
 
-					AST<T> rightAST = queuedASTs.pop();
-					AST<T> leftAST = queuedASTs.pop();
+					ITree<T> rightAST = queuedASTs.pop();
+					ITree<T> leftAST = queuedASTs.pop();
 
-					newAST = new AST<>(element, leftAST, rightAST);
+					newAST = new Tree<>(element, leftAST, rightAST);
 				}
 
 				queuedASTs.push(newAST);
@@ -64,16 +66,16 @@ public class TreeConstructor {
 			}
 		}
 
-		private IHolder<IPair<Deque<AST<T>>, AST<T>>>	initialState;
-		private Predicate<T>							operatorPredicate;
-		private Predicate<T>							isSpecialOperator;
-		private Function<Deque<AST<T>>, AST<T>>			handleSpecialOperator;
+		private IHolder<IPair<Deque<ITree<T>>, ITree<T>>>	initialState;
+		private Predicate<T>								operatorPredicate;
+		private Predicate<T>								isSpecialOperator;
+		private Function<Deque<ITree<T>>, ITree<T>>			handleSpecialOperator;
 
 		public TokenTransformer(
-				IHolder<IPair<Deque<AST<T>>, AST<T>>> initialState,
+				IHolder<IPair<Deque<ITree<T>>, ITree<T>>> initialState,
 				Predicate<T> operatorPredicate,
 				Predicate<T> isSpecialOperator,
-				Function<Deque<AST<T>>, AST<T>> handleSpecialOperator) {
+				Function<Deque<ITree<T>>, ITree<T>> handleSpecialOperator) {
 			this.initialState = initialState;
 			this.operatorPredicate = operatorPredicate;
 			this.isSpecialOperator = isSpecialOperator;
@@ -85,7 +87,7 @@ public class TreeConstructor {
 			if (operatorPredicate.test(element)) {
 				initialState.transform(new OperatorHandler(element));
 			} else {
-				AST<T> newAST = new AST<>(element);
+				ITree<T> newAST = new Tree<>(element);
 
 				initialState.doWith((pair) -> {
 					pair.doWith((queue, currentAST) -> {
@@ -116,7 +118,7 @@ public class TreeConstructor {
 	 *            operator
 	 * @return A AST from the expression
 	 */
-	public static <T> AST<T> constructTree(IFunctionalList<T> tokens,
+	public static <T> ITree<T> constructTree(IFunctionalList<T> tokens,
 			Predicate<T> operatorPredicate) {
 		return constructTree(tokens, operatorPredicate, (op) -> false,
 				null);
@@ -146,9 +148,9 @@ public class TreeConstructor {
 	 *         interface. Maybe there's a better way to express how that
 	 *         works
 	 */
-	public static <T> AST<T> constructTree(IFunctionalList<T> tokens,
+	public static <T> ITree<T> constructTree(IFunctionalList<T> tokens,
 			Predicate<T> operatorPredicate, Predicate<T> isSpecialOperator,
-			Function<Deque<AST<T>>, AST<T>> handleSpecialOperator) {
+			Function<Deque<ITree<T>>, ITree<T>> handleSpecialOperator) {
 		if (tokens == null) {
 			throw new NullPointerException("Tokens must not be null");
 		} else if (operatorPredicate == null) {
@@ -159,7 +161,7 @@ public class TreeConstructor {
 					"Special operator determiner must not be null");
 		}
 
-		IHolder<IPair<Deque<AST<T>>, AST<T>>> initialState = new Identity<>(
+		IHolder<IPair<Deque<ITree<T>>, ITree<T>>> initialState = new Identity<>(
 				new Pair<>(new LinkedList<>(), null));
 
 		tokens.forEach(

@@ -5,7 +5,7 @@ import java.util.function.Predicate;
 
 import bjc.utils.funcdata.FunctionalStringTokenizer;
 import bjc.utils.funcdata.IFunctionalList;
-import bjc.utils.parserutils.AST;
+import bjc.utils.funcdata.ITree;
 import bjc.utils.parserutils.ShuntingYard;
 import bjc.utils.parserutils.TreeConstructor;
 
@@ -30,13 +30,13 @@ public class TreeConstructTest {
 
 		ShuntingYard<String> yard = new ShuntingYard<>();
 
-		IFunctionalList<String> shuntedTokens =
-				yard.postfix(new FunctionalStringTokenizer(line)
+		IFunctionalList<String> shuntedTokens = yard
+				.postfix(new FunctionalStringTokenizer(line)
 						.toList((strang) -> strang), (s) -> s);
 
 		System.out.println("Shunted: " + shuntedTokens.toString());
 
-		AST<String> constructedTree = TreeConstructor
+		ITree<String> constructedTree = TreeConstructor
 				.constructTree(shuntedTokens, new Predicate<String>() {
 					@Override
 					public boolean test(String token) {
