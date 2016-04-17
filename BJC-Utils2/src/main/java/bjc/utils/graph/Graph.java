@@ -10,8 +10,8 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 
-import bjc.utils.data.experimental.IHolder;
-import bjc.utils.data.experimental.Identity;
+import bjc.utils.data.IHolder;
+import bjc.utils.data.Identity;
 import bjc.utils.funcdata.FunctionalMap;
 import bjc.utils.funcdata.IFunctionalList;
 import bjc.utils.funcdata.IFunctionalMap;
@@ -25,7 +25,6 @@ import bjc.utils.funcdata.IFunctionalMap;
  *            The label for vertices
  */
 public class Graph<T> {
-
 	/**
 	 * The backing representation of the graph
 	 */
@@ -157,20 +156,20 @@ public class Graph<T> {
 		// Start at the initial vertex and visit it
 		IHolder<T> sourceVertex = new Identity<>(getInitial());
 
-		visitedVertexes.add(sourceVertex.unwrap(vertex -> vertex));
+		visitedVertexes.add(sourceVertex.getValue());
 
 		// Make sure we visit all the nodes
 		while (visitedVertexes.size() != getVertexCount()) {
 			// Grab all edges adjacent to the provided edge
 
-			forAllEdgesMatchingAt(sourceVertex.unwrap(vertex -> vertex),
-					(targetVertex,
-							vertexWeight) -> !visitedVertexes
-									.contains(targetVertex),
-					(targetVertex,
-							vertexWeight) -> availableEdges.add(new Edge<>(
-									sourceVertex.unwrap(vertex -> vertex),
-									targetVertex, vertexWeight)));
+			forAllEdgesMatchingAt(sourceVertex.getValue(),
+					(targetVertex, vertexWeight) -> {
+						return !visitedVertexes.contains(targetVertex);
+					}, (targetVertex, vertexWeight) -> {
+						availableEdges.add(new Edge<>(
+								sourceVertex.unwrap(vertex -> vertex),
+								targetVertex, vertexWeight));
+					});
 
 			// Get the edge with the minimum distance
 			IHolder<Edge<T>> minimumEdge =
@@ -178,20 +177,19 @@ public class Graph<T> {
 
 			// Only consider edges where we haven't visited the target of
 			// the edge
-			while (visitedVertexes.contains(
-					minimumEdge.unwrap(vertex -> vertex.getTarget()))) {
+			while (visitedVertexes.contains(minimumEdge.getValue())) {
 				minimumEdge.transform((edge) -> availableEdges.poll());
 			}
 
 			// Add it to our MST
-			minimumEdges.add(minimumEdge.unwrap(edge -> edge));
+			minimumEdges.add(minimumEdge.getValue());
 
 			// Advance to the next node
 			sourceVertex.transform((vertex) -> minimumEdge
 					.unwrap(edge -> edge.getTarget()));
 
 			// Visit this node
-			visitedVertexes.add(sourceVertex.unwrap(vertex -> vertex));
+			visitedVertexes.add(sourceVertex.getValue());
 		}
 
 		return minimumEdges;
@@ -281,8 +279,10 @@ public class Graph<T> {
 	public static <E> Graph<E> fromEdgeList(List<Edge<E>> edges) {
 		Graph<E> g = new Graph<>();
 
-		edges.forEach(edge -> g.addEdge(edge.getSource(), edge.getTarget(),
-				edge.getDistance(), true));
+		edges.forEach(edge -> {
+			g.addEdge(edge.getSource(), edge.getTarget(),
+					edge.getDistance(), true);
+		});
 
 		return g;
 	}

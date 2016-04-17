@@ -1,4 +1,4 @@
-package bjc.utils.data.experimental;
+package bjc.utils.data;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;

@@ -57,4 +57,18 @@ public class StringUtils {
 				&& !expression.equalsIgnoreCase(operator)
 				&& !expression.startsWith(operator);
 	}
+
+	/**
+	 * Indent the string being built in a StringBuilder n levels
+	 * 
+	 * @param builder
+	 *            The builder to indent in
+	 * @param levels
+	 *            The number of levels to indent
+	 */
+	public static void indentNLevels(StringBuilder builder, int levels) {
+		for (int i = 0; i < levels; i++) {
+			builder.append("\t");
+		}
+	}
 }

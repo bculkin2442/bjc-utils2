@@ -11,10 +11,10 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import bjc.utils.data.experimental.IHolder;
-import bjc.utils.data.experimental.IPair;
-import bjc.utils.data.experimental.Identity;
-import bjc.utils.data.experimental.Pair;
+import bjc.utils.data.IHolder;
+import bjc.utils.data.IPair;
+import bjc.utils.data.Identity;
+import bjc.utils.data.Pair;
 
 import java.util.ArrayList;
 
@@ -589,5 +589,10 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 	@Override
 	public E[] toArray(E[] arrType) {
 		return wrappedList.toArray(arrType);
+	}
+
+	@Override
+	public IFunctionalList<E> tail() {
+		return new FunctionalList<>(wrappedList.subList(1, getSize()));
 	}
 }

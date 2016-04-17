@@ -3,8 +3,8 @@ package bjc.utils.gen;
 import java.util.Random;
 import java.util.function.Function;
 
-import bjc.utils.data.experimental.IPair;
-import bjc.utils.data.experimental.Pair;
+import bjc.utils.data.IPair;
+import bjc.utils.data.Pair;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.FunctionalMap;
 import bjc.utils.funcdata.IFunctionalList;

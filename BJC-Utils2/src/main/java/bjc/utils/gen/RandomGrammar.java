@@ -12,7 +12,6 @@ import bjc.utils.funcdata.IFunctionalList;
  *            The type of grammar elements to use.
  */
 public class RandomGrammar<E> extends WeightedGrammar<E> {
-
 	/**
 	 * Create a new random grammar.
 	 */

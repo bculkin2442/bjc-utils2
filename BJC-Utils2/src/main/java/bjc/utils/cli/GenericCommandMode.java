@@ -49,64 +49,7 @@ public class GenericCommandMode implements ICommandMode {
 		defaultHandlers = new FunctionalMap<>(new TreeMap<>());
 		helpTopics = new FunctionalMap<>(new TreeMap<>());
 
-		setupDefaultCommands(errorOutput);
-	}
-
-	private void setupDefaultCommands(Consumer<String> errorOutput) {
-		defaultHandlers.put("list", new GenericCommand((args) -> {
-			listCommands();
-
-			return this;
-		}, "list\tList available command",
-				"Lists all of the commands available in this mode,"
-						+ " as well as the commands that are valid in any mode."));
-
-		defaultHandlers.put("alias", new GenericCommand((args) -> {
-			aliasCommands(args);
-
-			return this;
-		}, "alias\tAlias one command to another",
-				"alias gives a command another name it can be invoked by. It is invoked"
-						+ " with two arguments, the name of the command to alias"
-						+ ", and the alias to give that command."));
-
-		defaultHandlers.put("help", new GenericCommand((args) -> {
-			if (args == null || args.length == 0) {
-				// Invoke general help
-				helpSummary();
-			} else {
-				// Invoke help for a command
-				helpCommand(args[0]);
-			}
-
-			return this;
-		}, "help\tConsult the help system",
-				"help consults the internal help system."
-						+ " It can be invoked in two ways. Invoking it with no arguments"
-						+ " causes it to print out all the topics you can ask for details on,"
-						+ " while invoking it with the name of a topic will print the entry"
-						+ " for that topic"));
-
-		addCommandAlias("help", "man");
-
-		// Add commands handled in a upper layer
-		defaultHandlers.put("clear", new GenericCommand((args) -> {
-			errorOutput.accept(
-					"ERROR: This console doesn't support screen clearing");
-
-			return this;
-		}, "clear\tClear the screen",
-				"clear clears the screen of all the text on it,"
-						+ " and prepares a fresh prompt."));
-
-		defaultHandlers.put("exit", new GenericCommand((args) -> {
-			errorOutput.accept(
-					"ERROR: This console doesn't support auto-exiting");
-
-			return this;
-		}, "exit\tExit the game",
-				"exit first prompts the user to make sure they want to exit,"
-						+ " and if they affirm it, it quits"));
+		setupDefaultCommands();
 	}
 
 	/**
@@ -195,6 +138,68 @@ public class GenericCommandMode implements ICommandMode {
 				addCommandAlias(commandName, aliasName);
 			}
 		}
+	}
+
+	private GenericCommand buildAliasCommand() {
+		return new GenericCommand((args) -> {
+			aliasCommands(args);
+
+			return this;
+		}, "alias\tAlias one command to another",
+				"alias gives a command another name it can be invoked by. It is invoked"
+						+ " with two arguments, the name of the command to alias"
+						+ ", and the alias to give that command.");
+	}
+
+	private GenericCommand buildClearCommands() {
+		return new GenericCommand((args) -> {
+			errorOutput.accept(
+					"ERROR: This console doesn't support screen clearing");
+
+			return this;
+		}, "clear\tClear the screen",
+				"clear clears the screen of all the text on it,"
+						+ " and prepares a fresh prompt.");
+	}
+
+	private GenericCommand buildExitCommand() {
+		return new GenericCommand((args) -> {
+			errorOutput.accept(
+					"ERROR: This console doesn't support auto-exiting");
+
+			return this;
+		}, "exit\tExit the game",
+				"exit first prompts the user to make sure they want to exit,"
+						+ " and if they affirm it, it quits");
+	}
+
+	private GenericCommand buildHelpCommand() {
+		return new GenericCommand((args) -> {
+			if (args == null || args.length == 0) {
+				// Invoke general help
+				helpSummary();
+			} else {
+				// Invoke help for a command
+				helpCommand(args[0]);
+			}
+
+			return this;
+		}, "help\tConsult the help system",
+				"help consults the internal help system."
+						+ " It can be invoked in two ways. Invoking it with no arguments"
+						+ " causes it to print out all the topics you can ask for details on,"
+						+ " while invoking it with the name of a topic will print the entry"
+						+ " for that topic");
+	}
+
+	private GenericCommand buildListCommand() {
+		return new GenericCommand((args) -> {
+			listCommands();
+
+			return this;
+		}, "list\tList available command",
+				"Lists all of the commands available in this mode,"
+						+ " as well as the commands that are valid in any mode.");
 	}
 
 	@Override
@@ -357,6 +362,21 @@ public class GenericCommandMode implements ICommandMode {
 		}
 
 		unknownCommandHandler = handler;
+	}
+
+	private void setupDefaultCommands() {
+		defaultHandlers.put("list", buildListCommand());
+
+		defaultHandlers.put("alias", buildAliasCommand());
+
+		defaultHandlers.put("help", buildHelpCommand());
+
+		addCommandAlias("help", "man");
+
+		// Add commands handled in a upper layer
+		defaultHandlers.put("clear", buildClearCommands());
+
+		defaultHandlers.put("exit", buildExitCommand());
 	}
 
 	@Override

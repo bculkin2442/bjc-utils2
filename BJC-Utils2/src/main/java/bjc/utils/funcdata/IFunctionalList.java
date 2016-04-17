@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import bjc.utils.data.experimental.IPair;
+import bjc.utils.data.IPair;
 
 /**
  * A wrapper over another list that provides eager functional operations
@@ -325,4 +325,10 @@ public interface IFunctionalList<ContainedType> {
 	 * @return An iterable view onto the list
 	 */
 	Iterable<ContainedType> toIterable();
+	
+	/**
+	 * Get the tail of this list (the list without the first element
+	 * @return The list without the first element
+	 */
+	public IFunctionalList<ContainedType> tail();
 }

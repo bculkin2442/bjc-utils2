@@ -2,13 +2,11 @@ package bjc.utils.funcutils;
 
 import java.util.ArrayList;
 import java.util.Deque;
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
-import bjc.utils.data.experimental.IHolder;
-import bjc.utils.data.experimental.IPair;
-import bjc.utils.data.experimental.Identity;
+import bjc.utils.data.IHolder;
+import bjc.utils.data.IPair;
+import bjc.utils.data.Identity;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IFunctionalList;
 
@@ -21,146 +19,6 @@ import bjc.utils.funcdata.IFunctionalList;
  */
 public class ListUtils {
 	private static final int MAX_NTRIESPART = 50;
-
-	private static final class TokenDeaffixer implements
-			BiFunction<String, String, IFunctionalList<String>> {
-		private String token;
-
-		public TokenDeaffixer(String tok) {
-			token = tok;
-		}
-
-		@Override
-		public IFunctionalList<String> apply(String operatorName,
-				String operatorRegex) {
-			if (operatorName == null) {
-				throw new NullPointerException(
-						"Operator name must not be null");
-			} else if (operatorRegex == null) {
-				throw new NullPointerException(
-						"Operator regex must not be null");
-			}
-
-			if (StringUtils.containsOnly(token, operatorRegex)) {
-				return new FunctionalList<>(token);
-			} else if (token.startsWith(operatorName)) {
-				return new FunctionalList<>(operatorName,
-						token.split(operatorRegex)[1]);
-			} else if (token.endsWith(operatorName)) {
-				return new FunctionalList<>(token.split(operatorRegex)[0],
-						operatorName);
-			} else {
-				return new FunctionalList<>(token);
-			}
-		}
-	}
-
-	private static final class TokenSplitter implements
-			BiFunction<String, String, IFunctionalList<String>> {
-		private String tokenToSplit;
-
-		public TokenSplitter(String tok) {
-			this.tokenToSplit = tok;
-		}
-
-		@Override
-		public IFunctionalList<String> apply(String operatorName,
-				String operatorRegex) {
-			if (operatorName == null) {
-				throw new NullPointerException(
-						"Operator name must not be null");
-			} else if (operatorRegex == null) {
-				throw new NullPointerException(
-						"Operator regex must not be null");
-			}
-
-			if (tokenToSplit.contains(operatorName)) {
-				if (StringUtils.containsOnly(tokenToSplit,
-						operatorRegex)) {
-					return new FunctionalList<>(tokenToSplit);
-				}
-
-				IFunctionalList<String> splitTokens = new FunctionalList<>(
-						tokenToSplit.split(operatorRegex));
-
-				IFunctionalList<String> result = new FunctionalList<>();
-
-				int tokenExpansionSize = splitTokens.getSize();
-
-				splitTokens.forEachIndexed((tokenIndex, token) -> {
-
-					if (tokenIndex != tokenExpansionSize
-							&& tokenIndex != 0) {
-						result.add(operatorName);
-						result.add(token);
-					} else {
-						result.add(token);
-					}
-				});
-
-				return result;
-			}
-
-			return new FunctionalList<>(tokenToSplit);
-		}
-	}
-
-	/**
-	 * Implements a single group partitioning pass on a list
-	 * 
-	 * @author ben
-	 *
-	 * @param <E>
-	 *            The type of element in the list being partitioned
-	 */
-	private static final class GroupPartIteration<E>
-			implements Consumer<E> {
-		private IFunctionalList<IFunctionalList<E>>	returnedList;
-		private IHolder<IFunctionalList<E>>		currentPartition;
-		private IFunctionalList<E>					rejectedItems;
-		private IHolder<Integer>					numberInCurrentPartition;
-		private int									numberPerPartition;
-		private Function<E, Integer>				elementCounter;
-
-		public GroupPartIteration(
-				IFunctionalList<IFunctionalList<E>> returned,
-				IHolder<IFunctionalList<E>> currPart,
-				IFunctionalList<E> rejects,
-				IHolder<Integer> numInCurrPart, int nPerPart,
-				Function<E, Integer> eleCount) {
-			this.returnedList = returned;
-			this.currentPartition = currPart;
-			this.rejectedItems = rejects;
-			this.numberInCurrentPartition = numInCurrPart;
-			this.numberPerPartition = nPerPart;
-			this.elementCounter = eleCount;
-		}
-
-		@Override
-		public void accept(E value) {
-			if (numberInCurrentPartition
-					.unwrap((number) -> number >= numberPerPartition)) {
-				returnedList.add(
-						currentPartition.unwrap((partition) -> partition));
-
-				currentPartition
-						.transform((partition) -> new FunctionalList<>());
-				numberInCurrentPartition.transform((number) -> 0);
-			} else {
-				int currentElementCount = elementCounter.apply(value);
-
-				if (numberInCurrentPartition.unwrap((number) -> (number
-						+ currentElementCount) >= numberPerPartition)) {
-					rejectedItems.add(value);
-				} else {
-					currentPartition
-							.unwrap((partition) -> partition.add(value));
-					numberInCurrentPartition.transform(
-							(number) -> number + currentElementCount);
-				}
-			}
-		}
-	}
 
 	/**
 	 * Partition a list into a list of lists, where each element can count
@@ -195,13 +53,14 @@ public class ListUtils {
 		/*
 		 * List that holds our results
 		 */
-		IFunctionalList<IFunctionalList<E>> returnedList = new FunctionalList<>();
+		IFunctionalList<IFunctionalList<E>> returnedList =
+				new FunctionalList<>();
 
 		/*
 		 * List that holds current partition
 		 */
-		IHolder<IFunctionalList<E>> currentPartition = new Identity<>(
-				new FunctionalList<>());
+		IHolder<IFunctionalList<E>> currentPartition =
+				new Identity<>(new FunctionalList<>());
 		/*
 		 * List that holds elements rejected during current pass
 		 */
@@ -215,8 +74,10 @@ public class ListUtils {
 		/*
 		 * Run up to a certain number of passes
 		 */
-		for (int numberOfIterations = 0; numberOfIterations < MAX_NTRIESPART
-				&& !rejectedElements.isEmpty(); numberOfIterations++) {
+		for (int numberOfIterations =
+				0; numberOfIterations < MAX_NTRIESPART
+						&& !rejectedElements
+								.isEmpty(); numberOfIterations++) {
 			input.forEach(new GroupPartIteration<>(returnedList,
 					currentPartition, rejectedElements,
 					numberInCurrentPartition, numberPerPartition,
@@ -264,8 +125,8 @@ public class ListUtils {
 					"Set of operators must not be null");
 		}
 
-		IHolder<IFunctionalList<String>> returnedList = new Identity<>(
-				input);
+		IHolder<IFunctionalList<String>> returnedList =
+				new Identity<>(input);
 
 		operators.forEach((operator) -> returnedList
 				.transform((oldReturn) -> oldReturn.flatMap((token) -> {
@@ -295,8 +156,8 @@ public class ListUtils {
 					"Set of operators must not be null");
 		}
 
-		IHolder<IFunctionalList<String>> returnedList = new Identity<>(
-				input);
+		IHolder<IFunctionalList<String>> returnedList =
+				new Identity<>(input);
 
 		operators.forEach((operator) -> returnedList
 				.transform((oldReturn) -> oldReturn.flatMap((token) -> {
@@ -372,8 +233,8 @@ public class ListUtils {
 	public static <E> IFunctionalList<E> drawWithReplacement(
 			IFunctionalList<E> list, int numberOfItems,
 			Function<Integer, Integer> rng) {
-		IFunctionalList<E> selectedItems = new FunctionalList<>(
-				new ArrayList<>(numberOfItems));
+		IFunctionalList<E> selectedItems =
+				new FunctionalList<>(new ArrayList<>(numberOfItems));
 
 		for (int i = 0; i < numberOfItems; i++) {
 			selectedItems.add(list.randItem(rng));
@@ -401,8 +262,8 @@ public class ListUtils {
 	public static <E> IFunctionalList<E> drawWithoutReplacement(
 			IFunctionalList<E> list, int numberOfItems,
 			Function<Integer, Integer> rng) {
-		IFunctionalList<E> selectedItems = new FunctionalList<>(
-				new ArrayList<>(numberOfItems));
+		IFunctionalList<E> selectedItems =
+				new FunctionalList<>(new ArrayList<>(numberOfItems));
 
 		int totalItems = list.getSize();
 
@@ -419,5 +280,26 @@ public class ListUtils {
 		});
 
 		return selectedItems;
+	}
+
+	/**
+	 * Merge the contents of a bunch of lists together into a single list
+	 * 
+	 * @param <E>
+	 *            The type of value in this lists
+	 * @param lists
+	 *            The values in the lists to merge
+	 * @return A list containing all the elements of the lists
+	 */
+	@SafeVarargs
+	public static <E> IFunctionalList<E>
+			mergeLists(IFunctionalList<E>... lists) {
+		IFunctionalList<E> returnedList = new FunctionalList<>();
+
+		for (IFunctionalList<E> list : lists) {
+			list.forEach(returnedList::add);
+		}
+
+		return returnedList;
 	}
 }

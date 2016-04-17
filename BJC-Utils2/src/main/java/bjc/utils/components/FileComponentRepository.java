@@ -3,13 +3,15 @@ package bjc.utils.components;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.function.BiPredicate;
 import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import bjc.utils.data.experimental.IHolder;
-import bjc.utils.data.experimental.Identity;
+import bjc.utils.data.IHolder;
+import bjc.utils.data.Identity;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.FunctionalMap;
 import bjc.utils.funcdata.IFunctionalList;
@@ -28,8 +30,8 @@ import bjc.utils.funcutils.FileUtils;
 public class FileComponentRepository<E extends IDescribedComponent>
 		implements IComponentRepository<E> {
 
-	private static final Logger			CLASS_LOGGER	= LoggerFactory
-			.getLogger(FileComponentRepository.class);
+	private static final Logger			CLASS_LOGGER	=
+			LoggerFactory.getLogger(FileComponentRepository.class);
 
 	/**
 	 * The internal storage of components
@@ -68,46 +70,54 @@ public class FileComponentRepository<E extends IDescribedComponent>
 
 		IHolder<Boolean> isFirstDir = new Identity<>(true);
 
-		try {
-			FileUtils.traverseDirectory(sourceDirectory, (pth, attr) -> {
-				if (attr.isDirectory() && !isFirstDir.getValue()) {
-					// Don't skip the first directory, that's the parent
-					isFirstDir.replace(false);
-					// Skip directories, they probably have component
-					return false;
-				}
-
-				return true;
-			}, (pth, attr) -> {
-				try {
-					E component = componentReader.apply(pth.toFile());
-
-					if (component == null) {
-						throw new NullPointerException(
-								"Component reader read null component");
-					} else if (!components
-							.containsKey(component.getName())) {
-						components.put(component.getName(), component);
-					} else {
-						CLASS_LOGGER.warn("Found a duplicate component.\n"
-								+ "Multiple versions of the same component are not currently supported.\n"
-								+ "The component" + component
-								+ " will not be registered .");
+		BiPredicate<Path, BasicFileAttributes> firstLevelTraverser =
+				(pth, attr) -> {
+					if (attr.isDirectory() && !isFirstDir.getValue()) {
+						// Don't skip the first directory, that's the
+						// parent
+						isFirstDir.replace(false);
+						// Skip directories, they probably have
+						// component
+						return false;
 					}
-				} catch (Exception ex) {
-					CLASS_LOGGER.warn(
-							"Error found reading component from file "
-									+ pth.toString()
-									+ ". This component will not be loaded",
-							ex);
-				}
 
-				// Keep loading components, even if this one failed
-				return true;
-			});
+					return true;
+				};
+
+		try {
+			FileUtils.traverseDirectory(sourceDirectory,
+					firstLevelTraverser, (pth, attr) -> {
+						loadComponent(componentReader, pth);
+
+						// Keep loading components, even if this one failed
+						return true;
+					});
 		} catch (IOException ioex) {
 			CLASS_LOGGER.warn("Error found reading component from file.",
 					ioex);
+		}
+	}
+
+	private void loadComponent(Function<File, E> componentReader,
+			Path pth) {
+		try {
+			E component = componentReader.apply(pth.toFile());
+
+			if (component == null) {
+				throw new NullPointerException(
+						"Component reader read null component");
+			} else if (!components.containsKey(component.getName())) {
+				components.put(component.getName(), component);
+			} else {
+				CLASS_LOGGER.warn("Found a duplicate component.\n"
+						+ "Multiple versions of the same component are not currently supported.\n"
+						+ "The component" + component
+						+ " will not be registered .");
+			}
+		} catch (Exception ex) {
+			CLASS_LOGGER.warn("Error found reading component from file "
+					+ pth.toString()
+					+ ". This component will not be loaded", ex);
 		}
 	}
 

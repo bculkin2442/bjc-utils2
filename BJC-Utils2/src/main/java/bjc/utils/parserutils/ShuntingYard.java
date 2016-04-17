@@ -161,10 +161,15 @@ public class ShuntingYard<E> {
 		operators.put(operatorToken, precedence);
 	}
 
-	private boolean isHigherPrec(String operator, String rightOperator) {
-		return (operators.containsKey(rightOperator) && operators
-				.get(rightOperator).getPrecedence() >= operators
-						.get(operator).getPrecedence());
+	private boolean isHigherPrec(String leftOperator,
+			String rightOperator) {
+		boolean operatorExists = operators.containsKey(rightOperator);
+
+		boolean hasHigherPrecedence =
+				operators.get(rightOperator).getPrecedence() >= operators
+						.get(leftOperator).getPrecedence();
+
+		return (operatorExists && hasHigherPrecedence);
 	}
 
 	/**

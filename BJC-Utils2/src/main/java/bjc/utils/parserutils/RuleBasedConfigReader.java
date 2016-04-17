@@ -8,8 +8,8 @@ import java.util.Scanner;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import bjc.utils.data.experimental.IPair;
-import bjc.utils.data.experimental.Pair;
+import bjc.utils.data.IPair;
+import bjc.utils.data.Pair;
 import bjc.utils.exceptions.UnknownPragmaException;
 import bjc.utils.funcdata.FunctionalStringTokenizer;
 
@@ -100,63 +100,77 @@ public class RuleBasedConfigReader<E> {
 					// It's a comment
 					continue;
 				} else if (line.equals("")) {
-					if (ruleOpen == false) {
-						// Ignore blank line without an open rule
-					} else {
-						if (endRule == null) {
-							// Nothing happens on rule end
-							ruleOpen = false;
-						} else {
-							endRule.accept(state);
-						}
+					ruleOpen = endRule(state, ruleOpen);
 
-						ruleOpen = false;
-					}
 					continue;
 				} else if (line.startsWith("\t")) {
-					if (ruleOpen == false) {
-						throw new InputMismatchException(
-								"Can't continue rule with no rule currently open");
-					}
-
-					if (continueRule == null) {
-						throw new InputMismatchException(
-								"Attempted to continue rule with rule continuation disabled."
-										+ " Check for extraneous tabs");
-					}
-
-					continueRule.accept(new FunctionalStringTokenizer(
-							line.substring(1), " "), state);
+					continueRule(state, ruleOpen, line);
 				} else {
-					FunctionalStringTokenizer tokenizer =
-							new FunctionalStringTokenizer(line, " ");
-
-					String nextToken = tokenizer.nextToken();
-
-					if (nextToken.equals("pragma")) {
-						String token = tokenizer.nextToken();
-
-						pragmas.getOrDefault(token, (tokenzer, stat) -> {
-							throw new UnknownPragmaException(
-									"Unknown pragma " + token);
-						}).accept(tokenizer, state);
-					} else {
-						if (ruleOpen == true) {
-							throw new InputMismatchException(
-									"Attempted to open a"
-											+ " rule with a rule already open. Make sure rules are"
-											+ " seperated by blank lines");
-						}
-
-						startRule.accept(tokenizer,
-								new Pair<>(nextToken, state));
-						ruleOpen = true;
-					}
+					ruleOpen = startRule(state, ruleOpen, line);
 				}
 			}
 		}
 
 		return state;
+	}
+
+	private boolean startRule(E state, boolean ruleOpen, String line) {
+		FunctionalStringTokenizer tokenizer =
+				new FunctionalStringTokenizer(line, " ");
+
+		String nextToken = tokenizer.nextToken();
+
+		if (nextToken.equals("pragma")) {
+			String token = tokenizer.nextToken();
+
+			pragmas.getOrDefault(token, (tokenzer, stat) -> {
+				throw new UnknownPragmaException(
+						"Unknown pragma " + token);
+			}).accept(tokenizer, state);
+		} else {
+			if (ruleOpen == true) {
+				throw new InputMismatchException("Attempted to open a"
+						+ " rule with a rule already open. Make sure rules are"
+						+ " seperated by blank lines");
+			}
+
+			startRule.accept(tokenizer, new Pair<>(nextToken, state));
+			ruleOpen = true;
+		}
+		return ruleOpen;
+	}
+
+	private void continueRule(E state, boolean ruleOpen, String line) {
+		if (ruleOpen == false) {
+			throw new InputMismatchException(
+					"Can't continue rule with no rule currently open");
+		}
+
+		if (continueRule == null) {
+			throw new InputMismatchException(
+					"Attempted to continue rule with rule continuation disabled."
+							+ " Check for extraneous tabs");
+		}
+
+		continueRule.accept(
+				new FunctionalStringTokenizer(line.substring(1), " "),
+				state);
+	}
+
+	private boolean endRule(E state, boolean ruleOpen) {
+		if (ruleOpen == false) {
+			// Ignore blank line without an open rule
+		} else {
+			if (endRule == null) {
+				// Nothing happens on rule end
+				ruleOpen = false;
+			} else {
+				endRule.accept(state);
+			}
+
+			ruleOpen = false;
+		}
+		return ruleOpen;
 	}
 
 	/**

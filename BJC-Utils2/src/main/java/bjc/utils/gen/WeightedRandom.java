@@ -2,9 +2,9 @@ package bjc.utils.gen;
 
 import java.util.Random;
 
-import bjc.utils.data.experimental.IHolder;
-import bjc.utils.data.experimental.IPair;
-import bjc.utils.data.experimental.Identity;
+import bjc.utils.data.IHolder;
+import bjc.utils.data.IPair;
+import bjc.utils.data.Identity;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IFunctionalList;
 

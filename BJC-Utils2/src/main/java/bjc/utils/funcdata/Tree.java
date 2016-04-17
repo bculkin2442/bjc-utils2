@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
 import bjc.utils.funcdata.bst.TreeLinearizationMethod;
+import bjc.utils.funcutils.StringUtils;
 
 /**
  * A node in a homogenous tree.
@@ -119,11 +120,11 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 			Function<ContainedType, NewType> leafTransform,
 			Function<ContainedType, Function<IFunctionalList<NewType>, NewType>> nodeCollapser) {
 		if (hasChildren) {
-			Function<IFunctionalList<NewType>, NewType> nodeTransformer = nodeCollapser
-					.apply(data);
+			Function<IFunctionalList<NewType>, NewType> nodeTransformer =
+					nodeCollapser.apply(data);
 
-			IFunctionalList<NewType> collapsedChildren = children
-					.map((child) -> {
+			IFunctionalList<NewType> collapsedChildren =
+					children.map((child) -> {
 						return child.collapse(leafTransform, nodeCollapser,
 								(subTreeVal) -> subTreeVal);
 					});
@@ -164,8 +165,9 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	public <MappedType> ITree<MappedType> transformTree(
 			Function<ContainedType, MappedType> transformer) {
 		if (hasChildren) {
-			IFunctionalList<ITree<MappedType>> transformedChildren = children
-					.map((child) -> child.transformTree(transformer));
+			IFunctionalList<ITree<MappedType>> transformedChildren =
+					children.map(
+							(child) -> child.transformTree(transformer));
 
 			return new Tree<>(transformer.apply(data),
 					transformedChildren);
@@ -219,8 +221,8 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 			Function<ContainedType, MappedType> leafTransformer,
 			Function<ContainedType, MappedType> operatorTransformer) {
 		if (hasChildren) {
-			IFunctionalList<ITree<MappedType>> mappedChildren = children
-					.map((child) -> {
+			IFunctionalList<ITree<MappedType>> mappedChildren =
+					children.map((child) -> {
 						return child.rebuildTree(leafTransformer,
 								operatorTransformer);
 					});
@@ -232,4 +234,32 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 		return new Tree<>(leafTransformer.apply(data));
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+
+		internalToString(builder, 1, true);
+
+		builder.deleteCharAt(builder.length() - 1);
+
+		return builder.toString();
+	}
+
+	protected void internalToString(StringBuilder builder, int indentLevel,
+			boolean initial) {
+		if (!initial) {
+			StringUtils.indentNLevels(builder, indentLevel);
+		}
+
+		builder.append("Node: ");
+		builder.append(data == null ? "(null)" : data.toString());
+		builder.append("\n");
+
+		if (hasChildren) {
+			children.forEach((child) -> {
+				((Tree<ContainedType>) child).internalToString(builder,
+						indentLevel + 2, false);
+			});
+		}
+	}
 }

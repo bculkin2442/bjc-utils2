@@ -6,110 +6,21 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import bjc.utils.data.experimental.IPair;
+import bjc.utils.data.IPair;
 
 /**
  * Basic implementation of {@link IFunctionalMap}
  * 
  * @author ben
  *
- * @param <K>
+ * @param <KeyType>
  *            The type of the map's keys
- * @param <V>
+ * @param <ValueType>
  *            The type of the map's values
  */
-public class FunctionalMap<K, V> implements IFunctionalMap<K, V> {
-	/**
-	 * A map that transforms values from one type to another
-	 * 
-	 * @author ben
-	 *
-	 * @param <K>
-	 *            The type of the map's keys
-	 * @param <V>
-	 *            The type of the map's values
-	 * @param <V2>
-	 *            The type of the transformed values
-	 */
-	private static final class TransformedValueMap<K, V, V2>
-			implements IFunctionalMap<K, V2> {
-		private IFunctionalMap<K, V>	mapToTransform;
-		private Function<V, V2>			transformer;
-
-		public TransformedValueMap(IFunctionalMap<K, V> destMap,
-				Function<V, V2> transform) {
-			mapToTransform = destMap;
-			transformer = transform;
-		}
-
-		@Override
-		public V2 get(K key) {
-			return transformer.apply(mapToTransform.get(key));
-		}
-
-		@Override
-		public boolean containsKey(K key) {
-			return mapToTransform.containsKey(key);
-		}
-
-		@Override
-		public String toString() {
-			return mapToTransform.toString();
-		}
-
-		@Override
-		public V2 put(K key, V2 val) {
-			throw new UnsupportedOperationException(
-					"Can't add items to transformed map");
-		}
-
-		@Override
-		public <V3> IFunctionalMap<K, V3> mapValues(
-				Function<V2, V3> transform) {
-			return new TransformedValueMap<>(this, transform);
-		}
-
-		@Override
-		public IFunctionalList<K> keyList() {
-			return mapToTransform.keyList();
-		}
-
-		@Override
-		public void forEach(BiConsumer<K, V2> action) {
-			mapToTransform.forEach((key, val) -> {
-				action.accept(key, transformer.apply(val));
-			});
-		}
-
-		@Override
-		public V2 remove(K key) {
-			return transformer.apply(mapToTransform.remove(key));
-		}
-
-		@Override
-		public int getSize() {
-			return mapToTransform.getSize();
-		}
-
-		@Override
-		public void forEachKey(Consumer<K> action) {
-			mapToTransform.forEachKey(action);
-		}
-
-		@Override
-		public void forEachValue(Consumer<V2> action) {
-			mapToTransform.forEachValue((val) -> {
-				action.accept(transformer.apply(val));
-			});
-		}
-
-		@Override
-		public IFunctionalList<V2> valueList() {
-			return mapToTransform.valueList().map(transformer);
-		}
-	}
-
-	private Map<K, V> wrappedMap;
+public class FunctionalMap<KeyType, ValueType>
+		implements IFunctionalMap<KeyType, ValueType> {
+	private Map<KeyType, ValueType> wrappedMap;
 
 	/**
 	 * Create a new blank functional map
@@ -124,7 +35,7 @@ public class FunctionalMap<K, V> implements IFunctionalMap<K, V> {
 	 * @param wrap
 	 *            The map to wrap
 	 */
-	public FunctionalMap(Map<K, V> wrap) {
+	public FunctionalMap(Map<KeyType, ValueType> wrap) {
 		if (wrap == null) {
 			throw new NullPointerException("Map to wrap must not be null");
 		}
@@ -139,10 +50,10 @@ public class FunctionalMap<K, V> implements IFunctionalMap<K, V> {
 	 *            The entries to put into the map
 	 */
 	@SafeVarargs
-	public FunctionalMap(IPair<K, V>... entries) {
+	public FunctionalMap(IPair<KeyType, ValueType>... entries) {
 		this();
 
-		for (IPair<K, V> entry : entries) {
+		for (IPair<KeyType, ValueType> entry : entries) {
 			entry.doWith((key, val) -> {
 				wrappedMap.put(key, val);
 			});
@@ -155,7 +66,7 @@ public class FunctionalMap<K, V> implements IFunctionalMap<K, V> {
 	 * @see bjc.utils.funcdata.IFunctionalMap#put(K, V)
 	 */
 	@Override
-	public V put(K key, V val) {
+	public ValueType put(KeyType key, ValueType val) {
 		if (key == null) {
 			throw new NullPointerException("Key must not be null");
 		}
@@ -169,7 +80,7 @@ public class FunctionalMap<K, V> implements IFunctionalMap<K, V> {
 	 * @see bjc.utils.funcdata.IFunctionalMap#get(K)
 	 */
 	@Override
-	public V get(K key) {
+	public ValueType get(KeyType key) {
 		if (key == null) {
 			throw new NullPointerException("Key must not be null");
 		}
@@ -189,8 +100,8 @@ public class FunctionalMap<K, V> implements IFunctionalMap<K, V> {
 	 * Function)
 	 */
 	@Override
-	public <V2> IFunctionalMap<K, V2> mapValues(
-			Function<V, V2> transformer) {
+	public <MappedValue> IFunctionalMap<KeyType, MappedValue> mapValues(
+			Function<ValueType, MappedValue> transformer) {
 		if (transformer == null) {
 			throw new NullPointerException("Transformer must not be null");
 		}
@@ -204,7 +115,7 @@ public class FunctionalMap<K, V> implements IFunctionalMap<K, V> {
 	 * @see bjc.utils.funcdata.IFunctionalMap#containsKey(K)
 	 */
 	@Override
-	public boolean containsKey(K key) {
+	public boolean containsKey(KeyType key) {
 		return wrappedMap.containsKey(key);
 	}
 
@@ -214,8 +125,8 @@ public class FunctionalMap<K, V> implements IFunctionalMap<K, V> {
 	}
 
 	@Override
-	public IFunctionalList<K> keyList() {
-		FunctionalList<K> keys = new FunctionalList<>();
+	public IFunctionalList<KeyType> keyList() {
+		FunctionalList<KeyType> keys = new FunctionalList<>();
 
 		wrappedMap.keySet().forEach((key) -> {
 			keys.add(key);
@@ -225,12 +136,12 @@ public class FunctionalMap<K, V> implements IFunctionalMap<K, V> {
 	}
 
 	@Override
-	public void forEach(BiConsumer<K, V> action) {
+	public void forEach(BiConsumer<KeyType, ValueType> action) {
 		wrappedMap.forEach(action);
 	}
 
 	@Override
-	public V remove(K key) {
+	public ValueType remove(KeyType key) {
 		return wrappedMap.remove(key);
 	}
 
@@ -240,23 +151,28 @@ public class FunctionalMap<K, V> implements IFunctionalMap<K, V> {
 	}
 
 	@Override
-	public void forEachKey(Consumer<K> action) {
+	public void forEachKey(Consumer<KeyType> action) {
 		wrappedMap.keySet().forEach(action);
 	}
 
 	@Override
-	public void forEachValue(Consumer<V> action) {
+	public void forEachValue(Consumer<ValueType> action) {
 		wrappedMap.values().forEach(action);
 	}
 
 	@Override
-	public IFunctionalList<V> valueList() {
-		FunctionalList<V> values = new FunctionalList<>();
+	public IFunctionalList<ValueType> valueList() {
+		FunctionalList<ValueType> values = new FunctionalList<>();
 
 		wrappedMap.values().forEach((value) -> {
 			values.add(value);
 		});
 
 		return values;
+	}
+
+	@Override
+	public IFunctionalMap<KeyType, ValueType> extend() {
+		return new ExtendedMap<>(this, new FunctionalMap<>());
 	}
 }

@@ -7,12 +7,13 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.stream.IntStream;
 
-import bjc.utils.data.experimental.IHolder;
-import bjc.utils.data.experimental.Identity;
+import bjc.utils.data.IHolder;
+import bjc.utils.data.Identity;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.FunctionalMap;
 import bjc.utils.funcdata.IFunctionalList;
 import bjc.utils.funcdata.IFunctionalMap;
+import bjc.utils.funcutils.FuncUtils;
 
 /**
  * An adjacency map representing a graph
@@ -67,54 +68,54 @@ public class AdjacencyMap<T> {
 
 			IFunctionalList<Integer> vertices = new FunctionalList<>();
 
-			IntStream.range(0, numVertices)
-					.forEach(element -> vertices.add(element));
+			FuncUtils.doTimes(numVertices,
+					(vertexNo) -> vertices.add(vertexNo));
 
 			adjacencyMap = new AdjacencyMap<>(vertices);
 
 			IHolder<Integer> row = new Identity<>(0);
 
 			inputSource.forEachRemaining((strang) -> {
-				String[] parts = strang.split(" ");
-
-				if (parts.length != numVertices) {
-					throw new InputMismatchException(
-							"Must specify a weight for all " + numVertices
-									+ " vertices");
-				}
-
-				int column = 0;
-
-				for (String part : parts) {
-					int columnWeight;
-
-					try {
-						columnWeight = Integer.parseInt(part);
-					} catch (NumberFormatException nfex) {
-						InputMismatchException imex =
-								new InputMismatchException("" + part
-										+ " is not a valid weight.");
-
-						imex.initCause(nfex);
-
-						throw imex;
-					}
-
-					adjacencyMap.setWeight(row.unwrap(number -> number),
-							column, columnWeight);
-
-					column++;
-				}
-
-				row.transform((number) -> {
-					int newNumber = number + 1;
-
-					return newNumber;
-				});
+				readRow(adjacencyMap, numVertices, row, strang);
 			});
 		}
 
 		return adjacencyMap;
+	}
+
+	private static void readRow(AdjacencyMap<Integer> adjacencyMap,
+			int numVertices, IHolder<Integer> row, String strang) {
+		String[] parts = strang.split(" ");
+
+		if (parts.length != numVertices) {
+			throw new InputMismatchException(
+					"Must specify a weight for all " + numVertices
+							+ " vertices");
+		}
+
+		int column = 0;
+
+		for (String part : parts) {
+			int columnWeight;
+
+			try {
+				columnWeight = Integer.parseInt(part);
+			} catch (NumberFormatException nfex) {
+				InputMismatchException imex = new InputMismatchException(
+						"" + part + " is not a valid weight.");
+
+				imex.initCause(nfex);
+
+				throw imex;
+			}
+
+			adjacencyMap.setWeight(row.getValue(), column,
+					columnWeight);
+
+			column++;
+		}
+
+		row.transform((rowNumber) -> rowNumber + 1);
 	}
 
 	/**
@@ -137,8 +138,9 @@ public class AdjacencyMap<T> {
 		vertices.forEach(vertex -> {
 			IFunctionalMap<T, Integer> vertexRow = new FunctionalMap<>();
 
-			vertices.forEach(
-					targetVertex -> vertexRow.put(targetVertex, 0));
+			vertices.forEach(targetVertex -> {
+				vertexRow.put(targetVertex, 0);
+			});
 
 			adjacencyMap.put(vertex, vertexRow);
 		});
@@ -157,12 +159,12 @@ public class AdjacencyMap<T> {
 				int inverseValue = adjacencyMap.get(targetKey).get(key);
 
 				if (targetValue != inverseValue) {
-					result.transform((bool) -> false);
+					result.replace(false);
 				}
 			});
 		});
 
-		return result.unwrap(bool -> bool);
+		return result.getValue();
 	}
 
 	/**

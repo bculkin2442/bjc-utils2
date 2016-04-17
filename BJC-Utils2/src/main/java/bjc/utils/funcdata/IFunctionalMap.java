@@ -58,7 +58,8 @@ public interface IFunctionalMap<KeyType, ValueType> {
 	 *            The function to use to transform values
 	 * @return The map where each value will be transformed after lookup
 	 */
-	<V2> IFunctionalMap<KeyType, V2> mapValues(Function<ValueType, V2> transformer);
+	<V2> IFunctionalMap<KeyType, V2> mapValues(
+			Function<ValueType, V2> transformer);
 
 	/**
 	 * Check if this map contains the specified key
@@ -125,4 +126,12 @@ public interface IFunctionalMap<KeyType, ValueType> {
 	 * @return A list of values in this map
 	 */
 	IFunctionalList<ValueType> valueList();
+
+	/**
+	 * Extends this map, creating a new map that will delegate queries to
+	 * the map, but store any added values itself
+	 * 
+	 * @return An extended map
+	 */
+	IFunctionalMap<KeyType, ValueType> extend();
 }
