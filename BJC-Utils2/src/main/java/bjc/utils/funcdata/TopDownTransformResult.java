@@ -18,5 +18,9 @@ public enum TopDownTransformResult {
 	/**
 	 * Ignore this node, and traverse its children
 	 */
-	PASSTHROUGH;
+	PASSTHROUGH,
+	/**
+	 * Traverse this nodes children, then transform it
+	 */
+	PUSHDOWN;
 }

@@ -155,4 +155,24 @@ public interface ITree<ContainedType> {
 	public ITree<ContainedType> topDownTransform(
 			Function<ContainedType, TopDownTransformResult> transformPicker,
 			UnaryOperator<ITree<ContainedType>> transformer);
+
+	/**
+	 * Get the specified child of this tree
+	 * 
+	 * @param childNo
+	 *            The number of the child to get
+	 * @return The specified child of this tree
+	 */
+	default ITree<ContainedType> getChild(int childNo) {
+		return transformChild(childNo, (child) -> child);
+	}
+
+	/**
+	 * Get the data stored in this node
+	 * 
+	 * @return The data stored in this node
+	 */
+	default ContainedType getHead() {
+		return transformHead((head) -> head);
+	}
 }

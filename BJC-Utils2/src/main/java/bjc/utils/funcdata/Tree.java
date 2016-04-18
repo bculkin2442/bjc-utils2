@@ -60,7 +60,15 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 		}
 	}
 
-	private Tree(ContainedType leafToken,
+	/**
+	 * Create a new tree node with the specified children
+	 * 
+	 * @param leafToken
+	 *            The data to hold in this node
+	 * @param childrn
+	 *            A list of children for this node
+	 */
+	public Tree(ContainedType leafToken,
 			IFunctionalList<ITree<ContainedType>> childrn) {
 		data = leafToken;
 
@@ -286,6 +294,17 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 				return this;
 			case TRANSFORM:
 				return transformer.apply(this);
+			case PUSHDOWN:
+				result = new Tree<>(data);
+
+				if (hasChildren) {
+					children.forEach((child) -> {
+						result.addChild(child.topDownTransform(
+								transformPicker, transformer));
+					});
+				}
+
+				return transformer.apply(result);
 			default:
 				throw new IllegalArgumentException(
 						"Recieved unknown transform result "
