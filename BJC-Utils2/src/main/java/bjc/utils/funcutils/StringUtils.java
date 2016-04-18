@@ -1,5 +1,7 @@
 package bjc.utils.funcutils;
 
+import java.util.Deque;
+
 /**
  * Utility methods for operations on strings
  * 
@@ -70,5 +72,9 @@ public class StringUtils {
 		for (int i = 0; i < levels; i++) {
 			builder.append("\t");
 		}
+	}
+
+	public static <ContainedType> String printDeque(Deque<ContainedType> queuedTrees) {
+		return queuedTrees.isEmpty() ? "(none)" : queuedTrees.toString();
 	}
 }

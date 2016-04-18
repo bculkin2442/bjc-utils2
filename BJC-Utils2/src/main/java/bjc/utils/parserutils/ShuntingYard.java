@@ -87,7 +87,9 @@ public class ShuntingYard<E> {
 				stack.push(token);
 			} else if (StringUtils.containsOnly(token, "\\)")) {
 				// Handle groups of parenthesis for multiple nesting levels
-				while (stack.peek().equals(token.replace(')', '('))) {
+				String swappedToken = token.replace(')', '(');
+
+				while (!stack.peek().equals(swappedToken)) {
 					output.add(transform.apply(stack.pop()));
 				}
 
@@ -98,21 +100,6 @@ public class ShuntingYard<E> {
 		}
 	}
 
-	private static boolean shouldConfigureBasicOperators = true;
-
-	/**
-	 * Set whether the shunter should configure the four basic math
-	 * operators
-	 * 
-	 * @param configureBasicOperators
-	 *            Whether or not the four basic math operators should be
-	 *            configured
-	 */
-	public static void setBasicOperatorConfiguration(
-			boolean configureBasicOperators) {
-		shouldConfigureBasicOperators = configureBasicOperators;
-	}
-
 	/**
 	 * Holds all the shuntable operations
 	 */
@@ -120,11 +107,12 @@ public class ShuntingYard<E> {
 
 	/**
 	 * Create a new shunting yard with a default set of operators
+	 * @param configureBasics Whether or not basic math operators should be provided
 	 */
-	public ShuntingYard() {
+	public ShuntingYard(boolean configureBasics) {
 		operators = new FunctionalMap<>();
 
-		if (shouldConfigureBasicOperators) {
+		if (configureBasics) {
 			operators.put("+", Operator.ADD);
 			operators.put("-", Operator.SUBTRACT);
 			operators.put("*", Operator.MULTIPLY);
@@ -165,11 +153,15 @@ public class ShuntingYard<E> {
 			String rightOperator) {
 		boolean operatorExists = operators.containsKey(rightOperator);
 
+		if (!operatorExists) {
+			return false;
+		}
+
 		boolean hasHigherPrecedence =
 				operators.get(rightOperator).getPrecedence() >= operators
 						.get(leftOperator).getPrecedence();
 
-		return (operatorExists && hasHigherPrecedence);
+		return hasHigherPrecedence;
 	}
 
 	/**

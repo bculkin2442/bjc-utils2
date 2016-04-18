@@ -25,43 +25,6 @@ public interface ITree<ContainedType> {
 	public void addChild(ITree<ContainedType> child);
 
 	/**
-	 * Transform the value that is the head of this node
-	 * 
-	 * @param <TransformedType>
-	 *            The type of the transformed value
-	 * @param transformer
-	 *            The function to use to transform the value
-	 * @return The transformed value
-	 */
-	public <TransformedType> TransformedType transformHead(
-			Function<ContainedType, TransformedType> transformer);
-
-	/**
-	 * Get a count of the number of direct children this node has
-	 * 
-	 * @return The number of direct children this node has
-	 */
-	public int getChildrenCount();
-
-	/**
-	 * Transform one of this nodes children
-	 * 
-	 * @param <TransformedType>
-	 *            The type of the transformed value
-	 * @param childNo
-	 *            The number of the child to transform
-	 * @param transformer
-	 *            The function to use to transform the value
-	 * @return The transformed value
-	 * 
-	 * @throws IllegalArgumentException
-	 *             if the childNo is out of bounds (0 <= childNo <=
-	 *             childCount())
-	 */
-	public <TransformedType> TransformedType transformChild(int childNo,
-			Function<ITree<ContainedType>, TransformedType> transformer);
-
-	/**
 	 * Collapse a tree into a single version
 	 * 
 	 * @param <NewType>
@@ -84,6 +47,14 @@ public interface ITree<ContainedType> {
 			Function<NewType, ReturnedType> resultTransformer);
 
 	/**
+	 * Execute a given action for each of this tree's children
+	 * 
+	 * @param action
+	 *            The action to execute for each child
+	 */
+	void doForChildren(Consumer<ITree<ContainedType>> action);
+
+	/**
 	 * Expand the nodes of a tree into trees, and then merge the contents
 	 * of those trees into a single tree
 	 * 
@@ -95,6 +66,48 @@ public interface ITree<ContainedType> {
 			Function<ContainedType, ITree<ContainedType>> mapper);
 
 	/**
+	 * Get the specified child of this tree
+	 * 
+	 * @param childNo
+	 *            The number of the child to get
+	 * @return The specified child of this tree
+	 */
+	default ITree<ContainedType> getChild(int childNo) {
+		return transformChild(childNo, (child) -> child);
+	}
+
+	/**
+	 * Get a count of the number of direct children this node has
+	 * 
+	 * @return The number of direct children this node has
+	 */
+	public int getChildrenCount();
+
+	/**
+	 * Get the data stored in this node
+	 * 
+	 * @return The data stored in this node
+	 */
+	default ContainedType getHead() {
+		return transformHead((head) -> head);
+	}
+
+	/**
+	 * Rebuild the tree with the same structure, but different nodes
+	 * 
+	 * @param <MappedType>
+	 *            The type of the new tree
+	 * @param leafTransformer
+	 *            The function to use to transform leaf tokens
+	 * @param operatorTransformer
+	 *            The function to use to transform internal tokens
+	 * @return The tree, with the nodes changed
+	 */
+	public <MappedType> ITree<MappedType> rebuildTree(
+			Function<ContainedType, MappedType> leafTransformer,
+			Function<ContainedType, MappedType> operatorTransformer);
+
+	/**
 	 * Transform some of the nodes in this tree
 	 * 
 	 * @param nodePicker
@@ -104,6 +117,49 @@ public interface ITree<ContainedType> {
 	 */
 	public void selectiveTransform(Predicate<ContainedType> nodePicker,
 			UnaryOperator<ContainedType> transformer);
+
+	/**
+	 * Do a top-down transform of the tree
+	 * 
+	 * @param transformPicker
+	 *            The function to use to pick how to progress
+	 * @param transformer
+	 *            The function used to transform picked subtrees
+	 * @return The tree with the transform applied to picked subtrees
+	 */
+	public ITree<ContainedType> topDownTransform(
+			Function<ContainedType, TopDownTransformResult> transformPicker,
+			UnaryOperator<ITree<ContainedType>> transformer);
+
+	/**
+	 * Transform one of this nodes children
+	 * 
+	 * @param <TransformedType>
+	 *            The type of the transformed value
+	 * @param childNo
+	 *            The number of the child to transform
+	 * @param transformer
+	 *            The function to use to transform the value
+	 * @return The transformed value
+	 * 
+	 * @throws IllegalArgumentException
+	 *             if the childNo is out of bounds (0 <= childNo <=
+	 *             childCount())
+	 */
+	public <TransformedType> TransformedType transformChild(int childNo,
+			Function<ITree<ContainedType>, TransformedType> transformer);
+
+	/**
+	 * Transform the value that is the head of this node
+	 * 
+	 * @param <TransformedType>
+	 *            The type of the transformed value
+	 * @param transformer
+	 *            The function to use to transform the value
+	 * @return The transformed value
+	 */
+	public <TransformedType> TransformedType transformHead(
+			Function<ContainedType, TransformedType> transformer);
 
 	/**
 	 * Transform the tree into a tree with a different type of token
@@ -127,52 +183,4 @@ public interface ITree<ContainedType> {
 	 */
 	public void traverse(TreeLinearizationMethod linearizationMethod,
 			Consumer<ContainedType> action);
-
-	/**
-	 * Rebuild the tree with the same structure, but different nodes
-	 * 
-	 * @param <MappedType>
-	 *            The type of the new tree
-	 * @param leafTransformer
-	 *            The function to use to transform leaf tokens
-	 * @param operatorTransformer
-	 *            The function to use to transform internal tokens
-	 * @return The tree, with the nodes changed
-	 */
-	public <MappedType> ITree<MappedType> rebuildTree(
-			Function<ContainedType, MappedType> leafTransformer,
-			Function<ContainedType, MappedType> operatorTransformer);
-
-	/**
-	 * Do a top-down transform of the tree
-	 * 
-	 * @param transformPicker
-	 *            The function to use to pick how to progress
-	 * @param transformer
-	 *            The function used to transform picked subtrees
-	 * @return The tree with the transform applied to picked subtrees
-	 */
-	public ITree<ContainedType> topDownTransform(
-			Function<ContainedType, TopDownTransformResult> transformPicker,
-			UnaryOperator<ITree<ContainedType>> transformer);
-
-	/**
-	 * Get the specified child of this tree
-	 * 
-	 * @param childNo
-	 *            The number of the child to get
-	 * @return The specified child of this tree
-	 */
-	default ITree<ContainedType> getChild(int childNo) {
-		return transformChild(childNo, (child) -> child);
-	}
-
-	/**
-	 * Get the data stored in this node
-	 * 
-	 * @return The data stored in this node
-	 */
-	default ContainedType getHead() {
-		return transformHead((head) -> head);
-	}
 }

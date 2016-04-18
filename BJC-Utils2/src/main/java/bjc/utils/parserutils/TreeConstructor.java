@@ -65,7 +65,7 @@ public class TreeConstructor {
 	 */
 	public static <T> ITree<T> constructTree(IFunctionalList<T> tokens,
 			Predicate<T> operatorPredicate, Predicate<T> isSpecialOperator,
-			Function<Deque<ITree<T>>, ITree<T>> handleSpecialOperator) {
+			Function<T, Function<Deque<ITree<T>>, ITree<T>>> handleSpecialOperator) {
 		if (tokens == null) {
 			throw new NullPointerException("Tokens must not be null");
 		} else if (operatorPredicate == null) {

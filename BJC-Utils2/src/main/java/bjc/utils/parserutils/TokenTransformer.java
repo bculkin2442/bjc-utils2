@@ -11,6 +11,7 @@ import bjc.utils.data.IPair;
 import bjc.utils.data.Pair;
 import bjc.utils.funcdata.ITree;
 import bjc.utils.funcdata.Tree;
+import bjc.utils.funcutils.StringUtils;
 
 final class TokenTransformer<T> implements Consumer<T> {
 	private final class OperatorHandler
@@ -34,7 +35,8 @@ final class TokenTransformer<T> implements Consumer<T> {
 			ITree<T> newAST;
 
 			if (isSpecialOperator.test(element)) {
-				newAST = handleSpecialOperator.apply(queuedASTs);
+				newAST = handleSpecialOperator.apply(element)
+						.apply(queuedASTs);
 			} else {
 				if (queuedASTs.size() < 2) {
 					throw new IllegalStateException(
@@ -56,15 +58,15 @@ final class TokenTransformer<T> implements Consumer<T> {
 		}
 	}
 
-	private IHolder<IPair<Deque<ITree<T>>, ITree<T>>>	initialState;
-	private Predicate<T>								operatorPredicate;
-	private Predicate<T>								isSpecialOperator;
-	private Function<Deque<ITree<T>>, ITree<T>>			handleSpecialOperator;
+	private IHolder<IPair<Deque<ITree<T>>, ITree<T>>>			initialState;
+	private Predicate<T>										operatorPredicate;
+	private Predicate<T>										isSpecialOperator;
+	private Function<T, Function<Deque<ITree<T>>, ITree<T>>>	handleSpecialOperator;
 
 	public TokenTransformer(
 			IHolder<IPair<Deque<ITree<T>>, ITree<T>>> initialState,
 			Predicate<T> operatorPredicate, Predicate<T> isSpecialOperator,
-			Function<Deque<ITree<T>>, ITree<T>> handleSpecialOperator) {
+			Function<T, Function<Deque<ITree<T>>, ITree<T>>> handleSpecialOperator) {
 		this.initialState = initialState;
 		this.operatorPredicate = operatorPredicate;
 		this.isSpecialOperator = isSpecialOperator;

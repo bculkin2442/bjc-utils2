@@ -182,8 +182,8 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 		// Get the iterator for the other list
 		Iterator<T> rightIterator = rightList.toIterable().iterator();
 
-		for (Iterator<E> leftIterator = wrappedList
-				.iterator(); leftIterator.hasNext()
+		for (Iterator<E> leftIterator =
+				wrappedList.iterator(); leftIterator.hasNext()
 						&& rightIterator.hasNext();) {
 			// Add the transformed items to the result list
 			E leftVal = leftIterator.next();
@@ -228,18 +228,18 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 	 * Function)
 	 */
 	@Override
-	public <T> IFunctionalList<T> flatMap(
-			Function<E, IFunctionalList<T>> elementExpander) {
+	public <T> IFunctionalList<T>
+			flatMap(Function<E, IFunctionalList<T>> elementExpander) {
 		if (elementExpander == null) {
 			throw new NullPointerException("Expander must not be null");
 		}
 
-		IFunctionalList<T> returnedList = new FunctionalList<>(
-				this.wrappedList.size());
+		IFunctionalList<T> returnedList =
+				new FunctionalList<>(this.wrappedList.size());
 
 		forEach(element -> {
-			IFunctionalList<T> expandedElement = elementExpander
-					.apply(element);
+			IFunctionalList<T> expandedElement =
+					elementExpander.apply(element);
 
 			if (expandedElement == null) {
 				throw new NullPointerException(
@@ -370,8 +370,8 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 			throw new NullPointerException("Transformer must be not null");
 		}
 
-		IFunctionalList<T> returnedList = new FunctionalList<>(
-				this.wrappedList.size());
+		IFunctionalList<T> returnedList =
+				new FunctionalList<>(this.wrappedList.size());
 
 		forEach(element -> {
 			// Add the transformed item to the result
@@ -388,8 +388,8 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 	 * IFunctionalList)
 	 */
 	@Override
-	public <T> IFunctionalList<IPair<E, T>> pairWith(
-			IFunctionalList<T> rightList) {
+	public <T> IFunctionalList<IPair<E, T>>
+			pairWith(IFunctionalList<T> rightList) {
 		return combineWith(rightList, Pair<E, T>::new);
 	}
 
@@ -399,8 +399,8 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 	 * @see bjc.utils.funcdata.IFunctionalList#partition(int)
 	 */
 	@Override
-	public IFunctionalList<IFunctionalList<E>> partition(
-			int numberPerPartition) {
+	public IFunctionalList<IFunctionalList<E>>
+			partition(int numberPerPartition) {
 		if (numberPerPartition < 1
 				|| numberPerPartition > wrappedList.size()) {
 			throw new IllegalArgumentException("" + numberPerPartition
@@ -408,11 +408,12 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 					+ wrappedList.size());
 		}
 
-		IFunctionalList<IFunctionalList<E>> returnedList = new FunctionalList<>();
+		IFunctionalList<IFunctionalList<E>> returnedList =
+				new FunctionalList<>();
 
 		// The current partition being filled
-		IHolder<IFunctionalList<E>> currentPartition = new Identity<>(
-				new FunctionalList<>());
+		IHolder<IFunctionalList<E>> currentPartition =
+				new Identity<>(new FunctionalList<>());
 
 		this.forEach((element) -> {
 			if (isPartitionFull(numberPerPartition, currentPartition)) {
@@ -594,5 +595,10 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 	@Override
 	public IFunctionalList<E> tail() {
 		return new FunctionalList<>(wrappedList.subList(1, getSize()));
+	}
+
+	@Override
+	public void reverse() {
+		Collections.reverse(wrappedList);
 	}
 }

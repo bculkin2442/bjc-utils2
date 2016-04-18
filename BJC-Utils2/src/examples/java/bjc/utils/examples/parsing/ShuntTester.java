@@ -25,7 +25,7 @@ public class ShuntTester {
 		System.out.print("Enter a expression to shunt: ");
 		String line = inputSource.nextLine();
 
-		ShuntingYard<String> yard = new ShuntingYard<>();
+		ShuntingYard<String> yard = new ShuntingYard<>(true);
 
 		IFunctionalList<String> shuntedTokens =
 				yard.postfix(new FunctionalStringTokenizer(line)
