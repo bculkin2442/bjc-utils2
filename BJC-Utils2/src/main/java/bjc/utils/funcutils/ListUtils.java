@@ -128,12 +128,15 @@ public class ListUtils {
 		IHolder<IFunctionalList<String>> returnedList =
 				new Identity<>(input);
 
-		operators.forEach((operator) -> returnedList
-				.transform((oldReturn) -> oldReturn.flatMap((token) -> {
+		operators.forEach((operator) -> {
+			returnedList.transform((oldReturn) -> {
+				return oldReturn.flatMap((token) -> {
 					return operator.merge(new TokenSplitter(token));
-				})));
+				});
+			});
+		});
 
-		return returnedList.unwrap((list) -> list);
+		return returnedList.getValue();
 	}
 
 	/**

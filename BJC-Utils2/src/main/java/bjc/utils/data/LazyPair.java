@@ -93,8 +93,8 @@ public class LazyPair<LeftType, RightType>
 	}
 
 	@Override
-	public <MergedType> MergedType merge(
-			BiFunction<LeftType, RightType, MergedType> merger) {
+	public <MergedType> MergedType
+			merge(BiFunction<LeftType, RightType, MergedType> merger) {
 		if (!leftMaterialized) {
 			leftValue = leftSupplier.get();
 
@@ -130,5 +130,28 @@ public class LazyPair<LeftType, RightType>
 		}
 
 		return rightValue;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder("pair[l=");
+
+		if (leftMaterialized) {
+			sb.append(leftValue.toString());
+		} else {
+			sb.append("(un-materialized)");
+		}
+
+		sb.append(", r=");
+
+		if (rightMaterialized) {
+			sb.append(rightValue.toString());
+		} else {
+			sb.append("(un-materialized)");
+		}
+
+		sb.append("]");
+
+		return sb.toString();
 	}
 }

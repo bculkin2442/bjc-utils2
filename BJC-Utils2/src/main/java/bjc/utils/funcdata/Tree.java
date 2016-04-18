@@ -262,4 +262,35 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 			});
 		}
 	}
+
+	@Override
+	public ITree<ContainedType> topDownTransform(
+			Function<ContainedType, TopDownTransformResult> transformPicker,
+			UnaryOperator<ITree<ContainedType>> transformer) {
+		TopDownTransformResult transformResult =
+				transformPicker.apply(data);
+
+		switch (transformResult) {
+			case PASSTHROUGH:
+				ITree<ContainedType> result = new Tree<>(data);
+
+				if (hasChildren) {
+					children.forEach((child) -> {
+						result.addChild(child.topDownTransform(
+								transformPicker, transformer));
+					});
+				}
+
+				return result;
+			case SKIP:
+				return this;
+			case TRANSFORM:
+				return transformer.apply(this);
+			default:
+				throw new IllegalArgumentException(
+						"Recieved unknown transform result "
+								+ transformResult);
+
+		}
+	}
 }

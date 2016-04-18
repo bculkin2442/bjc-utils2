@@ -114,8 +114,8 @@ public interface ITree<ContainedType> {
 	 *            The function to use to transform tokens
 	 * @return A tree with the token types transformed
 	 */
-	public <MappedType> ITree<MappedType> transformTree(
-			Function<ContainedType, MappedType> transformer);
+	public <MappedType> ITree<MappedType>
+			transformTree(Function<ContainedType, MappedType> transformer);
 
 	/**
 	 * Perform an action on each part of the tree
@@ -142,4 +142,17 @@ public interface ITree<ContainedType> {
 	public <MappedType> ITree<MappedType> rebuildTree(
 			Function<ContainedType, MappedType> leafTransformer,
 			Function<ContainedType, MappedType> operatorTransformer);
+
+	/**
+	 * Do a top-down transform of the tree
+	 * 
+	 * @param transformPicker
+	 *            The function to use to pick how to progress
+	 * @param transformer
+	 *            The function used to transform picked subtrees
+	 * @return The tree with the transform applied to picked subtrees
+	 */
+	public ITree<ContainedType> topDownTransform(
+			Function<ContainedType, TopDownTransformResult> transformPicker,
+			UnaryOperator<ITree<ContainedType>> transformer);
 }

@@ -5,8 +5,6 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import java.util.stream.IntStream;
-
 import bjc.utils.data.IHolder;
 import bjc.utils.data.Identity;
 import bjc.utils.funcdata.FunctionalList;
@@ -109,8 +107,7 @@ public class AdjacencyMap<T> {
 				throw imex;
 			}
 
-			adjacencyMap.setWeight(row.getValue(), column,
-					columnWeight);
+			adjacencyMap.setWeight(row.getValue(), column, columnWeight);
 
 			column++;
 		}
