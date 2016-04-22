@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+
 import bjc.utils.data.IHolder;
 import bjc.utils.data.Identity;
 import bjc.utils.funcdata.FunctionalList;
@@ -118,8 +119,7 @@ public class AdjacencyMap<T> {
 	/**
 	 * The backing storage of the map
 	 */
-	private IFunctionalMap<T, IFunctionalMap<T, Integer>> adjacencyMap =
-			new FunctionalMap<>();
+	private IFunctionalMap<T, IFunctionalMap<T, Integer>> adjacencyMap = new FunctionalMap<>();
 
 	/**
 	 * Create a new map from a set of vertices

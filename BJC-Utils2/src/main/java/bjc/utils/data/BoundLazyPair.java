@@ -60,8 +60,8 @@ class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight>
 	@Override
 	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind(
 			BiFunction<NewLeft, NewRight, IPair<BoundLeft, BoundRight>> bindr) {
-		IHolder<IPair<NewLeft, NewRight>> newPair =
-				new Identity<>(boundPair);
+		IHolder<IPair<NewLeft, NewRight>> newPair = new Identity<>(
+				boundPair);
 		IHolder<Boolean> newPairMade = new Identity<>(pairBound);
 
 		Supplier<NewLeft> leftSupp = () -> {
@@ -90,11 +90,11 @@ class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight>
 	}
 
 	@Override
-	public <MergedType> MergedType
-			merge(BiFunction<NewLeft, NewRight, MergedType> merger) {
+	public <MergedType> MergedType merge(
+			BiFunction<NewLeft, NewRight, MergedType> merger) {
 		if (!pairBound) {
-			boundPair =
-					binder.apply(leftSupplier.get(), rightSupplier.get());
+			boundPair = binder.apply(leftSupplier.get(),
+					rightSupplier.get());
 
 			pairBound = true;
 		}

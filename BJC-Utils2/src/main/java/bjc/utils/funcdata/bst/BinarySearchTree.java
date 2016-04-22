@@ -179,7 +179,7 @@ public class BinarySearchTree<T> {
 		} else if (traversalPredicate == null) {
 			throw new NullPointerException("Predicate must not be nulls");
 		}
-		
+
 		rootElement.forEach(linearizationMethod, traversalPredicate);
 	}
 

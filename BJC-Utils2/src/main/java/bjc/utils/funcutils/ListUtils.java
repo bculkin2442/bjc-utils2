@@ -53,14 +53,13 @@ public class ListUtils {
 		/*
 		 * List that holds our results
 		 */
-		IFunctionalList<IFunctionalList<E>> returnedList =
-				new FunctionalList<>();
+		IFunctionalList<IFunctionalList<E>> returnedList = new FunctionalList<>();
 
 		/*
 		 * List that holds current partition
 		 */
-		IHolder<IFunctionalList<E>> currentPartition =
-				new Identity<>(new FunctionalList<>());
+		IHolder<IFunctionalList<E>> currentPartition = new Identity<>(
+				new FunctionalList<>());
 		/*
 		 * List that holds elements rejected during current pass
 		 */
@@ -74,10 +73,8 @@ public class ListUtils {
 		/*
 		 * Run up to a certain number of passes
 		 */
-		for (int numberOfIterations =
-				0; numberOfIterations < MAX_NTRIESPART
-						&& !rejectedElements
-								.isEmpty(); numberOfIterations++) {
+		for (int numberOfIterations = 0; numberOfIterations < MAX_NTRIESPART
+				&& !rejectedElements.isEmpty(); numberOfIterations++) {
 			input.forEach(new GroupPartIteration<>(returnedList,
 					currentPartition, rejectedElements,
 					numberInCurrentPartition, numberPerPartition,
@@ -125,8 +122,8 @@ public class ListUtils {
 					"Set of operators must not be null");
 		}
 
-		IHolder<IFunctionalList<String>> returnedList =
-				new Identity<>(input);
+		IHolder<IFunctionalList<String>> returnedList = new Identity<>(
+				input);
 
 		operators.forEach((operator) -> {
 			returnedList.transform((oldReturn) -> {
@@ -159,8 +156,8 @@ public class ListUtils {
 					"Set of operators must not be null");
 		}
 
-		IHolder<IFunctionalList<String>> returnedList =
-				new Identity<>(input);
+		IHolder<IFunctionalList<String>> returnedList = new Identity<>(
+				input);
 
 		operators.forEach((operator) -> returnedList
 				.transform((oldReturn) -> oldReturn.flatMap((token) -> {
@@ -236,8 +233,8 @@ public class ListUtils {
 	public static <E> IFunctionalList<E> drawWithReplacement(
 			IFunctionalList<E> list, int numberOfItems,
 			Function<Integer, Integer> rng) {
-		IFunctionalList<E> selectedItems =
-				new FunctionalList<>(new ArrayList<>(numberOfItems));
+		IFunctionalList<E> selectedItems = new FunctionalList<>(
+				new ArrayList<>(numberOfItems));
 
 		for (int i = 0; i < numberOfItems; i++) {
 			selectedItems.add(list.randItem(rng));
@@ -265,8 +262,8 @@ public class ListUtils {
 	public static <E> IFunctionalList<E> drawWithoutReplacement(
 			IFunctionalList<E> list, int numberOfItems,
 			Function<Integer, Integer> rng) {
-		IFunctionalList<E> selectedItems =
-				new FunctionalList<>(new ArrayList<>(numberOfItems));
+		IFunctionalList<E> selectedItems = new FunctionalList<>(
+				new ArrayList<>(numberOfItems));
 
 		int totalItems = list.getSize();
 
@@ -295,8 +292,8 @@ public class ListUtils {
 	 * @return A list containing all the elements of the lists
 	 */
 	@SafeVarargs
-	public static <E> IFunctionalList<E>
-			mergeLists(IFunctionalList<E>... lists) {
+	public static <E> IFunctionalList<E> mergeLists(
+			IFunctionalList<E>... lists) {
 		IFunctionalList<E> returnedList = new FunctionalList<>();
 
 		for (IFunctionalList<E> list : lists) {

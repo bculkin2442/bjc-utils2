@@ -172,8 +172,8 @@ public interface IFunctionalList<ContainedType> {
 	 *            The predicate to match by
 	 * @return A list containing all elements that match the predicate
 	 */
-	IFunctionalList<ContainedType>
-			getMatching(Predicate<ContainedType> matchPredicate);
+	IFunctionalList<ContainedType> getMatching(
+			Predicate<ContainedType> matchPredicate);
 
 	/**
 	 * Retrieve the size of the wrapped list
@@ -200,8 +200,8 @@ public interface IFunctionalList<ContainedType> {
 	 *            The function to apply to each element in the list
 	 * @return A new list containing the mapped elements of this list.
 	 */
-	<MappedType> IFunctionalList<MappedType>
-			map(Function<ContainedType, MappedType> elementTransformer);
+	<MappedType> IFunctionalList<MappedType> map(
+			Function<ContainedType, MappedType> elementTransformer);
 
 	/**
 	 * Zip two lists into a list of pairs
@@ -214,8 +214,8 @@ public interface IFunctionalList<ContainedType> {
 	 * @return A list containing pairs of this element and the specified
 	 *         list
 	 */
-	<OtherType> IFunctionalList<IPair<ContainedType, OtherType>>
-			pairWith(IFunctionalList<OtherType> rightList);
+	<OtherType> IFunctionalList<IPair<ContainedType, OtherType>> pairWith(
+			IFunctionalList<OtherType> rightList);
 
 	/**
 	 * Partition this list into a list of sublists
@@ -224,8 +224,8 @@ public interface IFunctionalList<ContainedType> {
 	 *            The size of elements to put into each one of the sublists
 	 * @return A list partitioned into partitions of size nPerPart
 	 */
-	IFunctionalList<IFunctionalList<ContainedType>>
-			partition(int numberPerPartition);
+	IFunctionalList<IFunctionalList<ContainedType>> partition(
+			int numberPerPartition);
 
 	/**
 	 * Prepend an item to the list

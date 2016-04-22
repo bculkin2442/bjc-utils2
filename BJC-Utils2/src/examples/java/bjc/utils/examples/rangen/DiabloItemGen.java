@@ -83,8 +83,8 @@ public class DiabloItemGen {
 		addInfixRules();
 
 		for (int i = 0; i < 100; i++) {
-			IFunctionalList<String> ls =
-					rules.generateListValues("<item>", " ");
+			IFunctionalList<String> ls = rules.generateListValues("<item>",
+					" ");
 
 			StringBuilder sb = new StringBuilder();
 

@@ -56,8 +56,8 @@ public class Pair<LeftType, RightType>
 	}
 
 	@Override
-	public <MergedType> MergedType
-			merge(BiFunction<LeftType, RightType, MergedType> merger) {
+	public <MergedType> MergedType merge(
+			BiFunction<LeftType, RightType, MergedType> merger) {
 		return merger.apply(leftValue, rightValue);
 	}
 

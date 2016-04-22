@@ -107,7 +107,9 @@ public class ShuntingYard<E> {
 
 	/**
 	 * Create a new shunting yard with a default set of operators
-	 * @param configureBasics Whether or not basic math operators should be provided
+	 * 
+	 * @param configureBasics
+	 *            Whether or not basic math operators should be provided
 	 */
 	public ShuntingYard(boolean configureBasics) {
 		operators = new FunctionalMap<>();
@@ -157,9 +159,9 @@ public class ShuntingYard<E> {
 			return false;
 		}
 
-		boolean hasHigherPrecedence =
-				operators.get(rightOperator).getPrecedence() >= operators
-						.get(leftOperator).getPrecedence();
+		boolean hasHigherPrecedence = operators.get(rightOperator)
+				.getPrecedence() >= operators.get(leftOperator)
+						.getPrecedence();
 
 		return hasHigherPrecedence;
 	}

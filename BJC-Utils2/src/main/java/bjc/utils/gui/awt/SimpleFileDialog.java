@@ -48,8 +48,8 @@ public class SimpleFileDialog {
 			throw new NullPointerException("Title must not be null");
 		}
 
-		FileDialog fileDialog =
-				new FileDialog(parent, title, FileDialog.LOAD);
+		FileDialog fileDialog = new FileDialog(parent, title,
+				FileDialog.LOAD);
 
 		if (extensions != null) {
 			FilenameFilter filter = new ExtensionFileFilter(extensions);
@@ -99,8 +99,8 @@ public class SimpleFileDialog {
 			throw new NullPointerException("Title must not be null");
 		}
 
-		FileDialog fileDialog =
-				new FileDialog(parent, title, FileDialog.SAVE);
+		FileDialog fileDialog = new FileDialog(parent, title,
+				FileDialog.SAVE);
 
 		if (extensions != null) {
 			FilenameFilter filter = new ExtensionFileFilter(extensions);

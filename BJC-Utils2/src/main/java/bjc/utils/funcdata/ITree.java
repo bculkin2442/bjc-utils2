@@ -170,8 +170,8 @@ public interface ITree<ContainedType> {
 	 *            The function to use to transform tokens
 	 * @return A tree with the token types transformed
 	 */
-	public <MappedType> ITree<MappedType>
-			transformTree(Function<ContainedType, MappedType> transformer);
+	public <MappedType> ITree<MappedType> transformTree(
+			Function<ContainedType, MappedType> transformer);
 
 	/**
 	 * Perform an action on each part of the tree

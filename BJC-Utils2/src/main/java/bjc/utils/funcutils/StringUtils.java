@@ -74,7 +74,8 @@ public class StringUtils {
 		}
 	}
 
-	public static <ContainedType> String printDeque(Deque<ContainedType> queuedTrees) {
+	public static <ContainedType> String printDeque(
+			Deque<ContainedType> queuedTrees) {
 		return queuedTrees.isEmpty() ? "(none)" : queuedTrees.toString();
 	}
 }

@@ -93,8 +93,8 @@ public class LazyPair<LeftType, RightType>
 	}
 
 	@Override
-	public <MergedType> MergedType
-			merge(BiFunction<LeftType, RightType, MergedType> merger) {
+	public <MergedType> MergedType merge(
+			BiFunction<LeftType, RightType, MergedType> merger) {
 		if (!leftMaterialized) {
 			leftValue = leftSupplier.get();
 

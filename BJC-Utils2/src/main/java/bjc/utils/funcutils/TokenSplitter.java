@@ -5,8 +5,8 @@ import java.util.function.BiFunction;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IFunctionalList;
 
-final class TokenSplitter implements
-		BiFunction<String, String, IFunctionalList<String>> {
+final class TokenSplitter
+		implements BiFunction<String, String, IFunctionalList<String>> {
 	private String tokenToSplit;
 
 	public TokenSplitter(String tok) {
@@ -25,8 +25,7 @@ final class TokenSplitter implements
 		}
 
 		if (tokenToSplit.contains(operatorName)) {
-			if (StringUtils.containsOnly(tokenToSplit,
-					operatorRegex)) {
+			if (StringUtils.containsOnly(tokenToSplit, operatorRegex)) {
 				return new FunctionalList<>(tokenToSplit);
 			}
 
@@ -39,8 +38,7 @@ final class TokenSplitter implements
 
 			splitTokens.forEachIndexed((tokenIndex, token) -> {
 
-				if (tokenIndex != tokenExpansionSize
-						&& tokenIndex != 0) {
+				if (tokenIndex != tokenExpansionSize && tokenIndex != 0) {
 					result.add(operatorName);
 					result.add(token);
 				} else {

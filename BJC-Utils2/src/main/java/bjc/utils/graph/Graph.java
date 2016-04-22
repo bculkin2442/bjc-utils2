@@ -172,8 +172,8 @@ public class Graph<T> {
 					});
 
 			// Get the edge with the minimum distance
-			IHolder<Edge<T>> minimumEdge =
-					new Identity<>(availableEdges.poll());
+			IHolder<Edge<T>> minimumEdge = new Identity<>(
+					availableEdges.poll());
 
 			// Only consider edges where we haven't visited the target of
 			// the edge
@@ -254,8 +254,8 @@ public class Graph<T> {
 	 * @return A adjacency map representing this graph
 	 */
 	public AdjacencyMap<T> toAdjacencyMap() {
-		AdjacencyMap<T> adjacencyMap =
-				new AdjacencyMap<>(backingGraph.keyList());
+		AdjacencyMap<T> adjacencyMap = new AdjacencyMap<>(
+				backingGraph.keyList());
 
 		backingGraph.forEach((key, value) -> {
 			value.forEach((targetKey, targetValue) -> {

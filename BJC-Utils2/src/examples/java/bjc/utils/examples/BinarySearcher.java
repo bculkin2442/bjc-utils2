@@ -25,8 +25,8 @@ public class BinarySearcher {
 
 		char command = ' ';
 
-		BinarySearchTree<Character> searchTree =
-				new BinarySearchTree<>((o1, o2) -> o1 - o2);
+		BinarySearchTree<Character> searchTree = new BinarySearchTree<>(
+				(o1, o2) -> o1 - o2);
 
 		while (command != 'e') {
 			System.out.print("Enter a command (m for help): ");
@@ -128,8 +128,7 @@ public class BinarySearcher {
 					break;
 
 				case 'o':
-					linearizationMethod =
-							TreeLinearizationMethod.POSTORDER;
+					linearizationMethod = TreeLinearizationMethod.POSTORDER;
 					break;
 
 				default:

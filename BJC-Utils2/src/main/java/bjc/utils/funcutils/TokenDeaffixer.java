@@ -5,8 +5,8 @@ import java.util.function.BiFunction;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IFunctionalList;
 
-final class TokenDeaffixer implements
-		BiFunction<String, String, IFunctionalList<String>> {
+final class TokenDeaffixer
+		implements BiFunction<String, String, IFunctionalList<String>> {
 	private String token;
 
 	public TokenDeaffixer(String tok) {

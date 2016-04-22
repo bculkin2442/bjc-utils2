@@ -7,8 +7,7 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.function.BiPredicate;
 
-final class FunctionalFileVisitor
-		extends SimpleFileVisitor<Path> {
+final class FunctionalFileVisitor extends SimpleFileVisitor<Path> {
 	private BiPredicate<Path, BasicFileAttributes>	traversalPredicate;
 	private BiPredicate<Path, BasicFileAttributes>	traversalAction;
 
@@ -30,8 +29,8 @@ final class FunctionalFileVisitor
 	}
 
 	@Override
-	public FileVisitResult visitFile(Path file,
-			BasicFileAttributes attrs) throws IOException {
+	public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+			throws IOException {
 		if (traversalAction.test(file, attrs)) {
 			return FileVisitResult.CONTINUE;
 		}

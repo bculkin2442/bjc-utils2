@@ -29,11 +29,16 @@ public class FuncUtils {
 	 * Convert a binary function into a unary function that returns a
 	 * function
 	 * 
-	 * @param <A> The initial type of the function
-	 * @param <B> The intermediate type of the function
-	 * @param <C> The terminal type of the function
-	 * @param func The function to transform
-	 * @return The function transformed into a unary function returning a function
+	 * @param <A>
+	 *            The initial type of the function
+	 * @param <B>
+	 *            The intermediate type of the function
+	 * @param <C>
+	 *            The terminal type of the function
+	 * @param func
+	 *            The function to transform
+	 * @return The function transformed into a unary function returning a
+	 *         function
 	 */
 	public static <A, B, C> Function<A, Function<B, C>> curry2(
 			BiFunction<A, B, C> func) {

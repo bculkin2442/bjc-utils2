@@ -1,8 +1,9 @@
 package bjc.utils.gui;
 
 import java.io.File;
-import javax.swing.filechooser.FileFilter;
 import java.util.List;
+
+import javax.swing.filechooser.FileFilter;
 
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IFunctionalList;

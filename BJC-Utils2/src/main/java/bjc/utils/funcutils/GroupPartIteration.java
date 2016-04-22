@@ -15,8 +15,7 @@ import bjc.utils.funcdata.IFunctionalList;
  * @param <E>
  *            The type of element in the list being partitioned
  */
-final class GroupPartIteration<E>
-		implements Consumer<E> {
+final class GroupPartIteration<E> implements Consumer<E> {
 	private IFunctionalList<IFunctionalList<E>>	returnedList;
 	private IHolder<IFunctionalList<E>>			currentPartition;
 	private IFunctionalList<E>					rejectedItems;
@@ -24,8 +23,7 @@ final class GroupPartIteration<E>
 	private int									numberPerPartition;
 	private Function<E, Integer>				elementCounter;
 
-	public GroupPartIteration(
-			IFunctionalList<IFunctionalList<E>> returned,
+	public GroupPartIteration(IFunctionalList<IFunctionalList<E>> returned,
 			IHolder<IFunctionalList<E>> currPart,
 			IFunctionalList<E> rejects, IHolder<Integer> numInCurrPart,
 			int nPerPart, Function<E, Integer> eleCount) {

@@ -90,8 +90,8 @@ public class ListParameterPanel<E> extends JPanel {
 		if (addAction != null) {
 			addParam = new JButton("Add...");
 			addParam.addActionListener((event) -> {
-				DefaultListModel<E> model =
-						(DefaultListModel<E>) list.getModel();
+				DefaultListModel<E> model = (DefaultListModel<E>) list
+						.getModel();
 
 				model.addElement(addAction.get());
 			});
@@ -111,8 +111,8 @@ public class ListParameterPanel<E> extends JPanel {
 		if (removeAction != null) {
 			removeParam = new JButton("Remove...");
 			removeParam.addActionListener((event) -> {
-				DefaultListModel<E> model =
-						(DefaultListModel<E>) list.getModel();
+				DefaultListModel<E> model = (DefaultListModel<E>) list
+						.getModel();
 
 				removeAction.accept(model.remove(list.getSelectedIndex()));
 			});

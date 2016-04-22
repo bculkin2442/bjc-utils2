@@ -76,8 +76,8 @@ public class TreeConstructor {
 					"Special operator determiner must not be null");
 		}
 
-		IHolder<IPair<Deque<ITree<T>>, ITree<T>>> initialState =
-				new Identity<>(new Pair<>(new LinkedList<>(), null));
+		IHolder<IPair<Deque<ITree<T>>, ITree<T>>> initialState = new Identity<>(
+				new Pair<>(new LinkedList<>(), null));
 
 		tokens.forEach(
 				new TokenTransformer<>(initialState, operatorPredicate,

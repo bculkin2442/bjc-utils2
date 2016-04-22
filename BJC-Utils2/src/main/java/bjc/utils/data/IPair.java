@@ -84,13 +84,16 @@ public interface IPair<LeftType, RightType> {
 	}
 
 	/**
-	 * Immediately perfom the specified action with the contents of this pair
-	 * @param consumer The action to perform on the pair
+	 * Immediately perfom the specified action with the contents of this
+	 * pair
+	 * 
+	 * @param consumer
+	 *            The action to perform on the pair
 	 */
 	public default void doWith(BiConsumer<LeftType, RightType> consumer) {
 		merge((leftValue, rightValue) -> {
 			consumer.accept(leftValue, rightValue);
-			
+
 			return null;
 		});
 	}

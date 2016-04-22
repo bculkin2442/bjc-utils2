@@ -7,9 +7,6 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import bjc.utils.data.IHolder;
 import bjc.utils.data.Identity;
 import bjc.utils.funcdata.FunctionalList;
@@ -17,6 +14,9 @@ import bjc.utils.funcdata.FunctionalMap;
 import bjc.utils.funcdata.IFunctionalList;
 import bjc.utils.funcdata.IFunctionalMap;
 import bjc.utils.funcutils.FileUtils;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A component repository that loads its components from files in a
@@ -30,8 +30,8 @@ import bjc.utils.funcutils.FileUtils;
 public class FileComponentRepository<E extends IDescribedComponent>
 		implements IComponentRepository<E> {
 
-	private static final Logger			CLASS_LOGGER	=
-			LoggerFactory.getLogger(FileComponentRepository.class);
+	private static final Logger			CLASS_LOGGER	= LoggerFactory
+			.getLogger(FileComponentRepository.class);
 
 	/**
 	 * The internal storage of components
@@ -70,19 +70,19 @@ public class FileComponentRepository<E extends IDescribedComponent>
 
 		IHolder<Boolean> isFirstDir = new Identity<>(true);
 
-		BiPredicate<Path, BasicFileAttributes> firstLevelTraverser =
-				(pth, attr) -> {
-					if (attr.isDirectory() && !isFirstDir.getValue()) {
-						// Don't skip the first directory, that's the
-						// parent
-						isFirstDir.replace(false);
-						// Skip directories, they probably have
-						// component
-						return false;
-					}
+		BiPredicate<Path, BasicFileAttributes> firstLevelTraverser = (pth,
+				attr) -> {
+			if (attr.isDirectory() && !isFirstDir.getValue()) {
+				// Don't skip the first directory, that's the
+				// parent
+				isFirstDir.replace(false);
+				// Skip directories, they probably have
+				// component
+				return false;
+			}
 
-					return true;
-				};
+			return true;
+		};
 
 		try {
 			FileUtils.traverseDirectory(sourceDirectory,

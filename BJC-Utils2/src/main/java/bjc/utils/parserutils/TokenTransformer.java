@@ -11,7 +11,6 @@ import bjc.utils.data.IPair;
 import bjc.utils.data.Pair;
 import bjc.utils.funcdata.ITree;
 import bjc.utils.funcdata.Tree;
-import bjc.utils.funcutils.StringUtils;
 
 final class TokenTransformer<T> implements Consumer<T> {
 	private final class OperatorHandler
@@ -23,15 +22,15 @@ final class TokenTransformer<T> implements Consumer<T> {
 		}
 
 		@Override
-		public IPair<Deque<ITree<T>>, ITree<T>>
-				apply(IPair<Deque<ITree<T>>, ITree<T>> pair) {
+		public IPair<Deque<ITree<T>>, ITree<T>> apply(
+				IPair<Deque<ITree<T>>, ITree<T>> pair) {
 			return pair.bind((queuedASTs, currentAST) -> {
 				return handleOperator(queuedASTs);
 			});
 		}
 
-		private IPair<Deque<ITree<T>>, ITree<T>>
-				handleOperator(Deque<ITree<T>> queuedASTs) {
+		private IPair<Deque<ITree<T>>, ITree<T>> handleOperator(
+				Deque<ITree<T>> queuedASTs) {
 			ITree<T> newAST;
 
 			if (isSpecialOperator.test(element)) {

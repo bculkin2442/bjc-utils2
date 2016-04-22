@@ -61,8 +61,8 @@ public class TreeConstructTest {
 		System.out.print("Enter a expression to parse: ");
 		String line = inputSource.nextLine();
 
-		IFunctionalList<String> tokens =
-				new FunctionalStringTokenizer(line).toList();
+		IFunctionalList<String> tokens = new FunctionalStringTokenizer(
+				line).toList();
 
 		ShuntingYard<String> yard = new ShuntingYard<>(true);
 
@@ -75,8 +75,8 @@ public class TreeConstructTest {
 		ops.add(new Pair<>(":=", ":="));
 		ops.add(new Pair<>("=>", "=>"));
 
-		IFunctionalList<String> semiExpandedTokens =
-				ListUtils.splitTokens(tokens, ops);
+		IFunctionalList<String> semiExpandedTokens = ListUtils
+				.splitTokens(tokens, ops);
 
 		ops = new LinkedList<>();
 
@@ -85,13 +85,13 @@ public class TreeConstructTest {
 		ops.add(new Pair<>("[", "\\["));
 		ops.add(new Pair<>("]", "\\]"));
 
-		IFunctionalList<String> fullyExpandedTokens =
-				ListUtils.deAffixTokens(semiExpandedTokens, ops);
+		IFunctionalList<String> fullyExpandedTokens = ListUtils
+				.deAffixTokens(semiExpandedTokens, ops);
 
 		fullyExpandedTokens.removeIf((strang) -> strang.equals(""));
 
-		IFunctionalList<String> shuntedTokens =
-				yard.postfix(fullyExpandedTokens, (token) -> token);
+		IFunctionalList<String> shuntedTokens = yard
+				.postfix(fullyExpandedTokens, (token) -> token);
 
 		System.out.println("Shunted: " + shuntedTokens.toString());
 
@@ -105,8 +105,7 @@ public class TreeConstructTest {
 			return false;
 		};
 
-		IFunctionalMap<String, Function<Deque<ITree<String>>, ITree<String>>> operators =
-				new FunctionalMap<>();
+		IFunctionalMap<String, Function<Deque<ITree<String>>, ITree<String>>> operators = new FunctionalMap<>();
 
 		operators.put("[", (queuedTrees) -> {
 			return null;

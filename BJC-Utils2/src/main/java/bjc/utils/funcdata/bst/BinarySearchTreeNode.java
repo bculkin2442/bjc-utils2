@@ -1,6 +1,9 @@
 package bjc.utils.funcdata.bst;
 
-import static bjc.utils.funcdata.bst.DirectedWalkFunction.DirectedWalkResult.*;
+import static bjc.utils.funcdata.bst.DirectedWalkFunction.DirectedWalkResult.FAILURE;
+import static bjc.utils.funcdata.bst.DirectedWalkFunction.DirectedWalkResult.LEFT;
+import static bjc.utils.funcdata.bst.DirectedWalkFunction.DirectedWalkResult.RIGHT;
+import static bjc.utils.funcdata.bst.DirectedWalkFunction.DirectedWalkResult.SUCCESS;
 
 import java.util.Comparator;
 import java.util.function.BiFunction;

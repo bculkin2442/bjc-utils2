@@ -45,7 +45,8 @@ public class RandomStringExamples {
 				"<object>");
 
 		for (int i = 0; i < 10; i++) {
-			IFunctionalList<String> ls = rg.generateListValues("<sentance>", " ");
+			IFunctionalList<String> ls = rg
+					.generateListValues("<sentance>", " ");
 
 			StringBuilder sb = new StringBuilder();
 
@@ -56,8 +57,7 @@ public class RandomStringExamples {
 	}
 
 	private static void addRule(String rule, String... cases) {
-		IFunctionalList<IFunctionalList<String>> cses =
-				new FunctionalList<>();
+		IFunctionalList<IFunctionalList<String>> cses = new FunctionalList<>();
 
 		for (String strang : cases) {
 			cses.add(FunctionalStringTokenizer.fromString(strang)

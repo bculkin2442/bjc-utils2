@@ -50,8 +50,8 @@ public class ComponentDescriptionFileParser {
 			try {
 				state.setVersion(Integer.parseInt(token));
 			} catch (NumberFormatException nfex) {
-				PragmaFormatException pfex =
-						new PragmaFormatException("Argument " + token
+				PragmaFormatException pfex = new PragmaFormatException(
+						"Argument " + token
 								+ " to version pragma isn't a valid integer. "
 								+ "This pragma requires a integer argument");
 
@@ -62,9 +62,8 @@ public class ComponentDescriptionFileParser {
 		});
 	}
 
-	private static
-			BiConsumer<FunctionalStringTokenizer, ComponentDescriptionState>
-			buildStringCollapserPragma(String pragmaName) {
+	private static BiConsumer<FunctionalStringTokenizer, ComponentDescriptionState> buildStringCollapserPragma(
+			String pragmaName) {
 		return (tokenizer, state) -> {
 			if (!tokenizer.hasMoreTokens()) {
 				throw new PragmaFormatException("Pragma " + pragmaName
@@ -83,8 +82,8 @@ public class ComponentDescriptionFileParser {
 	 *            The stream to parse from
 	 * @return The description parsed from the stream
 	 */
-	public static ComponentDescription
-			fromStream(InputStream inputSource) {
+	public static ComponentDescription fromStream(
+			InputStream inputSource) {
 		ComponentDescriptionState readState = reader
 				.fromStream(inputSource, new ComponentDescriptionState());
 
