@@ -22,5 +22,9 @@ public enum TopDownTransformResult {
 	/**
 	 * Traverse this nodes children, then transform it
 	 */
-	PUSHDOWN;
+	PUSHDOWN,
+	/**
+	 * Transform this node, then traverse its children
+	 */
+	PULLUP;
 }

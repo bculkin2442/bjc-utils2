@@ -21,7 +21,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 	private boolean									hasChildren;
 
-	private int										childCount = 0;
+	private int										childCount	= 0;
 
 	/**
 	 * Create a new leaf node in a tree
@@ -131,11 +131,11 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 			Function<ContainedType, NewType> leafTransform,
 			Function<ContainedType, Function<IFunctionalList<NewType>, NewType>> nodeCollapser) {
 		if (hasChildren) {
-			Function<IFunctionalList<NewType>, NewType> nodeTransformer =
-					nodeCollapser.apply(data);
+			Function<IFunctionalList<NewType>, NewType> nodeTransformer = nodeCollapser
+					.apply(data);
 
-			IFunctionalList<NewType> collapsedChildren =
-					children.map((child) -> {
+			IFunctionalList<NewType> collapsedChildren = children
+					.map((child) -> {
 						return child.collapse(leafTransform, nodeCollapser,
 								(subTreeVal) -> subTreeVal);
 					});
@@ -169,8 +169,8 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 			Function<ContainedType, MappedType> leafTransformer,
 			Function<ContainedType, MappedType> operatorTransformer) {
 		if (hasChildren) {
-			IFunctionalList<ITree<MappedType>> mappedChildren =
-					children.map((child) -> {
+			IFunctionalList<ITree<MappedType>> mappedChildren = children
+					.map((child) -> {
 						return child.rebuildTree(leafTransformer,
 								operatorTransformer);
 					});
@@ -197,8 +197,8 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	public ITree<ContainedType> topDownTransform(
 			Function<ContainedType, TopDownTransformResult> transformPicker,
 			UnaryOperator<ITree<ContainedType>> transformer) {
-		TopDownTransformResult transformResult =
-				transformPicker.apply(data);
+		TopDownTransformResult transformResult = transformPicker
+				.apply(data);
 
 		switch (transformResult) {
 			case PASSTHROUGH:
@@ -227,6 +227,18 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 				}
 
 				return transformer.apply(result);
+			case PULLUP:
+				ITree<ContainedType> intermediateResult = transformer
+						.apply(this);
+
+				result = new Tree<>(intermediateResult.getHead());
+
+				intermediateResult.doForChildren((child) -> {
+					result.addChild(child.topDownTransform(transformPicker,
+							transformer));
+				});
+
+				return result;
 			default:
 				throw new IllegalArgumentException(
 						"Recieved unknown transform result "
@@ -267,9 +279,8 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	public <MappedType> ITree<MappedType> transformTree(
 			Function<ContainedType, MappedType> transformer) {
 		if (hasChildren) {
-			IFunctionalList<ITree<MappedType>> transformedChildren =
-					children.map(
-							(child) -> child.transformTree(transformer));
+			IFunctionalList<ITree<MappedType>> transformedChildren = children
+					.map((child) -> child.transformTree(transformer));
 
 			return new Tree<>(transformer.apply(data),
 					transformedChildren);
