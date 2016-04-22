@@ -15,8 +15,6 @@ import javax.lang.model.SourceVersion;
  *
  */
 public class ConfigFile {
-	private static Map<String, ConfigCategory> topLevelCategories;
-
 	/**
 	 * A category in a configuration file
 	 * 
@@ -43,6 +41,18 @@ public class ConfigFile {
 		 */
 		public void addChild(String childName, ConfigCategory child) {
 			children.put(childName, child);
+		}
+	}
+
+	private static Map<String, ConfigCategory> topLevelCategories;
+
+	private static boolean isCommentMarker(String token) {
+		switch (token) {
+			case "#":
+			case "//":
+				return true;
+			default:
+				return false;
 		}
 	}
 
@@ -147,16 +157,6 @@ public class ConfigFile {
 
 		switch (expType) {
 
-		}
-	}
-
-	private static boolean isCommentMarker(String token) {
-		switch (token) {
-			case "#":
-			case "//":
-				return true;
-			default:
-				return false;
 		}
 	}
 }

@@ -13,6 +13,16 @@ import bjc.utils.funcdata.IFunctionalMap;
  */
 public interface IComponentRepository<E extends IDescribedComponent> {
 	/**
+	 * Get a component with a specific name
+	 * 
+	 * @param name
+	 *            The name of the component to retrieve
+	 * @return The named component, or null if no component with that name
+	 *         exists
+	 */
+	public E getComponentByName(String name);
+
+	/**
 	 * Get a list of all the registered componets
 	 * 
 	 * @return A list of all the registered components
@@ -28,16 +38,6 @@ public interface IComponentRepository<E extends IDescribedComponent> {
 	 *         the components in the repositories
 	 */
 	public IFunctionalMap<String, E> getComponents();
-
-	/**
-	 * Get a component with a specific name
-	 * 
-	 * @param name
-	 *            The name of the component to retrieve
-	 * @return The named component, or null if no component with that name
-	 *         exists
-	 */
-	public E getComponentByName(String name);
 
 	/**
 	 * Get the source from which these components came

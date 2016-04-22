@@ -12,6 +12,59 @@ import bjc.utils.funcdata.bst.TreeLinearizationMethod;
  *
  */
 public class BinarySearcher {
+	private static void displayTree(BinarySearchTree<Character> tree,
+			Scanner inputSource) {
+		System.out.print(
+				"What order would you like the tree to be printed in (m for options): ");
+
+		char command;
+
+		while (true) {
+			command = inputSource.nextLine().charAt(0);
+
+			TreeLinearizationMethod linearizationMethod = null;
+
+			switch (command) {
+				case 'm':
+					System.out.println("Possible tree printing methods: ");
+					System.out.println(
+							"\tp: Preorder printing (print parent first, then left & right).");
+					System.out.println(
+							"\ti: Inorder printing (print left first, then parent & right).");
+					System.out.println(
+							"\to: Postorder printing (print left first, then right & parent).");
+					break;
+
+				case 'p':
+					linearizationMethod = TreeLinearizationMethod.PREORDER;
+					break;
+
+				case 'i':
+					linearizationMethod = TreeLinearizationMethod.INORDER;
+					break;
+
+				case 'o':
+					linearizationMethod = TreeLinearizationMethod.POSTORDER;
+					break;
+
+				default:
+					System.out.println("ERROR: Unknown command.");
+			}
+
+			if (linearizationMethod != null) {
+				tree.traverse(linearizationMethod, (element) -> {
+					System.out.println("Node: " + element);
+					return true;
+				});
+
+				return;
+			}
+
+			System.out.print(
+					"What order would you like the tree to be printed in (m for options): ");
+		}
+	}
+
 	/**
 	 * Main method of class
 	 * 
@@ -94,58 +147,5 @@ public class BinarySearcher {
 		}
 
 		inputSource.close();
-	}
-
-	private static void displayTree(BinarySearchTree<Character> tree,
-			Scanner inputSource) {
-		System.out.print(
-				"What order would you like the tree to be printed in (m for options): ");
-
-		char command;
-
-		while (true) {
-			command = inputSource.nextLine().charAt(0);
-
-			TreeLinearizationMethod linearizationMethod = null;
-
-			switch (command) {
-				case 'm':
-					System.out.println("Possible tree printing methods: ");
-					System.out.println(
-							"\tp: Preorder printing (print parent first, then left & right).");
-					System.out.println(
-							"\ti: Inorder printing (print left first, then parent & right).");
-					System.out.println(
-							"\to: Postorder printing (print left first, then right & parent).");
-					break;
-
-				case 'p':
-					linearizationMethod = TreeLinearizationMethod.PREORDER;
-					break;
-
-				case 'i':
-					linearizationMethod = TreeLinearizationMethod.INORDER;
-					break;
-
-				case 'o':
-					linearizationMethod = TreeLinearizationMethod.POSTORDER;
-					break;
-
-				default:
-					System.out.println("ERROR: Unknown command.");
-			}
-
-			if (linearizationMethod != null) {
-				tree.traverse(linearizationMethod, (element) -> {
-					System.out.println("Node: " + element);
-					return true;
-				});
-
-				return;
-			}
-
-			System.out.print(
-					"What order would you like the tree to be printed in (m for options): ");
-		}
 	}
 }

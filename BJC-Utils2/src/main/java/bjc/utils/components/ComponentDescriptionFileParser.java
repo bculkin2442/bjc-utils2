@@ -31,6 +31,34 @@ public class ComponentDescriptionFileParser {
 		setupReaderPragmas();
 	}
 
+	private static BiConsumer<FunctionalStringTokenizer, ComponentDescriptionState> buildStringCollapserPragma(
+			String pragmaName) {
+		return (tokenizer, state) -> {
+			if (!tokenizer.hasMoreTokens()) {
+				throw new PragmaFormatException("Pragma " + pragmaName
+						+ " requires one string argument");
+			}
+
+			state.setName(ListUtils
+					.collapseTokens(tokenizer.toList((strang) -> strang)));
+		};
+	}
+
+	/**
+	 * Parse a component description from a stream
+	 * 
+	 * @param inputSource
+	 *            The stream to parse from
+	 * @return The description parsed from the stream
+	 */
+	public static ComponentDescription fromStream(
+			InputStream inputSource) {
+		ComponentDescriptionState readState = reader
+				.fromStream(inputSource, new ComponentDescriptionState());
+
+		return readState.toDescription();
+	}
+
 	private static void setupReaderPragmas() {
 		reader.addPragma("name", buildStringCollapserPragma("name"));
 
@@ -60,33 +88,5 @@ public class ComponentDescriptionFileParser {
 				throw pfex;
 			}
 		});
-	}
-
-	private static BiConsumer<FunctionalStringTokenizer, ComponentDescriptionState> buildStringCollapserPragma(
-			String pragmaName) {
-		return (tokenizer, state) -> {
-			if (!tokenizer.hasMoreTokens()) {
-				throw new PragmaFormatException("Pragma " + pragmaName
-						+ " requires one string argument");
-			}
-
-			state.setName(ListUtils
-					.collapseTokens(tokenizer.toList((strang) -> strang)));
-		};
-	}
-
-	/**
-	 * Parse a component description from a stream
-	 * 
-	 * @param inputSource
-	 *            The stream to parse from
-	 * @return The description parsed from the stream
-	 */
-	public static ComponentDescription fromStream(
-			InputStream inputSource) {
-		ComponentDescriptionState readState = reader
-				.fromStream(inputSource, new ComponentDescriptionState());
-
-		return readState.toDescription();
 	}
 }

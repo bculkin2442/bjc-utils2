@@ -8,6 +8,13 @@ package bjc.utils.cli;
  */
 public interface ICommandHelp {
 	/**
+	 * Get the description of a command
+	 * 
+	 * @return The description of a command
+	 */
+	public String getDescription();
+
+	/**
 	 * Get the summary line for a command
 	 * 
 	 * Used for 'help commands' which gives the user a brief idea what all
@@ -16,11 +23,4 @@ public interface ICommandHelp {
 	 * @return The summary line line for a command
 	 */
 	public String getSummary();
-
-	/**
-	 * Get the description of a command
-	 * 
-	 * @return The description of a command
-	 */
-	public String getDescription();
 }

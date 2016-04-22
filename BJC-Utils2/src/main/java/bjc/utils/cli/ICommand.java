@@ -8,6 +8,13 @@ package bjc.utils.cli;
  */
 public interface ICommand {
 	/**
+	 * Create a command that serves as an alias to this one
+	 * 
+	 * @return A command that serves as an alias to this one
+	 */
+	public ICommand createAlias();
+
+	/**
 	 * Get the handler that executes this command
 	 * 
 	 * @return The handler that executes this command
@@ -20,13 +27,6 @@ public interface ICommand {
 	 * @return The help entry for this command
 	 */
 	public ICommandHelp getHelp();
-
-	/**
-	 * Create a command that serves as an alias to this one
-	 * 
-	 * @return A command that serves as an alias to this one
-	 */
-	public ICommand createAlias();
 
 	/**
 	 * Check if this command is an alias of another command

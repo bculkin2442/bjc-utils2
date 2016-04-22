@@ -26,6 +26,27 @@ import bjc.utils.funcdata.IFunctionalMap;
  */
 public class Graph<T> {
 	/**
+	 * Create a graph from a list of edges
+	 * 
+	 * @param <E>
+	 *            The type of data stored in the edges
+	 * 
+	 * @param edges
+	 *            The list of edges to build from
+	 * @return A graph built from the provided edge-list
+	 */
+	public static <E> Graph<E> fromEdgeList(List<Edge<E>> edges) {
+		Graph<E> g = new Graph<>();
+
+		edges.forEach(edge -> {
+			g.addEdge(edge.getSource(), edge.getTarget(),
+					edge.getDistance(), true);
+		});
+
+		return g;
+	}
+
+	/**
 	 * The backing representation of the graph
 	 */
 	private final IFunctionalMap<T, IFunctionalMap<T, Integer>> backingGraph;
@@ -264,26 +285,5 @@ public class Graph<T> {
 		});
 
 		return adjacencyMap;
-	}
-
-	/**
-	 * Create a graph from a list of edges
-	 * 
-	 * @param <E>
-	 *            The type of data stored in the edges
-	 * 
-	 * @param edges
-	 *            The list of edges to build from
-	 * @return A graph built from the provided edge-list
-	 */
-	public static <E> Graph<E> fromEdgeList(List<Edge<E>> edges) {
-		Graph<E> g = new Graph<>();
-
-		edges.forEach(edge -> {
-			g.addEdge(edge.getSource(), edge.getTarget(),
-					edge.getDistance(), true);
-		});
-
-		return g;
 	}
 }

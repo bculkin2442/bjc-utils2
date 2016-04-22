@@ -48,21 +48,6 @@ public class CLICommander {
 	}
 
 	/**
-	 * Set the initial command mode to use
-	 * 
-	 * @param initialMode
-	 *            The initial command mode to use
-	 */
-	public void setInitialCommandMode(ICommandMode initialMode) {
-		if (initialMode == null) {
-			throw new NullPointerException(
-					"Initial mode must be non-zero");
-		}
-
-		this.initialMode = initialMode;
-	}
-
-	/**
 	 * Run a set of commands through this commander
 	 */
 	public void runCommands() {
@@ -104,5 +89,20 @@ public class CLICommander {
 		}
 
 		normalOutput.print("Exiting now.");
+	}
+
+	/**
+	 * Set the initial command mode to use
+	 * 
+	 * @param initialMode
+	 *            The initial command mode to use
+	 */
+	public void setInitialCommandMode(ICommandMode initialMode) {
+		if (initialMode == null) {
+			throw new NullPointerException(
+					"Initial mode must be non-zero");
+		}
+
+		this.initialMode = initialMode;
 	}
 }

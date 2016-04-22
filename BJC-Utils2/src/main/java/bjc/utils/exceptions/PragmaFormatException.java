@@ -13,6 +13,13 @@ public class PragmaFormatException extends InputMismatchException {
 	private static final long serialVersionUID = 1288536477368021069L;
 
 	/**
+	 * Create a new exception
+	 */
+	public PragmaFormatException() {
+		super();
+	}
+
+	/**
 	 * Create a new exception with the given message
 	 * 
 	 * @param message
@@ -20,12 +27,5 @@ public class PragmaFormatException extends InputMismatchException {
 	 */
 	public PragmaFormatException(String message) {
 		super(message);
-	}
-
-	/**
-	 * Create a new exception
-	 */
-	public PragmaFormatException() {
-		super();
 	}
 }

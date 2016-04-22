@@ -265,4 +265,28 @@ public class SimpleDialogs {
 		JOptionPane.showMessageDialog(parent, errorMessage, title,
 				JOptionPane.ERROR_MESSAGE);
 	}
+
+	/**
+	 * Show an informative message to the user
+	 * 
+	 * @param parent
+	 *            The parent for this dialog
+	 * @param title
+	 *            Show the title for this dialog
+	 * @param message
+	 *            Show the message for this dialog
+	 */
+	public static void showMessage(Component parent, String title,
+			String message) {
+		if (parent == null) {
+			throw new NullPointerException("Parent must not be null");
+		} else if (title == null) {
+			throw new NullPointerException("Title must not be null");
+		} else if (message == null) {
+			throw new NullPointerException("Message must not be null");
+		}
+
+		JOptionPane.showMessageDialog(parent, title, message,
+				JOptionPane.INFORMATION_MESSAGE);
+	}
 }

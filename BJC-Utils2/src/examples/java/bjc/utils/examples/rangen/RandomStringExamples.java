@@ -14,6 +14,17 @@ import bjc.utils.gen.RandomGrammar;
 public class RandomStringExamples {
 	private static RandomGrammar<String> rg;
 
+	private static void addRule(String rule, String... cases) {
+		IFunctionalList<IFunctionalList<String>> cses = new FunctionalList<>();
+
+		for (String strang : cases) {
+			cses.add(FunctionalStringTokenizer.fromString(strang)
+					.toList(s -> s));
+		}
+
+		rg.makeRule(rule, cses);
+	}
+
 	/**
 	 * Main method
 	 * 
@@ -54,16 +65,5 @@ public class RandomStringExamples {
 
 			System.out.println(sb.toString().replaceAll("\\s+", " "));
 		}
-	}
-
-	private static void addRule(String rule, String... cases) {
-		IFunctionalList<IFunctionalList<String>> cses = new FunctionalList<>();
-
-		for (String strang : cases) {
-			cses.add(FunctionalStringTokenizer.fromString(strang)
-					.toList(s -> s));
-		}
-
-		rg.makeRule(rule, cses);
 	}
 }

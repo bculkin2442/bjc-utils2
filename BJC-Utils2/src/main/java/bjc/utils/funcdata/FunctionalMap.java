@@ -30,20 +30,6 @@ public class FunctionalMap<KeyType, ValueType>
 	}
 
 	/**
-	 * Create a new functional map wrapping the specified map
-	 * 
-	 * @param wrap
-	 *            The map to wrap
-	 */
-	public FunctionalMap(Map<KeyType, ValueType> wrap) {
-		if (wrap == null) {
-			throw new NullPointerException("Map to wrap must not be null");
-		}
-
-		wrappedMap = wrap;
-	}
-
-	/**
 	 * Create a new functional map with the specified entries
 	 * 
 	 * @param entries
@@ -60,18 +46,48 @@ public class FunctionalMap<KeyType, ValueType>
 		}
 	}
 
+	/**
+	 * Create a new functional map wrapping the specified map
+	 * 
+	 * @param wrap
+	 *            The map to wrap
+	 */
+	public FunctionalMap(Map<KeyType, ValueType> wrap) {
+		if (wrap == null) {
+			throw new NullPointerException("Map to wrap must not be null");
+		}
+
+		wrappedMap = wrap;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see bjc.utils.funcdata.IFunctionalMap#put(K, V)
+	 * @see bjc.utils.funcdata.IFunctionalMap#containsKey(K)
 	 */
 	@Override
-	public ValueType put(KeyType key, ValueType val) {
-		if (key == null) {
-			throw new NullPointerException("Key must not be null");
-		}
+	public boolean containsKey(KeyType key) {
+		return wrappedMap.containsKey(key);
+	}
 
-		return wrappedMap.put(key, val);
+	@Override
+	public IFunctionalMap<KeyType, ValueType> extend() {
+		return new ExtendedMap<>(this, new FunctionalMap<>());
+	}
+
+	@Override
+	public void forEach(BiConsumer<KeyType, ValueType> action) {
+		wrappedMap.forEach(action);
+	}
+
+	@Override
+	public void forEachKey(Consumer<KeyType> action) {
+		wrappedMap.keySet().forEach(action);
+	}
+
+	@Override
+	public void forEachValue(Consumer<ValueType> action) {
+		wrappedMap.values().forEach(action);
 	}
 
 	/*
@@ -93,6 +109,22 @@ public class FunctionalMap<KeyType, ValueType>
 		return wrappedMap.get(key);
 	}
 
+	@Override
+	public int getSize() {
+		return wrappedMap.size();
+	}
+
+	@Override
+	public IFunctionalList<KeyType> keyList() {
+		FunctionalList<KeyType> keys = new FunctionalList<>();
+
+		wrappedMap.keySet().forEach((key) -> {
+			keys.add(key);
+		});
+
+		return keys;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -112,32 +144,15 @@ public class FunctionalMap<KeyType, ValueType>
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see bjc.utils.funcdata.IFunctionalMap#containsKey(K)
+	 * @see bjc.utils.funcdata.IFunctionalMap#put(K, V)
 	 */
 	@Override
-	public boolean containsKey(KeyType key) {
-		return wrappedMap.containsKey(key);
-	}
+	public ValueType put(KeyType key, ValueType val) {
+		if (key == null) {
+			throw new NullPointerException("Key must not be null");
+		}
 
-	@Override
-	public String toString() {
-		return wrappedMap.toString();
-	}
-
-	@Override
-	public IFunctionalList<KeyType> keyList() {
-		FunctionalList<KeyType> keys = new FunctionalList<>();
-
-		wrappedMap.keySet().forEach((key) -> {
-			keys.add(key);
-		});
-
-		return keys;
-	}
-
-	@Override
-	public void forEach(BiConsumer<KeyType, ValueType> action) {
-		wrappedMap.forEach(action);
+		return wrappedMap.put(key, val);
 	}
 
 	@Override
@@ -146,18 +161,8 @@ public class FunctionalMap<KeyType, ValueType>
 	}
 
 	@Override
-	public int getSize() {
-		return wrappedMap.size();
-	}
-
-	@Override
-	public void forEachKey(Consumer<KeyType> action) {
-		wrappedMap.keySet().forEach(action);
-	}
-
-	@Override
-	public void forEachValue(Consumer<ValueType> action) {
-		wrappedMap.values().forEach(action);
+	public String toString() {
+		return wrappedMap.toString();
 	}
 
 	@Override
@@ -169,10 +174,5 @@ public class FunctionalMap<KeyType, ValueType>
 		});
 
 		return values;
-	}
-
-	@Override
-	public IFunctionalMap<KeyType, ValueType> extend() {
-		return new ExtendedMap<>(this, new FunctionalMap<>());
 	}
 }

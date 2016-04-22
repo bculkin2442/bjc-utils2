@@ -7,6 +7,22 @@ package bjc.utils.components;
  *
  */
 public class ComponentDescription implements IDescribedComponent {
+	private static void sanityCheckArgs(String name, String author,
+			String description, int version) {
+		if (name == null) {
+			throw new IllegalArgumentException(
+					"Component name can't be null");
+		} else if (author == null) {
+			throw new IllegalArgumentException(
+					"Component author can't be null");
+		} else if (description == null) {
+			throw new IllegalArgumentException(
+					"Component description can't be null");
+		} else if (version < 0) {
+			throw new IllegalArgumentException(
+					"Component version must be greater than 0");
+		}
+	}
 	/**
 	 * The author of the component
 	 */
@@ -19,6 +35,7 @@ public class ComponentDescription implements IDescribedComponent {
 	 * The name of the component
 	 */
 	private String	name;
+
 	/**
 	 * The version of the component
 	 */
@@ -47,23 +64,6 @@ public class ComponentDescription implements IDescribedComponent {
 		this.author = author;
 		this.description = description;
 		this.version = version;
-	}
-
-	private static void sanityCheckArgs(String name, String author,
-			String description, int version) {
-		if (name == null) {
-			throw new IllegalArgumentException(
-					"Component name can't be null");
-		} else if (author == null) {
-			throw new IllegalArgumentException(
-					"Component author can't be null");
-		} else if (description == null) {
-			throw new IllegalArgumentException(
-					"Component description can't be null");
-		} else if (version < 0) {
-			throw new IllegalArgumentException(
-					"Component version must be greater than 0");
-		}
 	}
 
 	@Override

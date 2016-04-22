@@ -96,6 +96,19 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 	}
 
 	@Override
+	public String toString() {
+		if (valueMaterialized) {
+			if (actions.isEmpty()) {
+				return "value[v='" + heldValue + "']";
+			}
+
+			return "value[v='" + heldValue + "'] (has pending transforms)";
+		}
+
+		return "(unmaterialized)";
+	}
+
+	@Override
 	public IHolder<ContainedType> transform(
 			UnaryOperator<ContainedType> transformer) {
 		actions.add(transformer);
@@ -119,18 +132,5 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 		actions = new FunctionalList<>();
 
 		return unwrapper.apply(heldValue);
-	}
-
-	@Override
-	public String toString() {
-		if (valueMaterialized) {
-			if (actions.isEmpty()) {
-				return "value[v='" + heldValue + "']";
-			}
-
-			return "value[v='" + heldValue + "'] (has pending transforms)";
-		}
-
-		return "(unmaterialized)";
 	}
 }

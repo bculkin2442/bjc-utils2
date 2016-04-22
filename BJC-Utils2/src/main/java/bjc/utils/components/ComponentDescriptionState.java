@@ -16,23 +16,13 @@ public class ComponentDescriptionState {
 	private int		version;
 
 	/**
-	 * Convert this state into the description it represents
+	 * Set the author of this component
 	 * 
-	 * @return The description represented by this state
+	 * @param author
+	 *            The author of this component
 	 */
-	public ComponentDescription toDescription() {
-		return new ComponentDescription(name, author, description,
-				version);
-	}
-
-	/**
-	 * Set the name of this component
-	 * 
-	 * @param name
-	 *            The name of this component
-	 */
-	public void setName(String name) {
-		this.name = name;
+	public void setAuthor(String author) {
+		this.author = author;
 	}
 
 	/**
@@ -46,13 +36,13 @@ public class ComponentDescriptionState {
 	}
 
 	/**
-	 * Set the author of this component
+	 * Set the name of this component
 	 * 
-	 * @param author
-	 *            The author of this component
+	 * @param name
+	 *            The name of this component
 	 */
-	public void setAuthor(String author) {
-		this.author = author;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**
@@ -63,5 +53,15 @@ public class ComponentDescriptionState {
 	 */
 	public void setVersion(int version) {
 		this.version = version;
+	}
+
+	/**
+	 * Convert this state into the description it represents
+	 * 
+	 * @return The description represented by this state
+	 */
+	public ComponentDescription toDescription() {
+		return new ComponentDescription(name, author, description,
+				version);
 	}
 }

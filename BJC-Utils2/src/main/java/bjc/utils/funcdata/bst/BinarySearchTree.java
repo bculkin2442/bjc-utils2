@@ -64,6 +64,23 @@ public class BinarySearchTree<T> {
 	}
 
 	/**
+	 * Check if an adjusted pivot falls with the bounds of a list
+	 * 
+	 * @param elements
+	 *            The list to get bounds from
+	 * @param pivot
+	 *            The pivot
+	 * @param pivotAdjustment
+	 *            The distance from the pivot
+	 * @return Whether the adjusted pivot is with the list
+	 */
+	private boolean adjustedPivotInBounds(IFunctionalList<T> elements,
+			int pivot, int pivotAdjustment) {
+		return (pivot - pivotAdjustment) >= 0
+				&& (pivot + pivotAdjustment) < elements.getSize();
+	}
+
+	/**
 	 * Balance the tree, and remove soft-deleted nodes for free. Takes O(N)
 	 * time, but also O(N) space.
 	 */
@@ -110,23 +127,6 @@ public class BinarySearchTree<T> {
 			rootElement.add(elements.getByIndex(pivot + pivotAdjustment),
 					comparator);
 		}
-	}
-
-	/**
-	 * Check if an adjusted pivot falls with the bounds of a list
-	 * 
-	 * @param elements
-	 *            The list to get bounds from
-	 * @param pivot
-	 *            The pivot
-	 * @param pivotAdjustment
-	 *            The distance from the pivot
-	 * @return Whether the adjusted pivot is with the list
-	 */
-	private boolean adjustedPivotInBounds(IFunctionalList<T> elements,
-			int pivot, int pivotAdjustment) {
-		return (pivot - pivotAdjustment) >= 0
-				&& (pivot + pivotAdjustment) < elements.getSize();
 	}
 
 	/**

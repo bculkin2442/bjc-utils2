@@ -71,6 +71,15 @@ class BoundLazy<OldType, BoundContainedType>
 	}
 
 	@Override
+	public String toString() {
+		if (holderBound) {
+			return boundHolder.toString();
+		}
+
+		return "(unmaterialized)";
+	}
+
+	@Override
 	public IHolder<BoundContainedType> transform(
 			UnaryOperator<BoundContainedType> transformer) {
 		actions.add(transformer);
@@ -86,14 +95,5 @@ class BoundLazy<OldType, BoundContainedType>
 		}
 
 		return boundHolder.unwrap(unwrapper);
-	}
-
-	@Override
-	public String toString() {
-		if (holderBound) {
-			return boundHolder.toString();
-		}
-
-		return "(unmaterialized)";
 	}
 }

@@ -24,13 +24,13 @@ public class GenericHelp implements ICommandHelp {
 	}
 
 	@Override
-	public String getSummary() {
-		return summary;
+	public String getDescription() {
+		return description;
 	}
 
 	@Override
-	public String getDescription() {
-		return description;
+	public String getSummary() {
+		return summary;
 	}
 
 }

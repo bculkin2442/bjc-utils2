@@ -19,26 +19,6 @@ class ExtendedMap<KeyType, ValueType>
 	}
 
 	@Override
-	public ValueType put(KeyType key, ValueType val) {
-		return store.put(key, val);
-	}
-
-	@Override
-	public ValueType get(KeyType key) {
-		if (store.containsKey(key)) {
-			return store.get(key);
-		}
-
-		return delegate.get(key);
-	}
-
-	@Override
-	public <MappedValue> IFunctionalMap<KeyType, MappedValue> mapValues(
-			Function<ValueType, MappedValue> transformer) {
-		return new TransformedValueMap<>(this, transformer);
-	}
-
-	@Override
 	public boolean containsKey(KeyType key) {
 		if (store.containsKey(key)) {
 			return true;
@@ -48,8 +28,8 @@ class ExtendedMap<KeyType, ValueType>
 	}
 
 	@Override
-	public IFunctionalList<KeyType> keyList() {
-		return ListUtils.mergeLists(store.keyList(), delegate.keyList());
+	public IFunctionalMap<KeyType, ValueType> extend() {
+		return new ExtendedMap<>(this, new FunctionalMap<>());
 	}
 
 	@Override
@@ -57,16 +37,6 @@ class ExtendedMap<KeyType, ValueType>
 		store.forEach(action);
 
 		delegate.forEach(action);
-	}
-
-	@Override
-	public ValueType remove(KeyType key) {
-		return store.remove(key);
-	}
-
-	@Override
-	public int getSize() {
-		return store.getSize() + delegate.getSize();
 	}
 
 	@Override
@@ -84,13 +54,43 @@ class ExtendedMap<KeyType, ValueType>
 	}
 
 	@Override
-	public IFunctionalList<ValueType> valueList() {
-		return ListUtils.mergeLists(store.valueList(),
-				delegate.valueList());
+	public ValueType get(KeyType key) {
+		if (store.containsKey(key)) {
+			return store.get(key);
+		}
+
+		return delegate.get(key);
 	}
 
 	@Override
-	public IFunctionalMap<KeyType, ValueType> extend() {
-		return new ExtendedMap<>(this, new FunctionalMap<>());
+	public int getSize() {
+		return store.getSize() + delegate.getSize();
+	}
+
+	@Override
+	public IFunctionalList<KeyType> keyList() {
+		return ListUtils.mergeLists(store.keyList(), delegate.keyList());
+	}
+
+	@Override
+	public <MappedValue> IFunctionalMap<KeyType, MappedValue> mapValues(
+			Function<ValueType, MappedValue> transformer) {
+		return new TransformedValueMap<>(this, transformer);
+	}
+
+	@Override
+	public ValueType put(KeyType key, ValueType val) {
+		return store.put(key, val);
+	}
+
+	@Override
+	public ValueType remove(KeyType key) {
+		return store.remove(key);
+	}
+
+	@Override
+	public IFunctionalList<ValueType> valueList() {
+		return ListUtils.mergeLists(store.valueList(),
+				delegate.valueList());
 	}
 }

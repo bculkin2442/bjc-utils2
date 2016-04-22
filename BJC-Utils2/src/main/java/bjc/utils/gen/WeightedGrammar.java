@@ -187,6 +187,34 @@ public class WeightedGrammar<E> {
 	}
 
 	/**
+	 * Remove a rule with the specified name.
+	 * 
+	 * @param name
+	 *            The name of the rule to remove.
+	 */
+	public void deleteRule(E name) {
+		if (name == null) {
+			throw new NullPointerException("Rule name must not be null");
+		}
+
+		rules.remove(name);
+	}
+
+	/**
+	 * Remove a subgrammar with the specified name.
+	 * 
+	 * @param name
+	 *            The name of the subgrammar to remove.
+	 */
+	public void deleteSubgrammar(E name) {
+		if (name == null) {
+			throw new NullPointerException("Rule name must not be null");
+		}
+
+		subgrammars.remove(name);
+	}
+
+	/**
 	 * Generate a set of debug sentences for the specified rule. Only
 	 * generates sentances one layer deep.
 	 * 
@@ -292,6 +320,24 @@ public class WeightedGrammar<E> {
 	 */
 	public String getInitialRule() {
 		return initialRule;
+	}
+
+	/**
+	 * Returns the number of rules in this grammar
+	 * 
+	 * @return The number of rules in this grammar
+	 */
+	public int getRuleCount() {
+		return rules.getSize();
+	}
+
+	/**
+	 * Returns a set containing all of the rules in this grammar
+	 * 
+	 * @return The set of all rule names in this grammar
+	 */
+	public IFunctionalList<E> getRuleNames() {
+		return rules.keyList();
 	}
 
 	/**
@@ -426,52 +472,6 @@ public class WeightedGrammar<E> {
 
 		newResults.forEach((pair) -> pair
 				.doWith((left, right) -> addCase(ruleName, left, right)));
-	}
-
-	/**
-	 * Remove a rule with the specified name.
-	 * 
-	 * @param name
-	 *            The name of the rule to remove.
-	 */
-	public void deleteRule(E name) {
-		if (name == null) {
-			throw new NullPointerException("Rule name must not be null");
-		}
-
-		rules.remove(name);
-	}
-
-	/**
-	 * Remove a subgrammar with the specified name.
-	 * 
-	 * @param name
-	 *            The name of the subgrammar to remove.
-	 */
-	public void deleteSubgrammar(E name) {
-		if (name == null) {
-			throw new NullPointerException("Rule name must not be null");
-		}
-
-		subgrammars.remove(name);
-	}
-
-	/**
-	 * Returns the number of rules in this grammar
-	 * 
-	 * @return The number of rules in this grammar
-	 */
-	public int getRuleCount() {
-		return rules.getSize();
-	}
-
-	/**
-	 * Returns a set containing all of the rules in this grammar
-	 * 
-	 * @return The set of all rule names in this grammar
-	 */
-	public IFunctionalList<E> getRuleNames() {
-		return rules.keyList();
 	}
 
 	/**

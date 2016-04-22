@@ -358,6 +358,15 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 	}
 
 	/*
+	 * Check if a partition has room for another item
+	 */
+	private Boolean isPartitionFull(int numberPerPartition,
+			IHolder<IFunctionalList<E>> currentPartition) {
+		return currentPartition.unwrap(
+				(partition) -> partition.getSize() >= numberPerPartition);
+	}
+
+	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see
@@ -430,15 +439,6 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 		});
 
 		return returnedList;
-	}
-
-	/*
-	 * Check if a partition has room for another item
-	 */
-	private Boolean isPartitionFull(int numberPerPartition,
-			IHolder<IFunctionalList<E>> currentPartition) {
-		return currentPartition.unwrap(
-				(partition) -> partition.getSize() >= numberPerPartition);
 	}
 
 	/*
@@ -522,6 +522,11 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 		removeIf((element) -> element.equals(desiredElement));
 	}
 
+	@Override
+	public void reverse() {
+		Collections.reverse(wrappedList);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -551,6 +556,16 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 	@Override
 	public void sort(Comparator<E> comparator) {
 		Collections.sort(wrappedList, comparator);
+	}
+
+	@Override
+	public IFunctionalList<E> tail() {
+		return new FunctionalList<>(wrappedList.subList(1, getSize()));
+	}
+
+	@Override
+	public E[] toArray(E[] arrType) {
+		return wrappedList.toArray(arrType);
 	}
 
 	/*
@@ -583,20 +598,5 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 		sb.append(")");
 
 		return sb.toString();
-	}
-
-	@Override
-	public E[] toArray(E[] arrType) {
-		return wrappedList.toArray(arrType);
-	}
-
-	@Override
-	public IFunctionalList<E> tail() {
-		return new FunctionalList<>(wrappedList.subList(1, getSize()));
-	}
-
-	@Override
-	public void reverse() {
-		Collections.reverse(wrappedList);
 	}
 }

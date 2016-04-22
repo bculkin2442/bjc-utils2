@@ -21,6 +21,152 @@ public class ListUtils {
 	private static final int MAX_NTRIESPART = 50;
 
 	/**
+	 * Collapse a string of tokens into a single string without adding any
+	 * spaces
+	 * 
+	 * @param input
+	 *            The list of tokens to collapse
+	 * @return The collapsed string of tokens
+	 */
+	public static String collapseTokens(IFunctionalList<String> input) {
+		if (input == null) {
+			throw new NullPointerException("Input must not be null");
+		}
+
+		return collapseTokens(input, "");
+	}
+
+	/**
+	 * Collapse a string of tokens into a single string, adding the desired
+	 * seperator after each token
+	 * 
+	 * @param input
+	 *            The list of tokens to collapse
+	 * @param seperator
+	 *            The seperator to use for seperating tokens
+	 * @return The collapsed string of tokens
+	 */
+	public static String collapseTokens(IFunctionalList<String> input,
+			String seperator) {
+		if (input == null) {
+			throw new NullPointerException("Input must not be null");
+		} else if (seperator == null) {
+			throw new NullPointerException("Seperator must not be null");
+		}
+
+		if (input.getSize() < 1) {
+			return "";
+		} else if (input.getSize() == 1) {
+			return input.first();
+		} else {
+			return input.reduceAux("", (currentString, state) -> {
+				return state + currentString + seperator;
+			}, (strang) -> {
+				return strang.substring(0,
+						strang.length() - seperator.length());
+			});
+		}
+	}
+
+	/**
+	 * Split off affixes from tokens
+	 * 
+	 * @param input
+	 *            The tokens to deaffix
+	 * @param operators
+	 *            The affixes to remove
+	 * @return The tokens that have been deaffixed
+	 * 
+	 */
+	public static IFunctionalList<String> deAffixTokens(
+			IFunctionalList<String> input,
+			Deque<IPair<String, String>> operators) {
+		if (input == null) {
+			throw new NullPointerException("Input must not be null");
+		} else if (operators == null) {
+			throw new NullPointerException(
+					"Set of operators must not be null");
+		}
+
+		IHolder<IFunctionalList<String>> returnedList = new Identity<>(
+				input);
+
+		operators.forEach((operator) -> returnedList
+				.transform((oldReturn) -> oldReturn.flatMap((token) -> {
+					return operator.merge(new TokenDeaffixer(token));
+				})));
+
+		return returnedList.unwrap((list) -> list);
+	}
+
+	/**
+	 * Select a number of random items from the list without replacement
+	 * 
+	 * @param <E>
+	 *            The type of items to select
+	 * @param list
+	 *            The list to select from
+	 * @param numberOfItems
+	 *            The number of items to selet
+	 * @param rng
+	 *            A function that creates a random number from 0 to the
+	 *            desired number
+	 * @return A new list containing the desired number of items randomly
+	 *         selected from the specified list without replacement
+	 */
+
+	public static <E> IFunctionalList<E> drawWithoutReplacement(
+			IFunctionalList<E> list, int numberOfItems,
+			Function<Integer, Integer> rng) {
+		IFunctionalList<E> selectedItems = new FunctionalList<>(
+				new ArrayList<>(numberOfItems));
+
+		int totalItems = list.getSize();
+
+		list.forEachIndexed((index, element) -> {
+			int winningChance = numberOfItems - selectedItems.getSize();
+			// n - m
+			int totalChance = totalItems - (index - 1);
+			// N - t
+
+			// Probability of selecting the t+1'th element
+			if (NumberUtils.isProbable(winningChance, totalChance, rng)) {
+				selectedItems.add(element);
+			}
+		});
+
+		return selectedItems;
+	}
+
+	/**
+	 * Select a number of random items from the list, with replacement
+	 * 
+	 * @param <E>
+	 *            The type of items to select
+	 * @param list
+	 *            The list to select from
+	 * @param numberOfItems
+	 *            The number of items to selet
+	 * @param rng
+	 *            A function that creates a random number from 0 to the
+	 *            desired number
+	 * @return A new list containing the desired number of items randomly
+	 *         selected from the specified list
+	 */
+	public static <E> IFunctionalList<E> drawWithReplacement(
+			IFunctionalList<E> list, int numberOfItems,
+			Function<Integer, Integer> rng) {
+		IFunctionalList<E> selectedItems = new FunctionalList<>(
+				new ArrayList<>(numberOfItems));
+
+		for (int i = 0; i < numberOfItems; i++) {
+			selectedItems.add(list.randItem(rng));
+		}
+
+		return selectedItems;
+	}
+
+	/**
 	 * Partition a list into a list of lists, where each element can count
 	 * for more than one element in a partition
 	 * 
@@ -99,6 +245,27 @@ public class ListUtils {
 	}
 
 	/**
+	 * Merge the contents of a bunch of lists together into a single list
+	 * 
+	 * @param <E>
+	 *            The type of value in this lists
+	 * @param lists
+	 *            The values in the lists to merge
+	 * @return A list containing all the elements of the lists
+	 */
+	@SafeVarargs
+	public static <E> IFunctionalList<E> mergeLists(
+			IFunctionalList<E>... lists) {
+		IFunctionalList<E> returnedList = new FunctionalList<>();
+
+		for (IFunctionalList<E> list : lists) {
+			list.forEach(returnedList::add);
+		}
+
+		return returnedList;
+	}
+
+	/**
 	 * Split tokens in a list of tokens into multiple tokens.
 	 * 
 	 * The intended use is for expression parsers so that you can enter
@@ -134,172 +301,5 @@ public class ListUtils {
 		});
 
 		return returnedList.getValue();
-	}
-
-	/**
-	 * Split off affixes from tokens
-	 * 
-	 * @param input
-	 *            The tokens to deaffix
-	 * @param operators
-	 *            The affixes to remove
-	 * @return The tokens that have been deaffixed
-	 * 
-	 */
-	public static IFunctionalList<String> deAffixTokens(
-			IFunctionalList<String> input,
-			Deque<IPair<String, String>> operators) {
-		if (input == null) {
-			throw new NullPointerException("Input must not be null");
-		} else if (operators == null) {
-			throw new NullPointerException(
-					"Set of operators must not be null");
-		}
-
-		IHolder<IFunctionalList<String>> returnedList = new Identity<>(
-				input);
-
-		operators.forEach((operator) -> returnedList
-				.transform((oldReturn) -> oldReturn.flatMap((token) -> {
-					return operator.merge(new TokenDeaffixer(token));
-				})));
-
-		return returnedList.unwrap((list) -> list);
-	}
-
-	/**
-	 * Collapse a string of tokens into a single string without adding any
-	 * spaces
-	 * 
-	 * @param input
-	 *            The list of tokens to collapse
-	 * @return The collapsed string of tokens
-	 */
-	public static String collapseTokens(IFunctionalList<String> input) {
-		if (input == null) {
-			throw new NullPointerException("Input must not be null");
-		}
-
-		return collapseTokens(input, "");
-	}
-
-	/**
-	 * Collapse a string of tokens into a single string, adding the desired
-	 * seperator after each token
-	 * 
-	 * @param input
-	 *            The list of tokens to collapse
-	 * @param seperator
-	 *            The seperator to use for seperating tokens
-	 * @return The collapsed string of tokens
-	 */
-	public static String collapseTokens(IFunctionalList<String> input,
-			String seperator) {
-		if (input == null) {
-			throw new NullPointerException("Input must not be null");
-		} else if (seperator == null) {
-			throw new NullPointerException("Seperator must not be null");
-		}
-
-		if (input.getSize() < 1) {
-			return "";
-		} else if (input.getSize() == 1) {
-			return input.first();
-		} else {
-			return input.reduceAux("", (currentString, state) -> {
-				return state + currentString + seperator;
-			}, (strang) -> {
-				return strang.substring(0,
-						strang.length() - seperator.length());
-			});
-		}
-	}
-
-	/**
-	 * Select a number of random items from the list, with replacement
-	 * 
-	 * @param <E>
-	 *            The type of items to select
-	 * @param list
-	 *            The list to select from
-	 * @param numberOfItems
-	 *            The number of items to selet
-	 * @param rng
-	 *            A function that creates a random number from 0 to the
-	 *            desired number
-	 * @return A new list containing the desired number of items randomly
-	 *         selected from the specified list
-	 */
-	public static <E> IFunctionalList<E> drawWithReplacement(
-			IFunctionalList<E> list, int numberOfItems,
-			Function<Integer, Integer> rng) {
-		IFunctionalList<E> selectedItems = new FunctionalList<>(
-				new ArrayList<>(numberOfItems));
-
-		for (int i = 0; i < numberOfItems; i++) {
-			selectedItems.add(list.randItem(rng));
-		}
-
-		return selectedItems;
-	}
-
-	/**
-	 * Select a number of random items from the list without replacement
-	 * 
-	 * @param <E>
-	 *            The type of items to select
-	 * @param list
-	 *            The list to select from
-	 * @param numberOfItems
-	 *            The number of items to selet
-	 * @param rng
-	 *            A function that creates a random number from 0 to the
-	 *            desired number
-	 * @return A new list containing the desired number of items randomly
-	 *         selected from the specified list without replacement
-	 */
-
-	public static <E> IFunctionalList<E> drawWithoutReplacement(
-			IFunctionalList<E> list, int numberOfItems,
-			Function<Integer, Integer> rng) {
-		IFunctionalList<E> selectedItems = new FunctionalList<>(
-				new ArrayList<>(numberOfItems));
-
-		int totalItems = list.getSize();
-
-		list.forEachIndexed((index, element) -> {
-			int winningChance = numberOfItems - selectedItems.getSize();
-			// n - m
-			int totalChance = totalItems - (index - 1);
-			// N - t
-
-			// Probability of selecting the t+1'th element
-			if (NumberUtils.isProbable(winningChance, totalChance, rng)) {
-				selectedItems.add(element);
-			}
-		});
-
-		return selectedItems;
-	}
-
-	/**
-	 * Merge the contents of a bunch of lists together into a single list
-	 * 
-	 * @param <E>
-	 *            The type of value in this lists
-	 * @param lists
-	 *            The values in the lists to merge
-	 * @return A list containing all the elements of the lists
-	 */
-	@SafeVarargs
-	public static <E> IFunctionalList<E> mergeLists(
-			IFunctionalList<E>... lists) {
-		IFunctionalList<E> returnedList = new FunctionalList<>();
-
-		for (IFunctionalList<E> list : lists) {
-			list.forEach(returnedList::add);
-		}
-
-		return returnedList;
 	}
 }

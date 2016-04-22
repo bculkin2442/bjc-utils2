@@ -8,6 +8,11 @@ class DelegatingCommand implements ICommand {
 	}
 
 	@Override
+	public ICommand createAlias() {
+		return new DelegatingCommand(delegate);
+	}
+
+	@Override
 	public ICommandHandler getHandler() {
 		return delegate.getHandler();
 	}
@@ -15,11 +20,6 @@ class DelegatingCommand implements ICommand {
 	@Override
 	public ICommandHelp getHelp() {
 		return delegate.getHelp();
-	}
-
-	@Override
-	public ICommand createAlias() {
-		return new DelegatingCommand(delegate);
 	}
 
 	@Override

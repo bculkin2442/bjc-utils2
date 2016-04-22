@@ -14,24 +14,6 @@ import bjc.utils.funcdata.IFunctionalList;
  */
 public class EnumUtils {
 	/**
-	 * Get a random value from an enum
-	 * 
-	 * @param <E>
-	 *            The type of the enum
-	 * @param enumClass
-	 *            The class of the enum
-	 * @param rnd
-	 *            The random source to use
-	 * @return A random value from the specified enum
-	 */
-	public static <E extends Enum<E>> E getRandomValue(Class<E> enumClass,
-			Random rnd) {
-		E[] enumValues = enumClass.getEnumConstants();
-
-		return new FunctionalList<>(enumValues).randItem(rnd::nextInt);
-	}
-
-	/**
 	 * Do an action for a random number of enum values
 	 * 
 	 * @param <E>
@@ -60,5 +42,23 @@ public class EnumUtils {
 		}
 
 		valueList.forEach(action);
+	}
+
+	/**
+	 * Get a random value from an enum
+	 * 
+	 * @param <E>
+	 *            The type of the enum
+	 * @param enumClass
+	 *            The class of the enum
+	 * @param rnd
+	 *            The random source to use
+	 * @return A random value from the specified enum
+	 */
+	public static <E extends Enum<E>> E getRandomValue(Class<E> enumClass,
+			Random rnd) {
+		E[] enumValues = enumClass.getEnumConstants();
+
+		return new FunctionalList<>(enumValues).randItem(rnd::nextInt);
 	}
 }

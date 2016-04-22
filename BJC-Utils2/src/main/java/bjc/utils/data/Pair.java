@@ -38,6 +38,12 @@ public class Pair<LeftType, RightType>
 	}
 
 	@Override
+	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind(
+			BiFunction<LeftType, RightType, IPair<BoundLeft, BoundRight>> binder) {
+		return binder.apply(leftValue, rightValue);
+	}
+
+	@Override
 	public <BoundLeft> IPair<BoundLeft, RightType> bindLeft(
 			Function<LeftType, IPair<BoundLeft, RightType>> leftBinder) {
 		return leftBinder.apply(leftValue);
@@ -47,12 +53,6 @@ public class Pair<LeftType, RightType>
 	public <BoundRight> IPair<LeftType, BoundRight> bindRight(
 			Function<RightType, IPair<LeftType, BoundRight>> rightBinder) {
 		return rightBinder.apply(rightValue);
-	}
-
-	@Override
-	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind(
-			BiFunction<LeftType, RightType, IPair<BoundLeft, BoundRight>> binder) {
-		return binder.apply(leftValue, rightValue);
 	}
 
 	@Override

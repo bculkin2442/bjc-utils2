@@ -16,6 +16,20 @@ import java.util.function.Function;
  */
 public interface IPair<LeftType, RightType> {
 	/**
+	 * Bind a function across the values in this pair
+	 * 
+	 * @param <BoundLeft>
+	 *            The type of the bound left
+	 * @param <BoundRight>
+	 *            The type of the bound right
+	 * @param binder
+	 *            The function to bind with
+	 * @return The bound pair
+	 */
+	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind(
+			BiFunction<LeftType, RightType, IPair<BoundLeft, BoundRight>> binder);
+
+	/**
 	 * Bind a function to the left value in this pair
 	 * 
 	 * @param <BoundLeft>
@@ -40,30 +54,19 @@ public interface IPair<LeftType, RightType> {
 			Function<RightType, IPair<LeftType, BoundRight>> rightBinder);
 
 	/**
-	 * Bind a function across the values in this pair
+	 * Immediately perfom the specified action with the contents of this
+	 * pair
 	 * 
-	 * @param <BoundLeft>
-	 *            The type of the bound left
-	 * @param <BoundRight>
-	 *            The type of the bound right
-	 * @param binder
-	 *            The function to bind with
-	 * @return The bound pair
+	 * @param consumer
+	 *            The action to perform on the pair
 	 */
-	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind(
-			BiFunction<LeftType, RightType, IPair<BoundLeft, BoundRight>> binder);
+	public default void doWith(BiConsumer<LeftType, RightType> consumer) {
+		merge((leftValue, rightValue) -> {
+			consumer.accept(leftValue, rightValue);
 
-	/**
-	 * Merge the two values in this pair into a single value
-	 * 
-	 * @param <MergedType>
-	 *            The type of the single value
-	 * @param merger
-	 *            The function to use for merging
-	 * @return The pair, merged into a single value
-	 */
-	public <MergedType> MergedType merge(
-			BiFunction<LeftType, RightType, MergedType> merger);
+			return null;
+		});
+	}
 
 	/**
 	 * Get the value on the left side of the pair
@@ -84,17 +87,14 @@ public interface IPair<LeftType, RightType> {
 	}
 
 	/**
-	 * Immediately perfom the specified action with the contents of this
-	 * pair
+	 * Merge the two values in this pair into a single value
 	 * 
-	 * @param consumer
-	 *            The action to perform on the pair
+	 * @param <MergedType>
+	 *            The type of the single value
+	 * @param merger
+	 *            The function to use for merging
+	 * @return The pair, merged into a single value
 	 */
-	public default void doWith(BiConsumer<LeftType, RightType> consumer) {
-		merge((leftValue, rightValue) -> {
-			consumer.accept(leftValue, rightValue);
-
-			return null;
-		});
-	}
+	public <MergedType> MergedType merge(
+			BiFunction<LeftType, RightType, MergedType> merger);
 }

@@ -286,6 +286,11 @@ public interface IFunctionalList<ContainedType> {
 	void removeMatching(ContainedType desiredElement);
 
 	/**
+	 * Reverse the contents of this list in place
+	 */
+	void reverse();
+
+	/**
 	 * Perform a binary search for the specified key using the provided
 	 * means of comparing elements. Since this IS a binary search, the list
 	 * must have been sorted before hand.
@@ -311,6 +316,13 @@ public interface IFunctionalList<ContainedType> {
 	void sort(Comparator<ContainedType> comparator);
 
 	/**
+	 * Get the tail of this list (the list without the first element
+	 * 
+	 * @return The list without the first element
+	 */
+	public IFunctionalList<ContainedType> tail();
+
+	/**
 	 * Convert this list into an array
 	 * 
 	 * @param arrType
@@ -325,16 +337,4 @@ public interface IFunctionalList<ContainedType> {
 	 * @return An iterable view onto the list
 	 */
 	Iterable<ContainedType> toIterable();
-
-	/**
-	 * Get the tail of this list (the list without the first element
-	 * 
-	 * @return The list without the first element
-	 */
-	public IFunctionalList<ContainedType> tail();
-
-	/**
-	 * Reverse the contents of this list in place
-	 */
-	void reverse();
 }

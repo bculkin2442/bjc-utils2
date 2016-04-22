@@ -98,27 +98,9 @@ public class FileComponentRepository<E extends IDescribedComponent>
 		}
 	}
 
-	private void loadComponent(Function<File, E> componentReader,
-			Path pth) {
-		try {
-			E component = componentReader.apply(pth.toFile());
-
-			if (component == null) {
-				throw new NullPointerException(
-						"Component reader read null component");
-			} else if (!components.containsKey(component.getName())) {
-				components.put(component.getName(), component);
-			} else {
-				CLASS_LOGGER.warn("Found a duplicate component.\n"
-						+ "Multiple versions of the same component are not currently supported.\n"
-						+ "The component" + component
-						+ " will not be registered .");
-			}
-		} catch (Exception ex) {
-			CLASS_LOGGER.warn("Error found reading component from file "
-					+ pth.toString()
-					+ ". This component will not be loaded", ex);
-		}
+	@Override
+	public E getComponentByName(String name) {
+		return components.get(name);
 	}
 
 	@Override
@@ -141,8 +123,26 @@ public class FileComponentRepository<E extends IDescribedComponent>
 		return "Components read from directory " + sourceDirectory + ".";
 	}
 
-	@Override
-	public E getComponentByName(String name) {
-		return components.get(name);
+	private void loadComponent(Function<File, E> componentReader,
+			Path pth) {
+		try {
+			E component = componentReader.apply(pth.toFile());
+
+			if (component == null) {
+				throw new NullPointerException(
+						"Component reader read null component");
+			} else if (!components.containsKey(component.getName())) {
+				components.put(component.getName(), component);
+			} else {
+				CLASS_LOGGER.warn("Found a duplicate component.\n"
+						+ "Multiple versions of the same component are not currently supported.\n"
+						+ "The component" + component
+						+ " will not be registered .");
+			}
+		} catch (Exception ex) {
+			CLASS_LOGGER.warn("Error found reading component from file "
+					+ pth.toString()
+					+ ". This component will not be loaded", ex);
+		}
 	}
 }

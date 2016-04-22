@@ -28,35 +28,13 @@ final class TransformedValueMap<OldKey, OldValue, NewValue>
 	}
 
 	@Override
-	public NewValue get(OldKey key) {
-		return transformer.apply(mapToTransform.get(key));
-	}
-
-	@Override
 	public boolean containsKey(OldKey key) {
 		return mapToTransform.containsKey(key);
 	}
 
 	@Override
-	public String toString() {
-		return mapToTransform.toString();
-	}
-
-	@Override
-	public NewValue put(OldKey key, NewValue val) {
-		throw new UnsupportedOperationException(
-				"Can't add items to transformed map");
-	}
-
-	@Override
-	public <MappedValue> IFunctionalMap<OldKey, MappedValue> mapValues(
-			Function<NewValue, MappedValue> transform) {
-		return new TransformedValueMap<>(this, transform);
-	}
-
-	@Override
-	public IFunctionalList<OldKey> keyList() {
-		return mapToTransform.keyList();
+	public IFunctionalMap<OldKey, NewValue> extend() {
+		return new ExtendedMap<>(this, new FunctionalMap<>());
 	}
 
 	@Override
@@ -64,16 +42,6 @@ final class TransformedValueMap<OldKey, OldValue, NewValue>
 		mapToTransform.forEach((key, val) -> {
 			action.accept(key, transformer.apply(val));
 		});
-	}
-
-	@Override
-	public NewValue remove(OldKey key) {
-		return transformer.apply(mapToTransform.remove(key));
-	}
-
-	@Override
-	public int getSize() {
-		return mapToTransform.getSize();
 	}
 
 	@Override
@@ -89,12 +57,44 @@ final class TransformedValueMap<OldKey, OldValue, NewValue>
 	}
 
 	@Override
-	public IFunctionalList<NewValue> valueList() {
-		return mapToTransform.valueList().map(transformer);
+	public NewValue get(OldKey key) {
+		return transformer.apply(mapToTransform.get(key));
 	}
 
 	@Override
-	public IFunctionalMap<OldKey, NewValue> extend() {
-		return new ExtendedMap<>(this, new FunctionalMap<>());
+	public int getSize() {
+		return mapToTransform.getSize();
+	}
+
+	@Override
+	public IFunctionalList<OldKey> keyList() {
+		return mapToTransform.keyList();
+	}
+
+	@Override
+	public <MappedValue> IFunctionalMap<OldKey, MappedValue> mapValues(
+			Function<NewValue, MappedValue> transform) {
+		return new TransformedValueMap<>(this, transform);
+	}
+
+	@Override
+	public NewValue put(OldKey key, NewValue val) {
+		throw new UnsupportedOperationException(
+				"Can't add items to transformed map");
+	}
+
+	@Override
+	public NewValue remove(OldKey key) {
+		return transformer.apply(mapToTransform.remove(key));
+	}
+
+	@Override
+	public String toString() {
+		return mapToTransform.toString();
+	}
+
+	@Override
+	public IFunctionalList<NewValue> valueList() {
+		return mapToTransform.valueList().map(transformer);
 	}
 }

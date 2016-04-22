@@ -12,20 +12,6 @@ import java.util.function.IntConsumer;
  */
 public class FuncUtils {
 	/**
-	 * Do the specified action the specified number of times
-	 * 
-	 * @param nTimes
-	 *            The number of times to do the action
-	 * @param cons
-	 *            The action to perform
-	 */
-	public static void doTimes(int nTimes, IntConsumer cons) {
-		for (int i = 0; i < nTimes; i++) {
-			cons.accept(i);
-		}
-	}
-
-	/**
 	 * Convert a binary function into a unary function that returns a
 	 * function
 	 * 
@@ -45,5 +31,19 @@ public class FuncUtils {
 		return (arg1) -> (arg2) -> {
 			return func.apply(arg1, arg2);
 		};
+	}
+
+	/**
+	 * Do the specified action the specified number of times
+	 * 
+	 * @param nTimes
+	 *            The number of times to do the action
+	 * @param cons
+	 *            The action to perform
+	 */
+	public static void doTimes(int nTimes, IntConsumer cons) {
+		for (int i = 0; i < nTimes; i++) {
+			cons.accept(i);
+		}
 	}
 }

@@ -64,6 +64,19 @@ public interface IHolder<ContainedType> {
 			Function<ContainedType, MappedType> mapper);
 
 	/**
+	 * Replace the held value with a new one
+	 * 
+	 * @param newValue
+	 *            The value to hold instead
+	 * @return The holder itself
+	 */
+	public default IHolder<ContainedType> replace(ContainedType newValue) {
+		return transform((oldValue) -> {
+			return newValue;
+		});
+	}
+
+	/**
 	 * Transform the value held in this holder
 	 * 
 	 * @param transformer
@@ -85,17 +98,4 @@ public interface IHolder<ContainedType> {
 	 */
 	public <UnwrappedType> UnwrappedType unwrap(
 			Function<ContainedType, UnwrappedType> unwrapper);
-
-	/**
-	 * Replace the held value with a new one
-	 * 
-	 * @param newValue
-	 *            The value to hold instead
-	 * @return The holder itself
-	 */
-	public default IHolder<ContainedType> replace(ContainedType newValue) {
-		return transform((oldValue) -> {
-			return newValue;
-		});
-	}
 }

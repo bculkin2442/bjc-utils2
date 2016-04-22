@@ -111,6 +111,15 @@ public class FunctionalStringTokenizer {
 	}
 
 	/**
+	 * Check if this tokenizer has more tokens
+	 * 
+	 * @return Whether or not this tokenizer has more tokens
+	 */
+	public boolean hasMoreTokens() {
+		return input.hasMoreTokens();
+	}
+
+	/**
 	 * Return the next token from the tokenizer. Returns null if no more
 	 * tokens are available
 	 * 
@@ -124,6 +133,15 @@ public class FunctionalStringTokenizer {
 
 		// Return no token
 		return null;
+	}
+
+	/**
+	 * Convert this tokenizer into a list of strings
+	 * 
+	 * @return This tokenizer, converted into a list of strings
+	 */
+	public IFunctionalList<String> toList() {
+		return toList((String element) -> element);
 	}
 
 	/**
@@ -153,23 +171,5 @@ public class FunctionalStringTokenizer {
 		});
 
 		return returnList;
-	}
-
-	/**
-	 * Convert this tokenizer into a list of strings
-	 * 
-	 * @return This tokenizer, converted into a list of strings
-	 */
-	public IFunctionalList<String> toList() {
-		return toList((String element) -> element);
-	}
-
-	/**
-	 * Check if this tokenizer has more tokens
-	 * 
-	 * @return Whether or not this tokenizer has more tokens
-	 */
-	public boolean hasMoreTokens() {
-		return input.hasMoreTokens();
 	}
 }

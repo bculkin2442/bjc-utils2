@@ -43,57 +43,6 @@ public class Edge<T> {
 		this.distance = distance;
 	}
 
-	/**
-	 * Get the distance in this edge
-	 * 
-	 * @return The distance between the initial and terminal nodes of this
-	 *         edge
-	 */
-	public int getDistance() {
-		return distance;
-	}
-
-	/**
-	 * Get the initial node of an edge
-	 * 
-	 * @return The initial node of this edge
-	 */
-	public T getSource() {
-		return source;
-	}
-
-	/**
-	 * Get the target node of an edge
-	 * 
-	 * @return The target node of this edge
-	 */
-	public T getTarget() {
-		return target;
-	}
-
-	@Override
-	public String toString() {
-		return " first vertex " + source + " to vertex " + target
-				+ " with distance: " + distance;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + distance;
-		result = prime * result
-				+ ((source == null) ? 0 : source.hashCode());
-		result = prime * result
-				+ ((target == null) ? 0 : target.hashCode());
-		return result;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -129,5 +78,56 @@ public class Edge<T> {
 
 			return true;
 		}
+	}
+
+	/**
+	 * Get the distance in this edge
+	 * 
+	 * @return The distance between the initial and terminal nodes of this
+	 *         edge
+	 */
+	public int getDistance() {
+		return distance;
+	}
+
+	/**
+	 * Get the initial node of an edge
+	 * 
+	 * @return The initial node of this edge
+	 */
+	public T getSource() {
+		return source;
+	}
+
+	/**
+	 * Get the target node of an edge
+	 * 
+	 * @return The target node of this edge
+	 */
+	public T getTarget() {
+		return target;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + distance;
+		result = prime * result
+				+ ((source == null) ? 0 : source.hashCode());
+		result = prime * result
+				+ ((target == null) ? 0 : target.hashCode());
+		return result;
+	}
+
+	@Override
+	public String toString() {
+		return " first vertex " + source + " to vertex " + target
+				+ " with distance: " + distance;
 	}
 }

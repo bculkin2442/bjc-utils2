@@ -20,6 +20,34 @@ class HalfBoundLazyPair<OldType, NewLeft, NewRight>
 	}
 
 	@Override
+	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind(
+			BiFunction<NewLeft, NewRight, IPair<BoundLeft, BoundRight>> bindr) {
+		IHolder<IPair<NewLeft, NewRight>> newPair = new Identity<>(
+				boundPair);
+		IHolder<Boolean> newPairMade = new Identity<>(pairBound);
+
+		Supplier<NewLeft> leftSupp = () -> {
+			if (!newPairMade.getValue()) {
+				newPair.replace(binder.apply(oldSupplier.get()));
+				newPairMade.replace(true);
+			}
+
+			return newPair.unwrap((pair) -> pair.getLeft());
+		};
+
+		Supplier<NewRight> rightSupp = () -> {
+			if (!newPairMade.getValue()) {
+				newPair.replace(binder.apply(oldSupplier.get()));
+				newPairMade.replace(true);
+			}
+
+			return newPair.unwrap((pair) -> pair.getRight());
+		};
+
+		return new BoundLazyPair<>(leftSupp, rightSupp, bindr);
+	}
+
+	@Override
 	public <BoundLeft> IPair<BoundLeft, NewRight> bindLeft(
 			Function<NewLeft, IPair<BoundLeft, NewRight>> leftBinder) {
 		Supplier<NewLeft> leftSupp = () -> {
@@ -49,34 +77,6 @@ class HalfBoundLazyPair<OldType, NewLeft, NewRight>
 		};
 
 		return new HalfBoundLazyPair<>(rightSupp, rightBinder);
-	}
-
-	@Override
-	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind(
-			BiFunction<NewLeft, NewRight, IPair<BoundLeft, BoundRight>> bindr) {
-		IHolder<IPair<NewLeft, NewRight>> newPair = new Identity<>(
-				boundPair);
-		IHolder<Boolean> newPairMade = new Identity<>(pairBound);
-
-		Supplier<NewLeft> leftSupp = () -> {
-			if (!newPairMade.getValue()) {
-				newPair.replace(binder.apply(oldSupplier.get()));
-				newPairMade.replace(true);
-			}
-
-			return newPair.unwrap((pair) -> pair.getLeft());
-		};
-
-		Supplier<NewRight> rightSupp = () -> {
-			if (!newPairMade.getValue()) {
-				newPair.replace(binder.apply(oldSupplier.get()));
-				newPairMade.replace(true);
-			}
-
-			return newPair.unwrap((pair) -> pair.getRight());
-		};
-
-		return new BoundLazyPair<>(leftSupp, rightSupp, bindr);
 	}
 
 	@Override

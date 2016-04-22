@@ -26,6 +26,16 @@ public class GenericCommand implements ICommand {
 		this.help = new GenericHelp(description, help);
 	}
 
+	/**
+	 * Create a command that is an alias to this one
+	 * 
+	 * @return A command that is an alias to this one
+	 */
+	@Override
+	public ICommand createAlias() {
+		return new DelegatingCommand(this);
+	}
+
 	@Override
 	public ICommandHandler getHandler() {
 		return handler;
@@ -39,15 +49,5 @@ public class GenericCommand implements ICommand {
 	@Override
 	public boolean isAlias() {
 		return false;
-	}
-
-	/**
-	 * Create a command that is an alias to this one
-	 * 
-	 * @return A command that is an alias to this one
-	 */
-	@Override
-	public ICommand createAlias() {
-		return new DelegatingCommand(this);
 	}
 }

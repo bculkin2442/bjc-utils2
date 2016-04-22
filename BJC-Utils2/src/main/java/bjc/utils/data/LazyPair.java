@@ -59,6 +59,12 @@ public class LazyPair<LeftType, RightType>
 	}
 
 	@Override
+	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind(
+			BiFunction<LeftType, RightType, IPair<BoundLeft, BoundRight>> binder) {
+		return new BoundLazyPair<>(leftSupplier, rightSupplier, binder);
+	}
+
+	@Override
 	public <BoundLeft> IPair<BoundLeft, RightType> bindLeft(
 			Function<LeftType, IPair<BoundLeft, RightType>> leftBinder) {
 		Supplier<LeftType> leftSupp = () -> {
@@ -87,30 +93,6 @@ public class LazyPair<LeftType, RightType>
 	}
 
 	@Override
-	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind(
-			BiFunction<LeftType, RightType, IPair<BoundLeft, BoundRight>> binder) {
-		return new BoundLazyPair<>(leftSupplier, rightSupplier, binder);
-	}
-
-	@Override
-	public <MergedType> MergedType merge(
-			BiFunction<LeftType, RightType, MergedType> merger) {
-		if (!leftMaterialized) {
-			leftValue = leftSupplier.get();
-
-			leftMaterialized = true;
-		}
-
-		if (!rightMaterialized) {
-			rightValue = rightSupplier.get();
-
-			rightMaterialized = true;
-		}
-
-		return merger.apply(leftValue, rightValue);
-	}
-
-	@Override
 	public LeftType getLeft() {
 		if (!leftMaterialized) {
 			leftValue = leftSupplier.get();
@@ -130,6 +112,24 @@ public class LazyPair<LeftType, RightType>
 		}
 
 		return rightValue;
+	}
+
+	@Override
+	public <MergedType> MergedType merge(
+			BiFunction<LeftType, RightType, MergedType> merger) {
+		if (!leftMaterialized) {
+			leftValue = leftSupplier.get();
+
+			leftMaterialized = true;
+		}
+
+		if (!rightMaterialized) {
+			rightValue = rightSupplier.get();
+
+			rightMaterialized = true;
+		}
+
+		return merger.apply(leftValue, rightValue);
 	}
 
 	@Override
