@@ -70,16 +70,26 @@ public class GenericCommandMode implements ICommandMode {
 					"Command name must not be null");
 		} else if (aliasName == null) {
 			throw new NullPointerException("Alias name must not be null");
-		} else if (!commandHandlers.containsKey(commandName)) {
+		} else if (!commandHandlers.containsKey(commandName)
+				&& !defaultHandlers.containsKey(commandName)) {
 			throw new IllegalArgumentException(
 					"Cannot alias non-existant command '" + commandName
 							+ "'");
-		} else if (commandHandlers.containsKey(aliasName)) {
+		} else if (commandHandlers.containsKey(aliasName)
+				|| defaultHandlers.containsKey(aliasName)) {
 			throw new IllegalArgumentException("Cannot bind alias '"
 					+ aliasName + "' to a command with a bound handler");
 		} else {
-			commandHandlers.put(aliasName,
-					commandHandlers.get(commandName).createAlias());
+			ICommand aliasedCommand;
+			if (defaultHandlers.containsKey(commandName)) {
+				aliasedCommand =
+						defaultHandlers.get(commandName).createAlias();
+			} else {
+				aliasedCommand =
+						commandHandlers.get(commandName).createAlias();
+			}
+
+			commandHandlers.put(aliasName, aliasedCommand);
 		}
 	}
 
@@ -120,29 +130,9 @@ public class GenericCommandMode implements ICommandMode {
 		helpTopics.put(topicName, help);
 	}
 
-	private void aliasCommands(String[] args) {
-		if (args.length != 2) {
-			errorOutput.accept("ERROR: Alias requires two arguments. "
-					+ "The command name, and the alias for that command");
-		} else {
-			String commandName = args[0];
-			String aliasName = args[1];
-
-			if (!canHandleCommand(commandName)) {
-				errorOutput.accept("ERROR: '" + commandName
-						+ "' is not a valid command.");
-			} else if (canHandleCommand(aliasName)) {
-				errorOutput.accept("ERROR: Cannot overwrite command '"
-						+ aliasName + "'");
-			} else {
-				addCommandAlias(commandName, aliasName);
-			}
-		}
-	}
-
 	private GenericCommand buildAliasCommand() {
 		return new GenericCommand((args) -> {
-			aliasCommands(args);
+			doAliasCommands(args);
 
 			return this;
 		}, "alias\tAlias one command to another",
@@ -177,10 +167,10 @@ public class GenericCommandMode implements ICommandMode {
 		return new GenericCommand((args) -> {
 			if (args == null || args.length == 0) {
 				// Invoke general help
-				helpSummary();
+				doHelpSummary();
 			} else {
 				// Invoke help for a command
-				helpCommand(args[0]);
+				doHelpCommand(args[0]);
 			}
 
 			return this;
@@ -194,7 +184,7 @@ public class GenericCommandMode implements ICommandMode {
 
 	private GenericCommand buildListCommand() {
 		return new GenericCommand((args) -> {
-			listCommands();
+			doListCommands();
 
 			return this;
 		}, "list\tList available command",
@@ -208,25 +198,27 @@ public class GenericCommandMode implements ICommandMode {
 				|| defaultHandlers.containsKey(command);
 	}
 
-	@Override
-	public String getCustomPrompt() {
-		if (customPrompt != null) {
-			return customPrompt;
-		}
+	private void doAliasCommands(String[] args) {
+		if (args.length != 2) {
+			errorOutput.accept("ERROR: Alias requires two arguments. "
+					+ "The command name, and the alias for that command");
+		} else {
+			String commandName = args[0];
+			String aliasName = args[1];
 
-		return ICommandMode.super.getCustomPrompt();
+			if (!canHandleCommand(commandName)) {
+				errorOutput.accept("ERROR: '" + commandName
+						+ "' is not a valid command.");
+			} else if (canHandleCommand(aliasName)) {
+				errorOutput.accept("ERROR: Cannot overwrite command '"
+						+ aliasName + "'");
+			} else {
+				addCommandAlias(commandName, aliasName);
+			}
+		}
 	}
 
-	@Override
-	public String getName() {
-		if (modeName != null) {
-			return modeName;
-		}
-
-		return ICommandMode.super.getName();
-	}
-
-	private void helpCommand(String commandName) {
+	private void doHelpCommand(String commandName) {
 		if (commandHandlers.containsKey(commandName)) {
 			normalOutput.accept("\n" + commandHandlers.get(commandName)
 					.getHelp().getDescription());
@@ -243,7 +235,7 @@ public class GenericCommandMode implements ICommandMode {
 		}
 	}
 
-	private void helpSummary() {
+	private void doHelpSummary() {
 		normalOutput.accept(
 				"Help topics for this command mode are as follows:\n");
 		if (commandHandlers.getSize() > 0) {
@@ -281,7 +273,7 @@ public class GenericCommandMode implements ICommandMode {
 		}
 	}
 
-	private void listCommands() {
+	private void doListCommands() {
 		normalOutput.accept(
 				"The available commands for this mode are as follows:\n");
 
@@ -297,6 +289,24 @@ public class GenericCommandMode implements ICommandMode {
 		});
 
 		normalOutput.accept("\n");
+	}
+
+	@Override
+	public String getCustomPrompt() {
+		if (customPrompt != null) {
+			return customPrompt;
+		}
+
+		return ICommandMode.super.getCustomPrompt();
+	}
+
+	@Override
+	public String getName() {
+		if (modeName != null) {
+			return modeName;
+		}
+
+		return ICommandMode.super.getName();
 	}
 
 	@Override
@@ -373,7 +383,10 @@ public class GenericCommandMode implements ICommandMode {
 
 		addCommandAlias("help", "man");
 
-		// Add commands handled in a upper layer
+		// Add commands handled in a upper layer.
+
+		// TODO figure out a place to put commands that apply across all
+		// modes, but only apply to a specific application
 		defaultHandlers.put("clear", buildClearCommands());
 
 		defaultHandlers.put("exit", buildExitCommand());

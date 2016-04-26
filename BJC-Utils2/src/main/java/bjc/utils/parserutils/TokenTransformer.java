@@ -12,26 +12,26 @@ import bjc.utils.data.Pair;
 import bjc.utils.funcdata.ITree;
 import bjc.utils.funcdata.Tree;
 
-final class TokenTransformer<T> implements Consumer<T> {
-	private final class OperatorHandler
-			implements UnaryOperator<IPair<Deque<ITree<T>>, ITree<T>>> {
-		private T element;
+final class TokenTransformer<TokenType> implements Consumer<TokenType> {
+	private final class OperatorHandler implements
+			UnaryOperator<IPair<Deque<ITree<TokenType>>, ITree<TokenType>>> {
+		private TokenType element;
 
-		public OperatorHandler(T element) {
+		public OperatorHandler(TokenType element) {
 			this.element = element;
 		}
 
 		@Override
-		public IPair<Deque<ITree<T>>, ITree<T>> apply(
-				IPair<Deque<ITree<T>>, ITree<T>> pair) {
-			return pair.bind((queuedASTs, currentAST) -> {
+		public IPair<Deque<ITree<TokenType>>, ITree<TokenType>> apply(
+				IPair<Deque<ITree<TokenType>>, ITree<TokenType>> pair) {
+			return pair.bindLeft((queuedASTs) -> {
 				return handleOperator(queuedASTs);
 			});
 		}
 
-		private IPair<Deque<ITree<T>>, ITree<T>> handleOperator(
-				Deque<ITree<T>> queuedASTs) {
-			ITree<T> newAST;
+		private IPair<Deque<ITree<TokenType>>, ITree<TokenType>>
+				handleOperator(Deque<ITree<TokenType>> queuedASTs) {
+			ITree<TokenType> newAST;
 
 			if (isSpecialOperator.test(element)) {
 				newAST = handleSpecialOperator.apply(element)
@@ -45,8 +45,8 @@ final class TokenTransformer<T> implements Consumer<T> {
 									+ queuedASTs.peek());
 				}
 
-				ITree<T> rightAST = queuedASTs.pop();
-				ITree<T> leftAST = queuedASTs.pop();
+				ITree<TokenType> rightAST = queuedASTs.pop();
+				ITree<TokenType> leftAST = queuedASTs.pop();
 
 				newAST = new Tree<>(element, leftAST, rightAST);
 			}
@@ -57,15 +57,18 @@ final class TokenTransformer<T> implements Consumer<T> {
 		}
 	}
 
-	private IHolder<IPair<Deque<ITree<T>>, ITree<T>>>			initialState;
-	private Predicate<T>										operatorPredicate;
-	private Predicate<T>										isSpecialOperator;
-	private Function<T, Function<Deque<ITree<T>>, ITree<T>>>	handleSpecialOperator;
+	private IHolder<IPair<Deque<ITree<TokenType>>, ITree<TokenType>>>					initialState;
+
+	private Predicate<TokenType>														operatorPredicate;
+
+	private Predicate<TokenType>														isSpecialOperator;
+	private Function<TokenType, Function<Deque<ITree<TokenType>>, ITree<TokenType>>>	handleSpecialOperator;
 
 	public TokenTransformer(
-			IHolder<IPair<Deque<ITree<T>>, ITree<T>>> initialState,
-			Predicate<T> operatorPredicate, Predicate<T> isSpecialOperator,
-			Function<T, Function<Deque<ITree<T>>, ITree<T>>> handleSpecialOperator) {
+			IHolder<IPair<Deque<ITree<TokenType>>, ITree<TokenType>>> initialState,
+			Predicate<TokenType> operatorPredicate,
+			Predicate<TokenType> isSpecialOperator,
+			Function<TokenType, Function<Deque<ITree<TokenType>>, ITree<TokenType>>> handleSpecialOperator) {
 		this.initialState = initialState;
 		this.operatorPredicate = operatorPredicate;
 		this.isSpecialOperator = isSpecialOperator;
@@ -73,20 +76,16 @@ final class TokenTransformer<T> implements Consumer<T> {
 	}
 
 	@Override
-	public void accept(T element) {
+	public void accept(TokenType element) {
 		if (operatorPredicate.test(element)) {
 			initialState.transform(new OperatorHandler(element));
 		} else {
-			ITree<T> newAST = new Tree<>(element);
-
-			initialState.doWith((pair) -> {
-				pair.doWith((queue, currentAST) -> {
-					queue.push(newAST);
-				});
-			});
+			ITree<TokenType> newAST = new Tree<>(element);
 
 			initialState.transform((pair) -> {
-				return pair.bind((queue, currentAST) -> {
+				return pair.bindLeft((queue) -> {
+					queue.push(newAST);
+
 					return new Pair<>(queue, newAST);
 				});
 			});

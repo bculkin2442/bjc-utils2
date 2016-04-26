@@ -24,7 +24,7 @@ public class TreeConstructor {
 	 * 
 	 * Only binary operators are accepted.
 	 * 
-	 * @param <T>
+	 * @param <TokenType>
 	 *            The elements of the parse tree
 	 * @param tokens
 	 *            The list of tokens to build a tree from
@@ -33,8 +33,9 @@ public class TreeConstructor {
 	 *            operator
 	 * @return A AST from the expression
 	 */
-	public static <T> ITree<T> constructTree(IFunctionalList<T> tokens,
-			Predicate<T> operatorPredicate) {
+	public static <TokenType> ITree<TokenType> constructTree(
+			IFunctionalList<TokenType> tokens,
+			Predicate<TokenType> operatorPredicate) {
 		return constructTree(tokens, operatorPredicate, (op) -> false,
 				null);
 	}
@@ -45,7 +46,7 @@ public class TreeConstructor {
 	 * Only binary operators are accepted by default. Use the last two
 	 * parameters to handle non-binary operators
 	 * 
-	 * @param <T>
+	 * @param <TokenType>
 	 *            The elements of the parse tree
 	 * @param tokens
 	 *            The list of tokens to build a tree from
@@ -63,9 +64,11 @@ public class TreeConstructor {
 	 *         interface. Maybe there's a better way to express how that
 	 *         works
 	 */
-	public static <T> ITree<T> constructTree(IFunctionalList<T> tokens,
-			Predicate<T> operatorPredicate, Predicate<T> isSpecialOperator,
-			Function<T, Function<Deque<ITree<T>>, ITree<T>>> handleSpecialOperator) {
+	public static <TokenType> ITree<TokenType> constructTree(
+			IFunctionalList<TokenType> tokens,
+			Predicate<TokenType> operatorPredicate,
+			Predicate<TokenType> isSpecialOperator,
+			Function<TokenType, Function<Deque<ITree<TokenType>>, ITree<TokenType>>> handleSpecialOperator) {
 		if (tokens == null) {
 			throw new NullPointerException("Tokens must not be null");
 		} else if (operatorPredicate == null) {
@@ -76,8 +79,8 @@ public class TreeConstructor {
 					"Special operator determiner must not be null");
 		}
 
-		IHolder<IPair<Deque<ITree<T>>, ITree<T>>> initialState = new Identity<>(
-				new Pair<>(new LinkedList<>(), null));
+		IHolder<IPair<Deque<ITree<TokenType>>, ITree<TokenType>>> initialState =
+				new Identity<>(new Pair<>(new LinkedList<>(), null));
 
 		tokens.forEach(
 				new TokenTransformer<>(initialState, operatorPredicate,

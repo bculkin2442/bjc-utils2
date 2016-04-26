@@ -67,10 +67,10 @@ public class CLICommander {
 				normalOutput.print(currentMode.getName() + ">> ");
 			}
 
-			String ln = inputSource.nextLine();
+			String currentLine = inputSource.nextLine();
 
-			if (currentMode.canHandleCommand(ln)) {
-				String[] commandTokens = ln.split(" ");
+			if (currentMode.canHandleCommand(currentLine)) {
+				String[] commandTokens = currentLine.split(" ");
 
 				String[] commandArgs;
 
@@ -84,7 +84,8 @@ public class CLICommander {
 				currentMode = currentMode.processCommand(commandTokens[0],
 						commandArgs);
 			} else {
-				errorOutput.print("Error: Unrecognized command " + ln);
+				errorOutput.print(
+						"Error: Unrecognized command " + currentLine);
 			}
 		}
 

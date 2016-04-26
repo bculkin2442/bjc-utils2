@@ -36,10 +36,11 @@ public interface ICommandMode {
 	/**
 	 * Get the name of this command mode
 	 * 
-	 * @return The name of this command mode, which is "crawler" by default
+	 * @return The name of this command mode, which is the empty string by
+	 *         default
 	 */
 	public default String getName() {
-		return "crawler";
+		return "";
 	}
 
 	/**

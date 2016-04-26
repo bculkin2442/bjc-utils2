@@ -16,10 +16,10 @@ import bjc.utils.funcutils.StringUtils;
  * 
  * @author ben
  *
- * @param <E>
+ * @param <TokenType>
  *            The type of tokens being shunted
  */
-public class ShuntingYard<E> {
+public class ShuntingYard<TokenType> {
 	/**
 	 * A enum representing the fundamental operator types
 	 * 
@@ -32,17 +32,18 @@ public class ShuntingYard<E> {
 		 */
 		ADD(1),
 		/**
-		 * Represents division
+		 * Represents subtraction
 		 */
-		DIVIDE(4),
+		SUBTRACT(2),
+
 		/**
 		 * Represents multiplication
 		 */
 		MULTIPLY(3),
 		/**
-		 * Represents subtraction
+		 * Represents division
 		 */
-		SUBTRACT(2);
+		DIVIDE(4);
 
 		private final int precedence;
 
@@ -62,12 +63,13 @@ public class ShuntingYard<E> {
 	}
 
 	private final class TokenShunter implements Consumer<String> {
-		private IFunctionalList<E>	output;
-		private Deque<String>		stack;
-		private Function<String, E>	transform;
+		private IFunctionalList<TokenType>	output;
+		private Deque<String>				stack;
+		private Function<String, TokenType>	transform;
 
-		public TokenShunter(IFunctionalList<E> outpt, Deque<String> stack,
-				Function<String, E> transform) {
+		public TokenShunter(IFunctionalList<TokenType> outpt,
+				Deque<String> stack,
+				Function<String, TokenType> transform) {
 			this.output = outpt;
 			this.stack = stack;
 			this.transform = transform;
@@ -159,11 +161,10 @@ public class ShuntingYard<E> {
 			return false;
 		}
 
-		boolean hasHigherPrecedence = operators.get(rightOperator)
-				.getPrecedence() >= operators.get(leftOperator)
-						.getPrecedence();
+		int rightPrecedence = operators.get(rightOperator).getPrecedence();
+		int leftPrecedence = operators.get(leftOperator).getPrecedence();
 
-		return hasHigherPrecedence;
+		return rightPrecedence >= leftPrecedence;
 	}
 
 	/**
@@ -175,15 +176,16 @@ public class ShuntingYard<E> {
 	 *            The function to use to transform strings to tokens
 	 * @return A list of tokens in postfix notation
 	 */
-	public IFunctionalList<E> postfix(IFunctionalList<String> input,
-			Function<String, E> tokenTransformer) {
+	public IFunctionalList<TokenType> postfix(
+			IFunctionalList<String> input,
+			Function<String, TokenType> tokenTransformer) {
 		if (input == null) {
 			throw new NullPointerException("Input must not be null");
 		} else if (tokenTransformer == null) {
 			throw new NullPointerException("Transformer must not be null");
 		}
 
-		IFunctionalList<E> output = new FunctionalList<>();
+		IFunctionalList<TokenType> output = new FunctionalList<>();
 
 		Deque<String> stack = new LinkedList<>();
 
@@ -199,14 +201,14 @@ public class ShuntingYard<E> {
 	/**
 	 * Remove an operator from the list of shuntable operators
 	 * 
-	 * @param tok
+	 * @param token
 	 *            The token representing the operator
 	 */
-	public void removeOp(String tok) {
-		if (tok == null) {
+	public void removeOp(String token) {
+		if (token == null) {
 			throw new NullPointerException("Token must not be null");
 		}
 
-		operators.remove(tok);
+		operators.remove(token);
 	}
 }
