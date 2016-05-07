@@ -96,4 +96,12 @@ class BoundLazy<OldType, BoundContainedType>
 
 		return boundHolder.unwrap(unwrapper);
 	}
+
+	@Override
+	public <NewType> Function<BoundContainedType, IHolder<NewType>> lift(
+			Function<BoundContainedType, NewType> func) {
+		return (val) -> {
+			return new Lazy<>(func.apply(val));
+		};
+	}
 }

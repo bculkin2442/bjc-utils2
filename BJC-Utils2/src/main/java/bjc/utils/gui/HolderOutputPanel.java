@@ -17,25 +17,31 @@ public class HolderOutputPanel extends JPanel {
 	private static final long	serialVersionUID	= 166573313903782080L;
 	private Timer				updateTimer;
 	private JLabel				value;
+	private int					nDelay;
+	private IHolder<String>		val;
 
 	/**
 	 * Create a new display panel, backed by a holder
 	 * 
 	 * @param lab
 	 *            The label to attach to this field
-	 * @param val
+	 * @param valueHolder
 	 *            The holder to get the value from
 	 * @param nDelay
 	 *            The delay in ms between value updates
 	 */
-	public HolderOutputPanel(String lab, IHolder<String> val, int nDelay) {
+	public HolderOutputPanel(String lab, IHolder<String> valueHolder,
+			int nDelay) {
+		this.val = valueHolder;
+		this.nDelay = nDelay;
+
 		setLayout(new HLayout(2));
 
 		JLabel label = new JLabel(lab);
-		value = new JLabel(val.getValue() + " (stopped)");
+		value = new JLabel("(stopped)");
 
 		updateTimer = new Timer(nDelay, (event) -> {
-			value.setText(val.getValue());
+			value.setText(valueHolder.getValue());
 		});
 
 		add(label);
@@ -56,5 +62,18 @@ public class HolderOutputPanel extends JPanel {
 		updateTimer.stop();
 
 		value.setText(value.getText() + " (stopped)");
+	}
+
+	/**
+	 * Set this panel back to its initial state
+	 */
+	public void reset() {
+		stopUpdating();
+
+		value.setText("(stopped)");
+
+		updateTimer = new Timer(nDelay, (event) -> {
+			value.setText(val.getValue());
+		});
 	}
 }

@@ -133,4 +133,13 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 
 		return unwrapper.apply(heldValue);
 	}
+
+	@Override
+	public <NewType> Function<ContainedType, IHolder<NewType>> lift(
+			Function<ContainedType, NewType> func) {
+		// TODO Auto-generated method stub
+		return (val) -> {
+			return new Lazy<>(func.apply(val));
+		};
+	}
 }

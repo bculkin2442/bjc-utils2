@@ -82,11 +82,11 @@ public class GenericCommandMode implements ICommandMode {
 		} else {
 			ICommand aliasedCommand;
 			if (defaultHandlers.containsKey(commandName)) {
-				aliasedCommand =
-						defaultHandlers.get(commandName).createAlias();
+				aliasedCommand = defaultHandlers.get(commandName)
+						.createAlias();
 			} else {
-				aliasedCommand =
-						commandHandlers.get(commandName).createAlias();
+				aliasedCommand = commandHandlers.get(commandName)
+						.createAlias();
 			}
 
 			commandHandlers.put(aliasName, aliasedCommand);

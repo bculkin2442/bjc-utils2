@@ -56,8 +56,8 @@ public class Pair<LeftType, RightType>
 	}
 
 	@Override
-	public <MergedType> MergedType merge(
-			BiFunction<LeftType, RightType, MergedType> merger) {
+	public <MergedType> MergedType
+			merge(BiFunction<LeftType, RightType, MergedType> merger) {
 		return merger.apply(leftValue, rightValue);
 	}
 
@@ -65,5 +65,17 @@ public class Pair<LeftType, RightType>
 	public String toString() {
 		return "pair[l=" + leftValue.toString() + ", r="
 				+ rightValue.toString() + "]";
+	}
+
+	@Override
+	public <NewLeft> IPair<NewLeft, RightType>
+			mapLeft(Function<LeftType, NewLeft> mapper) {
+		return new Pair<>(mapper.apply(leftValue), rightValue);
+	}
+
+	@Override
+	public <NewRight> IPair<LeftType, NewRight>
+			mapRight(Function<RightType, NewRight> mapper) {
+		return new Pair<>(leftValue, mapper.apply(rightValue));
 	}
 }

@@ -57,7 +57,7 @@ public class FileComponentRepository<E extends IDescribedComponent>
 	 *            The function to use to convert files to components
 	 */
 	public FileComponentRepository(File directory,
-			Function<File, E> componentReader) {
+			Function<File, ? extends E> componentReader) {
 		if (!directory.isDirectory()) {
 			throw new IllegalArgumentException("File " + directory
 					+ " is not a directory.\n"
@@ -123,7 +123,7 @@ public class FileComponentRepository<E extends IDescribedComponent>
 		return "Components read from directory " + sourceDirectory + ".";
 	}
 
-	private void loadComponent(Function<File, E> componentReader,
+	private void loadComponent(Function<File, ? extends E> componentReader,
 			Path pth) {
 		try {
 			E component = componentReader.apply(pth.toFile());

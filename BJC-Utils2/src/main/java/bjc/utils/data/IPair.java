@@ -4,6 +4,8 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import bjc.utils.funcdata.theory.Bifunctor;
+
 /**
  * Represents a pair of values
  * 
@@ -14,7 +16,8 @@ import java.util.function.Function;
  *            The type of the right side of the pair
  *
  */
-public interface IPair<LeftType, RightType> {
+public interface IPair<LeftType, RightType>
+		extends Bifunctor<LeftType, RightType> {
 	/**
 	 * Bind a function across the values in this pair
 	 * 
@@ -68,11 +71,45 @@ public interface IPair<LeftType, RightType> {
 		});
 	}
 
+	@Override
+	default <OldLeft, OldRight, NewLeft>
+			Function<Bifunctor<OldLeft, OldRight>, Bifunctor<NewLeft, OldRight>>
+			fmapLeft(Function<OldLeft, NewLeft> func) {
+		return (argumentPair) -> {
+			if (!(argumentPair instanceof IPair<?, ?>)) {
+				throw new IllegalArgumentException(
+						"This function can only be applied to instances of IPair");
+			}
+
+			IPair<OldLeft, OldRight> argPair = (IPair<OldLeft, OldRight>) argumentPair;
+
+			return argPair.mapLeft(func);
+		};
+	}
+
+	@Override
+	default <OldLeft, OldRight, NewRight>
+			Function<Bifunctor<OldLeft, OldRight>, Bifunctor<OldLeft, NewRight>>
+
+			fmapRight(Function<OldRight, NewRight> func) {
+		return (argumentPair) -> {
+			if (!(argumentPair instanceof IPair<?, ?>)) {
+				throw new IllegalArgumentException(
+						"This function can only be applied to instances of IPair");
+			}
+
+			IPair<OldLeft, OldRight> argPair = (IPair<OldLeft, OldRight>) argumentPair;
+
+			return argPair.mapRight(func);
+		};
+	}
+
 	/**
 	 * Get the value on the left side of the pair
 	 * 
 	 * @return The value on the left side of the pair
 	 */
+	@Override
 	public default LeftType getLeft() {
 		return merge((leftValue, rightValue) -> leftValue);
 	}
@@ -82,9 +119,38 @@ public interface IPair<LeftType, RightType> {
 	 * 
 	 * @return The value on the right side of the pair
 	 */
+	@Override
 	public default RightType getRight() {
 		return merge((leftValue, rightValue) -> rightValue);
 	}
+
+	/**
+	 * Transform the value on the left side of the pair. Doesn't modify the
+	 * pair
+	 * 
+	 * @param <NewLeft>
+	 *            The new type of the left part of the pair
+	 * @param mapper
+	 *            The function to use to transform the left part of the
+	 *            pair
+	 * @return The pair, with its left part transformed
+	 */
+	public <NewLeft> IPair<NewLeft, RightType>
+			mapLeft(Function<LeftType, NewLeft> mapper);
+
+	/**
+	 * Transform the value on the right side of the pair. Doesn't modify
+	 * the pair
+	 * 
+	 * @param <NewRight>
+	 *            The new type of the right part of the pair
+	 * @param mapper
+	 *            The function to use to transform the right part of the
+	 *            pair
+	 * @return The pair, with its right part transformed
+	 */
+	public <NewRight> IPair<LeftType, NewRight>
+			mapRight(Function<RightType, NewRight> mapper);
 
 	/**
 	 * Merge the two values in this pair into a single value
@@ -95,6 +161,6 @@ public interface IPair<LeftType, RightType> {
 	 *            The function to use for merging
 	 * @return The pair, merged into a single value
 	 */
-	public <MergedType> MergedType merge(
-			BiFunction<LeftType, RightType, MergedType> merger);
+	public <MergedType> MergedType
+			merge(BiFunction<LeftType, RightType, MergedType> merger);
 }

@@ -246,6 +246,16 @@ public interface IFunctionalList<ContainedType> {
 	ContainedType randItem(Function<Integer, Integer> rnd);
 
 	/**
+	 * Select a random item from the list, using a default random number
+	 * generator
+	 * 
+	 * @return A random item from the list
+	 */
+	default ContainedType randItem() {
+		return randItem((num) -> (int) (Math.random() * num));
+	}
+
+	/**
 	 * Reduce this list to a single value, using a accumulative approach.
 	 * 
 	 * @param <StateType>

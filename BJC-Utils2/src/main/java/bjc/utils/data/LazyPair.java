@@ -115,8 +115,8 @@ public class LazyPair<LeftType, RightType>
 	}
 
 	@Override
-	public <MergedType> MergedType merge(
-			BiFunction<LeftType, RightType, MergedType> merger) {
+	public <MergedType> MergedType
+			merge(BiFunction<LeftType, RightType, MergedType> merger) {
 		if (!leftMaterialized) {
 			leftValue = leftSupplier.get();
 
@@ -153,5 +153,49 @@ public class LazyPair<LeftType, RightType>
 		sb.append("]");
 
 		return sb.toString();
+	}
+
+	@Override
+	public <NewLeft> IPair<NewLeft, RightType>
+			mapLeft(Function<LeftType, NewLeft> mapper) {
+		Supplier<NewLeft> leftSupp = () -> {
+			if (leftMaterialized) {
+				return mapper.apply(leftValue);
+			}
+
+			return mapper.apply(leftSupplier.get());
+		};
+
+		Supplier<RightType> rightSupp = () -> {
+			if (rightMaterialized) {
+				return rightValue;
+			}
+
+			return rightSupplier.get();
+		};
+
+		return new LazyPair<>(leftSupp, rightSupp);
+	}
+
+	@Override
+	public <NewRight> IPair<LeftType, NewRight>
+			mapRight(Function<RightType, NewRight> mapper) {
+		Supplier<LeftType> leftSupp = () -> {
+			if (leftMaterialized) {
+				return leftValue;
+			}
+
+			return leftSupplier.get();
+		};
+
+		Supplier<NewRight> rightSupp = () -> {
+			if (rightMaterialized) {
+				return mapper.apply(rightValue);
+			}
+
+			return mapper.apply(rightSupplier.get());
+		};
+
+		return new LazyPair<>(leftSupp, rightSupp);
 	}
 }

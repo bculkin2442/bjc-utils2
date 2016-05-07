@@ -90,8 +90,8 @@ class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight>
 	}
 
 	@Override
-	public <MergedType> MergedType merge(
-			BiFunction<NewLeft, NewRight, MergedType> merger) {
+	public <MergedType> MergedType
+			merge(BiFunction<NewLeft, NewRight, MergedType> merger) {
 		if (!pairBound) {
 			boundPair = binder.apply(leftSupplier.get(),
 					rightSupplier.get());
@@ -109,5 +109,61 @@ class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight>
 		}
 
 		return "(un-materialized)";
+	}
+
+	@Override
+	public <NewLeftType> IPair<NewLeftType, NewRight>
+			mapLeft(Function<NewLeft, NewLeftType> mapper) {
+		Supplier<NewLeftType> leftSupp = () -> {
+			if (!pairBound) {
+				NewLeft leftVal = binder
+						.apply(leftSupplier.get(), rightSupplier.get())
+						.getLeft();
+
+				return mapper.apply(leftVal);
+			}
+
+			return mapper.apply(boundPair.getLeft());
+		};
+
+		Supplier<NewRight> rightSupp = () -> {
+			if (!pairBound) {
+				return binder
+						.apply(leftSupplier.get(), rightSupplier.get())
+						.getRight();
+			}
+
+			return boundPair.getRight();
+		};
+
+		return new LazyPair<>(leftSupp, rightSupp);
+	}
+
+	@Override
+	public <NewRightType> IPair<NewLeft, NewRightType>
+			mapRight(Function<NewRight, NewRightType> mapper) {
+		Supplier<NewLeft> leftSupp = () -> {
+			if (!pairBound) {
+				return binder
+						.apply(leftSupplier.get(), rightSupplier.get())
+						.getLeft();
+			}
+
+			return boundPair.getLeft();
+		};
+
+		Supplier<NewRightType> rightSupp = () -> {
+			if (!pairBound) {
+				NewRight rightVal = binder
+						.apply(leftSupplier.get(), rightSupplier.get())
+						.getRight();
+
+				return mapper.apply(rightVal);
+			}
+
+			return mapper.apply(boundPair.getRight());
+		};
+
+		return new LazyPair<>(leftSupp, rightSupp);
 	}
 }
