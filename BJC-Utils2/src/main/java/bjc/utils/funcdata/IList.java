@@ -10,12 +10,7 @@ import java.util.function.Predicate;
 import bjc.utils.data.IPair;
 
 /**
- * A wrapper over another list that provides eager functional operations
- * over it. Differs from a stream in every way except for the fact that
- * they both provide functional operations.
- * 
- * NOTE: The indications of complexity for methods assume that the backing
- * list has performance on the order of an array
+ * A wrapper over another list that provides functional operations over it.
  * 
  * @author ben
  *
@@ -27,8 +22,6 @@ public interface IList<ContainedType> {
 	/**
 	 * Add an item to this list
 	 * 
-	 * Takes O(1) time.
-	 * 
 	 * @param item
 	 *            The item to add to this list.
 	 * @return Whether the item was added to the list succesfully.
@@ -39,10 +32,6 @@ public interface IList<ContainedType> {
 	 * Check if all of the elements of this list match the specified
 	 * predicate.
 	 * 
-	 * Takes O(f * p(n)) time on average, where f is defined as the average
-	 * number of elements in a list until the predicate returns false, and
-	 * p is the average running time of the predicate
-	 * 
 	 * @param matchPredicate
 	 *            The predicate to use for checking.
 	 * @return Whether all of the elements of the list match the specified
@@ -52,10 +41,6 @@ public interface IList<ContainedType> {
 
 	/**
 	 * Check if any of the elements in this list match the specified list.
-	 * 
-	 * Takes O(f * p(n)) time on average, where f is defined as the average
-	 * number of elements in a list until the predicate returns true, and p
-	 * is the average running time of the predicate
 	 * 
 	 * @param matchPredicate
 	 *            The predicate to use for checking.
@@ -71,10 +56,6 @@ public interface IList<ContainedType> {
 	 * 
 	 * NOTE: The returned list will have the length of the shorter of this
 	 * list and the combined one.
-	 * 
-	 * Takes O(q * c(q)), where q is defined as the length of the shorter
-	 * of this list and the provided one, and c is the running time of the
-	 * combiner.
 	 * 
 	 * @param <OtherType>
 	 *            The type of the second list
@@ -94,8 +75,6 @@ public interface IList<ContainedType> {
 	/**
 	 * Check if the list contains the specified item
 	 * 
-	 * Takes O(n) time, assuming object compare in constant time.
-	 * 
 	 * @param item
 	 *            The item to see if it is contained
 	 * @return Whether or not the specified item is in the list
@@ -105,8 +84,6 @@ public interface IList<ContainedType> {
 	/**
 	 * Get the first element in the list
 	 * 
-	 * Takes O(1) time
-	 * 
 	 * @return The first element in this list.
 	 */
 	ContainedType first();
@@ -114,9 +91,6 @@ public interface IList<ContainedType> {
 	/**
 	 * Apply a function to each member of the list, then flatten the
 	 * results. Does not change the underlying list.
-	 * 
-	 * Takes O(n * m) time, where m is the average number of elements in
-	 * the returned list.
 	 * 
 	 * @param <MappedType>
 	 *            The type of the flattened list
@@ -132,9 +106,6 @@ public interface IList<ContainedType> {
 	/**
 	 * Apply a given action for each member of the list
 	 * 
-	 * Takes O(n * f(n)) time, where n is the length of the list, and f is
-	 * the running time of the action.
-	 * 
 	 * @param action
 	 *            The action to apply to each member of the list.
 	 */
@@ -142,9 +113,6 @@ public interface IList<ContainedType> {
 
 	/**
 	 * Apply a given function to each element in the list and its index.
-	 * 
-	 * Takes O(n * f(n)) time, where n is the length of the list, and f is
-	 * the running time of the action.
 	 * 
 	 * @param indexedAction
 	 *            The function to apply to each element in the list and its
@@ -155,8 +123,6 @@ public interface IList<ContainedType> {
 	/**
 	 * Retrieve a value in the list by its index.
 	 * 
-	 * Takes O(1) time.
-	 * 
 	 * @param index
 	 *            The index to retrieve a value from.
 	 * @return The value at the specified index in the list.
@@ -166,14 +132,12 @@ public interface IList<ContainedType> {
 	/**
 	 * Retrieve a list containing all elements matching a predicate
 	 * 
-	 * Takes O(n) time, where n is the number of elements in the list
-	 * 
 	 * @param matchPredicate
 	 *            The predicate to match by
 	 * @return A list containing all elements that match the predicate
 	 */
-	IList<ContainedType> getMatching(
-			Predicate<ContainedType> matchPredicate);
+	IList<ContainedType>
+			getMatching(Predicate<ContainedType> matchPredicate);
 
 	/**
 	 * Retrieve the size of the wrapped list
@@ -200,8 +164,8 @@ public interface IList<ContainedType> {
 	 *            The function to apply to each element in the list
 	 * @return A new list containing the mapped elements of this list.
 	 */
-	<MappedType> IList<MappedType> map(
-			Function<ContainedType, MappedType> elementTransformer);
+	<MappedType> IList<MappedType>
+			map(Function<ContainedType, MappedType> elementTransformer);
 
 	/**
 	 * Zip two lists into a list of pairs
@@ -214,8 +178,8 @@ public interface IList<ContainedType> {
 	 * @return A list containing pairs of this element and the specified
 	 *         list
 	 */
-	<OtherType> IList<IPair<ContainedType, OtherType>> pairWith(
-			IList<OtherType> rightList);
+	<OtherType> IList<IPair<ContainedType, OtherType>>
+			pairWith(IList<OtherType> rightList);
 
 	/**
 	 * Partition this list into a list of sublists
@@ -224,8 +188,7 @@ public interface IList<ContainedType> {
 	 *            The size of elements to put into each one of the sublists
 	 * @return A list partitioned into partitions of size nPerPart
 	 */
-	IList<IList<ContainedType>> partition(
-			int numberPerPartition);
+	IList<IList<ContainedType>> partition(int numberPerPartition);
 
 	/**
 	 * Prepend an item to the list
