@@ -3,20 +3,20 @@ package bjc.utils.data;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
-import bjc.utils.funcdata.IFunctionalList;
+import bjc.utils.funcdata.IList;
 
 class BoundListHolder<ContainedType> implements IHolder<ContainedType> {
-	private IFunctionalList<IHolder<ContainedType>> heldHolders;
+	private IList<IHolder<ContainedType>> heldHolders;
 
 	public BoundListHolder(
-			IFunctionalList<IHolder<ContainedType>> toHold) {
+			IList<IHolder<ContainedType>> toHold) {
 		heldHolders = toHold;
 	}
 
 	@Override
 	public <BoundType> IHolder<BoundType> bind(
 			Function<ContainedType, IHolder<BoundType>> binder) {
-		IFunctionalList<IHolder<BoundType>> boundHolders = heldHolders
+		IList<IHolder<BoundType>> boundHolders = heldHolders
 				.map((containedHolder) -> {
 					return containedHolder.bind(binder);
 				});
@@ -27,7 +27,7 @@ class BoundListHolder<ContainedType> implements IHolder<ContainedType> {
 	@Override
 	public <MappedType> IHolder<MappedType> map(
 			Function<ContainedType, MappedType> mapper) {
-		IFunctionalList<IHolder<MappedType>> mappedHolders = heldHolders
+		IList<IHolder<MappedType>> mappedHolders = heldHolders
 				.map((containedHolder) -> {
 					return containedHolder.map(mapper);
 				});

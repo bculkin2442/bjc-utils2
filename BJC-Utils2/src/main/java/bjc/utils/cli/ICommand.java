@@ -12,7 +12,7 @@ public interface ICommand {
 	 * 
 	 * @return A command that serves as an alias to this one
 	 */
-	public ICommand createAlias();
+	public ICommand aliased();
 
 	/**
 	 * Get the handler that executes this command

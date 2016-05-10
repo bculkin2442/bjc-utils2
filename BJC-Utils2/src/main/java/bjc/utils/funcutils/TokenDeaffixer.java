@@ -3,10 +3,10 @@ package bjc.utils.funcutils;
 import java.util.function.BiFunction;
 
 import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.IFunctionalList;
+import bjc.utils.funcdata.IList;
 
 final class TokenDeaffixer
-		implements BiFunction<String, String, IFunctionalList<String>> {
+		implements BiFunction<String, String, IList<String>> {
 	private String token;
 
 	public TokenDeaffixer(String tok) {
@@ -14,7 +14,7 @@ final class TokenDeaffixer
 	}
 
 	@Override
-	public IFunctionalList<String> apply(String operatorName,
+	public IList<String> apply(String operatorName,
 			String operatorRegex) {
 		if (operatorName == null) {
 			throw new NullPointerException(

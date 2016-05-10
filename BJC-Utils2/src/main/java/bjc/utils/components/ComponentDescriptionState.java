@@ -7,12 +7,16 @@ package bjc.utils.components;
  *
  */
 public class ComponentDescriptionState {
+	// Tentative name of this component
 	private String	name;
 
+	// Tentative description of this componet
 	private String	description;
 
+	// Tentative author of this component
 	private String	author;
 
+	// Tentative version of this component
 	private int		version;
 
 	/**

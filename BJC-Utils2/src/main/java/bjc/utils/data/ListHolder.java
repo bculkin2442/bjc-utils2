@@ -4,7 +4,7 @@ import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.IFunctionalList;
+import bjc.utils.funcdata.IList;
 
 /**
  * A holder that represents a set of non-deterministic computations
@@ -15,9 +15,9 @@ import bjc.utils.funcdata.IFunctionalList;
  *            The type of contained value
  */
 public class ListHolder<ContainedType> implements IHolder<ContainedType> {
-	private IFunctionalList<ContainedType> heldValues;
+	private IList<ContainedType> heldValues;
 
-	private ListHolder(IFunctionalList<ContainedType> toHold) {
+	private ListHolder(IList<ContainedType> toHold) {
 		heldValues = toHold;
 	}
 
@@ -41,7 +41,7 @@ public class ListHolder<ContainedType> implements IHolder<ContainedType> {
 	@Override
 	public <BoundType> IHolder<BoundType> bind(
 			Function<ContainedType, IHolder<BoundType>> binder) {
-		IFunctionalList<IHolder<BoundType>> boundValues = heldValues
+		IList<IHolder<BoundType>> boundValues = heldValues
 				.map(binder);
 
 		return new BoundListHolder<>(boundValues);
@@ -50,7 +50,7 @@ public class ListHolder<ContainedType> implements IHolder<ContainedType> {
 	@Override
 	public <MappedType> IHolder<MappedType> map(
 			Function<ContainedType, MappedType> mapper) {
-		IFunctionalList<MappedType> mappedValues = heldValues.map(mapper);
+		IList<MappedType> mappedValues = heldValues.map(mapper);
 
 		return new ListHolder<>(mappedValues);
 	}

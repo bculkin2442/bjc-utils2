@@ -4,7 +4,7 @@ import java.util.Random;
 import java.util.function.Consumer;
 
 import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.IFunctionalList;
+import bjc.utils.funcdata.IList;
 
 /**
  * Utility methods on enums
@@ -31,7 +31,7 @@ public class EnumUtils {
 			int nValues, Consumer<E> action, Random rnd) {
 		E[] enumValues = enumClass.getEnumConstants();
 
-		IFunctionalList<E> valueList = new FunctionalList<>(enumValues);
+		IList<E> valueList = new FunctionalList<>(enumValues);
 
 		int randomValueCount = enumValues.length - nValues;
 

@@ -16,7 +16,7 @@ public interface ICommandMode {
 	 * @return Whether or not this mode can handle the command. It is
 	 *         assumed not by default
 	 */
-	public default boolean canHandleCommand(String command) {
+	public default boolean canHandle(String command) {
 		return false;
 	};
 
@@ -53,7 +53,7 @@ public interface ICommandMode {
 	 * @return The command mode to use for the next command. Defaults to
 	 *         returning this, and doing nothing else
 	 */
-	public default ICommandMode processCommand(String command,
+	public default ICommandMode process(String command,
 			String[] args) {
 		return this;
 	}
@@ -63,7 +63,7 @@ public interface ICommandMode {
 	 * 
 	 * @return Whether or not this mode uses a custom prompt
 	 */
-	public default boolean useCustomPrompt() {
+	public default boolean isCustomPromptEnabled() {
 		return false;
 	}
 }

@@ -13,7 +13,7 @@ import java.util.function.Function;
  * @param <ValueType>
  */
 public class PushdownMap<KeyType, ValueType>
-		implements IFunctionalMap<KeyType, ValueType> {
+		implements IMap<KeyType, ValueType> {
 
 	@Override
 	public boolean containsKey(KeyType key) {
@@ -22,7 +22,7 @@ public class PushdownMap<KeyType, ValueType>
 	}
 
 	@Override
-	public IFunctionalMap<KeyType, ValueType> extend() {
+	public IMap<KeyType, ValueType> extend() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -58,13 +58,13 @@ public class PushdownMap<KeyType, ValueType>
 	}
 
 	@Override
-	public IFunctionalList<KeyType> keyList() {
+	public IList<KeyType> keyList() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <V2> IFunctionalMap<KeyType, V2> mapValues(
+	public <V2> IMap<KeyType, V2> mapValues(
 			Function<ValueType, V2> transformer) {
 		// TODO Auto-generated method stub
 		return null;
@@ -83,7 +83,7 @@ public class PushdownMap<KeyType, ValueType>
 	}
 
 	@Override
-	public IFunctionalList<ValueType> valueList() {
+	public IList<ValueType> valueList() {
 		// TODO Auto-generated method stub
 		return null;
 	}

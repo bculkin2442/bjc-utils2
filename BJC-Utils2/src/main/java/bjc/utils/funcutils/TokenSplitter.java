@@ -3,10 +3,10 @@ package bjc.utils.funcutils;
 import java.util.function.BiFunction;
 
 import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.IFunctionalList;
+import bjc.utils.funcdata.IList;
 
 final class TokenSplitter
-		implements BiFunction<String, String, IFunctionalList<String>> {
+		implements BiFunction<String, String, IList<String>> {
 	private String tokenToSplit;
 
 	public TokenSplitter(String tok) {
@@ -14,7 +14,7 @@ final class TokenSplitter
 	}
 
 	@Override
-	public IFunctionalList<String> apply(String operatorName,
+	public IList<String> apply(String operatorName,
 			String operatorRegex) {
 		if (operatorName == null) {
 			throw new NullPointerException(
@@ -29,10 +29,10 @@ final class TokenSplitter
 				return new FunctionalList<>(tokenToSplit);
 			}
 
-			IFunctionalList<String> splitTokens = new FunctionalList<>(
+			IList<String> splitTokens = new FunctionalList<>(
 					tokenToSplit.split(operatorRegex));
 
-			IFunctionalList<String> result = new FunctionalList<>();
+			IList<String> result = new FunctionalList<>();
 
 			int tokenExpansionSize = splitTokens.getSize();
 

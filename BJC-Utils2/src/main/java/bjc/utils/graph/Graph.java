@@ -13,8 +13,8 @@ import java.util.function.BiPredicate;
 import bjc.utils.data.IHolder;
 import bjc.utils.data.Identity;
 import bjc.utils.funcdata.FunctionalMap;
-import bjc.utils.funcdata.IFunctionalList;
-import bjc.utils.funcdata.IFunctionalMap;
+import bjc.utils.funcdata.IList;
+import bjc.utils.funcdata.IMap;
 
 /**
  * A directed weighted graph, where the vertices have some arbitrary label
@@ -49,7 +49,7 @@ public class Graph<T> {
 	/**
 	 * The backing representation of the graph
 	 */
-	private final IFunctionalMap<T, IFunctionalMap<T, Integer>> backingGraph;
+	private final IMap<T, IMap<T, Integer>> backingGraph;
 
 	/**
 	 * Create a new graph
@@ -135,7 +135,7 @@ public class Graph<T> {
 	 *            The vertex to use as a source
 	 * @return All of the edges with the specified vertex as a source
 	 */
-	public IFunctionalMap<T, Integer> getEdges(T source) {
+	public IMap<T, Integer> getEdges(T source) {
 		// Can't find edges for a null source
 		if (source == null) {
 			throw new NullPointerException("The source cannot be null.");
@@ -230,7 +230,7 @@ public class Graph<T> {
 	 * 
 	 * @return A unmodifiable set of all the vertices in the graph.
 	 */
-	public IFunctionalList<T> getVertices() {
+	public IList<T> getVertices() {
 		return backingGraph.keyList();
 	}
 

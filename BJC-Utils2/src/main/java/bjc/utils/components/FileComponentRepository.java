@@ -6,17 +6,15 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import bjc.utils.data.IHolder;
 import bjc.utils.data.Identity;
-import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.FunctionalMap;
-import bjc.utils.funcdata.IFunctionalList;
-import bjc.utils.funcdata.IFunctionalMap;
+import bjc.utils.funcdata.IList;
+import bjc.utils.funcdata.IMap;
 import bjc.utils.funcutils.FileUtils;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * A component repository that loads its components from files in a
@@ -24,24 +22,20 @@ import org.slf4j.LoggerFactory;
  * 
  * @author ben
  *
- * @param <E>
+ * @param <ComponentType>
  *            The type of component being read in
  */
-public class FileComponentRepository<E extends IDescribedComponent>
-		implements IComponentRepository<E> {
+public class FileComponentRepository<ComponentType extends IDescribedComponent>
+		implements IComponentRepository<ComponentType> {
+	// The logger to use for storing data about this class
+	private static final Logger						CLASS_LOGGER	=
+			Logger.getLogger("FileComponentRepository");
 
-	private static final Logger			CLASS_LOGGER	= LoggerFactory
-			.getLogger(FileComponentRepository.class);
+	// The internal storage of components
+	private IMap<String, ComponentType>	components;
 
-	/**
-	 * The internal storage of components
-	 */
-	private IFunctionalMap<String, E>	components;
-
-	/**
-	 * The path that all the components came from
-	 */
-	private Path						sourceDirectory;
+	// The path that all the components came from
+	private Path									sourceDirectory;
 
 	/**
 	 * Create a new component repository sourcing components from files in
@@ -57,33 +51,47 @@ public class FileComponentRepository<E extends IDescribedComponent>
 	 *            The function to use to convert files to components
 	 */
 	public FileComponentRepository(File directory,
-			Function<File, ? extends E> componentReader) {
+			Function<File, ? extends ComponentType> componentReader) {
+		// Make sure we have valid arguments
 		if (!directory.isDirectory()) {
 			throw new IllegalArgumentException("File " + directory
 					+ " is not a directory.\n"
 					+ "Components can only be read from a directory");
+		} else if (componentReader == null) {
+			throw new NullPointerException(
+					"Component reader must not be null");
 		}
 
+		// Initialize our fields
 		components = new FunctionalMap<>();
-
 		sourceDirectory = directory.toPath().toAbsolutePath();
 
+		// Marker for making sure we don't skip the parent
 		IHolder<Boolean> isFirstDir = new Identity<>(true);
 
-		BiPredicate<Path, BasicFileAttributes> firstLevelTraverser = (pth,
-				attr) -> {
-			if (attr.isDirectory() && !isFirstDir.getValue()) {
-				// Don't skip the first directory, that's the
-				// parent
-				isFirstDir.replace(false);
-				// Skip directories, they probably have
-				// component
-				return false;
-			}
+		// Predicate to use to traverse all the files in a directory, but
+		// not recurse into sub-directories
+		BiPredicate<Path, BasicFileAttributes> firstLevelTraverser =
+				(pth, attr) -> {
+					if (attr.isDirectory() && !isFirstDir.getValue()) {
 
-			return true;
-		};
+						/*
+						 * Skip directories, they probably have component
+						 * support files.
+						 */
+						return false;
+					}
 
+					/*
+					 * Don't skip the first directory, that's the parent
+					 * directory
+					 */
+					isFirstDir.replace(false);
+
+					return true;
+				};
+
+		// Try reading components
 		try {
 			FileUtils.traverseDirectory(sourceDirectory,
 					firstLevelTraverser, (pth, attr) -> {
@@ -93,28 +101,23 @@ public class FileComponentRepository<E extends IDescribedComponent>
 						return true;
 					});
 		} catch (IOException ioex) {
-			CLASS_LOGGER.warn("Error found reading component from file.",
-					ioex);
+			CLASS_LOGGER.log(Level.WARNING, ioex,
+					() -> "Error found reading component from file.");
 		}
 	}
 
 	@Override
-	public E getComponentByName(String name) {
+	public ComponentType getByName(String name) {
 		return components.get(name);
 	}
 
 	@Override
-	public IFunctionalList<E> getComponentList() {
-		IFunctionalList<E> returnedList = new FunctionalList<>();
-
-		components
-				.forEach((name, component) -> returnedList.add(component));
-
-		return returnedList;
+	public IList<ComponentType> getList() {
+		return components.valueList();
 	}
 
 	@Override
-	public IFunctionalMap<String, E> getComponents() {
+	public IMap<String, ComponentType> getAll() {
 		return components;
 	}
 
@@ -123,26 +126,38 @@ public class FileComponentRepository<E extends IDescribedComponent>
 		return "Components read from directory " + sourceDirectory + ".";
 	}
 
-	private void loadComponent(Function<File, ? extends E> componentReader,
+	/*
+	 * Load a component from a file
+	 */
+	private void loadComponent(
+			Function<File, ? extends ComponentType> componentReader,
 			Path pth) {
 		try {
-			E component = componentReader.apply(pth.toFile());
+			// Try to load the component
+			ComponentType component = componentReader.apply(pth.toFile());
 
 			if (component == null) {
 				throw new NullPointerException(
 						"Component reader read null component");
 			} else if (!components.containsKey(component.getName())) {
-				components.put(component.getName(), component);
+				// We only care about the latest version of a component
+				ComponentType oldComponent =
+						components.put(component.getName(), component);
+
+				if (oldComponent.getVersion() > component.getVersion()) {
+					components.put(oldComponent.getName(), oldComponent);
+				}
 			} else {
-				CLASS_LOGGER.warn("Found a duplicate component.\n"
+				CLASS_LOGGER.warning("Found a duplicate component.\n"
 						+ "Multiple versions of the same component are not currently supported.\n"
-						+ "The component" + component
-						+ " will not be registered .");
+						+ "Only the latest version of the component"
+						+ component + " will be registered .");
 			}
 		} catch (Exception ex) {
-			CLASS_LOGGER.warn("Error found reading component from file "
-					+ pth.toString()
-					+ ". This component will not be loaded", ex);
+			CLASS_LOGGER.log(Level.WARNING, ex,
+					() -> "Error found reading component from file "
+							+ pth.toString()
+							+ ". This component will not be loaded");
 		}
 	}
 }

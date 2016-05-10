@@ -15,7 +15,7 @@ import java.util.function.Function;
  *            The type of this map's values
  *
  */
-public interface IFunctionalMap<KeyType, ValueType> {
+public interface IMap<KeyType, ValueType> {
 
 	/**
 	 * Check if this map contains the specified key
@@ -32,7 +32,7 @@ public interface IFunctionalMap<KeyType, ValueType> {
 	 * 
 	 * @return An extended map
 	 */
-	IFunctionalMap<KeyType, ValueType> extend();
+	IMap<KeyType, ValueType> extend();
 
 	/**
 	 * Execute an action for each entry in the map
@@ -81,7 +81,7 @@ public interface IFunctionalMap<KeyType, ValueType> {
 	 * 
 	 * @return A list of all the keys in this map
 	 */
-	IFunctionalList<KeyType> keyList();
+	IList<KeyType> keyList();
 
 	/**
 	 * Transform the values returned by this map.
@@ -96,7 +96,7 @@ public interface IFunctionalMap<KeyType, ValueType> {
 	 *            The function to use to transform values
 	 * @return The map where each value will be transformed after lookup
 	 */
-	<V2> IFunctionalMap<KeyType, V2> mapValues(
+	<V2> IMap<KeyType, V2> mapValues(
 			Function<ValueType, V2> transformer);
 
 	/**
@@ -133,5 +133,5 @@ public interface IFunctionalMap<KeyType, ValueType> {
 	 * 
 	 * @return A list of values in this map
 	 */
-	IFunctionalList<ValueType> valueList();
+	IList<ValueType> valueList();
 }

@@ -7,7 +7,9 @@ package bjc.utils.cli;
  *
  */
 public class GenericCommand implements ICommand {
+	// The behavior for invoking the command
 	private ICommandHandler	handler;
+	// The help for the command
 	private ICommandHelp	help;
 
 	/**
@@ -22,17 +24,16 @@ public class GenericCommand implements ICommand {
 	 */
 	public GenericCommand(ICommandHandler handler, String description,
 			String help) {
+		if(handler == null) {
+			throw new NullPointerException("Command handler must not be null");
+		}
+		
 		this.handler = handler;
 		this.help = new GenericHelp(description, help);
 	}
-
-	/**
-	 * Create a command that is an alias to this one
-	 * 
-	 * @return A command that is an alias to this one
-	 */
+	
 	@Override
-	public ICommand createAlias() {
+	public ICommand aliased() {
 		return new DelegatingCommand(this);
 	}
 

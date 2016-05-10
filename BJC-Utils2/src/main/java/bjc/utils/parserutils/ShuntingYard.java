@@ -7,8 +7,8 @@ import java.util.function.Function;
 
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.FunctionalMap;
-import bjc.utils.funcdata.IFunctionalList;
-import bjc.utils.funcdata.IFunctionalMap;
+import bjc.utils.funcdata.IList;
+import bjc.utils.funcdata.IMap;
 import bjc.utils.funcutils.StringUtils;
 
 /**
@@ -63,11 +63,11 @@ public class ShuntingYard<TokenType> {
 	}
 
 	private final class TokenShunter implements Consumer<String> {
-		private IFunctionalList<TokenType>	output;
+		private IList<TokenType>	output;
 		private Deque<String>				stack;
 		private Function<String, TokenType>	transform;
 
-		public TokenShunter(IFunctionalList<TokenType> outpt,
+		public TokenShunter(IList<TokenType> outpt,
 				Deque<String> stack,
 				Function<String, TokenType> transform) {
 			this.output = outpt;
@@ -105,7 +105,7 @@ public class ShuntingYard<TokenType> {
 	/**
 	 * Holds all the shuntable operations
 	 */
-	private IFunctionalMap<String, IPrecedent> operators;
+	private IMap<String, IPrecedent> operators;
 
 	/**
 	 * Create a new shunting yard with a default set of operators
@@ -176,8 +176,8 @@ public class ShuntingYard<TokenType> {
 	 *            The function to use to transform strings to tokens
 	 * @return A list of tokens in postfix notation
 	 */
-	public IFunctionalList<TokenType> postfix(
-			IFunctionalList<String> input,
+	public IList<TokenType> postfix(
+			IList<String> input,
 			Function<String, TokenType> tokenTransformer) {
 		if (input == null) {
 			throw new NullPointerException("Input must not be null");
@@ -185,7 +185,7 @@ public class ShuntingYard<TokenType> {
 			throw new NullPointerException("Transformer must not be null");
 		}
 
-		IFunctionalList<TokenType> output = new FunctionalList<>();
+		IList<TokenType> output = new FunctionalList<>();
 
 		Deque<String> stack = new LinkedList<>();
 

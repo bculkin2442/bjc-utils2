@@ -10,8 +10,8 @@ import bjc.utils.data.IPair;
 import bjc.utils.data.Pair;
 import bjc.utils.funcdata.FunctionalMap;
 import bjc.utils.funcdata.FunctionalStringTokenizer;
-import bjc.utils.funcdata.IFunctionalList;
-import bjc.utils.funcdata.IFunctionalMap;
+import bjc.utils.funcdata.IList;
+import bjc.utils.funcdata.IMap;
 import bjc.utils.funcdata.ITree;
 import bjc.utils.funcdata.Tree;
 import bjc.utils.funcutils.ListUtils;
@@ -61,7 +61,7 @@ public class TreeConstructTest {
 		System.out.print("Enter a expression to parse: ");
 		String line = inputSource.nextLine();
 
-		IFunctionalList<String> tokens = new FunctionalStringTokenizer(
+		IList<String> tokens = new FunctionalStringTokenizer(
 				line).toList();
 
 		ShuntingYard<String> yard = new ShuntingYard<>(true);
@@ -75,7 +75,7 @@ public class TreeConstructTest {
 		ops.add(new Pair<>(":=", ":="));
 		ops.add(new Pair<>("=>", "=>"));
 
-		IFunctionalList<String> semiExpandedTokens = ListUtils
+		IList<String> semiExpandedTokens = ListUtils
 				.splitTokens(tokens, ops);
 
 		ops = new LinkedList<>();
@@ -85,12 +85,12 @@ public class TreeConstructTest {
 		ops.add(new Pair<>("[", "\\["));
 		ops.add(new Pair<>("]", "\\]"));
 
-		IFunctionalList<String> fullyExpandedTokens = ListUtils
+		IList<String> fullyExpandedTokens = ListUtils
 				.deAffixTokens(semiExpandedTokens, ops);
 
 		fullyExpandedTokens.removeIf((strang) -> strang.equals(""));
 
-		IFunctionalList<String> shuntedTokens = yard
+		IList<String> shuntedTokens = yard
 				.postfix(fullyExpandedTokens, (token) -> token);
 
 		System.out.println("Shunted: " + shuntedTokens.toString());
@@ -105,7 +105,7 @@ public class TreeConstructTest {
 			return false;
 		};
 
-		IFunctionalMap<String, Function<Deque<ITree<String>>, ITree<String>>> operators = new FunctionalMap<>();
+		IMap<String, Function<Deque<ITree<String>>, ITree<String>>> operators = new FunctionalMap<>();
 
 		operators.put("[", (queuedTrees) -> {
 			return null;

@@ -5,7 +5,7 @@ import java.util.function.Function;
 
 import bjc.utils.data.IHolder;
 import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.IFunctionalList;
+import bjc.utils.funcdata.IList;
 
 /**
  * Implements a single group partitioning pass on a list
@@ -16,16 +16,16 @@ import bjc.utils.funcdata.IFunctionalList;
  *            The type of element in the list being partitioned
  */
 final class GroupPartIteration<E> implements Consumer<E> {
-	private IFunctionalList<IFunctionalList<E>>	returnedList;
-	private IHolder<IFunctionalList<E>>			currentPartition;
-	private IFunctionalList<E>					rejectedItems;
+	private IList<IList<E>>	returnedList;
+	private IHolder<IList<E>>			currentPartition;
+	private IList<E>					rejectedItems;
 	private IHolder<Integer>					numberInCurrentPartition;
 	private int									numberPerPartition;
 	private Function<E, Integer>				elementCounter;
 
-	public GroupPartIteration(IFunctionalList<IFunctionalList<E>> returned,
-			IHolder<IFunctionalList<E>> currPart,
-			IFunctionalList<E> rejects, IHolder<Integer> numInCurrPart,
+	public GroupPartIteration(IList<IList<E>> returned,
+			IHolder<IList<E>> currPart,
+			IList<E> rejects, IHolder<Integer> numInCurrPart,
 			int nPerPart, Function<E, Integer> eleCount) {
 		this.returnedList = returned;
 		this.currentPartition = currPart;

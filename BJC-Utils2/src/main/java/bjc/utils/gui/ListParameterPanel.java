@@ -9,7 +9,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 
-import bjc.utils.funcdata.IFunctionalList;
+import bjc.utils.funcdata.IList;
 import bjc.utils.gui.layout.HLayout;
 import bjc.utils.gui.layout.VLayout;
 
@@ -54,7 +54,7 @@ public class ListParameterPanel<E> extends JPanel {
 	 */
 	public ListParameterPanel(Supplier<E> addAction,
 			Consumer<E> editAction, Consumer<E> removeAction,
-			IFunctionalList<E> defaultValues) {
+			IList<E> defaultValues) {
 		setLayout(new VLayout(2));
 
 		JList<E> list;

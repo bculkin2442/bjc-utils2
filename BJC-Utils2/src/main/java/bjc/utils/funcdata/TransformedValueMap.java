@@ -17,11 +17,11 @@ import java.util.function.Function;
  *            The type of the transformed values
  */
 final class TransformedValueMap<OldKey, OldValue, NewValue>
-		implements IFunctionalMap<OldKey, NewValue> {
-	private IFunctionalMap<OldKey, OldValue>	mapToTransform;
+		implements IMap<OldKey, NewValue> {
+	private IMap<OldKey, OldValue>	mapToTransform;
 	private Function<OldValue, NewValue>		transformer;
 
-	public TransformedValueMap(IFunctionalMap<OldKey, OldValue> destMap,
+	public TransformedValueMap(IMap<OldKey, OldValue> destMap,
 			Function<OldValue, NewValue> transform) {
 		mapToTransform = destMap;
 		transformer = transform;
@@ -33,7 +33,7 @@ final class TransformedValueMap<OldKey, OldValue, NewValue>
 	}
 
 	@Override
-	public IFunctionalMap<OldKey, NewValue> extend() {
+	public IMap<OldKey, NewValue> extend() {
 		return new ExtendedMap<>(this, new FunctionalMap<>());
 	}
 
@@ -67,12 +67,12 @@ final class TransformedValueMap<OldKey, OldValue, NewValue>
 	}
 
 	@Override
-	public IFunctionalList<OldKey> keyList() {
+	public IList<OldKey> keyList() {
 		return mapToTransform.keyList();
 	}
 
 	@Override
-	public <MappedValue> IFunctionalMap<OldKey, MappedValue> mapValues(
+	public <MappedValue> IMap<OldKey, MappedValue> mapValues(
 			Function<NewValue, MappedValue> transform) {
 		return new TransformedValueMap<>(this, transform);
 	}
@@ -94,7 +94,7 @@ final class TransformedValueMap<OldKey, OldValue, NewValue>
 	}
 
 	@Override
-	public IFunctionalList<NewValue> valueList() {
+	public IList<NewValue> valueList() {
 		return mapToTransform.valueList().map(transformer);
 	}
 }

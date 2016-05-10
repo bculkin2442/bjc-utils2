@@ -9,7 +9,7 @@ import bjc.utils.data.IHolder;
 import bjc.utils.data.IPair;
 import bjc.utils.data.Identity;
 import bjc.utils.data.Pair;
-import bjc.utils.funcdata.IFunctionalList;
+import bjc.utils.funcdata.IList;
 import bjc.utils.funcdata.ITree;
 
 /**
@@ -34,7 +34,7 @@ public class TreeConstructor {
 	 * @return A AST from the expression
 	 */
 	public static <TokenType> ITree<TokenType> constructTree(
-			IFunctionalList<TokenType> tokens,
+			IList<TokenType> tokens,
 			Predicate<TokenType> operatorPredicate) {
 		return constructTree(tokens, operatorPredicate, (op) -> false,
 				null);
@@ -65,7 +65,7 @@ public class TreeConstructor {
 	 *         works
 	 */
 	public static <TokenType> ITree<TokenType> constructTree(
-			IFunctionalList<TokenType> tokens,
+			IList<TokenType> tokens,
 			Predicate<TokenType> operatorPredicate,
 			Predicate<TokenType> isSpecialOperator,
 			Function<TokenType, Function<Deque<ITree<TokenType>>, ITree<TokenType>>> handleSpecialOperator) {

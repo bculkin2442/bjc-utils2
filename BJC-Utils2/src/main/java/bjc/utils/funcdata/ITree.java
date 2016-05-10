@@ -43,7 +43,7 @@ public interface ITree<ContainedType> {
 	 */
 	public <NewType, ReturnedType> ReturnedType collapse(
 			Function<ContainedType, NewType> leafTransform,
-			Function<ContainedType, Function<IFunctionalList<NewType>, NewType>> nodeCollapser,
+			Function<ContainedType, Function<IList<NewType>, NewType>> nodeCollapser,
 			Function<NewType, ReturnedType> resultTransformer);
 
 	/**

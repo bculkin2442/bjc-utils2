@@ -10,19 +10,19 @@ public class ComponentDescription implements IDescribedComponent {
 	private static void sanityCheckArgs(String name, String author,
 			String description, int version) {
 		if (name == null) {
-			throw new IllegalArgumentException(
-					"Component name can't be null");
+			throw new NullPointerException("Component name can't be null");
 		} else if (author == null) {
-			throw new IllegalArgumentException(
+			throw new NullPointerException(
 					"Component author can't be null");
 		} else if (description == null) {
-			throw new IllegalArgumentException(
+			throw new NullPointerException(
 					"Component description can't be null");
-		} else if (version < 0) {
+		} else if (version <= 0) {
 			throw new IllegalArgumentException(
 					"Component version must be greater than 0");
 		}
 	}
+
 	/**
 	 * The author of the component
 	 */
@@ -53,8 +53,7 @@ public class ComponentDescription implements IDescribedComponent {
 	 * @param version
 	 *            The version of the component
 	 * @throws IllegalArgumentException
-	 *             thrown if name, author or description is null, or if
-	 *             version is less than 1
+	 *             thrown if version is less than 1
 	 */
 	public ComponentDescription(String name, String author,
 			String description, int version) {

@@ -17,7 +17,7 @@ import bjc.utils.funcutils.StringUtils;
  */
 public class Tree<ContainedType> implements ITree<ContainedType> {
 	private ContainedType							data;
-	private IFunctionalList<ITree<ContainedType>>	children;
+	private IList<ITree<ContainedType>>	children;
 
 	private boolean									hasChildren;
 
@@ -44,7 +44,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	 *            A list of children for this node
 	 */
 	public Tree(ContainedType leafToken,
-			IFunctionalList<ITree<ContainedType>> childrn) {
+			IList<ITree<ContainedType>> childrn) {
 		data = leafToken;
 
 		hasChildren = true;
@@ -95,7 +95,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	@Override
 	public <NewType, ReturnedType> ReturnedType collapse(
 			Function<ContainedType, NewType> leafTransform,
-			Function<ContainedType, Function<IFunctionalList<NewType>, NewType>> nodeCollapser,
+			Function<ContainedType, Function<IList<NewType>, NewType>> nodeCollapser,
 			Function<NewType, ReturnedType> resultTransformer) {
 
 		return resultTransformer
@@ -129,12 +129,12 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 	protected <NewType> NewType internalCollapse(
 			Function<ContainedType, NewType> leafTransform,
-			Function<ContainedType, Function<IFunctionalList<NewType>, NewType>> nodeCollapser) {
+			Function<ContainedType, Function<IList<NewType>, NewType>> nodeCollapser) {
 		if (hasChildren) {
-			Function<IFunctionalList<NewType>, NewType> nodeTransformer = nodeCollapser
+			Function<IList<NewType>, NewType> nodeTransformer = nodeCollapser
 					.apply(data);
 
-			IFunctionalList<NewType> collapsedChildren = children
+			IList<NewType> collapsedChildren = children
 					.map((child) -> {
 						return child.collapse(leafTransform, nodeCollapser,
 								(subTreeVal) -> subTreeVal);
@@ -169,7 +169,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 			Function<ContainedType, MappedType> leafTransformer,
 			Function<ContainedType, MappedType> operatorTransformer) {
 		if (hasChildren) {
-			IFunctionalList<ITree<MappedType>> mappedChildren = children
+			IList<ITree<MappedType>> mappedChildren = children
 					.map((child) -> {
 						return child.rebuildTree(leafTransformer,
 								operatorTransformer);
@@ -279,7 +279,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	public <MappedType> ITree<MappedType> transformTree(
 			Function<ContainedType, MappedType> transformer) {
 		if (hasChildren) {
-			IFunctionalList<ITree<MappedType>> transformedChildren = children
+			IList<ITree<MappedType>> transformedChildren = children
 					.map((child) -> child.transformTree(transformer));
 
 			return new Tree<>(transformer.apply(data),

@@ -1,7 +1,7 @@
 package bjc.utils.examples.rangen;
 
 import bjc.utils.funcdata.FunctionalStringTokenizer;
-import bjc.utils.funcdata.IFunctionalList;
+import bjc.utils.funcdata.IList;
 import bjc.utils.gen.WeightedGrammar;
 
 /**
@@ -83,7 +83,7 @@ public class DiabloItemGen {
 		addInfixRules();
 
 		for (int i = 0; i < 100; i++) {
-			IFunctionalList<String> ls = rules.generateListValues("<item>",
+			IList<String> ls = rules.generateListValues("<item>",
 					" ");
 
 			StringBuilder sb = new StringBuilder();

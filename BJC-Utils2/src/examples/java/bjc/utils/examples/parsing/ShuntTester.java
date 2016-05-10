@@ -3,7 +3,7 @@ package bjc.utils.examples.parsing;
 import java.util.Scanner;
 
 import bjc.utils.funcdata.FunctionalStringTokenizer;
-import bjc.utils.funcdata.IFunctionalList;
+import bjc.utils.funcdata.IList;
 import bjc.utils.parserutils.ShuntingYard;
 
 /**
@@ -27,7 +27,7 @@ public class ShuntTester {
 
 		ShuntingYard<String> yard = new ShuntingYard<>(true);
 
-		IFunctionalList<String> shuntedTokens = yard
+		IList<String> shuntedTokens = yard
 				.postfix(new FunctionalStringTokenizer(line)
 						.toList((strang) -> strang), (strang) -> strang);
 

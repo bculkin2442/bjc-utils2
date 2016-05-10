@@ -8,7 +8,7 @@ import bjc.utils.data.IHolder;
 import bjc.utils.data.IPair;
 import bjc.utils.data.Identity;
 import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.IFunctionalList;
+import bjc.utils.funcdata.IList;
 
 /**
  * Utilities for manipulating FunctionalLists that don't belong in the
@@ -28,7 +28,7 @@ public class ListUtils {
 	 *            The list of tokens to collapse
 	 * @return The collapsed string of tokens
 	 */
-	public static String collapseTokens(IFunctionalList<String> input) {
+	public static String collapseTokens(IList<String> input) {
 		if (input == null) {
 			throw new NullPointerException("Input must not be null");
 		}
@@ -46,7 +46,7 @@ public class ListUtils {
 	 *            The seperator to use for seperating tokens
 	 * @return The collapsed string of tokens
 	 */
-	public static String collapseTokens(IFunctionalList<String> input,
+	public static String collapseTokens(IList<String> input,
 			String seperator) {
 		if (input == null) {
 			throw new NullPointerException("Input must not be null");
@@ -78,8 +78,8 @@ public class ListUtils {
 	 * @return The tokens that have been deaffixed
 	 * 
 	 */
-	public static IFunctionalList<String> deAffixTokens(
-			IFunctionalList<String> input,
+	public static IList<String> deAffixTokens(
+			IList<String> input,
 			Deque<IPair<String, String>> operators) {
 		if (input == null) {
 			throw new NullPointerException("Input must not be null");
@@ -88,7 +88,7 @@ public class ListUtils {
 					"Set of operators must not be null");
 		}
 
-		IHolder<IFunctionalList<String>> returnedList = new Identity<>(
+		IHolder<IList<String>> returnedList = new Identity<>(
 				input);
 
 		operators.forEach((operator) -> returnedList
@@ -115,10 +115,10 @@ public class ListUtils {
 	 *         selected from the specified list without replacement
 	 */
 
-	public static <E> IFunctionalList<E> drawWithoutReplacement(
-			IFunctionalList<E> list, int numberOfItems,
+	public static <E> IList<E> drawWithoutReplacement(
+			IList<E> list, int numberOfItems,
 			Function<Integer, Integer> rng) {
-		IFunctionalList<E> selectedItems = new FunctionalList<>(
+		IList<E> selectedItems = new FunctionalList<>(
 				new ArrayList<>(numberOfItems));
 
 		int totalItems = list.getSize();
@@ -153,10 +153,10 @@ public class ListUtils {
 	 * @return A new list containing the desired number of items randomly
 	 *         selected from the specified list
 	 */
-	public static <E> IFunctionalList<E> drawWithReplacement(
-			IFunctionalList<E> list, int numberOfItems,
+	public static <E> IList<E> drawWithReplacement(
+			IList<E> list, int numberOfItems,
 			Function<Integer, Integer> rng) {
-		IFunctionalList<E> selectedItems = new FunctionalList<>(
+		IList<E> selectedItems = new FunctionalList<>(
 				new ArrayList<>(numberOfItems));
 
 		for (int i = 0; i < numberOfItems; i++) {
@@ -181,8 +181,8 @@ public class ListUtils {
 	 *            The number of elements to put in each partition
 	 * @return A list partitioned according to the above rules
 	 */
-	public static <E> IFunctionalList<IFunctionalList<E>> groupPartition(
-			IFunctionalList<E> input, Function<E, Integer> elementCounter,
+	public static <E> IList<IList<E>> groupPartition(
+			IList<E> input, Function<E, Integer> elementCounter,
 			int numberPerPartition) {
 		if (input == null) {
 			throw new NullPointerException("Input list must not be null");
@@ -199,17 +199,17 @@ public class ListUtils {
 		/*
 		 * List that holds our results
 		 */
-		IFunctionalList<IFunctionalList<E>> returnedList = new FunctionalList<>();
+		IList<IList<E>> returnedList = new FunctionalList<>();
 
 		/*
 		 * List that holds current partition
 		 */
-		IHolder<IFunctionalList<E>> currentPartition = new Identity<>(
+		IHolder<IList<E>> currentPartition = new Identity<>(
 				new FunctionalList<>());
 		/*
 		 * List that holds elements rejected during current pass
 		 */
-		IFunctionalList<E> rejectedElements = new FunctionalList<>();
+		IList<E> rejectedElements = new FunctionalList<>();
 
 		/*
 		 * The effective number of elements in the current partitition
@@ -254,11 +254,11 @@ public class ListUtils {
 	 * @return A list containing all the elements of the lists
 	 */
 	@SafeVarargs
-	public static <E> IFunctionalList<E> mergeLists(
-			IFunctionalList<E>... lists) {
-		IFunctionalList<E> returnedList = new FunctionalList<>();
+	public static <E> IList<E> mergeLists(
+			IList<E>... lists) {
+		IList<E> returnedList = new FunctionalList<>();
 
-		for (IFunctionalList<E> list : lists) {
+		for (IList<E> list : lists) {
 			list.forEach(returnedList::add);
 		}
 
@@ -279,8 +279,8 @@ public class ListUtils {
 	 * @return A list of tokens split on all the operators
 	 * 
 	 */
-	public static IFunctionalList<String> splitTokens(
-			IFunctionalList<String> input,
+	public static IList<String> splitTokens(
+			IList<String> input,
 			Deque<IPair<String, String>> operators) {
 		if (input == null) {
 			throw new NullPointerException("Input must not be null");
@@ -289,7 +289,7 @@ public class ListUtils {
 					"Set of operators must not be null");
 		}
 
-		IHolder<IFunctionalList<String>> returnedList = new Identity<>(
+		IHolder<IList<String>> returnedList = new Identity<>(
 				input);
 
 		operators.forEach((operator) -> {

@@ -10,11 +10,12 @@ import java.util.function.Function;
  */
 public interface ICommandHandler extends Function<String[], ICommandMode> {
 	/**
-	 * Handle the command this handler handles
+	 * Execute this command
 	 * 
 	 * @param args
 	 *            The arguments for this command
-	 * @return The command mode to go to after this command
+	 * @return The command mode to switch to after this command, or null to
+	 *         stop executing commands
 	 */
 	public default ICommandMode handle(String[] args) {
 		return this.apply(args);

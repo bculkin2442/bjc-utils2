@@ -27,7 +27,7 @@ import bjc.utils.data.Pair;
  * @param <E>
  *            The type in this list
  */
-public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
+public class FunctionalList<E> implements Cloneable, IList<E> {
 	/**
 	 * The list used as a backing store
 	 */
@@ -148,8 +148,8 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 	 * @return A list
 	 */
 	@Override
-	public IFunctionalList<E> clone() {
-		IFunctionalList<E> clonedList = new FunctionalList<>();
+	public IList<E> clone() {
+		IList<E> clonedList = new FunctionalList<>();
 
 		for (E element : wrappedList) {
 			clonedList.add(element);
@@ -166,8 +166,8 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 	 * IFunctionalList, java.util.function.BiFunction)
 	 */
 	@Override
-	public <T, F> IFunctionalList<F> combineWith(
-			IFunctionalList<T> rightList,
+	public <T, F> IList<F> combineWith(
+			IList<T> rightList,
 			BiFunction<E, T, F> itemCombiner) {
 		if (rightList == null) {
 			throw new NullPointerException(
@@ -176,7 +176,7 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 			throw new NullPointerException("Combiner must not be null");
 		}
 
-		IFunctionalList<F> returnedList = new FunctionalList<>();
+		IList<F> returnedList = new FunctionalList<>();
 
 		// Get the iterator for the other list
 		Iterator<T> rightIterator = rightList.toIterable().iterator();
@@ -227,17 +227,17 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 	 * Function)
 	 */
 	@Override
-	public <T> IFunctionalList<T> flatMap(
-			Function<E, IFunctionalList<T>> elementExpander) {
+	public <T> IList<T> flatMap(
+			Function<E, IList<T>> elementExpander) {
 		if (elementExpander == null) {
 			throw new NullPointerException("Expander must not be null");
 		}
 
-		IFunctionalList<T> returnedList = new FunctionalList<>(
+		IList<T> returnedList = new FunctionalList<>(
 				this.wrappedList.size());
 
 		forEach(element -> {
-			IFunctionalList<T> expandedElement = elementExpander
+			IList<T> expandedElement = elementExpander
 					.apply(element);
 
 			if (expandedElement == null) {
@@ -320,12 +320,12 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 	 * Predicate)
 	 */
 	@Override
-	public IFunctionalList<E> getMatching(Predicate<E> matchPredicate) {
+	public IList<E> getMatching(Predicate<E> matchPredicate) {
 		if (matchPredicate == null) {
 			throw new NullPointerException("Predicate must not be null");
 		}
 
-		IFunctionalList<E> returnedList = new FunctionalList<>();
+		IList<E> returnedList = new FunctionalList<>();
 
 		wrappedList.forEach((element) -> {
 			if (matchPredicate.test(element)) {
@@ -361,7 +361,7 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 	 * Check if a partition has room for another item
 	 */
 	private Boolean isPartitionFull(int numberPerPartition,
-			IHolder<IFunctionalList<E>> currentPartition) {
+			IHolder<IList<E>> currentPartition) {
 		return currentPartition.unwrap(
 				(partition) -> partition.getSize() >= numberPerPartition);
 	}
@@ -373,12 +373,12 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 	 * bjc.utils.funcdata.IFunctionalList#map(java.util.function.Function)
 	 */
 	@Override
-	public <T> IFunctionalList<T> map(Function<E, T> elementTransformer) {
+	public <T> IList<T> map(Function<E, T> elementTransformer) {
 		if (elementTransformer == null) {
 			throw new NullPointerException("Transformer must be not null");
 		}
 
-		IFunctionalList<T> returnedList = new FunctionalList<>(
+		IList<T> returnedList = new FunctionalList<>(
 				this.wrappedList.size());
 
 		forEach(element -> {
@@ -396,8 +396,8 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 	 * IFunctionalList)
 	 */
 	@Override
-	public <T> IFunctionalList<IPair<E, T>> pairWith(
-			IFunctionalList<T> rightList) {
+	public <T> IList<IPair<E, T>> pairWith(
+			IList<T> rightList) {
 		return combineWith(rightList, Pair<E, T>::new);
 	}
 
@@ -407,7 +407,7 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 	 * @see bjc.utils.funcdata.IFunctionalList#partition(int)
 	 */
 	@Override
-	public IFunctionalList<IFunctionalList<E>> partition(
+	public IList<IList<E>> partition(
 			int numberPerPartition) {
 		if (numberPerPartition < 1
 				|| numberPerPartition > wrappedList.size()) {
@@ -416,10 +416,10 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 					+ wrappedList.size());
 		}
 
-		IFunctionalList<IFunctionalList<E>> returnedList = new FunctionalList<>();
+		IList<IList<E>> returnedList = new FunctionalList<>();
 
 		// The current partition being filled
-		IHolder<IFunctionalList<E>> currentPartition = new Identity<>(
+		IHolder<IList<E>> currentPartition = new Identity<>(
 				new FunctionalList<>());
 
 		this.forEach((element) -> {
@@ -559,7 +559,7 @@ public class FunctionalList<E> implements Cloneable, IFunctionalList<E> {
 	}
 
 	@Override
-	public IFunctionalList<E> tail() {
+	public IList<E> tail() {
 		return new FunctionalList<>(wrappedList.subList(1, getSize()));
 	}
 

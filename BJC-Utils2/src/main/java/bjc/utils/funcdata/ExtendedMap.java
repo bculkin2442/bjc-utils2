@@ -7,13 +7,13 @@ import java.util.function.Function;
 import bjc.utils.funcutils.ListUtils;
 
 class ExtendedMap<KeyType, ValueType>
-		implements IFunctionalMap<KeyType, ValueType> {
-	private IFunctionalMap<KeyType, ValueType>	delegate;
+		implements IMap<KeyType, ValueType> {
+	private IMap<KeyType, ValueType>	delegate;
 
-	private IFunctionalMap<KeyType, ValueType>	store;
+	private IMap<KeyType, ValueType>	store;
 
-	public ExtendedMap(IFunctionalMap<KeyType, ValueType> delegate,
-			IFunctionalMap<KeyType, ValueType> store) {
+	public ExtendedMap(IMap<KeyType, ValueType> delegate,
+			IMap<KeyType, ValueType> store) {
 		this.delegate = delegate;
 		this.store = store;
 	}
@@ -28,7 +28,7 @@ class ExtendedMap<KeyType, ValueType>
 	}
 
 	@Override
-	public IFunctionalMap<KeyType, ValueType> extend() {
+	public IMap<KeyType, ValueType> extend() {
 		return new ExtendedMap<>(this, new FunctionalMap<>());
 	}
 
@@ -68,12 +68,12 @@ class ExtendedMap<KeyType, ValueType>
 	}
 
 	@Override
-	public IFunctionalList<KeyType> keyList() {
+	public IList<KeyType> keyList() {
 		return ListUtils.mergeLists(store.keyList(), delegate.keyList());
 	}
 
 	@Override
-	public <MappedValue> IFunctionalMap<KeyType, MappedValue> mapValues(
+	public <MappedValue> IMap<KeyType, MappedValue> mapValues(
 			Function<ValueType, MappedValue> transformer) {
 		return new TransformedValueMap<>(this, transformer);
 	}
@@ -89,7 +89,7 @@ class ExtendedMap<KeyType, ValueType>
 	}
 
 	@Override
-	public IFunctionalList<ValueType> valueList() {
+	public IList<ValueType> valueList() {
 		return ListUtils.mergeLists(store.valueList(),
 				delegate.valueList());
 	}

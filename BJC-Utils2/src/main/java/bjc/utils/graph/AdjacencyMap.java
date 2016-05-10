@@ -10,8 +10,8 @@ import bjc.utils.data.IHolder;
 import bjc.utils.data.Identity;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.FunctionalMap;
-import bjc.utils.funcdata.IFunctionalList;
-import bjc.utils.funcdata.IFunctionalMap;
+import bjc.utils.funcdata.IList;
+import bjc.utils.funcdata.IMap;
 import bjc.utils.funcutils.FuncUtils;
 
 /**
@@ -65,7 +65,7 @@ public class AdjacencyMap<T> {
 						"The number of vertices must be greater than 0");
 			}
 
-			IFunctionalList<Integer> vertices = new FunctionalList<>();
+			IList<Integer> vertices = new FunctionalList<>();
 
 			FuncUtils.doTimes(numVertices,
 					(vertexNo) -> vertices.add(vertexNo));
@@ -119,7 +119,7 @@ public class AdjacencyMap<T> {
 	/**
 	 * The backing storage of the map
 	 */
-	private IFunctionalMap<T, IFunctionalMap<T, Integer>> adjacencyMap = new FunctionalMap<>();
+	private IMap<T, IMap<T, Integer>> adjacencyMap = new FunctionalMap<>();
 
 	/**
 	 * Create a new map from a set of vertices
@@ -127,13 +127,13 @@ public class AdjacencyMap<T> {
 	 * @param vertices
 	 *            The set of vertices to create a map from
 	 */
-	public AdjacencyMap(IFunctionalList<T> vertices) {
+	public AdjacencyMap(IList<T> vertices) {
 		if (vertices == null) {
 			throw new NullPointerException("Vertices must not be null");
 		}
 
 		vertices.forEach(vertex -> {
-			IFunctionalMap<T, Integer> vertexRow = new FunctionalMap<>();
+			IMap<T, Integer> vertexRow = new FunctionalMap<>();
 
 			vertices.forEach(targetVertex -> {
 				vertexRow.put(targetVertex, 0);

@@ -9,7 +9,7 @@ import java.util.function.Function;
 import bjc.utils.data.IPair;
 
 /**
- * Basic implementation of {@link IFunctionalMap}
+ * Basic implementation of {@link IMap}
  * 
  * @author ben
  *
@@ -19,7 +19,7 @@ import bjc.utils.data.IPair;
  *            The type of the map's values
  */
 public class FunctionalMap<KeyType, ValueType>
-		implements IFunctionalMap<KeyType, ValueType> {
+		implements IMap<KeyType, ValueType> {
 	private Map<KeyType, ValueType> wrappedMap;
 
 	/**
@@ -71,7 +71,7 @@ public class FunctionalMap<KeyType, ValueType>
 	}
 
 	@Override
-	public IFunctionalMap<KeyType, ValueType> extend() {
+	public IMap<KeyType, ValueType> extend() {
 		return new ExtendedMap<>(this, new FunctionalMap<>());
 	}
 
@@ -115,7 +115,7 @@ public class FunctionalMap<KeyType, ValueType>
 	}
 
 	@Override
-	public IFunctionalList<KeyType> keyList() {
+	public IList<KeyType> keyList() {
 		FunctionalList<KeyType> keys = new FunctionalList<>();
 
 		wrappedMap.keySet().forEach((key) -> {
@@ -132,7 +132,7 @@ public class FunctionalMap<KeyType, ValueType>
 	 * Function)
 	 */
 	@Override
-	public <MappedValue> IFunctionalMap<KeyType, MappedValue> mapValues(
+	public <MappedValue> IMap<KeyType, MappedValue> mapValues(
 			Function<ValueType, MappedValue> transformer) {
 		if (transformer == null) {
 			throw new NullPointerException("Transformer must not be null");
@@ -166,7 +166,7 @@ public class FunctionalMap<KeyType, ValueType>
 	}
 
 	@Override
-	public IFunctionalList<ValueType> valueList() {
+	public IList<ValueType> valueList() {
 		FunctionalList<ValueType> values = new FunctionalList<>();
 
 		wrappedMap.values().forEach((value) -> {

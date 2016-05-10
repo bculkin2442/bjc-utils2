@@ -22,7 +22,7 @@ import bjc.utils.data.IPair;
  * @param <ContainedType>
  *            The type in this list
  */
-public interface IFunctionalList<ContainedType> {
+public interface IList<ContainedType> {
 
 	/**
 	 * Add an item to this list
@@ -87,8 +87,8 @@ public interface IFunctionalList<ContainedType> {
 	 *            The function to use for combining element pairs.
 	 * @return A new list containing the merged pairs of lists.
 	 */
-	<OtherType, CombinedType> IFunctionalList<CombinedType> combineWith(
-			IFunctionalList<OtherType> rightList,
+	<OtherType, CombinedType> IList<CombinedType> combineWith(
+			IList<OtherType> rightList,
 			BiFunction<ContainedType, OtherType, CombinedType> itemCombiner);
 
 	/**
@@ -126,8 +126,8 @@ public interface IFunctionalList<ContainedType> {
 	 * @return A new list containing the flattened results of applying the
 	 *         provided function.
 	 */
-	<MappedType> IFunctionalList<MappedType> flatMap(
-			Function<ContainedType, IFunctionalList<MappedType>> elementExpander);
+	<MappedType> IList<MappedType> flatMap(
+			Function<ContainedType, IList<MappedType>> elementExpander);
 
 	/**
 	 * Apply a given action for each member of the list
@@ -172,7 +172,7 @@ public interface IFunctionalList<ContainedType> {
 	 *            The predicate to match by
 	 * @return A list containing all elements that match the predicate
 	 */
-	IFunctionalList<ContainedType> getMatching(
+	IList<ContainedType> getMatching(
 			Predicate<ContainedType> matchPredicate);
 
 	/**
@@ -200,7 +200,7 @@ public interface IFunctionalList<ContainedType> {
 	 *            The function to apply to each element in the list
 	 * @return A new list containing the mapped elements of this list.
 	 */
-	<MappedType> IFunctionalList<MappedType> map(
+	<MappedType> IList<MappedType> map(
 			Function<ContainedType, MappedType> elementTransformer);
 
 	/**
@@ -214,8 +214,8 @@ public interface IFunctionalList<ContainedType> {
 	 * @return A list containing pairs of this element and the specified
 	 *         list
 	 */
-	<OtherType> IFunctionalList<IPair<ContainedType, OtherType>> pairWith(
-			IFunctionalList<OtherType> rightList);
+	<OtherType> IList<IPair<ContainedType, OtherType>> pairWith(
+			IList<OtherType> rightList);
 
 	/**
 	 * Partition this list into a list of sublists
@@ -224,7 +224,7 @@ public interface IFunctionalList<ContainedType> {
 	 *            The size of elements to put into each one of the sublists
 	 * @return A list partitioned into partitions of size nPerPart
 	 */
-	IFunctionalList<IFunctionalList<ContainedType>> partition(
+	IList<IList<ContainedType>> partition(
 			int numberPerPartition);
 
 	/**
@@ -330,7 +330,7 @@ public interface IFunctionalList<ContainedType> {
 	 * 
 	 * @return The list without the first element
 	 */
-	public IFunctionalList<ContainedType> tail();
+	public IList<ContainedType> tail();
 
 	/**
 	 * Convert this list into an array

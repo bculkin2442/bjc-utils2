@@ -7,27 +7,33 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 /**
- * Runs a CLI interface from the provided set of streams
+ * Runs a CLI interface from the provided set of streams.
  * 
  * @author ben
  *
  */
 public class CLICommander {
+	/*
+	 * The streams used for input and normal/error output
+	 */
 	private InputStream		input;
 	private OutputStream	output;
 	private OutputStream	error;
 
+	/*
+	 * The command mode to start execution in
+	 */
 	private ICommandMode	initialMode;
 
 	/**
-	 * Create a new CLI interface powered by streams
+	 * Create a new CLI interface powered by streams.
 	 * 
 	 * @param input
-	 *            The stream to get user input from
+	 *            The stream to get user input from.
 	 * @param output
-	 *            The stream to send user output to
+	 *            The stream to send normal output to.
 	 * @param error
-	 *            The stream to send error messages to
+	 *            The stream to send error output to.
 	 */
 	public CLICommander(InputStream input, OutputStream output,
 			OutputStream error) {
@@ -48,32 +54,51 @@ public class CLICommander {
 	}
 
 	/**
-	 * Run a set of commands through this commander
+	 * Start handling commands from the given input stream.
 	 */
 	public void runCommands() {
+		// Setup output streams
 		PrintStream normalOutput = new PrintStream(output);
 		PrintStream errorOutput = new PrintStream(error);
 
+		/*
+		 * Set up input streams.
+		 * 
+		 * We're suppressing the warning because we might use the input
+		 * stream multiple times
+		 */
 		@SuppressWarnings("resource")
-		// We might use this stream multiple times. Don't close it
 		Scanner inputSource = new Scanner(input);
 
+		/*
+		 * The mode currently being used to handle commands.
+		 * 
+		 * Used to preserve the initial mode
+		 */
 		ICommandMode currentMode = initialMode;
 
+		// Process commands until we're told to stop
 		while (currentMode != null) {
-			if (currentMode.useCustomPrompt()) {
+			/*
+			 * Print out the command prompt, using a custom prompt if one
+			 * is specified
+			 */
+			if (currentMode.isCustomPromptEnabled()) {
 				normalOutput.print(currentMode.getCustomPrompt());
 			} else {
 				normalOutput.print(currentMode.getName() + ">> ");
 			}
 
+			// Read in a command
 			String currentLine = inputSource.nextLine();
 
-			if (currentMode.canHandleCommand(currentLine)) {
+			// Handle handleable commands
+			if (currentMode.canHandle(currentLine)) {
 				String[] commandTokens = currentLine.split(" ");
 
 				String[] commandArgs;
 
+				// Parse args if they are present
 				if (commandTokens.length > 1) {
 					commandArgs = Arrays.copyOfRange(commandTokens, 1,
 							commandTokens.length);
@@ -81,7 +106,8 @@ public class CLICommander {
 					commandArgs = null;
 				}
 
-				currentMode = currentMode.processCommand(commandTokens[0],
+				// Process command
+				currentMode = currentMode.process(commandTokens[0],
 						commandArgs);
 			} else {
 				errorOutput.print(

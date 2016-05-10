@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.IFunctionalList;
+import bjc.utils.funcdata.IList;
 
 /**
  * A binary search tree, with some mild support for functional traversal.
@@ -74,7 +74,7 @@ public class BinarySearchTree<T> {
 	 *            The distance from the pivot
 	 * @return Whether the adjusted pivot is with the list
 	 */
-	private boolean adjustedPivotInBounds(IFunctionalList<T> elements,
+	private boolean adjustedPivotInBounds(IList<T> elements,
 			int pivot, int pivotAdjustment) {
 		return (pivot - pivotAdjustment) >= 0
 				&& (pivot + pivotAdjustment) < elements.getSize();
@@ -85,7 +85,7 @@ public class BinarySearchTree<T> {
 	 * time, but also O(N) space.
 	 */
 	public void balance() {
-		IFunctionalList<T> elements = new FunctionalList<>();
+		IList<T> elements = new FunctionalList<>();
 
 		// Add each element to the list in sorted order
 		rootElement.forEach(TreeLinearizationMethod.INORDER,

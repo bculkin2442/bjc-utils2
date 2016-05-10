@@ -5,7 +5,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import bjc.utils.funcdata.FunctionalMap;
-import bjc.utils.funcdata.IFunctionalMap;
+import bjc.utils.funcdata.IMap;
 
 /**
  * A general command mode, with a customizable set of commands
@@ -18,18 +18,26 @@ import bjc.utils.funcdata.IFunctionalMap;
  *
  */
 public class GenericCommandMode implements ICommandMode {
-	private IFunctionalMap<String, ICommand>		commandHandlers;
-	private IFunctionalMap<String, ICommand>		defaultHandlers;
+	/*
+	 * Contains the commands this mode handles
+	 */
+	private IMap<String, ICommand>		commandHandlers;
+	private IMap<String, ICommand>		defaultHandlers;
 
-	private IFunctionalMap<String, ICommandHelp>	helpTopics;
+	// Contains help topics without an associated command
+	private IMap<String, ICommandHelp>	helpTopics;
 
+	// The action to execute upon encountering an unknown command
 	private BiConsumer<String, String[]>			unknownCommandHandler;
 
+	// The functions to use for input/output
 	private Consumer<String>						errorOutput;
 	private Consumer<String>						normalOutput;
 
+	// The name of this command mode, or null if it is unnamed
 	private String									modeName;
 
+	// The custom prompt to use, or null if none is specified
 	private String									customPrompt;
 
 	/**
@@ -45,6 +53,7 @@ public class GenericCommandMode implements ICommandMode {
 		this.normalOutput = normalOutput;
 		this.errorOutput = errorOutput;
 
+		// Initialize handler maps so that they sort in alphabetical order
 		commandHandlers = new FunctionalMap<>(new TreeMap<>());
 		defaultHandlers = new FunctionalMap<>(new TreeMap<>());
 		helpTopics = new FunctionalMap<>(new TreeMap<>());
@@ -81,12 +90,13 @@ public class GenericCommandMode implements ICommandMode {
 					+ aliasName + "' to a command with a bound handler");
 		} else {
 			ICommand aliasedCommand;
+
 			if (defaultHandlers.containsKey(commandName)) {
 				aliasedCommand = defaultHandlers.get(commandName)
-						.createAlias();
+						.aliased();
 			} else {
 				aliasedCommand = commandHandlers.get(commandName)
-						.createAlias();
+						.aliased();
 			}
 
 			commandHandlers.put(aliasName, aliasedCommand);
@@ -97,7 +107,7 @@ public class GenericCommandMode implements ICommandMode {
 	 * Add a command to this command mode
 	 * 
 	 * @param command
-	 *            The command to add
+	 *            The name of the command to add
 	 * @param handler
 	 *            The handler to use for the specified command
 	 * 
@@ -110,7 +120,7 @@ public class GenericCommandMode implements ICommandMode {
 			throw new NullPointerException("Command must not be null");
 		} else if (handler == null) {
 			throw new NullPointerException("Handler must not be null");
-		} else if (canHandleCommand(command)) {
+		} else if (canHandle(command)) {
 			throw new IllegalArgumentException("Command " + command
 					+ " already has a handler registered");
 		} else {
@@ -123,12 +133,18 @@ public class GenericCommandMode implements ICommandMode {
 	 * 
 	 * @param topicName
 	 *            The name of the topic
-	 * @param help
+	 * @param topic
 	 *            The contents of the topic
 	 */
-	public void addHelpTopic(String topicName, ICommandHelp help) {
-		helpTopics.put(topicName, help);
+	public void addHelpTopic(String topicName, ICommandHelp topic) {
+		helpTopics.put(topicName, topic);
 	}
+
+	// -------------------------------------------------------------------------
+	/*
+	 * Default command builders
+	 */
+	// -------------------------------------------------------------------------
 
 	private GenericCommand buildAliasCommand() {
 		return new GenericCommand((args) -> {
@@ -136,9 +152,9 @@ public class GenericCommandMode implements ICommandMode {
 
 			return this;
 		}, "alias\tAlias one command to another",
-				"alias gives a command another name it can be invoked by. It is invoked"
-						+ " with two arguments, the name of the command to alias"
-						+ ", and the alias to give that command.");
+				"Gives a command another name it can be invoked by. Invoke"
+						+ " with two arguments: the name of the command to alias"
+						+ "followed by the name of the alias to give that command.");
 	}
 
 	private GenericCommand buildClearCommands() {
@@ -148,8 +164,8 @@ public class GenericCommandMode implements ICommandMode {
 
 			return this;
 		}, "clear\tClear the screen",
-				"clear clears the screen of all the text on it,"
-						+ " and prepares a fresh prompt.");
+				"Clears the screen of all the text on it,"
+						+ " and prints a new prompt.");
 	}
 
 	private GenericCommand buildExitCommand() {
@@ -158,9 +174,9 @@ public class GenericCommandMode implements ICommandMode {
 					"ERROR: This console doesn't support auto-exiting");
 
 			return this;
-		}, "exit\tExit the game",
-				"exit first prompts the user to make sure they want to exit,"
-						+ " and if they affirm it, it quits");
+		}, "exit\tExit the console",
+				"First prompts the user to make sure they want to exit,"
+						+ " and if they affirm it, it immediately exits");
 	}
 
 	private GenericCommand buildHelpCommand() {
@@ -175,10 +191,10 @@ public class GenericCommandMode implements ICommandMode {
 
 			return this;
 		}, "help\tConsult the help system",
-				"help consults the internal help system."
-						+ " It can be invoked in two ways. Invoking it with no arguments"
-						+ " causes it to print out all the topics you can ask for details on,"
-						+ " while invoking it with the name of a topic will print the entry"
+				"Consults the internal help system."
+						+ " Invoked in two different ways. Invoking with no arguments"
+						+ " causes all the topics you can ask for details on to be list,"
+						+ " while invoking with the name of a topic will print the entry"
 						+ " for that topic");
 	}
 
@@ -193,10 +209,16 @@ public class GenericCommandMode implements ICommandMode {
 	}
 
 	@Override
-	public boolean canHandleCommand(String command) {
+	public boolean canHandle(String command) {
 		return commandHandlers.containsKey(command)
 				|| defaultHandlers.containsKey(command);
 	}
+
+	// -------------------------------------------------------------------------
+	/*
+	 * Implement default commands
+	 */
+	// -------------------------------------------------------------------------
 
 	private void doAliasCommands(String[] args) {
 		if (args.length != 2) {
@@ -206,10 +228,10 @@ public class GenericCommandMode implements ICommandMode {
 			String commandName = args[0];
 			String aliasName = args[1];
 
-			if (!canHandleCommand(commandName)) {
+			if (!canHandle(commandName)) {
 				errorOutput.accept("ERROR: '" + commandName
 						+ "' is not a valid command.");
-			} else if (canHandleCommand(aliasName)) {
+			} else if (canHandle(aliasName)) {
 				errorOutput.accept("ERROR: Cannot overwrite command '"
 						+ aliasName + "'");
 			} else {
@@ -310,7 +332,7 @@ public class GenericCommandMode implements ICommandMode {
 	}
 
 	@Override
-	public ICommandMode processCommand(String command, String[] args) {
+	public ICommandMode process(String command, String[] args) {
 		normalOutput.accept("\n");
 
 		if (defaultHandlers.containsKey(command)) {
@@ -363,7 +385,8 @@ public class GenericCommandMode implements ICommandMode {
 	 * Set the handler to use for unknown commands
 	 * 
 	 * @param handler
-	 *            The handler to use for unknown commands
+	 *            The handler to use for unknown commands, or null to throw
+	 *            on unknown commands
 	 */
 	public void setUnknownCommandHandler(
 			BiConsumer<String, String[]> handler) {
@@ -393,7 +416,7 @@ public class GenericCommandMode implements ICommandMode {
 	}
 
 	@Override
-	public boolean useCustomPrompt() {
+	public boolean isCustomPromptEnabled() {
 		return customPrompt != null;
 	}
 }
