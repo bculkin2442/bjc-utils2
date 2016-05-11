@@ -81,7 +81,8 @@ public interface IPair<LeftType, RightType>
 						"This function can only be applied to instances of IPair");
 			}
 
-			IPair<OldLeft, OldRight> argPair = (IPair<OldLeft, OldRight>) argumentPair;
+			IPair<OldLeft, OldRight> argPair =
+					(IPair<OldLeft, OldRight>) argumentPair;
 
 			return argPair.mapLeft(func);
 		};
@@ -98,7 +99,8 @@ public interface IPair<LeftType, RightType>
 						"This function can only be applied to instances of IPair");
 			}
 
-			IPair<OldLeft, OldRight> argPair = (IPair<OldLeft, OldRight>) argumentPair;
+			IPair<OldLeft, OldRight> argPair =
+					(IPair<OldLeft, OldRight>) argumentPair;
 
 			return argPair.mapRight(func);
 		};
@@ -163,4 +165,46 @@ public interface IPair<LeftType, RightType>
 	 */
 	public <MergedType> MergedType
 			merge(BiFunction<LeftType, RightType, MergedType> merger);
+
+	/**
+	 * Combine the contents of two pairs together
+	 * 
+	 * @param <OtherLeft>
+	 *            The type of the left value of the other pair
+	 * @param <OtherRight>
+	 *            The type of the right value of the other pair
+	 * @param <CombinedLeft>
+	 *            The type of the left value of the combined pair
+	 * @param <CombinedRight>
+	 *            The type of the right value of the combined pair
+	 * @param otherPair
+	 *            The other pair to combine with
+	 * @param leftCombiner
+	 * @param rightCombiner
+	 * @return A pair with its values combined
+	 */
+	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight>
+			IPair<CombinedLeft, CombinedRight>
+			combine(IPair<OtherLeft, OtherRight> otherPair,
+					BiFunction<LeftType, OtherLeft, CombinedLeft> leftCombiner,
+					BiFunction<RightType, OtherRight, CombinedRight> rightCombiner);
+
+	/**
+	 * Pairwise combine two pairs together
+	 * 
+	 * @param <OtherLeft>
+	 *            The left type of the other pair
+	 * @param <OtherRight>
+	 *            The right type of the other pair
+	 * @param otherPair
+	 *            The pair to combine with
+	 * @return The pairs, pairwise combined together
+	 */
+	public default <OtherLeft, OtherRight>
+			IPair<IPair<LeftType, OtherLeft>, IPair<RightType, OtherRight>>
+			combine(IPair<OtherLeft, OtherRight> otherPair) {
+		return combine(otherPair,
+				(left, otherLeft) -> new Pair<>(left, otherLeft),
+				(right, otherRight) -> new Pair<>(right, otherRight));
+	}
 }

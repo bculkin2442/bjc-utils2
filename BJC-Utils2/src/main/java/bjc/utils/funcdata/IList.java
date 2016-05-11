@@ -6,6 +6,7 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collector;
 
 import bjc.utils.data.IPair;
 
@@ -18,7 +19,6 @@ import bjc.utils.data.IPair;
  *            The type in this list
  */
 public interface IList<ContainedType> {
-
 	/**
 	 * Add an item to this list
 	 * 
@@ -302,12 +302,35 @@ public interface IList<ContainedType> {
 	 *            The type of array to return
 	 * @return The list, as an array
 	 */
-	ContainedType[] toArray(ContainedType[] arrType);
+	public ContainedType[] toArray(ContainedType[] arrType);
 
 	/**
 	 * Convert the list into a iterable
 	 * 
 	 * @return An iterable view onto the list
 	 */
-	Iterable<ContainedType> toIterable();
+	public Iterable<ContainedType> toIterable();
+
+	/**
+	 * Reduce the contents of this list using a collector
+	 * 
+	 * @param <StateType>
+	 *            The intermediate accumulation type
+	 * @param <ReducedType>
+	 *            The final, reduced type
+	 * @param collector
+	 *            The collector to use for reduction
+	 * @return The reduced list
+	 */
+	public default <StateType, ReducedType> ReducedType collect(
+			Collector<ContainedType, StateType, ReducedType> collector) {
+		BiConsumer<StateType, ContainedType> accumulator =
+				collector.accumulator();
+
+		return reduceAux(collector.supplier().get(), (value, state) -> {
+			accumulator.accept(state, value);
+
+			return state;
+		}, collector.finisher());
+	}
 }

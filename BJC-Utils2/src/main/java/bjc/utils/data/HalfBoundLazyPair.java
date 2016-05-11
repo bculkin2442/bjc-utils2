@@ -138,4 +138,19 @@ class HalfBoundLazyPair<OldType, NewLeft, NewRight>
 
 		return new LazyPair<>(leftSupp, rightSupp);
 	}
+	
+	@Override
+	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight>
+			IPair<CombinedLeft, CombinedRight>
+			combine(IPair<OtherLeft, OtherRight> otherPair,
+					BiFunction<NewLeft, OtherLeft, CombinedLeft> leftCombiner,
+					BiFunction<NewRight, OtherRight, CombinedRight> rightCombiner) {
+		return otherPair.bind((otherLeft, otherRight) -> {
+			return bind((leftVal, rightVal) -> {
+				return new LazyPair<>(
+						leftCombiner.apply(leftVal, otherLeft),
+						rightCombiner.apply(rightVal, otherRight));
+			});
+		});
+	}
 }

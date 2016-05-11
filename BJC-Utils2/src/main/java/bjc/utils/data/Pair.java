@@ -104,4 +104,16 @@ public class Pair<LeftType, RightType>
 
 		return new Pair<>(leftValue, mapper.apply(rightValue));
 	}
+
+	@Override
+	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight>
+			IPair<CombinedLeft, CombinedRight>
+			combine(IPair<OtherLeft, OtherRight> otherPair,
+					BiFunction<LeftType, OtherLeft, CombinedLeft> leftCombiner,
+					BiFunction<RightType, OtherRight, CombinedRight> rightCombiner) {
+		return otherPair.bind((otherLeft, otherRight) -> {
+			return new Pair<>(leftCombiner.apply(leftValue, otherLeft),
+					rightCombiner.apply(rightValue, otherRight));
+		});
+	}
 }

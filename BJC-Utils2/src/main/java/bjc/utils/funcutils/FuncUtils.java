@@ -1,8 +1,8 @@
 package bjc.utils.funcutils;
 
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.IntConsumer;
 
 /**
  * Utility things for functions
@@ -41,7 +41,7 @@ public class FuncUtils {
 	 * @param cons
 	 *            The action to perform
 	 */
-	public static void doTimes(int nTimes, IntConsumer cons) {
+	public static void doTimes(int nTimes, Consumer<Integer> cons) {
 		for (int i = 0; i < nTimes; i++) {
 			cons.accept(i);
 		}

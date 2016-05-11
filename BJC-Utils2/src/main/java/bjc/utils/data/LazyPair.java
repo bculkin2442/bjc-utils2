@@ -198,4 +198,19 @@ public class LazyPair<LeftType, RightType>
 
 		return new LazyPair<>(leftSupp, rightSupp);
 	}
+
+	@Override
+	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight>
+			IPair<CombinedLeft, CombinedRight>
+			combine(IPair<OtherLeft, OtherRight> otherPair,
+					BiFunction<LeftType, OtherLeft, CombinedLeft> leftCombiner,
+					BiFunction<RightType, OtherRight, CombinedRight> rightCombiner) {
+		return otherPair.bind((otherLeft, otherRight) -> {
+			return bind((leftVal, rightVal) -> {
+				return new LazyPair<>(
+						leftCombiner.apply(leftVal, otherLeft),
+						rightCombiner.apply(rightVal, otherRight));
+			});
+		});
+	}
 }

@@ -16,7 +16,6 @@ import java.util.function.Function;
  *
  */
 public interface IMap<KeyType, ValueType> {
-
 	/**
 	 * Check if this map contains the specified key
 	 * 
