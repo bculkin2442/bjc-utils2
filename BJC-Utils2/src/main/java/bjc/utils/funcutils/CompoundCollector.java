@@ -6,8 +6,6 @@ import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
-import java.util.stream.Collector.Characteristics;
-
 import bjc.utils.data.IHolder;
 import bjc.utils.data.IPair;
 import bjc.utils.data.Identity;
@@ -57,10 +55,8 @@ final class CompoundCollector<InitialType, AuxType1, AuxType2, FinalType1, Final
 	}
 
 	@Override
-	public BinaryOperator<IHolder<IPair<AuxType1, AuxType2>>>
-			combiner() {
-		BinaryOperator<AuxType1> firstCombiner =
-				firstCollector.combiner();
+	public BinaryOperator<IHolder<IPair<AuxType1, AuxType2>>> combiner() {
+		BinaryOperator<AuxType1> firstCombiner = firstCollector.combiner();
 		BinaryOperator<AuxType2> secondCombiner =
 				secondCollector.combiner();
 
@@ -82,8 +78,7 @@ final class CompoundCollector<InitialType, AuxType1, AuxType2, FinalType1, Final
 				return pair.bind((leftVal, rightVal) -> {
 					return new Pair<>(
 							firstCollector.finisher().apply(leftVal),
-							secondCollector.finisher()
-									.apply(rightVal));
+							secondCollector.finisher().apply(rightVal));
 				});
 			});
 		};

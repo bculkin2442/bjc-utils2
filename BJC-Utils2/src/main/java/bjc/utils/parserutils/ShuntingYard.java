@@ -63,12 +63,11 @@ public class ShuntingYard<TokenType> {
 	}
 
 	private final class TokenShunter implements Consumer<String> {
-		private IList<TokenType>	output;
+		private IList<TokenType>			output;
 		private Deque<String>				stack;
 		private Function<String, TokenType>	transform;
 
-		public TokenShunter(IList<TokenType> outpt,
-				Deque<String> stack,
+		public TokenShunter(IList<TokenType> outpt, Deque<String> stack,
 				Function<String, TokenType> transform) {
 			this.output = outpt;
 			this.stack = stack;
@@ -176,8 +175,7 @@ public class ShuntingYard<TokenType> {
 	 *            The function to use to transform strings to tokens
 	 * @return A list of tokens in postfix notation
 	 */
-	public IList<TokenType> postfix(
-			IList<String> input,
+	public IList<TokenType> postfix(IList<String> input,
 			Function<String, TokenType> tokenTransformer) {
 		if (input == null) {
 			throw new NullPointerException("Input must not be null");
@@ -191,9 +189,8 @@ public class ShuntingYard<TokenType> {
 
 		input.forEach(new TokenShunter(output, stack, tokenTransformer));
 
-		while (!stack.isEmpty()) {
-			output.add(tokenTransformer.apply(stack.pop()));
-		}
+		stack.forEach(
+				(token) -> output.add(tokenTransformer.apply(token)));
 
 		return output;
 	}

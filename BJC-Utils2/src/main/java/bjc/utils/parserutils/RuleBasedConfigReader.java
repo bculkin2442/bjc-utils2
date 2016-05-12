@@ -8,7 +8,9 @@ import java.util.Scanner;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import bjc.utils.data.IHolder;
 import bjc.utils.data.IPair;
+import bjc.utils.data.Identity;
 import bjc.utils.data.Pair;
 import bjc.utils.exceptions.UnknownPragmaException;
 import bjc.utils.funcdata.FunctionalStringTokenizer;
@@ -121,30 +123,30 @@ public class RuleBasedConfigReader<E> {
 
 		E state;
 
-		try (Scanner inputSource = new Scanner(inputStream)) {
+		try (Scanner inputSource = new Scanner(inputStream, "\n")) {
 
 			state = initialState;
-			boolean ruleOpen = false;
+			IHolder<Boolean> ruleOpen = new Identity<>(false);
 
-			while (inputSource.hasNextLine()) {
-				String line = inputSource.nextLine();
-
+			inputSource.forEachRemaining((line) -> {
 				if (line.startsWith("#") || line.startsWith("//")) {
 					// It's a comment
-					continue;
+					return;
 				} else if (line.equals("")) {
-					ruleOpen = endRule(state, ruleOpen);
+					ruleOpen.replace(endRule(state, ruleOpen.getValue()));
 
-					continue;
+					return;
 				} else if (line.startsWith("\t")) {
-					continueRule(state, ruleOpen, line);
+					continueRule(state, ruleOpen.getValue(), line);
 				} else {
-					ruleOpen = startRule(state, ruleOpen, line);
+					ruleOpen.replace(
+							startRule(state, ruleOpen.getValue(), line));
 				}
-			}
+			});
 		}
 
 		return state;
+
 	}
 
 	/**
@@ -185,8 +187,8 @@ public class RuleBasedConfigReader<E> {
 	}
 
 	private boolean startRule(E state, boolean ruleOpen, String line) {
-		FunctionalStringTokenizer tokenizer = new FunctionalStringTokenizer(
-				line, " ");
+		FunctionalStringTokenizer tokenizer =
+				new FunctionalStringTokenizer(line, " ");
 
 		String nextToken = tokenizer.nextToken();
 
