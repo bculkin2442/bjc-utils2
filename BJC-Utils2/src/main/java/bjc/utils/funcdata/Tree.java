@@ -16,12 +16,12 @@ import bjc.utils.funcutils.StringUtils;
  * @param <ContainedType>
  */
 public class Tree<ContainedType> implements ITree<ContainedType> {
-	private ContainedType							data;
+	private ContainedType				data;
 	private IList<ITree<ContainedType>>	children;
 
-	private boolean									hasChildren;
+	private boolean						hasChildren;
 
-	private int										childCount	= 0;
+	private int							childCount	= 0;
 
 	/**
 	 * Create a new leaf node in a tree
@@ -134,11 +134,10 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 			Function<IList<NewType>, NewType> nodeTransformer = nodeCollapser
 					.apply(data);
 
-			IList<NewType> collapsedChildren = children
-					.map((child) -> {
-						return child.collapse(leafTransform, nodeCollapser,
-								(subTreeVal) -> subTreeVal);
-					});
+			IList<NewType> collapsedChildren = children.map((child) -> {
+				return child.collapse(leafTransform, nodeCollapser,
+						(subTreeVal) -> subTreeVal);
+			});
 
 			return nodeTransformer.apply(collapsedChildren);
 		}

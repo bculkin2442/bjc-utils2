@@ -74,8 +74,8 @@ public class BinarySearchTree<T> {
 	 *            The distance from the pivot
 	 * @return Whether the adjusted pivot is with the list
 	 */
-	private boolean adjustedPivotInBounds(IList<T> elements,
-			int pivot, int pivotAdjustment) {
+	private boolean adjustedPivotInBounds(IList<T> elements, int pivot,
+			int pivotAdjustment) {
 		return (pivot - pivotAdjustment) >= 0
 				&& (pivot + pivotAdjustment) < elements.getSize();
 	}

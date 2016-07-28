@@ -75,10 +75,15 @@ public class StringUtils {
 	}
 
 	/**
-	 * Print out a deque with a special case for easily showing a deque is empty
-	 * @param <ContainedType> The type in the deque
-	 * @param queue The deque to print
-	 * @return A string version of the deque, with allowance for an empty deque
+	 * Print out a deque with a special case for easily showing a deque is
+	 * empty
+	 * 
+	 * @param <ContainedType>
+	 *            The type in the deque
+	 * @param queue
+	 *            The deque to print
+	 * @return A string version of the deque, with allowance for an empty
+	 *         deque
 	 */
 	public static <ContainedType> String printDeque(
 			Deque<ContainedType> queue) {

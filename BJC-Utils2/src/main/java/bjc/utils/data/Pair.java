@@ -70,8 +70,39 @@ public class Pair<LeftType, RightType>
 	}
 
 	@Override
-	public <MergedType> MergedType
-			merge(BiFunction<LeftType, RightType, MergedType> merger) {
+	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight> IPair<CombinedLeft, CombinedRight> combine(
+			IPair<OtherLeft, OtherRight> otherPair,
+			BiFunction<LeftType, OtherLeft, CombinedLeft> leftCombiner,
+			BiFunction<RightType, OtherRight, CombinedRight> rightCombiner) {
+		return otherPair.bind((otherLeft, otherRight) -> {
+			return new Pair<>(leftCombiner.apply(leftValue, otherLeft),
+					rightCombiner.apply(rightValue, otherRight));
+		});
+	}
+
+	@Override
+	public <NewLeft> IPair<NewLeft, RightType> mapLeft(
+			Function<LeftType, NewLeft> mapper) {
+		if (mapper == null) {
+			throw new NullPointerException("Mapper must not be null");
+		}
+
+		return new Pair<>(mapper.apply(leftValue), rightValue);
+	}
+
+	@Override
+	public <NewRight> IPair<LeftType, NewRight> mapRight(
+			Function<RightType, NewRight> mapper) {
+		if (mapper == null) {
+			throw new NullPointerException("Mapper must not be null");
+		}
+
+		return new Pair<>(leftValue, mapper.apply(rightValue));
+	}
+
+	@Override
+	public <MergedType> MergedType merge(
+			BiFunction<LeftType, RightType, MergedType> merger) {
 		if (merger == null) {
 			throw new NullPointerException("Merger must not be null");
 		}
@@ -83,37 +114,5 @@ public class Pair<LeftType, RightType>
 	public String toString() {
 		return "pair[l=" + leftValue.toString() + ", r="
 				+ rightValue.toString() + "]";
-	}
-
-	@Override
-	public <NewLeft> IPair<NewLeft, RightType>
-			mapLeft(Function<LeftType, NewLeft> mapper) {
-		if (mapper == null) {
-			throw new NullPointerException("Mapper must not be null");
-		}
-
-		return new Pair<>(mapper.apply(leftValue), rightValue);
-	}
-
-	@Override
-	public <NewRight> IPair<LeftType, NewRight>
-			mapRight(Function<RightType, NewRight> mapper) {
-		if (mapper == null) {
-			throw new NullPointerException("Mapper must not be null");
-		}
-
-		return new Pair<>(leftValue, mapper.apply(rightValue));
-	}
-
-	@Override
-	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight>
-			IPair<CombinedLeft, CombinedRight>
-			combine(IPair<OtherLeft, OtherRight> otherPair,
-					BiFunction<LeftType, OtherLeft, CombinedLeft> leftCombiner,
-					BiFunction<RightType, OtherRight, CombinedRight> rightCombiner) {
-		return otherPair.bind((otherLeft, otherRight) -> {
-			return new Pair<>(leftCombiner.apply(leftValue, otherLeft),
-					rightCombiner.apply(rightValue, otherRight));
-		});
 	}
 }

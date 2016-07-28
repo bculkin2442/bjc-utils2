@@ -24,14 +24,15 @@ public class GenericCommand implements ICommand {
 	 */
 	public GenericCommand(ICommandHandler handler, String description,
 			String help) {
-		if(handler == null) {
-			throw new NullPointerException("Command handler must not be null");
+		if (handler == null) {
+			throw new NullPointerException(
+					"Command handler must not be null");
 		}
-		
+
 		this.handler = handler;
 		this.help = new GenericHelp(description, help);
 	}
-	
+
 	@Override
 	public ICommand aliased() {
 		return new DelegatingCommand(this);

@@ -187,8 +187,8 @@ public class RuleBasedConfigReader<E> {
 	}
 
 	private boolean startRule(E state, boolean ruleOpen, String line) {
-		FunctionalStringTokenizer tokenizer =
-				new FunctionalStringTokenizer(line, " ");
+		FunctionalStringTokenizer tokenizer = new FunctionalStringTokenizer(
+				line, " ");
 
 		String nextToken = tokenizer.nextToken();
 

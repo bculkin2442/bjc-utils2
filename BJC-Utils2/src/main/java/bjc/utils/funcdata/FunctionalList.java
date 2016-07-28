@@ -166,8 +166,7 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 	 * IFunctionalList, java.util.function.BiFunction)
 	 */
 	@Override
-	public <T, F> IList<F> combineWith(
-			IList<T> rightList,
+	public <T, F> IList<F> combineWith(IList<T> rightList,
 			BiFunction<E, T, F> itemCombiner) {
 		if (rightList == null) {
 			throw new NullPointerException(
@@ -227,8 +226,7 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 	 * Function)
 	 */
 	@Override
-	public <T> IList<T> flatMap(
-			Function<E, IList<T>> elementExpander) {
+	public <T> IList<T> flatMap(Function<E, IList<T>> elementExpander) {
 		if (elementExpander == null) {
 			throw new NullPointerException("Expander must not be null");
 		}
@@ -237,8 +235,7 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 				this.wrappedList.size());
 
 		forEach(element -> {
-			IList<T> expandedElement = elementExpander
-					.apply(element);
+			IList<T> expandedElement = elementExpander.apply(element);
 
 			if (expandedElement == null) {
 				throw new NullPointerException(
@@ -396,8 +393,7 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 	 * IFunctionalList)
 	 */
 	@Override
-	public <T> IList<IPair<E, T>> pairWith(
-			IList<T> rightList) {
+	public <T> IList<IPair<E, T>> pairWith(IList<T> rightList) {
 		return combineWith(rightList, Pair<E, T>::new);
 	}
 
@@ -407,8 +403,7 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 	 * @see bjc.utils.funcdata.IFunctionalList#partition(int)
 	 */
 	@Override
-	public IList<IList<E>> partition(
-			int numberPerPartition) {
+	public IList<IList<E>> partition(int numberPerPartition) {
 		if (numberPerPartition < 1
 				|| numberPerPartition > wrappedList.size()) {
 			throw new IllegalArgumentException("" + numberPerPartition

@@ -44,6 +44,15 @@ public interface ICommandMode {
 	}
 
 	/**
+	 * Check if this mode uses a custom prompt
+	 * 
+	 * @return Whether or not this mode uses a custom prompt
+	 */
+	public default boolean isCustomPromptEnabled() {
+		return false;
+	}
+
+	/**
 	 * Process a command in this mode
 	 * 
 	 * @param command
@@ -53,17 +62,7 @@ public interface ICommandMode {
 	 * @return The command mode to use for the next command. Defaults to
 	 *         returning this, and doing nothing else
 	 */
-	public default ICommandMode process(String command,
-			String[] args) {
+	public default ICommandMode process(String command, String[] args) {
 		return this;
-	}
-
-	/**
-	 * Check if this mode uses a custom prompt
-	 * 
-	 * @return Whether or not this mode uses a custom prompt
-	 */
-	public default boolean isCustomPromptEnabled() {
-		return false;
 	}
 }

@@ -89,6 +89,14 @@ public class Identity<ContainedType> implements IHolder<ContainedType> {
 	}
 
 	@Override
+	public <NewType> Function<ContainedType, IHolder<NewType>> lift(
+			Function<ContainedType, NewType> func) {
+		return (val) -> {
+			return new Identity<>(func.apply(val));
+		};
+	}
+
+	@Override
 	public <MappedType> IHolder<MappedType> map(
 			Function<ContainedType, MappedType> mapper) {
 		return new Identity<>(mapper.apply(heldValue));
@@ -111,13 +119,5 @@ public class Identity<ContainedType> implements IHolder<ContainedType> {
 	public <UnwrappedType> UnwrappedType unwrap(
 			Function<ContainedType, UnwrappedType> unwrapper) {
 		return unwrapper.apply(heldValue);
-	}
-
-	@Override
-	public <NewType> Function<ContainedType, IHolder<NewType>> lift(
-			Function<ContainedType, NewType> func) {
-		return (val) -> {
-			return new Identity<>(func.apply(val));
-		};
 	}
 }

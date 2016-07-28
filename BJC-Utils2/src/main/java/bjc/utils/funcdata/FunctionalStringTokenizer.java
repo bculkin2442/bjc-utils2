@@ -155,8 +155,7 @@ public class FunctionalStringTokenizer {
 	 *            The function to use to convert tokens.
 	 * @return A list containing all of the converted tokens.
 	 */
-	public <E> IList<E> toList(
-			Function<String, E> tokenTransformer) {
+	public <E> IList<E> toList(Function<String, E> tokenTransformer) {
 		if (tokenTransformer == null) {
 			throw new NullPointerException("Transformer must not be null");
 		}

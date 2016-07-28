@@ -61,8 +61,8 @@ public class TreeConstructTest {
 		System.out.print("Enter a expression to parse: ");
 		String line = inputSource.nextLine();
 
-		IList<String> tokens = new FunctionalStringTokenizer(
-				line).toList();
+		IList<String> tokens = new FunctionalStringTokenizer(line)
+				.toList();
 
 		ShuntingYard<String> yard = new ShuntingYard<>(true);
 
@@ -75,8 +75,8 @@ public class TreeConstructTest {
 		ops.add(new Pair<>(":=", ":="));
 		ops.add(new Pair<>("=>", "=>"));
 
-		IList<String> semiExpandedTokens = ListUtils
-				.splitTokens(tokens, ops);
+		IList<String> semiExpandedTokens = ListUtils.splitTokens(tokens,
+				ops);
 
 		ops = new LinkedList<>();
 
@@ -90,8 +90,8 @@ public class TreeConstructTest {
 
 		fullyExpandedTokens.removeIf((strang) -> strang.equals(""));
 
-		IList<String> shuntedTokens = yard
-				.postfix(fullyExpandedTokens, (token) -> token);
+		IList<String> shuntedTokens = yard.postfix(fullyExpandedTokens,
+				(token) -> token);
 
 		System.out.println("Shunted: " + shuntedTokens.toString());
 

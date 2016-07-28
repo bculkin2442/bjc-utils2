@@ -17,10 +17,6 @@ import bjc.utils.funcdata.IList;
 public class ListHolder<ContainedType> implements IHolder<ContainedType> {
 	private IList<ContainedType> heldValues;
 
-	private ListHolder(IList<ContainedType> toHold) {
-		heldValues = toHold;
-	}
-
 	/**
 	 * Create a new list holder
 	 * 
@@ -38,13 +34,24 @@ public class ListHolder<ContainedType> implements IHolder<ContainedType> {
 		}
 	}
 
+	private ListHolder(IList<ContainedType> toHold) {
+		heldValues = toHold;
+	}
+
 	@Override
 	public <BoundType> IHolder<BoundType> bind(
 			Function<ContainedType, IHolder<BoundType>> binder) {
-		IList<IHolder<BoundType>> boundValues = heldValues
-				.map(binder);
+		IList<IHolder<BoundType>> boundValues = heldValues.map(binder);
 
 		return new BoundListHolder<>(boundValues);
+	}
+
+	@Override
+	public <NewType> Function<ContainedType, IHolder<NewType>> lift(
+			Function<ContainedType, NewType> func) {
+		return (val) -> {
+			return new ListHolder<>(new FunctionalList<>(func.apply(val)));
+		};
 	}
 
 	@Override
@@ -67,13 +74,5 @@ public class ListHolder<ContainedType> implements IHolder<ContainedType> {
 	public <UnwrappedType> UnwrappedType unwrap(
 			Function<ContainedType, UnwrappedType> unwrapper) {
 		return unwrapper.apply(heldValues.randItem());
-	}
-
-	@Override
-	public <NewType> Function<ContainedType, IHolder<NewType>> lift(
-			Function<ContainedType, NewType> func) {
-		return (val) -> {
-			return new ListHolder<>(new FunctionalList<>(func.apply(val)));
-		};
 	}
 }

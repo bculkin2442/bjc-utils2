@@ -35,6 +35,14 @@ public class Option<ContainedType> implements IHolder<ContainedType> {
 	}
 
 	@Override
+	public <NewType> Function<ContainedType, IHolder<NewType>> lift(
+			Function<ContainedType, NewType> func) {
+		return (val) -> {
+			return new Option<>(func.apply(val));
+		};
+	}
+
+	@Override
 	public <MappedType> IHolder<MappedType> map(
 			Function<ContainedType, MappedType> mapper) {
 		if (held == null) {
@@ -62,13 +70,5 @@ public class Option<ContainedType> implements IHolder<ContainedType> {
 		}
 
 		return unwrapper.apply(held);
-	}
-
-	@Override
-	public <NewType> Function<ContainedType, IHolder<NewType>> lift(
-			Function<ContainedType, NewType> func) {
-		return (val) -> {
-			return new Option<>(func.apply(val));
-		};
 	}
 }

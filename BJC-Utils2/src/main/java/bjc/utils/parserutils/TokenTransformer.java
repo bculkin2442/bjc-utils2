@@ -29,8 +29,8 @@ final class TokenTransformer<TokenType> implements Consumer<TokenType> {
 			});
 		}
 
-		private IPair<Deque<ITree<TokenType>>, ITree<TokenType>>
-				handleOperator(Deque<ITree<TokenType>> queuedASTs) {
+		private IPair<Deque<ITree<TokenType>>, ITree<TokenType>> handleOperator(
+				Deque<ITree<TokenType>> queuedASTs) {
 			ITree<TokenType> newAST;
 
 			if (isSpecialOperator.test(element)) {

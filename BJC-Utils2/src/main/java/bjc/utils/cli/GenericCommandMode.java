@@ -21,24 +21,24 @@ public class GenericCommandMode implements ICommandMode {
 	/*
 	 * Contains the commands this mode handles
 	 */
-	private IMap<String, ICommand>		commandHandlers;
-	private IMap<String, ICommand>		defaultHandlers;
+	private IMap<String, ICommand>			commandHandlers;
+	private IMap<String, ICommand>			defaultHandlers;
 
 	// Contains help topics without an associated command
-	private IMap<String, ICommandHelp>	helpTopics;
+	private IMap<String, ICommandHelp>		helpTopics;
 
 	// The action to execute upon encountering an unknown command
-	private BiConsumer<String, String[]>			unknownCommandHandler;
+	private BiConsumer<String, String[]>	unknownCommandHandler;
 
 	// The functions to use for input/output
-	private Consumer<String>						errorOutput;
-	private Consumer<String>						normalOutput;
+	private Consumer<String>				errorOutput;
+	private Consumer<String>				normalOutput;
 
 	// The name of this command mode, or null if it is unnamed
-	private String									modeName;
+	private String							modeName;
 
 	// The custom prompt to use, or null if none is specified
-	private String									customPrompt;
+	private String							customPrompt;
 
 	/**
 	 * Create a new generic command mode
@@ -332,6 +332,11 @@ public class GenericCommandMode implements ICommandMode {
 	}
 
 	@Override
+	public boolean isCustomPromptEnabled() {
+		return customPrompt != null;
+	}
+
+	@Override
 	public ICommandMode process(String command, String[] args) {
 		normalOutput.accept("\n");
 
@@ -413,10 +418,5 @@ public class GenericCommandMode implements ICommandMode {
 		defaultHandlers.put("clear", buildClearCommands());
 
 		defaultHandlers.put("exit", buildExitCommand());
-	}
-
-	@Override
-	public boolean isCustomPromptEnabled() {
-		return customPrompt != null;
 	}
 }

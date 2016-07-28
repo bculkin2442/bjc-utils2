@@ -15,28 +15,27 @@ class BoundLazy<OldType, BoundContainedType>
 	/*
 	 * The old value
 	 */
-	private Supplier<IHolder<OldType>>							oldSupplier;
+	private Supplier<IHolder<OldType>>						oldSupplier;
 
 	/*
 	 * The function to use to transform the old value into a new value
 	 */
-	private Function<OldType, IHolder<BoundContainedType>>		binder;
+	private Function<OldType, IHolder<BoundContainedType>>	binder;
 
 	/*
 	 * The bound value being held
 	 */
-	private IHolder<BoundContainedType>							boundHolder;
+	private IHolder<BoundContainedType>						boundHolder;
 
 	/*
 	 * Whether the bound value has been actualized or not
 	 */
-	private boolean												holderBound;
+	private boolean											holderBound;
 
 	/*
 	 * Transformations currently pending on the bound value
 	 */
-	private IList<UnaryOperator<BoundContainedType>>	actions	=
-			new FunctionalList<>();
+	private IList<UnaryOperator<BoundContainedType>>		actions	= new FunctionalList<>();
 
 	/*
 	 * Create a new bound lazy value
@@ -48,13 +47,12 @@ class BoundLazy<OldType, BoundContainedType>
 	}
 
 	@Override
-	public <BoundType> IHolder<BoundType>
-			bind(Function<BoundContainedType, IHolder<BoundType>> bindr) {
+	public <BoundType> IHolder<BoundType> bind(
+			Function<BoundContainedType, IHolder<BoundType>> bindr) {
 		/*
 		 * Prepare a list of pending actions
 		 */
-		IList<UnaryOperator<BoundContainedType>> pendingActions =
-				new FunctionalList<>();
+		IList<UnaryOperator<BoundContainedType>> pendingActions = new FunctionalList<>();
 		actions.forEach(pendingActions::add);
 
 		/*
@@ -82,11 +80,18 @@ class BoundLazy<OldType, BoundContainedType>
 	}
 
 	@Override
-	public <MappedType> IHolder<MappedType>
-			map(Function<BoundContainedType, MappedType> mapper) {
+	public <NewType> Function<BoundContainedType, IHolder<NewType>> lift(
+			Function<BoundContainedType, NewType> func) {
+		return (val) -> {
+			return new Lazy<>(func.apply(val));
+		};
+	}
+
+	@Override
+	public <MappedType> IHolder<MappedType> map(
+			Function<BoundContainedType, MappedType> mapper) {
 		// Prepare a list of pending actions
-		IList<UnaryOperator<BoundContainedType>> pendingActions =
-				new FunctionalList<>();
+		IList<UnaryOperator<BoundContainedType>> pendingActions = new FunctionalList<>();
 		actions.forEach(pendingActions::add);
 
 		// Prepare the new supplier
@@ -117,28 +122,20 @@ class BoundLazy<OldType, BoundContainedType>
 	}
 
 	@Override
-	public IHolder<BoundContainedType>
-			transform(UnaryOperator<BoundContainedType> transformer) {
+	public IHolder<BoundContainedType> transform(
+			UnaryOperator<BoundContainedType> transformer) {
 		actions.add(transformer);
 
 		return this;
 	}
 
 	@Override
-	public <UnwrappedType> UnwrappedType
-			unwrap(Function<BoundContainedType, UnwrappedType> unwrapper) {
+	public <UnwrappedType> UnwrappedType unwrap(
+			Function<BoundContainedType, UnwrappedType> unwrapper) {
 		if (!holderBound) {
 			boundHolder = oldSupplier.get().unwrap(binder::apply);
 		}
 
 		return boundHolder.unwrap(unwrapper);
-	}
-
-	@Override
-	public <NewType> Function<BoundContainedType, IHolder<NewType>>
-			lift(Function<BoundContainedType, NewType> func) {
-		return (val) -> {
-			return new Lazy<>(func.apply(val));
-		};
 	}
 }

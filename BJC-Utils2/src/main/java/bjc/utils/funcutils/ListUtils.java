@@ -78,8 +78,7 @@ public class ListUtils {
 	 * @return The tokens that have been deaffixed
 	 * 
 	 */
-	public static IList<String> deAffixTokens(
-			IList<String> input,
+	public static IList<String> deAffixTokens(IList<String> input,
 			Deque<IPair<String, String>> operators) {
 		if (input == null) {
 			throw new NullPointerException("Input must not be null");
@@ -88,8 +87,7 @@ public class ListUtils {
 					"Set of operators must not be null");
 		}
 
-		IHolder<IList<String>> returnedList = new Identity<>(
-				input);
+		IHolder<IList<String>> returnedList = new Identity<>(input);
 
 		operators.forEach((operator) -> returnedList
 				.transform((oldReturn) -> oldReturn.flatMap((token) -> {
@@ -115,9 +113,8 @@ public class ListUtils {
 	 *         selected from the specified list without replacement
 	 */
 
-	public static <E> IList<E> drawWithoutReplacement(
-			IList<E> list, int numberOfItems,
-			Function<Integer, Integer> rng) {
+	public static <E> IList<E> drawWithoutReplacement(IList<E> list,
+			int numberOfItems, Function<Integer, Integer> rng) {
 		IList<E> selectedItems = new FunctionalList<>(
 				new ArrayList<>(numberOfItems));
 
@@ -153,9 +150,8 @@ public class ListUtils {
 	 * @return A new list containing the desired number of items randomly
 	 *         selected from the specified list
 	 */
-	public static <E> IList<E> drawWithReplacement(
-			IList<E> list, int numberOfItems,
-			Function<Integer, Integer> rng) {
+	public static <E> IList<E> drawWithReplacement(IList<E> list,
+			int numberOfItems, Function<Integer, Integer> rng) {
 		IList<E> selectedItems = new FunctionalList<>(
 				new ArrayList<>(numberOfItems));
 
@@ -181,9 +177,8 @@ public class ListUtils {
 	 *            The number of elements to put in each partition
 	 * @return A list partitioned according to the above rules
 	 */
-	public static <E> IList<IList<E>> groupPartition(
-			IList<E> input, Function<E, Integer> elementCounter,
-			int numberPerPartition) {
+	public static <E> IList<IList<E>> groupPartition(IList<E> input,
+			Function<E, Integer> elementCounter, int numberPerPartition) {
 		if (input == null) {
 			throw new NullPointerException("Input list must not be null");
 		} else if (elementCounter == null) {
@@ -254,8 +249,7 @@ public class ListUtils {
 	 * @return A list containing all the elements of the lists
 	 */
 	@SafeVarargs
-	public static <E> IList<E> mergeLists(
-			IList<E>... lists) {
+	public static <E> IList<E> mergeLists(IList<E>... lists) {
 		IList<E> returnedList = new FunctionalList<>();
 
 		for (IList<E> list : lists) {
@@ -279,8 +273,7 @@ public class ListUtils {
 	 * @return A list of tokens split on all the operators
 	 * 
 	 */
-	public static IList<String> splitTokens(
-			IList<String> input,
+	public static IList<String> splitTokens(IList<String> input,
 			Deque<IPair<String, String>> operators) {
 		if (input == null) {
 			throw new NullPointerException("Input must not be null");
@@ -289,8 +282,7 @@ public class ListUtils {
 					"Set of operators must not be null");
 		}
 
-		IHolder<IList<String>> returnedList = new Identity<>(
-				input);
+		IHolder<IList<String>> returnedList = new Identity<>(input);
 
 		operators.forEach((operator) -> {
 			returnedList.transform((oldReturn) -> {

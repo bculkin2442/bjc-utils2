@@ -59,8 +59,7 @@ public class RandomGrammar<E> extends WeightedGrammar<E> {
 	 * @param cases
 	 *            The cases to add for this rule.
 	 */
-	public void makeRule(E rule,
-			IList<IList<E>> cases) {
+	public void makeRule(E rule, IList<IList<E>> cases) {
 		if (cases == null) {
 			throw new NullPointerException("Cases must not be null");
 		}

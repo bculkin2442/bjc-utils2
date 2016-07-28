@@ -15,7 +15,39 @@ import java.util.function.Function;
  */
 public class Either<LeftType, RightType>
 		implements IPair<LeftType, RightType> {
+	/**
+	 * Create a new either with the left value occupied
+	 * 
+	 * @param <LeftType>
+	 *            The type of the left value
+	 * @param <RightType>
+	 *            The type of the empty right value
+	 * @param left
+	 *            The value to put on the left
+	 * @return An either with the left side occupied
+	 */
+	public static <LeftType, RightType> Either<LeftType, RightType> fromLeft(
+			LeftType left) {
+		return new Either<>(left, null);
+	}
+	/**
+	 * Create a new either with the right value occupied
+	 * 
+	 * @param <LeftType>
+	 *            The type of the empty left value
+	 * @param <RightType>
+	 *            The type of the right value
+	 * @param right
+	 *            The value to put on the right
+	 * @return An either with the right side occupied
+	 */
+	public static <LeftType, RightType> Either<LeftType, RightType> fromRight(
+			RightType right) {
+		return new Either<>(null, right);
+	}
+
 	private LeftType	leftVal;
+
 	private RightType	rightVal;
 
 	private boolean		isLeft;
@@ -28,38 +60,6 @@ public class Either<LeftType, RightType>
 
 			isLeft = true;
 		}
-	}
-
-	/**
-	 * Create a new either with the left value occupied
-	 * 
-	 * @param <LeftType>
-	 *            The type of the left value
-	 * @param <RightType>
-	 *            The type of the empty right value
-	 * @param left
-	 *            The value to put on the left
-	 * @return An either with the left side occupied
-	 */
-	public static <LeftType, RightType> Either<LeftType, RightType>
-			fromLeft(LeftType left) {
-		return new Either<>(left, null);
-	}
-
-	/**
-	 * Create a new either with the right value occupied
-	 * 
-	 * @param <LeftType>
-	 *            The type of the empty left value
-	 * @param <RightType>
-	 *            The type of the right value
-	 * @param right
-	 *            The value to put on the right
-	 * @return An either with the right side occupied
-	 */
-	public static <LeftType, RightType> Either<LeftType, RightType>
-			fromRight(RightType right) {
-		return new Either<>(null, right);
 	}
 
 	@Override
@@ -89,37 +89,10 @@ public class Either<LeftType, RightType>
 	}
 
 	@Override
-	public <NewLeft> IPair<NewLeft, RightType>
-			mapLeft(Function<LeftType, NewLeft> mapper) {
-		if (isLeft) {
-			return new Either<>(mapper.apply(leftVal), null);
-		}
-
-		return new Either<>(null, rightVal);
-	}
-
-	@Override
-	public <NewRight> IPair<LeftType, NewRight>
-			mapRight(Function<RightType, NewRight> mapper) {
-		if (isLeft) {
-			return new Either<>(leftVal, null);
-		}
-
-		return new Either<>(null, mapper.apply(rightVal));
-	}
-
-	@Override
-	public <MergedType> MergedType
-			merge(BiFunction<LeftType, RightType, MergedType> merger) {
-		return merger.apply(leftVal, rightVal);
-	}
-
-	@Override
-	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight>
-			IPair<CombinedLeft, CombinedRight>
-			combine(IPair<OtherLeft, OtherRight> otherPair,
-					BiFunction<LeftType, OtherLeft, CombinedLeft> leftCombiner,
-					BiFunction<RightType, OtherRight, CombinedRight> rightCombiner) {
+	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight> IPair<CombinedLeft, CombinedRight> combine(
+			IPair<OtherLeft, OtherRight> otherPair,
+			BiFunction<LeftType, OtherLeft, CombinedLeft> leftCombiner,
+			BiFunction<RightType, OtherRight, CombinedRight> rightCombiner) {
 		if (isLeft) {
 			return otherPair.bind((otherLeft, otherRight) -> {
 				return new Either<>(leftCombiner.apply(leftVal, otherLeft),
@@ -131,5 +104,31 @@ public class Either<LeftType, RightType>
 			return new Either<>(null,
 					rightCombiner.apply(rightVal, otherRight));
 		});
+	}
+
+	@Override
+	public <NewLeft> IPair<NewLeft, RightType> mapLeft(
+			Function<LeftType, NewLeft> mapper) {
+		if (isLeft) {
+			return new Either<>(mapper.apply(leftVal), null);
+		}
+
+		return new Either<>(null, rightVal);
+	}
+
+	@Override
+	public <NewRight> IPair<LeftType, NewRight> mapRight(
+			Function<RightType, NewRight> mapper) {
+		if (isLeft) {
+			return new Either<>(leftVal, null);
+		}
+
+		return new Either<>(null, mapper.apply(rightVal));
+	}
+
+	@Override
+	public <MergedType> MergedType merge(
+			BiFunction<LeftType, RightType, MergedType> merger) {
+		return merger.apply(leftVal, rightVal);
 	}
 }

@@ -6,8 +6,7 @@ import java.util.function.Function;
 
 import bjc.utils.funcutils.ListUtils;
 
-class ExtendedMap<KeyType, ValueType>
-		implements IMap<KeyType, ValueType> {
+class ExtendedMap<KeyType, ValueType> implements IMap<KeyType, ValueType> {
 	private IMap<KeyType, ValueType>	delegate;
 
 	private IMap<KeyType, ValueType>	store;

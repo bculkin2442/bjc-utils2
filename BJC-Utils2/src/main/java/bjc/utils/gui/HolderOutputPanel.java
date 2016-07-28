@@ -49,6 +49,19 @@ public class HolderOutputPanel extends JPanel {
 	}
 
 	/**
+	 * Set this panel back to its initial state
+	 */
+	public void reset() {
+		stopUpdating();
+
+		value.setText("(stopped)");
+
+		updateTimer = new Timer(nDelay, (event) -> {
+			value.setText(val.getValue());
+		});
+	}
+
+	/**
 	 * Start updating the contents of the field from the holder
 	 */
 	public void startUpdating() {
@@ -62,18 +75,5 @@ public class HolderOutputPanel extends JPanel {
 		updateTimer.stop();
 
 		value.setText(value.getText() + " (stopped)");
-	}
-
-	/**
-	 * Set this panel back to its initial state
-	 */
-	public void reset() {
-		stopUpdating();
-
-		value.setText("(stopped)");
-
-		updateTimer = new Timer(nDelay, (event) -> {
-			value.setText(val.getValue());
-		});
 	}
 }

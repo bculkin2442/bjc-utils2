@@ -50,6 +50,29 @@ public interface IList<ContainedType> {
 	boolean anyMatch(Predicate<ContainedType> matchPredicate);
 
 	/**
+	 * Reduce the contents of this list using a collector
+	 * 
+	 * @param <StateType>
+	 *            The intermediate accumulation type
+	 * @param <ReducedType>
+	 *            The final, reduced type
+	 * @param collector
+	 *            The collector to use for reduction
+	 * @return The reduced list
+	 */
+	public default <StateType, ReducedType> ReducedType collect(
+			Collector<ContainedType, StateType, ReducedType> collector) {
+		BiConsumer<StateType, ContainedType> accumulator = collector
+				.accumulator();
+
+		return reduceAux(collector.supplier().get(), (value, state) -> {
+			accumulator.accept(state, value);
+
+			return state;
+		}, collector.finisher());
+	}
+
+	/**
 	 * Combine this list with another one into a new list and merge the
 	 * results. Works sort of like a combined zip/map over resulting pairs.
 	 * Does not change the underlying list.
@@ -136,8 +159,8 @@ public interface IList<ContainedType> {
 	 *            The predicate to match by
 	 * @return A list containing all elements that match the predicate
 	 */
-	IList<ContainedType>
-			getMatching(Predicate<ContainedType> matchPredicate);
+	IList<ContainedType> getMatching(
+			Predicate<ContainedType> matchPredicate);
 
 	/**
 	 * Retrieve the size of the wrapped list
@@ -164,8 +187,8 @@ public interface IList<ContainedType> {
 	 *            The function to apply to each element in the list
 	 * @return A new list containing the mapped elements of this list.
 	 */
-	<MappedType> IList<MappedType>
-			map(Function<ContainedType, MappedType> elementTransformer);
+	<MappedType> IList<MappedType> map(
+			Function<ContainedType, MappedType> elementTransformer);
 
 	/**
 	 * Zip two lists into a list of pairs
@@ -178,8 +201,8 @@ public interface IList<ContainedType> {
 	 * @return A list containing pairs of this element and the specified
 	 *         list
 	 */
-	<OtherType> IList<IPair<ContainedType, OtherType>>
-			pairWith(IList<OtherType> rightList);
+	<OtherType> IList<IPair<ContainedType, OtherType>> pairWith(
+			IList<OtherType> rightList);
 
 	/**
 	 * Partition this list into a list of sublists
@@ -199,16 +222,6 @@ public interface IList<ContainedType> {
 	void prepend(ContainedType item);
 
 	/**
-	 * Select a random item from this list, using the provided random
-	 * number generator.
-	 * 
-	 * @param rnd
-	 *            The random number generator to use.
-	 * @return A random element from this list.
-	 */
-	ContainedType randItem(Function<Integer, Integer> rnd);
-
-	/**
 	 * Select a random item from the list, using a default random number
 	 * generator
 	 * 
@@ -217,6 +230,16 @@ public interface IList<ContainedType> {
 	default ContainedType randItem() {
 		return randItem((num) -> (int) (Math.random() * num));
 	}
+
+	/**
+	 * Select a random item from this list, using the provided random
+	 * number generator.
+	 * 
+	 * @param rnd
+	 *            The random number generator to use.
+	 * @return A random element from this list.
+	 */
+	ContainedType randItem(Function<Integer, Integer> rnd);
 
 	/**
 	 * Reduce this list to a single value, using a accumulative approach.
@@ -310,27 +333,4 @@ public interface IList<ContainedType> {
 	 * @return An iterable view onto the list
 	 */
 	public Iterable<ContainedType> toIterable();
-
-	/**
-	 * Reduce the contents of this list using a collector
-	 * 
-	 * @param <StateType>
-	 *            The intermediate accumulation type
-	 * @param <ReducedType>
-	 *            The final, reduced type
-	 * @param collector
-	 *            The collector to use for reduction
-	 * @return The reduced list
-	 */
-	public default <StateType, ReducedType> ReducedType collect(
-			Collector<ContainedType, StateType, ReducedType> collector) {
-		BiConsumer<StateType, ContainedType> accumulator =
-				collector.accumulator();
-
-		return reduceAux(collector.supplier().get(), (value, state) -> {
-			accumulator.accept(state, value);
-
-			return state;
-		}, collector.finisher());
-	}
 }

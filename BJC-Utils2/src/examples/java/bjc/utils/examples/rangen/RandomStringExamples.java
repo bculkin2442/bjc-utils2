@@ -56,8 +56,7 @@ public class RandomStringExamples {
 				"<object>");
 
 		for (int i = 0; i < 10; i++) {
-			IList<String> ls = rg
-					.generateListValues("<sentance>", " ");
+			IList<String> ls = rg.generateListValues("<sentance>", " ");
 
 			StringBuilder sb = new StringBuilder();
 

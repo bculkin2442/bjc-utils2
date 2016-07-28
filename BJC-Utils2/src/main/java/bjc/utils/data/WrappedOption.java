@@ -6,13 +6,13 @@ import java.util.function.UnaryOperator;
 class WrappedOption<ContainedType> implements IHolder<ContainedType> {
 	private IHolder<IHolder<ContainedType>> held;
 
+	public WrappedOption(IHolder<ContainedType> seedValue) {
+		held = new Option<>(seedValue);
+	}
+
 	private WrappedOption(IHolder<IHolder<ContainedType>> toHold,
 			@SuppressWarnings("unused") boolean dummy) {
 		held = toHold;
-	}
-
-	public WrappedOption(IHolder<ContainedType> seedValue) {
-		held = new Option<>(seedValue);
 	}
 
 	@Override
@@ -30,6 +30,14 @@ class WrappedOption<ContainedType> implements IHolder<ContainedType> {
 				});
 
 		return new WrappedOption<>(newHolder, false);
+	}
+
+	@Override
+	public <NewType> Function<ContainedType, IHolder<NewType>> lift(
+			Function<ContainedType, NewType> func) {
+		return (val) -> {
+			return new Option<>(func.apply(val));
+		};
 	}
 
 	@Override
@@ -77,13 +85,5 @@ class WrappedOption<ContainedType> implements IHolder<ContainedType> {
 				return unwrapper.apply(containedValue);
 			});
 		});
-	}
-
-	@Override
-	public <NewType> Function<ContainedType, IHolder<NewType>> lift(
-			Function<ContainedType, NewType> func) {
-		return (val) -> {
-			return new Option<>(func.apply(val));
-		};
 	}
 }

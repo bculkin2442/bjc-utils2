@@ -14,8 +14,7 @@ final class TokenDeaffixer
 	}
 
 	@Override
-	public IList<String> apply(String operatorName,
-			String operatorRegex) {
+	public IList<String> apply(String operatorName, String operatorRegex) {
 		if (operatorName == null) {
 			throw new NullPointerException(
 					"Operator name must not be null");

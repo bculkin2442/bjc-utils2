@@ -18,8 +18,8 @@ import java.util.function.Function;
  */
 final class TransformedValueMap<OldKey, OldValue, NewValue>
 		implements IMap<OldKey, NewValue> {
-	private IMap<OldKey, OldValue>	mapToTransform;
-	private Function<OldValue, NewValue>		transformer;
+	private IMap<OldKey, OldValue>			mapToTransform;
+	private Function<OldValue, NewValue>	transformer;
 
 	public TransformedValueMap(IMap<OldKey, OldValue> destMap,
 			Function<OldValue, NewValue> transform) {

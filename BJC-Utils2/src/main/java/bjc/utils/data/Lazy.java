@@ -76,6 +76,14 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 	}
 
 	@Override
+	public <NewType> Function<ContainedType, IHolder<NewType>> lift(
+			Function<ContainedType, NewType> func) {
+		return (val) -> {
+			return new Lazy<>(func.apply(val));
+		};
+	}
+
+	@Override
 	public <MappedType> IHolder<MappedType> map(
 			Function<ContainedType, MappedType> mapper) {
 		IList<UnaryOperator<ContainedType>> pendingActions = new FunctionalList<>();
@@ -132,13 +140,5 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 		actions = new FunctionalList<>();
 
 		return unwrapper.apply(heldValue);
-	}
-
-	@Override
-	public <NewType> Function<ContainedType, IHolder<NewType>> lift(
-			Function<ContainedType, NewType> func) {
-		return (val) -> {
-			return new Lazy<>(func.apply(val));
-		};
 	}
 }

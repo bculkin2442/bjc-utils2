@@ -90,25 +90,17 @@ class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight>
 	}
 
 	@Override
-	public <MergedType> MergedType merge(
-			BiFunction<NewLeft, NewRight, MergedType> merger) {
-		if (!pairBound) {
-			boundPair = binder.apply(leftSupplier.get(),
-					rightSupplier.get());
-
-			pairBound = true;
-		}
-
-		return boundPair.merge(merger);
-	}
-
-	@Override
-	public String toString() {
-		if (pairBound) {
-			return boundPair.toString();
-		}
-
-		return "(un-materialized)";
+	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight> IPair<CombinedLeft, CombinedRight> combine(
+			IPair<OtherLeft, OtherRight> otherPair,
+			BiFunction<NewLeft, OtherLeft, CombinedLeft> leftCombiner,
+			BiFunction<NewRight, OtherRight, CombinedRight> rightCombiner) {
+		return otherPair.bind((otherLeft, otherRight) -> {
+			return bind((leftVal, rightVal) -> {
+				return new LazyPair<>(
+						leftCombiner.apply(leftVal, otherLeft),
+						rightCombiner.apply(rightVal, otherRight));
+			});
+		});
 	}
 
 	@Override
@@ -168,16 +160,24 @@ class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight>
 	}
 
 	@Override
-	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight> IPair<CombinedLeft, CombinedRight> combine(
-			IPair<OtherLeft, OtherRight> otherPair,
-			BiFunction<NewLeft, OtherLeft, CombinedLeft> leftCombiner,
-			BiFunction<NewRight, OtherRight, CombinedRight> rightCombiner) {
-		return otherPair.bind((otherLeft, otherRight) -> {
-			return bind((leftVal, rightVal) -> {
-				return new LazyPair<>(
-						leftCombiner.apply(leftVal, otherLeft),
-						rightCombiner.apply(rightVal, otherRight));
-			});
-		});
+	public <MergedType> MergedType merge(
+			BiFunction<NewLeft, NewRight, MergedType> merger) {
+		if (!pairBound) {
+			boundPair = binder.apply(leftSupplier.get(),
+					rightSupplier.get());
+
+			pairBound = true;
+		}
+
+		return boundPair.merge(merger);
+	}
+
+	@Override
+	public String toString() {
+		if (pairBound) {
+			return boundPair.toString();
+		}
+
+		return "(un-materialized)";
 	}
 }

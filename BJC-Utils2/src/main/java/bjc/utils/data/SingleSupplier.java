@@ -3,6 +3,8 @@ package bjc.utils.data;
 import java.util.function.Supplier;
 
 public class SingleSupplier<T> implements Supplier<T> {
+	private static long	nextID	= 0;
+
 	private Supplier<T>	source;
 
 	private boolean		gotten;
@@ -12,8 +14,6 @@ public class SingleSupplier<T> implements Supplier<T> {
 	// This is bad practice, but I want to know where the single
 	// instantiation was, in case of duplicate initiations
 	private Exception	instSite;
-
-	private static long	nextID	= 0;
 
 	public SingleSupplier(Supplier<T> supp) {
 		source = supp;

@@ -14,6 +14,14 @@ import bjc.utils.funcdata.IMap;
  */
 public interface IComponentRepository<ComponentType extends IDescribedComponent> {
 	/**
+	 * Get all of the components this repository knows about
+	 * 
+	 * @return A map from component name to component, containing all of
+	 *         the components in the repositories
+	 */
+	public IMap<String, ComponentType> getAll();
+
+	/**
 	 * Get a component with a specific name
 	 * 
 	 * @param name
@@ -31,14 +39,6 @@ public interface IComponentRepository<ComponentType extends IDescribedComponent>
 	public default IList<ComponentType> getList() {
 		return getAll().valueList();
 	}
-
-	/**
-	 * Get all of the components this repository knows about
-	 * 
-	 * @return A map from component name to component, containing all of
-	 *         the components in the repositories
-	 */
-	public IMap<String, ComponentType> getAll();
 
 	/**
 	 * Get the source from which these components came

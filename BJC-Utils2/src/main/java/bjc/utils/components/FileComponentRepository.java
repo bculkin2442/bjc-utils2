@@ -28,14 +28,14 @@ import bjc.utils.funcutils.FileUtils;
 public class FileComponentRepository<ComponentType extends IDescribedComponent>
 		implements IComponentRepository<ComponentType> {
 	// The logger to use for storing data about this class
-	private static final Logger						CLASS_LOGGER	=
-			Logger.getLogger("FileComponentRepository");
+	private static final Logger			CLASS_LOGGER	= Logger
+			.getLogger("FileComponentRepository");
 
 	// The internal storage of components
 	private IMap<String, ComponentType>	components;
 
 	// The path that all the components came from
-	private Path									sourceDirectory;
+	private Path						sourceDirectory;
 
 	/**
 	 * Create a new component repository sourcing components from files in
@@ -71,25 +71,24 @@ public class FileComponentRepository<ComponentType extends IDescribedComponent>
 
 		// Predicate to use to traverse all the files in a directory, but
 		// not recurse into sub-directories
-		BiPredicate<Path, BasicFileAttributes> firstLevelTraverser =
-				(pth, attr) -> {
-					if (attr.isDirectory() && !isFirstDir.getValue()) {
+		BiPredicate<Path, BasicFileAttributes> firstLevelTraverser = (pth,
+				attr) -> {
+			if (attr.isDirectory() && !isFirstDir.getValue()) {
 
-						/*
-						 * Skip directories, they probably have component
-						 * support files.
-						 */
-						return false;
-					}
+				/*
+				 * Skip directories, they probably have component support
+				 * files.
+				 */
+				return false;
+			}
 
-					/*
-					 * Don't skip the first directory, that's the parent
-					 * directory
-					 */
-					isFirstDir.replace(false);
+			/*
+			 * Don't skip the first directory, that's the parent directory
+			 */
+			isFirstDir.replace(false);
 
-					return true;
-				};
+			return true;
+		};
 
 		// Try reading components
 		try {
@@ -107,6 +106,11 @@ public class FileComponentRepository<ComponentType extends IDescribedComponent>
 	}
 
 	@Override
+	public IMap<String, ComponentType> getAll() {
+		return components;
+	}
+
+	@Override
 	public ComponentType getByName(String name) {
 		return components.get(name);
 	}
@@ -114,11 +118,6 @@ public class FileComponentRepository<ComponentType extends IDescribedComponent>
 	@Override
 	public IList<ComponentType> getList() {
 		return components.valueList();
-	}
-
-	@Override
-	public IMap<String, ComponentType> getAll() {
-		return components;
 	}
 
 	@Override
@@ -141,8 +140,8 @@ public class FileComponentRepository<ComponentType extends IDescribedComponent>
 						"Component reader read null component");
 			} else if (!components.containsKey(component.getName())) {
 				// We only care about the latest version of a component
-				ComponentType oldComponent =
-						components.put(component.getName(), component);
+				ComponentType oldComponent = components
+						.put(component.getName(), component);
 
 				if (oldComponent.getVersion() > component.getVersion()) {
 					components.put(oldComponent.getName(), oldComponent);

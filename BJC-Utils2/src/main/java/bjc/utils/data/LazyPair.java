@@ -96,6 +96,20 @@ public class LazyPair<LeftType, RightType>
 	}
 
 	@Override
+	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight> IPair<CombinedLeft, CombinedRight> combine(
+			IPair<OtherLeft, OtherRight> otherPair,
+			BiFunction<LeftType, OtherLeft, CombinedLeft> leftCombiner,
+			BiFunction<RightType, OtherRight, CombinedRight> rightCombiner) {
+		return otherPair.bind((otherLeft, otherRight) -> {
+			return bind((leftVal, rightVal) -> {
+				return new LazyPair<>(
+						leftCombiner.apply(leftVal, otherLeft),
+						rightCombiner.apply(rightVal, otherRight));
+			});
+		});
+	}
+
+	@Override
 	public LeftType getLeft() {
 		if (!leftMaterialized) {
 			leftValue = leftSupplier.get();
@@ -115,47 +129,6 @@ public class LazyPair<LeftType, RightType>
 		}
 
 		return rightValue;
-	}
-
-	@Override
-	public <MergedType> MergedType merge(
-			BiFunction<LeftType, RightType, MergedType> merger) {
-		if (!leftMaterialized) {
-			leftValue = leftSupplier.get();
-
-			leftMaterialized = true;
-		}
-
-		if (!rightMaterialized) {
-			rightValue = rightSupplier.get();
-
-			rightMaterialized = true;
-		}
-
-		return merger.apply(leftValue, rightValue);
-	}
-
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder("pair[l=");
-
-		if (leftMaterialized) {
-			sb.append(leftValue.toString());
-		} else {
-			sb.append("(un-materialized)");
-		}
-
-		sb.append(", r=");
-
-		if (rightMaterialized) {
-			sb.append(rightValue.toString());
-		} else {
-			sb.append("(un-materialized)");
-		}
-
-		sb.append("]");
-
-		return sb.toString();
 	}
 
 	@Override
@@ -203,16 +176,43 @@ public class LazyPair<LeftType, RightType>
 	}
 
 	@Override
-	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight> IPair<CombinedLeft, CombinedRight> combine(
-			IPair<OtherLeft, OtherRight> otherPair,
-			BiFunction<LeftType, OtherLeft, CombinedLeft> leftCombiner,
-			BiFunction<RightType, OtherRight, CombinedRight> rightCombiner) {
-		return otherPair.bind((otherLeft, otherRight) -> {
-			return bind((leftVal, rightVal) -> {
-				return new LazyPair<>(
-						leftCombiner.apply(leftVal, otherLeft),
-						rightCombiner.apply(rightVal, otherRight));
-			});
-		});
+	public <MergedType> MergedType merge(
+			BiFunction<LeftType, RightType, MergedType> merger) {
+		if (!leftMaterialized) {
+			leftValue = leftSupplier.get();
+
+			leftMaterialized = true;
+		}
+
+		if (!rightMaterialized) {
+			rightValue = rightSupplier.get();
+
+			rightMaterialized = true;
+		}
+
+		return merger.apply(leftValue, rightValue);
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder("pair[l=");
+
+		if (leftMaterialized) {
+			sb.append(leftValue.toString());
+		} else {
+			sb.append("(un-materialized)");
+		}
+
+		sb.append(", r=");
+
+		if (rightMaterialized) {
+			sb.append(rightValue.toString());
+		} else {
+			sb.append("(un-materialized)");
+		}
+
+		sb.append("]");
+
+		return sb.toString();
 	}
 }

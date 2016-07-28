@@ -80,20 +80,22 @@ class HalfBoundLazyPair<OldType, NewLeft, NewRight>
 	}
 
 	@Override
-	public <MergedType> MergedType
-			merge(BiFunction<NewLeft, NewRight, MergedType> merger) {
-		if (!pairBound) {
-			boundPair = binder.apply(oldSupplier.get());
-
-			pairBound = true;
-		}
-
-		return boundPair.merge(merger);
+	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight> IPair<CombinedLeft, CombinedRight> combine(
+			IPair<OtherLeft, OtherRight> otherPair,
+			BiFunction<NewLeft, OtherLeft, CombinedLeft> leftCombiner,
+			BiFunction<NewRight, OtherRight, CombinedRight> rightCombiner) {
+		return otherPair.bind((otherLeft, otherRight) -> {
+			return bind((leftVal, rightVal) -> {
+				return new LazyPair<>(
+						leftCombiner.apply(leftVal, otherLeft),
+						rightCombiner.apply(rightVal, otherRight));
+			});
+		});
 	}
 
 	@Override
-	public <NewLeftType> IPair<NewLeftType, NewRight>
-			mapLeft(Function<NewLeft, NewLeftType> mapper) {
+	public <NewLeftType> IPair<NewLeftType, NewRight> mapLeft(
+			Function<NewLeft, NewLeftType> mapper) {
 		Supplier<NewLeftType> leftSupp = () -> {
 			if (pairBound) {
 				return mapper.apply(boundPair.getLeft());
@@ -116,8 +118,8 @@ class HalfBoundLazyPair<OldType, NewLeft, NewRight>
 	}
 
 	@Override
-	public <NewRightType> IPair<NewLeft, NewRightType>
-			mapRight(Function<NewRight, NewRightType> mapper) {
+	public <NewRightType> IPair<NewLeft, NewRightType> mapRight(
+			Function<NewRight, NewRightType> mapper) {
 		Supplier<NewLeft> leftSupp = () -> {
 			if (pairBound) {
 				return boundPair.getLeft();
@@ -138,19 +140,16 @@ class HalfBoundLazyPair<OldType, NewLeft, NewRight>
 
 		return new LazyPair<>(leftSupp, rightSupp);
 	}
-	
+
 	@Override
-	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight>
-			IPair<CombinedLeft, CombinedRight>
-			combine(IPair<OtherLeft, OtherRight> otherPair,
-					BiFunction<NewLeft, OtherLeft, CombinedLeft> leftCombiner,
-					BiFunction<NewRight, OtherRight, CombinedRight> rightCombiner) {
-		return otherPair.bind((otherLeft, otherRight) -> {
-			return bind((leftVal, rightVal) -> {
-				return new LazyPair<>(
-						leftCombiner.apply(leftVal, otherLeft),
-						rightCombiner.apply(rightVal, otherRight));
-			});
-		});
+	public <MergedType> MergedType merge(
+			BiFunction<NewLeft, NewRight, MergedType> merger) {
+		if (!pairBound) {
+			boundPair = binder.apply(oldSupplier.get());
+
+			pairBound = true;
+		}
+
+		return boundPair.merge(merger);
 	}
 }

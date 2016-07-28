@@ -25,8 +25,8 @@ public interface IHolder<ContainedType> extends Functor<ContainedType> {
 	 *            The function to bind to the value
 	 * @return A holder from binding the value
 	 */
-	public <BoundType> IHolder<BoundType>
-			bind(Function<ContainedType, IHolder<BoundType>> binder);
+	public <BoundType> IHolder<BoundType> bind(
+			Function<ContainedType, IHolder<BoundType>> binder);
 
 	/**
 	 * Apply an action to the value
@@ -43,9 +43,8 @@ public interface IHolder<ContainedType> extends Functor<ContainedType> {
 	}
 
 	@Override
-	default <ArgType, ReturnType>
-			Function<Functor<ArgType>, Functor<ReturnType>>
-			fmap(Function<ArgType, ReturnType> func) {
+	default <ArgType, ReturnType> Function<Functor<ArgType>, Functor<ReturnType>> fmap(
+			Function<ArgType, ReturnType> func) {
 		return (argumentFunctor) -> {
 			if (!(argumentFunctor instanceof IHolder<?>)) {
 				throw new IllegalArgumentException(
@@ -72,8 +71,8 @@ public interface IHolder<ContainedType> extends Functor<ContainedType> {
 	 *            The function to lift over the holder
 	 * @return The function lifted over the holder
 	 */
-	public <NewType> Function<ContainedType, IHolder<NewType>>
-			lift(Function<ContainedType, NewType> func);
+	public <NewType> Function<ContainedType, IHolder<NewType>> lift(
+			Function<ContainedType, NewType> func);
 
 	/**
 	 * Make this holder lazy
@@ -114,8 +113,8 @@ public interface IHolder<ContainedType> extends Functor<ContainedType> {
 	 *            The function to do mapping with
 	 * @return A holder with the mapped value
 	 */
-	public <MappedType> IHolder<MappedType>
-			map(Function<ContainedType, MappedType> mapper);
+	public <MappedType> IHolder<MappedType> map(
+			Function<ContainedType, MappedType> mapper);
 
 	/**
 	 * Replace the held value with a new one
@@ -137,8 +136,8 @@ public interface IHolder<ContainedType> extends Functor<ContainedType> {
 	 *            The function to transform the value with
 	 * @return The holder itself, for easy chaining
 	 */
-	public IHolder<ContainedType>
-			transform(UnaryOperator<ContainedType> transformer);
+	public IHolder<ContainedType> transform(
+			UnaryOperator<ContainedType> transformer);
 
 	/**
 	 * Unwrap the value contained in this holder so that it is no longer
@@ -150,6 +149,6 @@ public interface IHolder<ContainedType> extends Functor<ContainedType> {
 	 *            The function to use to unwrap the value
 	 * @return The unwrapped held value
 	 */
-	public <UnwrappedType> UnwrappedType
-			unwrap(Function<ContainedType, UnwrappedType> unwrapper);
+	public <UnwrappedType> UnwrappedType unwrap(
+			Function<ContainedType, UnwrappedType> unwrapper);
 }

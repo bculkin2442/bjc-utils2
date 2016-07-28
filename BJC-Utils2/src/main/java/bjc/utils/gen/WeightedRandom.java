@@ -26,14 +26,14 @@ public class WeightedRandom<E> {
 	/**
 	 * The list of possible results to pick from
 	 */
-	private IList<E>			results;
+	private IList<E>		results;
 
 	/**
 	 * The source for any needed random numbers
 	 */
-	private Random						source;
+	private Random			source;
 
-	private int							totalChance;
+	private int				totalChance;
 
 	/**
 	 * Create a new weighted random generator with the specified source of

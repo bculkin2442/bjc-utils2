@@ -95,8 +95,7 @@ public interface IMap<KeyType, ValueType> {
 	 *            The function to use to transform values
 	 * @return The map where each value will be transformed after lookup
 	 */
-	<V2> IMap<KeyType, V2> mapValues(
-			Function<ValueType, V2> transformer);
+	<V2> IMap<KeyType, V2> mapValues(Function<ValueType, V2> transformer);
 
 	/**
 	 * Add an entry to the map

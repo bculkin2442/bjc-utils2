@@ -6,6 +6,7 @@ import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
+
 import bjc.utils.data.IHolder;
 import bjc.utils.data.IPair;
 import bjc.utils.data.Identity;
@@ -30,19 +31,11 @@ final class CompoundCollector<InitialType, AuxType1, AuxType2, FinalType1, Final
 	}
 
 	@Override
-	public Supplier<IHolder<IPair<AuxType1, AuxType2>>> supplier() {
-		return () -> new Identity<>(
-				new Pair<>(firstCollector.supplier().get(),
-						secondCollector.supplier().get()));
-	}
-
-	@Override
-	public BiConsumer<IHolder<IPair<AuxType1, AuxType2>>, InitialType>
-			accumulator() {
-		BiConsumer<AuxType1, InitialType> firstAccumulator =
-				firstCollector.accumulator();
-		BiConsumer<AuxType2, InitialType> secondAccumulator =
-				secondCollector.accumulator();
+	public BiConsumer<IHolder<IPair<AuxType1, AuxType2>>, InitialType> accumulator() {
+		BiConsumer<AuxType1, InitialType> firstAccumulator = firstCollector
+				.accumulator();
+		BiConsumer<AuxType2, InitialType> secondAccumulator = secondCollector
+				.accumulator();
 
 		return (state, value) -> {
 			state.doWith((statePair) -> {
@@ -55,10 +48,15 @@ final class CompoundCollector<InitialType, AuxType1, AuxType2, FinalType1, Final
 	}
 
 	@Override
+	public Set<java.util.stream.Collector.Characteristics> characteristics() {
+		return characteristicSet;
+	}
+
+	@Override
 	public BinaryOperator<IHolder<IPair<AuxType1, AuxType2>>> combiner() {
 		BinaryOperator<AuxType1> firstCombiner = firstCollector.combiner();
-		BinaryOperator<AuxType2> secondCombiner =
-				secondCollector.combiner();
+		BinaryOperator<AuxType2> secondCombiner = secondCollector
+				.combiner();
 
 		return (leftState, rightState) -> {
 			return leftState.unwrap((leftPair) -> {
@@ -71,8 +69,7 @@ final class CompoundCollector<InitialType, AuxType1, AuxType2, FinalType1, Final
 	}
 
 	@Override
-	public Function<IHolder<IPair<AuxType1, AuxType2>>, IPair<FinalType1, FinalType2>>
-			finisher() {
+	public Function<IHolder<IPair<AuxType1, AuxType2>>, IPair<FinalType1, FinalType2>> finisher() {
 		return (state) -> {
 			return state.unwrap((pair) -> {
 				return pair.bind((leftVal, rightVal) -> {
@@ -85,8 +82,9 @@ final class CompoundCollector<InitialType, AuxType1, AuxType2, FinalType1, Final
 	}
 
 	@Override
-	public Set<java.util.stream.Collector.Characteristics>
-			characteristics() {
-		return characteristicSet;
+	public Supplier<IHolder<IPair<AuxType1, AuxType2>>> supplier() {
+		return () -> new Identity<>(
+				new Pair<>(firstCollector.supplier().get(),
+						secondCollector.supplier().get()));
 	}
 }

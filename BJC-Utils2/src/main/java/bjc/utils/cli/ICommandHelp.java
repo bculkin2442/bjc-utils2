@@ -18,8 +18,9 @@ public interface ICommandHelp {
 	 * Get the summary line for a command.
 	 * 
 	 * A summary line should consist of a string of the following format
-	 * 		"<command-name>\t<command-summary>"
-	 * 	where anything in angle brackets should be filled in.
+	 * "<command-name>\t<command-summary>" where anything in angle brackets
+	 * should be filled in.
+	 * 
 	 * @return The summary line line for a command
 	 */
 	public String getSummary();

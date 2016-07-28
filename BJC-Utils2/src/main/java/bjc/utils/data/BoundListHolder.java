@@ -8,8 +8,7 @@ import bjc.utils.funcdata.IList;
 class BoundListHolder<ContainedType> implements IHolder<ContainedType> {
 	private IList<IHolder<ContainedType>> heldHolders;
 
-	public BoundListHolder(
-			IList<IHolder<ContainedType>> toHold) {
+	public BoundListHolder(IList<IHolder<ContainedType>> toHold) {
 		heldHolders = toHold;
 	}
 
@@ -22,6 +21,14 @@ class BoundListHolder<ContainedType> implements IHolder<ContainedType> {
 				});
 
 		return new BoundListHolder<>(boundHolders);
+	}
+
+	@Override
+	public <NewType> Function<ContainedType, IHolder<NewType>> lift(
+			Function<ContainedType, NewType> func) {
+		return (val) -> {
+			return new ListHolder<>(func.apply(val));
+		};
 	}
 
 	@Override
@@ -49,13 +56,5 @@ class BoundListHolder<ContainedType> implements IHolder<ContainedType> {
 	public <UnwrappedType> UnwrappedType unwrap(
 			Function<ContainedType, UnwrappedType> unwrapper) {
 		return heldHolders.randItem().unwrap(unwrapper);
-	}
-
-	@Override
-	public <NewType> Function<ContainedType, IHolder<NewType>> lift(
-			Function<ContainedType, NewType> func) {
-		return (val) -> {
-			return new ListHolder<>(func.apply(val));
-		};
 	}
 }
