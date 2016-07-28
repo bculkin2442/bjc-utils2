@@ -43,7 +43,7 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 	 *            The source of a value to use
 	 */
 	public Lazy(Supplier<ContainedType> supp) {
-		valueSupplier = supp;
+		valueSupplier = new SingleSupplier<>(supp);
 
 		valueMaterialized = false;
 	}

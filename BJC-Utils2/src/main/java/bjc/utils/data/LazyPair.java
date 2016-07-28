@@ -29,7 +29,7 @@ public class LazyPair<LeftType, RightType>
 	private boolean				rightMaterialized;
 
 	/**
-	 * Create a new lazy pair, using the set value s
+	 * Create a new lazy pair, using the set values
 	 * 
 	 * @param leftVal
 	 *            The value for the left side of the pair
@@ -54,8 +54,8 @@ public class LazyPair<LeftType, RightType>
 	 */
 	public LazyPair(Supplier<LeftType> leftSupp,
 			Supplier<RightType> rightSupp) {
-		leftSupplier = leftSupp;
-		rightSupplier = rightSupp;
+		leftSupplier = new SingleSupplier<>(leftSupp);
+		rightSupplier = new SingleSupplier<>(rightSupp);
 
 		leftMaterialized = false;
 		rightMaterialized = false;
