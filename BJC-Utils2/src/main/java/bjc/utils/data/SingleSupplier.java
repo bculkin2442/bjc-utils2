@@ -9,6 +9,10 @@ public class SingleSupplier<T> implements Supplier<T> {
 
 	private long		id;
 
+	// This is bad practice, but I want to know where the single
+	// instantiation was, in case of duplicate initiations
+	private Exception	instSite;
+
 	private static long	nextID	= 0;
 
 	public SingleSupplier(Supplier<T> supp) {
@@ -22,12 +26,24 @@ public class SingleSupplier<T> implements Supplier<T> {
 	@Override
 	public T get() {
 		if (gotten == true) {
-			throw new IllegalStateException(
+			IllegalStateException isex = new IllegalStateException(
 					"Attempted to get value more than once"
-							+ " from single supplier #" + id);
+							+ " from single supplier #" + id
+							+ ". Previous instantiation below.");
+
+			isex.initCause(instSite);
+
+			throw isex;
 		}
 
 		gotten = true;
+
+		try {
+			throw new IllegalStateException(
+					"Previous instantiation here.");
+		} catch (IllegalStateException isex) {
+			instSite = isex;
+		}
 
 		return source.get();
 	}
