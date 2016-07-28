@@ -16,13 +16,13 @@ import bjc.utils.funcdata.IList;
  * @param <ContainedType>
  */
 public class Lazy<ContainedType> implements IHolder<ContainedType> {
-	private Supplier<ContainedType>							valueSupplier;
+	private Supplier<ContainedType>				valueSupplier;
 
 	private IList<UnaryOperator<ContainedType>>	actions	= new FunctionalList<>();
 
-	private boolean											valueMaterialized;
+	private boolean								valueMaterialized;
 
-	private ContainedType									heldValue;
+	private ContainedType						heldValue;
 
 	/**
 	 * Create a new lazy value from the specified seed value
@@ -137,7 +137,6 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 	@Override
 	public <NewType> Function<ContainedType, IHolder<NewType>> lift(
 			Function<ContainedType, NewType> func) {
-		// TODO Auto-generated method stub
 		return (val) -> {
 			return new Lazy<>(func.apply(val));
 		};

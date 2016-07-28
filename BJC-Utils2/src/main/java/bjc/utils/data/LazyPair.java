@@ -13,6 +13,9 @@ import java.util.function.Supplier;
  *            The type on the left side of the pair
  * @param <RightType>
  *            The type on the right side of the pair
+ * 
+ * @TODO ensure we don't have any issues with values being materialized
+ *       more than once
  */
 public class LazyPair<LeftType, RightType>
 		implements IPair<LeftType, RightType> {
@@ -115,8 +118,8 @@ public class LazyPair<LeftType, RightType>
 	}
 
 	@Override
-	public <MergedType> MergedType
-			merge(BiFunction<LeftType, RightType, MergedType> merger) {
+	public <MergedType> MergedType merge(
+			BiFunction<LeftType, RightType, MergedType> merger) {
 		if (!leftMaterialized) {
 			leftValue = leftSupplier.get();
 
@@ -156,8 +159,8 @@ public class LazyPair<LeftType, RightType>
 	}
 
 	@Override
-	public <NewLeft> IPair<NewLeft, RightType>
-			mapLeft(Function<LeftType, NewLeft> mapper) {
+	public <NewLeft> IPair<NewLeft, RightType> mapLeft(
+			Function<LeftType, NewLeft> mapper) {
 		Supplier<NewLeft> leftSupp = () -> {
 			if (leftMaterialized) {
 				return mapper.apply(leftValue);
@@ -178,8 +181,8 @@ public class LazyPair<LeftType, RightType>
 	}
 
 	@Override
-	public <NewRight> IPair<LeftType, NewRight>
-			mapRight(Function<RightType, NewRight> mapper) {
+	public <NewRight> IPair<LeftType, NewRight> mapRight(
+			Function<RightType, NewRight> mapper) {
 		Supplier<LeftType> leftSupp = () -> {
 			if (leftMaterialized) {
 				return leftValue;
@@ -200,11 +203,10 @@ public class LazyPair<LeftType, RightType>
 	}
 
 	@Override
-	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight>
-			IPair<CombinedLeft, CombinedRight>
-			combine(IPair<OtherLeft, OtherRight> otherPair,
-					BiFunction<LeftType, OtherLeft, CombinedLeft> leftCombiner,
-					BiFunction<RightType, OtherRight, CombinedRight> rightCombiner) {
+	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight> IPair<CombinedLeft, CombinedRight> combine(
+			IPair<OtherLeft, OtherRight> otherPair,
+			BiFunction<LeftType, OtherLeft, CombinedLeft> leftCombiner,
+			BiFunction<RightType, OtherRight, CombinedRight> rightCombiner) {
 		return otherPair.bind((otherLeft, otherRight) -> {
 			return bind((leftVal, rightVal) -> {
 				return new LazyPair<>(
