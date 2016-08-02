@@ -8,6 +8,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
@@ -38,18 +39,18 @@ public class SimpleListPanel extends JPanel {
 		JList<String> itemList = new JList<>(listModel);
 		itemList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
+		JScrollPane listScroller = new JScrollPane(itemList);
+
 		JButton removeItemButton = new JButton("Remove " + itemType);
 
 		addItemButton.addActionListener((ev) -> {
-			String potentialItem = addItemField.getText();
+			addItem(listModel, itemVerifier, onVerificationFailure,
+					addItemField);
+		});
 
-			if (itemVerifier == null || itemVerifier.test(potentialItem)) {
-				listModel.addElement(potentialItem);
-			} else {
-				onVerificationFailure.accept(potentialItem);
-			}
-
-			addItemField.setText("");
+		addItemField.addActionListener((ev) -> {
+			addItem(listModel, itemVerifier, onVerificationFailure,
+					addItemField);
 		});
 
 		removeItemButton.addActionListener((ev) -> {
@@ -57,9 +58,24 @@ public class SimpleListPanel extends JPanel {
 		});
 
 		itemInputPanel.add(addItemPanel, BorderLayout.PAGE_START);
-		itemInputPanel.add(itemList, BorderLayout.CENTER);
+		itemInputPanel.add(listScroller, BorderLayout.CENTER);
 		itemInputPanel.add(removeItemButton, BorderLayout.PAGE_END);
 
 		add(itemInputPanel);
+	}
+
+	private static void addItem(DefaultListModel<String> listModel,
+			Predicate<String> itemVerifier,
+			Consumer<String> onVerificationFailure,
+			JTextField addItemField) {
+		String potentialItem = addItemField.getText();
+
+		if (itemVerifier == null || itemVerifier.test(potentialItem)) {
+			listModel.addElement(potentialItem);
+		} else {
+			onVerificationFailure.accept(potentialItem);
+		}
+
+		addItemField.setText("");
 	}
 }

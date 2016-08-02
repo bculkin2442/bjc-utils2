@@ -97,4 +97,9 @@ final class TransformedValueMap<OldKey, OldValue, NewValue>
 	public IList<NewValue> valueList() {
 		return mapToTransform.valueList().map(transformer);
 	}
+
+	@Override
+	public void clear() {
+		mapToTransform.clear();
+	}
 }

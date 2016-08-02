@@ -132,4 +132,9 @@ public interface IMap<KeyType, ValueType> {
 	 * @return A list of values in this map
 	 */
 	IList<ValueType> valueList();
+
+	/**
+	 * Delete all the values in the map
+	 */
+	void clear();
 }

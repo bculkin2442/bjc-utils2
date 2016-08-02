@@ -175,4 +175,9 @@ public class FunctionalMap<KeyType, ValueType>
 
 		return values;
 	}
+
+	@Override
+	public void clear() {
+		wrappedMap.clear();
+	}
 }

@@ -92,4 +92,9 @@ class ExtendedMap<KeyType, ValueType> implements IMap<KeyType, ValueType> {
 		return ListUtils.mergeLists(store.valueList(),
 				delegate.valueList());
 	}
+
+	@Override
+	public void clear() {
+		store.clear();
+	}
 }
