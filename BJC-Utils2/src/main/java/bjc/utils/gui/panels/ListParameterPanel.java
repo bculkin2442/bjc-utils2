@@ -1,4 +1,4 @@
-package bjc.utils.gui;
+package bjc.utils.gui.panels;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 
 import bjc.utils.funcdata.IList;
+import bjc.utils.gui.SimpleJList;
 import bjc.utils.gui.layout.HLayout;
 import bjc.utils.gui.layout.VLayout;
 

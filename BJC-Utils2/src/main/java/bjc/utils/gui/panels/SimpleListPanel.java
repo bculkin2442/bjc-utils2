@@ -1,4 +1,4 @@
-package bjc.utils.gui;
+package bjc.utils.gui.panels;
 
 import java.awt.BorderLayout;
 import java.util.function.Consumer;

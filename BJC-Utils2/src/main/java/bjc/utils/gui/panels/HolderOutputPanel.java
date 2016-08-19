@@ -1,4 +1,4 @@
-package bjc.utils.gui;
+package bjc.utils.gui.panels;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;

@@ -1,26 +1,23 @@
-package bjc.utils.gui;
+package bjc.utils.gui.panels;
 
 import java.awt.BorderLayout;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerModel;
 
-public class SimpleInputPanel extends JPanel {
+public class SimpleSpinnerPanel extends JPanel {
 	private static final long	serialVersionUID	= -4734279623645236868L;
 
-	public final JTextField		inputValue;
+	public final JSpinner		inputValue;
 
-	public SimpleInputPanel(String label, int columns) {
+	public SimpleSpinnerPanel(String label, SpinnerModel model) {
 		setLayout(new BorderLayout());
 
 		JLabel inputLabel = new JLabel(label);
 
-		if (columns < 1) {
-			inputValue = new JTextField();
-		} else {
-			inputValue = new JTextField(columns);
-		}
+		inputValue = new JSpinner(model);
 
 		add(inputLabel, BorderLayout.LINE_START);
 		add(inputValue, BorderLayout.CENTER);

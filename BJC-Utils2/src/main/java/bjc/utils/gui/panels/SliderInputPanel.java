@@ -1,4 +1,4 @@
-package bjc.utils.gui;
+package bjc.utils.gui.panels;
 
 import java.text.ParseException;
 import java.util.function.Consumer;
