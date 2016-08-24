@@ -137,4 +137,14 @@ public interface IMap<KeyType, ValueType> {
 	 * Delete all the values in the map
 	 */
 	void clear();
+
+	default ValueType getOrDefault(KeyType key, ValueType defaultValue) {
+		try {
+			return get(key);
+		} catch (@SuppressWarnings("unused") IllegalArgumentException iaex) {
+			// We don't care about this, because it indicates a key is
+			// missing
+			return defaultValue;
+		}
+	}
 }

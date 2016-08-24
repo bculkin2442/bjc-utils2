@@ -134,7 +134,8 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 			Function<IList<NewType>, NewType> nodeTransformer = nodeCollapser
 					.apply(data);
 
-			IList<NewType> collapsedChildren = children.map((child) -> {
+			@SuppressWarnings("unchecked")
+			IList<NewType> collapsedChildren = (IList<NewType>) children.map((child) -> {
 				return child.collapse(leafTransform, nodeCollapser,
 						(subTreeVal) -> subTreeVal);
 			});

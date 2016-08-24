@@ -3,7 +3,9 @@ package bjc.utils.parserutils;
 import java.io.InputStream;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.Stack;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 import bjc.utils.data.IHolder;
@@ -17,20 +19,29 @@ import bjc.utils.funcdata.IMap;
 
 /**
  * This class parses a rules based config file, and uses it to drive a
- * provided set of actions
+ * provided set of actions. It differs from {@link RuleBasedConfigReader}
+ * in that it has support for subrules
  * 
  * @author ben
  *
- * @param <E>
+ * @param <State>
  *            The type of the state object to use
+ * @param <SubruleState>
+ *            The type of state to use for subrules
  * 
  */
-public class RuleBasedConfigReader<E> {
-	private BiConsumer<FunctionalStringTokenizer, IPair<String, E>>	startRule;
-	private BiConsumer<FunctionalStringTokenizer, E>				continueRule;
-	private Consumer<E>												endRule;
+public class RuleStackBasedConfigReader<State, SubruleState> {
+	private BiConsumer<FunctionalStringTokenizer, IPair<String, State>>	startRule;
+	private BiConsumer<FunctionalStringTokenizer, State>				continueRule;
+	private Consumer<State>												endRule;
 
-	private IMap<String, BiConsumer<FunctionalStringTokenizer, E>>	pragmas;
+	private Stack<SubruleState>											subruleStack;
+
+	private BiFunction<FunctionalStringTokenizer, State, SubruleState>	startSubrule;
+	private BiConsumer<FunctionalStringTokenizer, SubruleState>			continueSubrule;
+	private BiConsumer<State, SubruleState>								endSubrule;
+
+	private IMap<String, BiConsumer<FunctionalStringTokenizer, State>>	pragmas;
 
 	/**
 	 * Create a new rule-based config reader
@@ -42,14 +53,18 @@ public class RuleBasedConfigReader<E> {
 	 * @param endRule
 	 *            The action to fire when ending a rule
 	 */
-	public RuleBasedConfigReader(
-			BiConsumer<FunctionalStringTokenizer, IPair<String, E>> startRule,
-			BiConsumer<FunctionalStringTokenizer, E> continueRule,
-			Consumer<E> endRule) {
+	public RuleStackBasedConfigReader(
+			BiConsumer<FunctionalStringTokenizer, IPair<String, State>> startRule,
+			BiConsumer<FunctionalStringTokenizer, State> continueRule,
+			Consumer<State> endRule) {
 		this.startRule = startRule;
 		this.continueRule = continueRule;
 		this.endRule = endRule;
 
+		this.pragmas = new FunctionalMap<>();
+	}
+
+	public RuleStackBasedConfigReader() {
 		this.pragmas = new FunctionalMap<>();
 	}
 
@@ -62,7 +77,7 @@ public class RuleBasedConfigReader<E> {
 	 *            The function to execute when this pragma is read
 	 */
 	public void addPragma(String pragmaName,
-			BiConsumer<FunctionalStringTokenizer, E> pragmaAction) {
+			BiConsumer<FunctionalStringTokenizer, State> pragmaAction) {
 		if (pragmaName == null) {
 			throw new NullPointerException("Pragma name must not be null");
 		} else if (pragmaAction == null) {
@@ -73,7 +88,7 @@ public class RuleBasedConfigReader<E> {
 		pragmas.put(pragmaName, pragmaAction);
 	}
 
-	private void continueRule(E state, boolean ruleOpen, String line) {
+	private void continueRule(State state, boolean ruleOpen, String line) {
 		if (ruleOpen == false) {
 			throw new InputMismatchException(
 					"Can't continue rule with no rule currently open");
@@ -85,12 +100,57 @@ public class RuleBasedConfigReader<E> {
 							+ " Check for extraneous tabs");
 		}
 
-		continueRule.accept(
-				new FunctionalStringTokenizer(line.substring(1), " "),
-				state);
+		String lineSansInitTab = line.substring(1);
+
+		if (lineSansInitTab.startsWith("\t")) {
+			// Do subrule stuff
+			int subruleLevel;
+
+			for (subruleLevel = 1; lineSansInitTab
+					.charAt(subruleLevel) != '\t'; subruleLevel++) {
+				// Count up subrule levels
+			}
+
+			if (subruleStack.size() + 1 < subruleLevel) {
+				throw new InputMismatchException(
+						"Attempted to start a nested subrule without starting its parent."
+								+ " Check indentation, as subrules can only be started one at a time");
+			} else if (subruleStack.size() + 1 == subruleLevel) {
+				SubruleState subruleState = startSubrule.apply(
+						new FunctionalStringTokenizer(lineSansInitTab
+								.substring(subruleLevel - 1), " "),
+						state);
+
+				subruleStack.push(subruleState);
+			} else if (subruleStack.size() == subruleLevel) {
+				continueSubrule.accept(
+						new FunctionalStringTokenizer(lineSansInitTab
+								.substring(subruleLevel - 1), " "),
+						subruleStack.peek());
+			} else {
+				while (subruleStack.size() != subruleLevel) {
+					endSubrule.accept(state, subruleStack.pop());
+				}
+
+				continueSubrule.accept(
+						new FunctionalStringTokenizer(lineSansInitTab
+								.substring(subruleLevel - 1), " "),
+						subruleStack.peek());
+			}
+		} else {
+			if (!subruleStack.empty()) {
+				while (!subruleStack.empty()) {
+					endSubrule.accept(state, subruleStack.pop());
+				}
+			}
+
+			continueRule.accept(
+					new FunctionalStringTokenizer(lineSansInitTab, " "),
+					state);
+		}
 	}
 
-	private boolean endRule(E state, boolean ruleOpen) {
+	private boolean endRule(State state, boolean ruleOpen) {
 		if (ruleOpen == false) {
 			// Ignore blank line without an open rule
 		} else {
@@ -115,13 +175,13 @@ public class RuleBasedConfigReader<E> {
 	 *            The initial state of the reader
 	 * @return The final state of the reader
 	 */
-	public E fromStream(InputStream inputStream, E initialState) {
+	public State fromStream(InputStream inputStream, State initialState) {
 		if (inputStream == null) {
 			throw new NullPointerException(
 					"Input stream must not be null");
 		}
 
-		E state;
+		State state;
 
 		try (Scanner inputSource = new Scanner(inputStream, "\n")) {
 
@@ -156,7 +216,7 @@ public class RuleBasedConfigReader<E> {
 	 *            The action to execute on continuation of a rule
 	 */
 	public void setContinueRule(
-			BiConsumer<FunctionalStringTokenizer, E> continueRule) {
+			BiConsumer<FunctionalStringTokenizer, State> continueRule) {
 		this.continueRule = continueRule;
 	}
 
@@ -166,7 +226,7 @@ public class RuleBasedConfigReader<E> {
 	 * @param endRule
 	 *            The action to execute on ending of a rule
 	 */
-	public void setEndRule(Consumer<E> endRule) {
+	public void setEndRule(Consumer<State> endRule) {
 		this.endRule = endRule;
 	}
 
@@ -177,7 +237,7 @@ public class RuleBasedConfigReader<E> {
 	 *            The action to execute on starting of a rule
 	 */
 	public void setStartRule(
-			BiConsumer<FunctionalStringTokenizer, IPair<String, E>> startRule) {
+			BiConsumer<FunctionalStringTokenizer, IPair<String, State>> startRule) {
 		if (startRule == null) {
 			throw new NullPointerException(
 					"Action on rule start must be non-null");
@@ -186,7 +246,7 @@ public class RuleBasedConfigReader<E> {
 		this.startRule = startRule;
 	}
 
-	private boolean startRule(E state, boolean ruleOpen, String line) {
+	private boolean startRule(State state, boolean ruleOpen, String line) {
 		FunctionalStringTokenizer tokenizer = new FunctionalStringTokenizer(
 				line, " ");
 
@@ -210,5 +270,37 @@ public class RuleBasedConfigReader<E> {
 			ruleOpen = true;
 		}
 		return ruleOpen;
+	}
+
+	/**
+	 * Set the function to use when a subrule starts
+	 * 
+	 * @param startSubrule
+	 *            the function to use for starting a subrule
+	 */
+	public void setStartSubrule(
+			BiFunction<FunctionalStringTokenizer, State, SubruleState> startSubrule) {
+		this.startSubrule = startSubrule;
+	}
+
+	/**
+	 * Set the function to use when a subrule continues
+	 * 
+	 * @param continueSubrule
+	 *            the function to use for continuing a subrule
+	 */
+	public void setContinueSubrule(
+			BiConsumer<FunctionalStringTokenizer, SubruleState> continueSubrule) {
+		this.continueSubrule = continueSubrule;
+	}
+
+	/**
+	 * Set the function to use when a subrule ends
+	 * 
+	 * @param endSubrule
+	 *            the function to use for ending a subrule
+	 */
+	public void setEndSubrule(BiConsumer<State, SubruleState> endSubrule) {
+		this.endSubrule = endSubrule;
 	}
 }

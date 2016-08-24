@@ -92,18 +92,16 @@ public class CLICommander {
 			// Read in a command
 			String currentLine = inputSource.nextLine();
 
-			// Handle handleable commands
+			// Handle commands we can handle
 			if (currentMode.canHandle(currentLine)) {
 				String[] commandTokens = currentLine.split(" ");
 
-				String[] commandArgs;
+				String[] commandArgs = null;
 
 				// Parse args if they are present
 				if (commandTokens.length > 1) {
 					commandArgs = Arrays.copyOfRange(commandTokens, 1,
 							commandTokens.length);
-				} else {
-					commandArgs = null;
 				}
 
 				// Process command
