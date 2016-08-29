@@ -12,7 +12,7 @@ import bjc.utils.parserutils.ShuntingYard;
  * @author ben
  *
  */
-public class ShuntTester {
+public class ShuntTest {
 	/**
 	 * Main method
 	 * 

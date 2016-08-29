@@ -11,7 +11,7 @@ import bjc.utils.funcdata.bst.TreeLinearizationMethod;
  * @author ben
  *
  */
-public class BinarySearcher {
+public class BinarySearchTest {
 	private static void displayTree(BinarySearchTree<Character> tree,
 			Scanner inputSource) {
 		System.out.print(
