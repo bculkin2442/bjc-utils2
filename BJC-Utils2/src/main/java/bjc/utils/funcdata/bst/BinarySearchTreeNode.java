@@ -80,6 +80,8 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 				} else {
 					rightBranch.add(element, comparator);
 				}
+			default:
+				throw new IllegalStateException("Error: Comparator yielded invalid value");
 		}
 	}
 
