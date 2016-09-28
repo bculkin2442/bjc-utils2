@@ -18,6 +18,21 @@ import bjc.utils.gui.layout.HLayout;
 public class SimpleListPanel extends JPanel {
 	private static final long serialVersionUID = 2719963952350133541L;
 
+	private static void addItem(DefaultListModel<String> listModel,
+			Predicate<String> itemVerifier,
+			Consumer<String> onVerificationFailure,
+			JTextField addItemField) {
+		String potentialItem = addItemField.getText();
+
+		if (itemVerifier == null || itemVerifier.test(potentialItem)) {
+			listModel.addElement(potentialItem);
+		} else {
+			onVerificationFailure.accept(potentialItem);
+		}
+
+		addItemField.setText("");
+	}
+
 	public SimpleListPanel(String itemType,
 			DefaultListModel<String> listModel,
 			Predicate<String> itemVerifier,
@@ -62,20 +77,5 @@ public class SimpleListPanel extends JPanel {
 		itemInputPanel.add(removeItemButton, BorderLayout.PAGE_END);
 
 		add(itemInputPanel);
-	}
-
-	private static void addItem(DefaultListModel<String> listModel,
-			Predicate<String> itemVerifier,
-			Consumer<String> onVerificationFailure,
-			JTextField addItemField) {
-		String potentialItem = addItemField.getText();
-
-		if (itemVerifier == null || itemVerifier.test(potentialItem)) {
-			listModel.addElement(potentialItem);
-		} else {
-			onVerificationFailure.accept(potentialItem);
-		}
-
-		addItemField.setText("");
 	}
 }

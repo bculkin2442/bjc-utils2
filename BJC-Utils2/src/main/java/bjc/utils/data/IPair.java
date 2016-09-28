@@ -30,7 +30,8 @@ public interface IPair<LeftType, RightType>
 	 * @return The bound pair
 	 */
 	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind(
-			BiFunction<LeftType, RightType, IPair<BoundLeft, BoundRight>> binder);
+			BiFunction<LeftType, RightType,
+					IPair<BoundLeft, BoundRight>> binder);
 
 	/**
 	 * Bind a function to the left value in this pair
@@ -67,8 +68,10 @@ public interface IPair<LeftType, RightType>
 	 *            The pair to combine with
 	 * @return The pairs, pairwise combined together
 	 */
-	public default <OtherLeft, OtherRight> IPair<IPair<LeftType, OtherLeft>, IPair<RightType, OtherRight>> combine(
-			IPair<OtherLeft, OtherRight> otherPair) {
+	public default <OtherLeft,
+			OtherRight> IPair<IPair<LeftType, OtherLeft>,
+					IPair<RightType, OtherRight>> combine(
+							IPair<OtherLeft, OtherRight> otherPair) {
 		return combine(otherPair,
 				(left, otherLeft) -> new Pair<>(left, otherLeft),
 				(right, otherRight) -> new Pair<>(right, otherRight));
@@ -91,10 +94,13 @@ public interface IPair<LeftType, RightType>
 	 * @param rightCombiner
 	 * @return A pair with its values combined
 	 */
-	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight> IPair<CombinedLeft, CombinedRight> combine(
-			IPair<OtherLeft, OtherRight> otherPair,
-			BiFunction<LeftType, OtherLeft, CombinedLeft> leftCombiner,
-			BiFunction<RightType, OtherRight, CombinedRight> rightCombiner);
+	public <OtherLeft, OtherRight, CombinedLeft,
+			CombinedRight> IPair<CombinedLeft, CombinedRight> combine(
+					IPair<OtherLeft, OtherRight> otherPair,
+					BiFunction<LeftType, OtherLeft,
+							CombinedLeft> leftCombiner,
+					BiFunction<RightType, OtherRight,
+							CombinedRight> rightCombiner);
 
 	/**
 	 * Immediately perfom the specified action with the contents of this
@@ -112,22 +118,26 @@ public interface IPair<LeftType, RightType>
 	}
 
 	@Override
-	default <OldLeft, OldRight, NewLeft> Function<Bifunctor<OldLeft, OldRight>, Bifunctor<NewLeft, OldRight>> fmapLeft(
-			Function<OldLeft, NewLeft> func) {
+	default <OldLeft, OldRight,
+			NewLeft> Function<Bifunctor<OldLeft, OldRight>,
+					Bifunctor<NewLeft, OldRight>> fmapLeft(
+							Function<OldLeft, NewLeft> func) {
 		return (argumentPair) -> {
 			if (!(argumentPair instanceof IPair<?, ?>)) {
 				throw new IllegalArgumentException(
 						"This function can only be applied to instances of IPair");
 			}
 
-			IPair<OldLeft, OldRight> argPair = (IPair<OldLeft, OldRight>) argumentPair;
+			IPair<OldLeft, OldRight> argPair = (IPair<OldLeft,
+					OldRight>) argumentPair;
 
 			return argPair.mapLeft(func);
 		};
 	}
 
 	@Override
-	default <OldLeft, OldRight, NewRight> Function<Bifunctor<OldLeft, OldRight>, Bifunctor<OldLeft, NewRight>>
+	default <OldLeft, OldRight, NewRight> Function<
+			Bifunctor<OldLeft, OldRight>, Bifunctor<OldLeft, NewRight>>
 
 			fmapRight(Function<OldRight, NewRight> func) {
 		return (argumentPair) -> {
@@ -136,7 +146,8 @@ public interface IPair<LeftType, RightType>
 						"This function can only be applied to instances of IPair");
 			}
 
-			IPair<OldLeft, OldRight> argPair = (IPair<OldLeft, OldRight>) argumentPair;
+			IPair<OldLeft, OldRight> argPair = (IPair<OldLeft,
+					OldRight>) argumentPair;
 
 			return argPair.mapRight(func);
 		};

@@ -21,9 +21,10 @@ class HalfBoundLazyPair<OldType, NewLeft, NewRight>
 
 	@Override
 	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind(
-			BiFunction<NewLeft, NewRight, IPair<BoundLeft, BoundRight>> bindr) {
-		IHolder<IPair<NewLeft, NewRight>> newPair = new Identity<>(
-				boundPair);
+			BiFunction<NewLeft, NewRight,
+					IPair<BoundLeft, BoundRight>> bindr) {
+		IHolder<IPair<NewLeft,
+				NewRight>> newPair = new Identity<>(boundPair);
 		IHolder<Boolean> newPairMade = new Identity<>(pairBound);
 
 		Supplier<NewLeft> leftSupp = () -> {
@@ -80,10 +81,13 @@ class HalfBoundLazyPair<OldType, NewLeft, NewRight>
 	}
 
 	@Override
-	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight> IPair<CombinedLeft, CombinedRight> combine(
-			IPair<OtherLeft, OtherRight> otherPair,
-			BiFunction<NewLeft, OtherLeft, CombinedLeft> leftCombiner,
-			BiFunction<NewRight, OtherRight, CombinedRight> rightCombiner) {
+	public <OtherLeft, OtherRight, CombinedLeft,
+			CombinedRight> IPair<CombinedLeft, CombinedRight> combine(
+					IPair<OtherLeft, OtherRight> otherPair,
+					BiFunction<NewLeft, OtherLeft,
+							CombinedLeft> leftCombiner,
+					BiFunction<NewRight, OtherRight,
+							CombinedRight> rightCombiner) {
 		return otherPair.bind((otherLeft, otherRight) -> {
 			return bind((leftVal, rightVal) -> {
 				return new LazyPair<>(

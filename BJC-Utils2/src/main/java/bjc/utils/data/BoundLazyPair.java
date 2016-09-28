@@ -6,18 +6,21 @@ import java.util.function.Supplier;
 
 class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight>
 		implements IPair<NewLeft, NewRight> {
-	private Supplier<OldLeft>										leftSupplier;
-	private Supplier<OldRight>										rightSupplier;
+	private Supplier<
+			OldLeft>												leftSupplier;
+	private Supplier<
+			OldRight>												rightSupplier;
 
 	private BiFunction<OldLeft, OldRight, IPair<NewLeft, NewRight>>	binder;
 
-	private IPair<NewLeft, NewRight>								boundPair;
+	private IPair<NewLeft,
+			NewRight>												boundPair;
 
 	private boolean													pairBound;
 
 	public BoundLazyPair(Supplier<OldLeft> leftSupp,
-			Supplier<OldRight> rightSupp,
-			BiFunction<OldLeft, OldRight, IPair<NewLeft, NewRight>> bindr) {
+			Supplier<OldRight> rightSupp, BiFunction<OldLeft, OldRight,
+					IPair<NewLeft, NewRight>> bindr) {
 		leftSupplier = leftSupp;
 		rightSupplier = rightSupp;
 		binder = bindr;
@@ -25,9 +28,10 @@ class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight>
 
 	@Override
 	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind(
-			BiFunction<NewLeft, NewRight, IPair<BoundLeft, BoundRight>> bindr) {
-		IHolder<IPair<NewLeft, NewRight>> newPair = new Identity<>(
-				boundPair);
+			BiFunction<NewLeft, NewRight,
+					IPair<BoundLeft, BoundRight>> bindr) {
+		IHolder<IPair<NewLeft,
+				NewRight>> newPair = new Identity<>(boundPair);
 		IHolder<Boolean> newPairMade = new Identity<>(pairBound);
 
 		Supplier<NewLeft> leftSupp = () -> {
@@ -90,10 +94,13 @@ class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight>
 	}
 
 	@Override
-	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight> IPair<CombinedLeft, CombinedRight> combine(
-			IPair<OtherLeft, OtherRight> otherPair,
-			BiFunction<NewLeft, OtherLeft, CombinedLeft> leftCombiner,
-			BiFunction<NewRight, OtherRight, CombinedRight> rightCombiner) {
+	public <OtherLeft, OtherRight, CombinedLeft,
+			CombinedRight> IPair<CombinedLeft, CombinedRight> combine(
+					IPair<OtherLeft, OtherRight> otherPair,
+					BiFunction<NewLeft, OtherLeft,
+							CombinedLeft> leftCombiner,
+					BiFunction<NewRight, OtherRight,
+							CombinedRight> rightCombiner) {
 		return otherPair.bind((otherLeft, otherRight) -> {
 			return bind((leftVal, rightVal) -> {
 				return new LazyPair<>(

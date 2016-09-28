@@ -85,8 +85,8 @@ public class StringUtils {
 	 * @return A string version of the deque, with allowance for an empty
 	 *         deque
 	 */
-	public static <ContainedType> String printDeque(
-			Deque<ContainedType> queue) {
+	public static <
+			ContainedType> String printDeque(Deque<ContainedType> queue) {
 		return queue.isEmpty() ? "(none)" : queue.toString();
 	}
 }

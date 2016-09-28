@@ -180,9 +180,8 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 		// Get the iterator for the other list
 		Iterator<T> rightIterator = rightList.toIterable().iterator();
 
-		for (Iterator<E> leftIterator = wrappedList
-				.iterator(); leftIterator.hasNext()
-						&& rightIterator.hasNext();) {
+		for (Iterator<E> leftIterator = wrappedList.iterator();
+				leftIterator.hasNext() && rightIterator.hasNext();) {
 			// Add the transformed items to the result list
 			E leftVal = leftIterator.next();
 			T rightVal = rightIterator.next();

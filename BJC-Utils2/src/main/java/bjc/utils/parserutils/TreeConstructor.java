@@ -68,7 +68,8 @@ public class TreeConstructor {
 			IList<TokenType> tokens,
 			Predicate<TokenType> operatorPredicate,
 			Predicate<TokenType> isSpecialOperator,
-			Function<TokenType, Function<Deque<ITree<TokenType>>, ITree<TokenType>>> handleSpecialOperator) {
+			Function<TokenType, Function<Deque<ITree<TokenType>>,
+					ITree<TokenType>>> handleSpecialOperator) {
 		if (tokens == null) {
 			throw new NullPointerException("Tokens must not be null");
 		} else if (operatorPredicate == null) {
@@ -79,8 +80,9 @@ public class TreeConstructor {
 					"Special operator determiner must not be null");
 		}
 
-		IHolder<IPair<Deque<ITree<TokenType>>, ITree<TokenType>>> initialState = new Identity<>(
-				new Pair<>(new LinkedList<>(), null));
+		IHolder<IPair<Deque<ITree<TokenType>>,
+				ITree<TokenType>>> initialState = new Identity<>(
+						new Pair<>(new LinkedList<>(), null));
 
 		tokens.forEach(
 				new TokenTransformer<>(initialState, operatorPredicate,

@@ -63,7 +63,8 @@ public class LazyPair<LeftType, RightType>
 
 	@Override
 	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind(
-			BiFunction<LeftType, RightType, IPair<BoundLeft, BoundRight>> binder) {
+			BiFunction<LeftType, RightType,
+					IPair<BoundLeft, BoundRight>> binder) {
 		return new BoundLazyPair<>(leftSupplier, rightSupplier, binder);
 	}
 
@@ -96,10 +97,13 @@ public class LazyPair<LeftType, RightType>
 	}
 
 	@Override
-	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight> IPair<CombinedLeft, CombinedRight> combine(
-			IPair<OtherLeft, OtherRight> otherPair,
-			BiFunction<LeftType, OtherLeft, CombinedLeft> leftCombiner,
-			BiFunction<RightType, OtherRight, CombinedRight> rightCombiner) {
+	public <OtherLeft, OtherRight, CombinedLeft,
+			CombinedRight> IPair<CombinedLeft, CombinedRight> combine(
+					IPair<OtherLeft, OtherRight> otherPair,
+					BiFunction<LeftType, OtherLeft,
+							CombinedLeft> leftCombiner,
+					BiFunction<RightType, OtherRight,
+							CombinedRight> rightCombiner) {
 		return otherPair.bind((otherLeft, otherRight) -> {
 			return bind((leftVal, rightVal) -> {
 				return new LazyPair<>(

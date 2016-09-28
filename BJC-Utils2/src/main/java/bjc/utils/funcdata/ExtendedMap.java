@@ -18,6 +18,11 @@ class ExtendedMap<KeyType, ValueType> implements IMap<KeyType, ValueType> {
 	}
 
 	@Override
+	public void clear() {
+		store.clear();
+	}
+
+	@Override
 	public boolean containsKey(KeyType key) {
 		if (store.containsKey(key)) {
 			return true;
@@ -91,10 +96,5 @@ class ExtendedMap<KeyType, ValueType> implements IMap<KeyType, ValueType> {
 	public IList<ValueType> valueList() {
 		return ListUtils.mergeLists(store.valueList(),
 				delegate.valueList());
-	}
-
-	@Override
-	public void clear() {
-		store.clear();
 	}
 }

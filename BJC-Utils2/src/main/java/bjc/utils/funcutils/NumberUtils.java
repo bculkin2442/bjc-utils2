@@ -26,8 +26,8 @@ public class NumberUtils {
 		} else {
 			int result = 1;
 
-			for (int currentSub = 0; currentSub < power
-					+ 1; currentSub++) {
+			for (int currentSub = 0; currentSub < power + 1;
+					currentSub++) {
 				result *= value - currentSub;
 			}
 

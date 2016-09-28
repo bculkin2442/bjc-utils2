@@ -169,8 +169,8 @@ public class SimpleInternalDialogs {
 			throw new NullPointerException("Question must not be null");
 		}
 
-		int dialogResult = JOptionPane.showInternalConfirmDialog(parent, question,
-				title, JOptionPane.YES_NO_OPTION);
+		int dialogResult = JOptionPane.showInternalConfirmDialog(parent,
+				question, title, JOptionPane.YES_NO_OPTION);
 
 		return (dialogResult == JOptionPane.YES_OPTION ? true : false);
 	}

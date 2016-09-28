@@ -13,8 +13,8 @@ import bjc.utils.funcdata.ITree;
 import bjc.utils.funcdata.Tree;
 
 final class TokenTransformer<TokenType> implements Consumer<TokenType> {
-	private final class OperatorHandler implements
-			UnaryOperator<IPair<Deque<ITree<TokenType>>, ITree<TokenType>>> {
+	private final class OperatorHandler implements UnaryOperator<
+			IPair<Deque<ITree<TokenType>>, ITree<TokenType>>> {
 		private TokenType element;
 
 		public OperatorHandler(TokenType element) {
@@ -29,8 +29,9 @@ final class TokenTransformer<TokenType> implements Consumer<TokenType> {
 			});
 		}
 
-		private IPair<Deque<ITree<TokenType>>, ITree<TokenType>> handleOperator(
-				Deque<ITree<TokenType>> queuedASTs) {
+		private IPair<Deque<ITree<TokenType>>,
+				ITree<TokenType>> handleOperator(
+						Deque<ITree<TokenType>> queuedASTs) {
 			ITree<TokenType> newAST;
 
 			if (isSpecialOperator.test(element)) {
@@ -57,18 +58,24 @@ final class TokenTransformer<TokenType> implements Consumer<TokenType> {
 		}
 	}
 
-	private IHolder<IPair<Deque<ITree<TokenType>>, ITree<TokenType>>>					initialState;
+	private IHolder<IPair<Deque<ITree<TokenType>>,
+			ITree<TokenType>>>															initialState;
 
-	private Predicate<TokenType>														operatorPredicate;
+	private Predicate<
+			TokenType>																	operatorPredicate;
 
-	private Predicate<TokenType>														isSpecialOperator;
-	private Function<TokenType, Function<Deque<ITree<TokenType>>, ITree<TokenType>>>	handleSpecialOperator;
+	private Predicate<
+			TokenType>																	isSpecialOperator;
+	private Function<TokenType, Function<Deque<ITree<TokenType>>,
+			ITree<TokenType>>>															handleSpecialOperator;
 
 	public TokenTransformer(
-			IHolder<IPair<Deque<ITree<TokenType>>, ITree<TokenType>>> initialState,
+			IHolder<IPair<Deque<ITree<TokenType>>,
+					ITree<TokenType>>> initialState,
 			Predicate<TokenType> operatorPredicate,
 			Predicate<TokenType> isSpecialOperator,
-			Function<TokenType, Function<Deque<ITree<TokenType>>, ITree<TokenType>>> handleSpecialOperator) {
+			Function<TokenType, Function<Deque<ITree<TokenType>>,
+					ITree<TokenType>>> handleSpecialOperator) {
 		this.initialState = initialState;
 		this.operatorPredicate = operatorPredicate;
 		this.isSpecialOperator = isSpecialOperator;

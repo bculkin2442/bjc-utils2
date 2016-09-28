@@ -216,8 +216,10 @@ public class ListUtils {
 		/*
 		 * Run up to a certain number of passes
 		 */
-		for (int numberOfIterations = 0; numberOfIterations < MAX_NTRIESPART
-				&& !rejectedElements.isEmpty(); numberOfIterations++) {
+		for (int numberOfIterations = 0;
+				numberOfIterations < MAX_NTRIESPART
+						&& !rejectedElements.isEmpty();
+				numberOfIterations++) {
 			input.forEach(new GroupPartIteration<>(returnedList,
 					currentPartition, rejectedElements,
 					numberInCurrentPartition, numberPerPartition,
@@ -261,42 +263,6 @@ public class ListUtils {
 		return returnedList;
 	}
 
-	/**
-	 * Split tokens in a list of tokens into multiple tokens.
-	 * 
-	 * The intended use is for expression parsers so that you can enter
-	 * something like 1+1 instead of 1 + 1.
-	 * 
-	 * @param input
-	 *            The tokens to split
-	 * @param operators
-	 *            Pairs of operators to split on and regexes that match
-	 *            those operators
-	 * @return A list of tokens split on all the operators
-	 * 
-	 */
-	public static IList<String> splitTokens(IList<String> input,
-			Deque<IPair<String, String>> operators) {
-		if (input == null) {
-			throw new NullPointerException("Input must not be null");
-		} else if (operators == null) {
-			throw new NullPointerException(
-					"Set of operators must not be null");
-		}
-
-		IHolder<IList<String>> returnedList = new Identity<>(input);
-
-		operators.forEach((operator) -> {
-			returnedList.transform((oldReturn) -> {
-				return oldReturn.flatMap((token) -> {
-					return operator.merge(new TokenSplitter(token));
-				});
-			});
-		});
-
-		return returnedList.getValue();
-	}
-
 	public static <E> IList<E> padList(IList<E> list,
 			Function<E, Integer> counter, int size,
 			Supplier<E> padSource) {
@@ -336,5 +302,41 @@ public class ListUtils {
 		}
 
 		return ret;
+	}
+
+	/**
+	 * Split tokens in a list of tokens into multiple tokens.
+	 * 
+	 * The intended use is for expression parsers so that you can enter
+	 * something like 1+1 instead of 1 + 1.
+	 * 
+	 * @param input
+	 *            The tokens to split
+	 * @param operators
+	 *            Pairs of operators to split on and regexes that match
+	 *            those operators
+	 * @return A list of tokens split on all the operators
+	 * 
+	 */
+	public static IList<String> splitTokens(IList<String> input,
+			Deque<IPair<String, String>> operators) {
+		if (input == null) {
+			throw new NullPointerException("Input must not be null");
+		} else if (operators == null) {
+			throw new NullPointerException(
+					"Set of operators must not be null");
+		}
+
+		IHolder<IList<String>> returnedList = new Identity<>(input);
+
+		operators.forEach((operator) -> {
+			returnedList.transform((oldReturn) -> {
+				return oldReturn.flatMap((token) -> {
+					return operator.merge(new TokenSplitter(token));
+				});
+			});
+		});
+
+		return returnedList.getValue();
 	}
 }

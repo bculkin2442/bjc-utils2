@@ -105,7 +105,8 @@ public class TreeConstructTest {
 			return false;
 		};
 
-		IMap<String, Function<Deque<ITree<String>>, ITree<String>>> operators = new FunctionalMap<>();
+		IMap<String, Function<Deque<ITree<String>>,
+				ITree<String>>> operators = new FunctionalMap<>();
 
 		operators.put("[", (queuedTrees) -> {
 			return null;

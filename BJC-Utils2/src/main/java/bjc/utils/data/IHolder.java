@@ -43,8 +43,10 @@ public interface IHolder<ContainedType> extends Functor<ContainedType> {
 	}
 
 	@Override
-	default <ArgType, ReturnType> Function<Functor<ArgType>, Functor<ReturnType>> fmap(
-			Function<ArgType, ReturnType> func) {
+	default <ArgType,
+			ReturnType> Function<Functor<ArgType>,
+					Functor<ReturnType>> fmap(
+							Function<ArgType, ReturnType> func) {
 		return (argumentFunctor) -> {
 			if (!(argumentFunctor instanceof IHolder<?>)) {
 				throw new IllegalArgumentException(

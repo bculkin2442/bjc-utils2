@@ -95,7 +95,8 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	@Override
 	public <NewType, ReturnedType> ReturnedType collapse(
 			Function<ContainedType, NewType> leafTransform,
-			Function<ContainedType, Function<IList<NewType>, NewType>> nodeCollapser,
+			Function<ContainedType,
+					Function<IList<NewType>, NewType>> nodeCollapser,
 			Function<NewType, ReturnedType> resultTransformer) {
 
 		return resultTransformer
@@ -129,16 +130,17 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 	protected <NewType> NewType internalCollapse(
 			Function<ContainedType, NewType> leafTransform,
-			Function<ContainedType, Function<IList<NewType>, NewType>> nodeCollapser) {
+			Function<ContainedType,
+					Function<IList<NewType>, NewType>> nodeCollapser) {
 		if (hasChildren) {
-			Function<IList<NewType>, NewType> nodeTransformer = nodeCollapser
-					.apply(data);
+			Function<IList<NewType>,
+					NewType> nodeTransformer = nodeCollapser.apply(data);
 
-			@SuppressWarnings("unchecked")
-			IList<NewType> collapsedChildren = (IList<NewType>) children.map((child) -> {
-				return child.collapse(leafTransform, nodeCollapser,
-						(subTreeVal) -> subTreeVal);
-			});
+			IList<NewType> collapsedChildren = (IList<NewType>) children
+					.map((child) -> {
+						return child.collapse(leafTransform, nodeCollapser,
+								(subTreeVal) -> subTreeVal);
+					});
 
 			return nodeTransformer.apply(collapsedChildren);
 		}
@@ -195,7 +197,8 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 	@Override
 	public ITree<ContainedType> topDownTransform(
-			Function<ContainedType, TopDownTransformResult> transformPicker,
+			Function<ContainedType,
+					TopDownTransformResult> transformPicker,
 			UnaryOperator<ITree<ContainedType>> transformer) {
 		TopDownTransformResult transformResult = transformPicker
 				.apply(data);

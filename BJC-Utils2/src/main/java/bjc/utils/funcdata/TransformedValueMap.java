@@ -28,6 +28,11 @@ final class TransformedValueMap<OldKey, OldValue, NewValue>
 	}
 
 	@Override
+	public void clear() {
+		mapToTransform.clear();
+	}
+
+	@Override
 	public boolean containsKey(OldKey key) {
 		return mapToTransform.containsKey(key);
 	}
@@ -96,10 +101,5 @@ final class TransformedValueMap<OldKey, OldValue, NewValue>
 	@Override
 	public IList<NewValue> valueList() {
 		return mapToTransform.valueList().map(transformer);
-	}
-
-	@Override
-	public void clear() {
-		mapToTransform.clear();
 	}
 }

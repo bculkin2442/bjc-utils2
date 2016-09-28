@@ -41,7 +41,8 @@ public class Pair<LeftType, RightType>
 
 	@Override
 	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind(
-			BiFunction<LeftType, RightType, IPair<BoundLeft, BoundRight>> binder) {
+			BiFunction<LeftType, RightType,
+					IPair<BoundLeft, BoundRight>> binder) {
 		if (binder == null) {
 			throw new NullPointerException("Binder must not be null.");
 		}
@@ -70,10 +71,13 @@ public class Pair<LeftType, RightType>
 	}
 
 	@Override
-	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight> IPair<CombinedLeft, CombinedRight> combine(
-			IPair<OtherLeft, OtherRight> otherPair,
-			BiFunction<LeftType, OtherLeft, CombinedLeft> leftCombiner,
-			BiFunction<RightType, OtherRight, CombinedRight> rightCombiner) {
+	public <OtherLeft, OtherRight, CombinedLeft,
+			CombinedRight> IPair<CombinedLeft, CombinedRight> combine(
+					IPair<OtherLeft, OtherRight> otherPair,
+					BiFunction<LeftType, OtherLeft,
+							CombinedLeft> leftCombiner,
+					BiFunction<RightType, OtherRight,
+							CombinedRight> rightCombiner) {
 		return otherPair.bind((otherLeft, otherRight) -> {
 			return new Pair<>(leftCombiner.apply(leftValue, otherLeft),
 					rightCombiner.apply(rightValue, otherRight));

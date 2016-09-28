@@ -43,7 +43,8 @@ public interface ITree<ContainedType> {
 	 */
 	public <NewType, ReturnedType> ReturnedType collapse(
 			Function<ContainedType, NewType> leafTransform,
-			Function<ContainedType, Function<IList<NewType>, NewType>> nodeCollapser,
+			Function<ContainedType,
+					Function<IList<NewType>, NewType>> nodeCollapser,
 			Function<NewType, ReturnedType> resultTransformer);
 
 	/**
@@ -128,7 +129,8 @@ public interface ITree<ContainedType> {
 	 * @return The tree with the transform applied to picked subtrees
 	 */
 	public ITree<ContainedType> topDownTransform(
-			Function<ContainedType, TopDownTransformResult> transformPicker,
+			Function<ContainedType,
+					TopDownTransformResult> transformPicker,
 			UnaryOperator<ITree<ContainedType>> transformer);
 
 	/**

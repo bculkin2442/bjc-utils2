@@ -11,17 +11,17 @@ import javax.swing.JTextArea;
  */
 public class TextAreaOutputStream extends OutputStream {
 
-    private JTextArea textArea;
+	private JTextArea textArea;
 
-    public TextAreaOutputStream(JTextArea console) {
-        this.textArea = console;
-    }
+	public TextAreaOutputStream(JTextArea console) {
+		this.textArea = console;
+	}
 
-    @Override
+	@Override
 	public void write(int b) throws IOException {
-        textArea.append("" + (char) b);
-        if (b == '\n') {
-            textArea.repaint();
-        }
-    }
+		textArea.append("" + (char) b);
+		if (b == '\n') {
+			textArea.repaint();
+		}
+	}
 }

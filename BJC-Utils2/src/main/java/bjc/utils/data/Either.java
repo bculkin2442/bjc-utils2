@@ -26,10 +26,12 @@ public class Either<LeftType, RightType>
 	 *            The value to put on the left
 	 * @return An either with the left side occupied
 	 */
-	public static <LeftType, RightType> Either<LeftType, RightType> fromLeft(
-			LeftType left) {
+	public static <LeftType,
+			RightType> Either<LeftType, RightType> fromLeft(
+					LeftType left) {
 		return new Either<>(left, null);
 	}
+
 	/**
 	 * Create a new either with the right value occupied
 	 * 
@@ -41,8 +43,9 @@ public class Either<LeftType, RightType>
 	 *            The value to put on the right
 	 * @return An either with the right side occupied
 	 */
-	public static <LeftType, RightType> Either<LeftType, RightType> fromRight(
-			RightType right) {
+	public static <LeftType,
+			RightType> Either<LeftType, RightType> fromRight(
+					RightType right) {
 		return new Either<>(null, right);
 	}
 
@@ -64,7 +67,8 @@ public class Either<LeftType, RightType>
 
 	@Override
 	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind(
-			BiFunction<LeftType, RightType, IPair<BoundLeft, BoundRight>> binder) {
+			BiFunction<LeftType, RightType,
+					IPair<BoundLeft, BoundRight>> binder) {
 		return binder.apply(leftVal, rightVal);
 	}
 
@@ -89,10 +93,13 @@ public class Either<LeftType, RightType>
 	}
 
 	@Override
-	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight> IPair<CombinedLeft, CombinedRight> combine(
-			IPair<OtherLeft, OtherRight> otherPair,
-			BiFunction<LeftType, OtherLeft, CombinedLeft> leftCombiner,
-			BiFunction<RightType, OtherRight, CombinedRight> rightCombiner) {
+	public <OtherLeft, OtherRight, CombinedLeft,
+			CombinedRight> IPair<CombinedLeft, CombinedRight> combine(
+					IPair<OtherLeft, OtherRight> otherPair,
+					BiFunction<LeftType, OtherLeft,
+							CombinedLeft> leftCombiner,
+					BiFunction<RightType, OtherRight,
+							CombinedRight> rightCombiner) {
 		if (isLeft) {
 			return otherPair.bind((otherLeft, otherRight) -> {
 				return new Either<>(leftCombiner.apply(leftVal, otherLeft),

@@ -12,13 +12,16 @@ import bjc.utils.data.IPair;
 import bjc.utils.data.Identity;
 import bjc.utils.data.Pair;
 
-final class CompoundCollector<InitialType, AuxType1, AuxType2, FinalType1, FinalType2>
-		implements
-		Collector<InitialType, IHolder<IPair<AuxType1, AuxType2>>, IPair<FinalType1, FinalType2>> {
-	private Set<java.util.stream.Collector.Characteristics>	characteristicSet;
+final class CompoundCollector<InitialType, AuxType1, AuxType2, FinalType1,
+		FinalType2> implements
+		Collector<InitialType, IHolder<IPair<AuxType1, AuxType2>>,
+				IPair<FinalType1, FinalType2>> {
+	private Set<
+			java.util.stream.Collector.Characteristics>		characteristicSet;
 
 	private Collector<InitialType, AuxType1, FinalType1>	firstCollector;
-	private Collector<InitialType, AuxType2, FinalType2>	secondCollector;
+	private Collector<InitialType, AuxType2,
+			FinalType2>										secondCollector;
 
 	public CompoundCollector(
 			Collector<InitialType, AuxType1, FinalType1> firstCollector,
@@ -31,11 +34,13 @@ final class CompoundCollector<InitialType, AuxType1, AuxType2, FinalType1, Final
 	}
 
 	@Override
-	public BiConsumer<IHolder<IPair<AuxType1, AuxType2>>, InitialType> accumulator() {
+	public BiConsumer<IHolder<IPair<AuxType1, AuxType2>>,
+			InitialType> accumulator() {
 		BiConsumer<AuxType1, InitialType> firstAccumulator = firstCollector
 				.accumulator();
-		BiConsumer<AuxType2, InitialType> secondAccumulator = secondCollector
-				.accumulator();
+		BiConsumer<AuxType2,
+				InitialType> secondAccumulator = secondCollector
+						.accumulator();
 
 		return (state, value) -> {
 			state.doWith((statePair) -> {
@@ -48,15 +53,16 @@ final class CompoundCollector<InitialType, AuxType1, AuxType2, FinalType1, Final
 	}
 
 	@Override
-	public Set<java.util.stream.Collector.Characteristics> characteristics() {
+	public Set<
+			java.util.stream.Collector.Characteristics> characteristics() {
 		return characteristicSet;
 	}
 
 	@Override
 	public BinaryOperator<IHolder<IPair<AuxType1, AuxType2>>> combiner() {
 		BinaryOperator<AuxType1> firstCombiner = firstCollector.combiner();
-		BinaryOperator<AuxType2> secondCombiner = secondCollector
-				.combiner();
+		BinaryOperator<
+				AuxType2> secondCombiner = secondCollector.combiner();
 
 		return (leftState, rightState) -> {
 			return leftState.unwrap((leftPair) -> {
@@ -69,7 +75,8 @@ final class CompoundCollector<InitialType, AuxType1, AuxType2, FinalType1, Final
 	}
 
 	@Override
-	public Function<IHolder<IPair<AuxType1, AuxType2>>, IPair<FinalType1, FinalType2>> finisher() {
+	public Function<IHolder<IPair<AuxType1, AuxType2>>,
+			IPair<FinalType1, FinalType2>> finisher() {
 		return (state) -> {
 			return state.unwrap((pair) -> {
 				return pair.bind((leftVal, rightVal) -> {

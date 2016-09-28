@@ -17,6 +17,11 @@ import java.util.function.Function;
  */
 public interface IMap<KeyType, ValueType> {
 	/**
+	 * Delete all the values in the map
+	 */
+	void clear();
+
+	/**
 	 * Check if this map contains the specified key
 	 * 
 	 * @param key
@@ -67,6 +72,16 @@ public interface IMap<KeyType, ValueType> {
 	 * 
 	 */
 	ValueType get(KeyType key);
+
+	default ValueType getOrDefault(KeyType key, ValueType defaultValue) {
+		try {
+			return get(key);
+		} catch (IllegalArgumentException iaex) {
+			// We don't care about this, because it indicates a key is
+			// missing
+			return defaultValue;
+		}
+	}
 
 	/**
 	 * Get the number of entries in this map
@@ -132,19 +147,4 @@ public interface IMap<KeyType, ValueType> {
 	 * @return A list of values in this map
 	 */
 	IList<ValueType> valueList();
-
-	/**
-	 * Delete all the values in the map
-	 */
-	void clear();
-
-	default ValueType getOrDefault(KeyType key, ValueType defaultValue) {
-		try {
-			return get(key);
-		} catch (IllegalArgumentException iaex) {
-			// We don't care about this, because it indicates a key is
-			// missing
-			return defaultValue;
-		}
-	}
 }

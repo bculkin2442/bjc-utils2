@@ -387,7 +387,8 @@ public class WeightedGrammar<E> {
 
 		WeightedRandom<IList<E>> rule = rules.get(ruleName);
 
-		IList<IPair<Integer, IList<E>>> newResults = new FunctionalList<>();
+		IList<IPair<Integer,
+				IList<E>>> newResults = new FunctionalList<>();
 
 		rule.getValues().forEach((pair) -> {
 			IList<IList<E>> newRule = new FunctionalList<>();
@@ -447,7 +448,8 @@ public class WeightedGrammar<E> {
 
 		WeightedRandom<IList<E>> rule = rules.get(ruleName);
 
-		IList<IPair<Integer, IList<E>>> newResults = new FunctionalList<>();
+		IList<IPair<Integer,
+				IList<E>>> newResults = new FunctionalList<>();
 
 		rule.getValues().forEach((pair) -> {
 			IList<E> newCase = pair.merge((left, right) -> {
@@ -501,7 +503,8 @@ public class WeightedGrammar<E> {
 
 		WeightedRandom<IList<E>> rule = rules.get(ruleName);
 
-		IList<IPair<Integer, IList<E>>> newResults = new FunctionalList<>();
+		IList<IPair<Integer,
+				IList<E>>> newResults = new FunctionalList<>();
 
 		rule.getValues().forEach((par) -> {
 			IList<E> newCase = par.merge((left, right) -> {

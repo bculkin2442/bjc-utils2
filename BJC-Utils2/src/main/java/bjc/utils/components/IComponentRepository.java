@@ -12,7 +12,8 @@ import bjc.utils.funcdata.IMap;
  * @param <ComponentType>
  *            The type of components contained in this repository
  */
-public interface IComponentRepository<ComponentType extends IDescribedComponent> {
+public interface IComponentRepository<
+		ComponentType extends IDescribedComponent> {
 	/**
 	 * Get all of the components this repository knows about
 	 * 

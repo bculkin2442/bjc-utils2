@@ -60,6 +60,11 @@ public class FunctionalMap<KeyType, ValueType>
 		wrappedMap = wrap;
 	}
 
+	@Override
+	public void clear() {
+		wrappedMap.clear();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -174,10 +179,5 @@ public class FunctionalMap<KeyType, ValueType>
 		});
 
 		return values;
-	}
-
-	@Override
-	public void clear() {
-		wrappedMap.clear();
 	}
 }

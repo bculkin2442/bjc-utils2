@@ -18,7 +18,8 @@ import bjc.utils.funcdata.IList;
 public class Lazy<ContainedType> implements IHolder<ContainedType> {
 	private Supplier<ContainedType>				valueSupplier;
 
-	private IList<UnaryOperator<ContainedType>>	actions	= new FunctionalList<>();
+	private IList<UnaryOperator<
+			ContainedType>>						actions	= new FunctionalList<>();
 
 	private boolean								valueMaterialized;
 
@@ -58,7 +59,8 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 	@Override
 	public <BoundType> IHolder<BoundType> bind(
 			Function<ContainedType, IHolder<BoundType>> binder) {
-		IList<UnaryOperator<ContainedType>> pendingActions = new FunctionalList<>();
+		IList<UnaryOperator<
+				ContainedType>> pendingActions = new FunctionalList<>();
 
 		actions.forEach(pendingActions::add);
 
@@ -86,7 +88,8 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 	@Override
 	public <MappedType> IHolder<MappedType> map(
 			Function<ContainedType, MappedType> mapper) {
-		IList<UnaryOperator<ContainedType>> pendingActions = new FunctionalList<>();
+		IList<UnaryOperator<
+				ContainedType>> pendingActions = new FunctionalList<>();
 
 		actions.forEach(pendingActions::add);
 

@@ -35,7 +35,8 @@ class BoundLazy<OldType, BoundContainedType>
 	/*
 	 * Transformations currently pending on the bound value
 	 */
-	private IList<UnaryOperator<BoundContainedType>>		actions	= new FunctionalList<>();
+	private IList<UnaryOperator<
+			BoundContainedType>>							actions	= new FunctionalList<>();
 
 	/*
 	 * Create a new bound lazy value
@@ -52,7 +53,8 @@ class BoundLazy<OldType, BoundContainedType>
 		/*
 		 * Prepare a list of pending actions
 		 */
-		IList<UnaryOperator<BoundContainedType>> pendingActions = new FunctionalList<>();
+		IList<UnaryOperator<
+				BoundContainedType>> pendingActions = new FunctionalList<>();
 		actions.forEach(pendingActions::add);
 
 		/*
@@ -91,7 +93,8 @@ class BoundLazy<OldType, BoundContainedType>
 	public <MappedType> IHolder<MappedType> map(
 			Function<BoundContainedType, MappedType> mapper) {
 		// Prepare a list of pending actions
-		IList<UnaryOperator<BoundContainedType>> pendingActions = new FunctionalList<>();
+		IList<UnaryOperator<
+				BoundContainedType>> pendingActions = new FunctionalList<>();
 		actions.forEach(pendingActions::add);
 
 		// Prepare the new supplier

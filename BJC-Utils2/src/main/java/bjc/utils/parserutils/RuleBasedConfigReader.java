@@ -26,11 +26,15 @@ import bjc.utils.funcdata.IMap;
  * 
  */
 public class RuleBasedConfigReader<E> {
-	private BiConsumer<FunctionalStringTokenizer, IPair<String, E>>	startRule;
-	private BiConsumer<FunctionalStringTokenizer, E>				continueRule;
-	private Consumer<E>												endRule;
+	private BiConsumer<FunctionalStringTokenizer, IPair<String,
+			E>>														startRule;
+	private BiConsumer<FunctionalStringTokenizer,
+			E>														continueRule;
+	private Consumer<
+			E>														endRule;
 
-	private IMap<String, BiConsumer<FunctionalStringTokenizer, E>>	pragmas;
+	private IMap<String, BiConsumer<FunctionalStringTokenizer,
+			E>>														pragmas;
 
 	/**
 	 * Create a new rule-based config reader
@@ -43,7 +47,8 @@ public class RuleBasedConfigReader<E> {
 	 *            The action to fire when ending a rule
 	 */
 	public RuleBasedConfigReader(
-			BiConsumer<FunctionalStringTokenizer, IPair<String, E>> startRule,
+			BiConsumer<FunctionalStringTokenizer,
+					IPair<String, E>> startRule,
 			BiConsumer<FunctionalStringTokenizer, E> continueRule,
 			Consumer<E> endRule) {
 		this.startRule = startRule;
@@ -176,8 +181,8 @@ public class RuleBasedConfigReader<E> {
 	 * @param startRule
 	 *            The action to execute on starting of a rule
 	 */
-	public void setStartRule(
-			BiConsumer<FunctionalStringTokenizer, IPair<String, E>> startRule) {
+	public void setStartRule(BiConsumer<FunctionalStringTokenizer,
+			IPair<String, E>> startRule) {
 		if (startRule == null) {
 			throw new NullPointerException(
 					"Action on rule start must be non-null");

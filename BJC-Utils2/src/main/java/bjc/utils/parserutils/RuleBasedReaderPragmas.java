@@ -25,8 +25,9 @@ public class RuleBasedReaderPragmas {
 	 *            The function to invoke with the parsed integer
 	 * @return A pragma that functions as described above.
 	 */
-	public static <StateType> BiConsumer<FunctionalStringTokenizer, StateType> buildInteger(
-			String name, BiConsumer<Integer, StateType> consumer) {
+	public static <StateType> BiConsumer<FunctionalStringTokenizer,
+			StateType> buildInteger(String name,
+					BiConsumer<Integer, StateType> consumer) {
 		return (tokenizer, state) -> {
 			if (!tokenizer.hasMoreTokens()) {
 				throw new PragmaFormatException("Pragma " + name
@@ -62,8 +63,9 @@ public class RuleBasedReaderPragmas {
 	 *            The function to invoke with the parsed string
 	 * @return A pragma that functions as described above.
 	 */
-	public static <StateType> BiConsumer<FunctionalStringTokenizer, StateType> buildStringCollapser(
-			String name, BiConsumer<String, StateType> consumer) {
+	public static <StateType> BiConsumer<FunctionalStringTokenizer,
+			StateType> buildStringCollapser(String name,
+					BiConsumer<String, StateType> consumer) {
 		return (tokenizer, state) -> {
 			if (!tokenizer.hasMoreTokens()) {
 				throw new PragmaFormatException("Pragma " + name
