@@ -11,7 +11,7 @@ class WrappedOption<ContainedType> implements IHolder<ContainedType> {
 	}
 
 	private WrappedOption(IHolder<IHolder<ContainedType>> toHold,
-			@SuppressWarnings("unused") boolean dummy) {
+			boolean dummy) {
 		held = toHold;
 	}
 

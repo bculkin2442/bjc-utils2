@@ -13,7 +13,7 @@ class WrappedLazy<ContainedType> implements IHolder<ContainedType> {
 	// This has an extra parameter, because otherwise it erases to the same
 	// as the public one
 	private WrappedLazy(IHolder<IHolder<ContainedType>> wrappedHolder,
-			@SuppressWarnings("unused") boolean dummy) {
+			boolean dummy) {
 		held = wrappedHolder;
 	}
 

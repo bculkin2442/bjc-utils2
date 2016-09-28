@@ -3,6 +3,7 @@ package bjc.utils.funcutils;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import bjc.utils.data.IHolder;
 import bjc.utils.data.IPair;
@@ -175,6 +176,7 @@ public class ListUtils {
 	 *            The function to determine the count for each element for
 	 * @param numberPerPartition
 	 *            The number of elements to put in each partition
+	 * 
 	 * @return A list partitioned according to the above rules
 	 */
 	public static <E> IList<IList<E>> groupPartition(IList<E> input,
@@ -293,5 +295,46 @@ public class ListUtils {
 		});
 
 		return returnedList.getValue();
+	}
+
+	public static <E> IList<E> padList(IList<E> list,
+			Function<E, Integer> counter, int size,
+			Supplier<E> padSource) {
+		IHolder<Integer> countHolder = new Identity<>(0);
+
+		IList<E> ret = list.map((elm) -> {
+			countHolder.map((val) -> val + counter.apply(elm));
+
+			return elm;
+		});
+
+		if (countHolder.unwrap((val) -> val % size != 0)) {
+			// We need to pad
+			int needed = countHolder.unwrap((val) -> val % size);
+			int threshold = 0;
+
+			while (needed > 0 && threshold <= MAX_NTRIESPART) {
+				E val = padSource.get();
+				int count = counter.apply(val);
+
+				if (count <= needed) {
+					ret.add(val);
+
+					threshold = 0;
+
+					needed -= count;
+				} else {
+					threshold += 1;
+				}
+			}
+
+			if (threshold > MAX_NTRIESPART) {
+				throw new IllegalArgumentException("Heuristic (more than "
+						+ MAX_NTRIESPART
+						+ " iterations of attempting to pad) detected unpaddable list ");
+			}
+		}
+
+		return ret;
 	}
 }

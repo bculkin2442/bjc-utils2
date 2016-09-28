@@ -43,7 +43,7 @@ public class SimpleDialogs {
 				int value = Integer.parseInt(strang);
 
 				return (value < upperBound) && (value > lowerBound);
-			} catch (@SuppressWarnings("unused") NumberFormatException nfex) {
+			} catch (NumberFormatException nfex) {
 				// We don't care about the specifics of the exception, just
 				// that this value isn't good
 				return false;
@@ -127,7 +127,7 @@ public class SimpleDialogs {
 			try {
 				Integer.parseInt(strang);
 				return true;
-			} catch (@SuppressWarnings("unused") NumberFormatException nfex) {
+			} catch (NumberFormatException nfex) {
 				// We don't care about this exception, just mark the value
 				// as not good
 				return false;
