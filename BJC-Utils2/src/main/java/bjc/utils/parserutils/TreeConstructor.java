@@ -7,10 +7,10 @@ import java.util.function.Predicate;
 
 import bjc.utils.data.IHolder;
 import bjc.utils.data.IPair;
+import bjc.utils.data.ITree;
 import bjc.utils.data.Identity;
 import bjc.utils.data.Pair;
 import bjc.utils.funcdata.IList;
-import bjc.utils.funcdata.ITree;
 
 /**
  * Creates a parse tree from a postfix expression

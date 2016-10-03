@@ -1,10 +1,11 @@
-package bjc.utils.funcdata;
+package bjc.utils.data;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
+import bjc.utils.funcdata.IList;
 import bjc.utils.funcdata.bst.TreeLinearizationMethod;
 
 /**

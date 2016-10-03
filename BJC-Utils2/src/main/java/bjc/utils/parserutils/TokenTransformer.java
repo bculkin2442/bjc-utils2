@@ -8,9 +8,9 @@ import java.util.function.UnaryOperator;
 
 import bjc.utils.data.IHolder;
 import bjc.utils.data.IPair;
+import bjc.utils.data.ITree;
 import bjc.utils.data.Pair;
-import bjc.utils.funcdata.ITree;
-import bjc.utils.funcdata.Tree;
+import bjc.utils.data.Tree;
 
 final class TokenTransformer<TokenType> implements Consumer<TokenType> {
 	private final class OperatorHandler implements UnaryOperator<

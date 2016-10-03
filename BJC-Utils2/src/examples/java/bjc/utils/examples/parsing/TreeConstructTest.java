@@ -7,13 +7,13 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import bjc.utils.data.IPair;
+import bjc.utils.data.ITree;
 import bjc.utils.data.Pair;
+import bjc.utils.data.Tree;
 import bjc.utils.funcdata.FunctionalMap;
 import bjc.utils.funcdata.FunctionalStringTokenizer;
 import bjc.utils.funcdata.IList;
 import bjc.utils.funcdata.IMap;
-import bjc.utils.funcdata.ITree;
-import bjc.utils.funcdata.Tree;
 import bjc.utils.funcutils.ListUtils;
 import bjc.utils.funcutils.StringUtils;
 import bjc.utils.parserutils.ShuntingYard;
