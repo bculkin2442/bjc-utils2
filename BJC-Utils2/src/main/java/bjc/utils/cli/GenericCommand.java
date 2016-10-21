@@ -1,5 +1,7 @@
 package bjc.utils.cli;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 /**
  * Generic command implementation
  * 
@@ -18,19 +20,24 @@ public class GenericCommand implements ICommand {
 	 * @param handler
 	 *            The handler to use for the command
 	 * @param description
-	 *            The description of the command
+	 *            The description of the command. May be null
 	 * @param help
-	 *            The detailed help message for the command
+	 *            The detailed help message for the command. May be null
 	 */
-	public GenericCommand(ICommandHandler handler, String description,
-			String help) {
+	public GenericCommand(ICommandHandler handler, @Nullable String description,
+			@Nullable String help) {
 		if (handler == null) {
 			throw new NullPointerException(
 					"Command handler must not be null");
 		}
 
 		this.handler = handler;
-		this.help = new GenericHelp(description, help);
+
+		if (description == null) {
+			this.help = new NullHelp();
+		} else {
+			this.help = new GenericHelp(description, help);
+		}
 	}
 
 	@Override

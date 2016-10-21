@@ -25,8 +25,7 @@ import bjc.utils.funcutils.FileUtils;
  * @param <ComponentType>
  *            The type of component being read in
  */
-public class FileComponentRepository<
-		ComponentType extends IDescribedComponent>
+public class FileComponentRepository<ComponentType extends IDescribedComponent>
 		implements IComponentRepository<ComponentType> {
 	// The logger to use for storing data about this class
 	private static final Logger			CLASS_LOGGER	= Logger
@@ -54,7 +53,9 @@ public class FileComponentRepository<
 	public FileComponentRepository(File directory,
 			Function<File, ? extends ComponentType> componentReader) {
 		// Make sure we have valid arguments
-		if (!directory.isDirectory()) {
+		if (directory == null) {
+			throw new NullPointerException("Directory must not be null");
+		} else if (!directory.isDirectory()) {
 			throw new IllegalArgumentException("File " + directory
 					+ " is not a directory.\n"
 					+ "Components can only be read from a directory");
@@ -72,25 +73,23 @@ public class FileComponentRepository<
 
 		// Predicate to use to traverse all the files in a directory, but
 		// not recurse into sub-directories
-		BiPredicate<Path,
-				BasicFileAttributes> firstLevelTraverser = (pth, attr) -> {
-					if (attr.isDirectory() && !isFirstDir.getValue()) {
+		BiPredicate<Path, BasicFileAttributes> firstLevelTraverser = (pth,
+				attr) -> {
+			if (attr.isDirectory() && !isFirstDir.getValue()) {
+				/*
+				 * Skip directories, they probably have component support
+				 * files.
+				 */
+				return false;
+			}
 
-						/*
-						 * Skip directories, they probably have component
-						 * support files.
-						 */
-						return false;
-					}
+			/*
+			 * Don't skip the first directory, that's the parent directory
+			 */
+			isFirstDir.replace(false);
 
-					/*
-					 * Don't skip the first directory, that's the parent
-					 * directory
-					 */
-					isFirstDir.replace(false);
-
-					return true;
-				};
+			return true;
+		};
 
 		// Try reading components
 		try {

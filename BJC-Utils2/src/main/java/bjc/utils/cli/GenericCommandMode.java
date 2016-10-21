@@ -7,6 +7,8 @@ import java.util.function.Consumer;
 import bjc.utils.funcdata.FunctionalMap;
 import bjc.utils.funcdata.IMap;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 /**
  * A general command mode, with a customizable set of commands
  * 
@@ -50,6 +52,14 @@ public class GenericCommandMode implements ICommandMode {
 	 */
 	public GenericCommandMode(Consumer<String> normalOutput,
 			Consumer<String> errorOutput) {
+		if (normalOutput == null) {
+			throw new NullPointerException(
+					"Normal output source must be non-null");
+		} else if (errorOutput == null) {
+			throw new NullPointerException(
+					"Error output source must be non-null");
+		}
+
 		this.normalOutput = normalOutput;
 		this.errorOutput = errorOutput;
 
@@ -371,7 +381,7 @@ public class GenericCommandMode implements ICommandMode {
 	 *            The custom prompt for this mode, or null to disable the
 	 *            custom prompt
 	 */
-	public void setCustomPrompt(String prompt) {
+	public void setCustomPrompt(@Nullable String prompt) {
 		customPrompt = prompt;
 	}
 
@@ -382,7 +392,7 @@ public class GenericCommandMode implements ICommandMode {
 	 *            The desired name of this mode, or null to use the default
 	 *            name
 	 */
-	public void setModeName(String name) {
+	public void setModeName(@Nullable String name) {
 		modeName = name;
 	}
 
@@ -394,7 +404,7 @@ public class GenericCommandMode implements ICommandMode {
 	 *            on unknown commands
 	 */
 	public void setUnknownCommandHandler(
-			BiConsumer<String, String[]> handler) {
+			@Nullable BiConsumer<String, String[]> handler) {
 		if (handler == null) {
 			throw new NullPointerException("Handler must not be null");
 		}

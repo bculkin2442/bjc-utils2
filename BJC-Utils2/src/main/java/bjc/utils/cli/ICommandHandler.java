@@ -8,6 +8,7 @@ import java.util.function.Function;
  * @author ben
  *
  */
+@FunctionalInterface
 public interface ICommandHandler extends Function<String[], ICommandMode> {
 	/**
 	 * Execute this command

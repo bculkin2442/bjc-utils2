@@ -4,23 +4,38 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+/**
+ * Implements a lazy pair that has been bound
+ */
 class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight>
 		implements IPair<NewLeft, NewRight> {
-	private Supplier<
-			OldLeft>												leftSupplier;
-	private Supplier<
-			OldRight>												rightSupplier;
+	/*
+	 * The supplier of the left value
+	 */
+	private Supplier<OldLeft>										leftSupplier;
+	/*
+	 * The supplier of the right value
+	 */
+	private Supplier<OldRight>										rightSupplier;
 
+	/*
+	 * The binder to transform values
+	 */
 	private BiFunction<OldLeft, OldRight, IPair<NewLeft, NewRight>>	binder;
 
-	private IPair<NewLeft,
-			NewRight>												boundPair;
+	/*
+	 * The bound pair
+	 */
+	private IPair<NewLeft, NewRight>								boundPair;
 
+	/*
+	 * Whether the pair has been bound yet
+	 */
 	private boolean													pairBound;
 
 	public BoundLazyPair(Supplier<OldLeft> leftSupp,
-			Supplier<OldRight> rightSupp, BiFunction<OldLeft, OldRight,
-					IPair<NewLeft, NewRight>> bindr) {
+			Supplier<OldRight> rightSupp,
+			BiFunction<OldLeft, OldRight, IPair<NewLeft, NewRight>> bindr) {
 		leftSupplier = leftSupp;
 		rightSupplier = rightSupp;
 		binder = bindr;
@@ -28,10 +43,13 @@ class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight>
 
 	@Override
 	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind(
-			BiFunction<NewLeft, NewRight,
-					IPair<BoundLeft, BoundRight>> bindr) {
-		IHolder<IPair<NewLeft,
-				NewRight>> newPair = new Identity<>(boundPair);
+			BiFunction<NewLeft, NewRight, IPair<BoundLeft, BoundRight>> bindr) {
+		if (bindr == null) {
+			throw new NullPointerException("Binder must not be null");
+		}
+
+		IHolder<IPair<NewLeft, NewRight>> newPair = new Identity<>(
+				boundPair);
 		IHolder<Boolean> newPairMade = new Identity<>(pairBound);
 
 		Supplier<NewLeft> leftSupp = () -> {
@@ -94,13 +112,10 @@ class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight>
 	}
 
 	@Override
-	public <OtherLeft, OtherRight, CombinedLeft,
-			CombinedRight> IPair<CombinedLeft, CombinedRight> combine(
-					IPair<OtherLeft, OtherRight> otherPair,
-					BiFunction<NewLeft, OtherLeft,
-							CombinedLeft> leftCombiner,
-					BiFunction<NewRight, OtherRight,
-							CombinedRight> rightCombiner) {
+	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight> IPair<CombinedLeft, CombinedRight> combine(
+			IPair<OtherLeft, OtherRight> otherPair,
+			BiFunction<NewLeft, OtherLeft, CombinedLeft> leftCombiner,
+			BiFunction<NewRight, OtherRight, CombinedRight> rightCombiner) {
 		return otherPair.bind((otherLeft, otherRight) -> {
 			return bind((leftVal, rightVal) -> {
 				return new LazyPair<>(

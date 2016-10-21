@@ -11,12 +11,6 @@ public class ComponentDescription implements IDescribedComponent {
 			String description, int version) {
 		if (name == null) {
 			throw new NullPointerException("Component name can't be null");
-		} else if (author == null) {
-			throw new NullPointerException(
-					"Component author can't be null");
-		} else if (description == null) {
-			throw new NullPointerException(
-					"Component description can't be null");
 		} else if (version <= 0) {
 			throw new IllegalArgumentException(
 					"Component version must be greater than 0");
@@ -67,11 +61,19 @@ public class ComponentDescription implements IDescribedComponent {
 
 	@Override
 	public String getAuthor() {
+		if(author == null) {
+			return IDescribedComponent.super.getAuthor();
+		}
+		
 		return author;
 	}
 
 	@Override
 	public String getDescription() {
+		if(description == null) {
+			return IDescribedComponent.super.getDescription();
+		}
+		
 		return description;
 	}
 

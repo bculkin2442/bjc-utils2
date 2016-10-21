@@ -7,7 +7,7 @@ import java.util.function.UnaryOperator;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IList;
 
-/*
+/**
  * Implements a lazy holder that has been bound
  */
 class BoundLazy<OldType, BoundContainedType>
@@ -35,8 +35,7 @@ class BoundLazy<OldType, BoundContainedType>
 	/*
 	 * Transformations currently pending on the bound value
 	 */
-	private IList<UnaryOperator<
-			BoundContainedType>>							actions	= new FunctionalList<>();
+	private IList<UnaryOperator<BoundContainedType>>		actions	= new FunctionalList<>();
 
 	/*
 	 * Create a new bound lazy value
@@ -50,11 +49,14 @@ class BoundLazy<OldType, BoundContainedType>
 	@Override
 	public <BoundType> IHolder<BoundType> bind(
 			Function<BoundContainedType, IHolder<BoundType>> bindr) {
+		if (bindr == null) {
+			throw new NullPointerException("Binder must not be null");
+		}
+
 		/*
 		 * Prepare a list of pending actions
 		 */
-		IList<UnaryOperator<
-				BoundContainedType>> pendingActions = new FunctionalList<>();
+		IList<UnaryOperator<BoundContainedType>> pendingActions = new FunctionalList<>();
 		actions.forEach(pendingActions::add);
 
 		/*
@@ -84,6 +86,11 @@ class BoundLazy<OldType, BoundContainedType>
 	@Override
 	public <NewType> Function<BoundContainedType, IHolder<NewType>> lift(
 			Function<BoundContainedType, NewType> func) {
+		if (func == null) {
+			throw new NullPointerException(
+					"Function to lift must not be null");
+		}
+
 		return (val) -> {
 			return new Lazy<>(func.apply(val));
 		};
@@ -92,9 +99,12 @@ class BoundLazy<OldType, BoundContainedType>
 	@Override
 	public <MappedType> IHolder<MappedType> map(
 			Function<BoundContainedType, MappedType> mapper) {
+		if (mapper == null) {
+			throw new NullPointerException("Mapper must not be null");
+		}
+
 		// Prepare a list of pending actions
-		IList<UnaryOperator<
-				BoundContainedType>> pendingActions = new FunctionalList<>();
+		IList<UnaryOperator<BoundContainedType>> pendingActions = new FunctionalList<>();
 		actions.forEach(pendingActions::add);
 
 		// Prepare the new supplier
@@ -127,6 +137,10 @@ class BoundLazy<OldType, BoundContainedType>
 	@Override
 	public IHolder<BoundContainedType> transform(
 			UnaryOperator<BoundContainedType> transformer) {
+		if (transformer == null) {
+			throw new NullPointerException("Transformer must not be null");
+		}
+
 		actions.add(transformer);
 
 		return this;
@@ -135,6 +149,10 @@ class BoundLazy<OldType, BoundContainedType>
 	@Override
 	public <UnwrappedType> UnwrappedType unwrap(
 			Function<BoundContainedType, UnwrappedType> unwrapper) {
+		if (unwrapper == null) {
+			throw new NullPointerException("Unwrapper must not be null");
+		}
+
 		if (!holderBound) {
 			boundHolder = oldSupplier.get().unwrap(binder::apply);
 		}

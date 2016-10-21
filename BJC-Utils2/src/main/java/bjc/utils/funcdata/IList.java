@@ -28,6 +28,10 @@ public interface IList<ContainedType> {
 	 */
 	boolean add(ContainedType item);
 
+	default boolean addAll(IList<ContainedType> items) {
+		return items.map(this::add).anyMatch((bl) -> bl == false);
+	}
+
 	/**
 	 * Check if all of the elements of this list match the specified
 	 * predicate.
@@ -62,8 +66,8 @@ public interface IList<ContainedType> {
 	 */
 	public default <StateType, ReducedType> ReducedType collect(
 			Collector<ContainedType, StateType, ReducedType> collector) {
-		BiConsumer<StateType,
-				ContainedType> accumulator = collector.accumulator();
+		BiConsumer<StateType, ContainedType> accumulator = collector
+				.accumulator();
 
 		return reduceAux(collector.supplier().get(), (value, state) -> {
 			accumulator.accept(state, value);
@@ -92,8 +96,8 @@ public interface IList<ContainedType> {
 	 * @return A new list containing the merged pairs of lists.
 	 */
 	<OtherType, CombinedType> IList<CombinedType> combineWith(
-			IList<OtherType> rightList, BiFunction<ContainedType,
-					OtherType, CombinedType> itemCombiner);
+			IList<OtherType> rightList,
+			BiFunction<ContainedType, OtherType, CombinedType> itemCombiner);
 
 	/**
 	 * Check if the list contains the specified item
@@ -261,8 +265,7 @@ public interface IList<ContainedType> {
 	 *         its final state.
 	 */
 	<StateType, ReducedType> ReducedType reduceAux(StateType initialValue,
-			BiFunction<ContainedType, StateType,
-					StateType> stateAccumulator,
+			BiFunction<ContainedType, StateType, StateType> stateAccumulator,
 			Function<StateType, ReducedType> resultTransformer);
 
 	/**

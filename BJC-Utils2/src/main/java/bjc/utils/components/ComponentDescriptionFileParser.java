@@ -41,6 +41,10 @@ public class ComponentDescriptionFileParser {
 	 */
 	public static ComponentDescription fromStream(
 			InputStream inputSource) {
+		if(inputSource == null) {
+			throw new NullPointerException("Input source must not be null");
+		}
+		
 		ComponentDescriptionState readState = reader
 				.fromStream(inputSource, new ComponentDescriptionState());
 
