@@ -26,13 +26,21 @@ import bjc.utils.funcdata.IMap;
  * 
  */
 public class RuleBasedConfigReader<E> {
+	// Function to execute when starting a rule
+	// Takes the tokenizer, and a pair of the read token and application state
 	private BiConsumer<FunctionalStringTokenizer, IPair<String,
 			E>>														startRule;
+	// Function to use when continuing a rule
+	// Takes a tokenizer and application state
 	private BiConsumer<FunctionalStringTokenizer,
 			E>														continueRule;
+	// Function to use when ending a rule
+	// Takes an application state
 	private Consumer<
 			E>														endRule;
 
+	// Map of pragma names to pragma actions
+	// Pragma actions are functions taking a tokenizer and application state
 	private IMap<String, BiConsumer<FunctionalStringTokenizer,
 			E>>														pragmas;
 
@@ -79,36 +87,37 @@ public class RuleBasedConfigReader<E> {
 	}
 
 	private void continueRule(E state, boolean ruleOpen, String line) {
+		// Make sure our input is correct
 		if (ruleOpen == false) {
 			throw new InputMismatchException(
 					"Can't continue rule with no rule currently open");
-		}
-
-		if (continueRule == null) {
+		} else if (continueRule == null) {
 			throw new InputMismatchException(
 					"Attempted to continue rule with rule continuation disabled."
 							+ " Check for extraneous tabs");
 		}
 
+		// Accept the rule
 		continueRule.accept(
 				new FunctionalStringTokenizer(line.substring(1), " "),
 				state);
-	}
+		}
 
 	private boolean endRule(E state, boolean ruleOpen) {
+		// Ignore blank line without an open rule
 		if (ruleOpen == false) {
-			// Ignore blank line without an open rule
+			// Do nothing
+			return false;
 		} else {
-			if (endRule == null) {
-				// Nothing happens on rule end
-				ruleOpen = false;
-			} else {
+			// Nothing happens on rule end
+			if (endRule != null) {
+				// Process the rule ending
 				endRule.accept(state);
 			}
 
-			ruleOpen = false;
+			// Return a closed rule
+			return false;
 		}
-		return ruleOpen;
 	}
 
 	/**
@@ -126,30 +135,35 @@ public class RuleBasedConfigReader<E> {
 					"Input stream must not be null");
 		}
 
-		E state;
+		// Application state: We're giving this back later
+		E state = initialState;
 
+		// Prepare our input source
 		try (Scanner inputSource = new Scanner(inputStream, "\n")) {
-
-			state = initialState;
+			// This is true when a rule's open
 			IHolder<Boolean> ruleOpen = new Identity<>(false);
 
+			// Do something for every line of the file
 			inputSource.forEachRemaining((line) -> {
+				// Skip comment lines
 				if (line.startsWith("#") || line.startsWith("//")) {
 					// It's a comment
 					return;
 				} else if (line.equals("")) {
+					// End the rule
 					ruleOpen.replace(endRule(state, ruleOpen.getValue()));
-
-					return;
 				} else if (line.startsWith("\t")) {
+					// Continue the rule
 					continueRule(state, ruleOpen.getValue(), line);
 				} else {
+					// Open a rule
 					ruleOpen.replace(
 							startRule(state, ruleOpen.getValue(), line));
 				}
 			});
 		}
 
+		// Return the state that the user has created
 		return state;
 
 	}
@@ -192,28 +206,37 @@ public class RuleBasedConfigReader<E> {
 	}
 
 	private boolean startRule(E state, boolean ruleOpen, String line) {
+		// Create the line tokenizer
 		FunctionalStringTokenizer tokenizer = new FunctionalStringTokenizer(
 				line, " ");
 
+		// Get the initial token
 		String nextToken = tokenizer.nextToken();
 
+		// Handle pragmas
 		if (nextToken.equals("pragma")) {
+			// Get the pragma name
 			String token = tokenizer.nextToken();
 
+			// Handle pragmas
 			pragmas.getOrDefault(token, (tokenzer, stat) -> {
 				throw new UnknownPragmaException(
 						"Unknown pragma " + token);
 			}).accept(tokenizer, state);
 		} else {
+			// Make sure input is correct
 			if (ruleOpen == true) {
 				throw new InputMismatchException("Attempted to open a"
 						+ " rule with a rule already open. Make sure rules are"
 						+ " seperated by blank lines");
 			}
 
+			// Start a rule
 			startRule.accept(tokenizer, new Pair<>(nextToken, state));
+
 			ruleOpen = true;
 		}
+
 		return ruleOpen;
 	}
 }

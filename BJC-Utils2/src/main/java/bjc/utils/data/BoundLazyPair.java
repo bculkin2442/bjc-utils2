@@ -80,6 +80,10 @@ class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight>
 	@Override
 	public <BoundLeft> IPair<BoundLeft, NewRight> bindLeft(
 			Function<NewLeft, IPair<BoundLeft, NewRight>> leftBinder) {
+		if (leftBinder == null) {
+			throw new NullPointerException("Left binder must not be null");
+		}
+
 		Supplier<NewLeft> leftSupp = () -> {
 			IPair<NewLeft, NewRight> newPair = boundPair;
 
@@ -97,6 +101,11 @@ class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight>
 	@Override
 	public <BoundRight> IPair<NewLeft, BoundRight> bindRight(
 			Function<NewRight, IPair<NewLeft, BoundRight>> rightBinder) {
+		if (rightBinder == null) {
+			throw new NullPointerException(
+					"Right binder must not be null");
+		}
+
 		Supplier<NewRight> rightSupp = () -> {
 			IPair<NewLeft, NewRight> newPair = boundPair;
 
@@ -116,6 +125,16 @@ class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight>
 			IPair<OtherLeft, OtherRight> otherPair,
 			BiFunction<NewLeft, OtherLeft, CombinedLeft> leftCombiner,
 			BiFunction<NewRight, OtherRight, CombinedRight> rightCombiner) {
+		if (otherPair == null) {
+			throw new NullPointerException("Other pair must not be null");
+		} else if (leftCombiner == null) {
+			throw new NullPointerException(
+					"Left combiner must not be null");
+		} else if (rightCombiner == null) {
+			throw new NullPointerException(
+					"Right combiner must not be null");
+		}
+
 		return otherPair.bind((otherLeft, otherRight) -> {
 			return bind((leftVal, rightVal) -> {
 				return new LazyPair<>(
@@ -128,6 +147,10 @@ class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight>
 	@Override
 	public <NewLeftType> IPair<NewLeftType, NewRight> mapLeft(
 			Function<NewLeft, NewLeftType> mapper) {
+		if (mapper == null) {
+			throw new NullPointerException("Mapper must not be null");
+		}
+
 		Supplier<NewLeftType> leftSupp = () -> {
 			if (!pairBound) {
 				NewLeft leftVal = binder
@@ -156,6 +179,10 @@ class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight>
 	@Override
 	public <NewRightType> IPair<NewLeft, NewRightType> mapRight(
 			Function<NewRight, NewRightType> mapper) {
+		if (mapper == null) {
+			throw new NullPointerException("Mapper must not be null");
+		}
+
 		Supplier<NewLeft> leftSupp = () -> {
 			if (!pairBound) {
 				return binder
@@ -184,6 +211,10 @@ class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight>
 	@Override
 	public <MergedType> MergedType merge(
 			BiFunction<NewLeft, NewRight, MergedType> merger) {
+		if (merger == null) {
+			throw new NullPointerException("Merger must not be null");
+		}
+
 		if (!pairBound) {
 			boundPair = binder.apply(leftSupplier.get(),
 					rightSupplier.get());

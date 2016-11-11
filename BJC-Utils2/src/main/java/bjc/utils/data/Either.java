@@ -26,9 +26,8 @@ public class Either<LeftType, RightType>
 	 *            The value to put on the left
 	 * @return An either with the left side occupied
 	 */
-	public static <LeftType,
-			RightType> Either<LeftType, RightType> fromLeft(
-					LeftType left) {
+	public static <LeftType, RightType> Either<LeftType, RightType> fromLeft(
+			LeftType left) {
 		return new Either<>(left, null);
 	}
 
@@ -43,9 +42,8 @@ public class Either<LeftType, RightType>
 	 *            The value to put on the right
 	 * @return An either with the right side occupied
 	 */
-	public static <LeftType,
-			RightType> Either<LeftType, RightType> fromRight(
-					RightType right) {
+	public static <LeftType, RightType> Either<LeftType, RightType> fromRight(
+			RightType right) {
 		return new Either<>(null, right);
 	}
 
@@ -55,7 +53,7 @@ public class Either<LeftType, RightType>
 
 	private boolean		isLeft;
 
-	private Either(LeftType left, RightType right) {
+	private Either( LeftType left, RightType right) {
 		if (left == null) {
 			rightVal = right;
 		} else {
@@ -67,14 +65,21 @@ public class Either<LeftType, RightType>
 
 	@Override
 	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind(
-			BiFunction<LeftType, RightType,
-					IPair<BoundLeft, BoundRight>> binder) {
+			BiFunction<LeftType, RightType, IPair<BoundLeft, BoundRight>> binder) {
+		if (binder == null) {
+			throw new NullPointerException("Binder must not be null");
+		}
+
 		return binder.apply(leftVal, rightVal);
 	}
 
 	@Override
 	public <BoundLeft> IPair<BoundLeft, RightType> bindLeft(
 			Function<LeftType, IPair<BoundLeft, RightType>> leftBinder) {
+		if (leftBinder == null) {
+			throw new NullPointerException("Left binder must not be null");
+		}
+
 		if (isLeft) {
 			return leftBinder.apply(leftVal);
 		}
@@ -85,6 +90,11 @@ public class Either<LeftType, RightType>
 	@Override
 	public <BoundRight> IPair<LeftType, BoundRight> bindRight(
 			Function<RightType, IPair<LeftType, BoundRight>> rightBinder) {
+		if (rightBinder == null) {
+			throw new NullPointerException(
+					"Right binder must not be null");
+		}
+
 		if (isLeft) {
 			return new Either<>(leftVal, null);
 		}
@@ -93,13 +103,20 @@ public class Either<LeftType, RightType>
 	}
 
 	@Override
-	public <OtherLeft, OtherRight, CombinedLeft,
-			CombinedRight> IPair<CombinedLeft, CombinedRight> combine(
-					IPair<OtherLeft, OtherRight> otherPair,
-					BiFunction<LeftType, OtherLeft,
-							CombinedLeft> leftCombiner,
-					BiFunction<RightType, OtherRight,
-							CombinedRight> rightCombiner) {
+	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight> IPair<CombinedLeft, CombinedRight> combine(
+			IPair<OtherLeft, OtherRight> otherPair,
+			BiFunction<LeftType, OtherLeft, CombinedLeft> leftCombiner,
+			BiFunction<RightType, OtherRight, CombinedRight> rightCombiner) {
+		if (otherPair == null) {
+			throw new NullPointerException("Other pair must not be null");
+		} else if (leftCombiner == null) {
+			throw new NullPointerException(
+					"Left combiner must not be null");
+		} else if (rightCombiner == null) {
+			throw new NullPointerException(
+					"Right combiner must not be null");
+		}
+
 		if (isLeft) {
 			return otherPair.bind((otherLeft, otherRight) -> {
 				return new Either<>(leftCombiner.apply(leftVal, otherLeft),
@@ -116,6 +133,10 @@ public class Either<LeftType, RightType>
 	@Override
 	public <NewLeft> IPair<NewLeft, RightType> mapLeft(
 			Function<LeftType, NewLeft> mapper) {
+		if (mapper == null) {
+			throw new NullPointerException("Mapper must not be null");
+		}
+
 		if (isLeft) {
 			return new Either<>(mapper.apply(leftVal), null);
 		}
@@ -126,6 +147,10 @@ public class Either<LeftType, RightType>
 	@Override
 	public <NewRight> IPair<LeftType, NewRight> mapRight(
 			Function<RightType, NewRight> mapper) {
+		if (mapper == null) {
+			throw new NullPointerException("Mapper must not be null");
+		}
+
 		if (isLeft) {
 			return new Either<>(leftVal, null);
 		}
@@ -136,6 +161,10 @@ public class Either<LeftType, RightType>
 	@Override
 	public <MergedType> MergedType merge(
 			BiFunction<LeftType, RightType, MergedType> merger) {
+		if (merger == null) {
+			throw new NullPointerException("Merger must not be null");
+		}
+
 		return merger.apply(leftVal, rightVal);
 	}
 }

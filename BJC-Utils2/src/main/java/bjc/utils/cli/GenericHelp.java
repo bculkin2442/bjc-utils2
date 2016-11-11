@@ -1,7 +1,5 @@
 package bjc.utils.cli;
 
-import org.eclipse.jdt.annotation.Nullable;
-
 /**
  * Generic implementation of a help topic
  * 
@@ -22,7 +20,7 @@ public class GenericHelp implements ICommandHelp {
 	 *            The description of this help topic, or null if this help
 	 *            topic doesn't have a more detailed description
 	 */
-	public GenericHelp(String summary, @Nullable String description) {
+	public GenericHelp(String summary,  String description) {
 		if (summary == null) {
 			throw new NullPointerException(
 					"Help summary must be non-null");

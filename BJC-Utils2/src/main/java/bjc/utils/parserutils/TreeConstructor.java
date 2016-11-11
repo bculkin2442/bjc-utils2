@@ -36,6 +36,7 @@ public class TreeConstructor {
 	public static <TokenType> ITree<TokenType> constructTree(
 			IList<TokenType> tokens,
 			Predicate<TokenType> operatorPredicate) {
+		// Construct a tree with no special operators
 		return constructTree(tokens, operatorPredicate, (op) -> false,
 				null);
 	}
@@ -70,6 +71,7 @@ public class TreeConstructor {
 			Predicate<TokenType> isSpecialOperator,
 			Function<TokenType, Function<Deque<ITree<TokenType>>,
 					ITree<TokenType>>> handleSpecialOperator) {
+		// Make sure our parameters are valid
 		if (tokens == null) {
 			throw new NullPointerException("Tokens must not be null");
 		} else if (operatorPredicate == null) {
@@ -80,14 +82,17 @@ public class TreeConstructor {
 					"Special operator determiner must not be null");
 		}
 
+		// Here is the state for the tree construction
 		IHolder<IPair<Deque<ITree<TokenType>>,
 				ITree<TokenType>>> initialState = new Identity<>(
 						new Pair<>(new LinkedList<>(), null));
 
+		// Transform each of the tokens
 		tokens.forEach(
 				new TokenTransformer<>(initialState, operatorPredicate,
 						isSpecialOperator, handleSpecialOperator));
 
+		// Grab the tree from the state
 		return initialState.unwrap((pair) -> {
 			return pair.getRight();
 		});

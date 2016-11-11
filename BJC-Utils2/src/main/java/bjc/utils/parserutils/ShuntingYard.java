@@ -76,12 +76,15 @@ public class ShuntingYard<TokenType> {
 
 		@Override
 		public void accept(String token) {
+			// Handle operators
 			if (operators.containsKey(token)) {
+				// Pop operators while there isn't a higher precedence one
 				while (!stack.isEmpty()
 						&& isHigherPrec(token, stack.peek())) {
 					output.add(transform.apply(stack.pop()));
 				}
 
+				// Put this operator onto the stack
 				stack.push(token);
 			} else if (StringUtils.containsOnly(token, "\\(")) {
 				// Handle groups of parenthesis for multiple nesting levels
@@ -90,12 +93,15 @@ public class ShuntingYard<TokenType> {
 				// Handle groups of parenthesis for multiple nesting levels
 				String swappedToken = token.replace(')', '(');
 
+				// Remove tokens up to a matching parenthesis
 				while (!stack.peek().equals(swappedToken)) {
 					output.add(transform.apply(stack.pop()));
 				}
 
+				// Remove the parenthesis
 				stack.pop();
 			} else {
+				// Just add the transformed token
 				output.add(transform.apply(token));
 			}
 		}
@@ -115,6 +121,7 @@ public class ShuntingYard<TokenType> {
 	public ShuntingYard(boolean configureBasics) {
 		operators = new FunctionalMap<>();
 
+		// Add basic operators if we're configured to do so
 		if (configureBasics) {
 			operators.put("+", Operator.ADD);
 			operators.put("-", Operator.SUBTRACT);
@@ -132,8 +139,10 @@ public class ShuntingYard<TokenType> {
 	 *            The precedence of the operator to add
 	 */
 	public void addOp(String operatorToken, int precedence) {
-		this.addOp(operatorToken,
-				IPrecedent.newSimplePrecedent(precedence));
+		// Create the precedence marker
+		IPrecedent prec = IPrecedent.newSimplePrecedent(precedence);
+
+		this.addOp(operatorToken, prec);
 	}
 
 	/**
@@ -145,24 +154,31 @@ public class ShuntingYard<TokenType> {
 	 *            The precedence of the operator
 	 */
 	public void addOp(String operatorToken, IPrecedent precedence) {
+		// Complain about trying to add an incorrect operator
 		if (operatorToken == null) {
 			throw new NullPointerException("Operator must not be null");
+		} else if(precedence == null) {
+			throw new NullPointerException("Precedence must not be null");
 		}
 
+		// Add the operator to the ones we handle
 		operators.put(operatorToken, precedence);
 	}
 
-	private boolean isHigherPrec(String leftOperator,
-			String rightOperator) {
+	private boolean isHigherPrec(String leftOperator, String rightOperator) {
+		// Check if the right operator exists
 		boolean operatorExists = operators.containsKey(rightOperator);
 
+		// If it doesn't, the left is higher precedence.
 		if (!operatorExists) {
 			return false;
 		}
 
+		// Get the precedence of operators
 		int rightPrecedence = operators.get(rightOperator).getPrecedence();
 		int leftPrecedence = operators.get(leftOperator).getPrecedence();
 
+		// Evaluate what we were asked
 		return rightPrecedence >= leftPrecedence;
 	}
 
@@ -177,20 +193,26 @@ public class ShuntingYard<TokenType> {
 	 */
 	public IList<TokenType> postfix(IList<String> input,
 			Function<String, TokenType> tokenTransformer) {
+		// Check our input
 		if (input == null) {
 			throw new NullPointerException("Input must not be null");
 		} else if (tokenTransformer == null) {
 			throw new NullPointerException("Transformer must not be null");
 		}
 
+		// Here's what we're handing back
 		IList<TokenType> output = new FunctionalList<>();
 
+		// The stack to put operators on
 		Deque<String> stack = new LinkedList<>();
 
+		// Shunt the tokens
 		input.forEach(new TokenShunter(output, stack, tokenTransformer));
 
-		stack.forEach(
-				(token) -> output.add(tokenTransformer.apply(token)));
+		// Transform any resulting tokens
+		stack.forEach((token) -> {
+			output.add(tokenTransformer.apply(token));
+		});
 
 		return output;
 	}
@@ -199,13 +221,15 @@ public class ShuntingYard<TokenType> {
 	 * Remove an operator from the list of shuntable operators
 	 * 
 	 * @param token
-	 *            The token representing the operator
+	 *            The token representing the operator. If null, remove all
+	 *            operators
 	 */
 	public void removeOp(String token) {
+		// Check if we want to remove all operators
 		if (token == null) {
-			throw new NullPointerException("Token must not be null");
+			operators = new FunctionalMap<>();
+		} else {
+			operators.remove(token);
 		}
-
-		operators.remove(token);
 	}
 }

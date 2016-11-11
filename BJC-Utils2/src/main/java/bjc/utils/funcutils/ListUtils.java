@@ -90,10 +90,13 @@ public class ListUtils {
 
 		IHolder<IList<String>> returnedList = new Identity<>(input);
 
-		operators.forEach((operator) -> returnedList
-				.transform((oldReturn) -> oldReturn.flatMap((token) -> {
+		operators.forEach((operator) -> {
+			returnedList.transform((oldReturn) -> {
+				return oldReturn.flatMap((token) -> {
 					return operator.merge(new TokenDeaffixer(token));
-				})));
+				});
+			});
+		});
 
 		return returnedList.unwrap((list) -> list);
 	}

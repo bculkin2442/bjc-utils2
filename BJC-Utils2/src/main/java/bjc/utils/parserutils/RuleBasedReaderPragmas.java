@@ -29,19 +29,23 @@ public class RuleBasedReaderPragmas {
 			StateType> buildInteger(String name,
 					BiConsumer<Integer, StateType> consumer) {
 		return (tokenizer, state) -> {
+			// Check our input is correct
 			if (!tokenizer.hasMoreTokens()) {
 				throw new PragmaFormatException("Pragma " + name
 						+ " requires one integer argument");
 			}
 
+			// Read the argument
 			String token = tokenizer.nextToken();
 
 			try {
+				// Run the pragma
 				consumer.accept(Integer.parseInt(token), state);
 			} catch (NumberFormatException nfex) {
+				// Tell the user their argument isn't correct
 				PragmaFormatException pfex = new PragmaFormatException(
 						"Argument " + token
-								+ " to version pragma isn't a valid integer. "
+								+ " to " + name + " pragma isn't a valid integer. "
 								+ "This pragma requires a integer argument");
 
 				pfex.initCause(nfex);
@@ -67,14 +71,17 @@ public class RuleBasedReaderPragmas {
 			StateType> buildStringCollapser(String name,
 					BiConsumer<String, StateType> consumer) {
 		return (tokenizer, state) -> {
+			// Check our input
 			if (!tokenizer.hasMoreTokens()) {
 				throw new PragmaFormatException("Pragma " + name
-						+ " requires one string argument");
+						+ " requires one or more string arguments");
 			}
 
-			consumer.accept(ListUtils.collapseTokens(
-					tokenizer.toList((strang) -> strang)), state);
+			// Build our argument
+			String collapsed = ListUtils.collapseTokens(tokenizer.toList());
+
+			// Run the pragma
+			consumer.accept(collapsed, state);
 		};
 	}
-
 }

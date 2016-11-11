@@ -5,6 +5,9 @@ import java.util.function.UnaryOperator;
 
 import bjc.utils.funcdata.IList;
 
+/*
+ * Holds a list, converted into a holder
+ */
 class BoundListHolder<ContainedType> implements IHolder<ContainedType> {
 	private IList<IHolder<ContainedType>> heldHolders;
 
@@ -15,6 +18,10 @@ class BoundListHolder<ContainedType> implements IHolder<ContainedType> {
 	@Override
 	public <BoundType> IHolder<BoundType> bind(
 			Function<ContainedType, IHolder<BoundType>> binder) {
+		if (binder == null) {
+			throw new NullPointerException("Binder must not be null");
+		}
+
 		IList<IHolder<BoundType>> boundHolders = heldHolders
 				.map((containedHolder) -> {
 					return containedHolder.bind(binder);
@@ -26,6 +33,11 @@ class BoundListHolder<ContainedType> implements IHolder<ContainedType> {
 	@Override
 	public <NewType> Function<ContainedType, IHolder<NewType>> lift(
 			Function<ContainedType, NewType> func) {
+		if (func == null) {
+			throw new NullPointerException(
+					"Function to lift must not be null");
+		}
+
 		return (val) -> {
 			return new ListHolder<>(func.apply(val));
 		};
@@ -34,6 +46,10 @@ class BoundListHolder<ContainedType> implements IHolder<ContainedType> {
 	@Override
 	public <MappedType> IHolder<MappedType> map(
 			Function<ContainedType, MappedType> mapper) {
+		if (mapper == null) {
+			throw new NullPointerException("Mapper must not be null");
+		}
+
 		IList<IHolder<MappedType>> mappedHolders = heldHolders
 				.map((containedHolder) -> {
 					return containedHolder.map(mapper);
@@ -45,6 +61,10 @@ class BoundListHolder<ContainedType> implements IHolder<ContainedType> {
 	@Override
 	public IHolder<ContainedType> transform(
 			UnaryOperator<ContainedType> transformer) {
+		if (transformer == null) {
+			throw new NullPointerException("Transformer must not be null");
+		}
+
 		heldHolders.forEach((containedHolder) -> {
 			containedHolder.transform(transformer);
 		});
@@ -55,6 +75,10 @@ class BoundListHolder<ContainedType> implements IHolder<ContainedType> {
 	@Override
 	public <UnwrappedType> UnwrappedType unwrap(
 			Function<ContainedType, UnwrappedType> unwrapper) {
+		if (unwrapper == null) {
+			throw new NullPointerException("Unwrapper must not be null");
+		}
+
 		return heldHolders.randItem().unwrap(unwrapper);
 	}
 }
