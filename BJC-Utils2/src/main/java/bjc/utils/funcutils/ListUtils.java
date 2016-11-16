@@ -219,10 +219,8 @@ public class ListUtils {
 		/*
 		 * Run up to a certain number of passes
 		 */
-		for (int numberOfIterations = 0;
-				numberOfIterations < MAX_NTRIESPART
-						&& !rejectedElements.isEmpty();
-				numberOfIterations++) {
+		for (int numberOfIterations = 0; numberOfIterations < MAX_NTRIESPART
+				&& !rejectedElements.isEmpty(); numberOfIterations++) {
 			input.forEach(new GroupPartIteration<>(returnedList,
 					currentPartition, rejectedElements,
 					numberInCurrentPartition, numberPerPartition,
@@ -266,6 +264,23 @@ public class ListUtils {
 		return returnedList;
 	}
 
+	/**
+	 * Pad the provided list out to the desired size
+	 * 
+	 * @param <E>
+	 *            The type of elements in the list
+	 * @param list
+	 *            The list to pad out
+	 * @param counter
+	 *            The function to count elements with
+	 * @param size
+	 *            The desired size of the list
+	 * @param padSource
+	 *            The function to get elements to pad with
+	 * @return The list, padded to the desired size
+	 * @throws IllegalArgumentException
+	 *             if the list couldn't be padded to the desired size
+	 */
 	public static <E> IList<E> padList(IList<E> list,
 			Function<E, Integer> counter, int size,
 			Supplier<E> padSource) {

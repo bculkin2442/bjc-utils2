@@ -15,6 +15,12 @@ import javax.swing.ListSelectionModel;
 import bjc.utils.gui.layout.AutosizeLayout;
 import bjc.utils.gui.layout.HLayout;
 
+/**
+ * A simple list of strings
+ * 
+ * @author ben
+ *
+ */
 public class SimpleListPanel extends JPanel {
 	private static final long serialVersionUID = 2719963952350133541L;
 
@@ -33,6 +39,18 @@ public class SimpleListPanel extends JPanel {
 		addItemField.setText("");
 	}
 
+	/**
+	 * Create a new list panel
+	 * 
+	 * @param itemType
+	 *            The type of things in the list
+	 * @param listModel
+	 *            The model to put items into
+	 * @param itemVerifier
+	 *            The predicate to use to verify items
+	 * @param onVerificationFailure
+	 *            The function to call when an item doesn't verify
+	 */
 	public SimpleListPanel(String itemType,
 			DefaultListModel<String> listModel,
 			Predicate<String> itemVerifier,

@@ -28,6 +28,14 @@ public interface IList<ContainedType> {
 	 */
 	boolean add(ContainedType item);
 
+	/**
+	 * Add all of the elements in the provided list to this list
+	 * 
+	 * @param items
+	 *            The list of items to add
+	 * @return True if every item was succesfully added to the list, false
+	 *         otherwise
+	 */
 	default boolean addAll(IList<ContainedType> items) {
 		return items.map(this::add).anyMatch((bl) -> bl == false);
 	}

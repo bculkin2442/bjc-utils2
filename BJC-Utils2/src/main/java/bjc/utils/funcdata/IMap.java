@@ -73,6 +73,17 @@ public interface IMap<KeyType, ValueType> {
 	 */
 	ValueType get(KeyType key);
 
+	/**
+	 * Get a value from the map, and return a default value if the key
+	 * doesn't exist
+	 * 
+	 * @param key
+	 *            The key to attempt to retrieve
+	 * @param defaultValue
+	 *            The value to return if the key doesn't exist
+	 * @return The value associated with the key, or the default value if
+	 *         the key doesn't exist
+	 */
 	default ValueType getOrDefault(KeyType key, ValueType defaultValue) {
 		try {
 			return get(key);
