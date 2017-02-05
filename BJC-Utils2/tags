@@ -104,11 +104,9 @@ ICommandMode	src/main/java/bjc/utils/cli/ICommandMode.java	/^public interface IC
 IComponentRepository	src/main/java/bjc/utils/components/IComponentRepository.java	/^public interface IComponentRepository<$/;"	i
 IDescribedComponent	src/main/java/bjc/utils/components/IDescribedComponent.java	/^public interface IDescribedComponent {$/;"	i
 IHolder	src/main/java/bjc/utils/data/IHolder.java	/^public interface IHolder<ContainedType> extends Functor<ContainedType> {$/;"	i
-IItem	src/main/java/bjc/utils/parserutils/StackBasedConfigReader.java	/^	public static interface IItem {$/;"	i	class:StackBasedConfigReader
 IList	src/main/java/bjc/utils/funcdata/IList.java	/^public interface IList<ContainedType> {$/;"	i
 IMap	src/main/java/bjc/utils/funcdata/IMap.java	/^public interface IMap<KeyType, ValueType> {$/;"	i
 INORDER	src/main/java/bjc/utils/funcdata/bst/TreeLinearizationMethod.java	/^	INORDER,$/;"	e	enum:TreeLinearizationMethod	file:
-INTEGER	src/main/java/bjc/utils/parserutils/StackBasedConfigReader.java	/^		INTEGER,$/;"	e	enum:StackBasedConfigReader.ItemType	file:
 IPair	src/main/java/bjc/utils/data/IPair.java	/^public interface IPair<LeftType, RightType>$/;"	i
 IPrecedent	src/main/java/bjc/utils/parserutils/IPrecedent.java	/^public interface IPrecedent {$/;"	i
 ITree	src/main/java/bjc/utils/data/ITree.java	/^public interface ITree<ContainedType> {$/;"	i
@@ -116,7 +114,6 @@ ITreePart	src/main/java/bjc/utils/funcdata/bst/ITreePart.java	/^public interface
 Identity	src/main/java/bjc/utils/data/Identity.java	/^	public Identity() {$/;"	m	class:Identity
 Identity	src/main/java/bjc/utils/data/Identity.java	/^	public Identity(ContainedType value) {$/;"	m	class:Identity
 Identity	src/main/java/bjc/utils/data/Identity.java	/^public class Identity<ContainedType> implements IHolder<ContainedType> {$/;"	c
-ItemType	src/main/java/bjc/utils/parserutils/StackBasedConfigReader.java	/^	public static enum ItemType {$/;"	g	class:StackBasedConfigReader
 LEFT	src/main/java/bjc/utils/funcdata/bst/DirectedWalkFunction.java	/^		LEFT,$/;"	e	enum:DirectedWalkFunction.DirectedWalkResult	file:
 Lazy	src/main/java/bjc/utils/data/Lazy.java	/^	private Lazy(Supplier<ContainedType> supp,$/;"	m	class:Lazy	file:
 Lazy	src/main/java/bjc/utils/data/Lazy.java	/^	public Lazy(ContainedType value) {$/;"	m	class:Lazy
@@ -137,7 +134,6 @@ NullHelp	src/main/java/bjc/utils/cli/NullHelp.java	/^public class NullHelp imple
 NumberFormatter	src/main/java/bjc/utils/gui/panels/SliderInputPanel.java	/^		public NumberFormatter(SliderSettings settings) {$/;"	m	class:SliderInputPanel.NumberFormatter
 NumberFormatter	src/main/java/bjc/utils/gui/panels/SliderInputPanel.java	/^	private final class NumberFormatter$/;"	c	class:SliderInputPanel
 NumberUtils	src/main/java/bjc/utils/funcutils/NumberUtils.java	/^public class NumberUtils {$/;"	c
-OBJECT	src/main/java/bjc/utils/parserutils/StackBasedConfigReader.java	/^		OBJECT$/;"	e	enum:StackBasedConfigReader.ItemType	file:
 Operator	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^		private Operator(int prec) {$/;"	m	class:ShuntingYard.Operator	file:
 Operator	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^	public static enum Operator implements IPrecedent {$/;"	g	class:ShuntingYard
 OperatorHandler	src/main/java/bjc/utils/parserutils/TokenTransformer.java	/^		public OperatorHandler(TokenType element) {$/;"	m	class:TokenTransformer.OperatorHandler
@@ -164,7 +160,6 @@ RuleBasedConfigReader	src/main/java/bjc/utils/parserutils/RuleBasedConfigReader.
 RuleBasedConfigReader	src/main/java/bjc/utils/parserutils/RuleBasedConfigReader.java	/^public class RuleBasedConfigReader<E> {$/;"	c
 RuleBasedReaderPragmas	src/main/java/bjc/utils/parserutils/RuleBasedReaderPragmas.java	/^public class RuleBasedReaderPragmas {$/;"	c
 SKIP	src/main/java/bjc/utils/data/TopDownTransformResult.java	/^	SKIP,$/;"	e	enum:TopDownTransformResult	file:
-STRING	src/main/java/bjc/utils/parserutils/StackBasedConfigReader.java	/^		STRING,$/;"	e	enum:StackBasedConfigReader.ItemType	file:
 SUBTRACT	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^		SUBTRACT(2),$/;"	e	enum:ShuntingYard.Operator	file:
 SUCCESS	src/main/java/bjc/utils/funcdata/bst/DirectedWalkFunction.java	/^		SUCCESS$/;"	e	enum:DirectedWalkFunction.DirectedWalkResult	file:
 ShuntTest	src/examples/java/bjc/utils/examples/parsing/ShuntTest.java	/^public class ShuntTest {$/;"	c
@@ -193,7 +188,6 @@ SliderInputPanel	src/main/java/bjc/utils/gui/panels/SliderInputPanel.java	/^publ
 SliderSettings	src/main/java/bjc/utils/gui/panels/SliderInputPanel.java	/^		public SliderSettings(int min, int max) {$/;"	m	class:SliderInputPanel.SliderSettings
 SliderSettings	src/main/java/bjc/utils/gui/panels/SliderInputPanel.java	/^		public SliderSettings(int min, int max, int init) {$/;"	m	class:SliderInputPanel.SliderSettings
 SliderSettings	src/main/java/bjc/utils/gui/panels/SliderInputPanel.java	/^	public static class SliderSettings {$/;"	c	class:SliderInputPanel
-StackBasedConfigReader	src/main/java/bjc/utils/parserutils/StackBasedConfigReader.java	/^public class StackBasedConfigReader {$/;"	c
 StringUtils	src/main/java/bjc/utils/funcutils/StringUtils.java	/^public class StringUtils {$/;"	c
 TRANSFORM	src/main/java/bjc/utils/data/TopDownTransformResult.java	/^	TRANSFORM,$/;"	e	enum:TopDownTransformResult	file:
 TextAreaOutputStream	src/main/java/bjc/utils/gui/TextAreaOutputStream.java	/^	public TextAreaOutputStream(JTextArea console) {$/;"	m	class:TextAreaOutputStream
@@ -423,7 +417,6 @@ bjc.utils.parserutils	src/main/java/bjc/utils/parserutils/IPrecedent.java	/^pack
 bjc.utils.parserutils	src/main/java/bjc/utils/parserutils/RuleBasedConfigReader.java	/^package bjc.utils.parserutils;$/;"	p
 bjc.utils.parserutils	src/main/java/bjc/utils/parserutils/RuleBasedReaderPragmas.java	/^package bjc.utils.parserutils;$/;"	p
 bjc.utils.parserutils	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^package bjc.utils.parserutils;$/;"	p
-bjc.utils.parserutils	src/main/java/bjc/utils/parserutils/StackBasedConfigReader.java	/^package bjc.utils.parserutils;$/;"	p
 bjc.utils.parserutils	src/main/java/bjc/utils/parserutils/TokenTransformer.java	/^package bjc.utils.parserutils;$/;"	p
 bjc.utils.parserutils	src/main/java/bjc/utils/parserutils/TreeConstructor.java	/^package bjc.utils.parserutils;$/;"	p
 boundHolder	src/main/java/bjc/utils/data/BoundLazy.java	/^	private IHolder<BoundContainedType>						boundHolder;$/;"	f	class:BoundLazy	file:
@@ -679,7 +672,6 @@ getSummary	src/main/java/bjc/utils/cli/GenericHelp.java	/^	public String getSumm
 getSummary	src/main/java/bjc/utils/cli/ICommandHelp.java	/^	public String getSummary();$/;"	m	interface:ICommandHelp
 getSummary	src/main/java/bjc/utils/cli/NullHelp.java	/^	public String getSummary() {$/;"	m	class:NullHelp
 getTarget	src/main/java/bjc/utils/graph/Edge.java	/^	public T getTarget() {$/;"	m	class:Edge
-getType	src/main/java/bjc/utils/parserutils/StackBasedConfigReader.java	/^		public ItemType getType();$/;"	m	interface:StackBasedConfigReader.IItem
 getValue	src/main/java/bjc/utils/data/IHolder.java	/^	public default ContainedType getValue() {$/;"	m	interface:IHolder
 getValue	src/main/java/bjc/utils/funcdata/theory/Functor.java	/^	public ContainedType getValue();$/;"	m	interface:Functor
 getValue	src/main/java/bjc/utils/gui/SimpleDialogs.java	/^	public static <E> E getValue(Component parent, String title,$/;"	m	class:SimpleDialogs
@@ -738,7 +730,7 @@ isDeleted	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeLeaf.java	/^	prot
 isDirected	src/main/java/bjc/utils/graph/AdjacencyMap.java	/^	public boolean isDirected() {$/;"	m	class:AdjacencyMap
 isEmpty	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public boolean isEmpty() {$/;"	m	class:FunctionalList
 isEmpty	src/main/java/bjc/utils/funcdata/IList.java	/^	boolean isEmpty();$/;"	m	interface:IList
-isHigherPrec	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^	private boolean isHigherPrec(String leftOperator,$/;"	m	class:ShuntingYard	file:
+isHigherPrec	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^	private boolean isHigherPrec(String leftOperator, String rightOperator) {$/;"	m	class:ShuntingYard	file:
 isInTree	src/main/java/bjc/utils/funcdata/bst/BinarySearchTree.java	/^	public boolean isInTree(T element) {$/;"	m	class:BinarySearchTree
 isLeft	src/main/java/bjc/utils/data/Either.java	/^	private boolean		isLeft;$/;"	f	class:Either	file:
 isPartitionFull	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	private Boolean isPartitionFull(int numberPerPartition,$/;"	m	class:FunctionalList	file:
