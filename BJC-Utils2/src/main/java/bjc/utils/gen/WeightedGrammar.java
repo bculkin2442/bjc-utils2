@@ -1,7 +1,10 @@
 package bjc.utils.gen;
 
 import java.util.Random;
+import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.function.Predicate;
 
 import bjc.utils.data.IPair;
 import bjc.utils.data.Pair;
@@ -41,11 +44,33 @@ public class WeightedGrammar<E> {
 	protected IMap<E, WeightedGrammar<E>> subgrammars;
 
 	/**
+	 * Rules that require special handling
+	 */
+	private IMap<E, Supplier<IList<E>>> specialRules;
+
+	/**
+	 * Predicate for marking special tokens
+	 */
+	
+	private Predicate<E> specialMarker;
+
+	/**
+	 * Action for special tokens
+	 */
+	private BiFunction<E, WeightedGrammar<E>, IList<E>> specialAction;
+
+	/**
+	 * Action to reset grammar
+	 */
+	private Runnable resetSpecial;
+
+	/**
 	 * Create a new weighted grammar.
 	 */
 	public WeightedGrammar() {
 		rules = new FunctionalMap<>();
 		subgrammars = new FunctionalMap<>();
+		specialRules = new FunctionalMap<>();
 	}
 
 	/**
@@ -63,6 +88,24 @@ public class WeightedGrammar<E> {
 		}
 
 		rng = source;
+	}
+
+	public void configureSpecial(Predicate<E> marker,
+			BiFunction<E, WeightedGrammar<E>, IList<E>> action,
+			Runnable reset) {
+		specialMarker = marker;
+		specialAction = action;
+		resetSpecial = reset;
+	}
+
+	public void addSpecialRule(E ruleName, Supplier<IList<E>> cse) {
+		if(ruleName == null) {
+			throw new NullPointerException("Rule name must not be null");
+		} else if (cse == null) {
+			throw new NullPointerException("Case must not be null");
+		}
+
+		specialRules.put(ruleName, cse);
 	}
 
 	/**
@@ -248,8 +291,8 @@ public class WeightedGrammar<E> {
 	 * @return A randomly generated sentance from the specified initial
 	 *         rule.
 	 */
-	public <T> IList<T> generateGenericValues(E initRule, Function<E, T> tokenTransformer, T spacer) {
-		if (initRule == null) {
+	public <T> IList<T> generateGenericValues(E initRules, Function<E, T> tokenTransformer, T spacer) {
+		if (initRules == null) {
 			throw new NullPointerException("Initial rule must not be null");
 		} else if (tokenTransformer == null) {
 			throw new NullPointerException("Transformer must not be null");
@@ -259,42 +302,55 @@ public class WeightedGrammar<E> {
 
 		IList<T> returnedList = new FunctionalList<>();
 
-		if (subgrammars.containsKey(initRule)) {
-			subgrammars.get(initRule)
-				.generateGenericValues(initRule, tokenTransformer, spacer)
-				.forEach(rulePart -> {
-						returnedList.add(rulePart);
-						returnedList.add(spacer);
-					});
-		} else if (rules.containsKey(initRule)) {
-			rules.get(initRule)
-				 .generateValue().forEach(rulePart -> {
-					 if(rulePart.matches("\\[\\S+\\]") {
-						 generateGenericValues(rulePart, tokenTransformer, spacer)
-							 .forEach(generatedRulePart -> {
-										returnedList.add(generatedRulePart);
-										returnedList.add(spacer);
-								});
-					 } else {
-						 T transformedToken = tokenTransformer.apply(initRule);
+		IList<E> genRules = new FunctionalList(initRules);
 
-						 if (transformedToken == null) {
-							 throw new NullPointerException("Transformer created null token");
-						 }
-
-						 returnedList.add(transformedToken);
-						 returnedList.add(spacer);
-					 }
-				});
-		} else {
-			T transformedToken = tokenTransformer.apply(initRule);
-
-			if (transformedToken == null) {
-				throw new NullPointerException("Transformer created null token");
+		if(specialMarker != null) {
+			if(specialMarker.test(initRules)) {
+				genRules = specialAction.apply(initRules, this);
 			}
+		}
 
-			returnedList.add(transformedToken);
-			returnedList.add(spacer);
+		for(E initRule : genRules.toIterable()) {
+			if(specialRules.containsKey(initRule)) {
+				for(E rulePart : specialRules.get(initRule).get().toIterable()) {
+					Iterable<T> generatedRuleParts = generateGenericValues(
+							rulePart, tokenTransformer, spacer).toIterable();
+
+					for(T generatedRulePart : generatedRuleParts) {
+						returnedList.add(generatedRulePart);
+						returnedList.add(spacer);
+					}
+				}
+			} else if (subgrammars.containsKey(initRule)) {
+				Iterable<T> ruleParts = subgrammars.get(initRule).generateGenericValues(
+						initRule, tokenTransformer, spacer).toIterable();
+
+				for(T rulePart : ruleParts) {
+					returnedList.add(rulePart);
+					returnedList.add(spacer);
+				}
+			} else if (rules.containsKey(initRule)) {
+				Iterable<E> ruleParts = rules.get(initRule).generateValue().toIterable();
+
+				for(E rulePart : ruleParts) {
+					Iterable<T> generatedRuleParts = 
+						generateGenericValues(rulePart, tokenTransformer, spacer).toIterable();
+
+					for(T generatedRulePart : generatedRuleParts) {
+						returnedList.add(generatedRulePart);
+						returnedList.add(spacer);
+					}
+				}
+			} else {
+				T transformedToken = tokenTransformer.apply(initRule);
+
+				if (transformedToken == null) {
+					throw new NullPointerException("Transformer created null token");
+				}
+
+				returnedList.add(transformedToken);
+				returnedList.add(spacer);
+			}
 		}
 
 		return returnedList;
@@ -312,7 +368,11 @@ public class WeightedGrammar<E> {
 	 *         rule.
 	 */
 	public IList<E> generateListValues(E initRule, E spacer) {
-		return generateGenericValues(initRule, strang -> strang, spacer);
+		IList<E> retList = generateGenericValues(initRule, strang -> strang, spacer);
+
+		resetSpecial.run();
+
+		return retList;
 	}
 
 	/**
