@@ -60,11 +60,6 @@ public class WeightedGrammar<E> {
 	private BiFunction<E, WeightedGrammar<E>, IList<E>> specialAction;
 
 	/**
-	 * Action to reset grammar
-	 */
-	private Runnable resetSpecial;
-
-	/**
 	 * Create a new weighted grammar.
 	 */
 	public WeightedGrammar() {
@@ -91,11 +86,9 @@ public class WeightedGrammar<E> {
 	}
 
 	public void configureSpecial(Predicate<E> marker,
-			BiFunction<E, WeightedGrammar<E>, IList<E>> action,
-			Runnable reset) {
+			BiFunction<E, WeightedGrammar<E>, IList<E>> action) {
 		specialMarker = marker;
 		specialAction = action;
-		resetSpecial = reset;
 	}
 
 	public void addSpecialRule(E ruleName, Supplier<IList<E>> cse) {
@@ -369,8 +362,6 @@ public class WeightedGrammar<E> {
 	 */
 	public IList<E> generateListValues(E initRule, E spacer) {
 		IList<E> retList = generateGenericValues(initRule, strang -> strang, spacer);
-
-		resetSpecial.run();
 
 		return retList;
 	}

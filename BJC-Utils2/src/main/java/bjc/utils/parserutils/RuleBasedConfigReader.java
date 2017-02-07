@@ -130,7 +130,8 @@ public class RuleBasedConfigReader<E> {
 		E state = initialState;
 
 		// Prepare our input source
-		try (Scanner source = new Scanner(input, "\n")) {
+		try (Scanner source = new Scanner(input)) {
+			source.useDelimiter("\n");
 			// This is true when a rule's open
 			IHolder<Boolean> isRuleOpen = new Identity<>(false);
 
