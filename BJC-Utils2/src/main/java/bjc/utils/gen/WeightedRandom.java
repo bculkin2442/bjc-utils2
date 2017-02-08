@@ -75,8 +75,6 @@ public class WeightedRandom<E> {
 	 * @return A random value selected in a weighted fashion.
 	 */
 	public E generateValue() {
-		System.out.println("Total chance is " + totalChance);
-
 		IHolder<Integer> randomValue = new Identity<>(
 				source.nextInt(totalChance));
 		IHolder<E> currentResult = new Identity<>();

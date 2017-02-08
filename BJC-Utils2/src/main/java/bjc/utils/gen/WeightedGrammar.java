@@ -295,7 +295,7 @@ public class WeightedGrammar<E> {
 
 		IList<T> returnedList = new FunctionalList<>();
 
-		IList<E> genRules = new FunctionalList(initRules);
+		IList<E> genRules = new FunctionalList<>(initRules);
 
 		if(specialMarker != null) {
 			if(specialMarker.test(initRules)) {
@@ -390,7 +390,12 @@ public class WeightedGrammar<E> {
 	 * @return The set of all rule names in this grammar
 	 */
 	public IList<E> getRuleNames() {
-		return rules.keyList();
+		IList<E> ruleNames = new FunctionalList<>();
+
+		ruleNames.addAll(rules.keyList());
+		ruleNames.addAll(specialRules.keyList());
+
+		return ruleNames;
 	}
 
 	/**
@@ -415,6 +420,10 @@ public class WeightedGrammar<E> {
 	 */
 	public boolean hasInitialRule() {
 		return initialRule != null && !initialRule.equalsIgnoreCase("");
+	}
+
+	public boolean hasRule(E ruleName) {
+		return rules.containsKey(ruleName) || specialRules.containsKey(ruleName);
 	}
 
 	/**
