@@ -19,10 +19,10 @@ public class FileUtils {
 	 * 
 	 * @param root
 	 *            The directory to start the traversal at
-	 * @param traversalPredicate
+	 * @param predicate
 	 *            The predicate to determine whether or not to traverse a
 	 *            directory
-	 * @param traversalAction
+	 * @param action
 	 *            The action to invoke upon each file in the directory.
 	 *            Returning true means to continue the traversal, returning
 	 *            false stops it
@@ -33,10 +33,9 @@ public class FileUtils {
 	 *             this with all the buttons and knobs from walkFileTree
 	 */
 	public static void traverseDirectory(Path root,
-			BiPredicate<Path, BasicFileAttributes> traversalPredicate,
-			BiPredicate<Path, BasicFileAttributes> traversalAction)
+			BiPredicate<Path, BasicFileAttributes> predicate,
+			BiPredicate<Path, BasicFileAttributes> action)
 			throws IOException {
-		Files.walkFileTree(root, new FunctionalFileVisitor(
-				traversalPredicate, traversalAction));
+		Files.walkFileTree(root, new FunctionalFileVisitor(predicate, action));
 	}
 }

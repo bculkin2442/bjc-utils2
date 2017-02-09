@@ -47,8 +47,7 @@ public class ListUtils {
 	 *            The seperator to use for seperating tokens
 	 * @return The collapsed string of tokens
 	 */
-	public static String collapseTokens(IList<String> input,
-			String seperator) {
+	public static String collapseTokens(IList<String> input, String seperator) {
 		if (input == null) {
 			throw new NullPointerException("Input must not be null");
 		} else if (seperator == null) {
@@ -60,12 +59,13 @@ public class ListUtils {
 		} else if (input.getSize() == 1) {
 			return input.first();
 		} else {
-			return input.reduceAux("", (currentString, state) -> {
-				return state + currentString + seperator;
-			}, (strang) -> {
-				return strang.substring(0,
-						strang.length() - seperator.length());
-			});
+			return input.reduceAux("", 
+					(currentString, state) -> {
+						return state + currentString + seperator;
+					},
+					(strang) -> {
+						return strang.substring(0, strang.length() - seperator.length());
+					});
 		}
 	}
 
@@ -84,21 +84,20 @@ public class ListUtils {
 		if (input == null) {
 			throw new NullPointerException("Input must not be null");
 		} else if (operators == null) {
-			throw new NullPointerException(
-					"Set of operators must not be null");
+			throw new NullPointerException("Set of operators must not be null");
 		}
 
-		IHolder<IList<String>> returnedList = new Identity<>(input);
+		IHolder<IList<String>> returned = new Identity<>(input);
 
 		operators.forEach((operator) -> {
-			returnedList.transform((oldReturn) -> {
-				return oldReturn.flatMap((token) -> {
+			returned.transform((old) -> {
+				return old.flatMap((token) -> {
 					return operator.merge(new TokenDeaffixer(token));
 				});
 			});
 		});
 
-		return returnedList.unwrap((list) -> list);
+		return returned.unwrap((list) -> list);
 	}
 
 	/**
@@ -108,7 +107,7 @@ public class ListUtils {
 	 *            The type of items to select
 	 * @param list
 	 *            The list to select from
-	 * @param numberOfItems
+	 * @param number
 	 *            The number of items to selet
 	 * @param rng
 	 *            A function that creates a random number from 0 to the
@@ -117,26 +116,25 @@ public class ListUtils {
 	 *         selected from the specified list without replacement
 	 */
 
-	public static <E> IList<E> drawWithoutReplacement(IList<E> list,
-			int numberOfItems, Function<Integer, Integer> rng) {
-		IList<E> selectedItems = new FunctionalList<>(
-				new ArrayList<>(numberOfItems));
+	public static <E> IList<E> drawWithoutReplacement(
+			IList<E> list, int number, Function<Integer, Integer> rng) {
+		IList<E> selected = new FunctionalList<>(new ArrayList<>(number));
 
-		int totalItems = list.getSize();
+		int total = list.getSize();
 
 		list.forEachIndexed((index, element) -> {
-			int winningChance = numberOfItems - selectedItems.getSize();
+			int winningChance = number - selected.getSize();
 			// n - m
-			int totalChance = totalItems - (index - 1);
+			int totalChance = total - (index - 1);
 			// N - t
 
 			// Probability of selecting the t+1'th element
 			if (NumberUtils.isProbable(winningChance, totalChance, rng)) {
-				selectedItems.add(element);
+				selected.add(element);
 			}
 		});
 
-		return selectedItems;
+		return selected;
 	}
 
 	/**
@@ -146,7 +144,7 @@ public class ListUtils {
 	 *            The type of items to select
 	 * @param list
 	 *            The list to select from
-	 * @param numberOfItems
+	 * @param number
 	 *            The number of items to selet
 	 * @param rng
 	 *            A function that creates a random number from 0 to the
@@ -155,15 +153,14 @@ public class ListUtils {
 	 *         selected from the specified list
 	 */
 	public static <E> IList<E> drawWithReplacement(IList<E> list,
-			int numberOfItems, Function<Integer, Integer> rng) {
-		IList<E> selectedItems = new FunctionalList<>(
-				new ArrayList<>(numberOfItems));
+			int number, Function<Integer, Integer> rng) {
+		IList<E> selected = new FunctionalList<>(new ArrayList<>(number));
 
-		for (int i = 0; i < numberOfItems; i++) {
-			selectedItems.add(list.randItem(rng));
+		for (int i = 0; i < number; i++) {
+			selected.add(list.randItem(rng));
 		}
 
-		return selectedItems;
+		return selected;
 	}
 
 	/**
@@ -175,23 +172,22 @@ public class ListUtils {
 	 * 
 	 * @param input
 	 *            The list to partition
-	 * @param elementCounter
+	 * @param counter
 	 *            The function to determine the count for each element for
-	 * @param numberPerPartition
+	 * @param partitionSize
 	 *            The number of elements to put in each partition
 	 * 
 	 * @return A list partitioned according to the above rules
 	 */
-	public static <E> IList<IList<E>> groupPartition(IList<E> input,
-			Function<E, Integer> elementCounter, int numberPerPartition) {
+	public static <E> IList<IList<E>> groupPartition(
+			IList<E> input, Function<E, Integer> counter, int partitionSize) {
 		if (input == null) {
 			throw new NullPointerException("Input list must not be null");
-		} else if (elementCounter == null) {
+		} else if (counter == null) {
 			throw new NullPointerException("Counter must not be null");
-		} else if (numberPerPartition < 1
-				|| numberPerPartition > input.getSize()) {
+		} else if (partitionSize < 1 || partitionSize > input.getSize()) {
 			throw new IllegalArgumentException(
-					"" + numberPerPartition + " is not a valid"
+					"" + partitionSize + " is not a valid"
 							+ " partition size. Must be between 1 and "
 							+ input.getSize());
 		}
@@ -199,36 +195,36 @@ public class ListUtils {
 		/*
 		 * List that holds our results
 		 */
-		IList<IList<E>> returnedList = new FunctionalList<>();
+		IList<IList<E>> returned = new FunctionalList<>();
 
 		/*
 		 * List that holds current partition
 		 */
-		IHolder<IList<E>> currentPartition = new Identity<>(
-				new FunctionalList<>());
+		IHolder<IList<E>> current = new Identity<>(new FunctionalList<>());
+
 		/*
 		 * List that holds elements rejected during current pass
 		 */
-		IList<E> rejectedElements = new FunctionalList<>();
+		IList<E> rejected = new FunctionalList<>();
 
 		/*
 		 * The effective number of elements in the current partitition
 		 */
-		IHolder<Integer> numberInCurrentPartition = new Identity<>(0);
+		IHolder<Integer> currentSize = new Identity<>(0);
 
 		/*
 		 * Run up to a certain number of passes
 		 */
 		for (int numberOfIterations = 0; numberOfIterations < MAX_NTRIESPART
-				&& !rejectedElements.isEmpty(); numberOfIterations++) {
-			input.forEach(new GroupPartIteration<>(returnedList,
-					currentPartition, rejectedElements,
-					numberInCurrentPartition, numberPerPartition,
-					elementCounter));
+				&& !rejected.isEmpty(); numberOfIterations++) {
+			input.forEach(new GroupPartIteration<>(returned,
+					current, rejected,
+					currentSize, partitionSize,
+					counter));
 
-			if (rejectedElements.isEmpty()) {
+			if (rejected.isEmpty()) {
 				// Nothing was rejected, so we're done
-				return returnedList;
+				return returned;
 			}
 		}
 
@@ -237,11 +233,11 @@ public class ListUtils {
 						+ " iterations of partitioning) detected unpartitionable list "
 						+ input.toString()
 						+ "\nThe following elements were not partitioned: "
-						+ rejectedElements.toString()
+						+ rejected.toString()
 						+ "\nCurrent group in formation: "
-						+ currentPartition.unwrap((vl) -> vl.toString())
+						+ current.unwrap((vl) -> vl.toString())
 						+ "\nPreviously formed groups: "
-						+ returnedList.toString());
+						+ returned.toString());
 	}
 
 	/**
@@ -255,13 +251,13 @@ public class ListUtils {
 	 */
 	@SafeVarargs
 	public static <E> IList<E> mergeLists(IList<E>... lists) {
-		IList<E> returnedList = new FunctionalList<>();
+		IList<E> returned = new FunctionalList<>();
 
 		for (IList<E> list : lists) {
-			list.forEach(returnedList::add);
+			list.forEach(returned::add);
 		}
 
-		return returnedList;
+		return returned;
 	}
 
 	/**
@@ -275,7 +271,7 @@ public class ListUtils {
 	 *            The function to count elements with
 	 * @param size
 	 *            The desired size of the list
-	 * @param padSource
+	 * @param padder
 	 *            The function to get elements to pad with
 	 * @return The list, padded to the desired size
 	 * @throws IllegalArgumentException
@@ -283,26 +279,26 @@ public class ListUtils {
 	 */
 	public static <E> IList<E> padList(IList<E> list,
 			Function<E, Integer> counter, int size,
-			Supplier<E> padSource) {
-		IHolder<Integer> countHolder = new Identity<>(0);
+			Supplier<E> padder) {
+		IHolder<Integer> count = new Identity<>(0);
 
-		IList<E> ret = list.map((elm) -> {
-			countHolder.map((val) -> val + counter.apply(elm));
+		IList<E> returned = list.map((elm) -> {
+			count.map((val) -> val + counter.apply(elm));
 
 			return elm;
 		});
 
-		if (countHolder.unwrap((val) -> val % size != 0)) {
+		if (count.unwrap((val) -> val % size != 0)) {
 			// We need to pad
-			int needed = countHolder.unwrap((val) -> val % size);
+			int needed = count.unwrap((val) -> val % size);
 			int threshold = 0;
 
 			while (needed > 0 && threshold <= MAX_NTRIESPART) {
-				E val = padSource.get();
+				E val = padder.get();
 				int count = counter.apply(val);
 
 				if (count <= needed) {
-					ret.add(val);
+					returned.add(val);
 
 					threshold = 0;
 
@@ -319,7 +315,7 @@ public class ListUtils {
 			}
 		}
 
-		return ret;
+		return returned;
 	}
 
 	/**
@@ -341,20 +337,19 @@ public class ListUtils {
 		if (input == null) {
 			throw new NullPointerException("Input must not be null");
 		} else if (operators == null) {
-			throw new NullPointerException(
-					"Set of operators must not be null");
+			throw new NullPointerException("Set of operators must not be null");
 		}
 
-		IHolder<IList<String>> returnedList = new Identity<>(input);
+		IHolder<IList<String>> returned = new Identity<>(input);
 
 		operators.forEach((operator) -> {
-			returnedList.transform((oldReturn) -> {
+			returned.transform((oldReturn) -> {
 				return oldReturn.flatMap((token) -> {
 					return operator.merge(new TokenSplitter(token));
 				});
 			});
 		});
 
-		return returnedList.getValue();
+		return returned.getValue();
 	}
 }

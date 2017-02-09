@@ -28,16 +28,16 @@ public class TreeConstructor {
 	 *            The elements of the parse tree
 	 * @param tokens
 	 *            The list of tokens to build a tree from
-	 * @param operatorPredicate
+	 * @param isOperator
 	 *            The predicate to use to determine if something is a
 	 *            operator
 	 * @return A AST from the expression
 	 */
 	public static <TokenType> ITree<TokenType> constructTree(
 			IList<TokenType> tokens,
-			Predicate<TokenType> operatorPredicate) {
+			Predicate<TokenType> isOperator) {
 		// Construct a tree with no special operators
-		return constructTree(tokens, operatorPredicate, (op) -> false,
+		return constructTree(tokens, isOperator, (op) -> false,
 				null);
 	}
 
@@ -51,7 +51,7 @@ public class TreeConstructor {
 	 *            The elements of the parse tree
 	 * @param tokens
 	 *            The list of tokens to build a tree from
-	 * @param operatorPredicate
+	 * @param isOperator
 	 *            The predicate to use to determine if something is a
 	 *            operator
 	 * @param isSpecialOperator
@@ -62,19 +62,19 @@ public class TreeConstructor {
 	 * @return A AST from the expression
 	 * 
 	 *         FIXME The handleSpecialOp function seems like an ugly
-	 *         interface. Maybe there's a better way to express how that
-	 *         works
+	 *         interface. Maybe there's a better way to express how
+	 *         that works.
 	 */
 	public static <TokenType> ITree<TokenType> constructTree(
 			IList<TokenType> tokens,
-			Predicate<TokenType> operatorPredicate,
+			Predicate<TokenType> isOperator,
 			Predicate<TokenType> isSpecialOperator,
 			Function<TokenType, Function<Deque<ITree<TokenType>>,
 					ITree<TokenType>>> handleSpecialOperator) {
 		// Make sure our parameters are valid
 		if (tokens == null) {
 			throw new NullPointerException("Tokens must not be null");
-		} else if (operatorPredicate == null) {
+		} else if (isOperator == null) {
 			throw new NullPointerException(
 					"Operator predicate must not be null");
 		} else if (isSpecialOperator == null) {
@@ -89,7 +89,7 @@ public class TreeConstructor {
 
 		// Transform each of the tokens
 		tokens.forEach(
-				new TokenTransformer<>(initialState, operatorPredicate,
+				new TokenTransformer<>(initialState, isOperator,
 						isSpecialOperator, handleSpecialOperator));
 
 		// Grab the tree from the state

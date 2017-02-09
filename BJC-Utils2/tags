@@ -3,7 +3,7 @@
 !_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
-!_TAG_PROGRAM_VERSION	5.8	//
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
 ADD	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^		ADD(1),$/;"	e	enum:ShuntingYard.Operator	file:
 AdjacencyMap	src/main/java/bjc/utils/graph/AdjacencyMap.java	/^	public AdjacencyMap(IList<T> vertices) {$/;"	m	class:AdjacencyMap
 AdjacencyMap	src/main/java/bjc/utils/graph/AdjacencyMap.java	/^public class AdjacencyMap<T> {$/;"	c

@@ -26,8 +26,7 @@ public class NumberUtils {
 		} else {
 			int result = 1;
 
-			for (int currentSub = 0; currentSub < power + 1;
-					currentSub++) {
+			for (int currentSub = 0; currentSub < power + 1; currentSub++) {
 				result *= value - currentSub;
 			}
 
@@ -38,16 +37,16 @@ public class NumberUtils {
 	/**
 	 * Evaluates a linear probability distribution
 	 * 
-	 * @param topExp
+	 * @param winning
 	 *            The number of winning possibilities
-	 * @param bottomExp
+	 * @param total
 	 *            The number of total possibilities
 	 * @param rng
 	 *            The function to use to generate a random possibility
 	 * @return Whether or not a random possibility was a winning one
 	 */
-	public static boolean isProbable(int topExp, int bottomExp,
+	public static boolean isProbable(int winning, int total,
 			Function<Integer, Integer> rng) {
-		return rng.apply(bottomExp) < topExp;
+		return rng.apply(total) < winning;
 	}
 }

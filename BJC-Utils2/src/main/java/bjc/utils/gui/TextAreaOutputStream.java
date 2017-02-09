@@ -6,11 +6,12 @@ import java.io.OutputStream;
 import javax.swing.JTextArea;
 
 /**
+ * An output stream that prints to a JTextArea
+ *
  * @author epr
  * @author Levente S\u00e1ntha (lsantha@users.sourceforge.net)
  */
 public class TextAreaOutputStream extends OutputStream {
-
 	private JTextArea textArea;
 
 	/**
@@ -26,6 +27,7 @@ public class TextAreaOutputStream extends OutputStream {
 	@Override
 	public void write(int b) throws IOException {
 		textArea.append("" + (char) b);
+
 		if (b == '\n') {
 			textArea.repaint();
 		}

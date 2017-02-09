@@ -55,8 +55,7 @@ public class SingleSupplier<T> implements Supplier<T> {
 		gotten = true;
 
 		try {
-			throw new IllegalStateException(
-					"Previous instantiation here.");
+			throw new IllegalStateException("Previous instantiation here.");
 		} catch (IllegalStateException isex) {
 			instSite = isex;
 		}

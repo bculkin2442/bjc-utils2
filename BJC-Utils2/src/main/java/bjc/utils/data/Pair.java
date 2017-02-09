@@ -13,10 +13,10 @@ import java.util.function.Function;
  * @param <RightType>
  *            The type of the right value
  */
-public class Pair<LeftType, RightType>
-		implements IPair<LeftType, RightType> {
+public class Pair<LeftType, RightType> implements IPair<LeftType, RightType> {
 	// The left value
 	private LeftType	leftValue;
+
 	// The right value
 	private RightType	rightValue;
 
@@ -24,6 +24,7 @@ public class Pair<LeftType, RightType>
 	 * Create a new pair with both sides set to null
 	 */
 	public Pair() {
+
 	}
 
 	/**
@@ -41,8 +42,7 @@ public class Pair<LeftType, RightType>
 
 	@Override
 	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind(
-			BiFunction<LeftType, RightType,
-					IPair<BoundLeft, BoundRight>> binder) {
+			BiFunction<LeftType, RightType, IPair<BoundLeft, BoundRight>> binder) {
 		if (binder == null) {
 			throw new NullPointerException("Binder must not be null.");
 		}
@@ -51,8 +51,7 @@ public class Pair<LeftType, RightType>
 	}
 
 	@Override
-	public <BoundLeft> IPair<BoundLeft, RightType> bindLeft(
-			Function<LeftType, IPair<BoundLeft, RightType>> leftBinder) {
+	public <BoundLeft> IPair<BoundLeft, RightType> bindLeft(Function<LeftType, IPair<BoundLeft, RightType>> leftBinder) {
 		if (leftBinder == null) {
 			throw new NullPointerException("Binder must not be null");
 		}
@@ -61,8 +60,7 @@ public class Pair<LeftType, RightType>
 	}
 
 	@Override
-	public <BoundRight> IPair<LeftType, BoundRight> bindRight(
-			Function<RightType, IPair<LeftType, BoundRight>> rightBinder) {
+	public <BoundRight> IPair<LeftType, BoundRight> bindRight(Function<RightType, IPair<LeftType, BoundRight>> rightBinder) {
 		if (rightBinder == null) {
 			throw new NullPointerException("Binder must not be null");
 		}
@@ -71,22 +69,17 @@ public class Pair<LeftType, RightType>
 	}
 
 	@Override
-	public <OtherLeft, OtherRight, CombinedLeft,
-			CombinedRight> IPair<CombinedLeft, CombinedRight> combine(
-					IPair<OtherLeft, OtherRight> otherPair,
-					BiFunction<LeftType, OtherLeft,
-							CombinedLeft> leftCombiner,
-					BiFunction<RightType, OtherRight,
-							CombinedRight> rightCombiner) {
-		return otherPair.bind((otherLeft, otherRight) -> {
-			return new Pair<>(leftCombiner.apply(leftValue, otherLeft),
-					rightCombiner.apply(rightValue, otherRight));
-		});
+	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight> IPair<CombinedLeft, CombinedRight> combine(
+			IPair<OtherLeft, OtherRight> otherPair,
+			BiFunction<LeftType, OtherLeft, CombinedLeft> leftCombiner,
+			BiFunction<RightType, OtherRight, CombinedRight> rightCombiner) {
+				return otherPair.bind((otherLeft, otherRight) -> {
+					return new Pair<>(leftCombiner.apply(leftValue, otherLeft), rightCombiner.apply(rightValue, otherRight));
+				});
 	}
 
 	@Override
-	public <NewLeft> IPair<NewLeft, RightType> mapLeft(
-			Function<LeftType, NewLeft> mapper) {
+	public <NewLeft> IPair<NewLeft, RightType> mapLeft(Function<LeftType, NewLeft> mapper) {
 		if (mapper == null) {
 			throw new NullPointerException("Mapper must not be null");
 		}
@@ -95,8 +88,7 @@ public class Pair<LeftType, RightType>
 	}
 
 	@Override
-	public <NewRight> IPair<LeftType, NewRight> mapRight(
-			Function<RightType, NewRight> mapper) {
+	public <NewRight> IPair<LeftType, NewRight> mapRight(Function<RightType, NewRight> mapper) {
 		if (mapper == null) {
 			throw new NullPointerException("Mapper must not be null");
 		}
@@ -105,8 +97,7 @@ public class Pair<LeftType, RightType>
 	}
 
 	@Override
-	public <MergedType> MergedType merge(
-			BiFunction<LeftType, RightType, MergedType> merger) {
+	public <MergedType> MergedType merge(BiFunction<LeftType, RightType, MergedType> merger) {
 		if (merger == null) {
 			throw new NullPointerException("Merger must not be null");
 		}
@@ -116,7 +107,6 @@ public class Pair<LeftType, RightType>
 
 	@Override
 	public String toString() {
-		return "pair[l=" + leftValue.toString() + ", r="
-				+ rightValue.toString() + "]";
+		return "pair[l=" + leftValue.toString() + ", r=" + rightValue.toString() + "]";
 	}
 }

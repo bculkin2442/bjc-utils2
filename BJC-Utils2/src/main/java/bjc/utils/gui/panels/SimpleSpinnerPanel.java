@@ -15,7 +15,7 @@ import javax.swing.SpinnerModel;
 public class SimpleSpinnerPanel extends JPanel {
 	private static final long	serialVersionUID	= -4734279623645236868L;
 
-	/**
+	/*
 	 * The spinner being used
 	 */
 	public final JSpinner		inputValue;
@@ -30,9 +30,9 @@ public class SimpleSpinnerPanel extends JPanel {
 
 		JLabel inputLabel = new JLabel(label);
 
-		inputValue = new JSpinner(model);
+		input = new JSpinner(model);
 
 		add(inputLabel, BorderLayout.LINE_START);
-		add(inputValue, BorderLayout.CENTER);
+		add(input, BorderLayout.CENTER);
 	}
 }

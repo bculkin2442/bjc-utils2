@@ -39,40 +39,35 @@ public class ListHolder<ContainedType> implements IHolder<ContainedType> {
 	}
 
 	@Override
-	public <BoundType> IHolder<BoundType> bind(
-			Function<ContainedType, IHolder<BoundType>> binder) {
+	public <BoundType> IHolder<BoundType> bind(Function<ContainedType, IHolder<BoundType>> binder) {
 		IList<IHolder<BoundType>> boundValues = heldValues.map(binder);
 
 		return new BoundListHolder<>(boundValues);
 	}
 
 	@Override
-	public <NewType> Function<ContainedType, IHolder<NewType>> lift(
-			Function<ContainedType, NewType> func) {
+	public <NewType> Function<ContainedType, IHolder<NewType>> lift(Function<ContainedType, NewType> func) {
 		return (val) -> {
 			return new ListHolder<>(new FunctionalList<>(func.apply(val)));
 		};
 	}
 
 	@Override
-	public <MappedType> IHolder<MappedType> map(
-			Function<ContainedType, MappedType> mapper) {
+	public <MappedType> IHolder<MappedType> map(Function<ContainedType, MappedType> mapper) {
 		IList<MappedType> mappedValues = heldValues.map(mapper);
 
 		return new ListHolder<>(mappedValues);
 	}
 
 	@Override
-	public IHolder<ContainedType> transform(
-			UnaryOperator<ContainedType> transformer) {
+	public IHolder<ContainedType> transform(UnaryOperator<ContainedType> transformer) {
 		heldValues = heldValues.map(transformer);
 
 		return this;
 	}
 
 	@Override
-	public <UnwrappedType> UnwrappedType unwrap(
-			Function<ContainedType, UnwrappedType> unwrapper) {
+	public <UnwrappedType> UnwrappedType unwrap(Function<ContainedType, UnwrappedType> unwrapper) {
 		return unwrapper.apply(heldValues.randItem());
 	}
 }

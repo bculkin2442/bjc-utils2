@@ -18,23 +18,23 @@ import java.util.function.Function;
  */
 final class TransformedValueMap<OldKey, OldValue, NewValue>
 		implements IMap<OldKey, NewValue> {
-	private IMap<OldKey, OldValue>			mapToTransform;
+	private IMap<OldKey, OldValue>			backing;
 	private Function<OldValue, NewValue>	transformer;
 
-	public TransformedValueMap(IMap<OldKey, OldValue> destMap,
+	public TransformedValueMap(IMap<OldKey, OldValue> backingMap,
 			Function<OldValue, NewValue> transform) {
-		mapToTransform = destMap;
+		backing = backingMap;
 		transformer = transform;
 	}
 
 	@Override
 	public void clear() {
-		mapToTransform.clear();
+		backing.clear();
 	}
 
 	@Override
 	public boolean containsKey(OldKey key) {
-		return mapToTransform.containsKey(key);
+		return backing.containsKey(key);
 	}
 
 	@Override
@@ -44,62 +44,61 @@ final class TransformedValueMap<OldKey, OldValue, NewValue>
 
 	@Override
 	public void forEach(BiConsumer<OldKey, NewValue> action) {
-		mapToTransform.forEach((key, val) -> {
-			action.accept(key, transformer.apply(val));
+		backing.forEach((key, value) -> {
+			action.accept(key, transformer.apply(value));
 		});
 	}
 
 	@Override
 	public void forEachKey(Consumer<OldKey> action) {
-		mapToTransform.forEachKey(action);
+		backing.forEachKey(action);
 	}
 
 	@Override
 	public void forEachValue(Consumer<NewValue> action) {
-		mapToTransform.forEachValue((val) -> {
-			action.accept(transformer.apply(val));
+		backing.forEachValue((value) -> {
+			action.accept(transformer.apply(value));
 		});
 	}
 
 	@Override
 	public NewValue get(OldKey key) {
-		return transformer.apply(mapToTransform.get(key));
+		return transformer.apply(backing.get(key));
 	}
 
 	@Override
 	public int getSize() {
-		return mapToTransform.getSize();
+		return backing.getSize();
 	}
 
 	@Override
 	public IList<OldKey> keyList() {
-		return mapToTransform.keyList();
+		return backing.keyList();
 	}
 
 	@Override
-	public <MappedValue> IMap<OldKey, MappedValue> mapValues(
-			Function<NewValue, MappedValue> transform) {
+	public <MappedValue> IMap<OldKey, MappedValue> 
+	mapValues(Function<NewValue, MappedValue> transform) {
 		return new TransformedValueMap<>(this, transform);
 	}
 
 	@Override
-	public NewValue put(OldKey key, NewValue val) {
-		throw new UnsupportedOperationException(
-				"Can't add items to transformed map");
+	public NewValue put(OldKey key, NewValue value) {
+		throw new UnsupportedOperationException("Can't add items to transformed map");
 	}
 
 	@Override
 	public NewValue remove(OldKey key) {
-		return transformer.apply(mapToTransform.remove(key));
+		return transformer.apply(backing.remove(key));
 	}
 
 	@Override
 	public String toString() {
-		return mapToTransform.toString();
+		return backing.toString();
 	}
 
 	@Override
 	public IList<NewValue> valueList() {
-		return mapToTransform.valueList().map(transformer);
+		return backing.valueList().map(transformer);
 	}
 }

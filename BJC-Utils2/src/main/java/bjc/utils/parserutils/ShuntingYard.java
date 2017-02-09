@@ -51,11 +51,6 @@ public class ShuntingYard<TokenType> {
 			precedence = prec;
 		}
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see bjc.utils.parserutils.IPrecedent#getPrecedence()
-		 */
 		@Override
 		public int getPrecedence() {
 			return precedence;
@@ -65,13 +60,13 @@ public class ShuntingYard<TokenType> {
 	private final class TokenShunter implements Consumer<String> {
 		private IList<TokenType>			output;
 		private Deque<String>				stack;
-		private Function<String, TokenType>	transform;
+		private Function<String, TokenType>	transformer;
 
 		public TokenShunter(IList<TokenType> outpt, Deque<String> stack,
-				Function<String, TokenType> transform) {
+				Function<String, TokenType> transformer) {
 			this.output = outpt;
 			this.stack = stack;
-			this.transform = transform;
+			this.transformer = transformer;
 		}
 
 		@Override
@@ -81,7 +76,7 @@ public class ShuntingYard<TokenType> {
 				// Pop operators while there isn't a higher precedence one
 				while (!stack.isEmpty()
 						&& isHigherPrec(token, stack.peek())) {
-					output.add(transform.apply(stack.pop()));
+					output.add(transformer.apply(stack.pop()));
 				}
 
 				// Put this operator onto the stack
@@ -95,19 +90,19 @@ public class ShuntingYard<TokenType> {
 
 				// Remove tokens up to a matching parenthesis
 				while (!stack.peek().equals(swappedToken)) {
-					output.add(transform.apply(stack.pop()));
+					output.add(transformer.apply(stack.pop()));
 				}
 
 				// Remove the parenthesis
 				stack.pop();
 			} else {
 				// Just add the transformed token
-				output.add(transform.apply(token));
+				output.add(transformer.apply(token));
 			}
 		}
 	}
 
-	/**
+	/*
 	 * Holds all the shuntable operations
 	 */
 	private IMap<String, IPrecedent> operators;
@@ -138,11 +133,11 @@ public class ShuntingYard<TokenType> {
 	 * @param precedence
 	 *            The precedence of the operator to add
 	 */
-	public void addOp(String operatorToken, int precedence) {
+	public void addOp(String operator, int precedence) {
 		// Create the precedence marker
 		IPrecedent prec = IPrecedent.newSimplePrecedent(precedence);
 
-		this.addOp(operatorToken, prec);
+		this.addOp(operator, prec);
 	}
 
 	/**
@@ -153,30 +148,30 @@ public class ShuntingYard<TokenType> {
 	 * @param precedence
 	 *            The precedence of the operator
 	 */
-	public void addOp(String operatorToken, IPrecedent precedence) {
+	public void addOp(String operator, IPrecedent precedence) {
 		// Complain about trying to add an incorrect operator
-		if (operatorToken == null) {
+		if (operator == null) {
 			throw new NullPointerException("Operator must not be null");
 		} else if(precedence == null) {
 			throw new NullPointerException("Precedence must not be null");
 		}
 
 		// Add the operator to the ones we handle
-		operators.put(operatorToken, precedence);
+		operators.put(operator, precedence);
 	}
 
-	private boolean isHigherPrec(String leftOperator, String rightOperator) {
+	private boolean isHigherPrec(String left, String right) {
 		// Check if the right operator exists
-		boolean operatorExists = operators.containsKey(rightOperator);
+		boolean exists = operators.containsKey(right);
 
 		// If it doesn't, the left is higher precedence.
-		if (!operatorExists) {
+		if (!exists) {
 			return false;
 		}
 
 		// Get the precedence of operators
-		int rightPrecedence = operators.get(rightOperator).getPrecedence();
-		int leftPrecedence = operators.get(leftOperator).getPrecedence();
+		int rightPrecedence = operators.get(right).getPrecedence();
+		int leftPrecedence = operators.get(left).getPrecedence();
 
 		// Evaluate what we were asked
 		return rightPrecedence >= leftPrecedence;
@@ -187,16 +182,16 @@ public class ShuntingYard<TokenType> {
 	 * 
 	 * @param input
 	 *            The string to transform
-	 * @param tokenTransformer
+	 * @param transformer
 	 *            The function to use to transform strings to tokens
 	 * @return A list of tokens in postfix notation
 	 */
 	public IList<TokenType> postfix(IList<String> input,
-			Function<String, TokenType> tokenTransformer) {
+			Function<String, TokenType> transformer) {
 		// Check our input
 		if (input == null) {
 			throw new NullPointerException("Input must not be null");
-		} else if (tokenTransformer == null) {
+		} else if (transformer == null) {
 			throw new NullPointerException("Transformer must not be null");
 		}
 
@@ -207,11 +202,11 @@ public class ShuntingYard<TokenType> {
 		Deque<String> stack = new LinkedList<>();
 
 		// Shunt the tokens
-		input.forEach(new TokenShunter(output, stack, tokenTransformer));
+		input.forEach(new TokenShunter(output, stack, transformer));
 
 		// Transform any resulting tokens
 		stack.forEach((token) -> {
-			output.add(tokenTransformer.apply(token));
+			output.add(transformer.apply(token));
 		});
 
 		return output;
@@ -224,12 +219,12 @@ public class ShuntingYard<TokenType> {
 	 *            The token representing the operator. If null, remove all
 	 *            operators
 	 */
-	public void removeOp(String token) {
+	public void removeOp(String operator) {
 		// Check if we want to remove all operators
-		if (token == null) {
+		if (operator == null) {
 			operators = new FunctionalMap<>();
 		} else {
-			operators.remove(token);
+			operators.remove(operator);
 		}
 	}
 }

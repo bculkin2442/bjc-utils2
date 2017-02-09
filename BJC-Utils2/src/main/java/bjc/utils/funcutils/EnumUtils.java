@@ -18,7 +18,7 @@ public class EnumUtils {
 	 * 
 	 * @param <E>
 	 *            The type of the enum
-	 * @param enumClass
+	 * @param clasz
 	 *            The enum class
 	 * @param nValues
 	 *            The number of values to execute the action on
@@ -27,9 +27,9 @@ public class EnumUtils {
 	 * @param rnd
 	 *            The source of randomness to use
 	 */
-	public static <E extends Enum<E>> void doForValues(Class<E> enumClass,
+	public static <E extends Enum<E>> void doForValues(Class<E> clasz,
 			int nValues, Consumer<E> action, Random rnd) {
-		E[] enumValues = enumClass.getEnumConstants();
+		E[] enumValues = clasz.getEnumConstants();
 
 		IList<E> valueList = new FunctionalList<>(enumValues);
 
@@ -49,15 +49,15 @@ public class EnumUtils {
 	 * 
 	 * @param <E>
 	 *            The type of the enum
-	 * @param enumClass
+	 * @param clasz
 	 *            The class of the enum
 	 * @param rnd
 	 *            The random source to use
 	 * @return A random value from the specified enum
 	 */
-	public static <E extends Enum<E>> E getRandomValue(Class<E> enumClass,
+	public static <E extends Enum<E>> E getRandomValue(Class<E> clasz,
 			Random rnd) {
-		E[] enumValues = enumClass.getEnumConstants();
+		E[] enumValues = clasz.getEnumConstants();
 
 		return new FunctionalList<>(enumValues).randItem(rnd::nextInt);
 	}

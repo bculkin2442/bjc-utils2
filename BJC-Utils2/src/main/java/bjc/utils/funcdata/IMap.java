@@ -146,7 +146,7 @@ public interface IMap<KeyType, ValueType> {
 	 * @param key
 	 *            The key to remove from the map
 	 * @return The previous value for the key in the map, or null if the
-	 *         key wasn't in the class. NOTE: Just because you recieved
+	 *         key wasn't in the class. NOTE: Just because you received
 	 *         null, doesn't mean the map wasn't changed. It may mean that
 	 *         someone put a null value for that key into the map
 	 */

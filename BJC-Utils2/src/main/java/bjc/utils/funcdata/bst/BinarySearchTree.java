@@ -17,20 +17,20 @@ import bjc.utils.funcdata.IList;
  *            The data type stored in the node.
  */
 public class BinarySearchTree<T> {
-	/**
+	/*
 	 * The comparator for use in ordering items
 	 */
 	private Comparator<T>	comparator;
 
-	/**
+	/*
 	 * The current count of elements in the tree
 	 */
 	private int				elementCount;
 
-	/**
+	/*
 	 * The root element of the tree
 	 */
-	private ITreePart<T>	rootElement;
+	private ITreePart<T>	root;
 
 	/**
 	 * Create a new tree using the specified way to compare elements.
@@ -56,10 +56,10 @@ public class BinarySearchTree<T> {
 	public void addNode(T element) {
 		elementCount++;
 
-		if (rootElement == null) {
-			rootElement = new BinarySearchTreeNode<>(element, null, null);
+		if (root == null) {
+			root = new BinarySearchTreeNode<>(element, null, null);
 		} else {
-			rootElement.add(element, comparator);
+			root.add(element, comparator);
 		}
 	}
 
@@ -74,25 +74,23 @@ public class BinarySearchTree<T> {
 	 *            The distance from the pivot
 	 * @return Whether the adjusted pivot is with the list
 	 */
-	private boolean adjustedPivotInBounds(IList<T> elements, int pivot,
-			int pivotAdjustment) {
-		return (pivot - pivotAdjustment) >= 0
-				&& (pivot + pivotAdjustment) < elements.getSize();
+	private boolean adjustedPivotInBounds(IList<T> elements, int pivot, int pivotAdjustment) {
+		return (pivot - pivotAdjustment) >= 0 && (pivot + pivotAdjustment) < elements.getSize();
 	}
 
 	/**
-	 * Balance the tree, and remove soft-deleted nodes for free. Takes O(N)
-	 * time, but also O(N) space.
+	 * Balance the tree, and remove soft-deleted nodes for free.
+	 *
+	 * Takes O(N) time, but also O(N) space.
 	 */
 	public void balance() {
 		IList<T> elements = new FunctionalList<>();
 
 		// Add each element to the list in sorted order
-		rootElement.forEach(TreeLinearizationMethod.INORDER,
-				element -> elements.add(element));
+		root.forEach(TreeLinearizationMethod.INORDER, element -> elements.add(element));
 
 		// Clear the tree
-		rootElement = null;
+		root = null;
 
 		// Set up the pivot and adjustment for readding elements
 		int pivot = elements.getSize() / 2;
@@ -100,19 +98,14 @@ public class BinarySearchTree<T> {
 
 		// Add elements until there aren't any left
 		while (adjustedPivotInBounds(elements, pivot, pivotAdjustment)) {
-			if (rootElement == null) {
+			if (root == null) {
 				// Create a new root element
-				rootElement = new BinarySearchTreeNode<>(
-						elements.getByIndex(pivot), null, null);
+				root = new BinarySearchTreeNode<>(elements.getByIndex(pivot), null, null);
 			} else {
 				// Add the left and right elements in a balanced manner
-				rootElement.add(
-						elements.getByIndex(pivot + pivotAdjustment),
-						comparator);
+				root.add(elements.getByIndex(pivot + pivotAdjustment), comparator);
 
-				rootElement.add(
-						elements.getByIndex(pivot - pivotAdjustment),
-						comparator);
+				root.add(elements.getByIndex(pivot - pivotAdjustment), comparator);
 			}
 
 			// Increase the distance from the pivot
@@ -121,18 +114,17 @@ public class BinarySearchTree<T> {
 
 		// Add any trailing unbalanced elements
 		if ((pivot - pivotAdjustment) >= 0) {
-			rootElement.add(elements.getByIndex(pivot - pivotAdjustment),
-					comparator);
+			root.add(elements.getByIndex(pivot - pivotAdjustment), comparator);
 		} else if ((pivot + pivotAdjustment) < elements.getSize()) {
-			rootElement.add(elements.getByIndex(pivot + pivotAdjustment),
-					comparator);
+			root.add(elements.getByIndex(pivot + pivotAdjustment), comparator);
 		}
 	}
 
 	/**
-	 * Soft-delete a node from the tree. Soft-deleted nodes stay in the
-	 * tree until trim()/balance() is invoked, and are not included in
-	 * traversals/finds.
+	 * Soft-delete a node from the tree.
+	 *
+	 * Soft-deleted nodes stay in the tree until trim()/balance() is invoked, and 
+	 * are not included in traversals/finds.
 	 * 
 	 * @param element
 	 *            The node to delete
@@ -140,7 +132,7 @@ public class BinarySearchTree<T> {
 	public void deleteNode(T element) {
 		elementCount--;
 
-		rootElement.delete(element, comparator);
+		root.delete(element, comparator);
 	}
 
 	/**
@@ -149,7 +141,7 @@ public class BinarySearchTree<T> {
 	 * @return The root of the tree.
 	 */
 	public ITreePart<T> getRoot() {
-		return rootElement;
+		return root;
 	}
 
 	/**
@@ -160,7 +152,7 @@ public class BinarySearchTree<T> {
 	 * @return Whether or not the node is in the tree.
 	 */
 	public boolean isInTree(T element) {
-		return rootElement.contains(element, comparator);
+		return root.contains(element, comparator);
 	}
 
 	/**
@@ -171,16 +163,14 @@ public class BinarySearchTree<T> {
 	 * @param traversalPredicate
 	 *            The function to use until it fails
 	 */
-	public void traverse(TreeLinearizationMethod linearizationMethod,
-			Predicate<T> traversalPredicate) {
+	public void traverse(TreeLinearizationMethod linearizationMethod, Predicate<T> traversalPredicate) {
 		if (linearizationMethod == null) {
-			throw new NullPointerException(
-					"Linearization method must not be null");
+			throw new NullPointerException("Linearization method must not be null");
 		} else if (traversalPredicate == null) {
 			throw new NullPointerException("Predicate must not be nulls");
 		}
 
-		rootElement.forEach(linearizationMethod, traversalPredicate);
+		root.forEach(linearizationMethod, traversalPredicate);
 	}
 
 	/**
@@ -196,7 +186,7 @@ public class BinarySearchTree<T> {
 		});
 
 		// Clear the tree
-		rootElement = null;
+		root = null;
 
 		// Add the nodes to the tree in the order they were inserted
 		nodes.forEach(node -> addNode(node));

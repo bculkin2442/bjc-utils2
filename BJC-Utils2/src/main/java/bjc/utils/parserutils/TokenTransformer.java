@@ -52,11 +52,11 @@ final class TokenTransformer<TokenType> implements Consumer<TokenType> {
 				}
 
 				// Grab the two operands
-				ITree<TokenType> rightAST = queuedASTs.pop();
-				ITree<TokenType> leftAST = queuedASTs.pop();
+				ITree<TokenType> right = queuedASTs.pop();
+				ITree<TokenType> left = queuedASTs.pop();
 
 				// Create a new AST
-				newAST = new Tree<>(element, leftAST, rightAST);
+				newAST = new Tree<>(element, left, right);
 			}
 
 			// Stick it onto the stack

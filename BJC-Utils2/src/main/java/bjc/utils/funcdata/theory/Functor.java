@@ -27,10 +27,9 @@ public interface Functor<ContainedType> {
 	 * @return The passed in function converted to work over a particular
 	 *         type of functors
 	 */
-	public <ArgType,
-			ReturnType> Function<Functor<ArgType>,
-					Functor<ReturnType>> fmap(
-							Function<ArgType, ReturnType> func);
+	public <ArgType, ReturnType> 
+		Function<Functor<ArgType>, Functor<ReturnType>> 
+		fmap(Function<ArgType, ReturnType> func);
 
 	/**
 	 * Retrieve the thing inside this functor

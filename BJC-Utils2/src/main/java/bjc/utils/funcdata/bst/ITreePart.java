@@ -74,11 +74,11 @@ public interface ITreePart<T> {
 	/**
 	 * Execute a directed walk through the tree.
 	 * 
-	 * @param treeWalker
+	 * @param walker
 	 *            The function to use to direct the walk through the tree.
 	 * @return Whether the directed walk finished successfully.
 	 */
-	public boolean directedWalk(DirectedWalkFunction<T> treeWalker);
+	public boolean directedWalk(DirectedWalkFunction<T> walker);
 
 	/**
 	 * Execute a provided function for each element of tree it succesfully
@@ -86,11 +86,11 @@ public interface ITreePart<T> {
 	 * 
 	 * @param linearizationMethod
 	 *            The way to linearize the tree for executing
-	 * @param traversalPredicate
-	 *            The function to apply to each element, where it returning
+	 * @param predicate
+	 *            The predicate to apply to each element, where it returning
 	 *            false terminates traversal early
 	 * @return Whether the traversal finished succesfully
 	 */
 	public boolean forEach(TreeLinearizationMethod linearizationMethod,
-			Predicate<T> traversalPredicate);
+			Predicate<T> predicate);
 }

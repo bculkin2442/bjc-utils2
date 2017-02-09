@@ -8,7 +8,7 @@ package bjc.utils.data;
  */
 public enum TopDownTransformResult {
 	/**
-	 * Do not do anything to this node, and ignore it's children
+	 * Do not do anything to this node, and ignore its children
 	 */
 	SKIP,
 	/**
@@ -20,7 +20,7 @@ public enum TopDownTransformResult {
 	 */
 	PASSTHROUGH,
 	/**
-	 * Traverse this nodes children, then transform it
+	 * Traverse the nodes of this children, then transform it
 	 */
 	PUSHDOWN,
 	/**

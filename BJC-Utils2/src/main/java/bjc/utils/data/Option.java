@@ -17,16 +17,15 @@ public class Option<ContainedType> implements IHolder<ContainedType> {
 	/**
 	 * Create a new optional, using the given initial value
 	 * 
-	 * @param seedValue
+	 * @param seed
 	 *            The initial value for the optional
 	 */
-	public Option(ContainedType seedValue) {
-		held = seedValue;
+	public Option(ContainedType seed) {
+		held = seed;
 	}
 
 	@Override
-	public <BoundType> IHolder<BoundType> bind(
-			Function<ContainedType, IHolder<BoundType>> binder) {
+	public <BoundType> IHolder<BoundType> bind(Function<ContainedType, IHolder<BoundType>> binder) {
 		if (held == null) {
 			return new Option<>(null);
 		}
@@ -35,16 +34,14 @@ public class Option<ContainedType> implements IHolder<ContainedType> {
 	}
 
 	@Override
-	public <NewType> Function<ContainedType, IHolder<NewType>> lift(
-			Function<ContainedType, NewType> func) {
+	public <NewType> Function<ContainedType, IHolder<NewType>> lift(Function<ContainedType, NewType> func) {
 		return (val) -> {
 			return new Option<>(func.apply(val));
 		};
 	}
 
 	@Override
-	public <MappedType> IHolder<MappedType> map(
-			Function<ContainedType, MappedType> mapper) {
+	public <MappedType> IHolder<MappedType> map(Function<ContainedType, MappedType> mapper) {
 		if (held == null) {
 			return new Option<>(null);
 		}
@@ -53,8 +50,7 @@ public class Option<ContainedType> implements IHolder<ContainedType> {
 	}
 
 	@Override
-	public IHolder<ContainedType> transform(
-			UnaryOperator<ContainedType> transformer) {
+	public IHolder<ContainedType> transform(UnaryOperator<ContainedType> transformer) {
 		if (held != null) {
 			held = transformer.apply(held);
 		}
@@ -63,8 +59,7 @@ public class Option<ContainedType> implements IHolder<ContainedType> {
 	}
 
 	@Override
-	public <UnwrappedType> UnwrappedType unwrap(
-			Function<ContainedType, UnwrappedType> unwrapper) {
+	public <UnwrappedType> UnwrappedType unwrap(Function<ContainedType, UnwrappedType> unwrapper) {
 		if (held == null) {
 			return null;
 		}

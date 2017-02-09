@@ -14,8 +14,6 @@ import java.util.function.Supplier;
  * @param <RightType>
  *            The type on the right side of the pair
  * 
- * @TODO ensure we don't have any issues with values being materialized
- *       more than once
  */
 public class LazyPair<LeftType, RightType>
 		implements IPair<LeftType, RightType> {
@@ -54,6 +52,7 @@ public class LazyPair<LeftType, RightType>
 	 */
 	public LazyPair(Supplier<LeftType> leftSupp,
 			Supplier<RightType> rightSupp) {
+		// Use single suppliers to catch double-instantiation bugs
 		leftSupplier = new SingleSupplier<>(leftSupp);
 		rightSupplier = new SingleSupplier<>(rightSupp);
 
@@ -63,14 +62,12 @@ public class LazyPair<LeftType, RightType>
 
 	@Override
 	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind(
-			BiFunction<LeftType, RightType,
-					IPair<BoundLeft, BoundRight>> binder) {
+			BiFunction<LeftType, RightType, IPair<BoundLeft, BoundRight>> binder) {
 		return new BoundLazyPair<>(leftSupplier, rightSupplier, binder);
 	}
 
 	@Override
-	public <BoundLeft> IPair<BoundLeft, RightType> bindLeft(
-			Function<LeftType, IPair<BoundLeft, RightType>> leftBinder) {
+	public <BoundLeft> IPair<BoundLeft, RightType> bindLeft(Function<LeftType, IPair<BoundLeft, RightType>> leftBinder) {
 		Supplier<LeftType> leftSupp = () -> {
 			if (leftMaterialized) {
 				return leftValue;

@@ -10,56 +10,48 @@ class WrappedOption<ContainedType> implements IHolder<ContainedType> {
 		held = new Option<>(seedValue);
 	}
 
-	private WrappedOption(IHolder<IHolder<ContainedType>> toHold,
-			boolean dummy) {
+	private WrappedOption(IHolder<IHolder<ContainedType>> toHold, boolean dummy) {
 		held = toHold;
 	}
 
-	@Override
-	public <BoundType> IHolder<BoundType> bind(
-			Function<ContainedType, IHolder<BoundType>> binder) {
-		IHolder<IHolder<BoundType>> newHolder = held
-				.map((containedHolder) -> {
-					return containedHolder.bind((containedValue) -> {
-						if (containedValue == null) {
-							return new Option<>(null);
-						}
+	@Override public <BoundType> IHolder<BoundType> bind(Function<ContainedType, IHolder<BoundType>> binder) {
+		IHolder<IHolder<BoundType>> newHolder = held.map((containedHolder) -> {
+			return containedHolder.bind((containedValue) -> {
+				if (containedValue == null) {
+					return new Option<>(null);
+				}
 
-						return binder.apply(containedValue);
-					});
-				});
+				return binder.apply(containedValue);
+			});
+		});
 
 		return new WrappedOption<>(newHolder, false);
 	}
 
 	@Override
-	public <NewType> Function<ContainedType, IHolder<NewType>> lift(
-			Function<ContainedType, NewType> func) {
+	public <NewType> Function<ContainedType, IHolder<NewType>> lift(Function<ContainedType, NewType> func) {
 		return (val) -> {
 			return new Option<>(func.apply(val));
 		};
 	}
 
 	@Override
-	public <MappedType> IHolder<MappedType> map(
-			Function<ContainedType, MappedType> mapper) {
-		IHolder<IHolder<MappedType>> newHolder = held
-				.map((containedHolder) -> {
-					return containedHolder.map((containedValue) -> {
-						if (containedValue == null) {
-							return null;
-						}
+	public <MappedType> IHolder<MappedType> map(Function<ContainedType, MappedType> mapper) {
+		IHolder<IHolder<MappedType>> newHolder = held.map((containedHolder) -> {
+			return containedHolder.map((containedValue) -> {
+				if (containedValue == null) {
+					return null;
+				}
 
-						return mapper.apply(containedValue);
-					});
-				});
+				return mapper.apply(containedValue);
+			});
+		});
 
 		return new WrappedOption<>(newHolder, false);
 	}
 
 	@Override
-	public IHolder<ContainedType> transform(
-			UnaryOperator<ContainedType> transformer) {
+	public IHolder<ContainedType> transform(UnaryOperator<ContainedType> transformer) {
 		held.transform((containedHolder) -> {
 			return containedHolder.transform((containedValue) -> {
 				if (containedValue == null) {
@@ -74,8 +66,7 @@ class WrappedOption<ContainedType> implements IHolder<ContainedType> {
 	}
 
 	@Override
-	public <UnwrappedType> UnwrappedType unwrap(
-			Function<ContainedType, UnwrappedType> unwrapper) {
+	public <UnwrappedType> UnwrappedType unwrap(Function<ContainedType, UnwrappedType> unwrapper) {
 		return held.unwrap((containedHolder) -> {
 			return containedHolder.unwrap((containedValue) -> {
 				if (containedValue == null) {

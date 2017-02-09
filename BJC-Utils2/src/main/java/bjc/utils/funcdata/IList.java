@@ -24,7 +24,7 @@ public interface IList<ContainedType> {
 	 * 
 	 * @param item
 	 *            The item to add to this list.
-	 * @return Whether the item was added to the list succesfully.
+	 * @return Whether the item was added to the list successfully.
 	 */
 	boolean add(ContainedType item);
 
@@ -33,7 +33,7 @@ public interface IList<ContainedType> {
 	 * 
 	 * @param items
 	 *            The list of items to add
-	 * @return True if every item was succesfully added to the list, false
+	 * @return True if every item was successfully added to the list, false
 	 *         otherwise
 	 */
 	default boolean addAll(IList<ContainedType> items) {
@@ -44,22 +44,22 @@ public interface IList<ContainedType> {
 	 * Check if all of the elements of this list match the specified
 	 * predicate.
 	 * 
-	 * @param matchPredicate
+	 * @param matcher
 	 *            The predicate to use for checking.
 	 * @return Whether all of the elements of the list match the specified
 	 *         predicate.
 	 */
-	boolean allMatch(Predicate<ContainedType> matchPredicate);
+	boolean allMatch(Predicate<ContainedType> matcher);
 
 	/**
 	 * Check if any of the elements in this list match the specified list.
 	 * 
-	 * @param matchPredicate
+	 * @param matcher
 	 *            The predicate to use for checking.
 	 * @return Whether any element in the list matches the provided
 	 *         predicate.
 	 */
-	boolean anyMatch(Predicate<ContainedType> matchPredicate);
+	boolean anyMatch(Predicate<ContainedType> matcher);
 
 	/**
 	 * Reduce the contents of this list using a collector
@@ -74,8 +74,7 @@ public interface IList<ContainedType> {
 	 */
 	public default <StateType, ReducedType> ReducedType collect(
 			Collector<ContainedType, StateType, ReducedType> collector) {
-		BiConsumer<StateType, ContainedType> accumulator = collector
-				.accumulator();
+		BiConsumer<StateType, ContainedType> accumulator = collector.accumulator();
 
 		return reduceAux(collector.supplier().get(), (value, state) -> {
 			accumulator.accept(state, value);
@@ -86,7 +85,9 @@ public interface IList<ContainedType> {
 
 	/**
 	 * Combine this list with another one into a new list and merge the
-	 * results. Works sort of like a combined zip/map over resulting pairs.
+	 * results.
+	 *
+	 * Works sort of like a combined zip/map over resulting pairs.
 	 * Does not change the underlying list.
 	 * 
 	 * NOTE: The returned list will have the length of the shorter of this
@@ -97,15 +98,15 @@ public interface IList<ContainedType> {
 	 * @param <CombinedType>
 	 *            The type of the combined list
 	 * 
-	 * @param rightList
+	 * @param list
 	 *            The list to combine with
-	 * @param itemCombiner
+	 * @param combiner
 	 *            The function to use for combining element pairs.
 	 * @return A new list containing the merged pairs of lists.
 	 */
 	<OtherType, CombinedType> IList<CombinedType> combineWith(
-			IList<OtherType> rightList,
-			BiFunction<ContainedType, OtherType, CombinedType> itemCombiner);
+			IList<OtherType> list,
+			BiFunction<ContainedType, OtherType, CombinedType> combiner);
 
 	/**
 	 * Check if the list contains the specified item
@@ -125,18 +126,20 @@ public interface IList<ContainedType> {
 
 	/**
 	 * Apply a function to each member of the list, then flatten the
-	 * results. Does not change the underlying list.
+	 * results.
+	 *
+	 * Does not change the underlying list.
 	 * 
 	 * @param <MappedType>
 	 *            The type of the flattened list
 	 * 
-	 * @param elementExpander
+	 * @param expander
 	 *            The function to apply to each member of the list.
 	 * @return A new list containing the flattened results of applying the
 	 *         provided function.
 	 */
 	<MappedType> IList<MappedType> flatMap(
-			Function<ContainedType, IList<MappedType>> elementExpander);
+			Function<ContainedType, IList<MappedType>> expander);
 
 	/**
 	 * Apply a given action for each member of the list
@@ -149,11 +152,11 @@ public interface IList<ContainedType> {
 	/**
 	 * Apply a given function to each element in the list and its index.
 	 * 
-	 * @param indexedAction
+	 * @param action
 	 *            The function to apply to each element in the list and its
 	 *            index.
 	 */
-	void forEachIndexed(BiConsumer<Integer, ContainedType> indexedAction);
+	void forEachIndexed(BiConsumer<Integer, ContainedType> action);
 
 	/**
 	 * Retrieve a value in the list by its index.
@@ -167,12 +170,11 @@ public interface IList<ContainedType> {
 	/**
 	 * Retrieve a list containing all elements matching a predicate
 	 * 
-	 * @param matchPredicate
+	 * @param predicate
 	 *            The predicate to match by
 	 * @return A list containing all elements that match the predicate
 	 */
-	IList<ContainedType> getMatching(
-			Predicate<ContainedType> matchPredicate);
+	IList<ContainedType> getMatching(Predicate<ContainedType> predicate);
 
 	/**
 	 * Retrieve the size of the wrapped list
@@ -190,17 +192,19 @@ public interface IList<ContainedType> {
 
 	/**
 	 * Create a new list by applying the given function to each element in
-	 * the list. Does not change the underlying list.
+	 * the list. 
+	 *
+	 * Does not change the underlying list.
 	 * 
 	 * @param <MappedType>
 	 *            The type of the transformed list
 	 * 
-	 * @param elementTransformer
+	 * @param transformer
 	 *            The function to apply to each element in the list
 	 * @return A new list containing the mapped elements of this list.
 	 */
 	<MappedType> IList<MappedType> map(
-			Function<ContainedType, MappedType> elementTransformer);
+			Function<ContainedType, MappedType> transformer);
 
 	/**
 	 * Zip two lists into a list of pairs
@@ -208,22 +212,21 @@ public interface IList<ContainedType> {
 	 * @param <OtherType>
 	 *            The type of the second list
 	 * 
-	 * @param rightList
+	 * @param list
 	 *            The list to use as the left side of the pair
 	 * @return A list containing pairs of this element and the specified
 	 *         list
 	 */
-	<OtherType> IList<IPair<ContainedType, OtherType>> pairWith(
-			IList<OtherType> rightList);
+	<OtherType> IList<IPair<ContainedType, OtherType>> pairWith(IList<OtherType> list);
 
 	/**
 	 * Partition this list into a list of sublists
 	 * 
-	 * @param numberPerPartition
+	 * @param partitionSize
 	 *            The size of elements to put into each one of the sublists
 	 * @return A list partitioned into partitions of size nPerPart
 	 */
-	IList<IList<ContainedType>> partition(int numberPerPartition);
+	IList<IList<ContainedType>> partition(int partitionSize);
 
 	/**
 	 * Prepend an item to the list
@@ -261,37 +264,37 @@ public interface IList<ContainedType> {
 	 * @param <ReducedType>
 	 *            The final value type
 	 * 
-	 * @param initialValue
+	 * @param initial
 	 *            The initial value of the accumulative state.
-	 * @param stateAccumulator
+	 * @param accumulator
 	 *            The function to use to combine a list element with the
 	 *            accumulative state.
-	 * @param resultTransformer
+	 * @param transformer
 	 *            The function to use to convert the accumulative state
 	 *            into a final result.
 	 * @return A single value condensed from this list and transformed into
 	 *         its final state.
 	 */
-	<StateType, ReducedType> ReducedType reduceAux(StateType initialValue,
-			BiFunction<ContainedType, StateType, StateType> stateAccumulator,
-			Function<StateType, ReducedType> resultTransformer);
+	<StateType, ReducedType> ReducedType reduceAux(StateType initial,
+			BiFunction<ContainedType, StateType, StateType> accumulator,
+			Function<StateType, ReducedType> transformer);
 
 	/**
 	 * Remove all elements that match a given predicate
 	 * 
-	 * @param removePredicate
+	 * @param predicate
 	 *            The predicate to use to determine elements to delete
 	 * @return Whether there was anything that satisfied the predicate
 	 */
-	boolean removeIf(Predicate<ContainedType> removePredicate);
+	boolean removeIf(Predicate<ContainedType> predicate);
 
 	/**
 	 * Remove all parameters that match a given parameter
 	 * 
-	 * @param desiredElement
+	 * @param element
 	 *            The object to remove all matching copies of
 	 */
-	void removeMatching(ContainedType desiredElement);
+	void removeMatching(ContainedType element);
 
 	/**
 	 * Reverse the contents of this list in place
@@ -300,22 +303,25 @@ public interface IList<ContainedType> {
 
 	/**
 	 * Perform a binary search for the specified key using the provided
-	 * means of comparing elements. Since this IS a binary search, the list
-	 * must have been sorted before hand.
+	 * means of comparing elements. 
+	 *
+	 * Since this IS a binary search, the list must have been sorted before hand.
 	 * 
-	 * @param searchKey
+	 * @param key
 	 *            The key to search for.
 	 * @param comparator
 	 *            The way to compare elements for searching. Pass null to
 	 *            use the natural ordering for E
 	 * @return The element if it is in this list, or null if it is not.
 	 */
-	ContainedType search(ContainedType searchKey,
+	ContainedType search(ContainedType key,
 			Comparator<ContainedType> comparator);
 
 	/**
 	 * Sort the elements of this list using the provided way of comparing
-	 * elements. Does change the underlying list.
+	 * elements. 
+	 *
+	 * Does change the underlying list.
 	 * 
 	 * @param comparator
 	 *            The way to compare elements for sorting. Pass null to use
@@ -333,14 +339,14 @@ public interface IList<ContainedType> {
 	/**
 	 * Convert this list into an array
 	 * 
-	 * @param arrType
+	 * @param type
 	 *            The type of array to return
 	 * @return The list, as an array
 	 */
-	public ContainedType[] toArray(ContainedType[] arrType);
+	public ContainedType[] toArray(ContainedType[] type);
 
 	/**
-	 * Convert the list into a iterable
+	 * Convert the list into a Iterable
 	 * 
 	 * @return An iterable view onto the list
 	 */

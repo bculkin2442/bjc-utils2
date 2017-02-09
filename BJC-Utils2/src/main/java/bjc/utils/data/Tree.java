@@ -19,20 +19,19 @@ import bjc.utils.funcutils.StringUtils;
  */
 public class Tree<ContainedType> implements ITree<ContainedType> {
 	private ContainedType				data;
+
 	private IList<ITree<ContainedType>>	children;
-
 	private boolean						hasChildren;
-
 	private int							childCount	= 0;
 
 	/**
 	 * Create a new leaf node in a tree
 	 * 
-	 * @param leafToken
+	 * @param leaf
 	 *            The data to store as a leaf node
 	 */
-	public Tree(ContainedType leafToken) {
-		data = leafToken;
+	public Tree(ContainedType leaf) {
+		data = leaf;
 
 		hasChildren = false;
 	}
@@ -40,14 +39,13 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	/**
 	 * Create a new tree node with the specified children
 	 * 
-	 * @param leafToken
+	 * @param leaf
 	 *            The data to hold in this node
 	 * @param childrn
 	 *            A list of children for this node
 	 */
-	public Tree(ContainedType leafToken,
-			IList<ITree<ContainedType>> childrn) {
-		data = leafToken;
+	public Tree(ContainedType leaf, IList<ITree<ContainedType>> childrn) {
+		data = leaf;
 
 		hasChildren = true;
 
@@ -59,14 +57,14 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	/**
 	 * Create a new tree node with the specified children
 	 * 
-	 * @param leafToken
+	 * @param leaf
 	 *            The data to hold in this node
 	 * @param childrn
 	 *            A list of children for this node
 	 */
 	@SafeVarargs
-	public Tree(ContainedType leafToken, ITree<ContainedType>... childrn) {
-		data = leafToken;
+	public Tree(ContainedType leaf, ITree<ContainedType>... childrn) {
+		data = leaf;
 
 		hasChildren = true;
 
@@ -97,12 +95,10 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	@Override
 	public <NewType, ReturnedType> ReturnedType collapse(
 			Function<ContainedType, NewType> leafTransform,
-			Function<ContainedType,
-					Function<IList<NewType>, NewType>> nodeCollapser,
+			Function<ContainedType, Function<IList<NewType>, NewType>> nodeCollapser,
 			Function<NewType, ReturnedType> resultTransformer) {
 
-		return resultTransformer
-				.apply(internalCollapse(leafTransform, nodeCollapser));
+		return resultTransformer.apply(internalCollapse(leafTransform, nodeCollapser));
 	}
 
 	@Override
@@ -111,8 +107,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	}
 
 	@Override
-	public ITree<ContainedType> flatMapTree(
-			Function<ContainedType, ITree<ContainedType>> mapper) {
+	public ITree<ContainedType> flatMapTree(Function<ContainedType, ITree<ContainedType>> mapper) {
 		if (hasChildren) {
 			ITree<ContainedType> flatMappedData = mapper.apply(data);
 
@@ -132,17 +127,14 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 	protected <NewType> NewType internalCollapse(
 			Function<ContainedType, NewType> leafTransform,
-			Function<ContainedType,
-					Function<IList<NewType>, NewType>> nodeCollapser) {
+			Function<ContainedType, Function<IList<NewType>, NewType>> nodeCollapser) {
 		if (hasChildren) {
-			Function<IList<NewType>,
-					NewType> nodeTransformer = nodeCollapser.apply(data);
+			Function<IList<NewType>, NewType> nodeTransformer = nodeCollapser.apply(data);
 
-			IList<NewType> collapsedChildren = (IList<NewType>) children
-					.map((child) -> {
-						return child.collapse(leafTransform, nodeCollapser,
-								(subTreeVal) -> subTreeVal);
-					});
+			IList<NewType> collapsedChildren = (IList<NewType>) children.map((child) -> {
+				return child.collapse(leafTransform, nodeCollapser,
+					(subTreeVal) -> subTreeVal);
+			});
 
 			return nodeTransformer.apply(collapsedChildren);
 		}
@@ -150,8 +142,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 		return leafTransform.apply(data);
 	}
 
-	protected void internalToString(StringBuilder builder, int indentLevel,
-			boolean initial) {
+	protected void internalToString(StringBuilder builder, int indentLevel, boolean initial) {
 		if (!initial) {
 			StringUtils.indentNLevels(builder, indentLevel);
 		}
@@ -162,8 +153,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 		if (hasChildren) {
 			children.forEach((child) -> {
-				((Tree<ContainedType>) child).internalToString(builder,
-						indentLevel + 2, false);
+				((Tree<ContainedType>) child).internalToString(builder, indentLevel + 2, false);
 			});
 		}
 	}
@@ -173,25 +163,21 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 			Function<ContainedType, MappedType> leafTransformer,
 			Function<ContainedType, MappedType> operatorTransformer) {
 		if (hasChildren) {
-			IList<ITree<MappedType>> mappedChildren = children
-					.map((child) -> {
-						return child.rebuildTree(leafTransformer,
-								operatorTransformer);
-					});
+			IList<ITree<MappedType>> mappedChildren = children.map((child) -> {
+				return child.rebuildTree(leafTransformer,
+					operatorTransformer);
+			});
 
-			return new Tree<>(operatorTransformer.apply(data),
-					mappedChildren);
+			return new Tree<>(operatorTransformer.apply(data), mappedChildren);
 		}
 
 		return new Tree<>(leafTransformer.apply(data));
 	}
 
 	@Override
-	public void selectiveTransform(Predicate<ContainedType> nodePicker,
-			UnaryOperator<ContainedType> transformer) {
+	public void selectiveTransform(Predicate<ContainedType> nodePicker, UnaryOperator<ContainedType> transformer) {
 		if (hasChildren) {
-			children.forEach((child) -> child
-					.selectiveTransform(nodePicker, transformer));
+			children.forEach((child) -> child.selectiveTransform(nodePicker, transformer));
 		} else {
 			data = transformer.apply(data);
 		}
@@ -199,11 +185,9 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 	@Override
 	public ITree<ContainedType> topDownTransform(
-			Function<ContainedType,
-					TopDownTransformResult> transformPicker,
+			Function<ContainedType, TopDownTransformResult> transformPicker,
 			UnaryOperator<ITree<ContainedType>> transformer) {
-		TopDownTransformResult transformResult = transformPicker
-				.apply(data);
+		TopDownTransformResult transformResult = transformPicker.apply(data);
 
 		switch (transformResult) {
 			case PASSTHROUGH:
@@ -211,8 +195,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 				if (hasChildren) {
 					children.forEach((child) -> {
-						result.addChild(child.topDownTransform(
-								transformPicker, transformer));
+						result.addChild(child.topDownTransform(transformPicker, transformer));
 					});
 				}
 
@@ -226,28 +209,23 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 				if (hasChildren) {
 					children.forEach((child) -> {
-						result.addChild(child.topDownTransform(
-								transformPicker, transformer));
+						result.addChild(child.topDownTransform(transformPicker, transformer));
 					});
 				}
 
 				return transformer.apply(result);
 			case PULLUP:
-				ITree<ContainedType> intermediateResult = transformer
-						.apply(this);
+				ITree<ContainedType> intermediateResult = transformer.apply(this);
 
 				result = new Tree<>(intermediateResult.getHead());
 
 				intermediateResult.doForChildren((child) -> {
-					result.addChild(child.topDownTransform(transformPicker,
-							transformer));
+					result.addChild(child.topDownTransform(transformPicker, transformer));
 				});
 
 				return result;
 			default:
-				throw new IllegalArgumentException(
-						"Recieved unknown transform result "
-								+ transformResult);
+				throw new IllegalArgumentException("Recieved unknown transform result " + transformResult);
 
 		}
 	}
@@ -264,66 +242,55 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	}
 
 	@Override
-	public <TransformedType> TransformedType transformChild(int childNo,
-			Function<ITree<ContainedType>, TransformedType> transformer) {
+	public <TransformedType> TransformedType transformChild(
+			int childNo, Function<ITree<ContainedType>, TransformedType> transformer) {
 		if (childNo < 0 || childNo > (childCount - 1)) {
-			throw new IllegalArgumentException(
-					"Child index #" + childNo + " is invalid");
+			throw new IllegalArgumentException("Child index #" + childNo + " is invalid");
 		}
 
 		return transformer.apply(children.getByIndex(childNo));
 	}
 
 	@Override
-	public <TransformedType> TransformedType transformHead(
-			Function<ContainedType, TransformedType> transformer) {
+	public <TransformedType> TransformedType transformHead(Function<ContainedType, TransformedType> transformer) {
 		return transformer.apply(data);
 	}
 
 	@Override
-	public <MappedType> ITree<MappedType> transformTree(
-			Function<ContainedType, MappedType> transformer) {
+	public <MappedType> ITree<MappedType> transformTree(Function<ContainedType, MappedType> transformer) {
 		if (hasChildren) {
-			IList<ITree<MappedType>> transformedChildren = children
-					.map((child) -> child.transformTree(transformer));
+			IList<ITree<MappedType>> transformedChildren = children.map((child) -> child.transformTree(transformer));
 
-			return new Tree<>(transformer.apply(data),
-					transformedChildren);
+			return new Tree<>(transformer.apply(data), transformedChildren);
 		}
 
 		return new Tree<>(transformer.apply(data));
 	}
 
 	@Override
-	public void traverse(TreeLinearizationMethod linearizationMethod,
-			Consumer<ContainedType> action) {
+	public void traverse(TreeLinearizationMethod linearizationMethod, Consumer<ContainedType> action) {
 		if (hasChildren) {
 			switch (linearizationMethod) {
 				case INORDER:
 					if (childCount != 2) {
-						throw new IllegalArgumentException(
-								"Can only do in-order traversal for binary trees.");
+						throw new IllegalArgumentException("Can only do in-order traversal for binary trees.");
 					}
 
-					children.getByIndex(0).traverse(linearizationMethod,
-							action);
+					children.getByIndex(0).traverse(linearizationMethod, action);
 
 					action.accept(data);
 
-					children.getByIndex(1).traverse(linearizationMethod,
-							action);
+					children.getByIndex(1).traverse(linearizationMethod, action);
 					break;
 				case POSTORDER:
-					children.forEach((child) -> child
-							.traverse(linearizationMethod, action));
+					children.forEach((child) -> child.traverse(linearizationMethod, action));
 
 					action.accept(data);
 					break;
 				case PREORDER:
 					action.accept(data);
 
-					children.forEach((child) -> child
-							.traverse(linearizationMethod, action));
+					children.forEach((child) -> child.traverse(linearizationMethod, action));
 					break;
 				default:
 					break;

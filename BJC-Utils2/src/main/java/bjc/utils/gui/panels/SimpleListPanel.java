@@ -24,16 +24,16 @@ import bjc.utils.gui.layout.HLayout;
 public class SimpleListPanel extends JPanel {
 	private static final long serialVersionUID = 2719963952350133541L;
 
-	private static void addItem(DefaultListModel<String> listModel,
-			Predicate<String> itemVerifier,
-			Consumer<String> onVerificationFailure,
+	private static void addItem(DefaultListModel<String> model,
+			Predicate<String> verifier,
+			Consumer<String> onFailure,
 			JTextField addItemField) {
 		String potentialItem = addItemField.getText();
 
-		if (itemVerifier == null || itemVerifier.test(potentialItem)) {
-			listModel.addElement(potentialItem);
+		if (verifier == null || verifier.test(potentialItem)) {
+			model.addElement(potentialItem);
 		} else {
-			onVerificationFailure.accept(potentialItem);
+			onFailure.accept(potentialItem);
 		}
 
 		addItemField.setText("");
@@ -42,19 +42,19 @@ public class SimpleListPanel extends JPanel {
 	/**
 	 * Create a new list panel
 	 * 
-	 * @param itemType
+	 * @param type
 	 *            The type of things in the list
-	 * @param listModel
+	 * @param model
 	 *            The model to put items into
-	 * @param itemVerifier
+	 * @param verifier
 	 *            The predicate to use to verify items
-	 * @param onVerificationFailure
+	 * @param onFailure
 	 *            The function to call when an item doesn't verify
 	 */
-	public SimpleListPanel(String itemType,
-			DefaultListModel<String> listModel,
-			Predicate<String> itemVerifier,
-			Consumer<String> onVerificationFailure) {
+	public SimpleListPanel(String type,
+			DefaultListModel<String> model,
+			Predicate<String> verifier,
+			Consumer<String> onFailure) {
 		setLayout(new AutosizeLayout());
 
 		JPanel itemInputPanel = new JPanel();
@@ -64,30 +64,30 @@ public class SimpleListPanel extends JPanel {
 		addItemPanel.setLayout(new HLayout(2));
 
 		JTextField addItemField = new JTextField(255);
-		JButton addItemButton = new JButton("Add " + itemType);
+		JButton addItemButton = new JButton("Add " + type);
 
 		addItemPanel.add(addItemField);
 		addItemPanel.add(addItemButton);
 
-		JList<String> itemList = new JList<>(listModel);
+		JList<String> itemList = new JList<>(model);
 		itemList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		JScrollPane listScroller = new JScrollPane(itemList);
 
-		JButton removeItemButton = new JButton("Remove " + itemType);
+		JButton removeItemButton = new JButton("Remove " + type);
 
 		addItemButton.addActionListener((ev) -> {
-			addItem(listModel, itemVerifier, onVerificationFailure,
+			addItem(model, verifier, onFailure,
 					addItemField);
 		});
 
 		addItemField.addActionListener((ev) -> {
-			addItem(listModel, itemVerifier, onVerificationFailure,
+			addItem(model, verifier, onFailure,
 					addItemField);
 		});
 
 		removeItemButton.addActionListener((ev) -> {
-			listModel.remove(itemList.getSelectedIndex());
+			model.remove(itemList.getSelectedIndex());
 		});
 
 		itemInputPanel.add(addItemPanel, BorderLayout.PAGE_START);

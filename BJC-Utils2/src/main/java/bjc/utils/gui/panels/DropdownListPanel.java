@@ -27,15 +27,15 @@ public class DropdownListPanel extends JPanel {
 	 * 
 	 * @param <T>
 	 *            The type of items in the dropdown list
-	 * @param itemType
+	 * @param type
 	 *            The label of the type of items in the list
-	 * @param listModel
+	 * @param model
 	 *            The model to put items into
 	 * @param choices
 	 *            The items to choose from
 	 */
-	public <T> DropdownListPanel(String itemType,
-			DefaultListModel<T> listModel, IList<T> choices) {
+	public <T> DropdownListPanel(String type,
+			DefaultListModel<T> model, IList<T> choices) {
 		setLayout(new AutosizeLayout());
 
 		JPanel itemInputPanel = new JPanel();
@@ -47,23 +47,23 @@ public class DropdownListPanel extends JPanel {
 		JComboBox<T> addItemBox = new JComboBox<>();
 		choices.forEach(addItemBox::addItem);
 
-		JButton addItemButton = new JButton("Add " + itemType);
+		JButton addItemButton = new JButton("Add " + type);
 
 		addItemPanel.add(addItemBox);
 		addItemPanel.add(addItemButton);
 
-		JList<T> itemList = new JList<>(listModel);
+		JList<T> itemList = new JList<>(model);
 		itemList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		JButton removeItemButton = new JButton("Remove " + itemType);
+		JButton removeItemButton = new JButton("Remove " + type);
 
 		addItemButton.addActionListener((ev) -> {
-			listModel.addElement(
+			model.addElement(
 					addItemBox.getItemAt(addItemBox.getSelectedIndex()));
 		});
 
 		removeItemButton.addActionListener((ev) -> {
-			listModel.remove(itemList.getSelectedIndex());
+			model.remove(itemList.getSelectedIndex());
 		});
 
 		itemInputPanel.add(addItemPanel, BorderLayout.PAGE_START);

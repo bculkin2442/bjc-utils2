@@ -19,7 +19,9 @@ import bjc.utils.data.Pair;
 
 /**
  * A wrapper over another list that provides eager functional operations
- * over it. Differs from a stream in every way except for the fact that
+ * over it. 
+ *
+ * Differs from a stream in every way except for the fact that
  * they both provide functional operations.
  * 
  * @author ben
@@ -28,16 +30,16 @@ import bjc.utils.data.Pair;
  *            The type in this list
  */
 public class FunctionalList<E> implements Cloneable, IList<E> {
-	/**
+	/*
 	 * The list used as a backing store
 	 */
-	private List<E> wrappedList;
+	private List<E> wrapped;
 
 	/**
 	 * Create a new empty functional list.
 	 */
 	public FunctionalList() {
-		wrappedList = new ArrayList<>();
+		wrapped = new ArrayList<>();
 	}
 
 	/**
@@ -50,10 +52,10 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 	 */
 	@SafeVarargs
 	public FunctionalList(E... items) {
-		wrappedList = new ArrayList<>(items.length);
+		wrapped = new ArrayList<>(items.length);
 
 		for (E item : items) {
-			wrappedList.add(item);
+			wrapped.add(item);
 		}
 	}
 
@@ -64,7 +66,7 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 	 *            The size of the backing list .
 	 */
 	private FunctionalList(int size) {
-		wrappedList = new ArrayList<>(size);
+		wrapped = new ArrayList<>(size);
 	}
 
 	/**
@@ -72,42 +74,31 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 	 * 
 	 * Takes O(1) time, since it doesn't copy the list.
 	 * 
-	 * @param backingList
+	 * @param backing
 	 *            The list to use as a backing list.
 	 */
-	public FunctionalList(List<E> backingList) {
-		if (backingList == null) {
+	public FunctionalList(List<E> backing) {
+		if (backing == null) {
 			throw new NullPointerException(
 					"Backing list must be non-null");
 		}
 
-		wrappedList = backingList;
+		wrapped = backing;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see bjc.utils.funcdata.IFunctionalList#add(E)
-	 */
 	@Override
 	public boolean add(E item) {
-		return wrappedList.add(item);
+		return wrapped.add(item);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see bjc.utils.funcdata.IFunctionalList#allMatch(java.util.function.
-	 * Predicate)
-	 */
 	@Override
-	public boolean allMatch(Predicate<E> matchPredicate) {
-		if (matchPredicate == null) {
+	public boolean allMatch(Predicate<E> predicate) {
+		if (predicate == null) {
 			throw new NullPointerException("Predicate must be non-null");
 		}
 
-		for (E item : wrappedList) {
-			if (!matchPredicate.test(item)) {
+		for (E item : wrapped) {
+			if (!predicate.test(item)) {
 				// We've found a non-matching item
 				return false;
 			}
@@ -117,20 +108,14 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 		return true;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see bjc.utils.funcdata.IFunctionalList#anyMatch(java.util.function.
-	 * Predicate)
-	 */
 	@Override
-	public boolean anyMatch(Predicate<E> matchPredicate) {
-		if (matchPredicate == null) {
+	public boolean anyMatch(Predicate<E> predicate) {
+		if (predicate == null) {
 			throw new NullPointerException("Predicate must be not null");
 		}
 
-		for (E item : wrappedList) {
-			if (matchPredicate.test(item)) {
+		for (E item : wrapped) {
+			if (predicate.test(item)) {
 				// We've found a matching item
 				return true;
 			}
@@ -149,127 +134,87 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 	 */
 	@Override
 	public IList<E> clone() {
-		IList<E> clonedList = new FunctionalList<>();
+		IList<E> cloned = new FunctionalList<>();
 
-		for (E element : wrappedList) {
-			clonedList.add(element);
+		for (E element : wrapped) {
+			cloned.add(element);
 		}
 
-		return clonedList;
+		return cloned;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * bjc.utils.funcdata.IFunctionalList#combineWith(bjc.utils.funcdata.
-	 * IFunctionalList, java.util.function.BiFunction)
-	 */
 	@Override
 	public <T, F> IList<F> combineWith(IList<T> rightList,
 			BiFunction<E, T, F> itemCombiner) {
 		if (rightList == null) {
-			throw new NullPointerException(
-					"Target combine list must not be null");
+			throw new NullPointerException( "Target combine list must not be null");
 		} else if (itemCombiner == null) {
 			throw new NullPointerException("Combiner must not be null");
 		}
 
-		IList<F> returnedList = new FunctionalList<>();
+		IList<F> returned = new FunctionalList<>();
 
 		// Get the iterator for the other list
 		Iterator<T> rightIterator = rightList.toIterable().iterator();
 
-		for (Iterator<E> leftIterator = wrappedList.iterator();
+		for (Iterator<E> leftIterator = wrapped.iterator();
 				leftIterator.hasNext() && rightIterator.hasNext();) {
 			// Add the transformed items to the result list
 			E leftVal = leftIterator.next();
 			T rightVal = rightIterator.next();
 
-			returnedList.add(itemCombiner.apply(leftVal, rightVal));
+			returned.add(itemCombiner.apply(leftVal, rightVal));
 		}
 
-		return returnedList;
+		return returned;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see bjc.utils.funcdata.IFunctionalList#contains(E)
-	 */
 	@Override
 	public boolean contains(E item) {
 		// Check if any items in the list match the provided item
 		return this.anyMatch(item::equals);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see bjc.utils.funcdata.IFunctionalList#first()
-	 */
 	@Override
 	public E first() {
-		if (wrappedList.size() < 1) {
-			throw new NoSuchElementException(
-					"Attempted to get first element of empty list");
+		if (wrapped.size() < 1) {
+			throw new NoSuchElementException("Attempted to get first element of empty list");
 		}
 
-		return wrappedList.get(0);
+		return wrapped.get(0);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see bjc.utils.funcdata.IFunctionalList#flatMap(java.util.function.
-	 * Function)
-	 */
 	@Override
-	public <T> IList<T> flatMap(Function<E, IList<T>> elementExpander) {
-		if (elementExpander == null) {
+	public <T> IList<T> flatMap(Function<E, IList<T>> expander) {
+		if (expander == null) {
 			throw new NullPointerException("Expander must not be null");
 		}
 
-		IList<T> returnedList = new FunctionalList<>(
-				this.wrappedList.size());
+		IList<T> returned = new FunctionalList<>(this.wrapped.size());
 
 		forEach(element -> {
-			IList<T> expandedElement = elementExpander.apply(element);
+			IList<T> expandedElement = expander.apply(element);
 
 			if (expandedElement == null) {
-				throw new NullPointerException(
-						"Expander returned null list");
+				throw new NullPointerException("Expander returned null list");
 			}
 
 			// Add each element to the returned list
-			expandedElement.forEach(returnedList::add);
+			expandedElement.forEach(returned::add);
 		});
 
-		return returnedList;
+		return returned;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see bjc.utils.funcdata.IFunctionalList#forEach(java.util.function.
-	 * Consumer)
-	 */
 	@Override
 	public void forEach(Consumer<E> action) {
 		if (action == null) {
 			throw new NullPointerException("Action is null");
 		}
 
-		wrappedList.forEach(action);
+		wrapped.forEach(action);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * bjc.utils.funcdata.IFunctionalList#forEachIndexed(java.util.function
-	 * .BiConsumer)
-	 */
 	@Override
 	public void forEachIndexed(BiConsumer<Integer, E> indexedAction) {
 		if (indexedAction == null) {
@@ -279,24 +224,18 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 		// This is held b/c ref'd variables must be final/effectively final
 		IHolder<Integer> currentIndex = new Identity<>(0);
 
-		wrappedList.forEach((element) -> {
+		wrapped.forEach((element) -> {
 			// Call the action with the index and the value
-			indexedAction.accept(currentIndex.unwrap(index -> index),
-					element);
+			indexedAction.accept(currentIndex.unwrap(index -> index), element);
 
 			// Increment the value
 			currentIndex.transform((index) -> index + 1);
 		});
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see bjc.utils.funcdata.IFunctionalList#getByIndex(int)
-	 */
 	@Override
 	public E getByIndex(int index) {
-		return wrappedList.get(index);
+		return wrapped.get(index);
 	}
 
 	/**
@@ -305,52 +244,35 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 	 * @return The backing list this list is based off of.
 	 */
 	public List<E> getInternal() {
-		return wrappedList;
+		return wrapped;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * bjc.utils.funcdata.IFunctionalList#getMatching(java.util.function.
-	 * Predicate)
-	 */
 	@Override
-	public IList<E> getMatching(Predicate<E> matchPredicate) {
-		if (matchPredicate == null) {
+	public IList<E> getMatching(Predicate<E> predicate) {
+		if (predicate == null) {
 			throw new NullPointerException("Predicate must not be null");
 		}
 
-		IList<E> returnedList = new FunctionalList<>();
+		IList<E> returned = new FunctionalList<>();
 
-		wrappedList.forEach((element) -> {
-			if (matchPredicate.test(element)) {
+		wrapped.forEach((element) -> {
+			if (predicate.test(element)) {
 				// The item matches, so add it to the returned list
-				returnedList.add(element);
+				returned.add(element);
 			}
 		});
 
-		return returnedList;
+		return returned;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see bjc.utils.funcdata.IFunctionalList#getSize()
-	 */
 	@Override
 	public int getSize() {
-		return wrappedList.size();
+		return wrapped.size();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see bjc.utils.funcdata.IFunctionalList#isEmpty()
-	 */
 	@Override
 	public boolean isEmpty() {
-		return wrappedList.isEmpty();
+		return wrapped.isEmpty();
 	}
 
 	/*
@@ -358,59 +280,40 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 	 */
 	private Boolean isPartitionFull(int numberPerPartition,
 			IHolder<IList<E>> currentPartition) {
-		return currentPartition.unwrap(
-				(partition) -> partition.getSize() >= numberPerPartition);
+		return currentPartition.unwrap((partition) -> partition.getSize() >= numberPerPartition);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * bjc.utils.funcdata.IFunctionalList#map(java.util.function.Function)
-	 */
 	@Override
 	public <T> IList<T> map(Function<E, T> elementTransformer) {
 		if (elementTransformer == null) {
 			throw new NullPointerException("Transformer must be not null");
 		}
 
-		IList<T> returnedList = new FunctionalList<>(
-				this.wrappedList.size());
+		IList<T> returned = new FunctionalList<>(this.wrapped.size());
 
 		forEach(element -> {
 			// Add the transformed item to the result
-			returnedList.add(elementTransformer.apply(element));
+			returned.add(elementTransformer.apply(element));
 		});
 
-		return returnedList;
+		return returned;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see bjc.utils.funcdata.IFunctionalList#pairWith(bjc.utils.funcdata.
-	 * IFunctionalList)
-	 */
 	@Override
 	public <T> IList<IPair<E, T>> pairWith(IList<T> rightList) {
 		return combineWith(rightList, Pair<E, T>::new);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see bjc.utils.funcdata.IFunctionalList#partition(int)
-	 */
 	@Override
 	public IList<IList<E>> partition(int numberPerPartition) {
 		if (numberPerPartition < 1
-				|| numberPerPartition > wrappedList.size()) {
+				|| numberPerPartition > wrapped.size()) {
 			throw new IllegalArgumentException("" + numberPerPartition
 					+ " is an invalid partition size. Must be between 1 and "
-					+ wrappedList.size());
+					+ wrapped.size());
 		}
 
-		IList<IList<E>> returnedList = new FunctionalList<>();
+		IList<IList<E>> returned = new FunctionalList<>();
 
 		// The current partition being filled
 		IHolder<IList<E>> currentPartition = new Identity<>(
@@ -419,55 +322,35 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 		this.forEach((element) -> {
 			if (isPartitionFull(numberPerPartition, currentPartition)) {
 				// Add the partition to the list
-				returnedList.add(
-						currentPartition.unwrap((partition) -> partition));
+				returned.add(currentPartition.unwrap((partition) -> partition));
 
 				// Start a new partition
-				currentPartition
-						.transform((partition) -> new FunctionalList<>());
+				currentPartition.transform((partition) -> new FunctionalList<>());
 			} else {
 				// Add the element to the current partition
-				currentPartition
-						.unwrap((partition) -> partition.add(element));
+				currentPartition.unwrap((partition) -> partition.add(element));
 			}
 		});
 
-		return returnedList;
+		return returned;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see bjc.utils.funcdata.IFunctionalList#prepend(E)
-	 */
 	@Override
 	public void prepend(E item) {
-		wrappedList.add(0, item);
+		wrapped.add(0, item);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see bjc.utils.funcdata.IFunctionalList#randItem(java.util.Random)
-	 */
 	@Override
 	public E randItem(Function<Integer, Integer> rnd) {
 		if (rnd == null) {
-			throw new NullPointerException(
-					"Random source must not be null");
+			throw new NullPointerException("Random source must not be null");
 		}
 
-		int randomIndex = rnd.apply(wrappedList.size());
+		int randomIndex = rnd.apply(wrapped.size());
 
-		return wrappedList.get(randomIndex);
+		return wrapped.get(randomIndex);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see bjc.utils.funcdata.IFunctionalList#reduceAux(T,
-	 * java.util.function.BiFunction, java.util.function.Function)
-	 */
 	@Override
 	public <T, F> F reduceAux(T initialValue,
 			BiFunction<E, T, T> stateAccumulator,
@@ -481,36 +364,24 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 		// The current collapsed list
 		IHolder<T> currentState = new Identity<>(initialValue);
 
-		wrappedList.forEach(element -> {
+		wrapped.forEach(element -> {
 			// Accumulate a new value into the state
-			currentState.transform(
-					(state) -> stateAccumulator.apply(element, state));
+			currentState.transform((state) -> stateAccumulator.apply(element, state));
 		});
 
 		// Convert the state to its final value
 		return currentState.unwrap(resultTransformer);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see bjc.utils.funcdata.IFunctionalList#removeIf(java.util.function.
-	 * Predicate)
-	 */
 	@Override
 	public boolean removeIf(Predicate<E> removePredicate) {
 		if (removePredicate == null) {
 			throw new NullPointerException("Predicate must be non-null");
 		}
 
-		return wrappedList.removeIf(removePredicate);
+		return wrapped.removeIf(removePredicate);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see bjc.utils.funcdata.IFunctionalList#removeMatching(E)
-	 */
 	@Override
 	public void removeMatching(E desiredElement) {
 		removeIf((element) -> element.equals(desiredElement));
@@ -518,66 +389,44 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 
 	@Override
 	public void reverse() {
-		Collections.reverse(wrappedList);
+		Collections.reverse(wrapped);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see bjc.utils.funcdata.IFunctionalList#search(E,
-	 * java.util.Comparator)
-	 */
 	@Override
 	public E search(E searchKey, Comparator<E> comparator) {
 		// Search our internal list
-		int foundIndex = Collections.binarySearch(wrappedList, searchKey,
+		int foundIndex = Collections.binarySearch(wrapped, searchKey,
 				comparator);
 
 		if (foundIndex >= 0) {
 			// We found a matching element
-			return wrappedList.get(foundIndex);
+			return wrapped.get(foundIndex);
 		}
 
 		// We didn't find an element
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see bjc.utils.funcdata.IFunctionalList#sort(java.util.Comparator)
-	 */
 	@Override
 	public void sort(Comparator<E> comparator) {
-		Collections.sort(wrappedList, comparator);
+		Collections.sort(wrapped, comparator);
 	}
 
 	@Override
 	public IList<E> tail() {
-		return new FunctionalList<>(wrappedList.subList(1, getSize()));
+		return new FunctionalList<>(wrapped.subList(1, getSize()));
 	}
 
 	@Override
 	public E[] toArray(E[] arrType) {
-		return wrappedList.toArray(arrType);
+		return wrapped.toArray(arrType);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see bjc.utils.funcdata.IFunctionalList#toIterable()
-	 */
 	@Override
 	public Iterable<E> toIterable() {
-		return wrappedList;
+		return wrapped;
 	}
 
-	/*
-	 * Reduce this item to a form useful for looking at in the debugger.
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder("(");

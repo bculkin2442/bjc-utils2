@@ -26,8 +26,7 @@ public class FuncUtils {
 	 * @return The function transformed into a unary function returning a
 	 *         function
 	 */
-	public static <A, B, C> Function<A, Function<B, C>> curry2(
-			BiFunction<A, B, C> func) {
+	public static <A, B, C> Function<A, Function<B, C>> curry2(BiFunction<A, B, C> func) {
 		return (arg1) -> (arg2) -> {
 			return func.apply(arg1, arg2);
 		};

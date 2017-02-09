@@ -157,11 +157,11 @@ public class SliderInputPanel extends JPanel {
 			if (slider.getValueIsAdjusting()) {
 				// Do nothing
 			} else {
-				int sliderVal = slider.getValue();
+				int val = slider.getValue();
 
-				field.setValue(sliderVal);
+				field.setValue(val);
 
-				action.accept(sliderVal);
+				action.accept(val);
 			}
 		});
 

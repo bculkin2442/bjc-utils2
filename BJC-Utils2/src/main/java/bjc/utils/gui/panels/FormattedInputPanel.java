@@ -19,6 +19,7 @@ import bjc.utils.gui.layout.HLayout;
  */
 public class FormattedInputPanel<InputVal> extends JPanel {
 	private static final long	serialVersionUID	= 5232016563558588031L;
+
 	private JFormattedTextField	field;
 
 	/**
@@ -30,13 +31,13 @@ public class FormattedInputPanel<InputVal> extends JPanel {
 	 *            The length of this panel
 	 * @param formatter
 	 *            The formatter to use for input
-	 * @param valueReciever
+	 * @param reciever
 	 *            The action to call whenever the value changes
 	 */
 	@SuppressWarnings("unchecked")
 	public FormattedInputPanel(String label, int length,
 			AbstractFormatter formatter,
-			Consumer<InputVal> valueReciever) {
+			Consumer<InputVal> reciever) {
 		setLayout(new HLayout(2));
 
 		JLabel lab = new JLabel(label);
@@ -47,7 +48,7 @@ public class FormattedInputPanel<InputVal> extends JPanel {
 		field.addPropertyChangeListener("value", (event) -> {
 			// This is safe, because InputVal should be the type of
 			// whatever object the formatter is returning
-			valueReciever.accept((InputVal) field.getValue());
+			reciever.accept((InputVal) field.getValue());
 		});
 
 		add(lab);

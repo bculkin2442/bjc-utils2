@@ -9,12 +9,12 @@ package bjc.utils.graph;
  *            The type of the nodes in the graph
  */
 public class Edge<T> {
-	/**
+	/*
 	 * The distance from initial to terminal node
 	 */
 	private final int	distance;
 
-	/**
+	/*
 	 * The initial and terminal nodes of this edge
 	 */
 	private final T		source, target;
@@ -22,32 +22,27 @@ public class Edge<T> {
 	/**
 	 * Create a new edge with set parameters
 	 * 
-	 * @param initialNode
+	 * @param initial
 	 *            The initial node of the edge
-	 * @param terminalNode
+	 * @param terminal
 	 *            The terminal node of the edge
 	 * @param distance
 	 *            The distance between initial and terminal edge
 	 */
-	public Edge(T initialNode, T terminalNode, int distance) {
-		if (initialNode == null) {
+	public Edge(T initial, T terminal, int distance) {
+		if (initial == null) {
 			throw new NullPointerException(
 					"Initial node must not be null");
-		} else if (terminalNode == null) {
+		} else if (terminal == null) {
 			throw new NullPointerException(
 					"Terminal node must not be null");
 		}
 
-		this.source = initialNode;
-		this.target = terminalNode;
+		this.source = initial;
+		this.target = terminal;
 		this.distance = distance;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -57,7 +52,6 @@ public class Edge<T> {
 		} else if (getClass() != obj.getClass()) {
 			return false;
 		} else {
-
 			Edge<?> other = (Edge<?>) obj;
 
 			if (distance != other.distance) {
@@ -108,20 +102,18 @@ public class Edge<T> {
 		return target;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
+
 		int result = 1;
+
 		result = prime * result + distance;
 		result = prime * result
 				+ ((source == null) ? 0 : source.hashCode());
 		result = prime * result
 				+ ((target == null) ? 0 : target.hashCode());
+
 		return result;
 	}
 

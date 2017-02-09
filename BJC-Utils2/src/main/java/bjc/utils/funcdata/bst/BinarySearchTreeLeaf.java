@@ -34,27 +34,13 @@ public class BinarySearchTreeLeaf<T> implements ITreePart<T> {
 		data = element;
 	}
 
-	/*
-	 * Can't add things to a leaf. (non-Javadoc)
-	 * 
-	 * @see bjc.utils.data.bst.ITreePart#add(java.lang.Object,
-	 * java.util.Comparator)
-	 */
 	@Override
 	public void add(T element, Comparator<T> comparator) {
 		throw new IllegalArgumentException("Can't add to a leaf.");
 	}
 
-	/*
-	 * Just transform our data. (non-Javadoc)
-	 * 
-	 * @see
-	 * bjc.utils.data.bst.ITreePart#collapse(java.util.function.Function,
-	 * java.util.function.BiFunction)
-	 */
 	@Override
-	public <E> E collapse(Function<T, E> leafTransformer,
-			BiFunction<E, E, E> branchCollapser) {
+	public <E> E collapse(Function<T, E> leafTransformer, BiFunction<E, E, E> branchCollapser) {
 		if (leafTransformer == null) {
 			throw new NullPointerException("Transformer must not be null");
 		}
@@ -62,33 +48,16 @@ public class BinarySearchTreeLeaf<T> implements ITreePart<T> {
 		return leafTransformer.apply(data);
 	}
 
-	/*
-	 * Only check our data. (non-Javadoc)
-	 * 
-	 * @see bjc.utils.data.bst.ITreePart#contains(java.lang.Object,
-	 * java.util.Comparator)
-	 */
 	@Override
 	public boolean contains(T element, Comparator<T> comparator) {
 		return this.data.equals(element);
 	}
 
-	/*
-	 * Just get the data (non-Javadoc)
-	 * 
-	 * @see bjc.utils.data.bst.ITreePart#data()
-	 */
 	@Override
 	public T data() {
 		return data;
 	}
 
-	/*
-	 * Just mark ourselves as "not here" (non-Javadoc)
-	 * 
-	 * @see bjc.utils.data.bst.ITreePart#delete(java.lang.Object,
-	 * java.util.Comparator)
-	 */
 	@Override
 	public void delete(T element, Comparator<T> comparator) {
 		if (data.equals(element)) {
@@ -96,13 +65,6 @@ public class BinarySearchTreeLeaf<T> implements ITreePart<T> {
 		}
 	}
 
-	/*
-	 * Just walk our data and only succede if the walk does, because
-	 * there's nowhere left to go. (non-Javadoc)
-	 * 
-	 * @see bjc.utils.data.bst.ITreePart#directedWalk(bjc.utils.data.bst.
-	 * DirectedWalkFunction)
-	 */
 	@Override
 	public boolean directedWalk(DirectedWalkFunction<T> treeWalker) {
 		if (treeWalker == null) {
@@ -121,16 +83,8 @@ public class BinarySearchTreeLeaf<T> implements ITreePart<T> {
 		}
 	}
 
-	/*
-	 * Just check our data. (non-Javadoc)
-	 * 
-	 * @see
-	 * bjc.utils.data.bst.ITreePart#forEach(bjc.utils.data.bst.ITreePart.
-	 * TreeLinearizationMethod, java.util.function.Predicate)
-	 */
 	@Override
-	public boolean forEach(TreeLinearizationMethod linearizationMethod,
-			Predicate<T> traversalPredicate) {
+	public boolean forEach(TreeLinearizationMethod linearizationMethod, Predicate<T> traversalPredicate) {
 		if (traversalPredicate == null) {
 			throw new NullPointerException("Predicate must not be null");
 		}

@@ -9,7 +9,6 @@ import java.util.Deque;
  *
  */
 public class StringUtils {
-
 	/**
 	 * Checks if the given expression contains the specified operator in a
 	 * situation that indicates its use as an infix operator.
@@ -21,12 +20,10 @@ public class StringUtils {
 	 * @return Whether or not the given expression contains the specified
 	 *         operator as a infix operator
 	 */
-	public static boolean containsInfixOperator(String expression,
-			String operator) {
+	public static boolean containsInfixOperator(String expression, String operator) {
 		// Bit annoying to have to use a full class name, but what are you
 		// going to do?
-		return org.apache.commons.lang3.StringUtils
-				.countMatches(expression, operator) == 1
+		return org.apache.commons.lang3.StringUtils.countMatches(expression, operator) == 1
 				&& !expression.equalsIgnoreCase(operator)
 				&& !expression.startsWith(operator);
 	}
@@ -85,8 +82,7 @@ public class StringUtils {
 	 * @return A string version of the deque, with allowance for an empty
 	 *         deque
 	 */
-	public static <
-			ContainedType> String printDeque(Deque<ContainedType> queue) {
+	public static <ContainedType> String printDeque(Deque<ContainedType> queue) {
 		return queue.isEmpty() ? "(none)" : queue.toString();
 	}
 }

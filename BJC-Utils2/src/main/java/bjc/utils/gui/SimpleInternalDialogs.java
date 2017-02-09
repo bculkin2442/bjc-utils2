@@ -7,8 +7,9 @@ import java.util.function.Predicate;
 import javax.swing.JOptionPane;
 
 /**
- * Utility class for getting simple input from the user. Modified to work
- * with JDesktopPanes
+ * Utility class for getting simple input from the user. 
+ *
+ * Modified to work with JDesktopPanes
  * 
  * @author ben
  *
@@ -106,30 +107,30 @@ public class SimpleInternalDialogs {
 	 *            The title for dialogs.
 	 * @param prompt
 	 *            The prompt to tell the user what to enter.
-	 * @param inputValidator
+	 * @param validator
 	 *            A predicate to determine if a input is valid.
-	 * @param inputTransformer
+	 * @param transformer
 	 *            The function to transform the string into a value.
 	 * @return The value parsed from a string.
 	 */
 	public static <E> E getValue(Component parent, String title,
-			String prompt, Predicate<String> inputValidator,
-			Function<String, E> inputTransformer) {
-		if (inputValidator == null) {
+			String prompt, Predicate<String> validator,
+			Function<String, E> transformer) {
+		if (validator == null) {
 			throw new NullPointerException("Validator must not be null");
-		} else if (inputTransformer == null) {
+		} else if (transformer == null) {
 			throw new NullPointerException("Transformer must not be null");
 		}
 
-		String inputString = getString(parent, title, prompt);
+		String strang = getString(parent, title, prompt);
 
-		while (!inputValidator.test(inputString)) {
+		while (!validator.test(strang)) {
 			showError(parent, "I/O Error", "Please enter a valid value");
 
-			inputString = getString(parent, title, prompt);
+			strang = getString(parent, title, prompt);
 		}
 
-		return inputTransformer.apply(inputString);
+		return transformer.apply(strang);
 	}
 
 	/**
@@ -169,10 +170,10 @@ public class SimpleInternalDialogs {
 			throw new NullPointerException("Question must not be null");
 		}
 
-		int dialogResult = JOptionPane.showInternalConfirmDialog(parent,
+		int result = JOptionPane.showInternalConfirmDialog(parent,
 				question, title, JOptionPane.YES_NO_OPTION);
 
-		return (dialogResult == JOptionPane.YES_OPTION ? true : false);
+		return (result == JOptionPane.YES_OPTION ? true : false);
 	}
 
 	/**
@@ -182,21 +183,21 @@ public class SimpleInternalDialogs {
 	 *            The parent component for dialogs.
 	 * @param title
 	 *            The title for dialogs.
-	 * @param errorMessage
+	 * @param message
 	 *            The error to show the user.
 	 */
 	public static void showError(Component parent, String title,
-			String errorMessage) {
+			String message) {
 		if (parent == null) {
 			throw new NullPointerException("Parent must not be null");
 		} else if (title == null) {
 			throw new NullPointerException("Title must not be null");
-		} else if (errorMessage == null) {
+		} else if (message == null) {
 			throw new NullPointerException(
 					"Error message must not be null");
 		}
 
-		JOptionPane.showInternalMessageDialog(parent, errorMessage, title,
+		JOptionPane.showInternalMessageDialog(parent, message, title,
 				JOptionPane.ERROR_MESSAGE);
 	}
 

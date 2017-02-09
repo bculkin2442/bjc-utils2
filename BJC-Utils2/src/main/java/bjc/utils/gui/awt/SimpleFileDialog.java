@@ -48,23 +48,23 @@ public class SimpleFileDialog {
 			throw new NullPointerException("Title must not be null");
 		}
 
-		FileDialog fileDialog = new FileDialog(parent, title,
+		FileDialog chooser = new FileDialog(parent, title,
 				FileDialog.LOAD);
 
 		if (extensions != null) {
 			FilenameFilter filter = new ExtensionFileFilter(extensions);
-			fileDialog.setFilenameFilter(filter);
+			chooser.setFilenameFilter(filter);
 		}
 
-		fileDialog.setVisible(true);
+		chooser.setVisible(true);
 
-		while (fileDialog.getFile() == null) {
+		while (chooser.getFile() == null) {
 			SimpleDialogs.showError(parent, "File I/O Error",
 					"Please choose a file to open.");
-			fileDialog.setVisible(true);
+			chooser.setVisible(true);
 		}
 
-		return fileDialog.getFiles()[0];
+		return chooser.getFiles()[0];
 	}
 
 	/**
@@ -86,24 +86,24 @@ public class SimpleFileDialog {
 			throw new NullPointerException("Title must not be null");
 		}
 
-		FileDialog fileDialog = new FileDialog(parent, title,
+		FileDialog chooser = new FileDialog(parent, title,
 				FileDialog.LOAD);
 
 		if (extensions != null) {
 			FilenameFilter filter = new ExtensionFileFilter(extensions);
-			fileDialog.setFilenameFilter(filter);
+			chooser.setFilenameFilter(filter);
 		}
 
-		fileDialog.setMultipleMode(true);
-		fileDialog.setVisible(true);
+		chooser.setMultipleMode(true);
+		chooser.setVisible(true);
 
-		while (fileDialog.getFile() == null) {
+		while (chooser.getFile() == null) {
 			SimpleDialogs.showError(parent, "File I/O Error",
 					"Please choose a file to open.");
-			fileDialog.setVisible(true);
+			chooser.setVisible(true);
 		}
 
-		return fileDialog.getFiles();
+		return chooser.getFiles();
 	}
 
 	/**
@@ -138,22 +138,22 @@ public class SimpleFileDialog {
 			throw new NullPointerException("Title must not be null");
 		}
 
-		FileDialog fileDialog = new FileDialog(parent, title,
+		FileDialog chooser = new FileDialog(parent, title,
 				FileDialog.SAVE);
 
 		if (extensions != null) {
 			FilenameFilter filter = new ExtensionFileFilter(extensions);
-			fileDialog.setFilenameFilter(filter);
+			chooser.setFilenameFilter(filter);
 		}
 
-		fileDialog.setVisible(true);
+		chooser.setVisible(true);
 
-		while (fileDialog.getFile() == null) {
+		while (chooser.getFile() == null) {
 			SimpleDialogs.showError(parent, "File I/O Error",
 					"Please choose a file to save to.");
-			fileDialog.setVisible(true);
+			chooser.setVisible(true);
 		}
 
-		return fileDialog.getFiles()[0];
+		return chooser.getFiles()[0];
 	}
 }

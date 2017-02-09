@@ -15,7 +15,8 @@ import bjc.utils.gui.layout.HLayout;
  */
 public class HolderOutputPanel extends JPanel {
 	private static final long	serialVersionUID	= 166573313903782080L;
-	private Timer				updateTimer;
+
+	private Timer				updater;
 	private JLabel				value;
 	private int					nDelay;
 	private IHolder<String>		val;
@@ -40,7 +41,7 @@ public class HolderOutputPanel extends JPanel {
 		JLabel label = new JLabel(lab);
 		value = new JLabel("(stopped)");
 
-		updateTimer = new Timer(nDelay, (event) -> {
+		updater = new Timer(nDelay, (event) -> {
 			value.setText(valueHolder.getValue());
 		});
 
@@ -56,7 +57,7 @@ public class HolderOutputPanel extends JPanel {
 
 		value.setText("(stopped)");
 
-		updateTimer = new Timer(nDelay, (event) -> {
+		updater = new Timer(nDelay, (event) -> {
 			value.setText(val.getValue());
 		});
 	}
@@ -65,14 +66,14 @@ public class HolderOutputPanel extends JPanel {
 	 * Start updating the contents of the field from the holder
 	 */
 	public void startUpdating() {
-		updateTimer.start();
+		updater.start();
 	}
 
 	/**
 	 * Stop updating the contents of the field from the holder
 	 */
 	public void stopUpdating() {
-		updateTimer.stop();
+		updater.stop();
 
 		value.setText(value.getText() + " (stopped)");
 	}

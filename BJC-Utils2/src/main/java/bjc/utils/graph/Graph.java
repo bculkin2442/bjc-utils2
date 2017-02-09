@@ -49,55 +49,55 @@ public class Graph<T> {
 	/**
 	 * The backing representation of the graph
 	 */
-	private final IMap<T, IMap<T, Integer>> backingGraph;
+	private final IMap<T, IMap<T, Integer>> backing;
 
 	/**
 	 * Create a new graph
 	 */
 	public Graph() {
-		backingGraph = new FunctionalMap<>();
+		backing = new FunctionalMap<>();
 	}
 
 	/**
 	 * Add a edge to the graph
 	 * 
-	 * @param sourceVertex
+	 * @param source
 	 *            The source vertex for this edge
-	 * @param targetVertex
+	 * @param target
 	 *            The target vertex for this edge
 	 * @param distance
 	 *            The distance from the source vertex to the target vertex
 	 * @param directed
 	 *            Whether or not
 	 */
-	public void addEdge(T sourceVertex, T targetVertex, int distance,
+	public void addEdge(T source, T target, int distance,
 			boolean directed) {
 		// Can't add edges with a null source or target
-		if (sourceVertex == null) {
+		if (source == null) {
 			throw new NullPointerException(
 					"The source vertex cannot be null");
-		} else if (targetVertex == null) {
+		} else if (target == null) {
 			throw new NullPointerException(
 					"The target vertex cannot be null");
 		}
 
 		// Initialize adjacency list for vertices if necessary
-		if (!backingGraph.containsKey(sourceVertex)) {
-			backingGraph.put(sourceVertex,
+		if (!backing.containsKey(source)) {
+			backing.put(source,
 					new FunctionalMap<T, Integer>());
 		}
 
 		// Add the edge to the graph
-		backingGraph.get(sourceVertex).put(targetVertex, distance);
+		backing.get(source).put(target, distance);
 
 		// Handle possible directed edges
 		if (!directed) {
-			if (!backingGraph.containsKey(targetVertex)) {
-				backingGraph.put(targetVertex,
+			if (!backing.containsKey(target)) {
+				backing.put(target,
 						new FunctionalMap<T, Integer>());
 			}
 
-			backingGraph.get(targetVertex).put(sourceVertex, distance);
+			backing.get(target).put(source, distance);
 		}
 	}
 
@@ -105,25 +105,25 @@ public class Graph<T> {
 	 * Execute an action for all edges of a specific vertex matching
 	 * conditions
 	 * 
-	 * @param sourceVertex
+	 * @param source
 	 *            The vertex to test edges for
-	 * @param edgeMatcher
+	 * @param matcher
 	 *            The conditions an edge must match
-	 * @param edgeAction
+	 * @param action
 	 *            The action to execute for matching edges
 	 */
-	public void forAllEdgesMatchingAt(T sourceVertex,
-			BiPredicate<T, Integer> edgeMatcher,
-			BiConsumer<T, Integer> edgeAction) {
-		if (edgeMatcher == null) {
+	public void forAllEdgesMatchingAt(T source,
+			BiPredicate<T, Integer> matcher,
+			BiConsumer<T, Integer> action) {
+		if (matcher == null) {
 			throw new NullPointerException("Matcher must not be null");
-		} else if (edgeAction == null) {
+		} else if (action == null) {
 			throw new NullPointerException("Action must not be null");
 		}
 
-		getEdges(sourceVertex).forEach((targetVertex, vertexWeight) -> {
-			if (edgeMatcher.test(targetVertex, vertexWeight)) {
-				edgeAction.accept(targetVertex, vertexWeight);
+		getEdges(source).forEach((target, weight) -> {
+			if (matcher.test(target, weight)) {
+				action.accept(target, weight);
 			}
 		});
 	}
@@ -139,12 +139,12 @@ public class Graph<T> {
 		// Can't find edges for a null source
 		if (source == null) {
 			throw new NullPointerException("The source cannot be null.");
-		} else if (!backingGraph.containsKey(source)) {
+		} else if (!backing.containsKey(source)) {
 			throw new IllegalArgumentException(
 					"Vertex " + source + " is not in graph");
 		}
 
-		return backingGraph.get(source);
+		return backing.get(source);
 	}
 
 	/**
@@ -153,67 +153,65 @@ public class Graph<T> {
 	 * @return The initial vertex of the graph
 	 */
 	public T getInitial() {
-		return backingGraph.keyList().first();
+		return backing.keyList().first();
 	}
 
 	/**
-	 * Uses Prim's algorothm to calculate a MST for the graph. If the graph
-	 * is non-connected, this will lead to unpredictable results.
+	 * Uses Prim's algorothm to calculate a MST for the graph.
+	 *
+	 * If the graph is non-connected, this will lead to unpredictable results.
 	 * 
 	 * @return a list of edges that constitute the MST
 	 */
 	public List<Edge<T>> getMinimumSpanningTree() {
 		// Set of all of the currently available edges
-		Queue<Edge<T>> availableEdges = new PriorityQueue<>(10,
-				(leftEdge, rightEdge) -> leftEdge.getDistance()
-						- rightEdge.getDistance());
+		Queue<Edge<T>> available = new PriorityQueue<>(10,
+				(left, right) -> left.getDistance() - right.getDistance());
 
 		// The MST of the graph
-		List<Edge<T>> minimumEdges = new ArrayList<>();
+		List<Edge<T>> minimums = new ArrayList<>();
 
 		// The set of all of the visited vertices.
-		Set<T> visitedVertexes = new HashSet<>();
+		Set<T> visited = new HashSet<>();
 
 		// Start at the initial vertex and visit it
-		IHolder<T> sourceVertex = new Identity<>(getInitial());
+		IHolder<T> source = new Identity<>(getInitial());
 
-		visitedVertexes.add(sourceVertex.getValue());
+		visited.add(source.getValue());
 
 		// Make sure we visit all the nodes
-		while (visitedVertexes.size() != getVertexCount()) {
+		while (visited.size() != getVertexCount()) {
 			// Grab all edges adjacent to the provided edge
 
-			forAllEdgesMatchingAt(sourceVertex.getValue(),
-					(targetVertex, vertexWeight) -> {
-						return !visitedVertexes.contains(targetVertex);
-					}, (targetVertex, vertexWeight) -> {
-						availableEdges.add(new Edge<>(
-								sourceVertex.unwrap(vertex -> vertex),
-								targetVertex, vertexWeight));
+			forAllEdgesMatchingAt(source.getValue(),
+					(target, weight) -> {
+						return !visited.contains(target);
+					}, (target, weight) -> {
+						available.add(new Edge<>(
+								source.unwrap(vertex -> vertex),
+								target, weight));
 					});
 
 			// Get the edge with the minimum distance
-			IHolder<Edge<T>> minimumEdge = new Identity<>(
-					availableEdges.poll());
+			IHolder<Edge<T>> minimum = new Identity<>(available.poll());
 
 			// Only consider edges where we haven't visited the target of
 			// the edge
-			while (visitedVertexes.contains(minimumEdge.getValue())) {
-				minimumEdge.transform((edge) -> availableEdges.poll());
+			while (visited.contains(minimum.getValue())) {
+				minimum.transform((edge) -> available.poll());
 			}
 
 			// Add it to our MST
-			minimumEdges.add(minimumEdge.getValue());
+			minimums.add(minimum.getValue());
 
 			// Advance to the next node
-			sourceVertex.transform((vertex) -> minimumEdge
-					.unwrap(edge -> edge.getTarget()));
+			source.transform((vertex) -> minimum.unwrap(edge -> edge.getTarget()));
 
 			// Visit this node
-			visitedVertexes.add(sourceVertex.getValue());
+			visited.add(source.getValue());
 		}
 
-		return minimumEdges;
+		return minimums;
 	}
 
 	/**
@@ -222,7 +220,7 @@ public class Graph<T> {
 	 * @return A count of the vertices in this graph
 	 */
 	public int getVertexCount() {
-		return backingGraph.getSize();
+		return backing.getSize();
 	}
 
 	/**
@@ -231,39 +229,39 @@ public class Graph<T> {
 	 * @return A unmodifiable set of all the vertices in the graph.
 	 */
 	public IList<T> getVertices() {
-		return backingGraph.keyList();
+		return backing.keyList();
 	}
 
 	/**
 	 * Remove the edge starting at the source and ending at the target
 	 * 
-	 * @param sourceVertex
+	 * @param source
 	 *            The source vertex for the edge
-	 * @param targetVertex
+	 * @param target
 	 *            The target vertex for the edge
 	 */
-	public void removeEdge(T sourceVertex, T targetVertex) {
+	public void removeEdge(T source, T target) {
 		// Can't remove things w/ null vertices
-		if (sourceVertex == null) {
+		if (source == null) {
 			throw new NullPointerException(
 					"The source vertex cannot be null");
-		} else if (targetVertex == null) {
+		} else if (target == null) {
 			throw new NullPointerException(
 					"The target vertex cannot be null");
 		}
 
 		// Can't remove if one vertice doesn't exists
-		if (!backingGraph.containsKey(sourceVertex)) {
+		if (!backing.containsKey(source)) {
 			throw new NoSuchElementException(
-					"vertex " + sourceVertex + " does not exist.");
+					"vertex " + source + " does not exist.");
 		}
 
-		if (!backingGraph.containsKey(targetVertex)) {
+		if (!backing.containsKey(target)) {
 			throw new NoSuchElementException(
-					"vertex " + targetVertex + " does not exist.");
+					"vertex " + target + " does not exist.");
 		}
 
-		backingGraph.get(sourceVertex).remove(targetVertex);
+		backing.get(source).remove(target);
 
 		// Uncomment this to turn the graph undirected
 		// graph.get(target).remove(source);
@@ -275,15 +273,15 @@ public class Graph<T> {
 	 * @return A adjacency map representing this graph
 	 */
 	public AdjacencyMap<T> toAdjacencyMap() {
-		AdjacencyMap<T> adjacencyMap = new AdjacencyMap<>(
-				backingGraph.keyList());
+		AdjacencyMap<T> adjacency = new AdjacencyMap<>(
+				backing.keyList());
 
-		backingGraph.forEach((key, value) -> {
-			value.forEach((targetKey, targetValue) -> {
-				adjacencyMap.setWeight(key, targetKey, targetValue);
+		backing.forEach((sourceKey, sourceValue) -> {
+			sourceValue.forEach((targetKey, targetValue) -> {
+				adjacency.setWeight(sourceKey, targetKey, targetValue);
 			});
 		});
 
-		return adjacencyMap;
+		return adjacency;
 	}
 }

@@ -18,17 +18,17 @@ import bjc.utils.funcdata.IList;
  *            The type of values that are randomly selected.
  */
 public class WeightedRandom<E> {
-	/**
+	/*
 	 * The list of probabilities for each result
 	 */
 	private IList<Integer>	probabilities;
 
-	/**
+	/*
 	 * The list of possible results to pick from
 	 */
 	private IList<E>		results;
 
-	/**
+	/*
 	 * The source for any needed random numbers
 	 */
 	private Random			source;
@@ -75,27 +75,23 @@ public class WeightedRandom<E> {
 	 * @return A random value selected in a weighted fashion.
 	 */
 	public E generateValue() {
-		IHolder<Integer> randomValue = new Identity<>(
-				source.nextInt(totalChance));
-		IHolder<E> currentResult = new Identity<>();
-		IHolder<Boolean> valuePicked = new Identity<>(true);
+		IHolder<Integer> value = new Identity<>(source.nextInt(totalChance));
+		IHolder<E> current = new Identity<>();
+		IHolder<Boolean> picked = new Identity<>(true);
 
-		probabilities.forEachIndexed((itemIndex, itemProbability) -> {
-			if (valuePicked.unwrap(bool -> bool)) {
-				if (randomValue
-						.unwrap((number) -> number < itemProbability)) {
-					currentResult.transform(
-							(result) -> results.getByIndex(itemIndex));
+		probabilities.forEachIndexed((index, probability) -> {
+			if (picked.unwrap(bool -> bool)) {
+				if (value.unwrap((number) -> number < probability)) {
+					current.transform((result) -> results.getByIndex(index));
 
-					valuePicked.transform((bool) -> false);
+					picked.transform((bool) -> false);
 				} else {
-					randomValue.transform(
-							(number) -> number - itemProbability);
+					value.transform((number) -> number - probability);
 				}
 			}
 		});
 
-		return currentResult.unwrap((result) -> result);
+		return current.unwrap((result) -> result);
 	}
 
 	/**

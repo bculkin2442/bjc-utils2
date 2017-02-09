@@ -147,9 +147,9 @@ public class SimpleFileChooser {
 					"File chooser must not be null");
 		}
 
-		int dialogResult = files.showSaveDialog(parent);
+		int result = files.showSaveDialog(parent);
 
-		if (dialogResult != JFileChooser.APPROVE_OPTION) {
+		if (result != JFileChooser.APPROVE_OPTION) {
 			throw new FileNotChosenException();
 		}
 	}
@@ -163,9 +163,9 @@ public class SimpleFileChooser {
 					"File chooser must not be null");
 		}
 
-		int dialogResult = files.showSaveDialog(parent);
+		int result = files.showSaveDialog(parent);
 
-		if (dialogResult != JFileChooser.APPROVE_OPTION) {
+		if (result != JFileChooser.APPROVE_OPTION) {
 			throw new FileNotChosenException();
 		}
 	}

@@ -16,21 +16,17 @@ final class TokenDeaffixer
 	@Override
 	public IList<String> apply(String operatorName, String operatorRegex) {
 		if (operatorName == null) {
-			throw new NullPointerException(
-					"Operator name must not be null");
+			throw new NullPointerException("Operator name must not be null");
 		} else if (operatorRegex == null) {
-			throw new NullPointerException(
-					"Operator regex must not be null");
+			throw new NullPointerException("Operator regex must not be null");
 		}
 
 		if (StringUtils.containsOnly(token, operatorRegex)) {
 			return new FunctionalList<>(token);
 		} else if (token.startsWith(operatorName)) {
-			return new FunctionalList<>(operatorName,
-					token.split(operatorRegex)[1]);
+			return new FunctionalList<>(operatorName, token.split(operatorRegex)[1]);
 		} else if (token.endsWith(operatorName)) {
-			return new FunctionalList<>(token.split(operatorRegex)[0],
-					operatorName);
+			return new FunctionalList<>(token.split(operatorRegex)[0], operatorName);
 		} else {
 			return new FunctionalList<>(token);
 		}

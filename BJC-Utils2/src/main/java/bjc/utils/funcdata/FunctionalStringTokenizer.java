@@ -24,11 +24,10 @@ public class FunctionalStringTokenizer {
 					"String to tokenize must be non-null");
 		}
 
-		return new FunctionalStringTokenizer(
-				new StringTokenizer(strang, " "));
+		return new FunctionalStringTokenizer(new StringTokenizer(strang, " "));
 	}
 
-	/**
+	/*
 	 * The string tokenizer being driven
 	 */
 	private StringTokenizer input;
@@ -41,8 +40,7 @@ public class FunctionalStringTokenizer {
 	 */
 	public FunctionalStringTokenizer(String inp) {
 		if (inp == null) {
-			throw new NullPointerException(
-					"String to tokenize must be non-null");
+			throw new NullPointerException("String to tokenize must be non-null");
 		}
 
 		this.input = new StringTokenizer(inp);
@@ -50,24 +48,22 @@ public class FunctionalStringTokenizer {
 
 	/**
 	 * Create a functional string tokenizer from a given string and set of
-	 * seperators
+	 * separators
 	 * 
-	 * @param inputString
+	 * @param input
 	 *            The string to tokenize
 	 * @param seperators
 	 *            The set of separating tokens to use for splitting
 	 */
-	public FunctionalStringTokenizer(String inputString,
+	public FunctionalStringTokenizer(String input,
 			String seperators) {
-		if (inputString == null) {
-			throw new NullPointerException(
-					"String to tokenize must not be null");
+		if (input == null) {
+			throw new NullPointerException("String to tokenize must not be null");
 		} else if (seperators == null) {
-			throw new NullPointerException(
-					"Tokens to split on must not be null");
+			throw new NullPointerException("Tokens to split on must not be null");
 		}
 
-		this.input = new StringTokenizer(inputString, seperators);
+		this.input = new StringTokenizer(input, seperators);
 	}
 
 	/**
@@ -78,8 +74,7 @@ public class FunctionalStringTokenizer {
 	 */
 	public FunctionalStringTokenizer(StringTokenizer toWrap) {
 		if (toWrap == null) {
-			throw new NullPointerException(
-					"Wrapped tokenizer must not be null");
+			throw new NullPointerException("Wrapped tokenizer must not be null");
 		}
 
 		this.input = toWrap;
@@ -102,7 +97,7 @@ public class FunctionalStringTokenizer {
 	}
 
 	/**
-	 * Get the string tokenizer encapsuled by this tokenizer
+	 * Get the string tokenizer encapsulated by this tokenizer
 	 * 
 	 * @return The encapsulated tokenizer
 	 */
@@ -120,14 +115,15 @@ public class FunctionalStringTokenizer {
 	}
 
 	/**
-	 * Return the next token from the tokenizer. Returns null if no more
-	 * tokens are available
+	 * Return the next token from the tokenizer.
+	 *
+	 * Returns null if no more tokens are available
 	 * 
 	 * @return The next token from the tokenizer
 	 */
 	public String nextToken() {
 		if (input.hasMoreTokens()) {
-			// Return the next availible token
+			// Return the next available token
 			return input.nextToken();
 		}
 
@@ -151,24 +147,24 @@ public class FunctionalStringTokenizer {
 	 * @param <E>
 	 *            The type of the converted tokens
 	 * 
-	 * @param tokenTransformer
+	 * @param transformer
 	 *            The function to use to convert tokens.
 	 * @return A list containing all of the converted tokens.
 	 */
-	public <E> IList<E> toList(Function<String, E> tokenTransformer) {
-		if (tokenTransformer == null) {
+	public <E> IList<E> toList(Function<String, E> transformer) {
+		if (transformer == null) {
 			throw new NullPointerException("Transformer must not be null");
 		}
 
-		IList<E> returnList = new FunctionalList<>();
+		IList<E> returned = new FunctionalList<>();
 
 		// Add each token to the list after transforming it
 		forEachToken(token -> {
-			E transformedToken = tokenTransformer.apply(token);
+			E transformedToken = transformer.apply(token);
 
-			returnList.add(transformedToken);
+			returned.add(transformedToken);
 		});
 
-		return returnList;
+		return returned;
 	}
 }

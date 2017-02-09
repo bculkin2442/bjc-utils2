@@ -18,8 +18,7 @@ import bjc.utils.data.IPair;
  * @param <ValueType>
  *            The type of the map's values
  */
-public class FunctionalMap<KeyType, ValueType>
-		implements IMap<KeyType, ValueType> {
+public class FunctionalMap<KeyType, ValueType> implements IMap<KeyType, ValueType> {
 	private Map<KeyType, ValueType> wrappedMap;
 
 	/**
@@ -65,11 +64,6 @@ public class FunctionalMap<KeyType, ValueType>
 		wrappedMap.clear();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see bjc.utils.funcdata.IFunctionalMap#containsKey(K)
-	 */
 	@Override
 	public boolean containsKey(KeyType key) {
 		return wrappedMap.containsKey(key);
@@ -95,11 +89,6 @@ public class FunctionalMap<KeyType, ValueType>
 		wrappedMap.values().forEach(action);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see bjc.utils.funcdata.IFunctionalMap#get(K)
-	 */
 	@Override
 	public ValueType get(KeyType key) {
 		if (key == null) {
@@ -107,8 +96,7 @@ public class FunctionalMap<KeyType, ValueType>
 		}
 
 		if (!wrappedMap.containsKey(key)) {
-			throw new IllegalArgumentException(
-					"Key " + key + " is not present in the map");
+			throw new IllegalArgumentException("Key " + key + " is not present in the map");
 		}
 
 		return wrappedMap.get(key);
@@ -130,12 +118,6 @@ public class FunctionalMap<KeyType, ValueType>
 		return keys;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see bjc.utils.funcdata.IFunctionalMap#mapValues(java.util.function.
-	 * Function)
-	 */
 	@Override
 	public <MappedValue> IMap<KeyType, MappedValue> mapValues(
 			Function<ValueType, MappedValue> transformer) {
@@ -146,11 +128,6 @@ public class FunctionalMap<KeyType, ValueType>
 		return new TransformedValueMap<>(this, transformer);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see bjc.utils.funcdata.IFunctionalMap#put(K, V)
-	 */
 	@Override
 	public ValueType put(KeyType key, ValueType val) {
 		if (key == null) {

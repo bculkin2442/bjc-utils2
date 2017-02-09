@@ -17,10 +17,13 @@ import bjc.utils.funcdata.IList;
  */
 final class GroupPartIteration<E> implements Consumer<E> {
 	private IList<IList<E>>			returnedList;
+
 	private IHolder<IList<E>>		currentPartition;
 	private IList<E>				rejectedItems;
+
 	private IHolder<Integer>		numberInCurrentPartition;
 	private int						numberPerPartition;
+
 	private Function<E, Integer>	elementCounter;
 
 	public GroupPartIteration(IList<IList<E>> returned,
@@ -37,25 +40,23 @@ final class GroupPartIteration<E> implements Consumer<E> {
 
 	@Override
 	public void accept(E value) {
-		if (numberInCurrentPartition
-				.unwrap((number) -> number >= numberPerPartition)) {
-			returnedList.add(
-					currentPartition.unwrap((partition) -> partition));
+		if (numberInCurrentPartition.unwrap((number) -> number >= numberPerPartition)) {
+			returnedList.add(currentPartition.unwrap((partition) -> partition));
 
-			currentPartition
-					.transform((partition) -> new FunctionalList<>());
+			currentPartition.transform((partition) -> new FunctionalList<>());
 			numberInCurrentPartition.transform((number) -> 0);
 		} else {
 			int currentElementCount = elementCounter.apply(value);
 
-			if (numberInCurrentPartition.unwrap((number) -> (number
-					+ currentElementCount) >= numberPerPartition)) {
+			boolean shouldReject = numberInCurrentPartition.unwrap((number) -> {
+					return (number + currentElementCount) >= numberPerPartition;
+			});
+			
+			if (shouldReject) {
 				rejectedItems.add(value);
 			} else {
-				currentPartition
-						.unwrap((partition) -> partition.add(value));
-				numberInCurrentPartition.transform(
-						(number) -> number + currentElementCount);
+				currentPartition.unwrap((partition) -> partition.add(value));
+				numberInCurrentPartition.transform((number) -> number + currentElementCount);
 			}
 		}
 	}

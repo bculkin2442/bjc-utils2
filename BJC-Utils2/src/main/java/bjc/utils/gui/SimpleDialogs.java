@@ -70,7 +70,6 @@ public class SimpleDialogs {
 	@SuppressWarnings("unchecked")
 	public static <E> E getChoice(Frame parent, String title,
 			String question, E... choices) {
-
 		if (parent == null) {
 			throw new NullPointerException("Parent must not be null");
 		} else if (title == null) {
@@ -79,8 +78,8 @@ public class SimpleDialogs {
 			throw new NullPointerException("Question must not be null");
 		}
 
-		JDialog mainDialog = new JDialog(parent, title, true);
-		mainDialog.setLayout(new VLayout(2));
+		JDialog chooser = new JDialog(parent, title, true);
+		chooser.setLayout(new VLayout(2));
 
 		JPanel questionPane = new JPanel();
 
@@ -95,17 +94,17 @@ public class SimpleDialogs {
 		JButton okButton = new JButton("Ok");
 		JButton cancelButton = new JButton("Cancel");
 
-		okButton.addActionListener((event) -> mainDialog.dispose());
-		cancelButton.addActionListener((event) -> mainDialog.dispose());
+		okButton.addActionListener((event) -> chooser.dispose());
+		cancelButton.addActionListener((event) -> chooser.dispose());
 
 		buttonPane.add(cancelButton);
 		buttonPane.add(okButton);
 
-		mainDialog.add(questionPane);
-		mainDialog.add(buttonPane);
+		chooser.add(questionPane);
+		chooser.add(buttonPane);
 
-		mainDialog.pack();
-		mainDialog.setVisible(true);
+		chooser.pack();
+		chooser.setVisible(true);
 
 		return (E) questionChoices.getSelectedItem();
 	}
@@ -172,30 +171,30 @@ public class SimpleDialogs {
 	 *            The title for dialogs.
 	 * @param prompt
 	 *            The prompt to tell the user what to enter.
-	 * @param inputValidator
+	 * @param validator
 	 *            A predicate to determine if a input is valid.
-	 * @param inputTransformer
+	 * @param transformer
 	 *            The function to transform the string into a value.
 	 * @return The value parsed from a string.
 	 */
 	public static <E> E getValue(Component parent, String title,
-			String prompt, Predicate<String> inputValidator,
-			Function<String, E> inputTransformer) {
-		if (inputValidator == null) {
+			String prompt, Predicate<String> validator,
+			Function<String, E> transformer) {
+		if (validator == null) {
 			throw new NullPointerException("Validator must not be null");
-		} else if (inputTransformer == null) {
+		} else if (transformer == null) {
 			throw new NullPointerException("Transformer must not be null");
 		}
 
-		String inputString = getString(parent, title, prompt);
+		String input = getString(parent, title, prompt);
 
-		while (!inputValidator.test(inputString)) {
+		while (!validator.test(input)) {
 			showError(parent, "I/O Error", "Please enter a valid value");
 
-			inputString = getString(parent, title, prompt);
+			input = getString(parent, title, prompt);
 		}
 
-		return inputTransformer.apply(inputString);
+		return transformer.apply(input);
 	}
 
 	/**
@@ -235,10 +234,10 @@ public class SimpleDialogs {
 			throw new NullPointerException("Question must not be null");
 		}
 
-		int dialogResult = JOptionPane.showConfirmDialog(parent, question,
+		int result = JOptionPane.showConfirmDialog(parent, question,
 				title, JOptionPane.YES_NO_OPTION);
 
-		return (dialogResult == JOptionPane.YES_OPTION ? true : false);
+		return (result == JOptionPane.YES_OPTION ? true : false);
 	}
 
 	/**
@@ -248,21 +247,21 @@ public class SimpleDialogs {
 	 *            The parent component for dialogs.
 	 * @param title
 	 *            The title for dialogs.
-	 * @param errorMessage
+	 * @param message
 	 *            The error to show the user.
 	 */
 	public static void showError(Component parent, String title,
-			String errorMessage) {
+			String message) {
 		if (parent == null) {
 			throw new NullPointerException("Parent must not be null");
 		} else if (title == null) {
 			throw new NullPointerException("Title must not be null");
-		} else if (errorMessage == null) {
+		} else if (message == null) {
 			throw new NullPointerException(
 					"Error message must not be null");
 		}
 
-		JOptionPane.showMessageDialog(parent, errorMessage, title,
+		JOptionPane.showMessageDialog(parent, message, title,
 				JOptionPane.ERROR_MESSAGE);
 	}
 

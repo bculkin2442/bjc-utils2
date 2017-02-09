@@ -17,16 +17,16 @@ public class SimpleJList {
 	 * @param <E>
 	 *            The type of data in the JList
 	 * 
-	 * @param listSource
+	 * @param source
 	 *            The list to populate the JList with.
 	 * @return A JList populated with the elements from ls.
 	 */
-	public static <E> JList<E> buildFromList(Iterable<E> listSource) {
-		if (listSource == null) {
+	public static <E> JList<E> buildFromList(Iterable<E> source) {
+		if (source == null) {
 			throw new NullPointerException("Source must not be null");
 		}
 
-		return new JList<>(buildModel(listSource));
+		return new JList<>(buildModel(source));
 	}
 
 	/**
@@ -35,18 +35,18 @@ public class SimpleJList {
 	 * @param <E>
 	 *            The type of data in the list model
 	 * 
-	 * @param listSource
+	 * @param source
 	 *            The list to fill the list model from.
 	 * @return A list model populated with the elements from ls.
 	 */
-	public static <E> ListModel<E> buildModel(Iterable<E> listSource) {
-		if (listSource == null) {
+	public static <E> ListModel<E> buildModel(Iterable<E> source) {
+		if (source == null) {
 			throw new NullPointerException("Source must not be null");
 		}
 
 		DefaultListModel<E> defaultModel = new DefaultListModel<>();
 
-		listSource.forEach(defaultModel::addElement);
+		source.forEach(defaultModel::addElement);
 
 		return defaultModel;
 	}

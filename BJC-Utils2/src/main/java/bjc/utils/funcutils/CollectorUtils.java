@@ -25,20 +25,17 @@ public class CollectorUtils {
 	 *            The final type of the first collector
 	 * @param <FinalType2>
 	 *            The final type of the second collector
-	 * @param firstCollector
+	 * @param first
 	 *            The first collector to use
-	 * @param secondCollector
+	 * @param second
 	 *            The second collector to use
 	 * @return A collector that functions as mentioned above
 	 */
-	public static <InitialType, AuxType1, AuxType2, FinalType1,
-			FinalType2> Collector<InitialType,
-					IHolder<IPair<AuxType1, AuxType2>>,
-					IPair<FinalType1, FinalType2>> compoundCollect(
-							Collector<InitialType, AuxType1,
-									FinalType1> firstCollector,
-							Collector<InitialType, AuxType2,
-									FinalType2> secondCollector) {
-		return new CompoundCollector<>(firstCollector, secondCollector);
+	public static <InitialType, AuxType1, AuxType2, FinalType1, FinalType2> 
+		Collector<InitialType, IHolder<IPair<AuxType1, AuxType2>>, IPair<FinalType1, FinalType2>>
+		compoundCollect(
+				Collector<InitialType, AuxType1, FinalType1> first,
+				Collector<InitialType, AuxType2, FinalType2> second) {
+		return new CompoundCollector<>(first, second);
 	}
 }

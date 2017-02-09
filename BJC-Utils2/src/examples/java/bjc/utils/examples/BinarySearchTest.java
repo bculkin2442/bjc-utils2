@@ -12,17 +12,17 @@ import bjc.utils.funcdata.bst.TreeLinearizationMethod;
  *
  */
 public class BinarySearchTest {
-	private static void displayTree(BinarySearchTree<Character> tree,
-			Scanner inputSource) {
+	private static void display(BinarySearchTree<Character> tree,
+			Scanner input) {
 		System.out.print(
 				"What order would you like the tree to be printed in (m for options): ");
 
 		char command;
 
 		while (true) {
-			command = inputSource.nextLine().charAt(0);
+			command = input.nextLine().charAt(0);
 
-			TreeLinearizationMethod linearizationMethod = null;
+			TreeLinearizationMethod method = null;
 
 			switch (command) {
 				case 'm':
@@ -36,23 +36,23 @@ public class BinarySearchTest {
 					break;
 
 				case 'p':
-					linearizationMethod = TreeLinearizationMethod.PREORDER;
+					method = TreeLinearizationMethod.PREORDER;
 					break;
 
 				case 'i':
-					linearizationMethod = TreeLinearizationMethod.INORDER;
+					method = TreeLinearizationMethod.INORDER;
 					break;
 
 				case 'o':
-					linearizationMethod = TreeLinearizationMethod.POSTORDER;
+					method = TreeLinearizationMethod.POSTORDER;
 					break;
 
 				default:
 					System.out.println("ERROR: Unknown command.");
 			}
 
-			if (linearizationMethod != null) {
-				tree.traverse(linearizationMethod, (element) -> {
+			if (method != null) {
+				tree.traverse(method, (element) -> {
 					System.out.println("Node: " + element);
 					return true;
 				});
@@ -72,18 +72,18 @@ public class BinarySearchTest {
 	 *            Unused CLI args
 	 */
 	public static void main(String[] args) {
-		Scanner inputSource = new Scanner(System.in);
+		Scanner input = new Scanner(System.in);
 
 		System.out.println("Binary Tree Constructor/Searcher");
 
 		char command = ' ';
 
-		BinarySearchTree<Character> searchTree = new BinarySearchTree<>(
+		BinarySearchTree<Character> tree = new BinarySearchTree<>(
 				(o1, o2) -> o1 - o2);
 
 		while (command != 'e') {
 			System.out.print("Enter a command (m for help): ");
-			command = inputSource.nextLine().charAt(0);
+			command = input.nextLine().charAt(0);
 
 			switch (command) {
 				case 'm':
@@ -106,39 +106,39 @@ public class BinarySearchTest {
 				case 'a':
 					System.out.print(
 							"Enter the letter to add to the binary tree: ");
-					command = inputSource.nextLine().charAt(0);
+					command = input.nextLine().charAt(0);
 
-					searchTree.addNode(command);
+					tree.addNode(command);
 					break;
 
 				case 'r':
 					System.out.print(
 							"Enter the letter to add to the binary tree: ");
-					command = inputSource.nextLine().charAt(0);
+					command = input.nextLine().charAt(0);
 
-					searchTree.deleteNode(command);
+					tree.deleteNode(command);
 					break;
 
 				case 'd':
-					displayTree(searchTree, inputSource);
+					display(tree, input);
 					break;
 
 				case 'f':
 					System.out.print(
 							"Enter the letter to add to the binary tree: ");
-					command = inputSource.nextLine().charAt(0);
+					command = input.nextLine().charAt(0);
 
 					System.out.println("Node " + command + " was "
-							+ (searchTree.isInTree(command) ? "" : "not ")
+							+ (tree.isInTree(command) ? "" : "not ")
 							+ "found");
 					break;
 
 				case 't':
-					searchTree.trim();
+					tree.trim();
 					break;
 
 				case 'b':
-					searchTree.balance();
+					tree.balance();
 					break;
 
 				default:
@@ -146,6 +146,6 @@ public class BinarySearchTest {
 			}
 		}
 
-		inputSource.close();
+		input.close();
 	}
 }
