@@ -2,6 +2,7 @@ package bjc.utils.funcutils;
 
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.Iterator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -59,13 +60,20 @@ public class ListUtils {
 		} else if (input.getSize() == 1) {
 			return input.first();
 		} else {
-			return input.reduceAux("", 
-					(currentString, state) -> {
-						return state + currentString + seperator;
-					},
-					(strang) -> {
-						return strang.substring(0, strang.length() - seperator.length());
-					});
+			StringBuilder state = new StringBuilder();
+
+			Iterator<String> itr = input.toIterable().iterator();
+			String tok = "";
+
+			for(int i = 1; itr.hasNext(); tok = itr.next()) {
+				state.append(tok);
+
+				if(i != input.getSize()) {
+					state.append(seperator);
+				}
+			}
+
+			return state.toString();
 		}
 	}
 
@@ -87,17 +95,15 @@ public class ListUtils {
 			throw new NullPointerException("Set of operators must not be null");
 		}
 
-		IHolder<IList<String>> returned = new Identity<>(input);
+		IList<String> returned = input;
 
-		operators.forEach((operator) -> {
-			returned.transform((old) -> {
-				return old.flatMap((token) -> {
-					return operator.merge(new TokenDeaffixer(token));
-				});
+		for(IPair<String, String> op : operators) {
+			returned = returned.flatMap(token -> {
+				return op.merge(new TokenDeaffixer(token));
 			});
-		});
+		}
 
-		return returned.unwrap((list) -> list);
+		return returned;
 	}
 
 	/**
@@ -121,10 +127,14 @@ public class ListUtils {
 		IList<E> selected = new FunctionalList<>(new ArrayList<>(number));
 
 		int total = list.getSize();
+		
+		Iterator<E> itr = list.toIterable().iterator();
+		E element = null;
 
-		list.forEachIndexed((index, element) -> {
+		for(int index = 0; itr.hasNext(); element = itr.next()) {
 			int winningChance = number - selected.getSize();
 			// n - m
+
 			int totalChance = total - (index - 1);
 			// N - t
 
@@ -132,7 +142,7 @@ public class ListUtils {
 			if (NumberUtils.isProbable(winningChance, totalChance, rng)) {
 				selected.add(element);
 			}
-		});
+		}
 
 		return selected;
 	}
@@ -198,29 +208,18 @@ public class ListUtils {
 		IList<IList<E>> returned = new FunctionalList<>();
 
 		/*
-		 * List that holds current partition
-		 */
-		IHolder<IList<E>> current = new Identity<>(new FunctionalList<>());
-
-		/*
 		 * List that holds elements rejected during current pass
 		 */
 		IList<E> rejected = new FunctionalList<>();
 
-		/*
-		 * The effective number of elements in the current partitition
-		 */
-		IHolder<Integer> currentSize = new Identity<>(0);
+		GroupPartIteration it = new GroupPartIteration<>(returned, rejected, partitionSize, counter);
 
 		/*
 		 * Run up to a certain number of passes
 		 */
 		for (int numberOfIterations = 0; numberOfIterations < MAX_NTRIESPART
 				&& !rejected.isEmpty(); numberOfIterations++) {
-			input.forEach(new GroupPartIteration<>(returned,
-					current, rejected,
-					currentSize, partitionSize,
-					counter));
+			input.forEach(it);
 
 			if (rejected.isEmpty()) {
 				// Nothing was rejected, so we're done
@@ -235,7 +234,7 @@ public class ListUtils {
 						+ "\nThe following elements were not partitioned: "
 						+ rejected.toString()
 						+ "\nCurrent group in formation: "
-						+ current.unwrap((vl) -> vl.toString())
+						+ it.currentPartition.toString()
 						+ "\nPreviously formed groups: "
 						+ returned.toString());
 	}
@@ -254,7 +253,9 @@ public class ListUtils {
 		IList<E> returned = new FunctionalList<>();
 
 		for (IList<E> list : lists) {
-			list.forEach(returned::add);
+			for(E itm : list.toIterable()) {
+				returned.add(itm);
+			}
 		}
 
 		return returned;
@@ -280,29 +281,31 @@ public class ListUtils {
 	public static <E> IList<E> padList(IList<E> list,
 			Function<E, Integer> counter, int size,
 			Supplier<E> padder) {
-		IHolder<Integer> count = new Identity<>(0);
+		int count = 0;
 
-		IList<E> returned = list.map((elm) -> {
-			count.map((val) -> val + counter.apply(elm));
+		IList<E> returned = new FunctionalList<>();
+		
+		for(E itm : list.toIterable()) {
+			count += counter.apply(itm);
 
-			return elm;
-		});
+			returned.add(itm);
+		}
 
-		if (count.unwrap((val) -> val % size != 0)) {
+		if ((count % size) != 0) {
 			// We need to pad
-			int needed = count.unwrap((val) -> val % size);
+			int needed = count % size;
 			int threshold = 0;
 
 			while (needed > 0 && threshold <= MAX_NTRIESPART) {
 				E val = padder.get();
-				int count = counter.apply(val);
+				int newCount = counter.apply(val);
 
-				if (count <= needed) {
+				if (newCount <= needed) {
 					returned.add(val);
 
 					threshold = 0;
 
-					needed -= count;
+					needed -= newCount;
 				} else {
 					threshold += 1;
 				}
@@ -340,16 +343,14 @@ public class ListUtils {
 			throw new NullPointerException("Set of operators must not be null");
 		}
 
-		IHolder<IList<String>> returned = new Identity<>(input);
+		IList<String> returned = input;
 
-		operators.forEach((operator) -> {
-			returned.transform((oldReturn) -> {
-				return oldReturn.flatMap((token) -> {
-					return operator.merge(new TokenSplitter(token));
-				});
+		for(IPair<String, String> op : operators) {
+			returned = returned.flatMap(token -> {
+				return op.merge(new TokenSplitter(token));
 			});
-		});
+		}
 
-		return returned.getValue();
+		return returned;
 	}
 }

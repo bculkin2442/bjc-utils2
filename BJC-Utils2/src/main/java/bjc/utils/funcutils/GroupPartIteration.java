@@ -18,45 +18,44 @@ import bjc.utils.funcdata.IList;
 final class GroupPartIteration<E> implements Consumer<E> {
 	private IList<IList<E>>			returnedList;
 
-	private IHolder<IList<E>>		currentPartition;
+	public IList<E>		currentPartition;
 	private IList<E>				rejectedItems;
 
-	private IHolder<Integer>		numberInCurrentPartition;
+	private int						numberInCurrentPartition;
 	private int						numberPerPartition;
 
 	private Function<E, Integer>	elementCounter;
 
-	public GroupPartIteration(IList<IList<E>> returned,
-			IHolder<IList<E>> currPart, IList<E> rejects,
-			IHolder<Integer> numInCurrPart, int nPerPart,
-			Function<E, Integer> eleCount) {
+	public GroupPartIteration(IList<IList<E>> returned, IList<E> rejects,
+			int nPerPart, Function<E, Integer> eleCount) {
 		this.returnedList = returned;
-		this.currentPartition = currPart;
 		this.rejectedItems = rejects;
-		this.numberInCurrentPartition = numInCurrPart;
 		this.numberPerPartition = nPerPart;
 		this.elementCounter = eleCount;
+
+		this.currentPartition = new FunctionalList<>();
+		this.numberInCurrentPartition = 0;
 	}
 
 	@Override
 	public void accept(E value) {
-		if (numberInCurrentPartition.unwrap((number) -> number >= numberPerPartition)) {
-			returnedList.add(currentPartition.unwrap((partition) -> partition));
+		boolean shouldStartPartition = numberInCurrentPartition >= numberPerPartition;
 
-			currentPartition.transform((partition) -> new FunctionalList<>());
-			numberInCurrentPartition.transform((number) -> 0);
+		if (shouldStartPartition) {
+			returnedList.add(currentPartition);
+
+			currentPartition = new FunctionalList<>();
+			numberInCurrentPartition = 0;
 		} else {
 			int currentElementCount = elementCounter.apply(value);
 
-			boolean shouldReject = numberInCurrentPartition.unwrap((number) -> {
-					return (number + currentElementCount) >= numberPerPartition;
-			});
+			boolean shouldReject = (numberInCurrentPartition + currentElementCount) >= numberPerPartition;
 			
 			if (shouldReject) {
 				rejectedItems.add(value);
 			} else {
-				currentPartition.unwrap((partition) -> partition.add(value));
-				numberInCurrentPartition.transform((number) -> number + currentElementCount);
+				currentPartition.add(value);
+				numberInCurrentPartition += currentElementCount;
 			}
 		}
 	}

@@ -135,7 +135,7 @@ public class AdjacencyMap<T> {
 			IMap<T, Integer> row = new FunctionalMap<>();
 
 			vertices.forEach(target -> {
-				row.put(target 0);
+				row.put(target, 0);
 			});
 
 			adjacency.put(vertex, row);
@@ -173,7 +173,7 @@ public class AdjacencyMap<T> {
 	 * @param weight
 	 *            The weight of the edge
 	 */
-	public void setWeight(T source, T target int weight) {
+	public void setWeight(T source, T target, int weight) {
 		if (source == null) {
 			throw new NullPointerException(
 					"Source vertex must not be null");
@@ -185,12 +185,12 @@ public class AdjacencyMap<T> {
 		if (!adjacency.containsKey(source)) {
 			throw new IllegalArgumentException("Source vertex "
 					+ source + " isn't present in map");
-		} else if (!adjacency.containsKey(target) {
+		} else if (!adjacency.containsKey(target)) {
 			throw new IllegalArgumentException("Target vertex "
 					+ target+ " isn't present in map");
 		}
 
-		adjacency.get(source).put(target weight);
+		adjacency.get(source).put(target, weight);
 	}
 
 	/**

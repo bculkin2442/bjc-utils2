@@ -30,9 +30,9 @@ public class SimpleSpinnerPanel extends JPanel {
 
 		JLabel inputLabel = new JLabel(label);
 
-		input = new JSpinner(model);
+		inputValue = new JSpinner(model);
 
 		add(inputLabel, BorderLayout.LINE_START);
-		add(input, BorderLayout.CENTER);
+		add(inputValue, BorderLayout.CENTER);
 	}
 }
