@@ -409,6 +409,7 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 
 	@Override
 	public void sort(Comparator<E> comparator) {
+		// sb.deleteCharAt(sb.length() - 2);
 		Collections.sort(wrapped, comparator);
 	}
 
@@ -429,17 +430,29 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 
 	@Override
 	public String toString() {
+		int lSize = getSize();
+
+		if(lSize == 0) return "()";
+
 		StringBuilder sb = new StringBuilder("(");
+		Iterator<E> itr = toIterable().iterator();
+		E itm = itr.next();
 
-		// Append the string form of each element
-		forEach(strang -> sb.append(strang + ", "));
+		if(lSize == 1) {
+			return "(" + itm + ")";
+		}
 
-		// Remove trailing space and comma
-		sb.deleteCharAt(sb.length() - 1);
-		// sb.deleteCharAt(sb.length() - 2);
+		for(int i = 0; itr.hasNext(); itm = itr.next()) {
+			sb.append(itm.toString());
+
+			if(i < lSize-1) {
+				sb.append(", ");
+			}
+
+			i += 1;
+		}
 
 		sb.append(")");
-
 		return sb.toString();
 	}
 }

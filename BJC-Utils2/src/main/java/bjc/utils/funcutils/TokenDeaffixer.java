@@ -1,5 +1,6 @@
 package bjc.utils.funcutils;
 
+import java.util.Iterator;
 import java.util.function.BiFunction;
 
 import bjc.utils.funcdata.FunctionalList;
@@ -24,9 +25,27 @@ final class TokenDeaffixer
 		if (StringUtils.containsOnly(token, operatorRegex)) {
 			return new FunctionalList<>(token);
 		} else if (token.startsWith(operatorName)) {
+			if(token.endsWith(operatorName)) {
+				return new FunctionalList<>(operatorName, token.split(operatorRegex)[1], operatorName);
+			}
+
 			return new FunctionalList<>(operatorName, token.split(operatorRegex)[1]);
 		} else if (token.endsWith(operatorName)) {
 			return new FunctionalList<>(token.split(operatorRegex)[0], operatorName);
+		} else if (token.contains(operatorName)) {
+			String[] tokenParts = token.split(operatorRegex);
+
+			IList<String> returned = new FunctionalList<>();
+			
+			for(int i = 0; i < tokenParts.length; i++) {
+				returned.add(tokenParts[i]);
+
+				if(i < tokenParts.length - 1) {
+					returned.add(operatorName);
+				}
+			}
+
+			return returned;
 		} else {
 			return new FunctionalList<>(token);
 		}
