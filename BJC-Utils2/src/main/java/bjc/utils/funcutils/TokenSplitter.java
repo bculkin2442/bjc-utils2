@@ -1,5 +1,6 @@
 package bjc.utils.funcutils;
 
+import java.util.Iterator;
 import java.util.function.BiFunction;
 
 import bjc.utils.funcdata.FunctionalList;
@@ -28,22 +29,21 @@ final class TokenSplitter
 				return new FunctionalList<>(tokenToSplit);
 			}
 
-			IList<String> splitTokens = new FunctionalList<>(
-					tokenToSplit.split(operatorRegex));
-
+			IList<String> splitTokens = new FunctionalList<>(tokenToSplit.split(operatorRegex));
 			IList<String> result = new FunctionalList<>();
 
+			Iterator<String> itr = splitTokens.toIterable().iterator();
 			int tokenExpansionSize = splitTokens.getSize();
 
-			splitTokens.forEachIndexed((tokenIndex, token) -> {
+			String elm = itr.next();
 
-				if (tokenIndex != tokenExpansionSize && tokenIndex != 0) {
+			for(int i = 0; itr.hasNext(); elm = itr.next()) {
+				result.add(elm);
+
+				if(i != tokenExpansionSize) {
 					result.add(operatorName);
-					result.add(token);
-				} else {
-					result.add(token);
 				}
-			});
+			}
 
 			return result;
 		}
