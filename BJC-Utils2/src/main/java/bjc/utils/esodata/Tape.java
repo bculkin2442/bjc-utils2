@@ -14,6 +14,36 @@ public class Tape<T> {
 		return backing.get(pos);
 	}
 
+	public int size() {
+		return backing.size();
+	}
+
+	public void item(T itm) {
+		backing.set(pos, itm);
+	}
+
+	public void append(T itm) {
+		backing.add(itm);
+	}
+
+	// Add an item before the current
+	public void insert(T itm) {
+		backing.add(pos, itm);
+	}
+
+	public T remove() {
+		if(pos != 0) pos -= 1;
+		return backing.remove(pos);
+	}
+
+	public void first() {
+		pos = 0;
+	}
+
+	public void last() {
+		pos = backing.size() - 1;
+	}
+
 	public boolean left() {
 		if(pos == 0) return false;
 		
