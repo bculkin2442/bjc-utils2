@@ -437,13 +437,14 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 		StringBuilder sb = new StringBuilder("(");
 		Iterator<E> itr = toIterable().iterator();
 		E itm = itr.next();
+		int i = 0;
 
 		if(lSize == 1) {
 			return "(" + itm + ")";
 		}
 
-		for(int i = 0; itr.hasNext(); itm = itr.next()) {
-			sb.append(itm.toString());
+		for(E item : toIterable()) {
+			sb.append(item.toString());
 
 			if(i < lSize-1) {
 				sb.append(", ");

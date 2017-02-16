@@ -62,15 +62,17 @@ public class ListUtils {
 		} else {
 			StringBuilder state = new StringBuilder();
 
-			Iterator<String> itr = input.toIterable().iterator();
 			String tok = "";
 
-			for(int i = 1; itr.hasNext(); tok = itr.next()) {
-				state.append(tok);
+			int i = 1;
+			for(String itm : input.toIterable()) {
+				state.append(itm);
 
 				if(i != input.getSize()) {
 					state.append(seperator);
 				}
+
+				i += 1;
 			}
 
 			return state.toString();
