@@ -1,6 +1,7 @@
 package bjc.utils.funcdata;
 
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -18,7 +19,7 @@ import bjc.utils.data.IPair;
  * @param <ContainedType>
  *            The type in this list
  */
-public interface IList<ContainedType> {
+public interface IList<ContainedType> extends Iterable<ContainedType> {
 	/**
 	 * Add an item to this list
 	 * 
@@ -72,7 +73,7 @@ public interface IList<ContainedType> {
 	 *            The collector to use for reduction
 	 * @return The reduced list
 	 */
-	public default <StateType, ReducedType> ReducedType collect(
+	default <StateType, ReducedType> ReducedType collect(
 			Collector<ContainedType, StateType, ReducedType> collector) {
 		BiConsumer<StateType, ContainedType> accumulator = collector.accumulator();
 
@@ -147,7 +148,7 @@ public interface IList<ContainedType> {
 	 * @param action
 	 *            The action to apply to each member of the list.
 	 */
-	void forEach(Consumer<ContainedType> action);
+	void forEach(Consumer<? super ContainedType> action);
 
 	/**
 	 * Apply a given function to each element in the list and its index.
@@ -334,7 +335,7 @@ public interface IList<ContainedType> {
 	 * 
 	 * @return The list without the first element
 	 */
-	public IList<ContainedType> tail();
+	IList<ContainedType> tail();
 
 	/**
 	 * Convert this list into an array
@@ -343,12 +344,17 @@ public interface IList<ContainedType> {
 	 *            The type of array to return
 	 * @return The list, as an array
 	 */
-	public ContainedType[] toArray(ContainedType[] type);
+	ContainedType[] toArray(ContainedType[] type);
 
 	/**
 	 * Convert the list into a Iterable
 	 * 
 	 * @return An iterable view onto the list
 	 */
-	public Iterable<ContainedType> toIterable();
+	Iterable<ContainedType> toIterable();
+
+	@Override
+	default Iterator<ContainedType> iterator() {
+		return toIterable().iterator();
+	}
 }

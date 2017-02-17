@@ -33,7 +33,7 @@ public class TapeChanger<T> implements Tape<T> {
 		tapes.insertBefore(current);
 
 		for(Tape<T> tp : others) {
-			tapes.insertAfter(others);
+			tapes.insertAfter(tp);
 			tapes.right();
 		}
 
@@ -47,7 +47,7 @@ public class TapeChanger<T> implements Tape<T> {
 	 * @return The item the tape is on.
 	 */
 	public T item() {
-		if(currentTape == null) return false;
+		if(currentTape == null) return null;
 
 		return currentTape.item();
 	}
@@ -176,7 +176,7 @@ public class TapeChanger<T> implements Tape<T> {
 	 * @return Whether the cursor was moved right.
 	 */
 	public boolean right(int amt) {
-		if(currentTape == null) return;
+		if(currentTape == null) return false;
 
 		return currentTape.right(amt);
 	}
@@ -198,7 +198,7 @@ public class TapeChanger<T> implements Tape<T> {
 
 	@Override
 	public boolean isDoubleSided() {
-		if(currentTape == null) return;
+		if(currentTape == null) return false;
 
 		return currentTape.isDoubleSided();
 	}
