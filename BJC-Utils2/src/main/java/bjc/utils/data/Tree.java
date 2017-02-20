@@ -300,4 +300,29 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 			action.accept(data);
 		}
 	}
+
+	public boolean equals(Object other) {
+		if(!(other instanceof Tree)) return false;
+
+		Tree<ContainedType> otr = (Tree<ContainedType>) other;
+
+		if(!otr.data.equals(data)) return false;
+
+		if(children == null && otr.children == null) return true;
+
+		if(children == null && otr.children != null) return false;
+		if(children != null && otr.children == null) return false;
+
+		if(children.getSize() != otr.children.getSize()) return false;
+
+		int childNo = 0;
+
+		for(ITree<ContainedType> child : children) {
+			if(!otr.children.getByIndex(childNo).equals(child)) return false;
+
+			childNo += 1;
+		}
+
+		return true;
+	}
 }

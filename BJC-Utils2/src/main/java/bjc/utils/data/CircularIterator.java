@@ -6,9 +6,19 @@ public class CircularIterator<E> implements Iterator<E> {
 	private Iterable<E> source;
 	private Iterator<E> curr;
 
-	public CircularIterator(Iterable<E> src) {
+	private E curElm;
+
+	private boolean doCircle;
+
+	public CircularIterator(Iterable<E> src, boolean circ) {
 		source = src;
 		curr = source.iterator();
+
+		doCircle = circ;
+	}
+
+	public CircularIterator(Iterable<E> src) {
+		this(src, true);
 	}
 
 	public boolean hasNext() {
@@ -17,12 +27,17 @@ public class CircularIterator<E> implements Iterator<E> {
 	}
 
 	public E next() {
-		if(curr.hasNext()) {
-			return curr.next();
-		} else {
-			curr = source.iterator();
-			return curr.next();
+		if(!curr.hasNext()) {
+			if(doCircle) {
+				curr = source.iterator();
+			} else {
+				return curElm;
+			}
 		}
+
+		curElm = curr.next();
+
+		return curElm;
 	}
 
 	public void remove() {
