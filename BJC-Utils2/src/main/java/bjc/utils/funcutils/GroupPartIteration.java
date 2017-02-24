@@ -3,7 +3,6 @@ package bjc.utils.funcutils;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import bjc.utils.data.IHolder;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IList;
 

@@ -206,7 +206,6 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 		return returned;
 	}
 
-	@Override
 	public void forEach(Consumer<E> action) {
 		if (action == null) {
 			throw new NullPointerException("Action is null");

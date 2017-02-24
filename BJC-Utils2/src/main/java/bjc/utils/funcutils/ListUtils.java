@@ -6,9 +6,7 @@ import java.util.Iterator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import bjc.utils.data.IHolder;
 import bjc.utils.data.IPair;
-import bjc.utils.data.Identity;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IList;
 
@@ -61,8 +59,6 @@ public class ListUtils {
 			return input.first();
 		} else {
 			StringBuilder state = new StringBuilder();
-
-			String tok = "";
 
 			int i = 1;
 			for(String itm : input.toIterable()) {
@@ -214,7 +210,7 @@ public class ListUtils {
 		 */
 		IList<E> rejected = new FunctionalList<>();
 
-		GroupPartIteration it = new GroupPartIteration<>(returned, rejected, partitionSize, counter);
+		GroupPartIteration<E> it = new GroupPartIteration<>(returned, rejected, partitionSize, counter);
 
 		/*
 		 * Run up to a certain number of passes

@@ -1,7 +1,5 @@
 package bjc.utils.esodata;
 
-import java.util.ArrayList;
-
 /**
  * Double-sided tape is essentially two tapes stuck together with a shared cursor. 
  *

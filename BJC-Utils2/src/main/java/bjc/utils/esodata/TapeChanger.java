@@ -27,6 +27,7 @@ public class TapeChanger<T> implements Tape<T> {
 	 *
 	 * @param taps The tapes to put in this tape changer.
 	 */
+	@SafeVarargs
 	public TapeChanger(Tape<T> current, Tape<T>... others) {
 		this();
 

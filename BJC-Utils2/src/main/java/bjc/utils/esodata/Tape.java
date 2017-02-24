@@ -1,7 +1,5 @@
 package bjc.utils.esodata;
 
-import java.util.ArrayList;
-
 /**
  * Interface for something that acts like a tape.
  *

@@ -1,6 +1,5 @@
 package bjc.utils.funcutils;
 
-import java.util.Iterator;
 import java.util.function.BiFunction;
 
 import bjc.utils.funcdata.FunctionalList;

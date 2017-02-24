@@ -131,9 +131,9 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 		if (hasChildren) {
 			Function<IList<NewType>, NewType> nodeTransformer = nodeCollapser.apply(data);
 
+			@SuppressWarnings("unchecked")
 			IList<NewType> collapsedChildren = (IList<NewType>) children.map((child) -> {
-				return child.collapse(leafTransform, nodeCollapser,
-					(subTreeVal) -> subTreeVal);
+				return child.collapse(leafTransform, nodeCollapser,	(subTreeVal) -> subTreeVal);
 			});
 
 			return nodeTransformer.apply(collapsedChildren);
@@ -302,8 +302,9 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	}
 
 	public boolean equals(Object other) {
-		if(!(other instanceof Tree)) return false;
+		if(!(other instanceof Tree<?>)) return false;
 
+		@SuppressWarnings("unchecked")
 		Tree<ContainedType> otr = (Tree<ContainedType>) other;
 
 		if(!otr.data.equals(data)) return false;
