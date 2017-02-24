@@ -8,6 +8,8 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static bjc.utils.data.TopDownTransformResult.*;
+
 public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<ContainedType>> {
 	private Function<ContainedType, TopDownTransformResult> picker;
 	private BiFunction<ITree<ContainedType>, 
@@ -83,6 +85,9 @@ public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<C
 				case TRANSFORM:
 					done = true;
 					return transform.apply(preParent, this::addYield);
+				case RTRANSFORM:
+					preParent = transform.apply(preParent, this::addYield);
+					break;
 				case PUSHDOWN:
 					if(preParent.getChildrenCount() != 0) {
 						for(int i = 0; i < preParent.getChildrenCount(); i++) {
@@ -115,7 +120,7 @@ public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<C
 					throw new IllegalArgumentException("Unknown result type " + res);
 			}
 
-			initial = false;
+			if(res != RTRANSFORM) initial = false;
 		}
 
 		if(curYield != null) {

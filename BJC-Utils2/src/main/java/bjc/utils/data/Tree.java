@@ -204,6 +204,8 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 				return this;
 			case TRANSFORM:
 				return transformer.apply(this);
+			case RTRANSFORM:
+				return transformer.apply(this).topDownTransform(transformPicker, transformer);
 			case PUSHDOWN:
 				result = new Tree<>(data);
 

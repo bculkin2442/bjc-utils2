@@ -16,6 +16,10 @@ public enum TopDownTransformResult {
 	 */
 	TRANSFORM,
 	/**
+	 * Transform this node, then do a top-down transform on the result
+	 */
+	RTRANSFORM,
+	/**
 	 * Ignore this node, and traverse its children
 	 */
 	PASSTHROUGH,
