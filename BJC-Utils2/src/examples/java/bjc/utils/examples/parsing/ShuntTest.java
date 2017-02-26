@@ -26,10 +26,8 @@ public class ShuntTest {
 		String line = inputSource.nextLine();
 
 		ShuntingYard<String> yard = new ShuntingYard<>(true);
-
-		IList<String> shuntedTokens = yard
-				.postfix(new FunctionalStringTokenizer(line)
-						.toList((strang) -> strang), (strang) -> strang);
+		IList<String> preTokens = new FunctionalStringTokenizer(line).toList(strang -> strang);
+		IList<String> shuntedTokens = yard.postfix(preTokens, strang -> strang);
 
 		System.out.println(shuntedTokens.toString());
 

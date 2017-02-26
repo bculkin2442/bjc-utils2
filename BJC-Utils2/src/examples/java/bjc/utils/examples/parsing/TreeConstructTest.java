@@ -26,8 +26,7 @@ import bjc.utils.parserutils.TreeConstructor;
  *
  */
 public class TreeConstructTest {
-	private static final class OperatorPicker
-			implements Predicate<String> {
+	private static final class OperatorPicker implements Predicate<String> {
 		@Override
 		public boolean test(String token) {
 			if (StringUtils.containsOnly(token, "\\[")) {
@@ -37,13 +36,13 @@ public class TreeConstructTest {
 			}
 
 			switch (token) {
-				case "+":
-				case "-":
-				case "*":
-				case "/":
-					return true;
-				default:
-					return false;
+			case "+":
+			case "-":
+			case "*":
+			case "/":
+				return true;
+			default:
+				return false;
 			}
 		}
 	}
@@ -61,8 +60,7 @@ public class TreeConstructTest {
 		System.out.print("Enter a expression to parse: ");
 		String line = inputSource.nextLine();
 
-		IList<String> tokens = new FunctionalStringTokenizer(line)
-				.toList();
+		IList<String> tokens = new FunctionalStringTokenizer(line).toList();
 
 		ShuntingYard<String> yard = new ShuntingYard<>(true);
 
@@ -75,23 +73,18 @@ public class TreeConstructTest {
 		ops.add(new Pair<>(":=", ":="));
 		ops.add(new Pair<>("=>", "=>"));
 
-		IList<String> semiExpandedTokens = ListUtils.splitTokens(tokens,
-				ops);
+		IList<String> semiExpandedTokens = ListUtils.splitTokens(tokens, ops);
 
 		ops = new LinkedList<>();
-
 		ops.add(new Pair<>("(", "\\("));
 		ops.add(new Pair<>(")", "\\)"));
 		ops.add(new Pair<>("[", "\\["));
 		ops.add(new Pair<>("]", "\\]"));
 
-		IList<String> fullyExpandedTokens = ListUtils
-				.deAffixTokens(semiExpandedTokens, ops);
-
+		IList<String> fullyExpandedTokens = ListUtils.deAffixTokens(semiExpandedTokens, ops);
 		fullyExpandedTokens.removeIf((strang) -> strang.equals(""));
 
-		IList<String> shuntedTokens = yard.postfix(fullyExpandedTokens,
-				(token) -> token);
+		IList<String> shuntedTokens = yard.postfix(fullyExpandedTokens, (token) -> token);
 
 		System.out.println("Shunted: " + shuntedTokens.toString());
 
@@ -105,8 +98,8 @@ public class TreeConstructTest {
 			return false;
 		};
 
-		IMap<String, Function<Deque<ITree<String>>,
-				ITree<String>>> operators = new FunctionalMap<>();
+		IMap<String, Function<Deque<ITree<String>>, ITree<String>>> operators =
+			new FunctionalMap<>();
 
 		operators.put("[", (queuedTrees) -> {
 			return null;
@@ -132,9 +125,9 @@ public class TreeConstructTest {
 			return arrayTree;
 		});
 
-		ITree<String> constructedTree = TreeConstructor.constructTree(
-				shuntedTokens, new OperatorPicker(), specialPicker,
-				operators::get);
+		ITree<String> constructedTree =
+			TreeConstructor.constructTree(shuntedTokens,
+					new OperatorPicker(), specialPicker, operators::get);
 
 		System.out.println("AST: " + constructedTree.toString());
 

@@ -15,8 +15,10 @@ public class DiabloItemGen {
 
 	private static void addCase(String ruleName, int probability,
 			String ruleParts) {
-		rules.addCase(ruleName, probability, FunctionalStringTokenizer
-				.fromString(ruleParts).toList(s -> s));
+		IList<String> parts = FunctionalStringTokenizer.fromString(ruleParts)
+			.toList(strang -> strang);
+
+		rules.addCase(ruleName, probability, parts);
 	}
 
 	private static void addInfixRules() {
@@ -36,7 +38,7 @@ public class DiabloItemGen {
 		addCase(rn, 10, "<infix>");
 		addCase(rn, 20, "<prefix> <infix>");
 		addCase(rn, 30, "<infix> <suffix>");
-		addCase(rn, 40, "<prefix> <infix> <suffix>");
+		addCase(rn, 40, "<prefix> <infix>  <suffix>");
 		addCase(rn, 50, "<prefix> <prefix> <infix>");
 		addCase(rn, 60, "<prefix> <prefix> <infix> <suffix>");
 	}
@@ -86,8 +88,7 @@ public class DiabloItemGen {
 			IList<String> ls = rules.generateListValues("<item>", " ");
 
 			StringBuilder sb = new StringBuilder();
-
-			ls.forEach(sp -> sb.append(sp));
+			ls.forEach(sb::append);
 
 			System.out.println(sb.toString().replaceAll("\\s+", " "));
 		}
