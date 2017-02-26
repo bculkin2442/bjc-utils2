@@ -24,6 +24,9 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	private boolean						hasChildren;
 	private int							childCount	= 0;
 
+	private int ID;
+	private static int nextID = 0;
+
 	/**
 	 * Create a new leaf node in a tree
 	 * 
@@ -34,6 +37,8 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 		data = leaf;
 
 		hasChildren = false;
+
+		ID = nextID++;
 	}
 
 	/**
@@ -45,9 +50,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	 *            A list of children for this node
 	 */
 	public Tree(ContainedType leaf, IList<ITree<ContainedType>> childrn) {
-		data = leaf;
-
-		hasChildren = true;
+		this(leaf);
 
 		childCount = childrn.getSize();
 
@@ -64,7 +67,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	 */
 	@SafeVarargs
 	public Tree(ContainedType leaf, ITree<ContainedType>... childrn) {
-		data = leaf;
+		this(leaf);
 
 		hasChildren = true;
 
@@ -143,17 +146,19 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	}
 
 	protected void internalToString(StringBuilder builder, int indentLevel, boolean initial) {
-		if (!initial) {
-			StringUtils.indentNLevels(builder, indentLevel);
+		for(int i = 0; i < indentLevel; i++) {
+			builder.append(">\t");
 		}
 
-		builder.append("Node: ");
+		builder.append("Node #");
+		builder.append(ID);
+		builder.append(": ");
 		builder.append(data == null ? "(null)" : data.toString());
 		builder.append("\n");
 
 		if (hasChildren) {
 			children.forEach((child) -> {
-				((Tree<ContainedType>) child).internalToString(builder, indentLevel + 2, false);
+				((Tree<ContainedType>) child).internalToString(builder, indentLevel+1, false);
 			});
 		}
 	}

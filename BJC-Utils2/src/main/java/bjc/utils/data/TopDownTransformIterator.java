@@ -58,8 +58,47 @@ public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<C
 		return !done;
 	}
 
+	public ITree<ContainedType> flushYields(ITree<ContainedType> val) {
+		if(curYield != null) {
+			toYield.add(new SingleIterator<>(val));
+
+			if(curYield.hasNext()) {
+				return curYield.next();
+			} else {
+				while(toYield.size() != 0 && !curYield.hasNext()) {
+					curYield = toYield.pop();
+				}
+
+				if(toYield.size() == 0 && !curYield.hasNext()) {
+					curYield = null;
+					return val;
+				} else {
+					return curYield.next();
+				}
+			}
+		} else {
+			return val;
+		}
+	}
+
 	public ITree<ContainedType> next() {
 		if(done) throw new NoSuchElementException();
+
+		if(curYield != null) {
+			if(curYield.hasNext()) {
+				return curYield.next();
+			} else {
+				while(toYield.size() != 0 && !curYield.hasNext()) {
+					curYield = toYield.pop();
+				}
+
+				if(toYield.size() == 0 && !curYield.hasNext()) {
+					curYield = null;
+				} else {
+					return curYield.next();
+				}
+			}
+		}
 
 		if(initial) {
 			TopDownTransformResult res = picker.apply(preParent.getHead());
@@ -77,17 +116,17 @@ public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<C
 						break;
 					} else {
 						done = true;
-						return postParent;
+						return flushYields(postParent);
 					}
 				case SKIP:
 					done = true;
-					return preParent;
+					return flushYields(preParent);
 				case TRANSFORM:
 					done = true;
-					return transform.apply(preParent, this::addYield);
+					return flushYields(transform.apply(preParent, this::addYield));
 				case RTRANSFORM:
 					preParent = transform.apply(preParent, this::addYield);
-					break;
+					return flushYields(preParent);
 				case PUSHDOWN:
 					if(preParent.getChildrenCount() != 0) {
 						for(int i = 0; i < preParent.getChildrenCount(); i++) {
@@ -98,7 +137,7 @@ public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<C
 						break;
 					} else {
 						done = true;
-						return transform.apply(new Tree<>(preParent.getHead()), this::addYield);
+						return flushYields(transform.apply(new Tree<>(preParent.getHead()), this::addYield));
 					}
 				case PULLUP:
 					ITree<ContainedType> intRes = transform.apply(preParent, this::addYield);
@@ -114,7 +153,7 @@ public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<C
 						break;
 					} else {
 						done = true;
-						return postParent;
+						return flushYields(postParent);
 					}
 				default:
 					throw new IllegalArgumentException("Unknown result type " + res);
@@ -123,55 +162,47 @@ public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<C
 			if(res != RTRANSFORM) initial = false;
 		}
 
-		if(curYield != null) {
-			if(curYield.hasNext()) {
-				return curYield.next();
-			} else {
-				while(toYield.size() != 0 && !curYield.hasNext()) {
-					curYield = toYield.pop();
-				}
-
-				if(toYield.size() == 0 && !curYield.hasNext()) {
-					curYield = null;
-				}
-			}
-		}
 
 		if(curChild == null || !curChild.hasNext()) {
 			if(preChildren.size() != 0) {
 				curChild = new TopDownTransformIterator<>(picker, transform, preChildren.pop());
 				
 				ITree<ContainedType> res = curChild.next();
+				System.out.println("\t\tTRACE: adding node " + res + " to children");
 				postChildren.add(res);
 
-				return res;
+				return flushYields(res);
 			} else {
 				ITree<ContainedType> res = null;
 
 				if(postParent == null) {
 					res = new Tree<>(preParent.getHead());
 
+					System.out.println("\t\tTRACE: adding nodes " + postChildren + " to " + res);
+
 					for(ITree<ContainedType> child : postChildren) {
 						res.addChild(child);
 					}
-
-					res = transform.apply(res, this::addYield);
+					
+					// res = transform.apply(res, this::addYield);
 				} else {
 					res = postParent;
 
+					System.out.println("\t\tTRACE: adding nodes " + postChildren + " to " + res);
 					for(ITree<ContainedType> child : postChildren) {
 						res.addChild(child);
 					}
 				}
 
 				done = true;
-				return res;
+				return flushYields(res);
 			}
 		} else {
 			ITree<ContainedType> res = curChild.next();
+			System.out.println("\t\tTRACE: adding node " + res + " to children");
 			postChildren.add(res);
 
-			return res;
+			return flushYields(res);
 		}
 	}
 }
