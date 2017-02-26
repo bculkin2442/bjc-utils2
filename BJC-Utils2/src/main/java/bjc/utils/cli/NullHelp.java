@@ -7,7 +7,6 @@ package bjc.utils.cli;
  *
  */
 public class NullHelp implements ICommandHelp {
-
 	@Override
 	public String getDescription() {
 		return "No description provided";

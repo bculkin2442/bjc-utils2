@@ -29,8 +29,7 @@ public interface ICommandMode {
 	 *             if this mode doesn't support a custom prompt
 	 */
 	public default String getCustomPrompt() {
-		throw new UnsupportedOperationException(
-				"This mode doesn't support a custom prompt");
+		throw new UnsupportedOperationException("This mode doesn't support a custom prompt");
 	}
 
 	/**

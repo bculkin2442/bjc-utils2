@@ -8,8 +8,8 @@ package bjc.utils.cli;
  */
 public class GenericHelp implements ICommandHelp {
 	// The strings for this help topic
-	private String	summary;
-	private String	description;
+	private String summary;
+	private String description;
 
 	/**
 	 * Create a new help topic
@@ -22,8 +22,7 @@ public class GenericHelp implements ICommandHelp {
 	 */
 	public GenericHelp(String summary,  String description) {
 		if (summary == null) {
-			throw new NullPointerException(
-					"Help summary must be non-null");
+			throw new NullPointerException("Help summary must be non-null");
 		}
 
 		this.summary = summary;

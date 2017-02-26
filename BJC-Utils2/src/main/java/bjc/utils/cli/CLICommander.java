@@ -16,14 +16,14 @@ public class CLICommander {
 	/*
 	 * The streams used for input and normal/error output
 	 */
-	private InputStream		input;
+	private InputStream	input;
 	private OutputStream	output;
 	private OutputStream	error;
 
 	/*
 	 * The command mode to start execution in
 	 */
-	private ICommandMode	initialMode;
+	private ICommandMode initialMode;
 
 	/**
 	 * Create a new CLI interface powered by streams.
@@ -35,17 +35,13 @@ public class CLICommander {
 	 * @param error
 	 *            The stream to send error output to.
 	 */
-	public CLICommander(InputStream input, OutputStream output,
-			OutputStream error) {
+	public CLICommander(InputStream input, OutputStream output, OutputStream error) {
 		if (input == null) {
-			throw new NullPointerException(
-					"Input stream must not be null");
+			throw new NullPointerException("Input stream must not be null");
 		} else if (output == null) {
-			throw new NullPointerException(
-					"Output stream must not be null");
+			throw new NullPointerException("Output stream must not be null");
 		} else if (error == null) {
-			throw new NullPointerException(
-					"Error stream must not be null");
+			throw new NullPointerException("Error stream must not be null");
 		}
 
 		this.input = input;
@@ -95,21 +91,17 @@ public class CLICommander {
 			// Handle commands we can handle
 			if (currentMode.canHandle(currentLine)) {
 				String[] commandTokens = currentLine.split(" ");
-
 				String[] commandArgs = null;
 
 				// Parse args if they are present
 				if (commandTokens.length > 1) {
-					commandArgs = Arrays.copyOfRange(commandTokens, 1,
-							commandTokens.length);
+					commandArgs = Arrays.copyOfRange(commandTokens, 1, commandTokens.length);
 				}
 
 				// Process command
-				currentMode = currentMode.process(commandTokens[0],
-						commandArgs);
+				currentMode = currentMode. process(commandTokens[0], commandArgs);
 			} else {
-				errorOutput.print(
-						"Error: Unrecognized command " + currentLine);
+				errorOutput.print("Error: Unrecognized command " + currentLine);
 			}
 		}
 
@@ -124,8 +116,7 @@ public class CLICommander {
 	 */
 	public void setInitialCommandMode(ICommandMode initialMode) {
 		if (initialMode == null) {
-			throw new NullPointerException(
-					"Initial mode must be non-zero");
+			throw new NullPointerException("Initial mode must be non-zero");
 		}
 
 		this.initialMode = initialMode;
