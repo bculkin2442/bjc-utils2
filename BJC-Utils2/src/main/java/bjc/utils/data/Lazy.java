@@ -4,6 +4,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
+import bjc.utils.data.internals.BoundLazy;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IList;
 

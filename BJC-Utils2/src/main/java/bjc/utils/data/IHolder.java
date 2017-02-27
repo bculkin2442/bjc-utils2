@@ -4,6 +4,9 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
+import bjc.utils.data.internals.BoundListHolder;
+import bjc.utils.data.internals.WrappedLazy;
+import bjc.utils.data.internals.WrappedOption;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.theory.Functor;
 

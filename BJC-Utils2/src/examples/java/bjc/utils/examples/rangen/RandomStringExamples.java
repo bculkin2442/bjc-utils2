@@ -19,7 +19,7 @@ public class RandomStringExamples {
 
 		for (String strang : cases) {
 			IList<String> lst = FunctionalStringTokenizer.fromString(strang)
-				.toList(s -> s)
+				.toList(s -> s);
 
 			cses.add(lst);
 		}

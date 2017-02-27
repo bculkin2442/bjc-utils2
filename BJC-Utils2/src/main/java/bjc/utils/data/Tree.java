@@ -8,7 +8,6 @@ import java.util.function.UnaryOperator;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IList;
 import bjc.utils.funcdata.bst.TreeLinearizationMethod;
-import bjc.utils.funcutils.StringUtils;
 
 /**
  * A node in a homogenous tree.

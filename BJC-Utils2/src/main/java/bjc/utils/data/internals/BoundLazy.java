@@ -1,16 +1,18 @@
-package bjc.utils.data;
+package bjc.utils.data.internals;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
+import bjc.utils.data.IHolder;
+import bjc.utils.data.Lazy;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IList;
 
 /**
  * Implements a lazy holder that has been bound
  */
-class BoundLazy<OldType, BoundContainedType>
+public class BoundLazy<OldType, BoundContainedType>
 		implements IHolder<BoundContainedType> {
 	/*
 	 * The old value

@@ -1,14 +1,16 @@
-package bjc.utils.data;
+package bjc.utils.data.internals;
 
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
+import bjc.utils.data.IHolder;
+import bjc.utils.data.ListHolder;
 import bjc.utils.funcdata.IList;
 
 /*
  * Holds a list, converted into a holder
  */
-class BoundListHolder<ContainedType> implements IHolder<ContainedType> {
+public class BoundListHolder<ContainedType> implements IHolder<ContainedType> {
 	private IList<IHolder<ContainedType>> heldHolders;
 
 	public BoundListHolder(IList<IHolder<ContainedType>> toHold) {

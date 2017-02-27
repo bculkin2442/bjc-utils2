@@ -3,6 +3,7 @@ package bjc.utils.data;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
+import bjc.utils.data.internals.BoundListHolder;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IList;
 

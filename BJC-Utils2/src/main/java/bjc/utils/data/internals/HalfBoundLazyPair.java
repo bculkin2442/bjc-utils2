@@ -1,13 +1,18 @@
-package bjc.utils.data;
+package bjc.utils.data.internals;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import bjc.utils.data.IHolder;
+import bjc.utils.data.IPair;
+import bjc.utils.data.Identity;
+import bjc.utils.data.LazyPair;
+
 /*
  * A lazy pair, with only one side bound
  */
-class HalfBoundLazyPair<OldType, NewLeft, NewRight>
+public class HalfBoundLazyPair<OldType, NewLeft, NewRight>
 		implements IPair<NewLeft, NewRight> {
 	private Supplier<OldType>							oldSupplier;
 

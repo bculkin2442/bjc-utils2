@@ -4,6 +4,9 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import bjc.utils.data.internals.BoundLazyPair;
+import bjc.utils.data.internals.HalfBoundLazyPair;
+
 /**
  * A lazy implementation of a pair
  * 
