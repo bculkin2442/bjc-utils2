@@ -1,6 +1,10 @@
 package bjc.utils.esodata;
+
+import java.util.ArrayList;
 import java.util.Deque;
+import java.util.List;
 import java.util.LinkedList;
+import java.util.function.Consumer;
 
 /**
  * A stack, with support for combinators.
@@ -114,10 +118,10 @@ public class Stack<T> {
 	 * @param m The number of times to duplicate items.
 	 */
 	public void multidup(int n, int m) {
-		LinkedList<T> lst = new LinkedList<>();
+		List<T> lst = new ArrayList<>(n);
 
-		for(int i = 0; i < n; i++) {
-			lst.add(0, backing.pop());
+		for(int i = n; i > 0; i--) {
+			lst.set(i - 1, backing.pop());
 		}
 		
 		for(int i = 0; i < m; i++) {
@@ -150,12 +154,12 @@ public class Stack<T> {
 	 * @param m The number of times to duplicate items.
 	 */
 	public void multiover(int n, int m) {
-		LinkedList<T> lst = new LinkedList<>();
+		List<T> lst = new ArrayList<>(n);
 
 		T elm = backing.pop();
 
-		for(int i = 0; i < n; i++) {
-			lst.add(0, backing.pop());
+		for(int i = n; i > 0; i--) {
+			lst.set(i - 1, backing.pop());
 		}
 
 		for(T nelm : lst) {
@@ -260,5 +264,146 @@ public class Stack<T> {
 		backing.push(z);
 		backing.push(x);
 		backing.push(y);
+	}
+
+	/*
+	 * Dataflow Combinators
+	 */
+	/**
+	 * Hides the top n elements on the stack from cons.
+	 *
+	 * @param n The number of elements to hide.
+	 * @param cons The action to hide the elements from
+	 */
+	public void dip(int n, Consumer<Stack<T>> cons) {
+		List<T> elms = new ArrayList<>(n);
+
+		for(int i = n; i > 0; i--) {
+			elms.set(i - 1, backing.pop());
+		}
+
+		cons.accept(this);
+
+		for(T elm : elms) {
+			backing.push(elm);
+		}
+	}
+
+	/**
+	 * Hide the top element of the stack from cons.
+	 *
+	 * @param cons The action to hide the top from
+	 */
+	public void dip(Consumer<Stack<T>> cons) {
+		dip(1, cons);
+	}
+
+	/**
+	 * Copy the top n elements on the stack, replacing them once cons is
+	 * done.
+	 *
+	 * @param n The number of elements to copy.
+	 * @param cons The action to execute.
+	 */
+	public void keep(int n, Consumer<Stack<T>> cons) {
+		dup(n);
+		dip(n, cons);
+	}
+
+	/**
+	 * Apply all the actions in conses to the top n elements of the stack.
+	 *
+	 * @param n The number of elements to give to cons.
+	 * @param conses The actions to execute.
+	 */
+	public void multicleave(int n, List<Consumer<Stack<T>>> conses) {
+		List<T> elms = new ArrayList<>(n);
+
+		for(int i = n; i > 0; i--) {
+			elms.set(i - 1, backing.pop());
+		}
+
+		for(Consumer<Stack<T>> cons : conses) {
+			for(T elm : elms) {
+				backing.push(elm);
+			}
+
+			cons.accept(this);
+		}
+	}
+
+	/**
+	 * Apply all the actions in conses to the top element of the stack.
+	 *
+	 * @param conses The actions to execute.
+	 */
+	public void cleave(List<Consumer<Stack<T>>> conses) {
+		multicleave(1, conses);
+	}
+
+	/**
+	 * Apply every action in cons to n arguments.
+	 *
+	 * @param n The number of parameters each action takes.
+	 * @param conses The actions to execute.
+	 */
+	public void multispread(int n, List<Consumer<Stack<T>>> conses) {
+		List<List<T>> nelms = new ArrayList<>(conses.size());
+
+		for(int i = conses.size(); i > 0; i--) {
+			List<T> elms = new ArrayList<>(n);
+
+			for(int j = n; j > 0; j--) {
+				elms.set(j, backing.pop());
+			}
+
+			nelms.set(i, elms);
+		}
+
+		int i = 0;
+		for(List<T> elms : nelms) {
+			for(T elm : elms) {
+				backing.push(elm);
+			}
+
+			conses.get(i).accept(this);
+			i += 1;
+		}
+	}
+
+	/**
+	 * Apply the actions in cons to corresponding elements from the stack.
+	 *
+	 * @parma conses The actions to execute.
+	 */
+	public void spread(List<Consumer<Stack<T>>> conses) {
+		multispread(1, conses);
+	}
+
+	/**
+	 * Apply the action in cons to the first m groups of n arguments.
+	 *
+	 * @param n The number of arguments cons takes.
+	 * @param m The number of time to call cons.
+	 * @param cons The action to execute.
+	 */
+	public void multiapply(int n, int m, Consumer<Stack<T>> cons) {
+		List<Consumer<Stack<T>>> conses = new ArrayList<>(m);
+
+		for(int i = 0; i < m; i++) {
+			conses.add(cons);
+		}
+
+		multispread(n, conses);
+	}
+
+	/**
+	 * Apply cons n times to the corresponding elements in the stack.
+	 *
+	 * @param n The number of times to execute cons.
+	 * @param cons The action to execute.
+	 */
+	public void apply(int n, Consumer<Stack<T>> cons) {
+		multiapply(1, n, cons);
 	}
 }
