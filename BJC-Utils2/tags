@@ -15,33 +15,39 @@ BinarySearchTree	src/main/java/bjc/utils/funcdata/bst/BinarySearchTree.java	/^	p
 BinarySearchTree	src/main/java/bjc/utils/funcdata/bst/BinarySearchTree.java	/^public class BinarySearchTree<T> {$/;"	c
 BinarySearchTreeLeaf	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeLeaf.java	/^	public BinarySearchTreeLeaf(T element) {$/;"	m	class:BinarySearchTreeLeaf
 BinarySearchTreeLeaf	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeLeaf.java	/^public class BinarySearchTreeLeaf<T> implements ITreePart<T> {$/;"	c
-BinarySearchTreeNode	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeNode.java	/^	public BinarySearchTreeNode(T element, ITreePart<T> left,$/;"	m	class:BinarySearchTreeNode
+BinarySearchTreeNode	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeNode.java	/^	public BinarySearchTreeNode(T element, ITreePart<T> lft,$/;"	m	class:BinarySearchTreeNode
 BinarySearchTreeNode	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeNode.java	/^public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {$/;"	c
-BoundLazy	src/main/java/bjc/utils/data/BoundLazy.java	/^	public BoundLazy(Supplier<IHolder<OldType>> supp,$/;"	m	class:BoundLazy
-BoundLazy	src/main/java/bjc/utils/data/BoundLazy.java	/^class BoundLazy<OldType, BoundContainedType>$/;"	c
-BoundLazyPair	src/main/java/bjc/utils/data/BoundLazyPair.java	/^	public BoundLazyPair(Supplier<OldLeft> leftSupp,$/;"	m	class:BoundLazyPair
-BoundLazyPair	src/main/java/bjc/utils/data/BoundLazyPair.java	/^class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight>$/;"	c
-BoundListHolder	src/main/java/bjc/utils/data/BoundListHolder.java	/^	public BoundListHolder(IList<IHolder<ContainedType>> toHold) {$/;"	m	class:BoundListHolder
-BoundListHolder	src/main/java/bjc/utils/data/BoundListHolder.java	/^class BoundListHolder<ContainedType> implements IHolder<ContainedType> {$/;"	c
+BoundLazy	src/main/java/bjc/utils/data/internals/BoundLazy.java	/^	public BoundLazy(Supplier<IHolder<OldType>> supp,$/;"	m	class:BoundLazy
+BoundLazy	src/main/java/bjc/utils/data/internals/BoundLazy.java	/^public class BoundLazy<OldType, BoundContainedType>$/;"	c
+BoundLazyPair	src/main/java/bjc/utils/data/internals/BoundLazyPair.java	/^	public BoundLazyPair(Supplier<OldLeft> leftSupp,$/;"	m	class:BoundLazyPair
+BoundLazyPair	src/main/java/bjc/utils/data/internals/BoundLazyPair.java	/^public class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight>$/;"	c
+BoundListHolder	src/main/java/bjc/utils/data/internals/BoundListHolder.java	/^	public BoundListHolder(IList<IHolder<ContainedType>> toHold) {$/;"	m	class:BoundListHolder
+BoundListHolder	src/main/java/bjc/utils/data/internals/BoundListHolder.java	/^public class BoundListHolder<ContainedType> implements IHolder<ContainedType> {$/;"	c
 CLASS_LOGGER	src/main/java/bjc/utils/components/FileComponentRepository.java	/^	private static final Logger			CLASS_LOGGER	= Logger$/;"	f	class:FileComponentRepository	file:
-CLICommander	src/main/java/bjc/utils/cli/CLICommander.java	/^	public CLICommander(InputStream input, OutputStream output,$/;"	m	class:CLICommander
+CLICommander	src/main/java/bjc/utils/cli/CLICommander.java	/^	public CLICommander(InputStream input, OutputStream output, OutputStream error) {$/;"	m	class:CLICommander
 CLICommander	src/main/java/bjc/utils/cli/CLICommander.java	/^public class CLICommander {$/;"	c
+CircularIterator	src/main/java/bjc/utils/data/CircularIterator.java	/^	public CircularIterator(Iterable<E> src) {$/;"	m	class:CircularIterator
+CircularIterator	src/main/java/bjc/utils/data/CircularIterator.java	/^	public CircularIterator(Iterable<E> src, boolean circ) {$/;"	m	class:CircularIterator
+CircularIterator	src/main/java/bjc/utils/data/CircularIterator.java	/^public class CircularIterator<E> implements Iterator<E> {$/;"	c
 CollectorUtils	src/main/java/bjc/utils/funcutils/CollectorUtils.java	/^public class CollectorUtils {$/;"	c
 ComponentDescription	src/main/java/bjc/utils/components/ComponentDescription.java	/^	public ComponentDescription(String name, String author,$/;"	m	class:ComponentDescription
 ComponentDescription	src/main/java/bjc/utils/components/ComponentDescription.java	/^public class ComponentDescription implements IDescribedComponent {$/;"	c
 ComponentDescriptionFileParser	src/main/java/bjc/utils/components/ComponentDescriptionFileParser.java	/^public class ComponentDescriptionFileParser {$/;"	c
 ComponentDescriptionState	src/main/java/bjc/utils/components/ComponentDescriptionState.java	/^public class ComponentDescriptionState {$/;"	c
 CompoundCollector	src/main/java/bjc/utils/funcutils/CompoundCollector.java	/^	public CompoundCollector($/;"	m	class:CompoundCollector
-CompoundCollector	src/main/java/bjc/utils/funcutils/CompoundCollector.java	/^final class CompoundCollector<InitialType, AuxType1, AuxType2, FinalType1,$/;"	c
+CompoundCollector	src/main/java/bjc/utils/funcutils/CompoundCollector.java	/^final class CompoundCollector<InitialType, AuxType1, AuxType2, FinalType1, FinalType2>$/;"	c
 DIVIDE	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^		DIVIDE(4);$/;"	e	enum:ShuntingYard.Operator	file:
 DelegatingCommand	src/main/java/bjc/utils/cli/DelegatingCommand.java	/^	public DelegatingCommand(ICommand delegate) {$/;"	m	class:DelegatingCommand
 DelegatingCommand	src/main/java/bjc/utils/cli/DelegatingCommand.java	/^class DelegatingCommand implements ICommand {$/;"	c
 DiabloItemGen	src/examples/java/bjc/utils/examples/rangen/DiabloItemGen.java	/^public class DiabloItemGen {$/;"	c
 DirectedWalkFunction	src/main/java/bjc/utils/funcdata/bst/DirectedWalkFunction.java	/^public interface DirectedWalkFunction<T> {$/;"	i
 DirectedWalkResult	src/main/java/bjc/utils/funcdata/bst/DirectedWalkFunction.java	/^	public enum DirectedWalkResult {$/;"	g	interface:DirectedWalkFunction
-DropdownListPanel	src/main/java/bjc/utils/gui/panels/DropdownListPanel.java	/^	public <T> DropdownListPanel(String itemType,$/;"	m	class:DropdownListPanel
+DoubleTape	src/main/java/bjc/utils/esodata/DoubleTape.java	/^	public DoubleTape() {$/;"	m	class:DoubleTape
+DoubleTape	src/main/java/bjc/utils/esodata/DoubleTape.java	/^	public DoubleTape(boolean autoExtnd) {$/;"	m	class:DoubleTape
+DoubleTape	src/main/java/bjc/utils/esodata/DoubleTape.java	/^public class DoubleTape<T> implements Tape<T> {$/;"	c
+DropdownListPanel	src/main/java/bjc/utils/gui/panels/DropdownListPanel.java	/^	public <T> DropdownListPanel(String type,$/;"	m	class:DropdownListPanel
 DropdownListPanel	src/main/java/bjc/utils/gui/panels/DropdownListPanel.java	/^public class DropdownListPanel extends JPanel {$/;"	c
-Edge	src/main/java/bjc/utils/graph/Edge.java	/^	public Edge(T initialNode, T terminalNode, int distance) {$/;"	m	class:Edge
+Edge	src/main/java/bjc/utils/graph/Edge.java	/^	public Edge(T initial, T terminal, int distance) {$/;"	m	class:Edge
 Edge	src/main/java/bjc/utils/graph/Edge.java	/^public class Edge<T> {$/;"	c
 Either	src/main/java/bjc/utils/data/Either.java	/^	private Either( LeftType left, RightType right) {$/;"	m	class:Either	file:
 Either	src/main/java/bjc/utils/data/Either.java	/^public class Either<LeftType, RightType>$/;"	c
@@ -69,31 +75,31 @@ FunctionalFileVisitor	src/main/java/bjc/utils/funcutils/FunctionalFileVisitor.ja
 FunctionalList	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	private FunctionalList(int size) {$/;"	m	class:FunctionalList	file:
 FunctionalList	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public FunctionalList() {$/;"	m	class:FunctionalList
 FunctionalList	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public FunctionalList(E... items) {$/;"	m	class:FunctionalList
-FunctionalList	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public FunctionalList(List<E> backingList) {$/;"	m	class:FunctionalList
+FunctionalList	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public FunctionalList(List<E> backing) {$/;"	m	class:FunctionalList
 FunctionalList	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^public class FunctionalList<E> implements Cloneable, IList<E> {$/;"	c
 FunctionalMap	src/main/java/bjc/utils/funcdata/FunctionalMap.java	/^	public FunctionalMap() {$/;"	m	class:FunctionalMap
 FunctionalMap	src/main/java/bjc/utils/funcdata/FunctionalMap.java	/^	public FunctionalMap(IPair<KeyType, ValueType>... entries) {$/;"	m	class:FunctionalMap
 FunctionalMap	src/main/java/bjc/utils/funcdata/FunctionalMap.java	/^	public FunctionalMap(Map<KeyType, ValueType> wrap) {$/;"	m	class:FunctionalMap
-FunctionalMap	src/main/java/bjc/utils/funcdata/FunctionalMap.java	/^public class FunctionalMap<KeyType, ValueType>$/;"	c
+FunctionalMap	src/main/java/bjc/utils/funcdata/FunctionalMap.java	/^public class FunctionalMap<KeyType, ValueType> implements IMap<KeyType, ValueType> {$/;"	c
 FunctionalStringTokenizer	src/main/java/bjc/utils/funcdata/FunctionalStringTokenizer.java	/^	public FunctionalStringTokenizer(String inp) {$/;"	m	class:FunctionalStringTokenizer
-FunctionalStringTokenizer	src/main/java/bjc/utils/funcdata/FunctionalStringTokenizer.java	/^	public FunctionalStringTokenizer(String inputString,$/;"	m	class:FunctionalStringTokenizer
+FunctionalStringTokenizer	src/main/java/bjc/utils/funcdata/FunctionalStringTokenizer.java	/^	public FunctionalStringTokenizer(String input,$/;"	m	class:FunctionalStringTokenizer
 FunctionalStringTokenizer	src/main/java/bjc/utils/funcdata/FunctionalStringTokenizer.java	/^	public FunctionalStringTokenizer(StringTokenizer toWrap) {$/;"	m	class:FunctionalStringTokenizer
 FunctionalStringTokenizer	src/main/java/bjc/utils/funcdata/FunctionalStringTokenizer.java	/^public class FunctionalStringTokenizer {$/;"	c
 Functor	src/main/java/bjc/utils/funcdata/theory/Functor.java	/^public interface Functor<ContainedType> {$/;"	i
-GenericCommand	src/main/java/bjc/utils/cli/GenericCommand.java	/^	public GenericCommand(ICommandHandler handler, String description,$/;"	m	class:GenericCommand
+GenericCommand	src/main/java/bjc/utils/cli/GenericCommand.java	/^	public GenericCommand(ICommandHandler handler, String description, String help) {$/;"	m	class:GenericCommand
 GenericCommand	src/main/java/bjc/utils/cli/GenericCommand.java	/^public class GenericCommand implements ICommand {$/;"	c
-GenericCommandMode	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	public GenericCommandMode(Consumer<String> normalOutput,$/;"	m	class:GenericCommandMode
+GenericCommandMode	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	public GenericCommandMode(Consumer<String> normalOutput, Consumer<String> errorOutput) {$/;"	m	class:GenericCommandMode
 GenericCommandMode	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^public class GenericCommandMode implements ICommandMode {$/;"	c
 GenericHelp	src/main/java/bjc/utils/cli/GenericHelp.java	/^	public GenericHelp(String summary,  String description) {$/;"	m	class:GenericHelp
 GenericHelp	src/main/java/bjc/utils/cli/GenericHelp.java	/^public class GenericHelp implements ICommandHelp {$/;"	c
 Graph	src/main/java/bjc/utils/graph/Graph.java	/^	public Graph() {$/;"	m	class:Graph
 Graph	src/main/java/bjc/utils/graph/Graph.java	/^public class Graph<T> {$/;"	c
-GroupPartIteration	src/main/java/bjc/utils/funcutils/GroupPartIteration.java	/^	public GroupPartIteration(IList<IList<E>> returned,$/;"	m	class:GroupPartIteration
+GroupPartIteration	src/main/java/bjc/utils/funcutils/GroupPartIteration.java	/^	public GroupPartIteration(IList<IList<E>> returned, IList<E> rejects,$/;"	m	class:GroupPartIteration
 GroupPartIteration	src/main/java/bjc/utils/funcutils/GroupPartIteration.java	/^final class GroupPartIteration<E> implements Consumer<E> {$/;"	c
 HLayout	src/main/java/bjc/utils/gui/layout/HLayout.java	/^	public HLayout(int columns) {$/;"	m	class:HLayout
 HLayout	src/main/java/bjc/utils/gui/layout/HLayout.java	/^public class HLayout extends GridLayout {$/;"	c
-HalfBoundLazyPair	src/main/java/bjc/utils/data/HalfBoundLazyPair.java	/^	public HalfBoundLazyPair(Supplier<OldType> oldSupp,$/;"	m	class:HalfBoundLazyPair
-HalfBoundLazyPair	src/main/java/bjc/utils/data/HalfBoundLazyPair.java	/^class HalfBoundLazyPair<OldType, NewLeft, NewRight>$/;"	c
+HalfBoundLazyPair	src/main/java/bjc/utils/data/internals/HalfBoundLazyPair.java	/^	public HalfBoundLazyPair(Supplier<OldType> oldSupp,$/;"	m	class:HalfBoundLazyPair
+HalfBoundLazyPair	src/main/java/bjc/utils/data/internals/HalfBoundLazyPair.java	/^public class HalfBoundLazyPair<OldType, NewLeft, NewRight>$/;"	c
 HolderOutputPanel	src/main/java/bjc/utils/gui/panels/HolderOutputPanel.java	/^	public HolderOutputPanel(String lab, IHolder<String> valueHolder,$/;"	m	class:HolderOutputPanel
 HolderOutputPanel	src/main/java/bjc/utils/gui/panels/HolderOutputPanel.java	/^public class HolderOutputPanel extends JPanel {$/;"	c
 IBuilder	src/main/java/bjc/utils/funcutils/IBuilder.java	/^public interface IBuilder<E> {$/;"	i
@@ -102,9 +108,10 @@ ICommandHandler	src/main/java/bjc/utils/cli/ICommandHandler.java	/^public interf
 ICommandHelp	src/main/java/bjc/utils/cli/ICommandHelp.java	/^public interface ICommandHelp {$/;"	i
 ICommandMode	src/main/java/bjc/utils/cli/ICommandMode.java	/^public interface ICommandMode {$/;"	i
 IComponentRepository	src/main/java/bjc/utils/components/IComponentRepository.java	/^public interface IComponentRepository<$/;"	i
+ID	src/main/java/bjc/utils/data/Tree.java	/^	private int ID;$/;"	f	class:Tree	file:
 IDescribedComponent	src/main/java/bjc/utils/components/IDescribedComponent.java	/^public interface IDescribedComponent {$/;"	i
 IHolder	src/main/java/bjc/utils/data/IHolder.java	/^public interface IHolder<ContainedType> extends Functor<ContainedType> {$/;"	i
-IList	src/main/java/bjc/utils/funcdata/IList.java	/^public interface IList<ContainedType> {$/;"	i
+IList	src/main/java/bjc/utils/funcdata/IList.java	/^public interface IList<ContainedType> extends Iterable<ContainedType> {$/;"	i
 IMap	src/main/java/bjc/utils/funcdata/IMap.java	/^public interface IMap<KeyType, ValueType> {$/;"	i
 INORDER	src/main/java/bjc/utils/funcdata/bst/TreeLinearizationMethod.java	/^	INORDER,$/;"	e	enum:TreeLinearizationMethod	file:
 IPair	src/main/java/bjc/utils/data/IPair.java	/^public interface IPair<LeftType, RightType>$/;"	i
@@ -125,7 +132,7 @@ LazyPair	src/main/java/bjc/utils/data/LazyPair.java	/^public class LazyPair<Left
 ListHolder	src/main/java/bjc/utils/data/ListHolder.java	/^	private ListHolder(IList<ContainedType> toHold) {$/;"	m	class:ListHolder	file:
 ListHolder	src/main/java/bjc/utils/data/ListHolder.java	/^	public ListHolder(ContainedType... values) {$/;"	m	class:ListHolder
 ListHolder	src/main/java/bjc/utils/data/ListHolder.java	/^public class ListHolder<ContainedType> implements IHolder<ContainedType> {$/;"	c
-ListParameterPanel	src/main/java/bjc/utils/gui/panels/ListParameterPanel.java	/^	public ListParameterPanel(Supplier<E> addAction,$/;"	m	class:ListParameterPanel
+ListParameterPanel	src/main/java/bjc/utils/gui/panels/ListParameterPanel.java	/^	public ListParameterPanel(Supplier<E> add,$/;"	m	class:ListParameterPanel
 ListParameterPanel	src/main/java/bjc/utils/gui/panels/ListParameterPanel.java	/^public class ListParameterPanel<E> extends JPanel {$/;"	c
 ListUtils	src/main/java/bjc/utils/funcutils/ListUtils.java	/^public class ListUtils {$/;"	c
 MAX_NTRIESPART	src/main/java/bjc/utils/funcutils/ListUtils.java	/^	private static final int MAX_NTRIESPART = 50;$/;"	f	class:ListUtils	file:
@@ -138,8 +145,8 @@ Operator	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^		private Opera
 Operator	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^	public static enum Operator implements IPrecedent {$/;"	g	class:ShuntingYard
 OperatorHandler	src/main/java/bjc/utils/parserutils/TokenTransformer.java	/^		public OperatorHandler(TokenType element) {$/;"	m	class:TokenTransformer.OperatorHandler
 OperatorHandler	src/main/java/bjc/utils/parserutils/TokenTransformer.java	/^	private final class OperatorHandler implements UnaryOperator<$/;"	c	class:TokenTransformer
-OperatorPicker	src/examples/java/bjc/utils/examples/parsing/TreeConstructTest.java	/^	private static final class OperatorPicker$/;"	c	class:TreeConstructTest
-Option	src/main/java/bjc/utils/data/Option.java	/^	public Option(ContainedType seedValue) {$/;"	m	class:Option
+OperatorPicker	src/examples/java/bjc/utils/examples/parsing/TreeConstructTest.java	/^	private static final class OperatorPicker implements Predicate<String> {$/;"	c	class:TreeConstructTest
+Option	src/main/java/bjc/utils/data/Option.java	/^	public Option(ContainedType seed) {$/;"	m	class:Option
 Option	src/main/java/bjc/utils/data/Option.java	/^public class Option<ContainedType> implements IHolder<ContainedType> {$/;"	c
 PASSTHROUGH	src/main/java/bjc/utils/data/TopDownTransformResult.java	/^	PASSTHROUGH,$/;"	e	enum:TopDownTransformResult	file:
 POSTORDER	src/main/java/bjc/utils/funcdata/bst/TreeLinearizationMethod.java	/^	POSTORDER,$/;"	e	enum:TreeLinearizationMethod	file:
@@ -148,11 +155,12 @@ PULLUP	src/main/java/bjc/utils/data/TopDownTransformResult.java	/^	PULLUP;$/;"	e
 PUSHDOWN	src/main/java/bjc/utils/data/TopDownTransformResult.java	/^	PUSHDOWN,$/;"	e	enum:TopDownTransformResult	file:
 Pair	src/main/java/bjc/utils/data/Pair.java	/^	public Pair() {$/;"	m	class:Pair
 Pair	src/main/java/bjc/utils/data/Pair.java	/^	public Pair(LeftType left, RightType right) {$/;"	m	class:Pair
-Pair	src/main/java/bjc/utils/data/Pair.java	/^public class Pair<LeftType, RightType>$/;"	c
+Pair	src/main/java/bjc/utils/data/Pair.java	/^public class Pair<LeftType, RightType> implements IPair<LeftType, RightType> {$/;"	c
 PragmaFormatException	src/main/java/bjc/utils/exceptions/PragmaFormatException.java	/^	public PragmaFormatException() {$/;"	m	class:PragmaFormatException
 PragmaFormatException	src/main/java/bjc/utils/exceptions/PragmaFormatException.java	/^	public PragmaFormatException(String message) {$/;"	m	class:PragmaFormatException
 PragmaFormatException	src/main/java/bjc/utils/exceptions/PragmaFormatException.java	/^public class PragmaFormatException extends InputMismatchException {$/;"	c
 RIGHT	src/main/java/bjc/utils/funcdata/bst/DirectedWalkFunction.java	/^		RIGHT,$/;"	e	enum:DirectedWalkFunction.DirectedWalkResult	file:
+RTRANSFORM	src/main/java/bjc/utils/data/TopDownTransformResult.java	/^	RTRANSFORM,$/;"	e	enum:TopDownTransformResult	file:
 RandomGrammar	src/main/java/bjc/utils/gen/RandomGrammar.java	/^	public RandomGrammar() {$/;"	m	class:RandomGrammar
 RandomGrammar	src/main/java/bjc/utils/gen/RandomGrammar.java	/^public class RandomGrammar<E> extends WeightedGrammar<E> {$/;"	c
 RandomStringExamples	src/examples/java/bjc/utils/examples/rangen/RandomStringExamples.java	/^public class RandomStringExamples {$/;"	c
@@ -162,6 +170,9 @@ RuleBasedReaderPragmas	src/main/java/bjc/utils/parserutils/RuleBasedReaderPragma
 SKIP	src/main/java/bjc/utils/data/TopDownTransformResult.java	/^	SKIP,$/;"	e	enum:TopDownTransformResult	file:
 SUBTRACT	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^		SUBTRACT(2),$/;"	e	enum:ShuntingYard.Operator	file:
 SUCCESS	src/main/java/bjc/utils/funcdata/bst/DirectedWalkFunction.java	/^		SUCCESS$/;"	e	enum:DirectedWalkFunction.DirectedWalkResult	file:
+SentryList	src/main/java/bjc/utils/funcdata/SentryList.java	/^	public SentryList() {$/;"	m	class:SentryList
+SentryList	src/main/java/bjc/utils/funcdata/SentryList.java	/^	public SentryList(List<T> backing) {$/;"	m	class:SentryList
+SentryList	src/main/java/bjc/utils/funcdata/SentryList.java	/^public class SentryList<T> extends FunctionalList<T> {$/;"	c
 ShuntTest	src/examples/java/bjc/utils/examples/parsing/ShuntTest.java	/^public class ShuntTest {$/;"	c
 ShuntingYard	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^	public ShuntingYard(boolean configureBasics) {$/;"	m	class:ShuntingYard
 ShuntingYard	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^public class ShuntingYard<TokenType> {$/;"	c
@@ -175,14 +186,19 @@ SimpleInternalFrame	src/main/java/bjc/utils/gui/SimpleInternalFrame.java	/^	publ
 SimpleInternalFrame	src/main/java/bjc/utils/gui/SimpleInternalFrame.java	/^	public SimpleInternalFrame(String title) {$/;"	m	class:SimpleInternalFrame
 SimpleInternalFrame	src/main/java/bjc/utils/gui/SimpleInternalFrame.java	/^public class SimpleInternalFrame extends JInternalFrame {$/;"	c
 SimpleJList	src/main/java/bjc/utils/gui/SimpleJList.java	/^public class SimpleJList {$/;"	c
-SimpleListPanel	src/main/java/bjc/utils/gui/panels/SimpleListPanel.java	/^	public SimpleListPanel(String itemType,$/;"	m	class:SimpleListPanel
+SimpleListPanel	src/main/java/bjc/utils/gui/panels/SimpleListPanel.java	/^	public SimpleListPanel(String type,$/;"	m	class:SimpleListPanel
 SimpleListPanel	src/main/java/bjc/utils/gui/panels/SimpleListPanel.java	/^public class SimpleListPanel extends JPanel {$/;"	c
 SimpleSpinnerPanel	src/main/java/bjc/utils/gui/panels/SimpleSpinnerPanel.java	/^	public SimpleSpinnerPanel(String label, SpinnerModel model) {$/;"	m	class:SimpleSpinnerPanel
 SimpleSpinnerPanel	src/main/java/bjc/utils/gui/panels/SimpleSpinnerPanel.java	/^public class SimpleSpinnerPanel extends JPanel {$/;"	c
 SimpleTitledBorder	src/main/java/bjc/utils/gui/SimpleTitledBorder.java	/^	public SimpleTitledBorder(String title) {$/;"	m	class:SimpleTitledBorder
 SimpleTitledBorder	src/main/java/bjc/utils/gui/SimpleTitledBorder.java	/^public class SimpleTitledBorder extends TitledBorder {$/;"	c
+SingleIterator	src/main/java/bjc/utils/data/SingleIterator.java	/^	public SingleIterator(T item) {$/;"	m	class:SingleIterator
+SingleIterator	src/main/java/bjc/utils/data/SingleIterator.java	/^public class SingleIterator<T> implements Iterator<T> {$/;"	c
 SingleSupplier	src/main/java/bjc/utils/data/SingleSupplier.java	/^	public SingleSupplier(Supplier<T> supp) {$/;"	m	class:SingleSupplier
 SingleSupplier	src/main/java/bjc/utils/data/SingleSupplier.java	/^public class SingleSupplier<T> implements Supplier<T> {$/;"	c
+SingleTape	src/main/java/bjc/utils/esodata/SingleTape.java	/^	public SingleTape() {$/;"	m	class:SingleTape
+SingleTape	src/main/java/bjc/utils/esodata/SingleTape.java	/^	public SingleTape(boolean autoExtnd) {$/;"	m	class:SingleTape
+SingleTape	src/main/java/bjc/utils/esodata/SingleTape.java	/^public class SingleTape<T> implements Tape<T> {$/;"	c
 SliderInputPanel	src/main/java/bjc/utils/gui/panels/SliderInputPanel.java	/^	public SliderInputPanel(String lab, SliderSettings settings,$/;"	m	class:SliderInputPanel
 SliderInputPanel	src/main/java/bjc/utils/gui/panels/SliderInputPanel.java	/^public class SliderInputPanel extends JPanel {$/;"	c
 SliderSettings	src/main/java/bjc/utils/gui/panels/SliderInputPanel.java	/^		public SliderSettings(int min, int max) {$/;"	m	class:SliderInputPanel.SliderSettings
@@ -190,6 +206,10 @@ SliderSettings	src/main/java/bjc/utils/gui/panels/SliderInputPanel.java	/^		publ
 SliderSettings	src/main/java/bjc/utils/gui/panels/SliderInputPanel.java	/^	public static class SliderSettings {$/;"	c	class:SliderInputPanel
 StringUtils	src/main/java/bjc/utils/funcutils/StringUtils.java	/^public class StringUtils {$/;"	c
 TRANSFORM	src/main/java/bjc/utils/data/TopDownTransformResult.java	/^	TRANSFORM,$/;"	e	enum:TopDownTransformResult	file:
+Tape	src/main/java/bjc/utils/esodata/Tape.java	/^public interface Tape<T> {$/;"	i
+TapeChanger	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public TapeChanger() {$/;"	m	class:TapeChanger
+TapeChanger	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public TapeChanger(Tape<T> current, Tape<T>... others) {$/;"	m	class:TapeChanger
+TapeChanger	src/main/java/bjc/utils/esodata/TapeChanger.java	/^public class TapeChanger<T> implements Tape<T> {$/;"	c
 TextAreaOutputStream	src/main/java/bjc/utils/gui/TextAreaOutputStream.java	/^	public TextAreaOutputStream(JTextArea console) {$/;"	m	class:TextAreaOutputStream
 TextAreaOutputStream	src/main/java/bjc/utils/gui/TextAreaOutputStream.java	/^public class TextAreaOutputStream extends OutputStream {$/;"	c
 TokenDeaffixer	src/main/java/bjc/utils/funcutils/TokenDeaffixer.java	/^	public TokenDeaffixer(String tok) {$/;"	m	class:TokenDeaffixer
@@ -200,12 +220,16 @@ TokenSplitter	src/main/java/bjc/utils/funcutils/TokenSplitter.java	/^	public Tok
 TokenSplitter	src/main/java/bjc/utils/funcutils/TokenSplitter.java	/^final class TokenSplitter$/;"	c
 TokenTransformer	src/main/java/bjc/utils/parserutils/TokenTransformer.java	/^	public TokenTransformer($/;"	m	class:TokenTransformer
 TokenTransformer	src/main/java/bjc/utils/parserutils/TokenTransformer.java	/^final class TokenTransformer<TokenType> implements Consumer<TokenType> {$/;"	c
+TopDownTransformIterator	src/main/java/bjc/utils/data/TopDownTransformIterator.java	/^	public TopDownTransformIterator(Function<ContainedType, TopDownTransformResult>                          pickr,$/;"	m	class:TopDownTransformIterator
+TopDownTransformIterator	src/main/java/bjc/utils/data/TopDownTransformIterator.java	/^public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<ContainedType>> {$/;"	c
 TopDownTransformResult	src/main/java/bjc/utils/data/TopDownTransformResult.java	/^public enum TopDownTransformResult {$/;"	g
-TransformedValueMap	src/main/java/bjc/utils/funcdata/TransformedValueMap.java	/^	public TransformedValueMap(IMap<OldKey, OldValue> destMap,$/;"	m	class:TransformedValueMap
+TransformedIterator	src/main/java/bjc/utils/data/TransformedIterator.java	/^	public TransformedIterator(Iterator<PreType> src, Function<PreType, PostType> trans) {$/;"	m	class:TransformedIterator
+TransformedIterator	src/main/java/bjc/utils/data/TransformedIterator.java	/^public class TransformedIterator<PreType, PostType> implements Iterator<PostType> {$/;"	c
+TransformedValueMap	src/main/java/bjc/utils/funcdata/TransformedValueMap.java	/^	public TransformedValueMap(IMap<OldKey, OldValue> backingMap,$/;"	m	class:TransformedValueMap
 TransformedValueMap	src/main/java/bjc/utils/funcdata/TransformedValueMap.java	/^final class TransformedValueMap<OldKey, OldValue, NewValue>$/;"	c
-Tree	src/main/java/bjc/utils/data/Tree.java	/^	public Tree(ContainedType leafToken) {$/;"	m	class:Tree
-Tree	src/main/java/bjc/utils/data/Tree.java	/^	public Tree(ContainedType leafToken, ITree<ContainedType>... childrn) {$/;"	m	class:Tree
-Tree	src/main/java/bjc/utils/data/Tree.java	/^	public Tree(ContainedType leafToken,$/;"	m	class:Tree
+Tree	src/main/java/bjc/utils/data/Tree.java	/^	public Tree(ContainedType leaf) {$/;"	m	class:Tree
+Tree	src/main/java/bjc/utils/data/Tree.java	/^	public Tree(ContainedType leaf, IList<ITree<ContainedType>> childrn) {$/;"	m	class:Tree
+Tree	src/main/java/bjc/utils/data/Tree.java	/^	public Tree(ContainedType leaf, ITree<ContainedType>... childrn) {$/;"	m	class:Tree
 Tree	src/main/java/bjc/utils/data/Tree.java	/^public class Tree<ContainedType> implements ITree<ContainedType> {$/;"	c
 TreeConstructTest	src/examples/java/bjc/utils/examples/parsing/TreeConstructTest.java	/^public class TreeConstructTest {$/;"	c
 TreeConstructor	src/main/java/bjc/utils/parserutils/TreeConstructor.java	/^public class TreeConstructor {$/;"	c
@@ -219,22 +243,24 @@ WeightedGrammar	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	public Weigh
 WeightedGrammar	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^public class WeightedGrammar<E> {$/;"	c
 WeightedRandom	src/main/java/bjc/utils/gen/WeightedRandom.java	/^	public WeightedRandom(Random src) {$/;"	m	class:WeightedRandom
 WeightedRandom	src/main/java/bjc/utils/gen/WeightedRandom.java	/^public class WeightedRandom<E> {$/;"	c
-WrappedLazy	src/main/java/bjc/utils/data/WrappedLazy.java	/^	private WrappedLazy(IHolder<IHolder<ContainedType>> wrappedHolder,$/;"	m	class:WrappedLazy	file:
-WrappedLazy	src/main/java/bjc/utils/data/WrappedLazy.java	/^	public WrappedLazy(IHolder<ContainedType> wrappedHolder) {$/;"	m	class:WrappedLazy
-WrappedLazy	src/main/java/bjc/utils/data/WrappedLazy.java	/^class WrappedLazy<ContainedType> implements IHolder<ContainedType> {$/;"	c
-WrappedOption	src/main/java/bjc/utils/data/WrappedOption.java	/^	private WrappedOption(IHolder<IHolder<ContainedType>> toHold,$/;"	m	class:WrappedOption	file:
-WrappedOption	src/main/java/bjc/utils/data/WrappedOption.java	/^	public WrappedOption(IHolder<ContainedType> seedValue) {$/;"	m	class:WrappedOption
-WrappedOption	src/main/java/bjc/utils/data/WrappedOption.java	/^class WrappedOption<ContainedType> implements IHolder<ContainedType> {$/;"	c
+WrappedLazy	src/main/java/bjc/utils/data/internals/WrappedLazy.java	/^	private WrappedLazy(IHolder<IHolder<ContainedType>> wrappedHolder, boolean dummy) {$/;"	m	class:WrappedLazy	file:
+WrappedLazy	src/main/java/bjc/utils/data/internals/WrappedLazy.java	/^	public WrappedLazy(IHolder<ContainedType> wrappedHolder) {$/;"	m	class:WrappedLazy
+WrappedLazy	src/main/java/bjc/utils/data/internals/WrappedLazy.java	/^public class WrappedLazy<ContainedType> implements IHolder<ContainedType> {$/;"	c
+WrappedOption	src/main/java/bjc/utils/data/internals/WrappedOption.java	/^	private WrappedOption(IHolder<IHolder<ContainedType>> toHold, boolean dummy) {$/;"	m	class:WrappedOption	file:
+WrappedOption	src/main/java/bjc/utils/data/internals/WrappedOption.java	/^	public WrappedOption(IHolder<ContainedType> seedValue) {$/;"	m	class:WrappedOption
+WrappedOption	src/main/java/bjc/utils/data/internals/WrappedOption.java	/^public class WrappedOption<ContainedType> implements IHolder<ContainedType> {$/;"	c
 accept	src/main/java/bjc/utils/funcutils/GroupPartIteration.java	/^	public void accept(E value) {$/;"	m	class:GroupPartIteration
 accept	src/main/java/bjc/utils/gui/ExtensionFileFilter.java	/^	public boolean accept(File pathname) {$/;"	m	class:ExtensionFileFilter
 accept	src/main/java/bjc/utils/gui/awt/ExtensionFileFilter.java	/^	public boolean accept(File directory, String name) {$/;"	m	class:ExtensionFileFilter
 accept	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^		public void accept(String token) {$/;"	m	class:ShuntingYard.TokenShunter
 accept	src/main/java/bjc/utils/parserutils/TokenTransformer.java	/^	public void accept(TokenType element) {$/;"	m	class:TokenTransformer
-accumulator	src/main/java/bjc/utils/funcutils/CompoundCollector.java	/^			InitialType> accumulator() {$/;"	m	class:CompoundCollector
-actions	src/main/java/bjc/utils/data/BoundLazy.java	/^	private IList<UnaryOperator<BoundContainedType>>		actions	= new FunctionalList<>();$/;"	f	class:BoundLazy	file:
+accumulator	src/main/java/bjc/utils/funcutils/CompoundCollector.java	/^	public BiConsumer<IHolder<IPair<AuxType1, AuxType2>>, InitialType> accumulator() {$/;"	m	class:CompoundCollector
+action	src/main/java/bjc/utils/funcutils/FunctionalFileVisitor.java	/^	private BiPredicate<Path, BasicFileAttributes>	action;$/;"	f	class:FunctionalFileVisitor	file:
 actions	src/main/java/bjc/utils/data/Lazy.java	/^			ContainedType>>						actions	= new FunctionalList<>();$/;"	f	class:Lazy	file:
+actions	src/main/java/bjc/utils/data/internals/BoundLazy.java	/^	private IList<UnaryOperator<BoundContainedType>>		actions	= new FunctionalList<>();$/;"	f	class:BoundLazy	file:
 add	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public boolean add(E item) {$/;"	m	class:FunctionalList
 add	src/main/java/bjc/utils/funcdata/IList.java	/^	boolean add(ContainedType item);$/;"	m	interface:IList
+add	src/main/java/bjc/utils/funcdata/SentryList.java	/^	public boolean add(T item) {$/;"	m	class:SentryList
 add	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeLeaf.java	/^	public void add(T element, Comparator<T> comparator) {$/;"	m	class:BinarySearchTreeLeaf
 add	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeNode.java	/^	public void add(T element, Comparator<T> comparator) {$/;"	m	class:BinarySearchTreeNode
 add	src/main/java/bjc/utils/funcdata/bst/ITreePart.java	/^	public void add(T element, Comparator<T> comparator);$/;"	m	interface:ITreePart
@@ -246,70 +272,76 @@ addChild	src/main/java/bjc/utils/data/ITree.java	/^	public void addChild(ITree<C
 addChild	src/main/java/bjc/utils/data/Tree.java	/^	public void addChild(ITree<ContainedType> child) {$/;"	m	class:Tree
 addCommandAlias	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	public void addCommandAlias(String commandName, String aliasName) {$/;"	m	class:GenericCommandMode
 addCommandHandler	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	public void addCommandHandler(String command, ICommand handler) {$/;"	m	class:GenericCommandMode
-addEdge	src/main/java/bjc/utils/graph/Graph.java	/^	public void addEdge(T sourceVertex, T targetVertex, int distance,$/;"	m	class:Graph
+addEdge	src/main/java/bjc/utils/graph/Graph.java	/^	public void addEdge(T source, T target, int distance,$/;"	m	class:Graph
 addGrammarAlias	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	public boolean addGrammarAlias(E name, E alias) {$/;"	m	class:WeightedGrammar
 addHelpTopic	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	public void addHelpTopic(String topicName, ICommandHelp topic) {$/;"	m	class:GenericCommandMode
 addInfixRules	src/examples/java/bjc/utils/examples/rangen/DiabloItemGen.java	/^	private static void addInfixRules() {$/;"	m	class:DiabloItemGen	file:
-addItem	src/main/java/bjc/utils/gui/panels/SimpleListPanel.java	/^	private static void addItem(DefaultListModel<String> listModel,$/;"	m	class:SimpleListPanel	file:
+addItem	src/main/java/bjc/utils/gui/panels/SimpleListPanel.java	/^	private static void addItem(DefaultListModel<String> model,$/;"	m	class:SimpleListPanel	file:
 addItemRules	src/examples/java/bjc/utils/examples/rangen/DiabloItemGen.java	/^	private static void addItemRules() {$/;"	m	class:DiabloItemGen	file:
 addNode	src/main/java/bjc/utils/funcdata/bst/BinarySearchTree.java	/^	public void addNode(T element) {$/;"	m	class:BinarySearchTree
-addOp	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^	public void addOp(String operatorToken, IPrecedent precedence) {$/;"	m	class:ShuntingYard
-addOp	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^	public void addOp(String operatorToken, int precedence) {$/;"	m	class:ShuntingYard
-addPragma	src/main/java/bjc/utils/parserutils/RuleBasedConfigReader.java	/^	public void addPragma(String pragmaName,$/;"	m	class:RuleBasedConfigReader
+addOp	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^	public void addOp(String operator, IPrecedent precedence) {$/;"	m	class:ShuntingYard
+addOp	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^	public void addOp(String operator, int precedence) {$/;"	m	class:ShuntingYard
+addPragma	src/main/java/bjc/utils/parserutils/RuleBasedConfigReader.java	/^	public void addPragma($/;"	m	class:RuleBasedConfigReader
 addPrefixRules	src/examples/java/bjc/utils/examples/rangen/DiabloItemGen.java	/^	private static void addPrefixRules() {$/;"	m	class:DiabloItemGen	file:
 addProbability	src/main/java/bjc/utils/gen/WeightedRandom.java	/^	public void addProbability(int chance, E result) {$/;"	m	class:WeightedRandom
 addRule	src/examples/java/bjc/utils/examples/rangen/RandomStringExamples.java	/^	private static void addRule(String rule, String... cases) {$/;"	m	class:RandomStringExamples	file:
 addRule	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	public boolean addRule(E name) {$/;"	m	class:WeightedGrammar
 addRule	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	public boolean addRule(E name, WeightedRandom<IList<E>> cases) {$/;"	m	class:WeightedGrammar
+addSpecialRule	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	public void addSpecialRule(E ruleName, Supplier<IList<E>> cse) {$/;"	m	class:WeightedGrammar
 addSubgrammar	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	public boolean addSubgrammar(E name, WeightedGrammar<E> subgrammar) {$/;"	m	class:WeightedGrammar
 addSuffixRules	src/examples/java/bjc/utils/examples/rangen/DiabloItemGen.java	/^	private static void addSuffixRules() {$/;"	m	class:DiabloItemGen	file:
-adjacencyMap	src/main/java/bjc/utils/graph/AdjacencyMap.java	/^	private IMap<T, IMap<T, Integer>> adjacencyMap = new FunctionalMap<>();$/;"	f	class:AdjacencyMap	file:
-adjustedPivotInBounds	src/main/java/bjc/utils/funcdata/bst/BinarySearchTree.java	/^	private boolean adjustedPivotInBounds(IList<T> elements, int pivot,$/;"	m	class:BinarySearchTree	file:
+addYield	src/main/java/bjc/utils/data/TopDownTransformIterator.java	/^	public void addYield(Iterator<ITree<ContainedType>> src) {$/;"	m	class:TopDownTransformIterator
+adjacency	src/main/java/bjc/utils/graph/AdjacencyMap.java	/^	private IMap<T, IMap<T, Integer>> adjacency = new FunctionalMap<>();$/;"	f	class:AdjacencyMap	file:
+adjustedPivotInBounds	src/main/java/bjc/utils/funcdata/bst/BinarySearchTree.java	/^	private boolean adjustedPivotInBounds(IList<T> elements, int pivot, int pivotAdjustment) {$/;"	m	class:BinarySearchTree	file:
 aliased	src/main/java/bjc/utils/cli/DelegatingCommand.java	/^	public ICommand aliased() {$/;"	m	class:DelegatingCommand
 aliased	src/main/java/bjc/utils/cli/GenericCommand.java	/^	public ICommand aliased() {$/;"	m	class:GenericCommand
 aliased	src/main/java/bjc/utils/cli/ICommand.java	/^	public ICommand aliased();$/;"	m	interface:ICommand
-allMatch	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public boolean allMatch(Predicate<E> matchPredicate) {$/;"	m	class:FunctionalList
-allMatch	src/main/java/bjc/utils/funcdata/IList.java	/^	boolean allMatch(Predicate<ContainedType> matchPredicate);$/;"	m	interface:IList
-anyMatch	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public boolean anyMatch(Predicate<E> matchPredicate) {$/;"	m	class:FunctionalList
-anyMatch	src/main/java/bjc/utils/funcdata/IList.java	/^	boolean anyMatch(Predicate<ContainedType> matchPredicate);$/;"	m	interface:IList
+allMatch	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public boolean allMatch(Predicate<E> predicate) {$/;"	m	class:FunctionalList
+allMatch	src/main/java/bjc/utils/funcdata/IList.java	/^	boolean allMatch(Predicate<ContainedType> matcher);$/;"	m	interface:IList
+anyMatch	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public boolean anyMatch(Predicate<E> predicate) {$/;"	m	class:FunctionalList
+anyMatch	src/main/java/bjc/utils/funcdata/IList.java	/^	boolean anyMatch(Predicate<ContainedType> matcher);$/;"	m	interface:IList
 apply	src/main/java/bjc/utils/funcutils/TokenDeaffixer.java	/^	public IList<String> apply(String operatorName, String operatorRegex) {$/;"	m	class:TokenDeaffixer
 apply	src/main/java/bjc/utils/funcutils/TokenSplitter.java	/^	public IList<String> apply(String operatorName, String operatorRegex) {$/;"	m	class:TokenSplitter
 apply	src/main/java/bjc/utils/parserutils/TokenTransformer.java	/^		public IPair<Deque<ITree<TokenType>>, ITree<TokenType>> apply($/;"	m	class:TokenTransformer.OperatorHandler
 author	src/main/java/bjc/utils/components/ComponentDescription.java	/^	private String	author;$/;"	f	class:ComponentDescription	file:
 author	src/main/java/bjc/utils/components/ComponentDescriptionState.java	/^	private String	author;$/;"	f	class:ComponentDescriptionState	file:
-backingGraph	src/main/java/bjc/utils/graph/Graph.java	/^	private final IMap<T, IMap<T, Integer>> backingGraph;$/;"	f	class:Graph	file:
+autoExtend	src/main/java/bjc/utils/esodata/SingleTape.java	/^	protected boolean autoExtend;$/;"	f	class:SingleTape
+back	src/main/java/bjc/utils/esodata/DoubleTape.java	/^	private Tape<T> back;$/;"	f	class:DoubleTape	file:
+backing	src/main/java/bjc/utils/esodata/SingleTape.java	/^	protected ArrayList<T> backing;$/;"	f	class:SingleTape
+backing	src/main/java/bjc/utils/funcdata/TransformedValueMap.java	/^	private IMap<OldKey, OldValue>			backing;$/;"	f	class:TransformedValueMap	file:
+backing	src/main/java/bjc/utils/graph/Graph.java	/^	private final IMap<T, IMap<T, Integer>> backing;$/;"	f	class:Graph	file:
 balance	src/main/java/bjc/utils/funcdata/bst/BinarySearchTree.java	/^	public void balance() {$/;"	m	class:BinarySearchTree
 bimap	src/main/java/bjc/utils/funcdata/theory/Bifunctor.java	/^					Bifunctor<NewLeft, NewRight>> bimap($/;"	m	interface:Bifunctor
-bind	src/main/java/bjc/utils/data/BoundLazy.java	/^	public <BoundType> IHolder<BoundType> bind($/;"	m	class:BoundLazy
-bind	src/main/java/bjc/utils/data/BoundLazyPair.java	/^	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind($/;"	m	class:BoundLazyPair
-bind	src/main/java/bjc/utils/data/BoundListHolder.java	/^	public <BoundType> IHolder<BoundType> bind($/;"	m	class:BoundListHolder
 bind	src/main/java/bjc/utils/data/Either.java	/^	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind($/;"	m	class:Either
-bind	src/main/java/bjc/utils/data/HalfBoundLazyPair.java	/^	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind($/;"	m	class:HalfBoundLazyPair
 bind	src/main/java/bjc/utils/data/IHolder.java	/^	public <BoundType> IHolder<BoundType> bind($/;"	m	interface:IHolder
 bind	src/main/java/bjc/utils/data/IPair.java	/^	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind($/;"	m	interface:IPair
 bind	src/main/java/bjc/utils/data/Identity.java	/^	public <BoundType> IHolder<BoundType> bind($/;"	m	class:Identity
 bind	src/main/java/bjc/utils/data/Lazy.java	/^	public <BoundType> IHolder<BoundType> bind($/;"	m	class:Lazy
 bind	src/main/java/bjc/utils/data/LazyPair.java	/^	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind($/;"	m	class:LazyPair
-bind	src/main/java/bjc/utils/data/ListHolder.java	/^	public <BoundType> IHolder<BoundType> bind($/;"	m	class:ListHolder
-bind	src/main/java/bjc/utils/data/Option.java	/^	public <BoundType> IHolder<BoundType> bind($/;"	m	class:Option
+bind	src/main/java/bjc/utils/data/ListHolder.java	/^	public <BoundType> IHolder<BoundType> bind(Function<ContainedType, IHolder<BoundType>> binder) {$/;"	m	class:ListHolder
+bind	src/main/java/bjc/utils/data/Option.java	/^	public <BoundType> IHolder<BoundType> bind(Function<ContainedType, IHolder<BoundType>> binder) {$/;"	m	class:Option
 bind	src/main/java/bjc/utils/data/Pair.java	/^	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind($/;"	m	class:Pair
-bind	src/main/java/bjc/utils/data/WrappedLazy.java	/^	public <BoundType> IHolder<BoundType> bind($/;"	m	class:WrappedLazy
-bind	src/main/java/bjc/utils/data/WrappedOption.java	/^	public <BoundType> IHolder<BoundType> bind($/;"	m	class:WrappedOption
-bindLeft	src/main/java/bjc/utils/data/BoundLazyPair.java	/^	public <BoundLeft> IPair<BoundLeft, NewRight> bindLeft($/;"	m	class:BoundLazyPair
+bind	src/main/java/bjc/utils/data/internals/BoundLazy.java	/^	public <BoundType> IHolder<BoundType> bind($/;"	m	class:BoundLazy
+bind	src/main/java/bjc/utils/data/internals/BoundLazyPair.java	/^	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind($/;"	m	class:BoundLazyPair
+bind	src/main/java/bjc/utils/data/internals/BoundListHolder.java	/^	public <BoundType> IHolder<BoundType> bind($/;"	m	class:BoundListHolder
+bind	src/main/java/bjc/utils/data/internals/HalfBoundLazyPair.java	/^	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind($/;"	m	class:HalfBoundLazyPair
+bind	src/main/java/bjc/utils/data/internals/WrappedLazy.java	/^	public <BoundType> IHolder<BoundType> bind(Function<ContainedType, IHolder<BoundType>> binder) {$/;"	m	class:WrappedLazy
+bind	src/main/java/bjc/utils/data/internals/WrappedOption.java	/^	@Override public <BoundType> IHolder<BoundType> bind(Function<ContainedType, IHolder<BoundType>> binder) {$/;"	m	class:WrappedOption
 bindLeft	src/main/java/bjc/utils/data/Either.java	/^	public <BoundLeft> IPair<BoundLeft, RightType> bindLeft($/;"	m	class:Either
-bindLeft	src/main/java/bjc/utils/data/HalfBoundLazyPair.java	/^	public <BoundLeft> IPair<BoundLeft, NewRight> bindLeft($/;"	m	class:HalfBoundLazyPair
 bindLeft	src/main/java/bjc/utils/data/IPair.java	/^	public <BoundLeft> IPair<BoundLeft, RightType> bindLeft($/;"	m	interface:IPair
-bindLeft	src/main/java/bjc/utils/data/LazyPair.java	/^	public <BoundLeft> IPair<BoundLeft, RightType> bindLeft($/;"	m	class:LazyPair
-bindLeft	src/main/java/bjc/utils/data/Pair.java	/^	public <BoundLeft> IPair<BoundLeft, RightType> bindLeft($/;"	m	class:Pair
-bindRight	src/main/java/bjc/utils/data/BoundLazyPair.java	/^	public <BoundRight> IPair<NewLeft, BoundRight> bindRight($/;"	m	class:BoundLazyPair
+bindLeft	src/main/java/bjc/utils/data/LazyPair.java	/^	public <BoundLeft> IPair<BoundLeft, RightType> bindLeft(Function<LeftType, IPair<BoundLeft, RightType>> leftBinder) {$/;"	m	class:LazyPair
+bindLeft	src/main/java/bjc/utils/data/Pair.java	/^	public <BoundLeft> IPair<BoundLeft, RightType> bindLeft(Function<LeftType, IPair<BoundLeft, RightType>> leftBinder) {$/;"	m	class:Pair
+bindLeft	src/main/java/bjc/utils/data/internals/BoundLazyPair.java	/^	public <BoundLeft> IPair<BoundLeft, NewRight> bindLeft($/;"	m	class:BoundLazyPair
+bindLeft	src/main/java/bjc/utils/data/internals/HalfBoundLazyPair.java	/^	public <BoundLeft> IPair<BoundLeft, NewRight> bindLeft($/;"	m	class:HalfBoundLazyPair
 bindRight	src/main/java/bjc/utils/data/Either.java	/^	public <BoundRight> IPair<LeftType, BoundRight> bindRight($/;"	m	class:Either
-bindRight	src/main/java/bjc/utils/data/HalfBoundLazyPair.java	/^	public <BoundRight> IPair<NewLeft, BoundRight> bindRight($/;"	m	class:HalfBoundLazyPair
 bindRight	src/main/java/bjc/utils/data/IPair.java	/^	public <BoundRight> IPair<LeftType, BoundRight> bindRight($/;"	m	interface:IPair
 bindRight	src/main/java/bjc/utils/data/LazyPair.java	/^	public <BoundRight> IPair<LeftType, BoundRight> bindRight($/;"	m	class:LazyPair
-bindRight	src/main/java/bjc/utils/data/Pair.java	/^	public <BoundRight> IPair<LeftType, BoundRight> bindRight($/;"	m	class:Pair
-binder	src/main/java/bjc/utils/data/BoundLazy.java	/^	private Function<OldType, IHolder<BoundContainedType>>	binder;$/;"	f	class:BoundLazy	file:
-binder	src/main/java/bjc/utils/data/BoundLazyPair.java	/^	private BiFunction<OldLeft, OldRight, IPair<NewLeft, NewRight>>	binder;$/;"	f	class:BoundLazyPair	file:
-binder	src/main/java/bjc/utils/data/HalfBoundLazyPair.java	/^	private Function<OldType, IPair<NewLeft, NewRight>>	binder;$/;"	f	class:HalfBoundLazyPair	file:
+bindRight	src/main/java/bjc/utils/data/Pair.java	/^	public <BoundRight> IPair<LeftType, BoundRight> bindRight(Function<RightType, IPair<LeftType, BoundRight>> rightBinder) {$/;"	m	class:Pair
+bindRight	src/main/java/bjc/utils/data/internals/BoundLazyPair.java	/^	public <BoundRight> IPair<NewLeft, BoundRight> bindRight($/;"	m	class:BoundLazyPair
+bindRight	src/main/java/bjc/utils/data/internals/HalfBoundLazyPair.java	/^	public <BoundRight> IPair<NewLeft, BoundRight> bindRight($/;"	m	class:HalfBoundLazyPair
+binder	src/main/java/bjc/utils/data/internals/BoundLazy.java	/^	private Function<OldType, IHolder<BoundContainedType>>	binder;$/;"	f	class:BoundLazy	file:
+binder	src/main/java/bjc/utils/data/internals/BoundLazyPair.java	/^	private BiFunction<OldLeft, OldRight, IPair<NewLeft, NewRight>>	binder;$/;"	f	class:BoundLazyPair	file:
+binder	src/main/java/bjc/utils/data/internals/HalfBoundLazyPair.java	/^	private Function<OldType, IPair<NewLeft, NewRight>>	binder;$/;"	f	class:HalfBoundLazyPair	file:
 bjc.utils.cli	src/main/java/bjc/utils/cli/CLICommander.java	/^package bjc.utils.cli;$/;"	p
 bjc.utils.cli	src/main/java/bjc/utils/cli/DelegatingCommand.java	/^package bjc.utils.cli;$/;"	p
 bjc.utils.cli	src/main/java/bjc/utils/cli/GenericCommand.java	/^package bjc.utils.cli;$/;"	p
@@ -328,11 +360,8 @@ bjc.utils.components	src/main/java/bjc/utils/components/FileComponentRepository.
 bjc.utils.components	src/main/java/bjc/utils/components/IComponentRepository.java	/^package bjc.utils.components;$/;"	p
 bjc.utils.components	src/main/java/bjc/utils/components/IDescribedComponent.java	/^package bjc.utils.components;$/;"	p
 bjc.utils.components	src/main/java/bjc/utils/components/package-info.java	/^package bjc.utils.components;$/;"	p
-bjc.utils.data	src/main/java/bjc/utils/data/BoundLazy.java	/^package bjc.utils.data;$/;"	p
-bjc.utils.data	src/main/java/bjc/utils/data/BoundLazyPair.java	/^package bjc.utils.data;$/;"	p
-bjc.utils.data	src/main/java/bjc/utils/data/BoundListHolder.java	/^package bjc.utils.data;$/;"	p
+bjc.utils.data	src/main/java/bjc/utils/data/CircularIterator.java	/^package bjc.utils.data;$/;"	p
 bjc.utils.data	src/main/java/bjc/utils/data/Either.java	/^package bjc.utils.data;$/;"	p
-bjc.utils.data	src/main/java/bjc/utils/data/HalfBoundLazyPair.java	/^package bjc.utils.data;$/;"	p
 bjc.utils.data	src/main/java/bjc/utils/data/IHolder.java	/^package bjc.utils.data;$/;"	p
 bjc.utils.data	src/main/java/bjc/utils/data/IPair.java	/^package bjc.utils.data;$/;"	p
 bjc.utils.data	src/main/java/bjc/utils/data/ITree.java	/^package bjc.utils.data;$/;"	p
@@ -342,12 +371,22 @@ bjc.utils.data	src/main/java/bjc/utils/data/LazyPair.java	/^package bjc.utils.da
 bjc.utils.data	src/main/java/bjc/utils/data/ListHolder.java	/^package bjc.utils.data;$/;"	p
 bjc.utils.data	src/main/java/bjc/utils/data/Option.java	/^package bjc.utils.data;$/;"	p
 bjc.utils.data	src/main/java/bjc/utils/data/Pair.java	/^package bjc.utils.data;$/;"	p
+bjc.utils.data	src/main/java/bjc/utils/data/SingleIterator.java	/^package bjc.utils.data;$/;"	p
 bjc.utils.data	src/main/java/bjc/utils/data/SingleSupplier.java	/^package bjc.utils.data;$/;"	p
+bjc.utils.data	src/main/java/bjc/utils/data/TopDownTransformIterator.java	/^package bjc.utils.data;$/;"	p
 bjc.utils.data	src/main/java/bjc/utils/data/TopDownTransformResult.java	/^package bjc.utils.data;$/;"	p
+bjc.utils.data	src/main/java/bjc/utils/data/TransformedIterator.java	/^package bjc.utils.data;$/;"	p
 bjc.utils.data	src/main/java/bjc/utils/data/Tree.java	/^package bjc.utils.data;$/;"	p
-bjc.utils.data	src/main/java/bjc/utils/data/WrappedLazy.java	/^package bjc.utils.data;$/;"	p
-bjc.utils.data	src/main/java/bjc/utils/data/WrappedOption.java	/^package bjc.utils.data;$/;"	p
-bjc.utils.data	src/main/java/bjc/utils/data/package-info.java	/^package bjc.utils.data;$/;"	p
+bjc.utils.data.internals	src/main/java/bjc/utils/data/internals/BoundLazy.java	/^package bjc.utils.data.internals;$/;"	p
+bjc.utils.data.internals	src/main/java/bjc/utils/data/internals/BoundLazyPair.java	/^package bjc.utils.data.internals;$/;"	p
+bjc.utils.data.internals	src/main/java/bjc/utils/data/internals/BoundListHolder.java	/^package bjc.utils.data.internals;$/;"	p
+bjc.utils.data.internals	src/main/java/bjc/utils/data/internals/HalfBoundLazyPair.java	/^package bjc.utils.data.internals;$/;"	p
+bjc.utils.data.internals	src/main/java/bjc/utils/data/internals/WrappedLazy.java	/^package bjc.utils.data.internals;$/;"	p
+bjc.utils.data.internals	src/main/java/bjc/utils/data/internals/WrappedOption.java	/^package bjc.utils.data.internals;$/;"	p
+bjc.utils.esodata	src/main/java/bjc/utils/esodata/DoubleTape.java	/^package bjc.utils.esodata;$/;"	p
+bjc.utils.esodata	src/main/java/bjc/utils/esodata/SingleTape.java	/^package bjc.utils.esodata;$/;"	p
+bjc.utils.esodata	src/main/java/bjc/utils/esodata/Tape.java	/^package bjc.utils.esodata;$/;"	p
+bjc.utils.esodata	src/main/java/bjc/utils/esodata/TapeChanger.java	/^package bjc.utils.esodata;$/;"	p
 bjc.utils.examples	src/examples/java/bjc/utils/examples/BinarySearchTest.java	/^package bjc.utils.examples;$/;"	p
 bjc.utils.examples.parsing	src/examples/java/bjc/utils/examples/parsing/ShuntTest.java	/^package bjc.utils.examples.parsing;$/;"	p
 bjc.utils.examples.parsing	src/examples/java/bjc/utils/examples/parsing/TreeConstructTest.java	/^package bjc.utils.examples.parsing;$/;"	p
@@ -362,6 +401,7 @@ bjc.utils.funcdata	src/main/java/bjc/utils/funcdata/FunctionalMap.java	/^package
 bjc.utils.funcdata	src/main/java/bjc/utils/funcdata/FunctionalStringTokenizer.java	/^package bjc.utils.funcdata;$/;"	p
 bjc.utils.funcdata	src/main/java/bjc/utils/funcdata/IList.java	/^package bjc.utils.funcdata;$/;"	p
 bjc.utils.funcdata	src/main/java/bjc/utils/funcdata/IMap.java	/^package bjc.utils.funcdata;$/;"	p
+bjc.utils.funcdata	src/main/java/bjc/utils/funcdata/SentryList.java	/^package bjc.utils.funcdata;$/;"	p
 bjc.utils.funcdata	src/main/java/bjc/utils/funcdata/TransformedValueMap.java	/^package bjc.utils.funcdata;$/;"	p
 bjc.utils.funcdata.bst	src/main/java/bjc/utils/funcdata/bst/BinarySearchTree.java	/^package bjc.utils.funcdata.bst;$/;"	p
 bjc.utils.funcdata.bst	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeLeaf.java	/^package bjc.utils.funcdata.bst;$/;"	p
@@ -419,23 +459,23 @@ bjc.utils.parserutils	src/main/java/bjc/utils/parserutils/RuleBasedReaderPragmas
 bjc.utils.parserutils	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^package bjc.utils.parserutils;$/;"	p
 bjc.utils.parserutils	src/main/java/bjc/utils/parserutils/TokenTransformer.java	/^package bjc.utils.parserutils;$/;"	p
 bjc.utils.parserutils	src/main/java/bjc/utils/parserutils/TreeConstructor.java	/^package bjc.utils.parserutils;$/;"	p
-boundHolder	src/main/java/bjc/utils/data/BoundLazy.java	/^	private IHolder<BoundContainedType>						boundHolder;$/;"	f	class:BoundLazy	file:
-boundPair	src/main/java/bjc/utils/data/BoundLazyPair.java	/^	private IPair<NewLeft, NewRight>								boundPair;$/;"	f	class:BoundLazyPair	file:
-boundPair	src/main/java/bjc/utils/data/HalfBoundLazyPair.java	/^	private IPair<NewLeft, NewRight>					boundPair;$/;"	f	class:HalfBoundLazyPair	file:
+boundHolder	src/main/java/bjc/utils/data/internals/BoundLazy.java	/^	private IHolder<BoundContainedType>						boundHolder;$/;"	f	class:BoundLazy	file:
+boundPair	src/main/java/bjc/utils/data/internals/BoundLazyPair.java	/^	private IPair<NewLeft, NewRight>								boundPair;$/;"	f	class:BoundLazyPair	file:
+boundPair	src/main/java/bjc/utils/data/internals/HalfBoundLazyPair.java	/^	private IPair<NewLeft, NewRight>					boundPair;$/;"	f	class:HalfBoundLazyPair	file:
 build	src/main/java/bjc/utils/funcutils/IBuilder.java	/^	public E build();$/;"	m	interface:IBuilder
 buildAliasCommand	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	private GenericCommand buildAliasCommand() {$/;"	m	class:GenericCommandMode	file:
 buildClearCommands	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	private GenericCommand buildClearCommands() {$/;"	m	class:GenericCommandMode	file:
 buildExitCommand	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	private GenericCommand buildExitCommand() {$/;"	m	class:GenericCommandMode	file:
-buildFromList	src/main/java/bjc/utils/gui/SimpleJList.java	/^	public static <E> JList<E> buildFromList(Iterable<E> listSource) {$/;"	m	class:SimpleJList
+buildFromList	src/main/java/bjc/utils/gui/SimpleJList.java	/^	public static <E> JList<E> buildFromList(Iterable<E> source) {$/;"	m	class:SimpleJList
 buildHelpCommand	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	private GenericCommand buildHelpCommand() {$/;"	m	class:GenericCommandMode	file:
 buildInteger	src/main/java/bjc/utils/parserutils/RuleBasedReaderPragmas.java	/^			StateType> buildInteger(String name,$/;"	m	class:RuleBasedReaderPragmas
 buildListCommand	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	private GenericCommand buildListCommand() {$/;"	m	class:GenericCommandMode	file:
-buildModel	src/main/java/bjc/utils/gui/SimpleJList.java	/^	public static <E> ListModel<E> buildModel(Iterable<E> listSource) {$/;"	m	class:SimpleJList
+buildModel	src/main/java/bjc/utils/gui/SimpleJList.java	/^	public static <E> ListModel<E> buildModel(Iterable<E> source) {$/;"	m	class:SimpleJList
 buildStringCollapser	src/main/java/bjc/utils/parserutils/RuleBasedReaderPragmas.java	/^			StateType> buildStringCollapser(String name,$/;"	m	class:RuleBasedReaderPragmas
 canHandle	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	public boolean canHandle(String command) {$/;"	m	class:GenericCommandMode
 canHandle	src/main/java/bjc/utils/cli/ICommandMode.java	/^	public default boolean canHandle(String command) {$/;"	m	interface:ICommandMode
-characteristicSet	src/main/java/bjc/utils/funcutils/CompoundCollector.java	/^			java.util.stream.Collector.Characteristics>		characteristicSet;$/;"	f	class:CompoundCollector	file:
-characteristics	src/main/java/bjc/utils/funcutils/CompoundCollector.java	/^			java.util.stream.Collector.Characteristics> characteristics() {$/;"	m	class:CompoundCollector
+characteristicSet	src/main/java/bjc/utils/funcutils/CompoundCollector.java	/^	private Set<java.util.stream.Collector.Characteristics>		characteristicSet;$/;"	f	class:CompoundCollector	file:
+characteristics	src/main/java/bjc/utils/funcutils/CompoundCollector.java	/^	public Set<java.util.stream.Collector.Characteristics> characteristics() {$/;"	m	class:CompoundCollector
 childCount	src/main/java/bjc/utils/data/Tree.java	/^	private int							childCount	= 0;$/;"	f	class:Tree	file:
 children	src/main/java/bjc/utils/data/Tree.java	/^	private IList<ITree<ContainedType>>	children;$/;"	f	class:Tree	file:
 clear	src/main/java/bjc/utils/funcdata/ExtendedMap.java	/^	public void clear() {$/;"	m	class:ExtendedMap
@@ -445,49 +485,55 @@ clear	src/main/java/bjc/utils/funcdata/TransformedValueMap.java	/^	public void c
 clone	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public IList<E> clone() {$/;"	m	class:FunctionalList
 collapse	src/main/java/bjc/utils/data/ITree.java	/^	public <NewType, ReturnedType> ReturnedType collapse($/;"	m	interface:ITree
 collapse	src/main/java/bjc/utils/data/Tree.java	/^	public <NewType, ReturnedType> ReturnedType collapse($/;"	m	class:Tree
-collapse	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeLeaf.java	/^	public <E> E collapse(Function<T, E> leafTransformer,$/;"	m	class:BinarySearchTreeLeaf
-collapse	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeNode.java	/^	public <E> E collapse(Function<T, E> nodeCollapser,$/;"	m	class:BinarySearchTreeNode
+collapse	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeLeaf.java	/^	public <E> E collapse(Function<T, E> leafTransformer, BiFunction<E, E, E> branchCollapser) {$/;"	m	class:BinarySearchTreeLeaf
+collapse	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeNode.java	/^	public <E> E collapse(Function<T, E> nodeCollapser, BiFunction<E, E, E> branchCollapser) {$/;"	m	class:BinarySearchTreeNode
 collapse	src/main/java/bjc/utils/funcdata/bst/ITreePart.java	/^	public <E> E collapse(Function<T, E> nodeCollapser,$/;"	m	interface:ITreePart
 collapseTokens	src/main/java/bjc/utils/funcutils/ListUtils.java	/^	public static String collapseTokens(IList<String> input) {$/;"	m	class:ListUtils
-collapseTokens	src/main/java/bjc/utils/funcutils/ListUtils.java	/^	public static String collapseTokens(IList<String> input,$/;"	m	class:ListUtils
-collect	src/main/java/bjc/utils/funcdata/IList.java	/^	public default <StateType, ReducedType> ReducedType collect($/;"	m	interface:IList
-combine	src/main/java/bjc/utils/data/BoundLazyPair.java	/^	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight> IPair<CombinedLeft, CombinedRight> combine($/;"	m	class:BoundLazyPair
+collapseTokens	src/main/java/bjc/utils/funcutils/ListUtils.java	/^	public static String collapseTokens(IList<String> input, String seperator) {$/;"	m	class:ListUtils
+collect	src/main/java/bjc/utils/funcdata/IList.java	/^	default <StateType, ReducedType> ReducedType collect($/;"	m	interface:IList
 combine	src/main/java/bjc/utils/data/Either.java	/^	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight> IPair<CombinedLeft, CombinedRight> combine($/;"	m	class:Either
-combine	src/main/java/bjc/utils/data/HalfBoundLazyPair.java	/^	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight> IPair<CombinedLeft, CombinedRight> combine($/;"	m	class:HalfBoundLazyPair
 combine	src/main/java/bjc/utils/data/IPair.java	/^					IPair<RightType, OtherRight>> combine($/;"	m	interface:IPair
 combine	src/main/java/bjc/utils/data/IPair.java	/^			CombinedRight> IPair<CombinedLeft, CombinedRight> combine($/;"	m	interface:IPair
 combine	src/main/java/bjc/utils/data/LazyPair.java	/^			CombinedRight> IPair<CombinedLeft, CombinedRight> combine($/;"	m	class:LazyPair
-combine	src/main/java/bjc/utils/data/Pair.java	/^			CombinedRight> IPair<CombinedLeft, CombinedRight> combine($/;"	m	class:Pair
+combine	src/main/java/bjc/utils/data/Pair.java	/^	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight> IPair<CombinedLeft, CombinedRight> combine($/;"	m	class:Pair
+combine	src/main/java/bjc/utils/data/internals/BoundLazyPair.java	/^	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight> IPair<CombinedLeft, CombinedRight> combine($/;"	m	class:BoundLazyPair
+combine	src/main/java/bjc/utils/data/internals/HalfBoundLazyPair.java	/^	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight> IPair<CombinedLeft, CombinedRight> combine($/;"	m	class:HalfBoundLazyPair
 combineWith	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public <T, F> IList<F> combineWith(IList<T> rightList,$/;"	m	class:FunctionalList
 combineWith	src/main/java/bjc/utils/funcdata/IList.java	/^	<OtherType, CombinedType> IList<CombinedType> combineWith($/;"	m	interface:IList
 combiner	src/main/java/bjc/utils/funcutils/CompoundCollector.java	/^	public BinaryOperator<IHolder<IPair<AuxType1, AuxType2>>> combiner() {$/;"	m	class:CompoundCollector
-commandHandlers	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	private IMap<String, ICommand>			commandHandlers;$/;"	f	class:GenericCommandMode	file:
+commandHandlers	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	private IMap<String, ICommand> commandHandlers;$/;"	f	class:GenericCommandMode	file:
 comparator	src/main/java/bjc/utils/funcdata/bst/BinarySearchTree.java	/^	private Comparator<T>	comparator;$/;"	f	class:BinarySearchTree	file:
 components	src/main/java/bjc/utils/components/FileComponentRepository.java	/^	private IMap<String, ComponentType>	components;$/;"	f	class:FileComponentRepository	file:
-compoundCollect	src/main/java/bjc/utils/funcutils/CollectorUtils.java	/^					IPair<FinalType1, FinalType2>> compoundCollect($/;"	m	class:CollectorUtils
+compoundCollect	src/main/java/bjc/utils/funcutils/CollectorUtils.java	/^		compoundCollect($/;"	m	class:CollectorUtils
+configureSpecial	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	public void configureSpecial(Predicate<E> marker,$/;"	m	class:WeightedGrammar
 constructTree	src/main/java/bjc/utils/parserutils/TreeConstructor.java	/^	public static <TokenType> ITree<TokenType> constructTree($/;"	m	class:TreeConstructor
 contains	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public boolean contains(E item) {$/;"	m	class:FunctionalList
 contains	src/main/java/bjc/utils/funcdata/IList.java	/^	boolean contains(ContainedType item);$/;"	m	interface:IList
 contains	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeLeaf.java	/^	public boolean contains(T element, Comparator<T> comparator) {$/;"	m	class:BinarySearchTreeLeaf
 contains	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeNode.java	/^	public boolean contains(T element, Comparator<T> comparator) {$/;"	m	class:BinarySearchTreeNode
 contains	src/main/java/bjc/utils/funcdata/bst/ITreePart.java	/^	public boolean contains(T element, Comparator<T> comparator);$/;"	m	interface:ITreePart
-containsInfixOperator	src/main/java/bjc/utils/funcutils/StringUtils.java	/^	public static boolean containsInfixOperator(String expression,$/;"	m	class:StringUtils
+containsInfixOperator	src/main/java/bjc/utils/funcutils/StringUtils.java	/^	public static boolean containsInfixOperator(String expression, String operator) {$/;"	m	class:StringUtils
 containsKey	src/main/java/bjc/utils/funcdata/ExtendedMap.java	/^	public boolean containsKey(KeyType key) {$/;"	m	class:ExtendedMap
 containsKey	src/main/java/bjc/utils/funcdata/FunctionalMap.java	/^	public boolean containsKey(KeyType key) {$/;"	m	class:FunctionalMap
 containsKey	src/main/java/bjc/utils/funcdata/IMap.java	/^	boolean containsKey(KeyType key);$/;"	m	interface:IMap
 containsKey	src/main/java/bjc/utils/funcdata/TransformedValueMap.java	/^	public boolean containsKey(OldKey key) {$/;"	m	class:TransformedValueMap
 containsOnly	src/main/java/bjc/utils/funcutils/StringUtils.java	/^	public static boolean containsOnly(String input, String regex) {$/;"	m	class:StringUtils
-continueRule	src/main/java/bjc/utils/parserutils/RuleBasedConfigReader.java	/^			E>														continueRule;$/;"	f	class:RuleBasedConfigReader	file:
-continueRule	src/main/java/bjc/utils/parserutils/RuleBasedConfigReader.java	/^	private void continueRule(E state, boolean ruleOpen, String line) {$/;"	m	class:RuleBasedConfigReader	file:
-currentPartition	src/main/java/bjc/utils/funcutils/GroupPartIteration.java	/^	private IHolder<IList<E>>		currentPartition;$/;"	f	class:GroupPartIteration	file:
-curry2	src/main/java/bjc/utils/funcutils/FuncUtils.java	/^	public static <A, B, C> Function<A, Function<B, C>> curry2($/;"	m	class:FuncUtils
-customPrompt	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	private String							customPrompt;$/;"	f	class:GenericCommandMode	file:
+continueRule	src/main/java/bjc/utils/parserutils/RuleBasedConfigReader.java	/^	private BiConsumer<FunctionalStringTokenizer, E> continueRule;$/;"	f	class:RuleBasedConfigReader	file:
+continueRule	src/main/java/bjc/utils/parserutils/RuleBasedConfigReader.java	/^	private void continueRule(E state, boolean isRuleOpen, String line) {$/;"	m	class:RuleBasedConfigReader	file:
+curChild	src/main/java/bjc/utils/data/TopDownTransformIterator.java	/^	private TopDownTransformIterator<ContainedType> curChild;$/;"	f	class:TopDownTransformIterator	file:
+curElm	src/main/java/bjc/utils/data/CircularIterator.java	/^	private E curElm;$/;"	f	class:CircularIterator	file:
+curYield	src/main/java/bjc/utils/data/TopDownTransformIterator.java	/^	private Iterator<ITree<ContainedType>>        curYield;$/;"	f	class:TopDownTransformIterator	file:
+curr	src/main/java/bjc/utils/data/CircularIterator.java	/^	private Iterator<E> curr;$/;"	f	class:CircularIterator	file:
+currentPartition	src/main/java/bjc/utils/funcutils/GroupPartIteration.java	/^	public IList<E>		currentPartition;$/;"	f	class:GroupPartIteration
+currentTape	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	private Tape<T>       currentTape;$/;"	f	class:TapeChanger	file:
+curry2	src/main/java/bjc/utils/funcutils/FuncUtils.java	/^	public static <A, B, C> Function<A, Function<B, C>> curry2(BiFunction<A, B, C> func) {$/;"	m	class:FuncUtils
+customPrompt	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	private String customPrompt;$/;"	f	class:GenericCommandMode	file:
 data	src/main/java/bjc/utils/data/Tree.java	/^	private ContainedType				data;$/;"	f	class:Tree	file:
 data	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeLeaf.java	/^	protected T			data;$/;"	f	class:BinarySearchTreeLeaf
 data	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeLeaf.java	/^	public T data() {$/;"	m	class:BinarySearchTreeLeaf
 data	src/main/java/bjc/utils/funcdata/bst/ITreePart.java	/^	public T data();$/;"	m	interface:ITreePart
 deAffixTokens	src/main/java/bjc/utils/funcutils/ListUtils.java	/^	public static IList<String> deAffixTokens(IList<String> input,$/;"	m	class:ListUtils
-defaultHandlers	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	private IMap<String, ICommand>			defaultHandlers;$/;"	f	class:GenericCommandMode	file:
+defaultHandlers	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	private IMap<String, ICommand> defaultHandlers;$/;"	f	class:GenericCommandMode	file:
 delegate	src/main/java/bjc/utils/cli/DelegatingCommand.java	/^	private ICommand delegate;$/;"	f	class:DelegatingCommand	file:
 delegate	src/main/java/bjc/utils/funcdata/ExtendedMap.java	/^	private IMap<KeyType, ValueType>	delegate;$/;"	f	class:ExtendedMap	file:
 delete	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeLeaf.java	/^	public void delete(T element, Comparator<T> comparator) {$/;"	m	class:BinarySearchTreeLeaf
@@ -496,18 +542,19 @@ delete	src/main/java/bjc/utils/funcdata/bst/ITreePart.java	/^	public void delete
 deleteNode	src/main/java/bjc/utils/funcdata/bst/BinarySearchTree.java	/^	public void deleteNode(T element) {$/;"	m	class:BinarySearchTree
 deleteRule	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	public void deleteRule(E name) {$/;"	m	class:WeightedGrammar
 deleteSubgrammar	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	public void deleteSubgrammar(E name) {$/;"	m	class:WeightedGrammar
-description	src/main/java/bjc/utils/cli/GenericHelp.java	/^	private String	description;$/;"	f	class:GenericHelp	file:
+description	src/main/java/bjc/utils/cli/GenericHelp.java	/^	private String description;$/;"	f	class:GenericHelp	file:
 description	src/main/java/bjc/utils/components/ComponentDescription.java	/^	private String	description;$/;"	f	class:ComponentDescription	file:
 description	src/main/java/bjc/utils/components/ComponentDescriptionState.java	/^	private String	description;$/;"	f	class:ComponentDescriptionState	file:
 directedWalk	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeLeaf.java	/^	public boolean directedWalk(DirectedWalkFunction<T> treeWalker) {$/;"	m	class:BinarySearchTreeLeaf
 directedWalk	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeNode.java	/^	public boolean directedWalk(DirectedWalkFunction<T> treeWalker) {$/;"	m	class:BinarySearchTreeNode
-directedWalk	src/main/java/bjc/utils/funcdata/bst/ITreePart.java	/^	public boolean directedWalk(DirectedWalkFunction<T> treeWalker);$/;"	m	interface:ITreePart
-displayTree	src/examples/java/bjc/utils/examples/BinarySearchTest.java	/^	private static void displayTree(BinarySearchTree<Character> tree,$/;"	m	class:BinarySearchTest	file:
+directedWalk	src/main/java/bjc/utils/funcdata/bst/ITreePart.java	/^	public boolean directedWalk(DirectedWalkFunction<T> walker);$/;"	m	interface:ITreePart
+display	src/examples/java/bjc/utils/examples/BinarySearchTest.java	/^	private static void display(BinarySearchTree<Character> tree,$/;"	m	class:BinarySearchTest	file:
 distance	src/main/java/bjc/utils/graph/Edge.java	/^	private final int	distance;$/;"	f	class:Edge	file:
 doAliasCommands	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	private void doAliasCommands(String[] args) {$/;"	m	class:GenericCommandMode	file:
+doCircle	src/main/java/bjc/utils/data/CircularIterator.java	/^	private boolean doCircle;$/;"	f	class:CircularIterator	file:
 doForChildren	src/main/java/bjc/utils/data/ITree.java	/^	void doForChildren(Consumer<ITree<ContainedType>> action);$/;"	m	interface:ITree
 doForChildren	src/main/java/bjc/utils/data/Tree.java	/^	public void doForChildren(Consumer<ITree<ContainedType>> action) {$/;"	m	class:Tree
-doForValues	src/main/java/bjc/utils/funcutils/EnumUtils.java	/^	public static <E extends Enum<E>> void doForValues(Class<E> enumClass,$/;"	m	class:EnumUtils
+doForValues	src/main/java/bjc/utils/funcutils/EnumUtils.java	/^	public static <E extends Enum<E>> void doForValues(Class<E> clasz,$/;"	m	class:EnumUtils
 doHelpCommand	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	private void doHelpCommand(String commandName) {$/;"	m	class:GenericCommandMode	file:
 doHelpSummary	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	private void doHelpSummary() {$/;"	m	class:GenericCommandMode	file:
 doListCommands	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	private void doListCommands() {$/;"	m	class:GenericCommandMode	file:
@@ -516,17 +563,20 @@ doSaveFile	src/main/java/bjc/utils/gui/SimpleFileChooser.java	/^	private static 
 doTimes	src/main/java/bjc/utils/funcutils/FuncUtils.java	/^	public static void doTimes(int nTimes, Consumer<Integer> cons) {$/;"	m	class:FuncUtils
 doWith	src/main/java/bjc/utils/data/IHolder.java	/^	public default void doWith(Consumer<? super ContainedType> action) {$/;"	m	interface:IHolder
 doWith	src/main/java/bjc/utils/data/IPair.java	/^	public default void doWith(BiConsumer<LeftType, RightType> consumer) {$/;"	m	interface:IPair
+done	src/main/java/bjc/utils/data/TopDownTransformIterator.java	/^	private boolean done;$/;"	f	class:TopDownTransformIterator	file:
 drawWithReplacement	src/main/java/bjc/utils/funcutils/ListUtils.java	/^	public static <E> IList<E> drawWithReplacement(IList<E> list,$/;"	m	class:ListUtils
-drawWithoutReplacement	src/main/java/bjc/utils/funcutils/ListUtils.java	/^	public static <E> IList<E> drawWithoutReplacement(IList<E> list,$/;"	m	class:ListUtils
+drawWithoutReplacement	src/main/java/bjc/utils/funcutils/ListUtils.java	/^	public static <E> IList<E> drawWithoutReplacement($/;"	m	class:ListUtils
+eject	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public void eject() {$/;"	m	class:TapeChanger
 element	src/main/java/bjc/utils/parserutils/TokenTransformer.java	/^		private TokenType element;$/;"	f	class:TokenTransformer.OperatorHandler	file:
 elementCount	src/main/java/bjc/utils/funcdata/bst/BinarySearchTree.java	/^	private int				elementCount;$/;"	f	class:BinarySearchTree	file:
 elementCounter	src/main/java/bjc/utils/funcutils/GroupPartIteration.java	/^	private Function<E, Integer>	elementCounter;$/;"	f	class:GroupPartIteration	file:
-endRule	src/main/java/bjc/utils/parserutils/RuleBasedConfigReader.java	/^			E>														endRule;$/;"	f	class:RuleBasedConfigReader	file:
-endRule	src/main/java/bjc/utils/parserutils/RuleBasedConfigReader.java	/^	private boolean endRule(E state, boolean ruleOpen) {$/;"	m	class:RuleBasedConfigReader	file:
+end	src/main/java/bjc/utils/parserutils/RuleBasedConfigReader.java	/^	private Consumer<E> end;$/;"	f	class:RuleBasedConfigReader	file:
+endRule	src/main/java/bjc/utils/parserutils/RuleBasedConfigReader.java	/^	private boolean endRule(E state, boolean isRuleOpen) {$/;"	m	class:RuleBasedConfigReader	file:
 equals	src/main/java/bjc/utils/data/Identity.java	/^	public boolean equals(Object obj) {$/;"	m	class:Identity
+equals	src/main/java/bjc/utils/data/Tree.java	/^	public boolean equals(Object other) {$/;"	m	class:Tree
 equals	src/main/java/bjc/utils/graph/Edge.java	/^	public boolean equals(Object obj) {$/;"	m	class:Edge
 error	src/main/java/bjc/utils/cli/CLICommander.java	/^	private OutputStream	error;$/;"	f	class:CLICommander	file:
-errorOutput	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	private Consumer<String>				errorOutput;$/;"	f	class:GenericCommandMode	file:
+errorOutput	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	private Consumer<String> errorOutput;$/;"	f	class:GenericCommandMode	file:
 extend	src/main/java/bjc/utils/funcdata/ExtendedMap.java	/^	public IMap<KeyType, ValueType> extend() {$/;"	m	class:ExtendedMap
 extend	src/main/java/bjc/utils/funcdata/FunctionalMap.java	/^	public IMap<KeyType, ValueType> extend() {$/;"	m	class:FunctionalMap
 extend	src/main/java/bjc/utils/funcdata/IMap.java	/^	IMap<KeyType, ValueType> extend();$/;"	m	interface:IMap
@@ -536,32 +586,39 @@ extensions	src/main/java/bjc/utils/gui/awt/ExtensionFileFilter.java	/^	private I
 fallingFactorial	src/main/java/bjc/utils/funcutils/NumberUtils.java	/^	public static int fallingFactorial(int value, int power) {$/;"	m	class:NumberUtils
 field	src/main/java/bjc/utils/gui/panels/FormattedInputPanel.java	/^	private JFormattedTextField	field;$/;"	f	class:FormattedInputPanel	file:
 field	src/main/java/bjc/utils/gui/panels/SliderInputPanel.java	/^	private JFormattedTextField	field;$/;"	f	class:SliderInputPanel	file:
-finisher	src/main/java/bjc/utils/funcutils/CompoundCollector.java	/^			IPair<FinalType1, FinalType2>> finisher() {$/;"	m	class:CompoundCollector
+finisher	src/main/java/bjc/utils/funcutils/CompoundCollector.java	/^	public Function<IHolder<IPair<AuxType1, AuxType2>>, IPair<FinalType1, FinalType2>> finisher() {$/;"	m	class:CompoundCollector
+first	src/main/java/bjc/utils/esodata/DoubleTape.java	/^	public void first() {$/;"	m	class:DoubleTape
+first	src/main/java/bjc/utils/esodata/SingleTape.java	/^	public void first() {$/;"	m	class:SingleTape
+first	src/main/java/bjc/utils/esodata/Tape.java	/^	void first();$/;"	m	interface:Tape
+first	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public void first() {$/;"	m	class:TapeChanger
 first	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public E first() {$/;"	m	class:FunctionalList
 first	src/main/java/bjc/utils/funcdata/IList.java	/^	ContainedType first();$/;"	m	interface:IList
-firstCollector	src/main/java/bjc/utils/funcutils/CompoundCollector.java	/^	private Collector<InitialType, AuxType1, FinalType1>	firstCollector;$/;"	f	class:CompoundCollector	file:
-flatMap	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public <T> IList<T> flatMap(Function<E, IList<T>> elementExpander) {$/;"	m	class:FunctionalList
+first	src/main/java/bjc/utils/funcutils/CompoundCollector.java	/^	private Collector<InitialType, AuxType1, FinalType1>	first;$/;"	f	class:CompoundCollector	file:
+flatMap	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public <T> IList<T> flatMap(Function<E, IList<T>> expander) {$/;"	m	class:FunctionalList
 flatMap	src/main/java/bjc/utils/funcdata/IList.java	/^	<MappedType> IList<MappedType> flatMap($/;"	m	interface:IList
 flatMapTree	src/main/java/bjc/utils/data/ITree.java	/^	public ITree<ContainedType> flatMapTree($/;"	m	interface:ITree
-flatMapTree	src/main/java/bjc/utils/data/Tree.java	/^	public ITree<ContainedType> flatMapTree($/;"	m	class:Tree
+flatMapTree	src/main/java/bjc/utils/data/Tree.java	/^	public ITree<ContainedType> flatMapTree(Function<ContainedType, ITree<ContainedType>> mapper) {$/;"	m	class:Tree
+flip	src/main/java/bjc/utils/esodata/DoubleTape.java	/^	public void flip() {$/;"	m	class:DoubleTape
+flip	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public void flip() {$/;"	m	class:TapeChanger
+flushYields	src/main/java/bjc/utils/data/TopDownTransformIterator.java	/^	public ITree<ContainedType> flushYields(ITree<ContainedType> val) {$/;"	m	class:TopDownTransformIterator
 fmap	src/main/java/bjc/utils/data/IHolder.java	/^					Functor<ReturnType>> fmap($/;"	m	interface:IHolder
-fmap	src/main/java/bjc/utils/funcdata/theory/Functor.java	/^					Functor<ReturnType>> fmap($/;"	m	interface:Functor
+fmap	src/main/java/bjc/utils/funcdata/theory/Functor.java	/^		fmap(Function<ArgType, ReturnType> func);$/;"	m	interface:Functor
 fmapLeft	src/main/java/bjc/utils/data/IPair.java	/^					Bifunctor<NewLeft, OldRight>> fmapLeft($/;"	m	interface:IPair
 fmapLeft	src/main/java/bjc/utils/funcdata/theory/Bifunctor.java	/^					Bifunctor<NewLeft, OldRight>> fmapLeft($/;"	m	interface:Bifunctor
 fmapRight	src/main/java/bjc/utils/data/IPair.java	/^			fmapRight(Function<OldRight, NewRight> func) {$/;"	m	interface:IPair
 fmapRight	src/main/java/bjc/utils/funcdata/theory/Bifunctor.java	/^					Bifunctor<OldLeft, NewRight>> fmapRight($/;"	m	interface:Bifunctor
-forAllEdgesMatchingAt	src/main/java/bjc/utils/graph/Graph.java	/^	public void forAllEdgesMatchingAt(T sourceVertex,$/;"	m	class:Graph
+forAllEdgesMatchingAt	src/main/java/bjc/utils/graph/Graph.java	/^	public void forAllEdgesMatchingAt(T source,$/;"	m	class:Graph
 forEach	src/main/java/bjc/utils/funcdata/ExtendedMap.java	/^	public void forEach(BiConsumer<KeyType, ValueType> action) {$/;"	m	class:ExtendedMap
-forEach	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public void forEach(Consumer<E> action) {$/;"	m	class:FunctionalList
+forEach	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public void forEach(Consumer<? super E> action) {$/;"	m	class:FunctionalList
 forEach	src/main/java/bjc/utils/funcdata/FunctionalMap.java	/^	public void forEach(BiConsumer<KeyType, ValueType> action) {$/;"	m	class:FunctionalMap
-forEach	src/main/java/bjc/utils/funcdata/IList.java	/^	void forEach(Consumer<ContainedType> action);$/;"	m	interface:IList
+forEach	src/main/java/bjc/utils/funcdata/IList.java	/^	void forEach(Consumer<? super ContainedType> action);$/;"	m	interface:IList
 forEach	src/main/java/bjc/utils/funcdata/IMap.java	/^	void forEach(BiConsumer<KeyType, ValueType> action);$/;"	m	interface:IMap
 forEach	src/main/java/bjc/utils/funcdata/TransformedValueMap.java	/^	public void forEach(BiConsumer<OldKey, NewValue> action) {$/;"	m	class:TransformedValueMap
-forEach	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeLeaf.java	/^	public boolean forEach(TreeLinearizationMethod linearizationMethod,$/;"	m	class:BinarySearchTreeLeaf
-forEach	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeNode.java	/^	public boolean forEach(TreeLinearizationMethod linearizationMethod,$/;"	m	class:BinarySearchTreeNode
+forEach	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeLeaf.java	/^	public boolean forEach(TreeLinearizationMethod linearizationMethod, Predicate<T> traversalPredicate) {$/;"	m	class:BinarySearchTreeLeaf
+forEach	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeNode.java	/^	public boolean forEach(TreeLinearizationMethod linearizationMethod, Predicate<T> traversalPredicate) {$/;"	m	class:BinarySearchTreeNode
 forEach	src/main/java/bjc/utils/funcdata/bst/ITreePart.java	/^	public boolean forEach(TreeLinearizationMethod linearizationMethod,$/;"	m	interface:ITreePart
 forEachIndexed	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public void forEachIndexed(BiConsumer<Integer, E> indexedAction) {$/;"	m	class:FunctionalList
-forEachIndexed	src/main/java/bjc/utils/funcdata/IList.java	/^	void forEachIndexed(BiConsumer<Integer, ContainedType> indexedAction);$/;"	m	interface:IList
+forEachIndexed	src/main/java/bjc/utils/funcdata/IList.java	/^	void forEachIndexed(BiConsumer<Integer, ContainedType> action);$/;"	m	interface:IList
 forEachKey	src/main/java/bjc/utils/funcdata/ExtendedMap.java	/^	public void forEachKey(Consumer<KeyType> action) {$/;"	m	class:ExtendedMap
 forEachKey	src/main/java/bjc/utils/funcdata/FunctionalMap.java	/^	public void forEachKey(Consumer<KeyType> action) {$/;"	m	class:FunctionalMap
 forEachKey	src/main/java/bjc/utils/funcdata/IMap.java	/^	void forEachKey(Consumer<KeyType> action);$/;"	m	interface:IMap
@@ -576,10 +633,11 @@ fromLeft	src/main/java/bjc/utils/data/Either.java	/^	public static <LeftType, Ri
 fromRight	src/main/java/bjc/utils/data/Either.java	/^	public static <LeftType, RightType> Either<LeftType, RightType> fromRight($/;"	m	class:Either
 fromStream	src/main/java/bjc/utils/components/ComponentDescriptionFileParser.java	/^	public static ComponentDescription fromStream($/;"	m	class:ComponentDescriptionFileParser
 fromStream	src/main/java/bjc/utils/graph/AdjacencyMap.java	/^	public static AdjacencyMap<Integer> fromStream(InputStream stream) {$/;"	m	class:AdjacencyMap
-fromStream	src/main/java/bjc/utils/parserutils/RuleBasedConfigReader.java	/^	public E fromStream(InputStream inputStream, E initialState) {$/;"	m	class:RuleBasedConfigReader
+fromStream	src/main/java/bjc/utils/parserutils/RuleBasedConfigReader.java	/^	public E fromStream(InputStream input, E initialState) {$/;"	m	class:RuleBasedConfigReader
 fromString	src/main/java/bjc/utils/funcdata/FunctionalStringTokenizer.java	/^	public static FunctionalStringTokenizer fromString(String strang) {$/;"	m	class:FunctionalStringTokenizer
+front	src/main/java/bjc/utils/esodata/DoubleTape.java	/^	private Tape<T> front;$/;"	f	class:DoubleTape	file:
 generateDebugValues	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	public IList<IList<E>> generateDebugValues(E ruleName) {$/;"	m	class:WeightedGrammar
-generateGenericValues	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	public <T> IList<T> generateGenericValues(E initRule,$/;"	m	class:WeightedGrammar
+generateGenericValues	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	public <T> IList<T> generateGenericValues(E initRules, Function<E, T> tokenTransformer, T spacer) {$/;"	m	class:WeightedGrammar
 generateListValues	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	public IList<E> generateListValues(E initRule, E spacer) {$/;"	m	class:WeightedGrammar
 generateValue	src/main/java/bjc/utils/gen/WeightedRandom.java	/^	public E generateValue() {$/;"	m	class:WeightedRandom
 get	src/main/java/bjc/utils/data/SingleSupplier.java	/^	public T get() {$/;"	m	class:SingleSupplier
@@ -629,8 +687,8 @@ getLeft	src/main/java/bjc/utils/data/LazyPair.java	/^	public LeftType getLeft() 
 getLeft	src/main/java/bjc/utils/funcdata/theory/Bifunctor.java	/^	public LeftType getLeft();$/;"	m	interface:Bifunctor
 getList	src/main/java/bjc/utils/components/FileComponentRepository.java	/^	public IList<ComponentType> getList() {$/;"	m	class:FileComponentRepository
 getList	src/main/java/bjc/utils/components/IComponentRepository.java	/^	public default IList<ComponentType> getList() {$/;"	m	interface:IComponentRepository
-getMatching	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public IList<E> getMatching(Predicate<E> matchPredicate) {$/;"	m	class:FunctionalList
-getMatching	src/main/java/bjc/utils/funcdata/IList.java	/^	IList<ContainedType> getMatching($/;"	m	interface:IList
+getMatching	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public IList<E> getMatching(Predicate<E> predicate) {$/;"	m	class:FunctionalList
+getMatching	src/main/java/bjc/utils/funcdata/IList.java	/^	IList<ContainedType> getMatching(Predicate<ContainedType> predicate);$/;"	m	interface:IList
 getMinimumSpanningTree	src/main/java/bjc/utils/graph/Graph.java	/^	public List<Edge<T>> getMinimumSpanningTree() {$/;"	m	class:Graph
 getName	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	public String getName() {$/;"	m	class:GenericCommandMode
 getName	src/main/java/bjc/utils/cli/ICommandMode.java	/^	public default String getName() {$/;"	m	interface:ICommandMode
@@ -644,7 +702,7 @@ getOpenFiles	src/main/java/bjc/utils/gui/awt/SimpleFileDialog.java	/^	public sta
 getOrDefault	src/main/java/bjc/utils/funcdata/IMap.java	/^	default ValueType getOrDefault(KeyType key, ValueType defaultValue) {$/;"	m	interface:IMap
 getPrecedence	src/main/java/bjc/utils/parserutils/IPrecedent.java	/^	public int getPrecedence();$/;"	m	interface:IPrecedent
 getPrecedence	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^		public int getPrecedence() {$/;"	m	class:ShuntingYard.Operator
-getRandomValue	src/main/java/bjc/utils/funcutils/EnumUtils.java	/^	public static <E extends Enum<E>> E getRandomValue(Class<E> enumClass,$/;"	m	class:EnumUtils
+getRandomValue	src/main/java/bjc/utils/funcutils/EnumUtils.java	/^	public static <E extends Enum<E>> E getRandomValue(Class<E> clasz,$/;"	m	class:EnumUtils
 getResults	src/main/java/bjc/utils/gen/WeightedRandom.java	/^	public IList<E> getResults() {$/;"	m	class:WeightedRandom
 getRight	src/main/java/bjc/utils/data/IPair.java	/^	public default RightType getRight() {$/;"	m	interface:IPair
 getRight	src/main/java/bjc/utils/data/LazyPair.java	/^	public RightType getRight() {$/;"	m	class:LazyPair
@@ -686,7 +744,7 @@ getWhole	src/main/java/bjc/utils/gui/SimpleInternalDialogs.java	/^	public static
 getYesNo	src/main/java/bjc/utils/gui/SimpleDialogs.java	/^	public static boolean getYesNo(Component parent, String title,$/;"	m	class:SimpleDialogs
 getYesNo	src/main/java/bjc/utils/gui/SimpleInternalDialogs.java	/^	public static boolean getYesNo(Component parent, String title,$/;"	m	class:SimpleInternalDialogs
 gotten	src/main/java/bjc/utils/data/SingleSupplier.java	/^	private boolean		gotten;$/;"	f	class:SingleSupplier	file:
-groupPartition	src/main/java/bjc/utils/funcutils/ListUtils.java	/^	public static <E> IList<IList<E>> groupPartition(IList<E> input,$/;"	m	class:ListUtils
+groupPartition	src/main/java/bjc/utils/funcutils/ListUtils.java	/^	public static <E> IList<IList<E>> groupPartition($/;"	m	class:ListUtils
 handle	src/main/java/bjc/utils/cli/ICommandHandler.java	/^	public default ICommandMode handle(String[] args) {$/;"	m	interface:ICommandHandler
 handleOperator	src/main/java/bjc/utils/parserutils/TokenTransformer.java	/^				ITree<TokenType>> handleOperator($/;"	m	class:TokenTransformer.OperatorHandler	file:
 handleSpecialOperator	src/main/java/bjc/utils/parserutils/TokenTransformer.java	/^			ITree<TokenType>>>															handleSpecialOperator;$/;"	f	class:TokenTransformer	file:
@@ -694,33 +752,48 @@ handler	src/main/java/bjc/utils/cli/GenericCommand.java	/^	private ICommandHandl
 hasChildren	src/main/java/bjc/utils/data/Tree.java	/^	private boolean						hasChildren;$/;"	f	class:Tree	file:
 hasInitialRule	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	public boolean hasInitialRule() {$/;"	m	class:WeightedGrammar
 hasMoreTokens	src/main/java/bjc/utils/funcdata/FunctionalStringTokenizer.java	/^	public boolean hasMoreTokens() {$/;"	m	class:FunctionalStringTokenizer
+hasNext	src/main/java/bjc/utils/data/CircularIterator.java	/^	public boolean hasNext() {$/;"	m	class:CircularIterator
+hasNext	src/main/java/bjc/utils/data/SingleIterator.java	/^	public boolean hasNext() {$/;"	m	class:SingleIterator
+hasNext	src/main/java/bjc/utils/data/TopDownTransformIterator.java	/^	public boolean hasNext() {$/;"	m	class:TopDownTransformIterator
+hasNext	src/main/java/bjc/utils/data/TransformedIterator.java	/^	public boolean hasNext() {$/;"	m	class:TransformedIterator
+hasRule	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	public boolean hasRule(E ruleName) {$/;"	m	class:WeightedGrammar
 hashCode	src/main/java/bjc/utils/data/Identity.java	/^	public int hashCode() {$/;"	m	class:Identity
 hashCode	src/main/java/bjc/utils/graph/Edge.java	/^	public int hashCode() {$/;"	m	class:Edge
 held	src/main/java/bjc/utils/data/Option.java	/^	private ContainedType held;$/;"	f	class:Option	file:
-held	src/main/java/bjc/utils/data/WrappedLazy.java	/^	private IHolder<IHolder<ContainedType>> held;$/;"	f	class:WrappedLazy	file:
-held	src/main/java/bjc/utils/data/WrappedOption.java	/^	private IHolder<IHolder<ContainedType>> held;$/;"	f	class:WrappedOption	file:
-heldHolders	src/main/java/bjc/utils/data/BoundListHolder.java	/^	private IList<IHolder<ContainedType>> heldHolders;$/;"	f	class:BoundListHolder	file:
+held	src/main/java/bjc/utils/data/internals/WrappedLazy.java	/^	private IHolder<IHolder<ContainedType>> held;$/;"	f	class:WrappedLazy	file:
+held	src/main/java/bjc/utils/data/internals/WrappedOption.java	/^	private IHolder<IHolder<ContainedType>> held;$/;"	f	class:WrappedOption	file:
+heldHolders	src/main/java/bjc/utils/data/internals/BoundListHolder.java	/^	private IList<IHolder<ContainedType>> heldHolders;$/;"	f	class:BoundListHolder	file:
 heldValue	src/main/java/bjc/utils/data/Identity.java	/^	private ContainedType heldValue;$/;"	f	class:Identity	file:
 heldValue	src/main/java/bjc/utils/data/Lazy.java	/^	private ContainedType						heldValue;$/;"	f	class:Lazy	file:
 heldValues	src/main/java/bjc/utils/data/ListHolder.java	/^	private IList<ContainedType> heldValues;$/;"	f	class:ListHolder	file:
-help	src/main/java/bjc/utils/cli/GenericCommand.java	/^	private ICommandHelp	help;$/;"	f	class:GenericCommand	file:
-helpTopics	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	private IMap<String, ICommandHelp>		helpTopics;$/;"	f	class:GenericCommandMode	file:
-holderBound	src/main/java/bjc/utils/data/BoundLazy.java	/^	private boolean											holderBound;$/;"	f	class:BoundLazy	file:
+help	src/main/java/bjc/utils/cli/GenericCommand.java	/^	private ICommandHelp help;$/;"	f	class:GenericCommand	file:
+helpTopics	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	private IMap<String, ICommandHelp> helpTopics;$/;"	f	class:GenericCommandMode	file:
+holderBound	src/main/java/bjc/utils/data/internals/BoundLazy.java	/^	private boolean											holderBound;$/;"	f	class:BoundLazy	file:
 id	src/main/java/bjc/utils/data/SingleSupplier.java	/^	private long		id;$/;"	f	class:SingleSupplier	file:
 indentNLevels	src/main/java/bjc/utils/funcutils/StringUtils.java	/^	public static void indentNLevels(StringBuilder builder, int levels) {$/;"	m	class:StringUtils
 initValue	src/main/java/bjc/utils/gui/panels/SliderInputPanel.java	/^		private int					initValue;$/;"	f	class:SliderInputPanel.NumberFormatter	file:
 initValue	src/main/java/bjc/utils/gui/panels/SliderInputPanel.java	/^		public final int	initValue;$/;"	f	class:SliderInputPanel.SliderSettings
-initialMode	src/main/java/bjc/utils/cli/CLICommander.java	/^	private ICommandMode	initialMode;$/;"	f	class:CLICommander	file:
-initialRule	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	protected String							initialRule;$/;"	f	class:WeightedGrammar
+initial	src/main/java/bjc/utils/data/TopDownTransformIterator.java	/^	private boolean initial;$/;"	f	class:TopDownTransformIterator	file:
+initialMode	src/main/java/bjc/utils/cli/CLICommander.java	/^	private ICommandMode initialMode;$/;"	f	class:CLICommander	file:
+initialRule	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	protected String initialRule;$/;"	f	class:WeightedGrammar
 initialState	src/main/java/bjc/utils/parserutils/TokenTransformer.java	/^			ITree<TokenType>>>															initialState;$/;"	f	class:TokenTransformer	file:
-inorderTraverse	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeNode.java	/^	private boolean inorderTraverse($/;"	m	class:BinarySearchTreeNode	file:
-input	src/main/java/bjc/utils/cli/CLICommander.java	/^	private InputStream		input;$/;"	f	class:CLICommander	file:
+inorderTraverse	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeNode.java	/^	private boolean inorderTraverse( TreeLinearizationMethod linearizationMethod, Predicate<T> traversalPredicate) {$/;"	m	class:BinarySearchTreeNode	file:
+input	src/main/java/bjc/utils/cli/CLICommander.java	/^	private InputStream	input;$/;"	f	class:CLICommander	file:
 input	src/main/java/bjc/utils/funcdata/FunctionalStringTokenizer.java	/^	private StringTokenizer input;$/;"	f	class:FunctionalStringTokenizer	file:
 inputValue	src/main/java/bjc/utils/gui/panels/SimpleInputPanel.java	/^	public final JTextField		inputValue;$/;"	f	class:SimpleInputPanel
 inputValue	src/main/java/bjc/utils/gui/panels/SimpleSpinnerPanel.java	/^	public final JSpinner		inputValue;$/;"	f	class:SimpleSpinnerPanel
+insertAfter	src/main/java/bjc/utils/esodata/DoubleTape.java	/^	public void insertAfter(T itm) {$/;"	m	class:DoubleTape
+insertAfter	src/main/java/bjc/utils/esodata/SingleTape.java	/^	public void insertAfter(T itm) {$/;"	m	class:SingleTape
+insertAfter	src/main/java/bjc/utils/esodata/Tape.java	/^	void insertAfter(T itm);$/;"	m	interface:Tape
+insertAfter	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public void insertAfter(T itm) {$/;"	m	class:TapeChanger
+insertBefore	src/main/java/bjc/utils/esodata/DoubleTape.java	/^	public void insertBefore(T itm) {$/;"	m	class:DoubleTape
+insertBefore	src/main/java/bjc/utils/esodata/SingleTape.java	/^	public void insertBefore(T itm) {$/;"	m	class:SingleTape
+insertBefore	src/main/java/bjc/utils/esodata/Tape.java	/^	void insertBefore(T itm);$/;"	m	interface:Tape
+insertBefore	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public void insertBefore(T itm) {$/;"	m	class:TapeChanger
+insertTape	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public void insertTape(Tape<T> tp) {$/;"	m	class:TapeChanger
 instSite	src/main/java/bjc/utils/data/SingleSupplier.java	/^	private Exception	instSite;$/;"	f	class:SingleSupplier	file:
 internalCollapse	src/main/java/bjc/utils/data/Tree.java	/^	protected <NewType> NewType internalCollapse($/;"	m	class:Tree
-internalToString	src/main/java/bjc/utils/data/Tree.java	/^	protected void internalToString(StringBuilder builder, int indentLevel,$/;"	m	class:Tree
+internalToString	src/main/java/bjc/utils/data/Tree.java	/^	protected void internalToString(StringBuilder builder, int indentLevel, boolean initial) {$/;"	m	class:Tree
 isAlias	src/main/java/bjc/utils/cli/DelegatingCommand.java	/^	public boolean isAlias() {$/;"	m	class:DelegatingCommand
 isAlias	src/main/java/bjc/utils/cli/GenericCommand.java	/^	public boolean isAlias() {$/;"	m	class:GenericCommand
 isAlias	src/main/java/bjc/utils/cli/ICommand.java	/^	public default boolean isAlias() {$/;"	m	interface:ICommand
@@ -728,34 +801,61 @@ isCustomPromptEnabled	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	pub
 isCustomPromptEnabled	src/main/java/bjc/utils/cli/ICommandMode.java	/^	public default boolean isCustomPromptEnabled() {$/;"	m	interface:ICommandMode
 isDeleted	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeLeaf.java	/^	protected boolean	isDeleted;$/;"	f	class:BinarySearchTreeLeaf
 isDirected	src/main/java/bjc/utils/graph/AdjacencyMap.java	/^	public boolean isDirected() {$/;"	m	class:AdjacencyMap
+isDoubleSided	src/main/java/bjc/utils/esodata/DoubleTape.java	/^	public boolean isDoubleSided() {$/;"	m	class:DoubleTape
+isDoubleSided	src/main/java/bjc/utils/esodata/SingleTape.java	/^	public boolean isDoubleSided() {$/;"	m	class:SingleTape
+isDoubleSided	src/main/java/bjc/utils/esodata/Tape.java	/^	boolean isDoubleSided();$/;"	m	interface:Tape
+isDoubleSided	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public boolean isDoubleSided() {$/;"	m	class:TapeChanger
 isEmpty	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public boolean isEmpty() {$/;"	m	class:FunctionalList
 isEmpty	src/main/java/bjc/utils/funcdata/IList.java	/^	boolean isEmpty();$/;"	m	interface:IList
-isHigherPrec	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^	private boolean isHigherPrec(String leftOperator, String rightOperator) {$/;"	m	class:ShuntingYard	file:
+isHigherPrec	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^	private boolean isHigherPrec(String left, String right) {$/;"	m	class:ShuntingYard	file:
 isInTree	src/main/java/bjc/utils/funcdata/bst/BinarySearchTree.java	/^	public boolean isInTree(T element) {$/;"	m	class:BinarySearchTree
 isLeft	src/main/java/bjc/utils/data/Either.java	/^	private boolean		isLeft;$/;"	f	class:Either	file:
+isLoaded	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public boolean isLoaded() {$/;"	m	class:TapeChanger
 isPartitionFull	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	private Boolean isPartitionFull(int numberPerPartition,$/;"	m	class:FunctionalList	file:
-isProbable	src/main/java/bjc/utils/funcutils/NumberUtils.java	/^	public static boolean isProbable(int topExp, int bottomExp,$/;"	m	class:NumberUtils
+isProbable	src/main/java/bjc/utils/funcutils/NumberUtils.java	/^	public static boolean isProbable(int winning, int total,$/;"	m	class:NumberUtils
 isSpecialOperator	src/main/java/bjc/utils/parserutils/TokenTransformer.java	/^			TokenType>																	isSpecialOperator;$/;"	f	class:TokenTransformer	file:
+item	src/main/java/bjc/utils/esodata/DoubleTape.java	/^	public T item() {$/;"	m	class:DoubleTape
+item	src/main/java/bjc/utils/esodata/DoubleTape.java	/^	public void item(T itm) {$/;"	m	class:DoubleTape
+item	src/main/java/bjc/utils/esodata/SingleTape.java	/^	public T item() {$/;"	m	class:SingleTape
+item	src/main/java/bjc/utils/esodata/SingleTape.java	/^	public void item(T itm) {$/;"	m	class:SingleTape
+item	src/main/java/bjc/utils/esodata/Tape.java	/^	T item();$/;"	m	interface:Tape
+item	src/main/java/bjc/utils/esodata/Tape.java	/^	void item(T itm);$/;"	m	interface:Tape
+item	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public T item() {$/;"	m	class:TapeChanger
+item	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public void item(T itm) {$/;"	m	class:TapeChanger
+iterator	src/main/java/bjc/utils/funcdata/IList.java	/^	default Iterator<ContainedType> iterator() {$/;"	m	interface:IList
+itm	src/main/java/bjc/utils/data/SingleIterator.java	/^	private T itm;$/;"	f	class:SingleIterator	file:
 keyList	src/main/java/bjc/utils/funcdata/ExtendedMap.java	/^	public IList<KeyType> keyList() {$/;"	m	class:ExtendedMap
 keyList	src/main/java/bjc/utils/funcdata/FunctionalMap.java	/^	public IList<KeyType> keyList() {$/;"	m	class:FunctionalMap
 keyList	src/main/java/bjc/utils/funcdata/IMap.java	/^	IList<KeyType> keyList();$/;"	m	interface:IMap
 keyList	src/main/java/bjc/utils/funcdata/TransformedValueMap.java	/^	public IList<OldKey> keyList() {$/;"	m	class:TransformedValueMap
-leftBranch	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeNode.java	/^	private ITreePart<T>	leftBranch;$/;"	f	class:BinarySearchTreeNode	file:
+last	src/main/java/bjc/utils/esodata/DoubleTape.java	/^	public void last() {$/;"	m	class:DoubleTape
+last	src/main/java/bjc/utils/esodata/SingleTape.java	/^	public void last() {$/;"	m	class:SingleTape
+last	src/main/java/bjc/utils/esodata/Tape.java	/^	void last();$/;"	m	interface:Tape
+last	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public void last() {$/;"	m	class:TapeChanger
+left	src/main/java/bjc/utils/esodata/DoubleTape.java	/^	public boolean left() {$/;"	m	class:DoubleTape
+left	src/main/java/bjc/utils/esodata/DoubleTape.java	/^	public boolean left(int amt) {$/;"	m	class:DoubleTape
+left	src/main/java/bjc/utils/esodata/SingleTape.java	/^	public boolean left() {$/;"	m	class:SingleTape
+left	src/main/java/bjc/utils/esodata/SingleTape.java	/^	public boolean left(int amt) {$/;"	m	class:SingleTape
+left	src/main/java/bjc/utils/esodata/Tape.java	/^	boolean left();$/;"	m	interface:Tape
+left	src/main/java/bjc/utils/esodata/Tape.java	/^	boolean left(int amt);$/;"	m	interface:Tape
+left	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public boolean left() {$/;"	m	class:TapeChanger
+left	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public boolean left(int amt) {$/;"	m	class:TapeChanger
+left	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeNode.java	/^	private ITreePart<T>	left;$/;"	f	class:BinarySearchTreeNode	file:
 leftMaterialized	src/main/java/bjc/utils/data/LazyPair.java	/^	private boolean				leftMaterialized;$/;"	f	class:LazyPair	file:
-leftSupplier	src/main/java/bjc/utils/data/BoundLazyPair.java	/^	private Supplier<OldLeft>										leftSupplier;$/;"	f	class:BoundLazyPair	file:
 leftSupplier	src/main/java/bjc/utils/data/LazyPair.java	/^	private Supplier<LeftType>	leftSupplier;$/;"	f	class:LazyPair	file:
+leftSupplier	src/main/java/bjc/utils/data/internals/BoundLazyPair.java	/^	private Supplier<OldLeft>										leftSupplier;$/;"	f	class:BoundLazyPair	file:
 leftVal	src/main/java/bjc/utils/data/Either.java	/^	private LeftType	leftVal;$/;"	f	class:Either	file:
 leftValue	src/main/java/bjc/utils/data/LazyPair.java	/^	private LeftType			leftValue;$/;"	f	class:LazyPair	file:
 leftValue	src/main/java/bjc/utils/data/Pair.java	/^	private LeftType	leftValue;$/;"	f	class:Pair	file:
-lift	src/main/java/bjc/utils/data/BoundLazy.java	/^	public <NewType> Function<BoundContainedType, IHolder<NewType>> lift($/;"	m	class:BoundLazy
-lift	src/main/java/bjc/utils/data/BoundListHolder.java	/^	public <NewType> Function<ContainedType, IHolder<NewType>> lift($/;"	m	class:BoundListHolder
 lift	src/main/java/bjc/utils/data/IHolder.java	/^	public <NewType> Function<ContainedType, IHolder<NewType>> lift($/;"	m	interface:IHolder
 lift	src/main/java/bjc/utils/data/Identity.java	/^	public <NewType> Function<ContainedType, IHolder<NewType>> lift($/;"	m	class:Identity
 lift	src/main/java/bjc/utils/data/Lazy.java	/^	public <NewType> Function<ContainedType, IHolder<NewType>> lift($/;"	m	class:Lazy
-lift	src/main/java/bjc/utils/data/ListHolder.java	/^	public <NewType> Function<ContainedType, IHolder<NewType>> lift($/;"	m	class:ListHolder
-lift	src/main/java/bjc/utils/data/Option.java	/^	public <NewType> Function<ContainedType, IHolder<NewType>> lift($/;"	m	class:Option
-lift	src/main/java/bjc/utils/data/WrappedLazy.java	/^	public <NewType> Function<ContainedType, IHolder<NewType>> lift($/;"	m	class:WrappedLazy
-lift	src/main/java/bjc/utils/data/WrappedOption.java	/^	public <NewType> Function<ContainedType, IHolder<NewType>> lift($/;"	m	class:WrappedOption
+lift	src/main/java/bjc/utils/data/ListHolder.java	/^	public <NewType> Function<ContainedType, IHolder<NewType>> lift(Function<ContainedType, NewType> func) {$/;"	m	class:ListHolder
+lift	src/main/java/bjc/utils/data/Option.java	/^	public <NewType> Function<ContainedType, IHolder<NewType>> lift(Function<ContainedType, NewType> func) {$/;"	m	class:Option
+lift	src/main/java/bjc/utils/data/internals/BoundLazy.java	/^	public <NewType> Function<BoundContainedType, IHolder<NewType>> lift($/;"	m	class:BoundLazy
+lift	src/main/java/bjc/utils/data/internals/BoundListHolder.java	/^	public <NewType> Function<ContainedType, IHolder<NewType>> lift($/;"	m	class:BoundListHolder
+lift	src/main/java/bjc/utils/data/internals/WrappedLazy.java	/^	public <NewType> Function<ContainedType, IHolder<NewType>> lift(Function<ContainedType, NewType> func) {$/;"	m	class:WrappedLazy
+lift	src/main/java/bjc/utils/data/internals/WrappedOption.java	/^	public <NewType> Function<ContainedType, IHolder<NewType>> lift(Function<ContainedType, NewType> func) {$/;"	m	class:WrappedOption
 loadComponent	src/main/java/bjc/utils/components/FileComponentRepository.java	/^	private void loadComponent($/;"	m	class:FileComponentRepository	file:
 main	src/examples/java/bjc/utils/examples/BinarySearchTest.java	/^	public static void main(String[] args) {$/;"	m	class:BinarySearchTest
 main	src/examples/java/bjc/utils/examples/parsing/ShuntTest.java	/^	public static void main(String[] args) {$/;"	m	class:ShuntTest
@@ -767,110 +867,129 @@ makeList	src/main/java/bjc/utils/data/IHolder.java	/^	public default IHolder<Con
 makeOptional	src/main/java/bjc/utils/data/IHolder.java	/^	public default IHolder<ContainedType> makeOptional() {$/;"	m	interface:IHolder
 makeRule	src/main/java/bjc/utils/gen/RandomGrammar.java	/^	public final void makeRule(E rule, IList<E>... cases) {$/;"	m	class:RandomGrammar
 makeRule	src/main/java/bjc/utils/gen/RandomGrammar.java	/^	public void makeRule(E rule, IList<IList<E>> cases) {$/;"	m	class:RandomGrammar
-map	src/main/java/bjc/utils/data/BoundLazy.java	/^	public <MappedType> IHolder<MappedType> map($/;"	m	class:BoundLazy
-map	src/main/java/bjc/utils/data/BoundListHolder.java	/^	public <MappedType> IHolder<MappedType> map($/;"	m	class:BoundListHolder
 map	src/main/java/bjc/utils/data/IHolder.java	/^	public <MappedType> IHolder<MappedType> map($/;"	m	interface:IHolder
 map	src/main/java/bjc/utils/data/Identity.java	/^	public <MappedType> IHolder<MappedType> map($/;"	m	class:Identity
 map	src/main/java/bjc/utils/data/Lazy.java	/^	public <MappedType> IHolder<MappedType> map($/;"	m	class:Lazy
-map	src/main/java/bjc/utils/data/ListHolder.java	/^	public <MappedType> IHolder<MappedType> map($/;"	m	class:ListHolder
-map	src/main/java/bjc/utils/data/Option.java	/^	public <MappedType> IHolder<MappedType> map($/;"	m	class:Option
-map	src/main/java/bjc/utils/data/WrappedLazy.java	/^	public <MappedType> IHolder<MappedType> map($/;"	m	class:WrappedLazy
-map	src/main/java/bjc/utils/data/WrappedOption.java	/^	public <MappedType> IHolder<MappedType> map($/;"	m	class:WrappedOption
+map	src/main/java/bjc/utils/data/ListHolder.java	/^	public <MappedType> IHolder<MappedType> map(Function<ContainedType, MappedType> mapper) {$/;"	m	class:ListHolder
+map	src/main/java/bjc/utils/data/Option.java	/^	public <MappedType> IHolder<MappedType> map(Function<ContainedType, MappedType> mapper) {$/;"	m	class:Option
+map	src/main/java/bjc/utils/data/internals/BoundLazy.java	/^	public <MappedType> IHolder<MappedType> map($/;"	m	class:BoundLazy
+map	src/main/java/bjc/utils/data/internals/BoundListHolder.java	/^	public <MappedType> IHolder<MappedType> map($/;"	m	class:BoundListHolder
+map	src/main/java/bjc/utils/data/internals/WrappedLazy.java	/^	public <MappedType> IHolder<MappedType> map(Function<ContainedType, MappedType> mapper) {$/;"	m	class:WrappedLazy
+map	src/main/java/bjc/utils/data/internals/WrappedOption.java	/^	public <MappedType> IHolder<MappedType> map(Function<ContainedType, MappedType> mapper) {$/;"	m	class:WrappedOption
 map	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public <T> IList<T> map(Function<E, T> elementTransformer) {$/;"	m	class:FunctionalList
 map	src/main/java/bjc/utils/funcdata/IList.java	/^	<MappedType> IList<MappedType> map($/;"	m	interface:IList
-mapLeft	src/main/java/bjc/utils/data/BoundLazyPair.java	/^	public <NewLeftType> IPair<NewLeftType, NewRight> mapLeft($/;"	m	class:BoundLazyPair
 mapLeft	src/main/java/bjc/utils/data/Either.java	/^	public <NewLeft> IPair<NewLeft, RightType> mapLeft($/;"	m	class:Either
-mapLeft	src/main/java/bjc/utils/data/HalfBoundLazyPair.java	/^	public <NewLeftType> IPair<NewLeftType, NewRight> mapLeft($/;"	m	class:HalfBoundLazyPair
 mapLeft	src/main/java/bjc/utils/data/IPair.java	/^	public <NewLeft> IPair<NewLeft, RightType> mapLeft($/;"	m	interface:IPair
 mapLeft	src/main/java/bjc/utils/data/LazyPair.java	/^	public <NewLeft> IPair<NewLeft, RightType> mapLeft($/;"	m	class:LazyPair
-mapLeft	src/main/java/bjc/utils/data/Pair.java	/^	public <NewLeft> IPair<NewLeft, RightType> mapLeft($/;"	m	class:Pair
-mapRight	src/main/java/bjc/utils/data/BoundLazyPair.java	/^	public <NewRightType> IPair<NewLeft, NewRightType> mapRight($/;"	m	class:BoundLazyPair
+mapLeft	src/main/java/bjc/utils/data/Pair.java	/^	public <NewLeft> IPair<NewLeft, RightType> mapLeft(Function<LeftType, NewLeft> mapper) {$/;"	m	class:Pair
+mapLeft	src/main/java/bjc/utils/data/internals/BoundLazyPair.java	/^	public <NewLeftType> IPair<NewLeftType, NewRight> mapLeft($/;"	m	class:BoundLazyPair
+mapLeft	src/main/java/bjc/utils/data/internals/HalfBoundLazyPair.java	/^	public <NewLeftType> IPair<NewLeftType, NewRight> mapLeft($/;"	m	class:HalfBoundLazyPair
 mapRight	src/main/java/bjc/utils/data/Either.java	/^	public <NewRight> IPair<LeftType, NewRight> mapRight($/;"	m	class:Either
-mapRight	src/main/java/bjc/utils/data/HalfBoundLazyPair.java	/^	public <NewRightType> IPair<NewLeft, NewRightType> mapRight($/;"	m	class:HalfBoundLazyPair
 mapRight	src/main/java/bjc/utils/data/IPair.java	/^	public <NewRight> IPair<LeftType, NewRight> mapRight($/;"	m	interface:IPair
 mapRight	src/main/java/bjc/utils/data/LazyPair.java	/^	public <NewRight> IPair<LeftType, NewRight> mapRight($/;"	m	class:LazyPair
-mapRight	src/main/java/bjc/utils/data/Pair.java	/^	public <NewRight> IPair<LeftType, NewRight> mapRight($/;"	m	class:Pair
-mapToTransform	src/main/java/bjc/utils/funcdata/TransformedValueMap.java	/^	private IMap<OldKey, OldValue>			mapToTransform;$/;"	f	class:TransformedValueMap	file:
+mapRight	src/main/java/bjc/utils/data/Pair.java	/^	public <NewRight> IPair<LeftType, NewRight> mapRight(Function<RightType, NewRight> mapper) {$/;"	m	class:Pair
+mapRight	src/main/java/bjc/utils/data/internals/BoundLazyPair.java	/^	public <NewRightType> IPair<NewLeft, NewRightType> mapRight($/;"	m	class:BoundLazyPair
+mapRight	src/main/java/bjc/utils/data/internals/HalfBoundLazyPair.java	/^	public <NewRightType> IPair<NewLeft, NewRightType> mapRight($/;"	m	class:HalfBoundLazyPair
 mapValues	src/main/java/bjc/utils/funcdata/ExtendedMap.java	/^	public <MappedValue> IMap<KeyType, MappedValue> mapValues($/;"	m	class:ExtendedMap
 mapValues	src/main/java/bjc/utils/funcdata/FunctionalMap.java	/^	public <MappedValue> IMap<KeyType, MappedValue> mapValues($/;"	m	class:FunctionalMap
 mapValues	src/main/java/bjc/utils/funcdata/IMap.java	/^	<V2> IMap<KeyType, V2> mapValues(Function<ValueType, V2> transformer);$/;"	m	interface:IMap
-mapValues	src/main/java/bjc/utils/funcdata/TransformedValueMap.java	/^	public <MappedValue> IMap<OldKey, MappedValue> mapValues($/;"	m	class:TransformedValueMap
+mapValues	src/main/java/bjc/utils/funcdata/TransformedValueMap.java	/^	mapValues(Function<NewValue, MappedValue> transform) {$/;"	m	class:TransformedValueMap
 maxValue	src/main/java/bjc/utils/gui/panels/SliderInputPanel.java	/^		private int					maxValue;$/;"	f	class:SliderInputPanel.NumberFormatter	file:
 maxValue	src/main/java/bjc/utils/gui/panels/SliderInputPanel.java	/^		public final int	maxValue;$/;"	f	class:SliderInputPanel.SliderSettings
 maybeDoOpenFile	src/main/java/bjc/utils/gui/SimpleFileChooser.java	/^	private static void maybeDoOpenFile(Component parent,$/;"	m	class:SimpleFileChooser	file:
 maybeDoSaveFile	src/main/java/bjc/utils/gui/SimpleFileChooser.java	/^	private static void maybeDoSaveFile(Component parent,$/;"	m	class:SimpleFileChooser	file:
 maybeOpenFile	src/main/java/bjc/utils/gui/SimpleFileChooser.java	/^	public static File maybeOpenFile(Component parent, String title) {$/;"	m	class:SimpleFileChooser
 maybeSaveFile	src/main/java/bjc/utils/gui/SimpleFileChooser.java	/^	public static File maybeSaveFile(Component parent, String title) {$/;"	m	class:SimpleFileChooser
-merge	src/main/java/bjc/utils/data/BoundLazyPair.java	/^	public <MergedType> MergedType merge($/;"	m	class:BoundLazyPair
 merge	src/main/java/bjc/utils/data/Either.java	/^	public <MergedType> MergedType merge($/;"	m	class:Either
-merge	src/main/java/bjc/utils/data/HalfBoundLazyPair.java	/^	public <MergedType> MergedType merge($/;"	m	class:HalfBoundLazyPair
 merge	src/main/java/bjc/utils/data/IPair.java	/^	public <MergedType> MergedType merge($/;"	m	interface:IPair
 merge	src/main/java/bjc/utils/data/LazyPair.java	/^	public <MergedType> MergedType merge($/;"	m	class:LazyPair
-merge	src/main/java/bjc/utils/data/Pair.java	/^	public <MergedType> MergedType merge($/;"	m	class:Pair
+merge	src/main/java/bjc/utils/data/Pair.java	/^	public <MergedType> MergedType merge(BiFunction<LeftType, RightType, MergedType> merger) {$/;"	m	class:Pair
+merge	src/main/java/bjc/utils/data/internals/BoundLazyPair.java	/^	public <MergedType> MergedType merge($/;"	m	class:BoundLazyPair
+merge	src/main/java/bjc/utils/data/internals/HalfBoundLazyPair.java	/^	public <MergedType> MergedType merge($/;"	m	class:HalfBoundLazyPair
 mergeLists	src/main/java/bjc/utils/funcutils/ListUtils.java	/^	public static <E> IList<E> mergeLists(IList<E>... lists) {$/;"	m	class:ListUtils
 minValue	src/main/java/bjc/utils/gui/panels/SliderInputPanel.java	/^		private int					minValue;$/;"	f	class:SliderInputPanel.NumberFormatter	file:
 minValue	src/main/java/bjc/utils/gui/panels/SliderInputPanel.java	/^		public final int	minValue;$/;"	f	class:SliderInputPanel.SliderSettings
-modeName	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	private String							modeName;$/;"	f	class:GenericCommandMode	file:
+modeName	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	private String modeName;$/;"	f	class:GenericCommandMode	file:
 multiPrefixRule	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	public void multiPrefixRule(E ruleName, E prefixToken,$/;"	m	class:WeightedGrammar
 nDelay	src/main/java/bjc/utils/gui/panels/HolderOutputPanel.java	/^	private int					nDelay;$/;"	f	class:HolderOutputPanel	file:
 name	src/main/java/bjc/utils/components/ComponentDescription.java	/^	private String	name;$/;"	f	class:ComponentDescription	file:
 name	src/main/java/bjc/utils/components/ComponentDescriptionState.java	/^	private String	name;$/;"	f	class:ComponentDescriptionState	file:
 newSimplePrecedent	src/main/java/bjc/utils/parserutils/IPrecedent.java	/^	public static IPrecedent newSimplePrecedent(int precedence) {$/;"	m	interface:IPrecedent
+next	src/main/java/bjc/utils/data/CircularIterator.java	/^	public E next() {$/;"	m	class:CircularIterator
+next	src/main/java/bjc/utils/data/SingleIterator.java	/^	public T next() {$/;"	m	class:SingleIterator
+next	src/main/java/bjc/utils/data/TopDownTransformIterator.java	/^	public ITree<ContainedType> next() {$/;"	m	class:TopDownTransformIterator
+next	src/main/java/bjc/utils/data/TransformedIterator.java	/^	public PostType next() {$/;"	m	class:TransformedIterator
 nextID	src/main/java/bjc/utils/data/SingleSupplier.java	/^	private static long	nextID	= 0;$/;"	f	class:SingleSupplier	file:
+nextID	src/main/java/bjc/utils/data/Tree.java	/^	private static int nextID = 0;$/;"	f	class:Tree	file:
+nextTape	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public boolean nextTape() {$/;"	m	class:TapeChanger
 nextToken	src/main/java/bjc/utils/funcdata/FunctionalStringTokenizer.java	/^	public String nextToken() {$/;"	m	class:FunctionalStringTokenizer
-normalOutput	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	private Consumer<String>				normalOutput;$/;"	f	class:GenericCommandMode	file:
-numberInCurrentPartition	src/main/java/bjc/utils/funcutils/GroupPartIteration.java	/^	private IHolder<Integer>		numberInCurrentPartition;$/;"	f	class:GroupPartIteration	file:
+normalOutput	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	private Consumer<String> normalOutput;$/;"	f	class:GenericCommandMode	file:
+numberInCurrentPartition	src/main/java/bjc/utils/funcutils/GroupPartIteration.java	/^	private int						numberInCurrentPartition;$/;"	f	class:GroupPartIteration	file:
 numberPerPartition	src/main/java/bjc/utils/funcutils/GroupPartIteration.java	/^	private int						numberPerPartition;$/;"	f	class:GroupPartIteration	file:
-oldSupplier	src/main/java/bjc/utils/data/BoundLazy.java	/^	private Supplier<IHolder<OldType>>						oldSupplier;$/;"	f	class:BoundLazy	file:
-oldSupplier	src/main/java/bjc/utils/data/HalfBoundLazyPair.java	/^	private Supplier<OldType>							oldSupplier;$/;"	f	class:HalfBoundLazyPair	file:
+oldSupplier	src/main/java/bjc/utils/data/internals/BoundLazy.java	/^	private Supplier<IHolder<OldType>>						oldSupplier;$/;"	f	class:BoundLazy	file:
+oldSupplier	src/main/java/bjc/utils/data/internals/HalfBoundLazyPair.java	/^	private Supplier<OldType>							oldSupplier;$/;"	f	class:HalfBoundLazyPair	file:
 operatorPredicate	src/main/java/bjc/utils/parserutils/TokenTransformer.java	/^			TokenType>																	operatorPredicate;$/;"	f	class:TokenTransformer	file:
 operators	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^	private IMap<String, IPrecedent> operators;$/;"	f	class:ShuntingYard	file:
 output	src/main/java/bjc/utils/cli/CLICommander.java	/^	private OutputStream	output;$/;"	f	class:CLICommander	file:
 output	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^		private IList<TokenType>			output;$/;"	f	class:ShuntingYard.TokenShunter	file:
 padList	src/main/java/bjc/utils/funcutils/ListUtils.java	/^	public static <E> IList<E> padList(IList<E> list,$/;"	m	class:ListUtils
-pairBound	src/main/java/bjc/utils/data/BoundLazyPair.java	/^	private boolean													pairBound;$/;"	f	class:BoundLazyPair	file:
-pairBound	src/main/java/bjc/utils/data/HalfBoundLazyPair.java	/^	private boolean										pairBound;$/;"	f	class:HalfBoundLazyPair	file:
+pairBound	src/main/java/bjc/utils/data/internals/BoundLazyPair.java	/^	private boolean													pairBound;$/;"	f	class:BoundLazyPair	file:
+pairBound	src/main/java/bjc/utils/data/internals/HalfBoundLazyPair.java	/^	private boolean										pairBound;$/;"	f	class:HalfBoundLazyPair	file:
 pairWith	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public <T> IList<IPair<E, T>> pairWith(IList<T> rightList) {$/;"	m	class:FunctionalList
-pairWith	src/main/java/bjc/utils/funcdata/IList.java	/^	<OtherType> IList<IPair<ContainedType, OtherType>> pairWith($/;"	m	interface:IList
+pairWith	src/main/java/bjc/utils/funcdata/IList.java	/^	<OtherType> IList<IPair<ContainedType, OtherType>> pairWith(IList<OtherType> list);$/;"	m	interface:IList
 partition	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public IList<IList<E>> partition(int numberPerPartition) {$/;"	m	class:FunctionalList
-partition	src/main/java/bjc/utils/funcdata/IList.java	/^	IList<IList<ContainedType>> partition(int numberPerPartition);$/;"	m	interface:IList
+partition	src/main/java/bjc/utils/funcdata/IList.java	/^	IList<IList<ContainedType>> partition(int partitionSize);$/;"	m	interface:IList
+picker	src/main/java/bjc/utils/data/TopDownTransformIterator.java	/^	private Function<ContainedType, TopDownTransformResult> picker;$/;"	f	class:TopDownTransformIterator	file:
+pos	src/main/java/bjc/utils/esodata/SingleTape.java	/^	protected int pos;$/;"	f	class:SingleTape
+postChildren	src/main/java/bjc/utils/data/TopDownTransformIterator.java	/^	private Deque<ITree<ContainedType>> postChildren;$/;"	f	class:TopDownTransformIterator	file:
+postParent	src/main/java/bjc/utils/data/TopDownTransformIterator.java	/^	private ITree<ContainedType> postParent;$/;"	f	class:TopDownTransformIterator	file:
 postfix	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^	public IList<TokenType> postfix(IList<String> input,$/;"	m	class:ShuntingYard
-postorderTraverse	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeNode.java	/^	private boolean postorderTraverse($/;"	m	class:BinarySearchTreeNode	file:
-pragmas	src/main/java/bjc/utils/parserutils/RuleBasedConfigReader.java	/^			E>>														pragmas;$/;"	f	class:RuleBasedConfigReader	file:
-preVisitDirectory	src/main/java/bjc/utils/funcutils/FunctionalFileVisitor.java	/^	public FileVisitResult preVisitDirectory(Path dir,$/;"	m	class:FunctionalFileVisitor
+postorderTraverse	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeNode.java	/^	private boolean postorderTraverse(TreeLinearizationMethod linearizationMethod, Predicate<T> traversalPredicate) {$/;"	m	class:BinarySearchTreeNode	file:
+pragmas	src/main/java/bjc/utils/parserutils/RuleBasedConfigReader.java	/^	private IMap<String, BiConsumer<FunctionalStringTokenizer, E>> pragmas;$/;"	f	class:RuleBasedConfigReader	file:
+preChildren	src/main/java/bjc/utils/data/TopDownTransformIterator.java	/^	private Deque<ITree<ContainedType>> preChildren;$/;"	f	class:TopDownTransformIterator	file:
+preParent	src/main/java/bjc/utils/data/TopDownTransformIterator.java	/^	private ITree<ContainedType> preParent;$/;"	f	class:TopDownTransformIterator	file:
+preVisitDirectory	src/main/java/bjc/utils/funcutils/FunctionalFileVisitor.java	/^	public FileVisitResult preVisitDirectory($/;"	m	class:FunctionalFileVisitor
 precedence	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^		private final int precedence;$/;"	f	class:ShuntingYard.Operator	file:
-prefixRule	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	public void prefixRule(E ruleName, E prefixToken,$/;"	m	class:WeightedGrammar
-preorderTraverse	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeNode.java	/^	private boolean preorderTraverse($/;"	m	class:BinarySearchTreeNode	file:
+predicate	src/main/java/bjc/utils/funcutils/FunctionalFileVisitor.java	/^	private BiPredicate<Path, BasicFileAttributes>	predicate;$/;"	f	class:FunctionalFileVisitor	file:
+prefixRule	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	public void prefixRule(E ruleName, E prefixToken, int additionalProbability) {$/;"	m	class:WeightedGrammar
+preorderTraverse	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeNode.java	/^	private boolean preorderTraverse(TreeLinearizationMethod linearizationMethod, Predicate<T> traversalPredicate) {$/;"	m	class:BinarySearchTreeNode	file:
 prepend	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public void prepend(E item) {$/;"	m	class:FunctionalList
 prepend	src/main/java/bjc/utils/funcdata/IList.java	/^	void prepend(ContainedType item);$/;"	m	interface:IList
-printDeque	src/main/java/bjc/utils/funcutils/StringUtils.java	/^			ContainedType> String printDeque(Deque<ContainedType> queue) {$/;"	m	class:StringUtils
+prevTape	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public boolean prevTape() {$/;"	m	class:TapeChanger
+printDeque	src/main/java/bjc/utils/funcutils/StringUtils.java	/^	public static <ContainedType> String printDeque(Deque<ContainedType> queue) {$/;"	m	class:StringUtils
 probabilities	src/main/java/bjc/utils/gen/WeightedRandom.java	/^	private IList<Integer>	probabilities;$/;"	f	class:WeightedRandom	file:
 process	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	public ICommandMode process(String command, String[] args) {$/;"	m	class:GenericCommandMode
 process	src/main/java/bjc/utils/cli/ICommandMode.java	/^	public default ICommandMode process(String command, String[] args) {$/;"	m	interface:ICommandMode
 put	src/main/java/bjc/utils/funcdata/ExtendedMap.java	/^	public ValueType put(KeyType key, ValueType val) {$/;"	m	class:ExtendedMap
 put	src/main/java/bjc/utils/funcdata/FunctionalMap.java	/^	public ValueType put(KeyType key, ValueType val) {$/;"	m	class:FunctionalMap
 put	src/main/java/bjc/utils/funcdata/IMap.java	/^	ValueType put(KeyType key, ValueType val);$/;"	m	interface:IMap
-put	src/main/java/bjc/utils/funcdata/TransformedValueMap.java	/^	public NewValue put(OldKey key, NewValue val) {$/;"	m	class:TransformedValueMap
+put	src/main/java/bjc/utils/funcdata/TransformedValueMap.java	/^	public NewValue put(OldKey key, NewValue value) {$/;"	m	class:TransformedValueMap
 randItem	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public E randItem(Function<Integer, Integer> rnd) {$/;"	m	class:FunctionalList
 randItem	src/main/java/bjc/utils/funcdata/IList.java	/^	ContainedType randItem(Function<Integer, Integer> rnd);$/;"	m	interface:IList
 randItem	src/main/java/bjc/utils/funcdata/IList.java	/^	default ContainedType randItem() {$/;"	m	interface:IList
-readRow	src/main/java/bjc/utils/graph/AdjacencyMap.java	/^	private static void readRow(AdjacencyMap<Integer> adjacencyMap,$/;"	m	class:AdjacencyMap	file:
+readRow	src/main/java/bjc/utils/graph/AdjacencyMap.java	/^	private static void readRow(AdjacencyMap<Integer> adjacency,$/;"	m	class:AdjacencyMap	file:
 reader	src/main/java/bjc/utils/components/ComponentDescriptionFileParser.java	/^	private static RuleBasedConfigReader<ComponentDescriptionState> reader;$/;"	f	class:ComponentDescriptionFileParser	file:
 rebuildTree	src/main/java/bjc/utils/data/ITree.java	/^	public <MappedType> ITree<MappedType> rebuildTree($/;"	m	interface:ITree
 rebuildTree	src/main/java/bjc/utils/data/Tree.java	/^	public <MappedType> ITree<MappedType> rebuildTree($/;"	m	class:Tree
 reduceAux	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public <T, F> F reduceAux(T initialValue,$/;"	m	class:FunctionalList
-reduceAux	src/main/java/bjc/utils/funcdata/IList.java	/^	<StateType, ReducedType> ReducedType reduceAux(StateType initialValue,$/;"	m	interface:IList
+reduceAux	src/main/java/bjc/utils/funcdata/IList.java	/^	<StateType, ReducedType> ReducedType reduceAux(StateType initial,$/;"	m	interface:IList
 rejectedItems	src/main/java/bjc/utils/funcutils/GroupPartIteration.java	/^	private IList<E>				rejectedItems;$/;"	f	class:GroupPartIteration	file:
+remove	src/main/java/bjc/utils/data/CircularIterator.java	/^	public void remove() {$/;"	m	class:CircularIterator
+remove	src/main/java/bjc/utils/esodata/DoubleTape.java	/^	public T remove() {$/;"	m	class:DoubleTape
+remove	src/main/java/bjc/utils/esodata/SingleTape.java	/^	public T remove() {$/;"	m	class:SingleTape
+remove	src/main/java/bjc/utils/esodata/Tape.java	/^	T remove();$/;"	m	interface:Tape
+remove	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public T remove() {$/;"	m	class:TapeChanger
 remove	src/main/java/bjc/utils/funcdata/ExtendedMap.java	/^	public ValueType remove(KeyType key) {$/;"	m	class:ExtendedMap
 remove	src/main/java/bjc/utils/funcdata/FunctionalMap.java	/^	public ValueType remove(KeyType key) {$/;"	m	class:FunctionalMap
 remove	src/main/java/bjc/utils/funcdata/IMap.java	/^	ValueType remove(KeyType key);$/;"	m	interface:IMap
 remove	src/main/java/bjc/utils/funcdata/TransformedValueMap.java	/^	public NewValue remove(OldKey key) {$/;"	m	class:TransformedValueMap
-removeEdge	src/main/java/bjc/utils/graph/Graph.java	/^	public void removeEdge(T sourceVertex, T targetVertex) {$/;"	m	class:Graph
+removeEdge	src/main/java/bjc/utils/graph/Graph.java	/^	public void removeEdge(T source, T target) {$/;"	m	class:Graph
 removeIf	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public boolean removeIf(Predicate<E> removePredicate) {$/;"	m	class:FunctionalList
-removeIf	src/main/java/bjc/utils/funcdata/IList.java	/^	boolean removeIf(Predicate<ContainedType> removePredicate);$/;"	m	interface:IList
+removeIf	src/main/java/bjc/utils/funcdata/IList.java	/^	boolean removeIf(Predicate<ContainedType> predicate);$/;"	m	interface:IList
 removeMatching	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public void removeMatching(E desiredElement) {$/;"	m	class:FunctionalList
-removeMatching	src/main/java/bjc/utils/funcdata/IList.java	/^	void removeMatching(ContainedType desiredElement);$/;"	m	interface:IList
-removeOp	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^	public void removeOp(String token) {$/;"	m	class:ShuntingYard
+removeMatching	src/main/java/bjc/utils/funcdata/IList.java	/^	void removeMatching(ContainedType element);$/;"	m	interface:IList
+removeOp	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^	public void removeOp(String operator) {$/;"	m	class:ShuntingYard
+removeTape	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public Tape<T> removeTape() {$/;"	m	class:TapeChanger
 replace	src/main/java/bjc/utils/data/IHolder.java	/^	public default IHolder<ContainedType> replace(ContainedType newValue) {$/;"	m	interface:IHolder
 reset	src/main/java/bjc/utils/funcutils/IBuilder.java	/^	public default void reset() {$/;"	m	interface:IBuilder
 reset	src/main/java/bjc/utils/gui/panels/HolderOutputPanel.java	/^	public void reset() {$/;"	m	class:HolderOutputPanel
@@ -881,24 +1000,32 @@ returnedList	src/main/java/bjc/utils/funcutils/GroupPartIteration.java	/^	privat
 reverse	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public void reverse() {$/;"	m	class:FunctionalList
 reverse	src/main/java/bjc/utils/funcdata/IList.java	/^	void reverse();$/;"	m	interface:IList
 rg	src/examples/java/bjc/utils/examples/rangen/RandomStringExamples.java	/^	private static RandomGrammar<String> rg;$/;"	f	class:RandomStringExamples	file:
-rightBranch	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeNode.java	/^	private ITreePart<T>	rightBranch;$/;"	f	class:BinarySearchTreeNode	file:
+right	src/main/java/bjc/utils/esodata/DoubleTape.java	/^	public boolean right() {$/;"	m	class:DoubleTape
+right	src/main/java/bjc/utils/esodata/DoubleTape.java	/^	public boolean right(int amt) {$/;"	m	class:DoubleTape
+right	src/main/java/bjc/utils/esodata/SingleTape.java	/^	public boolean right() {$/;"	m	class:SingleTape
+right	src/main/java/bjc/utils/esodata/SingleTape.java	/^	public boolean right(int amt) {$/;"	m	class:SingleTape
+right	src/main/java/bjc/utils/esodata/Tape.java	/^	boolean right();$/;"	m	interface:Tape
+right	src/main/java/bjc/utils/esodata/Tape.java	/^	boolean right(int amt);$/;"	m	interface:Tape
+right	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public boolean right() {$/;"	m	class:TapeChanger
+right	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public boolean right(int amt) {$/;"	m	class:TapeChanger
+right	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeNode.java	/^	private ITreePart<T>	right;$/;"	f	class:BinarySearchTreeNode	file:
 rightMaterialized	src/main/java/bjc/utils/data/LazyPair.java	/^	private boolean				rightMaterialized;$/;"	f	class:LazyPair	file:
-rightSupplier	src/main/java/bjc/utils/data/BoundLazyPair.java	/^	private Supplier<OldRight>										rightSupplier;$/;"	f	class:BoundLazyPair	file:
 rightSupplier	src/main/java/bjc/utils/data/LazyPair.java	/^	private Supplier<RightType>	rightSupplier;$/;"	f	class:LazyPair	file:
+rightSupplier	src/main/java/bjc/utils/data/internals/BoundLazyPair.java	/^	private Supplier<OldRight>										rightSupplier;$/;"	f	class:BoundLazyPair	file:
 rightVal	src/main/java/bjc/utils/data/Either.java	/^	private RightType	rightVal;$/;"	f	class:Either	file:
 rightValue	src/main/java/bjc/utils/data/LazyPair.java	/^	private RightType			rightValue;$/;"	f	class:LazyPair	file:
 rightValue	src/main/java/bjc/utils/data/Pair.java	/^	private RightType	rightValue;$/;"	f	class:Pair	file:
-rng	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	private Random								rng;$/;"	f	class:WeightedGrammar	file:
-rootElement	src/main/java/bjc/utils/funcdata/bst/BinarySearchTree.java	/^	private ITreePart<T>	rootElement;$/;"	f	class:BinarySearchTree	file:
+rng	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	private Random rng;$/;"	f	class:WeightedGrammar	file:
+root	src/main/java/bjc/utils/funcdata/bst/BinarySearchTree.java	/^	private ITreePart<T>	root;$/;"	f	class:BinarySearchTree	file:
 rules	src/examples/java/bjc/utils/examples/rangen/DiabloItemGen.java	/^	private static WeightedGrammar<String> rules = new WeightedGrammar<>();$/;"	f	class:DiabloItemGen	file:
 rules	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	protected IMap<E, WeightedRandom<IList<E>>>	rules;$/;"	f	class:WeightedGrammar
 runCommands	src/main/java/bjc/utils/cli/CLICommander.java	/^	public void runCommands() {$/;"	m	class:CLICommander
 sanityCheckArgs	src/main/java/bjc/utils/components/ComponentDescription.java	/^	private static void sanityCheckArgs(String name, String author,$/;"	m	class:ComponentDescription	file:
 search	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public E search(E searchKey, Comparator<E> comparator) {$/;"	m	class:FunctionalList
-search	src/main/java/bjc/utils/funcdata/IList.java	/^	ContainedType search(ContainedType searchKey,$/;"	m	interface:IList
-secondCollector	src/main/java/bjc/utils/funcutils/CompoundCollector.java	/^			FinalType2>										secondCollector;$/;"	f	class:CompoundCollector	file:
+search	src/main/java/bjc/utils/funcdata/IList.java	/^	ContainedType search(ContainedType key,$/;"	m	interface:IList
+second	src/main/java/bjc/utils/funcutils/CompoundCollector.java	/^	private Collector<InitialType, AuxType2, FinalType2>	second;$/;"	f	class:CompoundCollector	file:
 selectiveTransform	src/main/java/bjc/utils/data/ITree.java	/^	public void selectiveTransform(Predicate<ContainedType> nodePicker,$/;"	m	interface:ITree
-selectiveTransform	src/main/java/bjc/utils/data/Tree.java	/^	public void selectiveTransform(Predicate<ContainedType> nodePicker,$/;"	m	class:Tree
+selectiveTransform	src/main/java/bjc/utils/data/Tree.java	/^	public void selectiveTransform(Predicate<ContainedType> nodePicker, UnaryOperator<ContainedType> transformer) {$/;"	m	class:Tree
 serialVersionUID	src/main/java/bjc/utils/exceptions/FileNotChosenException.java	/^	private static final long serialVersionUID = -8753348705210831096L;$/;"	f	class:FileNotChosenException	file:
 serialVersionUID	src/main/java/bjc/utils/exceptions/PragmaFormatException.java	/^	private static final long serialVersionUID = 1288536477368021069L;$/;"	f	class:PragmaFormatException	file:
 serialVersionUID	src/main/java/bjc/utils/exceptions/UnknownPragmaException.java	/^	private static final long serialVersionUID = -4277573484926638662L;$/;"	f	class:UnknownPragmaException	file:
@@ -918,17 +1045,17 @@ serialVersionUID	src/main/java/bjc/utils/gui/panels/SliderInputPanel.java	/^		pr
 serialVersionUID	src/main/java/bjc/utils/gui/panels/SliderInputPanel.java	/^	private static final long	serialVersionUID	= 2956394160569961404L;$/;"	f	class:SliderInputPanel	file:
 setAuthor	src/main/java/bjc/utils/components/ComponentDescriptionState.java	/^	public void setAuthor(String author) {$/;"	m	class:ComponentDescriptionState
 setContinueRule	src/main/java/bjc/utils/parserutils/RuleBasedConfigReader.java	/^	public void setContinueRule($/;"	m	class:RuleBasedConfigReader
-setCustomPrompt	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	public void setCustomPrompt( String prompt) {$/;"	m	class:GenericCommandMode
+setCustomPrompt	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	public void setCustomPrompt(String prompt) {$/;"	m	class:GenericCommandMode
 setDescription	src/main/java/bjc/utils/components/ComponentDescriptionState.java	/^	public void setDescription(String description) {$/;"	m	class:ComponentDescriptionState
-setEndRule	src/main/java/bjc/utils/parserutils/RuleBasedConfigReader.java	/^	public void setEndRule(Consumer<E> endRule) {$/;"	m	class:RuleBasedConfigReader
+setEndRule	src/main/java/bjc/utils/parserutils/RuleBasedConfigReader.java	/^	public void setEndRule(Consumer<E> end) {$/;"	m	class:RuleBasedConfigReader
 setInitialCommandMode	src/main/java/bjc/utils/cli/CLICommander.java	/^	public void setInitialCommandMode(ICommandMode initialMode) {$/;"	m	class:CLICommander
 setInitialRule	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	public void setInitialRule(String initRule) {$/;"	m	class:WeightedGrammar
-setModeName	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	public void setModeName( String name) {$/;"	m	class:GenericCommandMode
+setModeName	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	public void setModeName(String name) {$/;"	m	class:GenericCommandMode
 setName	src/main/java/bjc/utils/components/ComponentDescriptionState.java	/^	public void setName(String name) {$/;"	m	class:ComponentDescriptionState
-setStartRule	src/main/java/bjc/utils/parserutils/RuleBasedConfigReader.java	/^	public void setStartRule(BiConsumer<FunctionalStringTokenizer,$/;"	m	class:RuleBasedConfigReader
-setUnknownCommandHandler	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	public void setUnknownCommandHandler($/;"	m	class:GenericCommandMode
+setStartRule	src/main/java/bjc/utils/parserutils/RuleBasedConfigReader.java	/^	public void setStartRule(BiConsumer<FunctionalStringTokenizer, IPair<String, E>> start) {$/;"	m	class:RuleBasedConfigReader
+setUnknownCommandHandler	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	public void setUnknownCommandHandler(BiConsumer<String, String[]> handler) {$/;"	m	class:GenericCommandMode
 setVersion	src/main/java/bjc/utils/components/ComponentDescriptionState.java	/^	public void setVersion(int version) {$/;"	m	class:ComponentDescriptionState
-setWeight	src/main/java/bjc/utils/graph/AdjacencyMap.java	/^	public void setWeight(T sourceVertex, T targetVertex, int edgeWeight) {$/;"	m	class:AdjacencyMap
+setWeight	src/main/java/bjc/utils/graph/AdjacencyMap.java	/^	public void setWeight(T source, T target, int weight) {$/;"	m	class:AdjacencyMap
 setupDefaultCommands	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	private void setupDefaultCommands() {$/;"	m	class:GenericCommandMode	file:
 setupFrame	src/main/java/bjc/utils/gui/SimpleInternalFrame.java	/^	protected void setupFrame() {$/;"	m	class:SimpleInternalFrame
 setupReaderPragmas	src/main/java/bjc/utils/components/ComponentDescriptionFileParser.java	/^	private static void setupReaderPragmas() {$/;"	m	class:ComponentDescriptionFileParser	file:
@@ -936,95 +1063,107 @@ showError	src/main/java/bjc/utils/gui/SimpleDialogs.java	/^	public static void s
 showError	src/main/java/bjc/utils/gui/SimpleInternalDialogs.java	/^	public static void showError(Component parent, String title,$/;"	m	class:SimpleInternalDialogs
 showMessage	src/main/java/bjc/utils/gui/SimpleDialogs.java	/^	public static void showMessage(Component parent, String title,$/;"	m	class:SimpleDialogs
 showMessage	src/main/java/bjc/utils/gui/SimpleInternalDialogs.java	/^	public static void showMessage(Component parent, String title,$/;"	m	class:SimpleInternalDialogs
+size	src/main/java/bjc/utils/esodata/DoubleTape.java	/^	public int size() {$/;"	m	class:DoubleTape
+size	src/main/java/bjc/utils/esodata/SingleTape.java	/^	public int size() {$/;"	m	class:SingleTape
+size	src/main/java/bjc/utils/esodata/Tape.java	/^	int size();$/;"	m	interface:Tape
+size	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public int size() {$/;"	m	class:TapeChanger
 slider	src/main/java/bjc/utils/gui/panels/SliderInputPanel.java	/^	private JSlider				slider;$/;"	f	class:SliderInputPanel	file:
 sort	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public void sort(Comparator<E> comparator) {$/;"	m	class:FunctionalList
 sort	src/main/java/bjc/utils/funcdata/IList.java	/^	void sort(Comparator<ContainedType> comparator);$/;"	m	interface:IList
+source	src/main/java/bjc/utils/data/CircularIterator.java	/^	private Iterable<E> source;$/;"	f	class:CircularIterator	file:
 source	src/main/java/bjc/utils/data/SingleSupplier.java	/^	private Supplier<T>	source;$/;"	f	class:SingleSupplier	file:
+source	src/main/java/bjc/utils/data/TransformedIterator.java	/^	private Iterator<PreType> source;$/;"	f	class:TransformedIterator	file:
 source	src/main/java/bjc/utils/gen/WeightedRandom.java	/^	private Random			source;$/;"	f	class:WeightedRandom	file:
 source	src/main/java/bjc/utils/graph/Edge.java	/^	private final T		source, target;$/;"	f	class:Edge	file:
 sourceDirectory	src/main/java/bjc/utils/components/FileComponentRepository.java	/^	private Path						sourceDirectory;$/;"	f	class:FileComponentRepository	file:
+specialAction	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	private BiFunction<E, WeightedGrammar<E>, IList<E>> specialAction;$/;"	f	class:WeightedGrammar	file:
+specialMarker	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	private Predicate<E> specialMarker;$/;"	f	class:WeightedGrammar	file:
+specialRules	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	private IMap<E, Supplier<IList<E>>> specialRules;$/;"	f	class:WeightedGrammar	file:
 splitTokens	src/main/java/bjc/utils/funcutils/ListUtils.java	/^	public static IList<String> splitTokens(IList<String> input,$/;"	m	class:ListUtils
 stack	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^		private Deque<String>				stack;$/;"	f	class:ShuntingYard.TokenShunter	file:
-startRule	src/main/java/bjc/utils/parserutils/RuleBasedConfigReader.java	/^			E>>														startRule;$/;"	f	class:RuleBasedConfigReader	file:
-startRule	src/main/java/bjc/utils/parserutils/RuleBasedConfigReader.java	/^	private boolean startRule(E state, boolean ruleOpen, String line) {$/;"	m	class:RuleBasedConfigReader	file:
+start	src/main/java/bjc/utils/parserutils/RuleBasedConfigReader.java	/^	private BiConsumer<FunctionalStringTokenizer, IPair<String, E>> start;$/;"	f	class:RuleBasedConfigReader	file:
+startRule	src/main/java/bjc/utils/parserutils/RuleBasedConfigReader.java	/^	private boolean startRule(E state, boolean isRuleOpen, String line) {$/;"	m	class:RuleBasedConfigReader	file:
 startUpdating	src/main/java/bjc/utils/gui/panels/HolderOutputPanel.java	/^	public void startUpdating() {$/;"	m	class:HolderOutputPanel
 stopUpdating	src/main/java/bjc/utils/gui/panels/HolderOutputPanel.java	/^	public void stopUpdating() {$/;"	m	class:HolderOutputPanel
 store	src/main/java/bjc/utils/funcdata/ExtendedMap.java	/^	private IMap<KeyType, ValueType>	store;$/;"	f	class:ExtendedMap	file:
 stringToValue	src/main/java/bjc/utils/gui/panels/SliderInputPanel.java	/^		public Object stringToValue(String text) throws ParseException {$/;"	m	class:SliderInputPanel.NumberFormatter
-subgrammars	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	protected IMap<E, WeightedGrammar<E>>		subgrammars;$/;"	f	class:WeightedGrammar
-suffixRule	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	public void suffixRule(E ruleName, E suffixToken,$/;"	m	class:WeightedGrammar
-summary	src/main/java/bjc/utils/cli/GenericHelp.java	/^	private String	summary;$/;"	f	class:GenericHelp	file:
+subgrammars	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	protected IMap<E, WeightedGrammar<E>> subgrammars;$/;"	f	class:WeightedGrammar
+suffixRule	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	public void suffixRule(E ruleName, E suffixToken, int additionalProbability) {$/;"	m	class:WeightedGrammar
+summary	src/main/java/bjc/utils/cli/GenericHelp.java	/^	private String summary;$/;"	f	class:GenericHelp	file:
 supplier	src/main/java/bjc/utils/funcutils/CompoundCollector.java	/^	public Supplier<IHolder<IPair<AuxType1, AuxType2>>> supplier() {$/;"	m	class:CompoundCollector
 tail	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public IList<E> tail() {$/;"	m	class:FunctionalList
-tail	src/main/java/bjc/utils/funcdata/IList.java	/^	public IList<ContainedType> tail();$/;"	m	interface:IList
+tail	src/main/java/bjc/utils/funcdata/IList.java	/^	IList<ContainedType> tail();$/;"	m	interface:IList
+tapeCount	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public int tapeCount() {$/;"	m	class:TapeChanger
+tapes	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	private Tape<Tape<T>> tapes;$/;"	f	class:TapeChanger	file:
 target	src/main/java/bjc/utils/graph/Edge.java	/^	private final T		source, target;$/;"	f	class:Edge	file:
 test	src/examples/java/bjc/utils/examples/parsing/TreeConstructTest.java	/^		public boolean test(String token) {$/;"	m	class:TreeConstructTest.OperatorPicker
 textArea	src/main/java/bjc/utils/gui/TextAreaOutputStream.java	/^	private JTextArea textArea;$/;"	f	class:TextAreaOutputStream	file:
 toAdjacencyMap	src/main/java/bjc/utils/graph/Graph.java	/^	public AdjacencyMap<T> toAdjacencyMap() {$/;"	m	class:Graph
 toArray	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public E[] toArray(E[] arrType) {$/;"	m	class:FunctionalList
-toArray	src/main/java/bjc/utils/funcdata/IList.java	/^	public ContainedType[] toArray(ContainedType[] arrType);$/;"	m	interface:IList
+toArray	src/main/java/bjc/utils/funcdata/IList.java	/^	ContainedType[] toArray(ContainedType[] type);$/;"	m	interface:IList
 toDescription	src/main/java/bjc/utils/components/ComponentDescriptionState.java	/^	public ComponentDescription toDescription() {$/;"	m	class:ComponentDescriptionState
 toGraph	src/main/java/bjc/utils/graph/AdjacencyMap.java	/^	public Graph<T> toGraph() {$/;"	m	class:AdjacencyMap
 toIterable	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public Iterable<E> toIterable() {$/;"	m	class:FunctionalList
-toIterable	src/main/java/bjc/utils/funcdata/IList.java	/^	public Iterable<ContainedType> toIterable();$/;"	m	interface:IList
-toList	src/main/java/bjc/utils/funcdata/FunctionalStringTokenizer.java	/^	public <E> IList<E> toList(Function<String, E> tokenTransformer) {$/;"	m	class:FunctionalStringTokenizer
+toIterable	src/main/java/bjc/utils/funcdata/IList.java	/^	Iterable<ContainedType> toIterable();$/;"	m	interface:IList
+toList	src/main/java/bjc/utils/funcdata/FunctionalStringTokenizer.java	/^	public <E> IList<E> toList(Function<String, E> transformer) {$/;"	m	class:FunctionalStringTokenizer
 toList	src/main/java/bjc/utils/funcdata/FunctionalStringTokenizer.java	/^	public IList<String> toList() {$/;"	m	class:FunctionalStringTokenizer
-toStream	src/main/java/bjc/utils/graph/AdjacencyMap.java	/^	public void toStream(OutputStream outputSink) {$/;"	m	class:AdjacencyMap
+toStream	src/main/java/bjc/utils/graph/AdjacencyMap.java	/^	public void toStream(OutputStream sink) {$/;"	m	class:AdjacencyMap
 toString	src/main/java/bjc/utils/components/ComponentDescription.java	/^	public String toString() {$/;"	m	class:ComponentDescription
-toString	src/main/java/bjc/utils/data/BoundLazy.java	/^	public String toString() {$/;"	m	class:BoundLazy
-toString	src/main/java/bjc/utils/data/BoundLazyPair.java	/^	public String toString() {$/;"	m	class:BoundLazyPair
 toString	src/main/java/bjc/utils/data/Identity.java	/^	public String toString() {$/;"	m	class:Identity
 toString	src/main/java/bjc/utils/data/Lazy.java	/^	public String toString() {$/;"	m	class:Lazy
 toString	src/main/java/bjc/utils/data/LazyPair.java	/^	public String toString() {$/;"	m	class:LazyPair
 toString	src/main/java/bjc/utils/data/Pair.java	/^	public String toString() {$/;"	m	class:Pair
 toString	src/main/java/bjc/utils/data/Tree.java	/^	public String toString() {$/;"	m	class:Tree
+toString	src/main/java/bjc/utils/data/internals/BoundLazy.java	/^	public String toString() {$/;"	m	class:BoundLazy
+toString	src/main/java/bjc/utils/data/internals/BoundLazyPair.java	/^	public String toString() {$/;"	m	class:BoundLazyPair
 toString	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public String toString() {$/;"	m	class:FunctionalList
 toString	src/main/java/bjc/utils/funcdata/FunctionalMap.java	/^	public String toString() {$/;"	m	class:FunctionalMap
 toString	src/main/java/bjc/utils/funcdata/TransformedValueMap.java	/^	public String toString() {$/;"	m	class:TransformedValueMap
 toString	src/main/java/bjc/utils/graph/Edge.java	/^	public String toString() {$/;"	m	class:Edge
+toYield	src/main/java/bjc/utils/data/TopDownTransformIterator.java	/^	private Deque<Iterator<ITree<ContainedType>>> toYield;$/;"	f	class:TopDownTransformIterator	file:
 token	src/main/java/bjc/utils/funcutils/TokenDeaffixer.java	/^	private String token;$/;"	f	class:TokenDeaffixer	file:
 tokenToSplit	src/main/java/bjc/utils/funcutils/TokenSplitter.java	/^	private String tokenToSplit;$/;"	f	class:TokenSplitter	file:
 topDownTransform	src/main/java/bjc/utils/data/ITree.java	/^	public ITree<ContainedType> topDownTransform($/;"	m	interface:ITree
 topDownTransform	src/main/java/bjc/utils/data/Tree.java	/^	public ITree<ContainedType> topDownTransform($/;"	m	class:Tree
 totalChance	src/main/java/bjc/utils/gen/WeightedRandom.java	/^	private int				totalChance;$/;"	f	class:WeightedRandom	file:
-transform	src/main/java/bjc/utils/data/BoundLazy.java	/^	public IHolder<BoundContainedType> transform($/;"	m	class:BoundLazy
-transform	src/main/java/bjc/utils/data/BoundListHolder.java	/^	public IHolder<ContainedType> transform($/;"	m	class:BoundListHolder
 transform	src/main/java/bjc/utils/data/IHolder.java	/^	public IHolder<ContainedType> transform($/;"	m	interface:IHolder
 transform	src/main/java/bjc/utils/data/Identity.java	/^	public IHolder<ContainedType> transform($/;"	m	class:Identity
 transform	src/main/java/bjc/utils/data/Lazy.java	/^	public IHolder<ContainedType> transform($/;"	m	class:Lazy
-transform	src/main/java/bjc/utils/data/ListHolder.java	/^	public IHolder<ContainedType> transform($/;"	m	class:ListHolder
-transform	src/main/java/bjc/utils/data/Option.java	/^	public IHolder<ContainedType> transform($/;"	m	class:Option
-transform	src/main/java/bjc/utils/data/WrappedLazy.java	/^	public IHolder<ContainedType> transform($/;"	m	class:WrappedLazy
-transform	src/main/java/bjc/utils/data/WrappedOption.java	/^	public IHolder<ContainedType> transform($/;"	m	class:WrappedOption
-transform	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^		private Function<String, TokenType>	transform;$/;"	f	class:ShuntingYard.TokenShunter	file:
+transform	src/main/java/bjc/utils/data/ListHolder.java	/^	public IHolder<ContainedType> transform(UnaryOperator<ContainedType> transformer) {$/;"	m	class:ListHolder
+transform	src/main/java/bjc/utils/data/Option.java	/^	public IHolder<ContainedType> transform(UnaryOperator<ContainedType> transformer) {$/;"	m	class:Option
+transform	src/main/java/bjc/utils/data/TopDownTransformIterator.java	/^			ITree<ContainedType>>                           transform;$/;"	f	class:TopDownTransformIterator	file:
+transform	src/main/java/bjc/utils/data/TransformedIterator.java	/^	private Function<PreType, PostType> transform;$/;"	f	class:TransformedIterator	file:
+transform	src/main/java/bjc/utils/data/internals/BoundLazy.java	/^	public IHolder<BoundContainedType> transform($/;"	m	class:BoundLazy
+transform	src/main/java/bjc/utils/data/internals/BoundListHolder.java	/^	public IHolder<ContainedType> transform($/;"	m	class:BoundListHolder
+transform	src/main/java/bjc/utils/data/internals/WrappedLazy.java	/^	public IHolder<ContainedType> transform(UnaryOperator<ContainedType> transformer) {$/;"	m	class:WrappedLazy
+transform	src/main/java/bjc/utils/data/internals/WrappedOption.java	/^	public IHolder<ContainedType> transform(UnaryOperator<ContainedType> transformer) {$/;"	m	class:WrappedOption
 transformChild	src/main/java/bjc/utils/data/ITree.java	/^	public <TransformedType> TransformedType transformChild(int childNo,$/;"	m	interface:ITree
-transformChild	src/main/java/bjc/utils/data/Tree.java	/^	public <TransformedType> TransformedType transformChild(int childNo,$/;"	m	class:Tree
+transformChild	src/main/java/bjc/utils/data/Tree.java	/^	public <TransformedType> TransformedType transformChild($/;"	m	class:Tree
 transformHead	src/main/java/bjc/utils/data/ITree.java	/^	public <TransformedType> TransformedType transformHead($/;"	m	interface:ITree
-transformHead	src/main/java/bjc/utils/data/Tree.java	/^	public <TransformedType> TransformedType transformHead($/;"	m	class:Tree
+transformHead	src/main/java/bjc/utils/data/Tree.java	/^	public <TransformedType> TransformedType transformHead(Function<ContainedType, TransformedType> transformer) {$/;"	m	class:Tree
 transformTree	src/main/java/bjc/utils/data/ITree.java	/^	public <MappedType> ITree<MappedType> transformTree($/;"	m	interface:ITree
-transformTree	src/main/java/bjc/utils/data/Tree.java	/^	public <MappedType> ITree<MappedType> transformTree($/;"	m	class:Tree
+transformTree	src/main/java/bjc/utils/data/Tree.java	/^	public <MappedType> ITree<MappedType> transformTree(Function<ContainedType, MappedType> transformer) {$/;"	m	class:Tree
 transformer	src/main/java/bjc/utils/funcdata/TransformedValueMap.java	/^	private Function<OldValue, NewValue>	transformer;$/;"	f	class:TransformedValueMap	file:
-traversalAction	src/main/java/bjc/utils/funcutils/FunctionalFileVisitor.java	/^	private BiPredicate<Path, BasicFileAttributes>	traversalAction;$/;"	f	class:FunctionalFileVisitor	file:
-traversalPredicate	src/main/java/bjc/utils/funcutils/FunctionalFileVisitor.java	/^	private BiPredicate<Path, BasicFileAttributes>	traversalPredicate;$/;"	f	class:FunctionalFileVisitor	file:
+transformer	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^		private Function<String, TokenType>	transformer;$/;"	f	class:ShuntingYard.TokenShunter	file:
 traverse	src/main/java/bjc/utils/data/ITree.java	/^	public void traverse(TreeLinearizationMethod linearizationMethod,$/;"	m	interface:ITree
-traverse	src/main/java/bjc/utils/data/Tree.java	/^	public void traverse(TreeLinearizationMethod linearizationMethod,$/;"	m	class:Tree
-traverse	src/main/java/bjc/utils/funcdata/bst/BinarySearchTree.java	/^	public void traverse(TreeLinearizationMethod linearizationMethod,$/;"	m	class:BinarySearchTree
+traverse	src/main/java/bjc/utils/data/Tree.java	/^	public void traverse(TreeLinearizationMethod linearizationMethod, Consumer<ContainedType> action) {$/;"	m	class:Tree
+traverse	src/main/java/bjc/utils/funcdata/bst/BinarySearchTree.java	/^	public void traverse(TreeLinearizationMethod linearizationMethod, Predicate<T> traversalPredicate) {$/;"	m	class:BinarySearchTree
 traverseDirectory	src/main/java/bjc/utils/funcutils/FileUtils.java	/^	public static void traverseDirectory(Path root,$/;"	m	class:FileUtils
 traverseElement	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeNode.java	/^	private boolean traverseElement(Predicate<T> traversalPredicate) {$/;"	m	class:BinarySearchTreeNode	file:
-traverseLeftBranch	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeNode.java	/^	private boolean traverseLeftBranch($/;"	m	class:BinarySearchTreeNode	file:
-traverseRightBranch	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeNode.java	/^	private boolean traverseRightBranch($/;"	m	class:BinarySearchTreeNode	file:
+traverseLeftBranch	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeNode.java	/^	private boolean traverseLeftBranch(TreeLinearizationMethod linearizationMethod, Predicate<T> traversalPredicate) {$/;"	m	class:BinarySearchTreeNode	file:
+traverseRightBranch	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeNode.java	/^	private boolean traverseRightBranch(TreeLinearizationMethod linearizationMethod, Predicate<T> traversalPredicate) {$/;"	m	class:BinarySearchTreeNode	file:
 trim	src/main/java/bjc/utils/funcdata/bst/BinarySearchTree.java	/^	public void trim() {$/;"	m	class:BinarySearchTree
-unknownCommandHandler	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	private BiConsumer<String, String[]>	unknownCommandHandler;$/;"	f	class:GenericCommandMode	file:
-unwrap	src/main/java/bjc/utils/data/BoundLazy.java	/^	public <UnwrappedType> UnwrappedType unwrap($/;"	m	class:BoundLazy
-unwrap	src/main/java/bjc/utils/data/BoundListHolder.java	/^	public <UnwrappedType> UnwrappedType unwrap($/;"	m	class:BoundListHolder
+unknownCommandHandler	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	private BiConsumer<String, String[]> unknownCommandHandler;$/;"	f	class:GenericCommandMode	file:
 unwrap	src/main/java/bjc/utils/data/IHolder.java	/^	public <UnwrappedType> UnwrappedType unwrap($/;"	m	interface:IHolder
 unwrap	src/main/java/bjc/utils/data/Identity.java	/^	public <UnwrappedType> UnwrappedType unwrap($/;"	m	class:Identity
 unwrap	src/main/java/bjc/utils/data/Lazy.java	/^	public <UnwrappedType> UnwrappedType unwrap($/;"	m	class:Lazy
-unwrap	src/main/java/bjc/utils/data/ListHolder.java	/^	public <UnwrappedType> UnwrappedType unwrap($/;"	m	class:ListHolder
-unwrap	src/main/java/bjc/utils/data/Option.java	/^	public <UnwrappedType> UnwrappedType unwrap($/;"	m	class:Option
-unwrap	src/main/java/bjc/utils/data/WrappedLazy.java	/^	public <UnwrappedType> UnwrappedType unwrap($/;"	m	class:WrappedLazy
-unwrap	src/main/java/bjc/utils/data/WrappedOption.java	/^	public <UnwrappedType> UnwrappedType unwrap($/;"	m	class:WrappedOption
-updateTimer	src/main/java/bjc/utils/gui/panels/HolderOutputPanel.java	/^	private Timer				updateTimer;$/;"	f	class:HolderOutputPanel	file:
+unwrap	src/main/java/bjc/utils/data/ListHolder.java	/^	public <UnwrappedType> UnwrappedType unwrap(Function<ContainedType, UnwrappedType> unwrapper) {$/;"	m	class:ListHolder
+unwrap	src/main/java/bjc/utils/data/Option.java	/^	public <UnwrappedType> UnwrappedType unwrap(Function<ContainedType, UnwrappedType> unwrapper) {$/;"	m	class:Option
+unwrap	src/main/java/bjc/utils/data/internals/BoundLazy.java	/^	public <UnwrappedType> UnwrappedType unwrap($/;"	m	class:BoundLazy
+unwrap	src/main/java/bjc/utils/data/internals/BoundListHolder.java	/^	public <UnwrappedType> UnwrappedType unwrap($/;"	m	class:BoundListHolder
+unwrap	src/main/java/bjc/utils/data/internals/WrappedLazy.java	/^	public <UnwrappedType> UnwrappedType unwrap(Function<ContainedType, UnwrappedType> unwrapper) {$/;"	m	class:WrappedLazy
+unwrap	src/main/java/bjc/utils/data/internals/WrappedOption.java	/^	public <UnwrappedType> UnwrappedType unwrap(Function<ContainedType, UnwrappedType> unwrapper) {$/;"	m	class:WrappedOption
+updater	src/main/java/bjc/utils/gui/panels/HolderOutputPanel.java	/^	private Timer				updater;$/;"	f	class:HolderOutputPanel	file:
 val	src/main/java/bjc/utils/gui/panels/HolderOutputPanel.java	/^	private IHolder<String>		val;$/;"	f	class:HolderOutputPanel	file:
 value	src/main/java/bjc/utils/gui/panels/HolderOutputPanel.java	/^	private JLabel				value;$/;"	f	class:HolderOutputPanel	file:
 valueList	src/main/java/bjc/utils/funcdata/ExtendedMap.java	/^	public IList<ValueType> valueList() {$/;"	m	class:ExtendedMap
@@ -1038,6 +1177,7 @@ version	src/main/java/bjc/utils/components/ComponentDescription.java	/^	private 
 version	src/main/java/bjc/utils/components/ComponentDescriptionState.java	/^	private int		version;$/;"	f	class:ComponentDescriptionState	file:
 visitFile	src/main/java/bjc/utils/funcutils/FunctionalFileVisitor.java	/^	public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)$/;"	m	class:FunctionalFileVisitor
 walk	src/main/java/bjc/utils/funcdata/bst/DirectedWalkFunction.java	/^	public DirectedWalkResult walk(T element);$/;"	m	interface:DirectedWalkFunction
-wrappedList	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	private List<E> wrappedList;$/;"	f	class:FunctionalList	file:
+wrapped	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	private List<E> wrapped;$/;"	f	class:FunctionalList	file:
 wrappedMap	src/main/java/bjc/utils/funcdata/FunctionalMap.java	/^	private Map<KeyType, ValueType> wrappedMap;$/;"	f	class:FunctionalMap	file:
 write	src/main/java/bjc/utils/gui/TextAreaOutputStream.java	/^	public void write(int b) throws IOException {$/;"	m	class:TextAreaOutputStream
+yielded	src/main/java/bjc/utils/data/SingleIterator.java	/^	private boolean yielded;$/;"	f	class:SingleIterator	file:
