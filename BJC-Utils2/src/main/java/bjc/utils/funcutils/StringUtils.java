@@ -204,4 +204,14 @@ public class StringUtils {
 
 		return new String(Character.toChars(codepoint));
 	}
+
+	public static boolean isDouble(String inp) {
+		return DoubleMatcher.floatingLiteral.matcher(inp).matches();
+	}
+
+	private static Pattern intLitPattern = Pattern.compile("\\A[+\\-]?\\d+\\Z");
+
+	public static boolean isInt(String inp) {
+		return intLitPattern.matcher(inp).matches();
+	}
 }
