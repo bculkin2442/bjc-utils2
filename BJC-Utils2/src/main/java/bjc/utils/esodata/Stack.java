@@ -39,7 +39,7 @@ public class Stack<T> {
 	 *
 	 * @return The element on top of the stack.
 	 */
-	public T pop(T elm) {
+	public T pop() {
 		return backing.pop();
 	}
 
