@@ -14,59 +14,43 @@ import java.util.function.Consumer;
  * @param T The datatype stored in the stack.
  * @author Ben Culkin
  */
-public class Stack<T> {
-	private Deque<T> backing;
-
-	/**
-	 * Create a new empty stack.
-	 *
-	 */
-	public Stack() {
-		backing = new LinkedList();
-	}
-
+public abstract class Stack<T> {
 	/**
 	 * Push an element onto the stack.
 	 *
 	 * @param elm The element to insert.
 	 */
-	public void push(T elm) {
-		backing.push(elm);
-	}
+	public abstract void push(T elm);
 
 	/**
 	 * Pop an element off of the stack.
 	 *
 	 * @return The element on top of the stack.
 	 */
-	public T pop() {
-		return backing.pop();
-	}
+	public abstract T pop();
 
-	/**
-	 * Get the top item of the stack without removing it.
-	 *
-	 * @return The element on top of the stack.
-	 */
-	public T top() {
-		return backing.peek();
-	}
+	public abstract T top();
 
 	/**
 	 * Get the number of elements in the stack.
 	 *
 	 * @return the number of elements in the stack.
 	 */
-	public int size() {
-		return backing.size();
-	}
+	public abstract int size();
 
 	/** Check if the stack is empty.
 	 *
-	 * @return Whether or not the stack is empty
+	 * @return Whether or not the stack is empty.
 	 */
-	public boolean empty() {
-		return backing.size() == 0;
+	public abstract boolean empty();
+
+	/**
+	 * Create a spaghetti stack branching off of this one.
+	 *
+	 * @return A spaghetti stack with this stack as a parent.
+	 */
+	public Stack<T> spaghettify() {
+		return new SpaghettiStack<>(this);
 	}
 
 	/*
@@ -80,7 +64,7 @@ public class Stack<T> {
 	 */
 	public void drop(int n) {
 		for(int i = 0; i < n; i++) {
-			backing.pop();
+			pop();
 		}
 	}
 
@@ -97,11 +81,11 @@ public class Stack<T> {
 	 * @param n The number of items below the top to delete.
 	 */
 	public void nip(int n) {
-		T elm = backing.pop();
+		T elm = pop();
 
 		drop(n);
 
-		backing.push(elm);
+		push(elm);
 	}
 
 	/**
@@ -121,12 +105,12 @@ public class Stack<T> {
 		List<T> lst = new ArrayList<>(n);
 
 		for(int i = n; i > 0; i--) {
-			lst.set(i - 1, backing.pop());
+			lst.set(i - 1, pop());
 		}
 		
 		for(int i = 0; i < m; i++) {
 			for(T elm : lst) {
-				backing.push(elm);
+				push(elm);
 			}
 		}
 	}
@@ -156,20 +140,20 @@ public class Stack<T> {
 	public void multiover(int n, int m) {
 		List<T> lst = new ArrayList<>(n);
 
-		T elm = backing.pop();
+		T elm = pop();
 
 		for(int i = n; i > 0; i--) {
-			lst.set(i - 1, backing.pop());
+			lst.set(i - 1, pop());
 		}
 
 		for(T nelm : lst) {
-			backing.push(nelm);
+			push(nelm);
 		}
-		backing.push(elm);
+		push(elm);
 
 		for(int i = 1; i < m; i++) {
 			for(T nelm : lst) {
-				backing.push(nelm);
+				push(nelm);
 			}
 		}
 	}
@@ -194,76 +178,76 @@ public class Stack<T> {
 	 * Duplicate the third item in the stack.
 	 */
 	public void pick() {
-		T z = backing.pop();
-		T y = backing.pop();
-		T x = backing.pop();
+		T z = pop();
+		T y = pop();
+		T x = pop();
 
-		backing.push(x);
-		backing.push(y);
-		backing.push(z);
-		backing.push(x);
+		push(x);
+		push(y);
+		push(z);
+		push(x);
 	}
 
 	/**
 	 * Swap the top two items on the stack.
 	 */
 	public void swap() {
-		T y = backing.pop();
-		T x = backing.pop();
+		T y = pop();
+		T x = pop();
 
-		backing.push(y);
-		backing.push(x);
+		push(y);
+		push(x);
 	}
 
 	/**
 	 * Duplicate the second item below the first item.
 	 */
 	public void deepdup() {
-		T y = backing.pop();
-		T x = backing.pop();
+		T y = pop();
+		T x = pop();
 
-		backing.push(x);
-		backing.push(x);
-		backing.push(y);
+		push(x);
+		push(x);
+		push(y);
 	}
 
 	/**
 	 * Swap the second and third items in the stack.
 	 */
 	public void deepswap() {
-		T z = backing.pop();
-		T y = backing.pop();
-		T x = backing.pop();
+		T z = pop();
+		T y = pop();
+		T x = pop();
 
-		backing.push(y);
-		backing.push(x);
-		backing.push(z);
+		push(y);
+		push(x);
+		push(z);
 	}
 
 	/**
 	 * Rotate the top three items on the stack
 	 */
 	public void rot() {
-		T z = backing.pop();
-		T y = backing.pop();
-		T x = backing.pop();
+		T z = pop();
+		T y = pop();
+		T x = pop();
 
-		backing.push(y);
-		backing.push(z);
-		backing.push(x);
+		push(y);
+		push(z);
+		push(x);
 	}
 
 	/**
 	 * Inversely rotate the top three items on the stack
 	 */
 	public void invrot() {
-		T z = backing.pop();
-		T y = backing.pop();
-		T x = backing.pop();
+		T z = pop();
+		T y = pop();
+		T x = pop();
 
-		backing.push(z);
-		backing.push(x);
-		backing.push(y);
+		push(z);
+		push(x);
+		push(y);
 	}
 
 	/*
@@ -279,13 +263,13 @@ public class Stack<T> {
 		List<T> elms = new ArrayList<>(n);
 
 		for(int i = n; i > 0; i--) {
-			elms.set(i - 1, backing.pop());
+			elms.set(i - 1, pop());
 		}
 
 		cons.accept(this);
 
 		for(T elm : elms) {
-			backing.push(elm);
+			push(elm);
 		}
 	}
 
@@ -320,12 +304,12 @@ public class Stack<T> {
 		List<T> elms = new ArrayList<>(n);
 
 		for(int i = n; i > 0; i--) {
-			elms.set(i - 1, backing.pop());
+			elms.set(i - 1, pop());
 		}
 
 		for(Consumer<Stack<T>> cons : conses) {
 			for(T elm : elms) {
-				backing.push(elm);
+				push(elm);
 			}
 
 			cons.accept(this);
@@ -354,7 +338,7 @@ public class Stack<T> {
 			List<T> elms = new ArrayList<>(n);
 
 			for(int j = n; j > 0; j--) {
-				elms.set(j, backing.pop());
+				elms.set(j, pop());
 			}
 
 			nelms.set(i, elms);
@@ -363,7 +347,7 @@ public class Stack<T> {
 		int i = 0;
 		for(List<T> elms : nelms) {
 			for(T elm : elms) {
-				backing.push(elm);
+				push(elm);
 			}
 
 			conses.get(i).accept(this);

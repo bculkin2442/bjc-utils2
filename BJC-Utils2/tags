@@ -204,12 +204,16 @@ SliderInputPanel	src/main/java/bjc/utils/gui/panels/SliderInputPanel.java	/^publ
 SliderSettings	src/main/java/bjc/utils/gui/panels/SliderInputPanel.java	/^		public SliderSettings(int min, int max) {$/;"	m	class:SliderInputPanel.SliderSettings
 SliderSettings	src/main/java/bjc/utils/gui/panels/SliderInputPanel.java	/^		public SliderSettings(int min, int max, int init) {$/;"	m	class:SliderInputPanel.SliderSettings
 SliderSettings	src/main/java/bjc/utils/gui/panels/SliderInputPanel.java	/^	public static class SliderSettings {$/;"	c	class:SliderInputPanel
+Stack	src/main/java/bjc/utils/esodata/Stack.java	/^	public Stack() {$/;"	m	class:Stack
+Stack	src/main/java/bjc/utils/esodata/Stack.java	/^public class Stack<T> {$/;"	c
 StringUtils	src/main/java/bjc/utils/funcutils/StringUtils.java	/^public class StringUtils {$/;"	c
 TRANSFORM	src/main/java/bjc/utils/data/TopDownTransformResult.java	/^	TRANSFORM,$/;"	e	enum:TopDownTransformResult	file:
 Tape	src/main/java/bjc/utils/esodata/Tape.java	/^public interface Tape<T> {$/;"	i
 TapeChanger	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public TapeChanger() {$/;"	m	class:TapeChanger
 TapeChanger	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public TapeChanger(Tape<T> current, Tape<T>... others) {$/;"	m	class:TapeChanger
 TapeChanger	src/main/java/bjc/utils/esodata/TapeChanger.java	/^public class TapeChanger<T> implements Tape<T> {$/;"	c
+TapeLibrary	src/main/java/bjc/utils/esodata/TapeLibrary.java	/^	public TapeLibrary() {$/;"	m	class:TapeLibrary
+TapeLibrary	src/main/java/bjc/utils/esodata/TapeLibrary.java	/^public class TapeLibrary<T> implements Tape<T> {$/;"	c
 TextAreaOutputStream	src/main/java/bjc/utils/gui/TextAreaOutputStream.java	/^	public TextAreaOutputStream(JTextArea console) {$/;"	m	class:TextAreaOutputStream
 TextAreaOutputStream	src/main/java/bjc/utils/gui/TextAreaOutputStream.java	/^public class TextAreaOutputStream extends OutputStream {$/;"	c
 TokenDeaffixer	src/main/java/bjc/utils/funcutils/TokenDeaffixer.java	/^	public TokenDeaffixer(String tok) {$/;"	m	class:TokenDeaffixer
@@ -300,6 +304,7 @@ allMatch	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public boolean 
 allMatch	src/main/java/bjc/utils/funcdata/IList.java	/^	boolean allMatch(Predicate<ContainedType> matcher);$/;"	m	interface:IList
 anyMatch	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public boolean anyMatch(Predicate<E> predicate) {$/;"	m	class:FunctionalList
 anyMatch	src/main/java/bjc/utils/funcdata/IList.java	/^	boolean anyMatch(Predicate<ContainedType> matcher);$/;"	m	interface:IList
+apply	src/main/java/bjc/utils/esodata/Stack.java	/^	public void apply(int n, Consumer<Stack<T>> cons) {$/;"	m	class:Stack
 apply	src/main/java/bjc/utils/funcutils/TokenDeaffixer.java	/^	public IList<String> apply(String operatorName, String operatorRegex) {$/;"	m	class:TokenDeaffixer
 apply	src/main/java/bjc/utils/funcutils/TokenSplitter.java	/^	public IList<String> apply(String operatorName, String operatorRegex) {$/;"	m	class:TokenSplitter
 apply	src/main/java/bjc/utils/parserutils/TokenTransformer.java	/^		public IPair<Deque<ITree<TokenType>>, ITree<TokenType>> apply($/;"	m	class:TokenTransformer.OperatorHandler
@@ -308,6 +313,7 @@ author	src/main/java/bjc/utils/components/ComponentDescriptionState.java	/^	priv
 autoExtend	src/main/java/bjc/utils/esodata/SingleTape.java	/^	protected boolean autoExtend;$/;"	f	class:SingleTape
 back	src/main/java/bjc/utils/esodata/DoubleTape.java	/^	private Tape<T> back;$/;"	f	class:DoubleTape	file:
 backing	src/main/java/bjc/utils/esodata/SingleTape.java	/^	protected ArrayList<T> backing;$/;"	f	class:SingleTape
+backing	src/main/java/bjc/utils/esodata/Stack.java	/^	private Deque<T> backing;$/;"	f	class:Stack	file:
 backing	src/main/java/bjc/utils/funcdata/TransformedValueMap.java	/^	private IMap<OldKey, OldValue>			backing;$/;"	f	class:TransformedValueMap	file:
 backing	src/main/java/bjc/utils/graph/Graph.java	/^	private final IMap<T, IMap<T, Integer>> backing;$/;"	f	class:Graph	file:
 balance	src/main/java/bjc/utils/funcdata/bst/BinarySearchTree.java	/^	public void balance() {$/;"	m	class:BinarySearchTree
@@ -385,8 +391,10 @@ bjc.utils.data.internals	src/main/java/bjc/utils/data/internals/WrappedLazy.java
 bjc.utils.data.internals	src/main/java/bjc/utils/data/internals/WrappedOption.java	/^package bjc.utils.data.internals;$/;"	p
 bjc.utils.esodata	src/main/java/bjc/utils/esodata/DoubleTape.java	/^package bjc.utils.esodata;$/;"	p
 bjc.utils.esodata	src/main/java/bjc/utils/esodata/SingleTape.java	/^package bjc.utils.esodata;$/;"	p
+bjc.utils.esodata	src/main/java/bjc/utils/esodata/Stack.java	/^package bjc.utils.esodata;$/;"	p
 bjc.utils.esodata	src/main/java/bjc/utils/esodata/Tape.java	/^package bjc.utils.esodata;$/;"	p
 bjc.utils.esodata	src/main/java/bjc/utils/esodata/TapeChanger.java	/^package bjc.utils.esodata;$/;"	p
+bjc.utils.esodata	src/main/java/bjc/utils/esodata/TapeLibrary.java	/^package bjc.utils.esodata;$/;"	p
 bjc.utils.examples	src/examples/java/bjc/utils/examples/BinarySearchTest.java	/^package bjc.utils.examples;$/;"	p
 bjc.utils.examples.parsing	src/examples/java/bjc/utils/examples/parsing/ShuntTest.java	/^package bjc.utils.examples.parsing;$/;"	p
 bjc.utils.examples.parsing	src/examples/java/bjc/utils/examples/parsing/TreeConstructTest.java	/^package bjc.utils.examples.parsing;$/;"	p
@@ -482,6 +490,7 @@ clear	src/main/java/bjc/utils/funcdata/ExtendedMap.java	/^	public void clear() {
 clear	src/main/java/bjc/utils/funcdata/FunctionalMap.java	/^	public void clear() {$/;"	m	class:FunctionalMap
 clear	src/main/java/bjc/utils/funcdata/IMap.java	/^	void clear();$/;"	m	interface:IMap
 clear	src/main/java/bjc/utils/funcdata/TransformedValueMap.java	/^	public void clear() {$/;"	m	class:TransformedValueMap
+cleave	src/main/java/bjc/utils/esodata/Stack.java	/^	public void cleave(List<Consumer<Stack<T>>> conses) {$/;"	m	class:Stack
 clone	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public IList<E> clone() {$/;"	m	class:FunctionalList
 collapse	src/main/java/bjc/utils/data/ITree.java	/^	public <NewType, ReturnedType> ReturnedType collapse($/;"	m	interface:ITree
 collapse	src/main/java/bjc/utils/data/Tree.java	/^	public <NewType, ReturnedType> ReturnedType collapse($/;"	m	class:Tree
@@ -526,6 +535,7 @@ curYield	src/main/java/bjc/utils/data/TopDownTransformIterator.java	/^	private I
 curr	src/main/java/bjc/utils/data/CircularIterator.java	/^	private Iterator<E> curr;$/;"	f	class:CircularIterator	file:
 currentPartition	src/main/java/bjc/utils/funcutils/GroupPartIteration.java	/^	public IList<E>		currentPartition;$/;"	f	class:GroupPartIteration
 currentTape	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	private Tape<T>       currentTape;$/;"	f	class:TapeChanger	file:
+currentTape	src/main/java/bjc/utils/esodata/TapeLibrary.java	/^	private Tape<T>           currentTape;$/;"	f	class:TapeLibrary	file:
 curry2	src/main/java/bjc/utils/funcutils/FuncUtils.java	/^	public static <A, B, C> Function<A, Function<B, C>> curry2(BiFunction<A, B, C> func) {$/;"	m	class:FuncUtils
 customPrompt	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	private String customPrompt;$/;"	f	class:GenericCommandMode	file:
 data	src/main/java/bjc/utils/data/Tree.java	/^	private ContainedType				data;$/;"	f	class:Tree	file:
@@ -533,6 +543,8 @@ data	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeLeaf.java	/^	protected
 data	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeLeaf.java	/^	public T data() {$/;"	m	class:BinarySearchTreeLeaf
 data	src/main/java/bjc/utils/funcdata/bst/ITreePart.java	/^	public T data();$/;"	m	interface:ITreePart
 deAffixTokens	src/main/java/bjc/utils/funcutils/ListUtils.java	/^	public static IList<String> deAffixTokens(IList<String> input,$/;"	m	class:ListUtils
+deepdup	src/main/java/bjc/utils/esodata/Stack.java	/^	public void deepdup() {$/;"	m	class:Stack
+deepswap	src/main/java/bjc/utils/esodata/Stack.java	/^	public void deepswap() {$/;"	m	class:Stack
 defaultHandlers	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	private IMap<String, ICommand> defaultHandlers;$/;"	f	class:GenericCommandMode	file:
 delegate	src/main/java/bjc/utils/cli/DelegatingCommand.java	/^	private ICommand delegate;$/;"	f	class:DelegatingCommand	file:
 delegate	src/main/java/bjc/utils/funcdata/ExtendedMap.java	/^	private IMap<KeyType, ValueType>	delegate;$/;"	f	class:ExtendedMap	file:
@@ -545,6 +557,8 @@ deleteSubgrammar	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	public void
 description	src/main/java/bjc/utils/cli/GenericHelp.java	/^	private String description;$/;"	f	class:GenericHelp	file:
 description	src/main/java/bjc/utils/components/ComponentDescription.java	/^	private String	description;$/;"	f	class:ComponentDescription	file:
 description	src/main/java/bjc/utils/components/ComponentDescriptionState.java	/^	private String	description;$/;"	f	class:ComponentDescriptionState	file:
+dip	src/main/java/bjc/utils/esodata/Stack.java	/^	public void dip(Consumer<Stack<T>> cons) {$/;"	m	class:Stack
+dip	src/main/java/bjc/utils/esodata/Stack.java	/^	public void dip(int n, Consumer<Stack<T>> cons) {$/;"	m	class:Stack
 directedWalk	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeLeaf.java	/^	public boolean directedWalk(DirectedWalkFunction<T> treeWalker) {$/;"	m	class:BinarySearchTreeLeaf
 directedWalk	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeNode.java	/^	public boolean directedWalk(DirectedWalkFunction<T> treeWalker) {$/;"	m	class:BinarySearchTreeNode
 directedWalk	src/main/java/bjc/utils/funcdata/bst/ITreePart.java	/^	public boolean directedWalk(DirectedWalkFunction<T> walker);$/;"	m	interface:ITreePart
@@ -566,10 +580,16 @@ doWith	src/main/java/bjc/utils/data/IPair.java	/^	public default void doWith(BiC
 done	src/main/java/bjc/utils/data/TopDownTransformIterator.java	/^	private boolean done;$/;"	f	class:TopDownTransformIterator	file:
 drawWithReplacement	src/main/java/bjc/utils/funcutils/ListUtils.java	/^	public static <E> IList<E> drawWithReplacement(IList<E> list,$/;"	m	class:ListUtils
 drawWithoutReplacement	src/main/java/bjc/utils/funcutils/ListUtils.java	/^	public static <E> IList<E> drawWithoutReplacement($/;"	m	class:ListUtils
+drop	src/main/java/bjc/utils/esodata/Stack.java	/^	public void drop() {$/;"	m	class:Stack
+drop	src/main/java/bjc/utils/esodata/Stack.java	/^	public void drop(int n) {$/;"	m	class:Stack
+dup	src/main/java/bjc/utils/esodata/Stack.java	/^	public void dup() {$/;"	m	class:Stack
+dup	src/main/java/bjc/utils/esodata/Stack.java	/^	public void dup(int n) {$/;"	m	class:Stack
 eject	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public void eject() {$/;"	m	class:TapeChanger
+eject	src/main/java/bjc/utils/esodata/TapeLibrary.java	/^	public void eject() {$/;"	m	class:TapeLibrary
 element	src/main/java/bjc/utils/parserutils/TokenTransformer.java	/^		private TokenType element;$/;"	f	class:TokenTransformer.OperatorHandler	file:
 elementCount	src/main/java/bjc/utils/funcdata/bst/BinarySearchTree.java	/^	private int				elementCount;$/;"	f	class:BinarySearchTree	file:
 elementCounter	src/main/java/bjc/utils/funcutils/GroupPartIteration.java	/^	private Function<E, Integer>	elementCounter;$/;"	f	class:GroupPartIteration	file:
+empty	src/main/java/bjc/utils/esodata/Stack.java	/^	public boolean empty() {$/;"	m	class:Stack
 end	src/main/java/bjc/utils/parserutils/RuleBasedConfigReader.java	/^	private Consumer<E> end;$/;"	f	class:RuleBasedConfigReader	file:
 endRule	src/main/java/bjc/utils/parserutils/RuleBasedConfigReader.java	/^	private boolean endRule(E state, boolean isRuleOpen) {$/;"	m	class:RuleBasedConfigReader	file:
 equals	src/main/java/bjc/utils/data/Identity.java	/^	public boolean equals(Object obj) {$/;"	m	class:Identity
@@ -591,6 +611,7 @@ first	src/main/java/bjc/utils/esodata/DoubleTape.java	/^	public void first() {$/
 first	src/main/java/bjc/utils/esodata/SingleTape.java	/^	public void first() {$/;"	m	class:SingleTape
 first	src/main/java/bjc/utils/esodata/Tape.java	/^	void first();$/;"	m	interface:Tape
 first	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public void first() {$/;"	m	class:TapeChanger
+first	src/main/java/bjc/utils/esodata/TapeLibrary.java	/^	public void first() {$/;"	m	class:TapeLibrary
 first	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public E first() {$/;"	m	class:FunctionalList
 first	src/main/java/bjc/utils/funcdata/IList.java	/^	ContainedType first();$/;"	m	interface:IList
 first	src/main/java/bjc/utils/funcutils/CompoundCollector.java	/^	private Collector<InitialType, AuxType1, FinalType1>	first;$/;"	f	class:CompoundCollector	file:
@@ -600,6 +621,7 @@ flatMapTree	src/main/java/bjc/utils/data/ITree.java	/^	public ITree<ContainedTyp
 flatMapTree	src/main/java/bjc/utils/data/Tree.java	/^	public ITree<ContainedType> flatMapTree(Function<ContainedType, ITree<ContainedType>> mapper) {$/;"	m	class:Tree
 flip	src/main/java/bjc/utils/esodata/DoubleTape.java	/^	public void flip() {$/;"	m	class:DoubleTape
 flip	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public void flip() {$/;"	m	class:TapeChanger
+flip	src/main/java/bjc/utils/esodata/TapeLibrary.java	/^	public void flip() {$/;"	m	class:TapeLibrary
 flushYields	src/main/java/bjc/utils/data/TopDownTransformIterator.java	/^	public ITree<ContainedType> flushYields(ITree<ContainedType> val) {$/;"	m	class:TopDownTransformIterator
 fmap	src/main/java/bjc/utils/data/IHolder.java	/^					Functor<ReturnType>> fmap($/;"	m	interface:IHolder
 fmap	src/main/java/bjc/utils/funcdata/theory/Functor.java	/^		fmap(Function<ArgType, ReturnType> func);$/;"	m	interface:Functor
@@ -757,6 +779,7 @@ hasNext	src/main/java/bjc/utils/data/SingleIterator.java	/^	public boolean hasNe
 hasNext	src/main/java/bjc/utils/data/TopDownTransformIterator.java	/^	public boolean hasNext() {$/;"	m	class:TopDownTransformIterator
 hasNext	src/main/java/bjc/utils/data/TransformedIterator.java	/^	public boolean hasNext() {$/;"	m	class:TransformedIterator
 hasRule	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	public boolean hasRule(E ruleName) {$/;"	m	class:WeightedGrammar
+hasTape	src/main/java/bjc/utils/esodata/TapeLibrary.java	/^	public boolean hasTape(String label) {$/;"	m	class:TapeLibrary
 hashCode	src/main/java/bjc/utils/data/Identity.java	/^	public int hashCode() {$/;"	m	class:Identity
 hashCode	src/main/java/bjc/utils/graph/Edge.java	/^	public int hashCode() {$/;"	m	class:Edge
 held	src/main/java/bjc/utils/data/Option.java	/^	private ContainedType held;$/;"	f	class:Option	file:
@@ -786,14 +809,18 @@ insertAfter	src/main/java/bjc/utils/esodata/DoubleTape.java	/^	public void inser
 insertAfter	src/main/java/bjc/utils/esodata/SingleTape.java	/^	public void insertAfter(T itm) {$/;"	m	class:SingleTape
 insertAfter	src/main/java/bjc/utils/esodata/Tape.java	/^	void insertAfter(T itm);$/;"	m	interface:Tape
 insertAfter	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public void insertAfter(T itm) {$/;"	m	class:TapeChanger
+insertAfter	src/main/java/bjc/utils/esodata/TapeLibrary.java	/^	public void insertAfter(T itm) {$/;"	m	class:TapeLibrary
 insertBefore	src/main/java/bjc/utils/esodata/DoubleTape.java	/^	public void insertBefore(T itm) {$/;"	m	class:DoubleTape
 insertBefore	src/main/java/bjc/utils/esodata/SingleTape.java	/^	public void insertBefore(T itm) {$/;"	m	class:SingleTape
 insertBefore	src/main/java/bjc/utils/esodata/Tape.java	/^	void insertBefore(T itm);$/;"	m	interface:Tape
 insertBefore	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public void insertBefore(T itm) {$/;"	m	class:TapeChanger
+insertBefore	src/main/java/bjc/utils/esodata/TapeLibrary.java	/^	public void insertBefore(T itm) {$/;"	m	class:TapeLibrary
 insertTape	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public void insertTape(Tape<T> tp) {$/;"	m	class:TapeChanger
+insertTape	src/main/java/bjc/utils/esodata/TapeLibrary.java	/^	public void insertTape(String label, Tape<T> tp) {$/;"	m	class:TapeLibrary
 instSite	src/main/java/bjc/utils/data/SingleSupplier.java	/^	private Exception	instSite;$/;"	f	class:SingleSupplier	file:
 internalCollapse	src/main/java/bjc/utils/data/Tree.java	/^	protected <NewType> NewType internalCollapse($/;"	m	class:Tree
 internalToString	src/main/java/bjc/utils/data/Tree.java	/^	protected void internalToString(StringBuilder builder, int indentLevel, boolean initial) {$/;"	m	class:Tree
+invrot	src/main/java/bjc/utils/esodata/Stack.java	/^	public void invrot() {$/;"	m	class:Stack
 isAlias	src/main/java/bjc/utils/cli/DelegatingCommand.java	/^	public boolean isAlias() {$/;"	m	class:DelegatingCommand
 isAlias	src/main/java/bjc/utils/cli/GenericCommand.java	/^	public boolean isAlias() {$/;"	m	class:GenericCommand
 isAlias	src/main/java/bjc/utils/cli/ICommand.java	/^	public default boolean isAlias() {$/;"	m	interface:ICommand
@@ -805,12 +832,14 @@ isDoubleSided	src/main/java/bjc/utils/esodata/DoubleTape.java	/^	public boolean 
 isDoubleSided	src/main/java/bjc/utils/esodata/SingleTape.java	/^	public boolean isDoubleSided() {$/;"	m	class:SingleTape
 isDoubleSided	src/main/java/bjc/utils/esodata/Tape.java	/^	boolean isDoubleSided();$/;"	m	interface:Tape
 isDoubleSided	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public boolean isDoubleSided() {$/;"	m	class:TapeChanger
+isDoubleSided	src/main/java/bjc/utils/esodata/TapeLibrary.java	/^	public boolean isDoubleSided() {$/;"	m	class:TapeLibrary
 isEmpty	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public boolean isEmpty() {$/;"	m	class:FunctionalList
 isEmpty	src/main/java/bjc/utils/funcdata/IList.java	/^	boolean isEmpty();$/;"	m	interface:IList
 isHigherPrec	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^	private boolean isHigherPrec(String left, String right) {$/;"	m	class:ShuntingYard	file:
 isInTree	src/main/java/bjc/utils/funcdata/bst/BinarySearchTree.java	/^	public boolean isInTree(T element) {$/;"	m	class:BinarySearchTree
 isLeft	src/main/java/bjc/utils/data/Either.java	/^	private boolean		isLeft;$/;"	f	class:Either	file:
 isLoaded	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public boolean isLoaded() {$/;"	m	class:TapeChanger
+isLoaded	src/main/java/bjc/utils/esodata/TapeLibrary.java	/^	public boolean isLoaded() {$/;"	m	class:TapeLibrary
 isPartitionFull	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	private Boolean isPartitionFull(int numberPerPartition,$/;"	m	class:FunctionalList	file:
 isProbable	src/main/java/bjc/utils/funcutils/NumberUtils.java	/^	public static boolean isProbable(int winning, int total,$/;"	m	class:NumberUtils
 isSpecialOperator	src/main/java/bjc/utils/parserutils/TokenTransformer.java	/^			TokenType>																	isSpecialOperator;$/;"	f	class:TokenTransformer	file:
@@ -822,8 +851,11 @@ item	src/main/java/bjc/utils/esodata/Tape.java	/^	T item();$/;"	m	interface:Tape
 item	src/main/java/bjc/utils/esodata/Tape.java	/^	void item(T itm);$/;"	m	interface:Tape
 item	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public T item() {$/;"	m	class:TapeChanger
 item	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public void item(T itm) {$/;"	m	class:TapeChanger
+item	src/main/java/bjc/utils/esodata/TapeLibrary.java	/^	public T item() {$/;"	m	class:TapeLibrary
+item	src/main/java/bjc/utils/esodata/TapeLibrary.java	/^	public void item(T itm) {$/;"	m	class:TapeLibrary
 iterator	src/main/java/bjc/utils/funcdata/IList.java	/^	default Iterator<ContainedType> iterator() {$/;"	m	interface:IList
 itm	src/main/java/bjc/utils/data/SingleIterator.java	/^	private T itm;$/;"	f	class:SingleIterator	file:
+keep	src/main/java/bjc/utils/esodata/Stack.java	/^	public void keep(int n, Consumer<Stack<T>> cons) {$/;"	m	class:Stack
 keyList	src/main/java/bjc/utils/funcdata/ExtendedMap.java	/^	public IList<KeyType> keyList() {$/;"	m	class:ExtendedMap
 keyList	src/main/java/bjc/utils/funcdata/FunctionalMap.java	/^	public IList<KeyType> keyList() {$/;"	m	class:FunctionalMap
 keyList	src/main/java/bjc/utils/funcdata/IMap.java	/^	IList<KeyType> keyList();$/;"	m	interface:IMap
@@ -832,6 +864,7 @@ last	src/main/java/bjc/utils/esodata/DoubleTape.java	/^	public void last() {$/;"
 last	src/main/java/bjc/utils/esodata/SingleTape.java	/^	public void last() {$/;"	m	class:SingleTape
 last	src/main/java/bjc/utils/esodata/Tape.java	/^	void last();$/;"	m	interface:Tape
 last	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public void last() {$/;"	m	class:TapeChanger
+last	src/main/java/bjc/utils/esodata/TapeLibrary.java	/^	public void last() {$/;"	m	class:TapeLibrary
 left	src/main/java/bjc/utils/esodata/DoubleTape.java	/^	public boolean left() {$/;"	m	class:DoubleTape
 left	src/main/java/bjc/utils/esodata/DoubleTape.java	/^	public boolean left(int amt) {$/;"	m	class:DoubleTape
 left	src/main/java/bjc/utils/esodata/SingleTape.java	/^	public boolean left() {$/;"	m	class:SingleTape
@@ -840,6 +873,8 @@ left	src/main/java/bjc/utils/esodata/Tape.java	/^	boolean left();$/;"	m	interfac
 left	src/main/java/bjc/utils/esodata/Tape.java	/^	boolean left(int amt);$/;"	m	interface:Tape
 left	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public boolean left() {$/;"	m	class:TapeChanger
 left	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public boolean left(int amt) {$/;"	m	class:TapeChanger
+left	src/main/java/bjc/utils/esodata/TapeLibrary.java	/^	public boolean left() {$/;"	m	class:TapeLibrary
+left	src/main/java/bjc/utils/esodata/TapeLibrary.java	/^	public boolean left(int amt) {$/;"	m	class:TapeLibrary
 left	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeNode.java	/^	private ITreePart<T>	left;$/;"	f	class:BinarySearchTreeNode	file:
 leftMaterialized	src/main/java/bjc/utils/data/LazyPair.java	/^	private boolean				leftMaterialized;$/;"	f	class:LazyPair	file:
 leftSupplier	src/main/java/bjc/utils/data/LazyPair.java	/^	private Supplier<LeftType>	leftSupplier;$/;"	f	class:LazyPair	file:
@@ -911,6 +946,11 @@ minValue	src/main/java/bjc/utils/gui/panels/SliderInputPanel.java	/^		private in
 minValue	src/main/java/bjc/utils/gui/panels/SliderInputPanel.java	/^		public final int	minValue;$/;"	f	class:SliderInputPanel.SliderSettings
 modeName	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	private String modeName;$/;"	f	class:GenericCommandMode	file:
 multiPrefixRule	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	public void multiPrefixRule(E ruleName, E prefixToken,$/;"	m	class:WeightedGrammar
+multiapply	src/main/java/bjc/utils/esodata/Stack.java	/^	public void multiapply(int n, int m, Consumer<Stack<T>> cons) {$/;"	m	class:Stack
+multicleave	src/main/java/bjc/utils/esodata/Stack.java	/^	public void multicleave(int n, List<Consumer<Stack<T>>> conses) {$/;"	m	class:Stack
+multidup	src/main/java/bjc/utils/esodata/Stack.java	/^	public void multidup(int n, int m) {$/;"	m	class:Stack
+multiover	src/main/java/bjc/utils/esodata/Stack.java	/^	public void multiover(int n, int m) {$/;"	m	class:Stack
+multispread	src/main/java/bjc/utils/esodata/Stack.java	/^	public void multispread(int n, List<Consumer<Stack<T>>> conses) {$/;"	m	class:Stack
 nDelay	src/main/java/bjc/utils/gui/panels/HolderOutputPanel.java	/^	private int					nDelay;$/;"	f	class:HolderOutputPanel	file:
 name	src/main/java/bjc/utils/components/ComponentDescription.java	/^	private String	name;$/;"	f	class:ComponentDescription	file:
 name	src/main/java/bjc/utils/components/ComponentDescriptionState.java	/^	private String	name;$/;"	f	class:ComponentDescriptionState	file:
@@ -923,6 +963,8 @@ nextID	src/main/java/bjc/utils/data/SingleSupplier.java	/^	private static long	n
 nextID	src/main/java/bjc/utils/data/Tree.java	/^	private static int nextID = 0;$/;"	f	class:Tree	file:
 nextTape	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public boolean nextTape() {$/;"	m	class:TapeChanger
 nextToken	src/main/java/bjc/utils/funcdata/FunctionalStringTokenizer.java	/^	public String nextToken() {$/;"	m	class:FunctionalStringTokenizer
+nip	src/main/java/bjc/utils/esodata/Stack.java	/^	public void nip() {$/;"	m	class:Stack
+nip	src/main/java/bjc/utils/esodata/Stack.java	/^	public void nip(int n) {$/;"	m	class:Stack
 normalOutput	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	private Consumer<String> normalOutput;$/;"	f	class:GenericCommandMode	file:
 numberInCurrentPartition	src/main/java/bjc/utils/funcutils/GroupPartIteration.java	/^	private int						numberInCurrentPartition;$/;"	f	class:GroupPartIteration	file:
 numberPerPartition	src/main/java/bjc/utils/funcutils/GroupPartIteration.java	/^	private int						numberPerPartition;$/;"	f	class:GroupPartIteration	file:
@@ -932,6 +974,8 @@ operatorPredicate	src/main/java/bjc/utils/parserutils/TokenTransformer.java	/^		
 operators	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^	private IMap<String, IPrecedent> operators;$/;"	f	class:ShuntingYard	file:
 output	src/main/java/bjc/utils/cli/CLICommander.java	/^	private OutputStream	output;$/;"	f	class:CLICommander	file:
 output	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^		private IList<TokenType>			output;$/;"	f	class:ShuntingYard.TokenShunter	file:
+over	src/main/java/bjc/utils/esodata/Stack.java	/^	public void over() {$/;"	m	class:Stack
+over	src/main/java/bjc/utils/esodata/Stack.java	/^	public void over(int n) {$/;"	m	class:Stack
 padList	src/main/java/bjc/utils/funcutils/ListUtils.java	/^	public static <E> IList<E> padList(IList<E> list,$/;"	m	class:ListUtils
 pairBound	src/main/java/bjc/utils/data/internals/BoundLazyPair.java	/^	private boolean													pairBound;$/;"	f	class:BoundLazyPair	file:
 pairBound	src/main/java/bjc/utils/data/internals/HalfBoundLazyPair.java	/^	private boolean										pairBound;$/;"	f	class:HalfBoundLazyPair	file:
@@ -939,7 +983,9 @@ pairWith	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public <T> ILis
 pairWith	src/main/java/bjc/utils/funcdata/IList.java	/^	<OtherType> IList<IPair<ContainedType, OtherType>> pairWith(IList<OtherType> list);$/;"	m	interface:IList
 partition	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public IList<IList<E>> partition(int numberPerPartition) {$/;"	m	class:FunctionalList
 partition	src/main/java/bjc/utils/funcdata/IList.java	/^	IList<IList<ContainedType>> partition(int partitionSize);$/;"	m	interface:IList
+pick	src/main/java/bjc/utils/esodata/Stack.java	/^	public void pick() {$/;"	m	class:Stack
 picker	src/main/java/bjc/utils/data/TopDownTransformIterator.java	/^	private Function<ContainedType, TopDownTransformResult> picker;$/;"	f	class:TopDownTransformIterator	file:
+pop	src/main/java/bjc/utils/esodata/Stack.java	/^	public T pop() {$/;"	m	class:Stack
 pos	src/main/java/bjc/utils/esodata/SingleTape.java	/^	protected int pos;$/;"	f	class:SingleTape
 postChildren	src/main/java/bjc/utils/data/TopDownTransformIterator.java	/^	private Deque<ITree<ContainedType>> postChildren;$/;"	f	class:TopDownTransformIterator	file:
 postParent	src/main/java/bjc/utils/data/TopDownTransformIterator.java	/^	private ITree<ContainedType> postParent;$/;"	f	class:TopDownTransformIterator	file:
@@ -960,6 +1006,7 @@ printDeque	src/main/java/bjc/utils/funcutils/StringUtils.java	/^	public static <
 probabilities	src/main/java/bjc/utils/gen/WeightedRandom.java	/^	private IList<Integer>	probabilities;$/;"	f	class:WeightedRandom	file:
 process	src/main/java/bjc/utils/cli/GenericCommandMode.java	/^	public ICommandMode process(String command, String[] args) {$/;"	m	class:GenericCommandMode
 process	src/main/java/bjc/utils/cli/ICommandMode.java	/^	public default ICommandMode process(String command, String[] args) {$/;"	m	interface:ICommandMode
+push	src/main/java/bjc/utils/esodata/Stack.java	/^	public void push(T elm) {$/;"	m	class:Stack
 put	src/main/java/bjc/utils/funcdata/ExtendedMap.java	/^	public ValueType put(KeyType key, ValueType val) {$/;"	m	class:ExtendedMap
 put	src/main/java/bjc/utils/funcdata/FunctionalMap.java	/^	public ValueType put(KeyType key, ValueType val) {$/;"	m	class:FunctionalMap
 put	src/main/java/bjc/utils/funcdata/IMap.java	/^	ValueType put(KeyType key, ValueType val);$/;"	m	interface:IMap
@@ -979,6 +1026,7 @@ remove	src/main/java/bjc/utils/esodata/DoubleTape.java	/^	public T remove() {$/;
 remove	src/main/java/bjc/utils/esodata/SingleTape.java	/^	public T remove() {$/;"	m	class:SingleTape
 remove	src/main/java/bjc/utils/esodata/Tape.java	/^	T remove();$/;"	m	interface:Tape
 remove	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public T remove() {$/;"	m	class:TapeChanger
+remove	src/main/java/bjc/utils/esodata/TapeLibrary.java	/^	public T remove() {$/;"	m	class:TapeLibrary
 remove	src/main/java/bjc/utils/funcdata/ExtendedMap.java	/^	public ValueType remove(KeyType key) {$/;"	m	class:ExtendedMap
 remove	src/main/java/bjc/utils/funcdata/FunctionalMap.java	/^	public ValueType remove(KeyType key) {$/;"	m	class:FunctionalMap
 remove	src/main/java/bjc/utils/funcdata/IMap.java	/^	ValueType remove(KeyType key);$/;"	m	interface:IMap
@@ -990,6 +1038,7 @@ removeMatching	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public vo
 removeMatching	src/main/java/bjc/utils/funcdata/IList.java	/^	void removeMatching(ContainedType element);$/;"	m	interface:IList
 removeOp	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^	public void removeOp(String operator) {$/;"	m	class:ShuntingYard
 removeTape	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public Tape<T> removeTape() {$/;"	m	class:TapeChanger
+removeTape	src/main/java/bjc/utils/esodata/TapeLibrary.java	/^	public Tape<T> removeTape(String label) {$/;"	m	class:TapeLibrary
 replace	src/main/java/bjc/utils/data/IHolder.java	/^	public default IHolder<ContainedType> replace(ContainedType newValue) {$/;"	m	interface:IHolder
 reset	src/main/java/bjc/utils/funcutils/IBuilder.java	/^	public default void reset() {$/;"	m	interface:IBuilder
 reset	src/main/java/bjc/utils/gui/panels/HolderOutputPanel.java	/^	public void reset() {$/;"	m	class:HolderOutputPanel
@@ -1008,6 +1057,8 @@ right	src/main/java/bjc/utils/esodata/Tape.java	/^	boolean right();$/;"	m	interf
 right	src/main/java/bjc/utils/esodata/Tape.java	/^	boolean right(int amt);$/;"	m	interface:Tape
 right	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public boolean right() {$/;"	m	class:TapeChanger
 right	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public boolean right(int amt) {$/;"	m	class:TapeChanger
+right	src/main/java/bjc/utils/esodata/TapeLibrary.java	/^	public boolean right() {$/;"	m	class:TapeLibrary
+right	src/main/java/bjc/utils/esodata/TapeLibrary.java	/^	public boolean right(int amt) {$/;"	m	class:TapeLibrary
 right	src/main/java/bjc/utils/funcdata/bst/BinarySearchTreeNode.java	/^	private ITreePart<T>	right;$/;"	f	class:BinarySearchTreeNode	file:
 rightMaterialized	src/main/java/bjc/utils/data/LazyPair.java	/^	private boolean				rightMaterialized;$/;"	f	class:LazyPair	file:
 rightSupplier	src/main/java/bjc/utils/data/LazyPair.java	/^	private Supplier<RightType>	rightSupplier;$/;"	f	class:LazyPair	file:
@@ -1017,6 +1068,7 @@ rightValue	src/main/java/bjc/utils/data/LazyPair.java	/^	private RightType			rig
 rightValue	src/main/java/bjc/utils/data/Pair.java	/^	private RightType	rightValue;$/;"	f	class:Pair	file:
 rng	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	private Random rng;$/;"	f	class:WeightedGrammar	file:
 root	src/main/java/bjc/utils/funcdata/bst/BinarySearchTree.java	/^	private ITreePart<T>	root;$/;"	f	class:BinarySearchTree	file:
+rot	src/main/java/bjc/utils/esodata/Stack.java	/^	public void rot() {$/;"	m	class:Stack
 rules	src/examples/java/bjc/utils/examples/rangen/DiabloItemGen.java	/^	private static WeightedGrammar<String> rules = new WeightedGrammar<>();$/;"	f	class:DiabloItemGen	file:
 rules	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	protected IMap<E, WeightedRandom<IList<E>>>	rules;$/;"	f	class:WeightedGrammar
 runCommands	src/main/java/bjc/utils/cli/CLICommander.java	/^	public void runCommands() {$/;"	m	class:CLICommander
@@ -1065,8 +1117,10 @@ showMessage	src/main/java/bjc/utils/gui/SimpleDialogs.java	/^	public static void
 showMessage	src/main/java/bjc/utils/gui/SimpleInternalDialogs.java	/^	public static void showMessage(Component parent, String title,$/;"	m	class:SimpleInternalDialogs
 size	src/main/java/bjc/utils/esodata/DoubleTape.java	/^	public int size() {$/;"	m	class:DoubleTape
 size	src/main/java/bjc/utils/esodata/SingleTape.java	/^	public int size() {$/;"	m	class:SingleTape
+size	src/main/java/bjc/utils/esodata/Stack.java	/^	public int size() {$/;"	m	class:Stack
 size	src/main/java/bjc/utils/esodata/Tape.java	/^	int size();$/;"	m	interface:Tape
 size	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public int size() {$/;"	m	class:TapeChanger
+size	src/main/java/bjc/utils/esodata/TapeLibrary.java	/^	public int size() {$/;"	m	class:TapeLibrary
 slider	src/main/java/bjc/utils/gui/panels/SliderInputPanel.java	/^	private JSlider				slider;$/;"	f	class:SliderInputPanel	file:
 sort	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public void sort(Comparator<E> comparator) {$/;"	m	class:FunctionalList
 sort	src/main/java/bjc/utils/funcdata/IList.java	/^	void sort(Comparator<ContainedType> comparator);$/;"	m	interface:IList
@@ -1080,6 +1134,7 @@ specialAction	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	private BiFunc
 specialMarker	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	private Predicate<E> specialMarker;$/;"	f	class:WeightedGrammar	file:
 specialRules	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	private IMap<E, Supplier<IList<E>>> specialRules;$/;"	f	class:WeightedGrammar	file:
 splitTokens	src/main/java/bjc/utils/funcutils/ListUtils.java	/^	public static IList<String> splitTokens(IList<String> input,$/;"	m	class:ListUtils
+spread	src/main/java/bjc/utils/esodata/Stack.java	/^	public void spread(List<Consumer<Stack<T>>> conses) {$/;"	m	class:Stack
 stack	src/main/java/bjc/utils/parserutils/ShuntingYard.java	/^		private Deque<String>				stack;$/;"	f	class:ShuntingYard.TokenShunter	file:
 start	src/main/java/bjc/utils/parserutils/RuleBasedConfigReader.java	/^	private BiConsumer<FunctionalStringTokenizer, IPair<String, E>> start;$/;"	f	class:RuleBasedConfigReader	file:
 startRule	src/main/java/bjc/utils/parserutils/RuleBasedConfigReader.java	/^	private boolean startRule(E state, boolean isRuleOpen, String line) {$/;"	m	class:RuleBasedConfigReader	file:
@@ -1091,10 +1146,14 @@ subgrammars	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	protected IMap<E
 suffixRule	src/main/java/bjc/utils/gen/WeightedGrammar.java	/^	public void suffixRule(E ruleName, E suffixToken, int additionalProbability) {$/;"	m	class:WeightedGrammar
 summary	src/main/java/bjc/utils/cli/GenericHelp.java	/^	private String summary;$/;"	f	class:GenericHelp	file:
 supplier	src/main/java/bjc/utils/funcutils/CompoundCollector.java	/^	public Supplier<IHolder<IPair<AuxType1, AuxType2>>> supplier() {$/;"	m	class:CompoundCollector
+swap	src/main/java/bjc/utils/esodata/Stack.java	/^	public void swap() {$/;"	m	class:Stack
+switchTape	src/main/java/bjc/utils/esodata/TapeLibrary.java	/^	public boolean switchTape(String label) {$/;"	m	class:TapeLibrary
 tail	src/main/java/bjc/utils/funcdata/FunctionalList.java	/^	public IList<E> tail() {$/;"	m	class:FunctionalList
 tail	src/main/java/bjc/utils/funcdata/IList.java	/^	IList<ContainedType> tail();$/;"	m	interface:IList
 tapeCount	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	public int tapeCount() {$/;"	m	class:TapeChanger
+tapeCount	src/main/java/bjc/utils/esodata/TapeLibrary.java	/^	public int tapeCount() {$/;"	m	class:TapeLibrary
 tapes	src/main/java/bjc/utils/esodata/TapeChanger.java	/^	private Tape<Tape<T>> tapes;$/;"	f	class:TapeChanger	file:
+tapes	src/main/java/bjc/utils/esodata/TapeLibrary.java	/^	private Map<String, Tape> tapes;$/;"	f	class:TapeLibrary	file:
 target	src/main/java/bjc/utils/graph/Edge.java	/^	private final T		source, target;$/;"	f	class:Edge	file:
 test	src/examples/java/bjc/utils/examples/parsing/TreeConstructTest.java	/^		public boolean test(String token) {$/;"	m	class:TreeConstructTest.OperatorPicker
 textArea	src/main/java/bjc/utils/gui/TextAreaOutputStream.java	/^	private JTextArea textArea;$/;"	f	class:TextAreaOutputStream	file:
@@ -1123,6 +1182,7 @@ toString	src/main/java/bjc/utils/graph/Edge.java	/^	public String toString() {$/
 toYield	src/main/java/bjc/utils/data/TopDownTransformIterator.java	/^	private Deque<Iterator<ITree<ContainedType>>> toYield;$/;"	f	class:TopDownTransformIterator	file:
 token	src/main/java/bjc/utils/funcutils/TokenDeaffixer.java	/^	private String token;$/;"	f	class:TokenDeaffixer	file:
 tokenToSplit	src/main/java/bjc/utils/funcutils/TokenSplitter.java	/^	private String tokenToSplit;$/;"	f	class:TokenSplitter	file:
+top	src/main/java/bjc/utils/esodata/Stack.java	/^	public T top() {$/;"	m	class:Stack
 topDownTransform	src/main/java/bjc/utils/data/ITree.java	/^	public ITree<ContainedType> topDownTransform($/;"	m	interface:ITree
 topDownTransform	src/main/java/bjc/utils/data/Tree.java	/^	public ITree<ContainedType> topDownTransform($/;"	m	class:Tree
 totalChance	src/main/java/bjc/utils/gen/WeightedRandom.java	/^	private int				totalChance;$/;"	f	class:WeightedRandom	file:
