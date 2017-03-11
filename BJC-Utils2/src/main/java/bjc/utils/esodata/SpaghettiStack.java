@@ -23,8 +23,10 @@ class SpaghettiStack<T> extends Stack<T> {
 	 *
 	 * @param par The parent stack
 	 */
-	public SimpleStack() {
+	public SpaghettiStack(Stack<T> par) {
 		backing = new SimpleStack();
+
+		parent = par;
 	}
 
 	@Override
@@ -47,7 +49,7 @@ class SpaghettiStack<T> extends Stack<T> {
 			return parent.top();
 		}
 
-		return backing.peek();
+		return backing.top();
 	}
 
 	@Override

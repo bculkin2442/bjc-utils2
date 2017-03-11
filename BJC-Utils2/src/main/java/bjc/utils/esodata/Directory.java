@@ -13,7 +13,7 @@ import bjc.utils.funcdata.IMap;
  * @param V The value type of the map.
  */
 public class Directory<K, V> {
-	private IMap<K, TreeDict<K, V>> children;
+	private IMap<K, Directory<K, V>> children;
 
 	private IMap<K, V> data;
 

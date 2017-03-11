@@ -19,7 +19,7 @@ public class QueueStack<T> extends Stack<T> {
 	 * Create a new empty stack queue.
 	 *
 	 */
-	public SimpleStack() {
+	public QueueStack() {
 		backing = new LinkedList();
 	}
 
