@@ -31,8 +31,10 @@ public class NeoTokenSplitter {
 	private static String WITH_MULTI_DELIM = "((?<=%1$s+)(?!%1$s)|(?<!%1$s)(?=%1$s+))";
 
 	private StringBuilder currPatt;
+	private StringBuilder currExclusionPatt;
 
 	private Pattern compPatt;
+	private Pattern exclusionPatt;
 
 	/**
 	 * Create a new token splitter.
@@ -57,6 +59,10 @@ public class NeoTokenSplitter {
 			throw new IllegalStateException("Token splitter has not been compiled yet");
 		}
 
+		/*
+		 * Don't split something that matches only an operator
+		 */
+		if(exclusionPatt.matcher(inp).matches()) return new String[] {inp};
 		return compPatt.split(inp);
 	}
 
@@ -70,14 +76,18 @@ public class NeoTokenSplitter {
 	 * @param delim The delimiter to match on.
 	 */
 	public void addDelimiter(String delim) {
-		String delimPat = String.format(WITH_DELIM, Pattern.quote(delim));
+		String quoteDelim = Pattern.quote(delim);
+		String delimPat = String.format(WITH_DELIM, quoteDelim);
 
 		if(currPatt == null) {
-			currPatt = new StringBuilder();
+			currPatt          = new StringBuilder();
+			currExclusionPatt = new StringBuilder();
 
 			currPatt.append("(?:" + delimPat + ")");
+			currExclusionPatt.append("(?:" + quoteDelim + ")");
 		} else {
 			currPatt.append("|(?:" + delimPat + ")");
+			currExclusionPatt.append("|(?:" + quoteDelim + ")");
 		}
 	}
 
@@ -93,11 +103,15 @@ public class NeoTokenSplitter {
 		String delimPat = String.format(WITH_MULTI_DELIM, "(?:" + delim + ")");
 
 		if(currPatt == null) {
-			currPatt = new StringBuilder();
+			currPatt          = new StringBuilder();
+			currExclusionPatt = new StringBuilder();
 
 			currPatt.append("(?:" + delimPat + ")");
+			currExclusionPatt.append("(?:(?:" + delim + ")+)");
+
 		} else {
 			currPatt.append("|(?:" + delimPat + ")");
+			currExclusionPatt.append("|(?:(?:" + delim + ")+)");
 		}
 	}
 
@@ -107,6 +121,7 @@ public class NeoTokenSplitter {
 	 * Makes this splitter ready to use.
 	 */
 	public void compile() {
-		compPatt = Pattern.compile(currPatt.toString());
+		compPatt      = Pattern.compile(currPatt.toString());
+		exclusionPatt = Pattern.compile(currExclusionPatt.toString());
 	}
 }
