@@ -9,8 +9,10 @@ import bjc.utils.funcdata.IMap;
  * What's useful about this is that you can hand sub-directories to people and
  * be able to ensure that they can't write outside of it.
  *
- * @param K The key type of the map.
- * @param V The value type of the map.
+ * @param K
+ *                The key type of the map.
+ * @param V
+ *                The value type of the map.
  */
 public class Directory<K, V> {
 	private IMap<K, Directory<K, V>> children;
@@ -22,7 +24,7 @@ public class Directory<K, V> {
 	 */
 	public Directory() {
 		children = new FunctionalMap<>();
-		data     = new FunctionalMap<>();
+		data = new FunctionalMap<>();
 	}
 
 	/**
@@ -30,13 +32,15 @@ public class Directory<K, V> {
 	 *
 	 * Will fail if a sub-directory of that name already exists.
 	 *
-	 * @param key The name of the new sub-directory.
+	 * @param key
+	 *                The name of the new sub-directory.
 	 *
 	 * @return The new sub-directory, or null if one by that name already
-	 * exists.
+	 *         exists.
 	 */
 	public Directory<K, V> newSubdirectory(K key) {
-		if(children.containsKey(key)) return null;
+		if (children.containsKey(key))
+			return null;
 
 		Directory<K, V> kid = new Directory<>();
 		children.put(key, kid);
@@ -46,7 +50,8 @@ public class Directory<K, V> {
 	/**
 	 * Check if a given sub-directory exists.
 	 *
-	 * @param key The key to look for the sub-directory under.
+	 * @param key
+	 *                The key to look for the sub-directory under.
 	 *
 	 * @return Whether or not a sub-directory of that name exists.
 	 */
@@ -57,12 +62,13 @@ public class Directory<K, V> {
 	/**
 	 * Retrieves a given sub-directory.
 	 *
-	 * @param key The key to retrieve the sub-directory for.
+	 * @param key
+	 *                The key to retrieve the sub-directory for.
 	 *
 	 * @return The sub-directory under that name.
 	 *
-	 * @throws IllegalArgumentException If the given sub-directory doesn't
-	 * exist.
+	 * @throws IllegalArgumentException
+	 *                 If the given sub-directory doesn't exist.
 	 */
 	public Directory<K, V> getSubdirectory(K key) {
 		return children.get(key);
@@ -71,8 +77,10 @@ public class Directory<K, V> {
 	/**
 	 * Insert a data-item into the directory.
 	 *
-	 * @param key The key to insert into.
-	 * @param val The value to insert.
+	 * @param key
+	 *                The key to insert into.
+	 * @param val
+	 *                The value to insert.
 	 *
 	 * @return The old value of key, or null if such a value didn't exist.
 	 */
@@ -83,7 +91,8 @@ public class Directory<K, V> {
 	/**
 	 * Check if the directory contains a data-item under the given key.
 	 *
-	 * @param key The key to check for.
+	 * @param key
+	 *                The key to check for.
 	 *
 	 * @return Whether or not there is a data item for the given key.
 	 */
@@ -94,12 +103,13 @@ public class Directory<K, V> {
 	/**
 	 * Retrive a given data-item from the directory.
 	 *
-	 * @param key The key to retrieve data for.
+	 * @param key
+	 *                The key to retrieve data for.
 	 *
 	 * @return The value for the given key.
 	 *
-	 * @throws IllegalArgumentException If no value exists for the given
-	 * key.
+	 * @throws IllegalArgumentException
+	 *                 If no value exists for the given key.
 	 */
 	public V get(K key) {
 		return data.get(key);

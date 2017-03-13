@@ -6,8 +6,7 @@ import java.util.function.BiFunction;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IList;
 
-final class TokenSplitter
-		implements BiFunction<String, String, IList<String>> {
+final class TokenSplitter implements BiFunction<String, String, IList<String>> {
 	private String tokenToSplit;
 
 	public TokenSplitter(String tok) {
@@ -17,11 +16,9 @@ final class TokenSplitter
 	@Override
 	public IList<String> apply(String operatorName, String operatorRegex) {
 		if (operatorName == null) {
-			throw new NullPointerException(
-					"Operator name must not be null");
+			throw new NullPointerException("Operator name must not be null");
 		} else if (operatorRegex == null) {
-			throw new NullPointerException(
-					"Operator regex must not be null");
+			throw new NullPointerException("Operator regex must not be null");
 		}
 
 		if (tokenToSplit.contains(operatorName)) {
@@ -37,10 +34,10 @@ final class TokenSplitter
 
 			String elm = itr.next();
 
-			for(int i = 0; itr.hasNext(); elm = itr.next()) {
+			for (int i = 0; itr.hasNext(); elm = itr.next()) {
 				result.add(elm);
 
-				if(i != tokenExpansionSize) {
+				if (i != tokenExpansionSize) {
 					result.add(operatorName);
 				}
 			}

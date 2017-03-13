@@ -23,22 +23,20 @@ public class ExtensionFileFilter extends FileFilter {
 	private IList<String> extensions;
 
 	/**
-	 * Create a new filter only showing files with the specified
-	 * extensions.
+	 * Create a new filter only showing files with the specified extensions.
 	 * 
 	 * @param exts
-	 *            The extensions to show in this filter.
+	 *                The extensions to show in this filter.
 	 */
 	public ExtensionFileFilter(List<String> exts) {
 		extensions = new FunctionalList<>(exts);
 	}
 
 	/**
-	 * Create a new filter only showing files with the specified
-	 * extensions.
+	 * Create a new filter only showing files with the specified extensions.
 	 * 
 	 * @param exts
-	 *            The extensions to show in this filter.
+	 *                The extensions to show in this filter.
 	 */
 	public ExtensionFileFilter(String... exts) {
 		extensions = new FunctionalList<>(exts);

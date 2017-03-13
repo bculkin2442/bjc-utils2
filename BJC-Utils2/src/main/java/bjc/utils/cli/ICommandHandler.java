@@ -14,7 +14,7 @@ public interface ICommandHandler extends Function<String[], ICommandMode> {
 	 * Execute this command
 	 * 
 	 * @param args
-	 *            The arguments for this command
+	 *                The arguments for this command
 	 * @return The command mode to switch to after this command, or null to
 	 *         stop executing commands
 	 */

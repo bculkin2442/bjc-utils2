@@ -15,12 +15,12 @@ public class GenericHelp implements ICommandHelp {
 	 * Create a new help topic
 	 * 
 	 * @param summary
-	 *            The summary of this help topic
+	 *                The summary of this help topic
 	 * @param description
-	 *            The description of this help topic, or null if this help
-	 *            topic doesn't have a more detailed description
+	 *                The description of this help topic, or null if this
+	 *                help topic doesn't have a more detailed description
 	 */
-	public GenericHelp(String summary,  String description) {
+	public GenericHelp(String summary, String description) {
 		if (summary == null) {
 			throw new NullPointerException("Help summary must be non-null");
 		}

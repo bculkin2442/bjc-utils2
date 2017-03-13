@@ -14,9 +14,9 @@ import bjc.utils.data.IPair;
  * @author ben
  *
  * @param <KeyType>
- *            The type of the map's keys
+ *                The type of the map's keys
  * @param <ValueType>
- *            The type of the map's values
+ *                The type of the map's values
  */
 public class FunctionalMap<KeyType, ValueType> implements IMap<KeyType, ValueType> {
 	private Map<KeyType, ValueType> wrappedMap;
@@ -32,7 +32,7 @@ public class FunctionalMap<KeyType, ValueType> implements IMap<KeyType, ValueTyp
 	 * Create a new functional map with the specified entries
 	 * 
 	 * @param entries
-	 *            The entries to put into the map
+	 *                The entries to put into the map
 	 */
 	@SafeVarargs
 	public FunctionalMap(IPair<KeyType, ValueType>... entries) {
@@ -49,7 +49,7 @@ public class FunctionalMap<KeyType, ValueType> implements IMap<KeyType, ValueTyp
 	 * Create a new functional map wrapping the specified map
 	 * 
 	 * @param wrap
-	 *            The map to wrap
+	 *                The map to wrap
 	 */
 	public FunctionalMap(Map<KeyType, ValueType> wrap) {
 		if (wrap == null) {
@@ -119,8 +119,7 @@ public class FunctionalMap<KeyType, ValueType> implements IMap<KeyType, ValueTyp
 	}
 
 	@Override
-	public <MappedValue> IMap<KeyType, MappedValue> mapValues(
-			Function<ValueType, MappedValue> transformer) {
+	public <MappedValue> IMap<KeyType, MappedValue> mapValues(Function<ValueType, MappedValue> transformer) {
 		if (transformer == null) {
 			throw new NullPointerException("Transformer must not be null");
 		}

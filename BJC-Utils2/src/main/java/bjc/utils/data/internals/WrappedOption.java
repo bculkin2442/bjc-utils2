@@ -17,7 +17,8 @@ public class WrappedOption<ContainedType> implements IHolder<ContainedType> {
 		held = toHold;
 	}
 
-	@Override public <BoundType> IHolder<BoundType> bind(Function<ContainedType, IHolder<BoundType>> binder) {
+	@Override
+	public <BoundType> IHolder<BoundType> bind(Function<ContainedType, IHolder<BoundType>> binder) {
 		IHolder<IHolder<BoundType>> newHolder = held.map((containedHolder) -> {
 			return containedHolder.bind((containedValue) -> {
 				if (containedValue == null) {

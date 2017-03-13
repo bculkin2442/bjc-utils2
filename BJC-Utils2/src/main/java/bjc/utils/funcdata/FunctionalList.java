@@ -18,16 +18,16 @@ import bjc.utils.data.Identity;
 import bjc.utils.data.Pair;
 
 /**
- * A wrapper over another list that provides eager functional operations
- * over it. 
+ * A wrapper over another list that provides eager functional operations over
+ * it.
  *
- * Differs from a stream in every way except for the fact that
- * they both provide functional operations.
+ * Differs from a stream in every way except for the fact that they both provide
+ * functional operations.
  * 
  * @author ben
  *
  * @param <E>
- *            The type in this list
+ *                The type in this list
  */
 public class FunctionalList<E> implements Cloneable, IList<E> {
 	/*
@@ -48,7 +48,7 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 	 * Takes O(n) time, where n is the number of items specified
 	 * 
 	 * @param items
-	 *            The items to put into this functional list.
+	 *                The items to put into this functional list.
 	 */
 	@SafeVarargs
 	public FunctionalList(E... items) {
@@ -63,7 +63,7 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 	 * Create a new functional list with the specified size.
 	 * 
 	 * @param size
-	 *            The size of the backing list .
+	 *                The size of the backing list .
 	 */
 	private FunctionalList(int size) {
 		wrapped = new ArrayList<>(size);
@@ -75,12 +75,11 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 	 * Takes O(1) time, since it doesn't copy the list.
 	 * 
 	 * @param backing
-	 *            The list to use as a backing list.
+	 *                The list to use as a backing list.
 	 */
 	public FunctionalList(List<E> backing) {
 		if (backing == null) {
-			throw new NullPointerException(
-					"Backing list must be non-null");
+			throw new NullPointerException("Backing list must be non-null");
 		}
 
 		wrapped = backing;
@@ -144,10 +143,9 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 	}
 
 	@Override
-	public <T, F> IList<F> combineWith(IList<T> rightList,
-			BiFunction<E, T, F> itemCombiner) {
+	public <T, F> IList<F> combineWith(IList<T> rightList, BiFunction<E, T, F> itemCombiner) {
 		if (rightList == null) {
-			throw new NullPointerException( "Target combine list must not be null");
+			throw new NullPointerException("Target combine list must not be null");
 		} else if (itemCombiner == null) {
 			throw new NullPointerException("Combiner must not be null");
 		}
@@ -157,8 +155,8 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 		// Get the iterator for the other list
 		Iterator<T> rightIterator = rightList.toIterable().iterator();
 
-		for (Iterator<E> leftIterator = wrapped.iterator();
-				leftIterator.hasNext() && rightIterator.hasNext();) {
+		for (Iterator<E> leftIterator = wrapped.iterator(); leftIterator.hasNext()
+				&& rightIterator.hasNext();) {
 			// Add the transformed items to the result list
 			E leftVal = leftIterator.next();
 			T rightVal = rightIterator.next();
@@ -220,7 +218,8 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 			throw new NullPointerException("Action must not be null");
 		}
 
-		// This is held b/c ref'd variables must be final/effectively final
+		// This is held b/c ref'd variables must be final/effectively
+		// final
 		IHolder<Integer> currentIndex = new Identity<>(0);
 
 		wrapped.forEach((element) -> {
@@ -256,7 +255,8 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 
 		wrapped.forEach((element) -> {
 			if (predicate.test(element)) {
-				// The item matches, so add it to the returned list
+				// The item matches, so add it to the returned
+				// list
 				returned.add(element);
 			}
 		});
@@ -277,8 +277,7 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 	/*
 	 * Check if a partition has room for another item
 	 */
-	private Boolean isPartitionFull(int numberPerPartition,
-			IHolder<IList<E>> currentPartition) {
+	private Boolean isPartitionFull(int numberPerPartition, IHolder<IList<E>> currentPartition) {
 		return currentPartition.unwrap((partition) -> partition.getSize() >= numberPerPartition);
 	}
 
@@ -305,18 +304,15 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 
 	@Override
 	public IList<IList<E>> partition(int numberPerPartition) {
-		if (numberPerPartition < 1
-				|| numberPerPartition > wrapped.size()) {
+		if (numberPerPartition < 1 || numberPerPartition > wrapped.size()) {
 			throw new IllegalArgumentException("" + numberPerPartition
-					+ " is an invalid partition size. Must be between 1 and "
-					+ wrapped.size());
+					+ " is an invalid partition size. Must be between 1 and " + wrapped.size());
 		}
 
 		IList<IList<E>> returned = new FunctionalList<>();
 
 		// The current partition being filled
-		IHolder<IList<E>> currentPartition = new Identity<>(
-				new FunctionalList<>());
+		IHolder<IList<E>> currentPartition = new Identity<>(new FunctionalList<>());
 
 		this.forEach((element) -> {
 			if (isPartitionFull(numberPerPartition, currentPartition)) {
@@ -351,8 +347,7 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 	}
 
 	@Override
-	public <T, F> F reduceAux(T initialValue,
-			BiFunction<E, T, T> stateAccumulator,
+	public <T, F> F reduceAux(T initialValue, BiFunction<E, T, T> stateAccumulator,
 			Function<T, F> resultTransformer) {
 		if (stateAccumulator == null) {
 			throw new NullPointerException("Accumulator must not be null");
@@ -394,8 +389,7 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 	@Override
 	public E search(E searchKey, Comparator<E> comparator) {
 		// Search our internal list
-		int foundIndex = Collections.binarySearch(wrapped, searchKey,
-				comparator);
+		int foundIndex = Collections.binarySearch(wrapped, searchKey, comparator);
 
 		if (foundIndex >= 0) {
 			// We found a matching element
@@ -431,21 +425,22 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 	public String toString() {
 		int lSize = getSize();
 
-		if(lSize == 0) return "()";
+		if (lSize == 0)
+			return "()";
 
 		StringBuilder sb = new StringBuilder("(");
 		Iterator<E> itr = toIterable().iterator();
 		E itm = itr.next();
 		int i = 0;
 
-		if(lSize == 1) {
+		if (lSize == 1) {
 			return "(" + itm + ")";
 		}
 
-		for(E item : toIterable()) {
+		for (E item : toIterable()) {
 			sb.append(item.toString());
 
-			if(i < lSize-1) {
+			if (i < lSize - 1) {
 				sb.append(", ");
 			}
 

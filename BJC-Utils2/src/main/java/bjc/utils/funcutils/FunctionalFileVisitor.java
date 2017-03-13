@@ -8,19 +8,17 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.function.BiPredicate;
 
 final class FunctionalFileVisitor extends SimpleFileVisitor<Path> {
-	private BiPredicate<Path, BasicFileAttributes>	predicate;
-	private BiPredicate<Path, BasicFileAttributes>	action;
+	private BiPredicate<Path, BasicFileAttributes> predicate;
+	private BiPredicate<Path, BasicFileAttributes> action;
 
-	public FunctionalFileVisitor(
-			BiPredicate<Path, BasicFileAttributes> predicate,
+	public FunctionalFileVisitor(BiPredicate<Path, BasicFileAttributes> predicate,
 			BiPredicate<Path, BasicFileAttributes> action) {
 		this.predicate = predicate;
 		this.action = action;
 	}
 
 	@Override
-	public FileVisitResult preVisitDirectory(
-			Path dir, BasicFileAttributes attrs) throws IOException {
+	public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
 		if (predicate.test(dir, attrs)) {
 			return FileVisitResult.CONTINUE;
 		}
@@ -29,8 +27,7 @@ final class FunctionalFileVisitor extends SimpleFileVisitor<Path> {
 	}
 
 	@Override
-	public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
-			throws IOException {
+	public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
 		if (action.test(file, attrs)) {
 			return FileVisitResult.CONTINUE;
 		}

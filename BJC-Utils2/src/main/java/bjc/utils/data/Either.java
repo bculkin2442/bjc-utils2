@@ -8,26 +8,24 @@ import java.util.function.Function;
  * 
  * @author ben
  * @param <LeftType>
- *            The type that could be on the left
+ *                The type that could be on the left
  * @param <RightType>
- *            The type that could be on the right
+ *                The type that could be on the right
  *
  */
-public class Either<LeftType, RightType>
-		implements IPair<LeftType, RightType> {
+public class Either<LeftType, RightType> implements IPair<LeftType, RightType> {
 	/**
 	 * Create a new either with the left value occupied
 	 * 
 	 * @param <LeftType>
-	 *            The type of the left value
+	 *                The type of the left value
 	 * @param <RightType>
-	 *            The type of the empty right value
+	 *                The type of the empty right value
 	 * @param left
-	 *            The value to put on the left
+	 *                The value to put on the left
 	 * @return An either with the left side occupied
 	 */
-	public static <LeftType, RightType> Either<LeftType, RightType> fromLeft(
-			LeftType left) {
+	public static <LeftType, RightType> Either<LeftType, RightType> fromLeft(LeftType left) {
 		return new Either<>(left, null);
 	}
 
@@ -35,25 +33,24 @@ public class Either<LeftType, RightType>
 	 * Create a new either with the right value occupied
 	 * 
 	 * @param <LeftType>
-	 *            The type of the empty left value
+	 *                The type of the empty left value
 	 * @param <RightType>
-	 *            The type of the right value
+	 *                The type of the right value
 	 * @param right
-	 *            The value to put on the right
+	 *                The value to put on the right
 	 * @return An either with the right side occupied
 	 */
-	public static <LeftType, RightType> Either<LeftType, RightType> fromRight(
-			RightType right) {
+	public static <LeftType, RightType> Either<LeftType, RightType> fromRight(RightType right) {
 		return new Either<>(null, right);
 	}
 
-	private LeftType	leftVal;
+	private LeftType leftVal;
 
-	private RightType	rightVal;
+	private RightType rightVal;
 
-	private boolean		isLeft;
+	private boolean isLeft;
 
-	private Either( LeftType left, RightType right) {
+	private Either(LeftType left, RightType right) {
 		if (left == null) {
 			rightVal = right;
 		} else {
@@ -91,8 +88,7 @@ public class Either<LeftType, RightType>
 	public <BoundRight> IPair<LeftType, BoundRight> bindRight(
 			Function<RightType, IPair<LeftType, BoundRight>> rightBinder) {
 		if (rightBinder == null) {
-			throw new NullPointerException(
-					"Right binder must not be null");
+			throw new NullPointerException("Right binder must not be null");
 		}
 
 		if (isLeft) {
@@ -110,29 +106,24 @@ public class Either<LeftType, RightType>
 		if (otherPair == null) {
 			throw new NullPointerException("Other pair must not be null");
 		} else if (leftCombiner == null) {
-			throw new NullPointerException(
-					"Left combiner must not be null");
+			throw new NullPointerException("Left combiner must not be null");
 		} else if (rightCombiner == null) {
-			throw new NullPointerException(
-					"Right combiner must not be null");
+			throw new NullPointerException("Right combiner must not be null");
 		}
 
 		if (isLeft) {
 			return otherPair.bind((otherLeft, otherRight) -> {
-				return new Either<>(leftCombiner.apply(leftVal, otherLeft),
-						null);
+				return new Either<>(leftCombiner.apply(leftVal, otherLeft), null);
 			});
 		}
 
 		return otherPair.bind((otherLeft, otherRight) -> {
-			return new Either<>(null,
-					rightCombiner.apply(rightVal, otherRight));
+			return new Either<>(null, rightCombiner.apply(rightVal, otherRight));
 		});
 	}
 
 	@Override
-	public <NewLeft> IPair<NewLeft, RightType> mapLeft(
-			Function<LeftType, NewLeft> mapper) {
+	public <NewLeft> IPair<NewLeft, RightType> mapLeft(Function<LeftType, NewLeft> mapper) {
 		if (mapper == null) {
 			throw new NullPointerException("Mapper must not be null");
 		}
@@ -145,8 +136,7 @@ public class Either<LeftType, RightType>
 	}
 
 	@Override
-	public <NewRight> IPair<LeftType, NewRight> mapRight(
-			Function<RightType, NewRight> mapper) {
+	public <NewRight> IPair<LeftType, NewRight> mapRight(Function<RightType, NewRight> mapper) {
 		if (mapper == null) {
 			throw new NullPointerException("Mapper must not be null");
 		}
@@ -159,8 +149,7 @@ public class Either<LeftType, RightType>
 	}
 
 	@Override
-	public <MergedType> MergedType merge(
-			BiFunction<LeftType, RightType, MergedType> merger) {
+	public <MergedType> MergedType merge(BiFunction<LeftType, RightType, MergedType> merger) {
 		if (merger == null) {
 			throw new NullPointerException("Merger must not be null");
 		}

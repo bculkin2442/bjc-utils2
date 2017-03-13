@@ -15,29 +15,27 @@ import bjc.utils.gui.layout.HLayout;
  * @author ben
  *
  * @param <InputVal>
- *            The type of value being formatted
+ *                The type of value being formatted
  */
 public class FormattedInputPanel<InputVal> extends JPanel {
-	private static final long	serialVersionUID	= 5232016563558588031L;
+	private static final long serialVersionUID = 5232016563558588031L;
 
-	private JFormattedTextField	field;
+	private JFormattedTextField field;
 
 	/**
 	 * Create a new formatted input panel
 	 * 
 	 * @param label
-	 *            The label for this panel
+	 *                The label for this panel
 	 * @param length
-	 *            The length of this panel
+	 *                The length of this panel
 	 * @param formatter
-	 *            The formatter to use for input
+	 *                The formatter to use for input
 	 * @param reciever
-	 *            The action to call whenever the value changes
+	 *                The action to call whenever the value changes
 	 */
 	@SuppressWarnings("unchecked")
-	public FormattedInputPanel(String label, int length,
-			AbstractFormatter formatter,
-			Consumer<InputVal> reciever) {
+	public FormattedInputPanel(String label, int length, AbstractFormatter formatter, Consumer<InputVal> reciever) {
 		setLayout(new HLayout(2));
 
 		JLabel lab = new JLabel(label);
@@ -59,7 +57,7 @@ public class FormattedInputPanel<InputVal> extends JPanel {
 	 * Reset the value in this panel to a specified value
 	 * 
 	 * @param value
-	 *            The value to set the panel to
+	 *                The value to set the panel to
 	 */
 	public void resetValues(InputVal value) {
 		field.setValue(value);

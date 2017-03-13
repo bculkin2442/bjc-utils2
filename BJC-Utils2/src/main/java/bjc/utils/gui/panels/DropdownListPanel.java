@@ -26,16 +26,15 @@ public class DropdownListPanel extends JPanel {
 	 * Create a new dropdown list panel
 	 * 
 	 * @param <T>
-	 *            The type of items in the dropdown list
+	 *                The type of items in the dropdown list
 	 * @param type
-	 *            The label of the type of items in the list
+	 *                The label of the type of items in the list
 	 * @param model
-	 *            The model to put items into
+	 *                The model to put items into
 	 * @param choices
-	 *            The items to choose from
+	 *                The items to choose from
 	 */
-	public <T> DropdownListPanel(String type,
-			DefaultListModel<T> model, IList<T> choices) {
+	public <T> DropdownListPanel(String type, DefaultListModel<T> model, IList<T> choices) {
 		setLayout(new AutosizeLayout());
 
 		JPanel itemInputPanel = new JPanel();
@@ -58,8 +57,7 @@ public class DropdownListPanel extends JPanel {
 		JButton removeItemButton = new JButton("Remove " + type);
 
 		addItemButton.addActionListener((ev) -> {
-			model.addElement(
-					addItemBox.getItemAt(addItemBox.getSelectedIndex()));
+			model.addElement(addItemBox.getItemAt(addItemBox.getSelectedIndex()));
 		});
 
 		removeItemButton.addActionListener((ev) -> {

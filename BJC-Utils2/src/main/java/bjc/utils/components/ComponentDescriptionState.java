@@ -8,22 +8,22 @@ package bjc.utils.components;
  */
 public class ComponentDescriptionState {
 	// Tentative name of this component
-	private String	name;
+	private String name;
 
 	// Tentative description of this componet
-	private String	description;
+	private String description;
 
 	// Tentative author of this component
-	private String	author;
+	private String author;
 
 	// Tentative version of this component
-	private int		version;
+	private int version;
 
 	/**
 	 * Set the author of this component
 	 * 
 	 * @param author
-	 *            The author of this component
+	 *                The author of this component
 	 */
 	public void setAuthor(String author) {
 		this.author = author;
@@ -33,7 +33,7 @@ public class ComponentDescriptionState {
 	 * Set the description of this component
 	 * 
 	 * @param description
-	 *            The description of this component
+	 *                The description of this component
 	 */
 	public void setDescription(String description) {
 		this.description = description;
@@ -43,7 +43,7 @@ public class ComponentDescriptionState {
 	 * Set the name of this component
 	 * 
 	 * @param name
-	 *            The name of this component
+	 *                The name of this component
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -53,7 +53,7 @@ public class ComponentDescriptionState {
 	 * Set the version of this component
 	 * 
 	 * @param version
-	 *            The version of this component
+	 *                The version of this component
 	 */
 	public void setVersion(int version) {
 		this.version = version;
@@ -65,7 +65,6 @@ public class ComponentDescriptionState {
 	 * @return The description represented by this state
 	 */
 	public ComponentDescription toDescription() {
-		return new ComponentDescription(name, author, description,
-				version);
+		return new ComponentDescription(name, author, description, version);
 	}
 }

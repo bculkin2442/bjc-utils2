@@ -15,13 +15,12 @@ public class FunctionalStringTokenizer {
 	 * Create a new tokenizer from the specified string.
 	 * 
 	 * @param strang
-	 *            The string to create a tokenizer from.
+	 *                The string to create a tokenizer from.
 	 * @return A new tokenizer that splits the provided string on spaces.
 	 */
 	public static FunctionalStringTokenizer fromString(String strang) {
 		if (strang == null) {
-			throw new NullPointerException(
-					"String to tokenize must be non-null");
+			throw new NullPointerException("String to tokenize must be non-null");
 		}
 
 		return new FunctionalStringTokenizer(new StringTokenizer(strang, " "));
@@ -36,7 +35,7 @@ public class FunctionalStringTokenizer {
 	 * Create a functional string tokenizer from a given string
 	 * 
 	 * @param inp
-	 *            The string to tokenize
+	 *                The string to tokenize
 	 */
 	public FunctionalStringTokenizer(String inp) {
 		if (inp == null) {
@@ -51,12 +50,11 @@ public class FunctionalStringTokenizer {
 	 * separators
 	 * 
 	 * @param input
-	 *            The string to tokenize
+	 *                The string to tokenize
 	 * @param seperators
-	 *            The set of separating tokens to use for splitting
+	 *                The set of separating tokens to use for splitting
 	 */
-	public FunctionalStringTokenizer(String input,
-			String seperators) {
+	public FunctionalStringTokenizer(String input, String seperators) {
 		if (input == null) {
 			throw new NullPointerException("String to tokenize must not be null");
 		} else if (seperators == null) {
@@ -70,7 +68,7 @@ public class FunctionalStringTokenizer {
 	 * Create a functional string tokenizer from a non-functional one
 	 * 
 	 * @param toWrap
-	 *            The non-functional string tokenizer to wrap
+	 *                The non-functional string tokenizer to wrap
 	 */
 	public FunctionalStringTokenizer(StringTokenizer toWrap) {
 		if (toWrap == null) {
@@ -84,7 +82,7 @@ public class FunctionalStringTokenizer {
 	 * Execute a provided action for each of the remaining tokens
 	 * 
 	 * @param action
-	 *            The action to execute for each token
+	 *                The action to execute for each token
 	 */
 	public void forEachToken(Consumer<String> action) {
 		if (action == null) {
@@ -145,10 +143,10 @@ public class FunctionalStringTokenizer {
 	 * the input from this tokenizer.
 	 * 
 	 * @param <E>
-	 *            The type of the converted tokens
+	 *                The type of the converted tokens
 	 * 
 	 * @param transformer
-	 *            The function to use to convert tokens.
+	 *                The function to use to convert tokens.
 	 * @return A list containing all of the converted tokens.
 	 */
 	public <E> IList<E> toList(Function<String, E> transformer) {

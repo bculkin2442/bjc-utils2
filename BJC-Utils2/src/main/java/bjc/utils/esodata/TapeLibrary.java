@@ -6,15 +6,18 @@ import java.util.Map;
 /**
  * A tape changer is essentially a map of tapes.
  *
- * It has a current tape that you can do operations to, but also operations to add/remove other tapes.
+ * It has a current tape that you can do operations to, but also operations to
+ * add/remove other tapes.
  * 
- * If there is no tape currently loaded into the changer, all the methods will either return null/false.
+ * If there is no tape currently loaded into the changer, all the methods will
+ * either return null/false.
  *
- * @param T The element type of the tapes.
+ * @param T
+ *                The element type of the tapes.
  */
 public class TapeLibrary<T> implements Tape<T> {
 	private Map<String, Tape<T>> tapes;
-	private Tape<T>           currentTape;
+	private Tape<T> currentTape;
 
 	/**
 	 * Create a new empty tape library.
@@ -29,7 +32,8 @@ public class TapeLibrary<T> implements Tape<T> {
 	 * @return The item the tape is on.
 	 */
 	public T item() {
-		if(currentTape == null) return null;
+		if (currentTape == null)
+			return null;
 
 		return currentTape.item();
 	}
@@ -37,10 +41,12 @@ public class TapeLibrary<T> implements Tape<T> {
 	/**
 	 * Set the item the tape is currently on.
 	 *
-	 * @param itm The new value for the tape item.
+	 * @param itm
+	 *                The new value for the tape item.
 	 */
 	public void item(T itm) {
-		if(currentTape == null) return;
+		if (currentTape == null)
+			return;
 
 		currentTape.item(itm);
 	}
@@ -51,7 +57,8 @@ public class TapeLibrary<T> implements Tape<T> {
 	 * @return The current number of elements in the tape.
 	 */
 	public int size() {
-		if(currentTape == null) return 0;
+		if (currentTape == null)
+			return 0;
 
 		return currentTape.size();
 	}
@@ -59,10 +66,12 @@ public class TapeLibrary<T> implements Tape<T> {
 	/**
 	 * Insert an element before the current item.
 	 *
-	 * @param itm The item to add.
+	 * @param itm
+	 *                The item to add.
 	 */
 	public void insertBefore(T itm) {
-		if(currentTape == null) return;
+		if (currentTape == null)
+			return;
 
 		currentTape.insertBefore(itm);
 	}
@@ -71,7 +80,8 @@ public class TapeLibrary<T> implements Tape<T> {
 	 * Insert an element after the current item.
 	 */
 	public void insertAfter(T itm) {
-		if(currentTape == null) return;
+		if (currentTape == null)
+			return;
 
 		currentTape.insertAfter(itm);
 	}
@@ -79,13 +89,14 @@ public class TapeLibrary<T> implements Tape<T> {
 	/**
 	 * Remove the current element.
 	 * 
-	 * Also moves the cursor back one step if possible to maintain
-	 * relative position, and removes the corresponding item from the non-active side
+	 * Also moves the cursor back one step if possible to maintain relative
+	 * position, and removes the corresponding item from the non-active side
 	 *
 	 * @return The removed item from the active side.
 	 */
 	public T remove() {
-		if(currentTape == null) return null;
+		if (currentTape == null)
+			return null;
 
 		return currentTape.remove();
 	}
@@ -94,7 +105,8 @@ public class TapeLibrary<T> implements Tape<T> {
 	 * Move the cursor to the left-most position.
 	 */
 	public void first() {
-		if(currentTape == null) return;
+		if (currentTape == null)
+			return;
 
 		currentTape.first();
 	}
@@ -103,7 +115,8 @@ public class TapeLibrary<T> implements Tape<T> {
 	 * Move the cursor the right-most position.
 	 */
 	public void last() {
-		if(currentTape == null) return;
+		if (currentTape == null)
+			return;
 
 		currentTape.last();
 	}
@@ -122,20 +135,20 @@ public class TapeLibrary<T> implements Tape<T> {
 	/**
 	 * Move the cursor the specified amount left.
 	 *
-	 * The cursor can't go past zero.
-	 * Attempts to move the cursor by amounts that would exceed zero
-	 * don't move the cursor at all.
+	 * The cursor can't go past zero. Attempts to move the cursor by amounts
+	 * that would exceed zero don't move the cursor at all.
 	 *
-	 * @param amt The amount to attempt to move the cursor left.
+	 * @param amt
+	 *                The amount to attempt to move the cursor left.
 	 *
 	 * @return True if the cursor was moved left.
 	 */
 	public boolean left(int amt) {
-		if(currentTape == null) return false;
+		if (currentTape == null)
+			return false;
 
 		return currentTape.left(amt);
 	}
-
 
 	/**
 	 * Move the cursor one space right.
@@ -153,12 +166,14 @@ public class TapeLibrary<T> implements Tape<T> {
 	 *
 	 * Moving the cursor right will auto-extend the tape if that is enabled.
 	 *
-	 * @param amt The amount to move the cursor right by.
+	 * @param amt
+	 *                The amount to move the cursor right by.
 	 *
 	 * @return Whether the cursor was moved right.
 	 */
 	public boolean right(int amt) {
-		if(currentTape == null) return false;
+		if (currentTape == null)
+			return false;
 
 		return currentTape.right(amt);
 	}
@@ -166,21 +181,24 @@ public class TapeLibrary<T> implements Tape<T> {
 	/**
 	 * Flips the tape.
 	 *
-	 * The active side becomes inactive, and the inactive side becomes active.
+	 * The active side becomes inactive, and the inactive side becomes
+	 * active.
 	 *
 	 * If the current tape is not double-sided, does nothing.
 	 */
 	public void flip() {
-		if(currentTape == null) return;
+		if (currentTape == null)
+			return;
 
-		if(currentTape.isDoubleSided()) {
-			((DoubleTape<T>)currentTape).flip();
+		if (currentTape.isDoubleSided()) {
+			((DoubleTape<T>) currentTape).flip();
 		}
 	}
 
 	@Override
 	public boolean isDoubleSided() {
-		if(currentTape == null) return false;
+		if (currentTape == null)
+			return false;
 
 		return currentTape.isDoubleSided();
 	}
@@ -197,14 +215,16 @@ public class TapeLibrary<T> implements Tape<T> {
 	/**
 	 * Move to the specified tape in the library.
 	 *
-	 * Attempting to load a tape that isn't there won't eject the current tape.
+	 * Attempting to load a tape that isn't there won't eject the current
+	 * tape.
 	 *
-	 * @param label The label of the tape to load.
+	 * @param label
+	 *                The label of the tape to load.
 	 *
 	 * @return Whether or not the next tape was loaded.
 	 */
 	public boolean switchTape(String label) {
-		if(tapes.containsKey(label)) {
+		if (tapes.containsKey(label)) {
 			currentTape = tapes.get(label);
 			return true;
 		}
@@ -221,7 +241,8 @@ public class TapeLibrary<T> implements Tape<T> {
 	 *
 	 * Adding a duplicate tape will overwrite any existing types.
 	 *
-	 * @param The tape to insert and load.
+	 * @param The
+	 *                tape to insert and load.
 	 */
 	public void insertTape(String label, Tape<T> tp) {
 		tapes.put(label, tp);
@@ -234,7 +255,8 @@ public class TapeLibrary<T> implements Tape<T> {
 	 *
 	 * Does nothing if there is not a tape of that name loaded.
 	 *
-	 * @param label The tape to remove.
+	 * @param label
+	 *                The tape to remove.
 	 *
 	 * @return The removed tape.
 	 */
@@ -263,7 +285,8 @@ public class TapeLibrary<T> implements Tape<T> {
 	/**
 	 * Check if a specific tape is loaded into the library.
 	 *
-	 * @param label The tape to check for.
+	 * @param label
+	 *                The tape to check for.
 	 *
 	 * @return Whether or not a tape of that name exists
 	 */

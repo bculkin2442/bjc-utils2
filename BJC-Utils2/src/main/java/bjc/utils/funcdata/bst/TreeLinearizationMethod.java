@@ -8,8 +8,8 @@ package bjc.utils.funcdata.bst;
  */
 public enum TreeLinearizationMethod {
 	/**
-	 * Visit the left side of this tree part, the tree part itself, and
-	 * then the right part.
+	 * Visit the left side of this tree part, the tree part itself, and then
+	 * the right part.
 	 */
 	INORDER,
 	/**
@@ -18,8 +18,8 @@ public enum TreeLinearizationMethod {
 	 */
 	POSTORDER,
 	/**
-	 * Visit the tree part itself, then the left side of tthis tree part
-	 * and then the right part.
+	 * Visit the tree part itself, then the left side of tthis tree part and
+	 * then the right part.
 	 */
 	PREORDER
 }

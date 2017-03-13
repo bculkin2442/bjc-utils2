@@ -7,12 +7,11 @@ import java.util.function.Function;
 import bjc.utils.funcutils.ListUtils;
 
 class ExtendedMap<KeyType, ValueType> implements IMap<KeyType, ValueType> {
-	private IMap<KeyType, ValueType>	delegate;
+	private IMap<KeyType, ValueType> delegate;
 
-	private IMap<KeyType, ValueType>	store;
+	private IMap<KeyType, ValueType> store;
 
-	public ExtendedMap(IMap<KeyType, ValueType> delegate,
-			IMap<KeyType, ValueType> store) {
+	public ExtendedMap(IMap<KeyType, ValueType> delegate, IMap<KeyType, ValueType> store) {
 		this.delegate = delegate;
 		this.store = store;
 	}
@@ -77,8 +76,7 @@ class ExtendedMap<KeyType, ValueType> implements IMap<KeyType, ValueType> {
 	}
 
 	@Override
-	public <MappedValue> IMap<KeyType, MappedValue> mapValues(
-			Function<ValueType, MappedValue> transformer) {
+	public <MappedValue> IMap<KeyType, MappedValue> mapValues(Function<ValueType, MappedValue> transformer) {
 		return new TransformedValueMap<>(this, transformer);
 	}
 
@@ -94,7 +92,6 @@ class ExtendedMap<KeyType, ValueType> implements IMap<KeyType, ValueType> {
 
 	@Override
 	public IList<ValueType> valueList() {
-		return ListUtils.mergeLists(store.valueList(),
-				delegate.valueList());
+		return ListUtils.mergeLists(store.valueList(), delegate.valueList());
 	}
 }

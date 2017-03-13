@@ -14,7 +14,7 @@ import java.util.function.UnaryOperator;
  * @author ben
  *
  * @param <ContainedType>
- *            The type contained in the holder
+ *                The type contained in the holder
  */
 public class Identity<ContainedType> implements IHolder<ContainedType> {
 	private ContainedType heldValue;
@@ -30,15 +30,14 @@ public class Identity<ContainedType> implements IHolder<ContainedType> {
 	 * Create a holder holding the specified value
 	 * 
 	 * @param value
-	 *            The value to hold
+	 *                The value to hold
 	 */
 	public Identity(ContainedType value) {
 		heldValue = value;
 	}
 
 	@Override
-	public <BoundType> IHolder<BoundType> bind(
-			Function<ContainedType, IHolder<BoundType>> binder) {
+	public <BoundType> IHolder<BoundType> bind(Function<ContainedType, IHolder<BoundType>> binder) {
 		return binder.apply(heldValue);
 	}
 
@@ -89,16 +88,14 @@ public class Identity<ContainedType> implements IHolder<ContainedType> {
 	}
 
 	@Override
-	public <NewType> Function<ContainedType, IHolder<NewType>> lift(
-			Function<ContainedType, NewType> func) {
+	public <NewType> Function<ContainedType, IHolder<NewType>> lift(Function<ContainedType, NewType> func) {
 		return (val) -> {
 			return new Identity<>(func.apply(val));
 		};
 	}
 
 	@Override
-	public <MappedType> IHolder<MappedType> map(
-			Function<ContainedType, MappedType> mapper) {
+	public <MappedType> IHolder<MappedType> map(Function<ContainedType, MappedType> mapper) {
 		return new Identity<>(mapper.apply(heldValue));
 	}
 
@@ -108,16 +105,14 @@ public class Identity<ContainedType> implements IHolder<ContainedType> {
 	}
 
 	@Override
-	public IHolder<ContainedType> transform(
-			UnaryOperator<ContainedType> transformer) {
+	public IHolder<ContainedType> transform(UnaryOperator<ContainedType> transformer) {
 		heldValue = transformer.apply(heldValue);
 
 		return this;
 	}
 
 	@Override
-	public <UnwrappedType> UnwrappedType unwrap(
-			Function<ContainedType, UnwrappedType> unwrapper) {
+	public <UnwrappedType> UnwrappedType unwrap(Function<ContainedType, UnwrappedType> unwrapper) {
 		return unwrapper.apply(heldValue);
 	}
 }

@@ -27,8 +27,8 @@ public class CircularIterator<E> implements Iterator<E> {
 	}
 
 	public E next() {
-		if(!curr.hasNext()) {
-			if(doCircle) {
+		if (!curr.hasNext()) {
+			if (doCircle) {
 				curr = source.iterator();
 			} else {
 				return curElm;

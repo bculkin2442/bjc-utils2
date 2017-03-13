@@ -10,7 +10,7 @@ public class TransformedIterator<PreType, PostType> implements Iterator<PostType
 
 	public TransformedIterator(Iterator<PreType> src, Function<PreType, PostType> trans) {
 		source = src;
-		trans  = transform;
+		trans = transform;
 	}
 
 	public boolean hasNext() {

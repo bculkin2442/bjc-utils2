@@ -12,7 +12,7 @@ public interface ICommandMode {
 	 * Check to see if this mode can handle the specified command
 	 * 
 	 * @param command
-	 *            The command to check
+	 *                The command to check
 	 * @return Whether or not this mode can handle the command. It is
 	 *         assumed not by default
 	 */
@@ -26,7 +26,7 @@ public interface ICommandMode {
 	 * @return the custom prompt for this mode
 	 * 
 	 * @throws UnsupportedOperationException
-	 *             if this mode doesn't support a custom prompt
+	 *                 if this mode doesn't support a custom prompt
 	 */
 	public default String getCustomPrompt() {
 		throw new UnsupportedOperationException("This mode doesn't support a custom prompt");
@@ -55,9 +55,9 @@ public interface ICommandMode {
 	 * Process a command in this mode
 	 * 
 	 * @param command
-	 *            The command to process
+	 *                The command to process
 	 * @param args
-	 *            A list of arguments to the command
+	 *                A list of arguments to the command
 	 * @return The command mode to use for the next command. Defaults to
 	 *         returning this, and doing nothing else
 	 */

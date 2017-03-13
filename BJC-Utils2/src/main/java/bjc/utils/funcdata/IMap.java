@@ -10,9 +10,9 @@ import java.util.function.Function;
  * @author ben
  * 
  * @param <KeyType>
- *            The type of this map's keys
+ *                The type of this map's keys
  * @param <ValueType>
- *            The type of this map's values
+ *                The type of this map's values
  *
  */
 public interface IMap<KeyType, ValueType> {
@@ -25,7 +25,7 @@ public interface IMap<KeyType, ValueType> {
 	 * Check if this map contains the specified key
 	 * 
 	 * @param key
-	 *            The key to check
+	 *                The key to check
 	 * @return Whether or not the map contains the key
 	 */
 	boolean containsKey(KeyType key);
@@ -42,7 +42,7 @@ public interface IMap<KeyType, ValueType> {
 	 * Execute an action for each entry in the map
 	 * 
 	 * @param action
-	 *            the action to execute for each entry in the map
+	 *                the action to execute for each entry in the map
 	 */
 	void forEach(BiConsumer<KeyType, ValueType> action);
 
@@ -50,7 +50,7 @@ public interface IMap<KeyType, ValueType> {
 	 * Perform an action for each key in the map
 	 * 
 	 * @param action
-	 *            The action to perform on each key in the map
+	 *                The action to perform on each key in the map
 	 */
 	void forEachKey(Consumer<KeyType> action);
 
@@ -58,7 +58,7 @@ public interface IMap<KeyType, ValueType> {
 	 * Perform an action for each value in the map
 	 * 
 	 * @param action
-	 *            The action to perform on each value in the map
+	 *                The action to perform on each value in the map
 	 */
 	void forEachValue(Consumer<ValueType> action);
 
@@ -66,7 +66,7 @@ public interface IMap<KeyType, ValueType> {
 	 * Get the value assigned to the given key
 	 * 
 	 * @param key
-	 *            The key to look for a value under
+	 *                The key to look for a value under
 	 * @return The value of the key
 	 * 
 	 * 
@@ -78,9 +78,9 @@ public interface IMap<KeyType, ValueType> {
 	 * doesn't exist
 	 * 
 	 * @param key
-	 *            The key to attempt to retrieve
+	 *                The key to attempt to retrieve
 	 * @param defaultValue
-	 *            The value to return if the key doesn't exist
+	 *                The value to return if the key doesn't exist
 	 * @return The value associated with the key, or the default value if
 	 *         the key doesn't exist
 	 */
@@ -88,7 +88,8 @@ public interface IMap<KeyType, ValueType> {
 		try {
 			return get(key);
 		} catch (IllegalArgumentException iaex) {
-			// We don't care about this, because it indicates a key is
+			// We don't care about this, because it indicates a key
+			// is
 			// missing
 			return defaultValue;
 		}
@@ -116,9 +117,9 @@ public interface IMap<KeyType, ValueType> {
 	 * likely not work as expected.
 	 * 
 	 * @param <V2>
-	 *            The new type of returned values
+	 *                The new type of returned values
 	 * @param transformer
-	 *            The function to use to transform values
+	 *                The function to use to transform values
 	 * @return The map where each value will be transformed after lookup
 	 */
 	<V2> IMap<KeyType, V2> mapValues(Function<ValueType, V2> transformer);
@@ -127,16 +128,16 @@ public interface IMap<KeyType, ValueType> {
 	 * Add an entry to the map
 	 * 
 	 * @param key
-	 *            The key to put the value under
+	 *                The key to put the value under
 	 * @param val
-	 *            The value to add
+	 *                The value to add
 	 * @return The previous value of the key in the map, or null if the key
-	 *         wasn't in the map. However, note that it may also return
-	 *         null if the key was set to null.
+	 *         wasn't in the map. However, note that it may also return null
+	 *         if the key was set to null.
 	 * 
 	 * @throws UnsupportedOperationException
-	 *             if the map implementation doesn't support modifying the
-	 *             map
+	 *                 if the map implementation doesn't support modifying
+	 *                 the map
 	 */
 	ValueType put(KeyType key, ValueType val);
 
@@ -144,11 +145,11 @@ public interface IMap<KeyType, ValueType> {
 	 * Remove the value bound to the key
 	 * 
 	 * @param key
-	 *            The key to remove from the map
-	 * @return The previous value for the key in the map, or null if the
-	 *         key wasn't in the class. NOTE: Just because you received
-	 *         null, doesn't mean the map wasn't changed. It may mean that
-	 *         someone put a null value for that key into the map
+	 *                The key to remove from the map
+	 * @return The previous value for the key in the map, or null if the key
+	 *         wasn't in the class. NOTE: Just because you received null,
+	 *         doesn't mean the map wasn't changed. It may mean that someone
+	 *         put a null value for that key into the map
 	 */
 	ValueType remove(KeyType key);
 

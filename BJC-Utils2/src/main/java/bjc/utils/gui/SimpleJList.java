@@ -15,10 +15,10 @@ public class SimpleJList {
 	 * Create a new JList from a given list.
 	 * 
 	 * @param <E>
-	 *            The type of data in the JList
+	 *                The type of data in the JList
 	 * 
 	 * @param source
-	 *            The list to populate the JList with.
+	 *                The list to populate the JList with.
 	 * @return A JList populated with the elements from ls.
 	 */
 	public static <E> JList<E> buildFromList(Iterable<E> source) {
@@ -33,10 +33,10 @@ public class SimpleJList {
 	 * Create a new list model from a given list.
 	 * 
 	 * @param <E>
-	 *            The type of data in the list model
+	 *                The type of data in the list model
 	 * 
 	 * @param source
-	 *            The list to fill the list model from.
+	 *                The list to fill the list model from.
 	 * @return A list model populated with the elements from ls.
 	 */
 	public static <E> ListModel<E> buildModel(Iterable<E> source) {

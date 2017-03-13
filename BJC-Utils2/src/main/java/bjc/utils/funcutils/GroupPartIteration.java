@@ -12,21 +12,21 @@ import bjc.utils.funcdata.IList;
  * @author ben
  *
  * @param <E>
- *            The type of element in the list being partitioned
+ *                The type of element in the list being partitioned
  */
 final class GroupPartIteration<E> implements Consumer<E> {
-	private IList<IList<E>>			returnedList;
+	private IList<IList<E>> returnedList;
 
-	public IList<E>		currentPartition;
-	private IList<E>				rejectedItems;
+	public IList<E> currentPartition;
+	private IList<E> rejectedItems;
 
-	private int						numberInCurrentPartition;
-	private int						numberPerPartition;
+	private int numberInCurrentPartition;
+	private int numberPerPartition;
 
-	private Function<E, Integer>	elementCounter;
+	private Function<E, Integer> elementCounter;
 
-	public GroupPartIteration(IList<IList<E>> returned, IList<E> rejects,
-			int nPerPart, Function<E, Integer> eleCount) {
+	public GroupPartIteration(IList<IList<E>> returned, IList<E> rejects, int nPerPart,
+			Function<E, Integer> eleCount) {
 		this.returnedList = returned;
 		this.rejectedItems = rejects;
 		this.numberPerPartition = nPerPart;
@@ -49,7 +49,7 @@ final class GroupPartIteration<E> implements Consumer<E> {
 			int currentElementCount = elementCounter.apply(value);
 
 			boolean shouldReject = (numberInCurrentPartition + currentElementCount) >= numberPerPartition;
-			
+
 			if (shouldReject) {
 				rejectedItems.add(value);
 			} else {

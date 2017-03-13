@@ -15,7 +15,8 @@ class SpaghettiStack<T> extends Stack<T> {
 	/**
 	 * Create a new empty spaghetti stack, off of the specified parent.
 	 *
-	 * @param par The parent stack
+	 * @param par
+	 *                The parent stack
 	 */
 	public SpaghettiStack(Stack<T> par) {
 		backing = new SimpleStack<>();
@@ -30,7 +31,7 @@ class SpaghettiStack<T> extends Stack<T> {
 
 	@Override
 	public T pop() {
-		if(backing.empty()) {
+		if (backing.empty()) {
 			return parent.pop();
 		}
 
@@ -39,7 +40,7 @@ class SpaghettiStack<T> extends Stack<T> {
 
 	@Override
 	public T top() {
-		if(backing.empty()) {
+		if (backing.empty()) {
 			return parent.top();
 		}
 

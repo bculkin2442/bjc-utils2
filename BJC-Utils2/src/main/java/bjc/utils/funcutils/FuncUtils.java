@@ -16,13 +16,13 @@ public class FuncUtils {
 	 * function
 	 * 
 	 * @param <A>
-	 *            The initial type of the function
+	 *                The initial type of the function
 	 * @param <B>
-	 *            The intermediate type of the function
+	 *                The intermediate type of the function
 	 * @param <C>
-	 *            The terminal type of the function
+	 *                The terminal type of the function
 	 * @param func
-	 *            The function to transform
+	 *                The function to transform
 	 * @return The function transformed into a unary function returning a
 	 *         function
 	 */
@@ -36,9 +36,9 @@ public class FuncUtils {
 	 * Do the specified action the specified number of times
 	 * 
 	 * @param nTimes
-	 *            The number of times to do the action
+	 *                The number of times to do the action
 	 * @param cons
-	 *            The action to perform
+	 *                The action to perform
 	 */
 	public static void doTimes(int nTimes, Consumer<Integer> cons) {
 		for (int i = 0; i < nTimes; i++) {

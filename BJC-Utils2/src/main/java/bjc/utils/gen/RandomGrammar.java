@@ -9,7 +9,7 @@ import bjc.utils.funcdata.IList;
  * @author ben
  *
  * @param <E>
- *            The type of grammar elements to use.
+ *                The type of grammar elements to use.
  */
 public class RandomGrammar<E> extends WeightedGrammar<E> {
 	/**
@@ -23,9 +23,9 @@ public class RandomGrammar<E> extends WeightedGrammar<E> {
 	 * Add cases to a specified rule.
 	 * 
 	 * @param rule
-	 *            The name of the rule to add cases to.
+	 *                The name of the rule to add cases to.
 	 * @param cases
-	 *            The cases to add for this rule.
+	 *                The cases to add for this rule.
 	 */
 	@SafeVarargs
 	public final void addCases(E rule, IList<E>... cases) {
@@ -38,9 +38,9 @@ public class RandomGrammar<E> extends WeightedGrammar<E> {
 	 * Create a rule with the specified name and cases.
 	 * 
 	 * @param rule
-	 *            The name of the rule to add.
+	 *                The name of the rule to add.
 	 * @param cases
-	 *            The cases to add for this rule.
+	 *                The cases to add for this rule.
 	 */
 	@SafeVarargs
 	public final void makeRule(E rule, IList<E>... cases) {
@@ -55,9 +55,9 @@ public class RandomGrammar<E> extends WeightedGrammar<E> {
 	 * Create a rule with the specified name and cases.
 	 * 
 	 * @param rule
-	 *            The name of the rule to add.
+	 *                The name of the rule to add.
 	 * @param cases
-	 *            The cases to add for this rule.
+	 *                The cases to add for this rule.
 	 */
 	public void makeRule(E rule, IList<IList<E>> cases) {
 		if (cases == null) {

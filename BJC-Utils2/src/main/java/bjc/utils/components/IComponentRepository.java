@@ -10,15 +10,14 @@ import bjc.utils.funcdata.IMap;
  * @author ben
  *
  * @param <ComponentType>
- *            The type of components contained in this repository
+ *                The type of components contained in this repository
  */
-public interface IComponentRepository<
-		ComponentType extends IDescribedComponent> {
+public interface IComponentRepository<ComponentType extends IDescribedComponent> {
 	/**
 	 * Get all of the components this repository knows about
 	 * 
-	 * @return A map from component name to component, containing all of
-	 *         the components in the repositories
+	 * @return A map from component name to component, containing all of the
+	 *         components in the repositories
 	 */
 	public IMap<String, ComponentType> getAll();
 
@@ -26,7 +25,7 @@ public interface IComponentRepository<
 	 * Get a component with a specific name
 	 * 
 	 * @param name
-	 *            The name of the component to retrieve
+	 *                The name of the component to retrieve
 	 * @return The named component, or null if no component with that name
 	 *         exists
 	 */

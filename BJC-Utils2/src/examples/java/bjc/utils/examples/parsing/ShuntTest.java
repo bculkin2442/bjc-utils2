@@ -17,7 +17,7 @@ public class ShuntTest {
 	 * Main method
 	 * 
 	 * @param args
-	 *            Unused CLI args
+	 *                Unused CLI args
 	 */
 	public static void main(String[] args) {
 		Scanner inputSource = new Scanner(System.in);

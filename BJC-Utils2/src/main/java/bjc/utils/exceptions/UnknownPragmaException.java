@@ -16,7 +16,7 @@ public class UnknownPragmaException extends InputMismatchException {
 	 * Create a new exception with the given cause
 	 * 
 	 * @param cause
-	 *            The cause for throwing this exception
+	 *                The cause for throwing this exception
 	 */
 	public UnknownPragmaException(String cause) {
 		super(cause);

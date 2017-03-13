@@ -9,16 +9,16 @@ import java.util.function.Function;
  * @author ben
  *
  * @param <LeftType>
- *            The type of the left value
+ *                The type of the left value
  * @param <RightType>
- *            The type of the right value
+ *                The type of the right value
  */
 public class Pair<LeftType, RightType> implements IPair<LeftType, RightType> {
 	// The left value
-	private LeftType	leftValue;
+	private LeftType leftValue;
 
 	// The right value
-	private RightType	rightValue;
+	private RightType rightValue;
 
 	/**
 	 * Create a new pair with both sides set to null
@@ -31,9 +31,9 @@ public class Pair<LeftType, RightType> implements IPair<LeftType, RightType> {
 	 * Create a new pair with both sides set to the specified values
 	 * 
 	 * @param left
-	 *            The value of the left side
+	 *                The value of the left side
 	 * @param right
-	 *            The value of the right side
+	 *                The value of the right side
 	 */
 	public Pair(LeftType left, RightType right) {
 		leftValue = left;
@@ -51,7 +51,8 @@ public class Pair<LeftType, RightType> implements IPair<LeftType, RightType> {
 	}
 
 	@Override
-	public <BoundLeft> IPair<BoundLeft, RightType> bindLeft(Function<LeftType, IPair<BoundLeft, RightType>> leftBinder) {
+	public <BoundLeft> IPair<BoundLeft, RightType> bindLeft(
+			Function<LeftType, IPair<BoundLeft, RightType>> leftBinder) {
 		if (leftBinder == null) {
 			throw new NullPointerException("Binder must not be null");
 		}
@@ -60,7 +61,8 @@ public class Pair<LeftType, RightType> implements IPair<LeftType, RightType> {
 	}
 
 	@Override
-	public <BoundRight> IPair<LeftType, BoundRight> bindRight(Function<RightType, IPair<LeftType, BoundRight>> rightBinder) {
+	public <BoundRight> IPair<LeftType, BoundRight> bindRight(
+			Function<RightType, IPair<LeftType, BoundRight>> rightBinder) {
 		if (rightBinder == null) {
 			throw new NullPointerException("Binder must not be null");
 		}
@@ -73,9 +75,10 @@ public class Pair<LeftType, RightType> implements IPair<LeftType, RightType> {
 			IPair<OtherLeft, OtherRight> otherPair,
 			BiFunction<LeftType, OtherLeft, CombinedLeft> leftCombiner,
 			BiFunction<RightType, OtherRight, CombinedRight> rightCombiner) {
-				return otherPair.bind((otherLeft, otherRight) -> {
-					return new Pair<>(leftCombiner.apply(leftValue, otherLeft), rightCombiner.apply(rightValue, otherRight));
-				});
+		return otherPair.bind((otherLeft, otherRight) -> {
+			return new Pair<>(leftCombiner.apply(leftValue, otherLeft),
+					rightCombiner.apply(rightValue, otherRight));
+		});
 	}
 
 	@Override

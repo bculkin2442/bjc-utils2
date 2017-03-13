@@ -3,11 +3,12 @@ package bjc.utils.esodata;
 /**
  * Interface for something that acts like a tape.
  *
- * A tape is essentially a 1D array with a cursor attached to it, and you can only
- * affect elements at that cursor. The size of the array is theoretically unbounded
- * to the right, but in practice bounded by available memory.
+ * A tape is essentially a 1D array with a cursor attached to it, and you can
+ * only affect elements at that cursor. The size of the array is theoretically
+ * unbounded to the right, but in practice bounded by available memory.
  *
- * @param T The element type of the tape.
+ * @param T
+ *                The element type of the tape.
  * @author bjculkin
  */
 public interface Tape<T> {
@@ -21,7 +22,8 @@ public interface Tape<T> {
 	/**
 	 * Set the item the tape is currently on.
 	 *
-	 * @param itm The new value for the tape item.
+	 * @param itm
+	 *                The new value for the tape item.
 	 */
 	void item(T itm);
 
@@ -35,7 +37,8 @@ public interface Tape<T> {
 	/**
 	 * Insert an element before the current item.
 	 *
-	 * @param itm The item to add.
+	 * @param itm
+	 *                The item to add.
 	 */
 	void insertBefore(T itm);
 
@@ -47,8 +50,8 @@ public interface Tape<T> {
 	/**
 	 * Remove the current element.
 	 * 
-	 * Also moves the cursor back one step if possible to maintain
-	 * relative position.
+	 * Also moves the cursor back one step if possible to maintain relative
+	 * position.
 	 *
 	 * @return The removed item.
 	 */
@@ -76,11 +79,11 @@ public interface Tape<T> {
 	/**
 	 * Move the cursor the specified amount left.
 	 *
-	 * The cursor can't go past zero.
-	 * Attempts to move the cursor by amounts that would exceed zero
-	 * don't move the cursor at all.
+	 * The cursor can't go past zero. Attempts to move the cursor by amounts
+	 * that would exceed zero don't move the cursor at all.
 	 *
-	 * @param amt The amount to attempt to move the cursor left.
+	 * @param amt
+	 *                The amount to attempt to move the cursor left.
 	 *
 	 * @return True if the cursor was moved left.
 	 */
@@ -96,7 +99,8 @@ public interface Tape<T> {
 	/**
 	 * Move the cursor the specified amount right.
 	 *
-	 * @param amt The amount to move the cursor right by.
+	 * @param amt
+	 *                The amount to move the cursor right by.
 	 *
 	 * @return Whether the cursor was moved right.
 	 */

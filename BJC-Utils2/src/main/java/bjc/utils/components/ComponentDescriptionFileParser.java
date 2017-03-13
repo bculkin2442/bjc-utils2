@@ -19,7 +19,8 @@ public class ComponentDescriptionFileParser {
 
 	// Initialize the reader and its pragmas
 	static {
-		// This reader works entirely off of pragmas, so no need to handle
+		// This reader works entirely off of pragmas, so no need to
+		// handle
 		// rules
 		reader = new RuleBasedConfigReader<>((tokenizer, statePair) -> {
 			// Don't need to do anything on rule start
@@ -36,17 +37,15 @@ public class ComponentDescriptionFileParser {
 	 * Parse a component description from a stream
 	 * 
 	 * @param inputSource
-	 *            The stream to parse from
+	 *                The stream to parse from
 	 * @return The description parsed from the stream
 	 */
-	public static ComponentDescription fromStream(
-			InputStream inputSource) {
-		if(inputSource == null) {
+	public static ComponentDescription fromStream(InputStream inputSource) {
+		if (inputSource == null) {
 			throw new NullPointerException("Input source must not be null");
 		}
-		
-		ComponentDescriptionState readState = reader
-				.fromStream(inputSource, new ComponentDescriptionState());
+
+		ComponentDescriptionState readState = reader.fromStream(inputSource, new ComponentDescriptionState());
 
 		return readState.toDescription();
 	}
@@ -55,17 +54,13 @@ public class ComponentDescriptionFileParser {
 	 * Create all the pragmas the reader needs to function
 	 */
 	private static void setupReaderPragmas() {
-		reader.addPragma("name", buildStringCollapser("name",
-				(name, state) -> state.setName(name)));
+		reader.addPragma("name", buildStringCollapser("name", (name, state) -> state.setName(name)));
 
-		reader.addPragma("author", buildStringCollapser("author",
-				(author, state) -> state.setAuthor(author)));
+		reader.addPragma("author", buildStringCollapser("author", (author, state) -> state.setAuthor(author)));
 
-		reader.addPragma("description",
-				buildStringCollapser("description", (description,
-						state) -> state.setDescription(description)));
+		reader.addPragma("description", buildStringCollapser("description",
+				(description, state) -> state.setDescription(description)));
 
-		reader.addPragma("version", buildInteger("version",
-				(version, state) -> state.setVersion(version)));
+		reader.addPragma("version", buildInteger("version", (version, state) -> state.setVersion(version)));
 	}
 }

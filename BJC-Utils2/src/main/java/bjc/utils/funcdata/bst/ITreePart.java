@@ -11,17 +11,17 @@ import java.util.function.Predicate;
  * @author ben
  *
  * @param <T>
- *            The data contained in this part of the tree.
+ *                The data contained in this part of the tree.
  */
 public interface ITreePart<T> {
 	/**
 	 * Add a element below this tree part somewhere.
 	 * 
 	 * @param element
-	 *            The element to add below this tree part
+	 *                The element to add below this tree part
 	 * @param comparator
-	 *            The thing to use for comparing values to find where to
-	 *            insert the tree part.
+	 *                The thing to use for comparing values to find where to
+	 *                insert the tree part.
 	 */
 	public void add(T element, Comparator<T> comparator);
 
@@ -30,25 +30,25 @@ public interface ITreePart<T> {
 	 * underlying tree.
 	 * 
 	 * @param <E>
-	 *            The type of the final collapsed value
+	 *                The type of the final collapsed value
 	 * 
 	 * @param nodeCollapser
-	 *            The function to use to transform data into mapped form.
+	 *                The function to use to transform data into mapped
+	 *                form.
 	 * @param branchCollapser
-	 *            The function to use to collapse data in mapped form into
-	 *            a single value.
+	 *                The function to use to collapse data in mapped form
+	 *                into a single value.
 	 * @return A single value from collapsing the tree.
 	 */
-	public <E> E collapse(Function<T, E> nodeCollapser,
-			BiFunction<E, E, E> branchCollapser);
+	public <E> E collapse(Function<T, E> nodeCollapser, BiFunction<E, E, E> branchCollapser);
 
 	/**
 	 * Check if this tre part or below it contains the specified data item
 	 * 
 	 * @param element
-	 *            The data item to look for.
+	 *                The data item to look for.
 	 * @param comparator
-	 *            The comparator to use to search for the data item
+	 *                The comparator to use to search for the data item
 	 * @return Whether or not the given item is contained in this tree part
 	 *         or its children.
 	 */
@@ -65,9 +65,9 @@ public interface ITreePart<T> {
 	 * Remove the given node from this tree part and any of its children.
 	 * 
 	 * @param element
-	 *            The data item to remove.
+	 *                The data item to remove.
 	 * @param comparator
-	 *            The comparator to use to search for the data item.
+	 *                The comparator to use to search for the data item.
 	 */
 	public void delete(T element, Comparator<T> comparator);
 
@@ -75,7 +75,8 @@ public interface ITreePart<T> {
 	 * Execute a directed walk through the tree.
 	 * 
 	 * @param walker
-	 *            The function to use to direct the walk through the tree.
+	 *                The function to use to direct the walk through the
+	 *                tree.
 	 * @return Whether the directed walk finished successfully.
 	 */
 	public boolean directedWalk(DirectedWalkFunction<T> walker);
@@ -85,12 +86,11 @@ public interface ITreePart<T> {
 	 * completes for
 	 * 
 	 * @param linearizationMethod
-	 *            The way to linearize the tree for executing
+	 *                The way to linearize the tree for executing
 	 * @param predicate
-	 *            The predicate to apply to each element, where it returning
-	 *            false terminates traversal early
+	 *                The predicate to apply to each element, where it
+	 *                returning false terminates traversal early
 	 * @return Whether the traversal finished succesfully
 	 */
-	public boolean forEach(TreeLinearizationMethod linearizationMethod,
-			Predicate<T> predicate);
+	public boolean forEach(TreeLinearizationMethod linearizationMethod, Predicate<T> predicate);
 }

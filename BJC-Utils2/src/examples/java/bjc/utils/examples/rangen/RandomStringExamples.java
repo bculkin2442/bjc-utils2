@@ -18,8 +18,7 @@ public class RandomStringExamples {
 		IList<IList<String>> cses = new FunctionalList<>();
 
 		for (String strang : cases) {
-			IList<String> lst = FunctionalStringTokenizer.fromString(strang)
-				.toList(s -> s);
+			IList<String> lst = FunctionalStringTokenizer.fromString(strang).toList(s -> s);
 
 			cses.add(lst);
 		}
@@ -31,51 +30,27 @@ public class RandomStringExamples {
 	 * Main method
 	 * 
 	 * @param args
-	 *            Unused CLI args
+	 *                Unused CLI args
 	 */
 	public static void main(String[] args) {
 		rg = new RandomGrammar<>();
 
-		addRule("<sentance>",
-				"<person> <opines> <something>",
-				"<person> thinks that I am <property>",
-				"I <opine> <something>",
-				"You think that I am <property>");
+		addRule("<sentance>", "<person> <opines> <something>", "<person> thinks that I am <property>",
+				"I <opine> <something>", "You think that I am <property>");
 
-		addRule("<activity>",
-				"dancing",
-				"eating",
-				"sleeping");
+		addRule("<activity>", "dancing", "eating", "sleeping");
 
-		addRule("<object>",
-				"<person>",
-				"life",
-				"my computer",
-				"my friends");
+		addRule("<object>", "<person>", "life", "my computer", "my friends");
 
-		addRule("<opine>",
-				"hate",
-				"am jealous of",
-				"love");
+		addRule("<opine>", "hate", "am jealous of", "love");
 
-		addRule("<opines>",
-				"hates",
-				"loves");
+		addRule("<opines>", "hates", "loves");
 
-		addRule("<person>",
-				"my sister",
-				"my father",
-				"my girlfriend",
-				"the man next door");
+		addRule("<person>", "my sister", "my father", "my girlfriend", "the man next door");
 
-		addRule("<property>",
-				"creative",
-				"intelligent");
+		addRule("<property>", "creative", "intelligent");
 
-		addRule("<something>",
-				"<activity>",
-				"<activity> with <person>",
-				"<object>");
+		addRule("<something>", "<activity>", "<activity> with <person>", "<object>");
 
 		for (int i = 0; i < 10; i++) {
 			IList<String> ls = rg.generateListValues("<sentance>", " ");

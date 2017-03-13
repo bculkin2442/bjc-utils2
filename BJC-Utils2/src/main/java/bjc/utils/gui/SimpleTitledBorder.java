@@ -17,7 +17,7 @@ public class SimpleTitledBorder extends TitledBorder {
 	 * Create a new border with the specified title.
 	 * 
 	 * @param title
-	 *            The title for the border.
+	 *                The title for the border.
 	 */
 	public SimpleTitledBorder(String title) {
 		super(new EtchedBorder(), title);

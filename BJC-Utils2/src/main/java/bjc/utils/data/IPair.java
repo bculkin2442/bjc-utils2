@@ -11,35 +11,33 @@ import bjc.utils.funcdata.theory.Bifunctor;
  * 
  * @author ben
  * @param <LeftType>
- *            The type of the left side of the pair
+ *                The type of the left side of the pair
  * @param <RightType>
- *            The type of the right side of the pair
+ *                The type of the right side of the pair
  *
  */
-public interface IPair<LeftType, RightType>
-		extends Bifunctor<LeftType, RightType> {
+public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightType> {
 	/**
 	 * Bind a function across the values in this pair
 	 * 
 	 * @param <BoundLeft>
-	 *            The type of the bound left
+	 *                The type of the bound left
 	 * @param <BoundRight>
-	 *            The type of the bound right
+	 *                The type of the bound right
 	 * @param binder
-	 *            The function to bind with
+	 *                The function to bind with
 	 * @return The bound pair
 	 */
 	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind(
-			BiFunction<LeftType, RightType,
-					IPair<BoundLeft, BoundRight>> binder);
+			BiFunction<LeftType, RightType, IPair<BoundLeft, BoundRight>> binder);
 
 	/**
 	 * Bind a function to the left value in this pair
 	 * 
 	 * @param <BoundLeft>
-	 *            The type of the bound value
+	 *                The type of the bound value
 	 * @param leftBinder
-	 *            The function to use to bind
+	 *                The function to use to bind
 	 * @return A pair with the left type bound
 	 */
 	public <BoundLeft> IPair<BoundLeft, RightType> bindLeft(
@@ -49,9 +47,9 @@ public interface IPair<LeftType, RightType>
 	 * Bind a function to the right value in this pair
 	 * 
 	 * @param <BoundRight>
-	 *            The type of the bound value
+	 *                The type of the bound value
 	 * @param rightBinder
-	 *            The function to use to bind
+	 *                The function to use to bind
 	 * @return A pair with the right type bound
 	 */
 	public <BoundRight> IPair<LeftType, BoundRight> bindRight(
@@ -61,19 +59,16 @@ public interface IPair<LeftType, RightType>
 	 * Pairwise combine two pairs together
 	 * 
 	 * @param <OtherLeft>
-	 *            The left type of the other pair
+	 *                The left type of the other pair
 	 * @param <OtherRight>
-	 *            The right type of the other pair
+	 *                The right type of the other pair
 	 * @param otherPair
-	 *            The pair to combine with
+	 *                The pair to combine with
 	 * @return The pairs, pairwise combined together
 	 */
-	public default <OtherLeft,
-			OtherRight> IPair<IPair<LeftType, OtherLeft>,
-					IPair<RightType, OtherRight>> combine(
-							IPair<OtherLeft, OtherRight> otherPair) {
-		return combine(otherPair,
-				(left, otherLeft) -> new Pair<>(left, otherLeft),
+	public default <OtherLeft, OtherRight> IPair<IPair<LeftType, OtherLeft>, IPair<RightType, OtherRight>> combine(
+			IPair<OtherLeft, OtherRight> otherPair) {
+		return combine(otherPair, (left, otherLeft) -> new Pair<>(left, otherLeft),
 				(right, otherRight) -> new Pair<>(right, otherRight));
 	}
 
@@ -81,33 +76,30 @@ public interface IPair<LeftType, RightType>
 	 * Combine the contents of two pairs together
 	 * 
 	 * @param <OtherLeft>
-	 *            The type of the left value of the other pair
+	 *                The type of the left value of the other pair
 	 * @param <OtherRight>
-	 *            The type of the right value of the other pair
+	 *                The type of the right value of the other pair
 	 * @param <CombinedLeft>
-	 *            The type of the left value of the combined pair
+	 *                The type of the left value of the combined pair
 	 * @param <CombinedRight>
-	 *            The type of the right value of the combined pair
+	 *                The type of the right value of the combined pair
 	 * @param otherPair
-	 *            The other pair to combine with
+	 *                The other pair to combine with
 	 * @param leftCombiner
 	 * @param rightCombiner
 	 * @return A pair with its values combined
 	 */
-	public <OtherLeft, OtherRight, CombinedLeft,
-			CombinedRight> IPair<CombinedLeft, CombinedRight> combine(
-					IPair<OtherLeft, OtherRight> otherPair,
-					BiFunction<LeftType, OtherLeft,
-							CombinedLeft> leftCombiner,
-					BiFunction<RightType, OtherRight,
-							CombinedRight> rightCombiner);
+	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight> IPair<CombinedLeft, CombinedRight> combine(
+			IPair<OtherLeft, OtherRight> otherPair,
+			BiFunction<LeftType, OtherLeft, CombinedLeft> leftCombiner,
+			BiFunction<RightType, OtherRight, CombinedRight> rightCombiner);
 
 	/**
 	 * Immediately perfom the specified action with the contents of this
 	 * pair
 	 * 
 	 * @param consumer
-	 *            The action to perform on the pair
+	 *                The action to perform on the pair
 	 */
 	public default void doWith(BiConsumer<LeftType, RightType> consumer) {
 		merge((leftValue, rightValue) -> {
@@ -118,26 +110,22 @@ public interface IPair<LeftType, RightType>
 	}
 
 	@Override
-	default <OldLeft, OldRight,
-			NewLeft> Function<Bifunctor<OldLeft, OldRight>,
-					Bifunctor<NewLeft, OldRight>> fmapLeft(
-							Function<OldLeft, NewLeft> func) {
+	default <OldLeft, OldRight, NewLeft> Function<Bifunctor<OldLeft, OldRight>, Bifunctor<NewLeft, OldRight>> fmapLeft(
+			Function<OldLeft, NewLeft> func) {
 		return (argumentPair) -> {
 			if (!(argumentPair instanceof IPair<?, ?>)) {
 				throw new IllegalArgumentException(
 						"This function can only be applied to instances of IPair");
 			}
 
-			IPair<OldLeft, OldRight> argPair = (IPair<OldLeft,
-					OldRight>) argumentPair;
+			IPair<OldLeft, OldRight> argPair = (IPair<OldLeft, OldRight>) argumentPair;
 
 			return argPair.mapLeft(func);
 		};
 	}
 
 	@Override
-	default <OldLeft, OldRight, NewRight> Function<
-			Bifunctor<OldLeft, OldRight>, Bifunctor<OldLeft, NewRight>>
+	default <OldLeft, OldRight, NewRight> Function<Bifunctor<OldLeft, OldRight>, Bifunctor<OldLeft, NewRight>>
 
 			fmapRight(Function<OldRight, NewRight> func) {
 		return (argumentPair) -> {
@@ -146,8 +134,7 @@ public interface IPair<LeftType, RightType>
 						"This function can only be applied to instances of IPair");
 			}
 
-			IPair<OldLeft, OldRight> argPair = (IPair<OldLeft,
-					OldRight>) argumentPair;
+			IPair<OldLeft, OldRight> argPair = (IPair<OldLeft, OldRight>) argumentPair;
 
 			return argPair.mapRight(func);
 		};
@@ -178,38 +165,35 @@ public interface IPair<LeftType, RightType>
 	 * pair
 	 * 
 	 * @param <NewLeft>
-	 *            The new type of the left part of the pair
+	 *                The new type of the left part of the pair
 	 * @param mapper
-	 *            The function to use to transform the left part of the
-	 *            pair
+	 *                The function to use to transform the left part of the
+	 *                pair
 	 * @return The pair, with its left part transformed
 	 */
-	public <NewLeft> IPair<NewLeft, RightType> mapLeft(
-			Function<LeftType, NewLeft> mapper);
+	public <NewLeft> IPair<NewLeft, RightType> mapLeft(Function<LeftType, NewLeft> mapper);
 
 	/**
-	 * Transform the value on the right side of the pair. Doesn't modify
-	 * the pair
+	 * Transform the value on the right side of the pair. Doesn't modify the
+	 * pair
 	 * 
 	 * @param <NewRight>
-	 *            The new type of the right part of the pair
+	 *                The new type of the right part of the pair
 	 * @param mapper
-	 *            The function to use to transform the right part of the
-	 *            pair
+	 *                The function to use to transform the right part of the
+	 *                pair
 	 * @return The pair, with its right part transformed
 	 */
-	public <NewRight> IPair<LeftType, NewRight> mapRight(
-			Function<RightType, NewRight> mapper);
+	public <NewRight> IPair<LeftType, NewRight> mapRight(Function<RightType, NewRight> mapper);
 
 	/**
 	 * Merge the two values in this pair into a single value
 	 * 
 	 * @param <MergedType>
-	 *            The type of the single value
+	 *                The type of the single value
 	 * @param merger
-	 *            The function to use for merging
+	 *                The function to use for merging
 	 * @return The pair, merged into a single value
 	 */
-	public <MergedType> MergedType merge(
-			BiFunction<LeftType, RightType, MergedType> merger);
+	public <MergedType> MergedType merge(BiFunction<LeftType, RightType, MergedType> merger);
 }

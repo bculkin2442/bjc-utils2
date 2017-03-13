@@ -51,7 +51,7 @@ public class TreeConstructTest {
 	 * Main method
 	 * 
 	 * @param args
-	 *            Unused CLI args
+	 *                Unused CLI args
 	 */
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
@@ -98,8 +98,7 @@ public class TreeConstructTest {
 			return false;
 		};
 
-		IMap<String, Function<Deque<ITree<String>>, ITree<String>>> operators =
-			new FunctionalMap<>();
+		IMap<String, Function<Deque<ITree<String>>, ITree<String>>> operators = new FunctionalMap<>();
 
 		operators.put("[", (queuedTrees) -> {
 			return null;
@@ -125,9 +124,8 @@ public class TreeConstructTest {
 			return arrayTree;
 		});
 
-		ITree<String> constructedTree =
-			TreeConstructor.constructTree(shuntedTokens,
-					new OperatorPicker(), specialPicker, operators::get);
+		ITree<String> constructedTree = TreeConstructor.constructTree(shuntedTokens, new OperatorPicker(),
+				specialPicker, operators::get);
 
 		System.out.println("AST: " + constructedTree.toString());
 

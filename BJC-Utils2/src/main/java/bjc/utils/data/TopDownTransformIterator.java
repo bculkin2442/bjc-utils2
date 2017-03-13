@@ -12,13 +12,11 @@ import static bjc.utils.data.TopDownTransformResult.*;
 
 public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<ContainedType>> {
 	private Function<ContainedType, TopDownTransformResult> picker;
-	private BiFunction<ITree<ContainedType>, 
-			Consumer<Iterator<ITree<ContainedType>>>,
-			ITree<ContainedType>>                           transform;
+	private BiFunction<ITree<ContainedType>, Consumer<Iterator<ITree<ContainedType>>>, ITree<ContainedType>> transform;
 
 	private ITree<ContainedType> preParent;
 	private ITree<ContainedType> postParent;
-	
+
 	private Deque<ITree<ContainedType>> preChildren;
 	private Deque<ITree<ContainedType>> postChildren;
 
@@ -28,29 +26,29 @@ public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<C
 	private boolean initial;
 
 	private Deque<Iterator<ITree<ContainedType>>> toYield;
-	private Iterator<ITree<ContainedType>>        curYield;
+	private Iterator<ITree<ContainedType>> curYield;
 
-	public TopDownTransformIterator(Function<ContainedType, TopDownTransformResult>                          pickr,
+	public TopDownTransformIterator(Function<ContainedType, TopDownTransformResult> pickr,
 			BiFunction<ITree<ContainedType>, Consumer<Iterator<ITree<ContainedType>>>, ITree<ContainedType>> transfrm,
 			ITree<ContainedType> tree) {
 		preParent = tree;
 
-		preChildren  = new LinkedList<>();
+		preChildren = new LinkedList<>();
 		postChildren = new LinkedList<>();
-		toYield      = new LinkedList<>();
+		toYield = new LinkedList<>();
 
-		picker      = pickr;
+		picker = pickr;
 		transform = transfrm;
 
-		done    = false;
+		done = false;
 		initial = true;
 	}
 
 	public void addYield(Iterator<ITree<ContainedType>> src) {
-		if(curYield != null) {
+		if (curYield != null) {
 			toYield.push(curYield);
 		}
-		
+
 		curYield = src;
 	}
 
@@ -59,17 +57,17 @@ public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<C
 	}
 
 	public ITree<ContainedType> flushYields(ITree<ContainedType> val) {
-		if(curYield != null) {
+		if (curYield != null) {
 			toYield.add(new SingleIterator<>(val));
 
-			if(curYield.hasNext()) {
+			if (curYield.hasNext()) {
 				return curYield.next();
 			} else {
-				while(toYield.size() != 0 && !curYield.hasNext()) {
+				while (toYield.size() != 0 && !curYield.hasNext()) {
 					curYield = toYield.pop();
 				}
 
-				if(toYield.size() == 0 && !curYield.hasNext()) {
+				if (toYield.size() == 0 && !curYield.hasNext()) {
 					curYield = null;
 					return val;
 				} else {
@@ -82,17 +80,18 @@ public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<C
 	}
 
 	public ITree<ContainedType> next() {
-		if(done) throw new NoSuchElementException();
+		if (done)
+			throw new NoSuchElementException();
 
-		if(curYield != null) {
-			if(curYield.hasNext()) {
+		if (curYield != null) {
+			if (curYield.hasNext()) {
 				return curYield.next();
 			} else {
-				while(toYield.size() != 0 && !curYield.hasNext()) {
+				while (toYield.size() != 0 && !curYield.hasNext()) {
 					curYield = toYield.pop();
 				}
 
-				if(toYield.size() == 0 && !curYield.hasNext()) {
+				if (toYield.size() == 0 && !curYield.hasNext()) {
 					curYield = null;
 				} else {
 					return curYield.next();
@@ -100,73 +99,74 @@ public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<C
 			}
 		}
 
-		if(initial) {
+		if (initial) {
 			TopDownTransformResult res = picker.apply(preParent.getHead());
 
-			switch(res) {
-				case PASSTHROUGH:
-					postParent = new Tree<>(preParent.getHead());
+			switch (res) {
+			case PASSTHROUGH:
+				postParent = new Tree<>(preParent.getHead());
 
-					if(preParent.getChildrenCount() != 0) {
-						for(int i = 0; i < preParent.getChildrenCount(); i++) {
-							preChildren.add(preParent.getChild(i));
-						}
-						
-						// Return whatever the first child is
-						break;
-					} else {
-						done = true;
-						return flushYields(postParent);
+				if (preParent.getChildrenCount() != 0) {
+					for (int i = 0; i < preParent.getChildrenCount(); i++) {
+						preChildren.add(preParent.getChild(i));
 					}
-				case SKIP:
-					done = true;
-					return flushYields(preParent);
-				case TRANSFORM:
-					done = true;
-					return flushYields(transform.apply(preParent, this::addYield));
-				case RTRANSFORM:
-					preParent = transform.apply(preParent, this::addYield);
-					return flushYields(preParent);
-				case PUSHDOWN:
-					if(preParent.getChildrenCount() != 0) {
-						for(int i = 0; i < preParent.getChildrenCount(); i++) {
-							preChildren.add(preParent.getChild(i));
-						}
-						
-						// Return whatever the first child is
-						break;
-					} else {
-						done = true;
-						return flushYields(transform.apply(new Tree<>(preParent.getHead()), this::addYield));
-					}
-				case PULLUP:
-					ITree<ContainedType> intRes = transform.apply(preParent, this::addYield);
-					
-					postParent = new Tree<>(intRes.getHead());
 
-					if(intRes.getChildrenCount() != 0) {
-						for(int i = 0; i < intRes.getChildrenCount(); i++) {
-							preChildren.add(intRes.getChild(i));
-						}
-						
-						// Return whatever the first child is
-						break;
-					} else {
-						done = true;
-						return flushYields(postParent);
+					// Return whatever the first child is
+					break;
+				} else {
+					done = true;
+					return flushYields(postParent);
+				}
+			case SKIP:
+				done = true;
+				return flushYields(preParent);
+			case TRANSFORM:
+				done = true;
+				return flushYields(transform.apply(preParent, this::addYield));
+			case RTRANSFORM:
+				preParent = transform.apply(preParent, this::addYield);
+				return flushYields(preParent);
+			case PUSHDOWN:
+				if (preParent.getChildrenCount() != 0) {
+					for (int i = 0; i < preParent.getChildrenCount(); i++) {
+						preChildren.add(preParent.getChild(i));
 					}
-				default:
-					throw new IllegalArgumentException("Unknown result type " + res);
+
+					// Return whatever the first child is
+					break;
+				} else {
+					done = true;
+					return flushYields(transform.apply(new Tree<>(preParent.getHead()),
+							this::addYield));
+				}
+			case PULLUP:
+				ITree<ContainedType> intRes = transform.apply(preParent, this::addYield);
+
+				postParent = new Tree<>(intRes.getHead());
+
+				if (intRes.getChildrenCount() != 0) {
+					for (int i = 0; i < intRes.getChildrenCount(); i++) {
+						preChildren.add(intRes.getChild(i));
+					}
+
+					// Return whatever the first child is
+					break;
+				} else {
+					done = true;
+					return flushYields(postParent);
+				}
+			default:
+				throw new IllegalArgumentException("Unknown result type " + res);
 			}
 
-			if(res != RTRANSFORM) initial = false;
+			if (res != RTRANSFORM)
+				initial = false;
 		}
 
-
-		if(curChild == null || !curChild.hasNext()) {
-			if(preChildren.size() != 0) {
+		if (curChild == null || !curChild.hasNext()) {
+			if (preChildren.size() != 0) {
 				curChild = new TopDownTransformIterator<>(picker, transform, preChildren.pop());
-				
+
 				ITree<ContainedType> res = curChild.next();
 				System.out.println("\t\tTRACE: adding node " + res + " to children");
 				postChildren.add(res);
@@ -175,21 +175,22 @@ public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<C
 			} else {
 				ITree<ContainedType> res = null;
 
-				if(postParent == null) {
+				if (postParent == null) {
 					res = new Tree<>(preParent.getHead());
 
 					System.out.println("\t\tTRACE: adding nodes " + postChildren + " to " + res);
 
-					for(ITree<ContainedType> child : postChildren) {
+					for (ITree<ContainedType> child : postChildren) {
 						res.addChild(child);
 					}
-					
-					// res = transform.apply(res, this::addYield);
+
+					// res = transform.apply(res,
+					// this::addYield);
 				} else {
 					res = postParent;
 
 					System.out.println("\t\tTRACE: adding nodes " + postChildren + " to " + res);
-					for(ITree<ContainedType> child : postChildren) {
+					for (ITree<ContainedType> child : postChildren) {
 						res.addChild(child);
 					}
 				}

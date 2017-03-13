@@ -8,7 +8,7 @@ package bjc.utils.cli;
  */
 public class GenericCommand implements ICommand {
 	// The behavior for invoking the command
-	private ICommandHandler	handler;
+	private ICommandHandler handler;
 
 	// The help for the command
 	private ICommandHelp help;
@@ -17,11 +17,11 @@ public class GenericCommand implements ICommand {
 	 * Create a new generic command
 	 * 
 	 * @param handler
-	 *			  The handler to use for the command
+	 *                The handler to use for the command
 	 * @param description
-	 *			  The description of the command. May be null
+	 *                The description of the command. May be null
 	 * @param help
-	 *			  The detailed help message for the command. May be null
+	 *                The detailed help message for the command. May be null
 	 */
 	public GenericCommand(ICommandHandler handler, String description, String help) {
 		if (handler == null) {

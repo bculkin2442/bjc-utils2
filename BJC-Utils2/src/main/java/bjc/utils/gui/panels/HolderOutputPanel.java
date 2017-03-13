@@ -14,25 +14,24 @@ import bjc.utils.gui.layout.HLayout;
  *
  */
 public class HolderOutputPanel extends JPanel {
-	private static final long	serialVersionUID	= 166573313903782080L;
+	private static final long serialVersionUID = 166573313903782080L;
 
-	private Timer				updater;
-	private JLabel				value;
-	private int					nDelay;
-	private IHolder<String>		val;
+	private Timer updater;
+	private JLabel value;
+	private int nDelay;
+	private IHolder<String> val;
 
 	/**
 	 * Create a new display panel, backed by a holder
 	 * 
 	 * @param lab
-	 *            The label to attach to this field
+	 *                The label to attach to this field
 	 * @param valueHolder
-	 *            The holder to get the value from
+	 *                The holder to get the value from
 	 * @param nDelay
-	 *            The delay in ms between value updates
+	 *                The delay in ms between value updates
 	 */
-	public HolderOutputPanel(String lab, IHolder<String> valueHolder,
-			int nDelay) {
+	public HolderOutputPanel(String lab, IHolder<String> valueHolder, int nDelay) {
 		this.val = valueHolder;
 		this.nDelay = nDelay;
 

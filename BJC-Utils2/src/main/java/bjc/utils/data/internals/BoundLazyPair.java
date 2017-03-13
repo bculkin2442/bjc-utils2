@@ -12,34 +12,32 @@ import bjc.utils.data.LazyPair;
 /**
  * Implements a lazy pair that has been bound
  */
-public class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight>
-		implements IPair<NewLeft, NewRight> {
+public class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight> implements IPair<NewLeft, NewRight> {
 	/*
 	 * The supplier of the left value
 	 */
-	private Supplier<OldLeft>										leftSupplier;
+	private Supplier<OldLeft> leftSupplier;
 	/*
 	 * The supplier of the right value
 	 */
-	private Supplier<OldRight>										rightSupplier;
+	private Supplier<OldRight> rightSupplier;
 
 	/*
 	 * The binder to transform values
 	 */
-	private BiFunction<OldLeft, OldRight, IPair<NewLeft, NewRight>>	binder;
+	private BiFunction<OldLeft, OldRight, IPair<NewLeft, NewRight>> binder;
 
 	/*
 	 * The bound pair
 	 */
-	private IPair<NewLeft, NewRight>								boundPair;
+	private IPair<NewLeft, NewRight> boundPair;
 
 	/*
 	 * Whether the pair has been bound yet
 	 */
-	private boolean													pairBound;
+	private boolean pairBound;
 
-	public BoundLazyPair(Supplier<OldLeft> leftSupp,
-			Supplier<OldRight> rightSupp,
+	public BoundLazyPair(Supplier<OldLeft> leftSupp, Supplier<OldRight> rightSupp,
 			BiFunction<OldLeft, OldRight, IPair<NewLeft, NewRight>> bindr) {
 		leftSupplier = leftSupp;
 		rightSupplier = rightSupp;
@@ -53,14 +51,12 @@ public class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight>
 			throw new NullPointerException("Binder must not be null");
 		}
 
-		IHolder<IPair<NewLeft, NewRight>> newPair = new Identity<>(
-				boundPair);
+		IHolder<IPair<NewLeft, NewRight>> newPair = new Identity<>(boundPair);
 		IHolder<Boolean> newPairMade = new Identity<>(pairBound);
 
 		Supplier<NewLeft> leftSupp = () -> {
 			if (!newPairMade.getValue()) {
-				newPair.replace(binder.apply(leftSupplier.get(),
-						rightSupplier.get()));
+				newPair.replace(binder.apply(leftSupplier.get(), rightSupplier.get()));
 
 				newPairMade.replace(true);
 			}
@@ -70,8 +66,7 @@ public class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight>
 
 		Supplier<NewRight> rightSupp = () -> {
 			if (!newPairMade.getValue()) {
-				newPair.replace(binder.apply(leftSupplier.get(),
-						rightSupplier.get()));
+				newPair.replace(binder.apply(leftSupplier.get(), rightSupplier.get()));
 
 				newPairMade.replace(true);
 			}
@@ -93,8 +88,7 @@ public class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight>
 			IPair<NewLeft, NewRight> newPair = boundPair;
 
 			if (!pairBound) {
-				newPair = binder.apply(leftSupplier.get(),
-						rightSupplier.get());
+				newPair = binder.apply(leftSupplier.get(), rightSupplier.get());
 			}
 
 			return newPair.getLeft();
@@ -107,16 +101,14 @@ public class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight>
 	public <BoundRight> IPair<NewLeft, BoundRight> bindRight(
 			Function<NewRight, IPair<NewLeft, BoundRight>> rightBinder) {
 		if (rightBinder == null) {
-			throw new NullPointerException(
-					"Right binder must not be null");
+			throw new NullPointerException("Right binder must not be null");
 		}
 
 		Supplier<NewRight> rightSupp = () -> {
 			IPair<NewLeft, NewRight> newPair = boundPair;
 
 			if (!pairBound) {
-				newPair = binder.apply(leftSupplier.get(),
-						rightSupplier.get());
+				newPair = binder.apply(leftSupplier.get(), rightSupplier.get());
 			}
 
 			return newPair.getRight();
@@ -133,34 +125,28 @@ public class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight>
 		if (otherPair == null) {
 			throw new NullPointerException("Other pair must not be null");
 		} else if (leftCombiner == null) {
-			throw new NullPointerException(
-					"Left combiner must not be null");
+			throw new NullPointerException("Left combiner must not be null");
 		} else if (rightCombiner == null) {
-			throw new NullPointerException(
-					"Right combiner must not be null");
+			throw new NullPointerException("Right combiner must not be null");
 		}
 
 		return otherPair.bind((otherLeft, otherRight) -> {
 			return bind((leftVal, rightVal) -> {
-				return new LazyPair<>(
-						leftCombiner.apply(leftVal, otherLeft),
+				return new LazyPair<>(leftCombiner.apply(leftVal, otherLeft),
 						rightCombiner.apply(rightVal, otherRight));
 			});
 		});
 	}
 
 	@Override
-	public <NewLeftType> IPair<NewLeftType, NewRight> mapLeft(
-			Function<NewLeft, NewLeftType> mapper) {
+	public <NewLeftType> IPair<NewLeftType, NewRight> mapLeft(Function<NewLeft, NewLeftType> mapper) {
 		if (mapper == null) {
 			throw new NullPointerException("Mapper must not be null");
 		}
 
 		Supplier<NewLeftType> leftSupp = () -> {
 			if (!pairBound) {
-				NewLeft leftVal = binder
-						.apply(leftSupplier.get(), rightSupplier.get())
-						.getLeft();
+				NewLeft leftVal = binder.apply(leftSupplier.get(), rightSupplier.get()).getLeft();
 
 				return mapper.apply(leftVal);
 			}
@@ -170,9 +156,7 @@ public class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight>
 
 		Supplier<NewRight> rightSupp = () -> {
 			if (!pairBound) {
-				return binder
-						.apply(leftSupplier.get(), rightSupplier.get())
-						.getRight();
+				return binder.apply(leftSupplier.get(), rightSupplier.get()).getRight();
 			}
 
 			return boundPair.getRight();
@@ -182,17 +166,14 @@ public class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight>
 	}
 
 	@Override
-	public <NewRightType> IPair<NewLeft, NewRightType> mapRight(
-			Function<NewRight, NewRightType> mapper) {
+	public <NewRightType> IPair<NewLeft, NewRightType> mapRight(Function<NewRight, NewRightType> mapper) {
 		if (mapper == null) {
 			throw new NullPointerException("Mapper must not be null");
 		}
 
 		Supplier<NewLeft> leftSupp = () -> {
 			if (!pairBound) {
-				return binder
-						.apply(leftSupplier.get(), rightSupplier.get())
-						.getLeft();
+				return binder.apply(leftSupplier.get(), rightSupplier.get()).getLeft();
 			}
 
 			return boundPair.getLeft();
@@ -200,9 +181,7 @@ public class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight>
 
 		Supplier<NewRightType> rightSupp = () -> {
 			if (!pairBound) {
-				NewRight rightVal = binder
-						.apply(leftSupplier.get(), rightSupplier.get())
-						.getRight();
+				NewRight rightVal = binder.apply(leftSupplier.get(), rightSupplier.get()).getRight();
 
 				return mapper.apply(rightVal);
 			}
@@ -214,15 +193,13 @@ public class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight>
 	}
 
 	@Override
-	public <MergedType> MergedType merge(
-			BiFunction<NewLeft, NewRight, MergedType> merger) {
+	public <MergedType> MergedType merge(BiFunction<NewLeft, NewRight, MergedType> merger) {
 		if (merger == null) {
 			throw new NullPointerException("Merger must not be null");
 		}
 
 		if (!pairBound) {
-			boundPair = binder.apply(leftSupplier.get(),
-					rightSupplier.get());
+			boundPair = binder.apply(leftSupplier.get(), rightSupplier.get());
 
 			pairBound = true;
 		}

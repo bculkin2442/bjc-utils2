@@ -1,8 +1,8 @@
 package bjc.utils.components;
 
 /**
- * Represents a optional component that has status information associated
- * with it
+ * Represents a optional component that has status information associated with
+ * it
  * 
  * @author ben
  *

@@ -16,8 +16,7 @@ import bjc.utils.exceptions.FileNotChosenException;
  *
  */
 public class SimpleFileChooser {
-	private static File doOpenFile(Component parent, String title,
-			JFileChooser files) {
+	private static File doOpenFile(Component parent, String title, JFileChooser files) {
 		if (title == null) {
 			throw new NullPointerException("Title must not be null");
 		}
@@ -33,16 +32,14 @@ public class SimpleFileChooser {
 				success = true;
 			} catch (FileNotChosenException fncx) {
 				// We don't care about specifics
-				SimpleDialogs.showError(parent, "I/O Error",
-						"Please pick a file to open");
+				SimpleDialogs.showError(parent, "I/O Error", "Please pick a file to open");
 			}
 		}
 
 		return files.getSelectedFile();
 	}
 
-	private static File doSaveFile(Component parent, String title,
-			JFileChooser files) {
+	private static File doSaveFile(Component parent, String title, JFileChooser files) {
 		if (title == null) {
 			throw new NullPointerException("Title must not be null");
 		}
@@ -58,8 +55,7 @@ public class SimpleFileChooser {
 				return files.getSelectedFile();
 			} catch (FileNotChosenException fncex) {
 				// We don't care about specifics
-				SimpleDialogs.showError(parent, "I/O Error",
-						"Please pick a file to save to");
+				SimpleDialogs.showError(parent, "I/O Error", "Please pick a file to save to");
 			}
 		}
 
@@ -71,9 +67,9 @@ public class SimpleFileChooser {
 	 * until they pick a file.
 	 * 
 	 * @param parent
-	 *            The component to use as the parent for the dialog.
+	 *                The component to use as the parent for the dialog.
 	 * @param title
-	 *            The title of the dialog to prompt with.
+	 *                The title of the dialog to prompt with.
 	 * @return The file the user has chosen.
 	 */
 	public static File getOpenFile(Component parent, String title) {
@@ -87,15 +83,14 @@ public class SimpleFileChooser {
 	 * until they pick a file.
 	 * 
 	 * @param parent
-	 *            The component to use as the parent for the dialog.
+	 *                The component to use as the parent for the dialog.
 	 * @param title
-	 *            The title of the dialog to prompt with.
+	 *                The title of the dialog to prompt with.
 	 * @param extensions
-	 *            The list of file extensions the file should have.
+	 *                The list of file extensions the file should have.
 	 * @return The file the user has chosen.
 	 */
-	public static File getOpenFile(Component parent, String title,
-			String... extensions) {
+	public static File getOpenFile(Component parent, String title, String... extensions) {
 		JFileChooser files = new JFileChooser();
 
 		files.addChoosableFileFilter(new ExtensionFileFilter(extensions));
@@ -107,9 +102,9 @@ public class SimpleFileChooser {
 	 * Prompt the user with a "Save File..." dialog.
 	 * 
 	 * @param parent
-	 *            The component to use as the parent for the dialog.
+	 *                The component to use as the parent for the dialog.
 	 * @param title
-	 *            The title of the dialog to prompt with.
+	 *                The title of the dialog to prompt with.
 	 * @return The file the user chose.
 	 */
 	public static File getSaveFile(Component parent, String title) {
@@ -122,15 +117,14 @@ public class SimpleFileChooser {
 	 * Prompt the user with a "Save File..." dialog.
 	 * 
 	 * @param parent
-	 *            The component to use as the parent for the dialog.
+	 *                The component to use as the parent for the dialog.
 	 * @param title
-	 *            The title of the dialog to prompt with.
+	 *                The title of the dialog to prompt with.
 	 * @param extensions
-	 *            The extensions of the files the user can choose.
+	 *                The extensions of the files the user can choose.
 	 * @return The file the user chose.
 	 */
-	public static File getSaveFile(Component parent, String title,
-			String... extensions) {
+	public static File getSaveFile(Component parent, String title, String... extensions) {
 		JFileChooser files = new JFileChooser();
 
 		files.addChoosableFileFilter(new ExtensionFileFilter(extensions));
@@ -138,13 +132,11 @@ public class SimpleFileChooser {
 		return doSaveFile(parent, title, files);
 	}
 
-	private static void maybeDoOpenFile(Component parent,
-			JFileChooser files) throws FileNotChosenException {
+	private static void maybeDoOpenFile(Component parent, JFileChooser files) throws FileNotChosenException {
 		if (parent == null) {
 			throw new NullPointerException("Parent must not be null");
 		} else if (files == null) {
-			throw new NullPointerException(
-					"File chooser must not be null");
+			throw new NullPointerException("File chooser must not be null");
 		}
 
 		int result = files.showSaveDialog(parent);
@@ -154,13 +146,11 @@ public class SimpleFileChooser {
 		}
 	}
 
-	private static void maybeDoSaveFile(Component parent,
-			JFileChooser files) throws FileNotChosenException {
+	private static void maybeDoSaveFile(Component parent, JFileChooser files) throws FileNotChosenException {
 		if (parent == null) {
 			throw new NullPointerException("Parent must not be null");
 		} else if (files == null) {
-			throw new NullPointerException(
-					"File chooser must not be null");
+			throw new NullPointerException("File chooser must not be null");
 		}
 
 		int result = files.showSaveDialog(parent);
@@ -174,9 +164,9 @@ public class SimpleFileChooser {
 	 * Prompt the user with a "Open File..." dialog.
 	 * 
 	 * @param parent
-	 *            The component to use as the parent for the dialog.
+	 *                The component to use as the parent for the dialog.
 	 * @param title
-	 *            The title of the dialog to prompt with.
+	 *                The title of the dialog to prompt with.
 	 * @return The file if the user chose one or null if they didn't.
 	 */
 	public static File maybeOpenFile(Component parent, String title) {
@@ -200,9 +190,9 @@ public class SimpleFileChooser {
 	 * Prompt the user with a "Save File..." dialog.
 	 * 
 	 * @param parent
-	 *            The component to use as the parent for the dialog.
+	 *                The component to use as the parent for the dialog.
 	 * @param title
-	 *            The title of the dialog to prompt with.
+	 *                The title of the dialog to prompt with.
 	 * @return The file if the user chose one or null if they didn't.
 	 */
 	public static File maybeSaveFile(Component parent, String title) {

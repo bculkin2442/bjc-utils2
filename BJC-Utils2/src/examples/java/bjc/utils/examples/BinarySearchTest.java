@@ -12,8 +12,7 @@ import bjc.utils.funcdata.bst.TreeLinearizationMethod;
  *
  */
 public class BinarySearchTest {
-	private static void display(BinarySearchTree<Character> tree,
-			Scanner input) {
+	private static void display(BinarySearchTree<Character> tree, Scanner input) {
 		System.out.print("What order would you like the tree to be printed in (m for options): ");
 		char command;
 
@@ -58,7 +57,7 @@ public class BinarySearchTest {
 	 * Main method of class
 	 * 
 	 * @param args
-	 *            Unused CLI args
+	 *                Unused CLI args
 	 */
 	public static void main(String[] args) {
 		Scanner input = new Scanner(System.in);
@@ -105,7 +104,7 @@ public class BinarySearchTest {
 				command = input.nextLine().charAt(0);
 
 				boolean inTree = tree.isInTree(command);
-				if(inTree) {
+				if (inTree) {
 					System.out.printf("Node %s was found\n", command);
 				} else {
 					System.out.printf("Node %s was not found\n", command);

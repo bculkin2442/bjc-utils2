@@ -13,15 +13,14 @@ import bjc.utils.data.Identity;
 import bjc.utils.data.Pair;
 
 final class CompoundCollector<InitialType, AuxType1, AuxType2, FinalType1, FinalType2>
-	implements Collector<InitialType, IHolder<IPair<AuxType1, AuxType2>>, IPair<FinalType1, FinalType2>> {
+		implements Collector<InitialType, IHolder<IPair<AuxType1, AuxType2>>, IPair<FinalType1, FinalType2>> {
 
-	private Set<java.util.stream.Collector.Characteristics>		characteristicSet;
+	private Set<java.util.stream.Collector.Characteristics> characteristicSet;
 
-	private Collector<InitialType, AuxType1, FinalType1>	first;
-	private Collector<InitialType, AuxType2, FinalType2>	second;
+	private Collector<InitialType, AuxType1, FinalType1> first;
+	private Collector<InitialType, AuxType2, FinalType2> second;
 
-	public CompoundCollector(
-			Collector<InitialType, AuxType1, FinalType1> first,
+	public CompoundCollector(Collector<InitialType, AuxType1, FinalType1> first,
 			Collector<InitialType, AuxType2, FinalType2> second) {
 		this.first = first;
 		this.second = second;
@@ -69,9 +68,7 @@ final class CompoundCollector<InitialType, AuxType1, AuxType2, FinalType1, Final
 		return (state) -> {
 			return state.unwrap((pair) -> {
 				return pair.bind((left, right) -> {
-					return new Pair<>(
-							first.finisher().apply(left),
-							second.finisher().apply(right));
+					return new Pair<>(first.finisher().apply(left), second.finisher().apply(right));
 				});
 			});
 		};
@@ -80,9 +77,7 @@ final class CompoundCollector<InitialType, AuxType1, AuxType2, FinalType1, Final
 	@Override
 	public Supplier<IHolder<IPair<AuxType1, AuxType2>>> supplier() {
 		return () -> {
-			return new Identity<>(new Pair<>(
-					first.supplier().get(),
-					second.supplier().get()));
+			return new Identity<>(new Pair<>(first.supplier().get(), second.supplier().get()));
 		};
 	}
 }

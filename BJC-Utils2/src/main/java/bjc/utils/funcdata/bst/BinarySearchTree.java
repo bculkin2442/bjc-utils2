@@ -14,29 +14,29 @@ import bjc.utils.funcdata.IList;
  * @author ben
  *
  * @param <T>
- *            The data type stored in the node.
+ *                The data type stored in the node.
  */
 public class BinarySearchTree<T> {
 	/*
 	 * The comparator for use in ordering items
 	 */
-	private Comparator<T>	comparator;
+	private Comparator<T> comparator;
 
 	/*
 	 * The current count of elements in the tree
 	 */
-	private int				elementCount;
+	private int elementCount;
 
 	/*
 	 * The root element of the tree
 	 */
-	private ITreePart<T>	root;
+	private ITreePart<T> root;
 
 	/**
 	 * Create a new tree using the specified way to compare elements.
 	 * 
 	 * @param cmp
-	 *            The thing to use for comparing elements
+	 *                The thing to use for comparing elements
 	 */
 	public BinarySearchTree(Comparator<T> cmp) {
 		if (cmp == null) {
@@ -51,7 +51,7 @@ public class BinarySearchTree<T> {
 	 * Add a node to the binary search tree.
 	 * 
 	 * @param element
-	 *            The data to add to the binary search tree.
+	 *                The data to add to the binary search tree.
 	 */
 	public void addNode(T element) {
 		elementCount++;
@@ -67,11 +67,11 @@ public class BinarySearchTree<T> {
 	 * Check if an adjusted pivot falls with the bounds of a list
 	 * 
 	 * @param elements
-	 *            The list to get bounds from
+	 *                The list to get bounds from
 	 * @param pivot
-	 *            The pivot
+	 *                The pivot
 	 * @param pivotAdjustment
-	 *            The distance from the pivot
+	 *                The distance from the pivot
 	 * @return Whether the adjusted pivot is with the list
 	 */
 	private boolean adjustedPivotInBounds(IList<T> elements, int pivot, int pivotAdjustment) {
@@ -102,7 +102,8 @@ public class BinarySearchTree<T> {
 				// Create a new root element
 				root = new BinarySearchTreeNode<>(elements.getByIndex(pivot), null, null);
 			} else {
-				// Add the left and right elements in a balanced manner
+				// Add the left and right elements in a balanced
+				// manner
 				root.add(elements.getByIndex(pivot + pivotAdjustment), comparator);
 
 				root.add(elements.getByIndex(pivot - pivotAdjustment), comparator);
@@ -123,11 +124,11 @@ public class BinarySearchTree<T> {
 	/**
 	 * Soft-delete a node from the tree.
 	 *
-	 * Soft-deleted nodes stay in the tree until trim()/balance() is invoked, and 
-	 * are not included in traversals/finds.
+	 * Soft-deleted nodes stay in the tree until trim()/balance() is
+	 * invoked, and are not included in traversals/finds.
 	 * 
 	 * @param element
-	 *            The node to delete
+	 *                The node to delete
 	 */
 	public void deleteNode(T element) {
 		elementCount--;
@@ -148,7 +149,7 @@ public class BinarySearchTree<T> {
 	 * Check if a node is in the tree
 	 * 
 	 * @param element
-	 *            The node to check the presence of for the tree.
+	 *                The node to check the presence of for the tree.
 	 * @return Whether or not the node is in the tree.
 	 */
 	public boolean isInTree(T element) {
@@ -159,9 +160,9 @@ public class BinarySearchTree<T> {
 	 * Traverse the tree in a specified way until the function fails
 	 * 
 	 * @param linearizationMethod
-	 *            The way to linearize the tree for traversal
+	 *                The way to linearize the tree for traversal
 	 * @param traversalPredicate
-	 *            The function to use until it fails
+	 *                The function to use until it fails
 	 */
 	public void traverse(TreeLinearizationMethod linearizationMethod, Predicate<T> traversalPredicate) {
 		if (linearizationMethod == null) {

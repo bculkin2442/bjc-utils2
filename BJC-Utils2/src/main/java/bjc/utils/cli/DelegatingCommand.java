@@ -14,7 +14,7 @@ class DelegatingCommand implements ICommand {
 	 * Create a new command that delegates to another command
 	 * 
 	 * @param delegate
-	 *            The command to delegate to
+	 *                The command to delegate to
 	 */
 	public DelegatingCommand(ICommand delegate) {
 		this.delegate = delegate;

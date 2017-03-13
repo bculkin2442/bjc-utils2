@@ -9,7 +9,7 @@ import java.util.function.UnaryOperator;
  * @author ben
  *
  * @param <ContainedType>
- *            The type of the value that may or may not be held
+ *                The type of the value that may or may not be held
  */
 public class Option<ContainedType> implements IHolder<ContainedType> {
 	private ContainedType held;
@@ -18,7 +18,7 @@ public class Option<ContainedType> implements IHolder<ContainedType> {
 	 * Create a new optional, using the given initial value
 	 * 
 	 * @param seed
-	 *            The initial value for the optional
+	 *                The initial value for the optional
 	 */
 	public Option(ContainedType seed) {
 		held = seed;

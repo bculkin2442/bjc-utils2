@@ -13,8 +13,8 @@ public class SentryList<T> extends FunctionalList<T> {
 
 	public boolean add(T item) {
 		boolean val = super.add(item);
-		
-		if(val)
+
+		if (val)
 			System.out.println("Added item (" + item + ") to list");
 
 		return val;

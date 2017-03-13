@@ -16,20 +16,21 @@ import bjc.utils.funcdata.FunctionalStringTokenizer;
 import bjc.utils.funcdata.IMap;
 
 /**
- * This class parses a rules based config file, and uses it to drive a
- * provided set of actions
+ * This class parses a rules based config file, and uses it to drive a provided
+ * set of actions
  * 
  * @author ben
  *
  * @param <E>
- *            The type of the state object to use
+ *                The type of the state object to use
  * 
  */
 public class RuleBasedConfigReader<E> {
 	// Function to execute when starting a rule
-	// Takes the tokenizer, and a pair of the read token and application state
+	// Takes the tokenizer, and a pair of the read token and application
+	// state
 	private BiConsumer<FunctionalStringTokenizer, IPair<String, E>> start;
-	
+
 	// Function to use when continuing a rule
 	// Takes a tokenizer and application state
 	private BiConsumer<FunctionalStringTokenizer, E> continueRule;
@@ -46,16 +47,14 @@ public class RuleBasedConfigReader<E> {
 	 * Create a new rule-based config reader
 	 * 
 	 * @param start
-	 *            The action to fire when starting a rule
+	 *                The action to fire when starting a rule
 	 * @param continueRule
-	 *            The action to fire when continuing a rule
+	 *                The action to fire when continuing a rule
 	 * @param end
-	 *            The action to fire when ending a rule
+	 *                The action to fire when ending a rule
 	 */
-	public RuleBasedConfigReader(
-			BiConsumer<FunctionalStringTokenizer, IPair<String, E>> start,
-			BiConsumer<FunctionalStringTokenizer, E> continueRule,
-			Consumer<E> end) {
+	public RuleBasedConfigReader(BiConsumer<FunctionalStringTokenizer, IPair<String, E>> start,
+			BiConsumer<FunctionalStringTokenizer, E> continueRule, Consumer<E> end) {
 		this.start = start;
 		this.continueRule = continueRule;
 		this.end = end;
@@ -67,13 +66,11 @@ public class RuleBasedConfigReader<E> {
 	 * Add a pragma to this reader
 	 * 
 	 * @param name
-	 *            The name of the pragma to add
+	 *                The name of the pragma to add
 	 * @param action
-	 *            The function to execute when this pragma is read
+	 *                The function to execute when this pragma is read
 	 */
-	public void addPragma(
-			String name,
-			BiConsumer<FunctionalStringTokenizer, E> action) {
+	public void addPragma(String name, BiConsumer<FunctionalStringTokenizer, E> action) {
 		if (name == null) {
 			throw new NullPointerException("Pragma name must not be null");
 		} else if (action == null) {
@@ -116,9 +113,9 @@ public class RuleBasedConfigReader<E> {
 	 * Run a stream through this reader
 	 * 
 	 * @param input
-	 *            The stream to get input
+	 *                The stream to get input
 	 * @param initialState
-	 *            The initial state of the reader
+	 *                The initial state of the reader
 	 * @return The final state of the reader
 	 */
 	public E fromStream(InputStream input, E initialState) {
@@ -143,15 +140,13 @@ public class RuleBasedConfigReader<E> {
 					return;
 				} else if (line.equals("")) {
 					// End the rule
-					isRuleOpen.replace(
-							endRule(state, isRuleOpen.getValue()));
+					isRuleOpen.replace(endRule(state, isRuleOpen.getValue()));
 				} else if (line.startsWith("\t")) {
 					// Continue the rule
 					continueRule(state, isRuleOpen.getValue(), line);
 				} else {
 					// Open a rule
-					isRuleOpen.replace(
-							startRule(state, isRuleOpen.getValue(), line));
+					isRuleOpen.replace(startRule(state, isRuleOpen.getValue(), line));
 				}
 			});
 		}
@@ -165,10 +160,9 @@ public class RuleBasedConfigReader<E> {
 	 * Set the action to execute when continuing a rule
 	 * 
 	 * @param continueRule
-	 *            The action to execute on continuation of a rule
+	 *                The action to execute on continuation of a rule
 	 */
-	public void setContinueRule(
-			BiConsumer<FunctionalStringTokenizer, E> continueRule) {
+	public void setContinueRule(BiConsumer<FunctionalStringTokenizer, E> continueRule) {
 		this.continueRule = continueRule;
 	}
 
@@ -176,7 +170,7 @@ public class RuleBasedConfigReader<E> {
 	 * Set the action to execute when ending a rule
 	 * 
 	 * @param end
-	 *            The action to execute on ending of a rule
+	 *                The action to execute on ending of a rule
 	 */
 	public void setEndRule(Consumer<E> end) {
 		this.end = end;
@@ -186,7 +180,7 @@ public class RuleBasedConfigReader<E> {
 	 * Set the action to execute when starting a rule
 	 * 
 	 * @param start
-	 *            The action to execute on starting of a rule
+	 *                The action to execute on starting of a rule
 	 */
 	public void setStartRule(BiConsumer<FunctionalStringTokenizer, IPair<String, E>> start) {
 		if (start == null) {

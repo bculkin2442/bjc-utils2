@@ -7,50 +7,47 @@ package bjc.utils.components;
  *
  */
 public class ComponentDescription implements IDescribedComponent {
-	private static void sanityCheckArgs(String name, String author,
-			String description, int version) {
+	private static void sanityCheckArgs(String name, String author, String description, int version) {
 		if (name == null) {
 			throw new NullPointerException("Component name can't be null");
 		} else if (version <= 0) {
-			throw new IllegalArgumentException(
-					"Component version must be greater than 0");
+			throw new IllegalArgumentException("Component version must be greater than 0");
 		}
 	}
 
 	/**
 	 * The author of the component
 	 */
-	private String	author;
+	private String author;
 	/**
 	 * The description of the component
 	 */
-	private String	description;
+	private String description;
 	/**
 	 * The name of the component
 	 */
-	private String	name;
+	private String name;
 
 	/**
 	 * The version of the component
 	 */
-	private int		version;
+	private int version;
 
 	/**
 	 * Create a new component description
 	 * 
 	 * @param name
-	 *            The name of the component
+	 *                The name of the component
 	 * @param author
-	 *            The author of the component
+	 *                The author of the component
 	 * @param description
-	 *            The description of the component
+	 *                The description of the component
 	 * @param version
-	 *            The version of the component
+	 *                The version of the component
 	 * @throws IllegalArgumentException
-	 *             thrown if version is less than 1
+	 *                 thrown if version is less than 1
 	 */
-	public ComponentDescription(String name, String author,
-			String description, int version) {
+	public ComponentDescription(String name, String author, String description, int version) {
 		sanityCheckArgs(name, author, description, version);
 
 		this.name = name;
@@ -61,19 +58,19 @@ public class ComponentDescription implements IDescribedComponent {
 
 	@Override
 	public String getAuthor() {
-		if(author == null) {
+		if (author == null) {
 			return IDescribedComponent.super.getAuthor();
 		}
-		
+
 		return author;
 	}
 
 	@Override
 	public String getDescription() {
-		if(description == null) {
+		if (description == null) {
 			return IDescribedComponent.super.getDescription();
 		}
-		
+
 		return description;
 	}
 

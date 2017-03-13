@@ -8,21 +8,25 @@ import javax.swing.JTextField;
 
 /**
  * A simple component for text input
+ * 
  * @author ben
  *
  */
 public class SimpleInputPanel extends JPanel {
-	private static final long	serialVersionUID	= -4734279623645236868L;
+	private static final long serialVersionUID = -4734279623645236868L;
 
 	/**
 	 * The text field containing the input value
 	 */
-	public final JTextField		inputValue;
+	public final JTextField inputValue;
 
 	/**
 	 * Create a new input panel
-	 * @param label The label for the field
-	 * @param columns The number of columns of text input to take
+	 * 
+	 * @param label
+	 *                The label for the field
+	 * @param columns
+	 *                The number of columns of text input to take
 	 */
 	public SimpleInputPanel(String label, int columns) {
 		setLayout(new BorderLayout());

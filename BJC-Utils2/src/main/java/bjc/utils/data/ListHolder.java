@@ -13,7 +13,7 @@ import bjc.utils.funcdata.IList;
  * @author ben
  *
  * @param <ContainedType>
- *            The type of contained value
+ *                The type of contained value
  */
 public class ListHolder<ContainedType> implements IHolder<ContainedType> {
 	private IList<ContainedType> heldValues;
@@ -22,7 +22,7 @@ public class ListHolder<ContainedType> implements IHolder<ContainedType> {
 	 * Create a new list holder
 	 * 
 	 * @param values
-	 *            The possible values for the computation
+	 *                The possible values for the computation
 	 */
 	@SafeVarargs
 	public ListHolder(ContainedType... values) {

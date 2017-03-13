@@ -3,15 +3,18 @@ package bjc.utils.esodata;
 /**
  * A tape changer is essentially a tape of tapes.
  *
- * It has a current tape that you can do operations to, but also operations to add/remove other tapes.
+ * It has a current tape that you can do operations to, but also operations to
+ * add/remove other tapes.
  * 
- * If there is no tape currently loaded into the changer, all the methods will either return null/false.
+ * If there is no tape currently loaded into the changer, all the methods will
+ * either return null/false.
  *
- * @param T The element type of the tapes.
+ * @param T
+ *                The element type of the tapes.
  */
 public class TapeChanger<T> implements Tape<T> {
 	private Tape<Tape<T>> tapes;
-	private Tape<T>       currentTape;
+	private Tape<T> currentTape;
 
 	/**
 	 * Create a new empty tape changer.
@@ -25,7 +28,8 @@ public class TapeChanger<T> implements Tape<T> {
 	 *
 	 * The first tape in the list will be mounted.
 	 *
-	 * @param taps The tapes to put in this tape changer.
+	 * @param taps
+	 *                The tapes to put in this tape changer.
 	 */
 	@SafeVarargs
 	public TapeChanger(Tape<T> current, Tape<T>... others) {
@@ -33,7 +37,7 @@ public class TapeChanger<T> implements Tape<T> {
 
 		tapes.insertBefore(current);
 
-		for(Tape<T> tp : others) {
+		for (Tape<T> tp : others) {
 			tapes.insertAfter(tp);
 			tapes.right();
 		}
@@ -48,7 +52,8 @@ public class TapeChanger<T> implements Tape<T> {
 	 * @return The item the tape is on.
 	 */
 	public T item() {
-		if(currentTape == null) return null;
+		if (currentTape == null)
+			return null;
 
 		return currentTape.item();
 	}
@@ -56,10 +61,12 @@ public class TapeChanger<T> implements Tape<T> {
 	/**
 	 * Set the item the tape is currently on.
 	 *
-	 * @param itm The new value for the tape item.
+	 * @param itm
+	 *                The new value for the tape item.
 	 */
 	public void item(T itm) {
-		if(currentTape == null) return;
+		if (currentTape == null)
+			return;
 
 		currentTape.item(itm);
 	}
@@ -70,7 +77,8 @@ public class TapeChanger<T> implements Tape<T> {
 	 * @return The current number of elements in the tape.
 	 */
 	public int size() {
-		if(currentTape == null) return 0;
+		if (currentTape == null)
+			return 0;
 
 		return currentTape.size();
 	}
@@ -78,10 +86,12 @@ public class TapeChanger<T> implements Tape<T> {
 	/**
 	 * Insert an element before the current item.
 	 *
-	 * @param itm The item to add.
+	 * @param itm
+	 *                The item to add.
 	 */
 	public void insertBefore(T itm) {
-		if(currentTape == null) return;
+		if (currentTape == null)
+			return;
 
 		currentTape.insertBefore(itm);
 	}
@@ -90,7 +100,8 @@ public class TapeChanger<T> implements Tape<T> {
 	 * Insert an element after the current item.
 	 */
 	public void insertAfter(T itm) {
-		if(currentTape == null) return;
+		if (currentTape == null)
+			return;
 
 		currentTape.insertAfter(itm);
 	}
@@ -98,13 +109,14 @@ public class TapeChanger<T> implements Tape<T> {
 	/**
 	 * Remove the current element.
 	 * 
-	 * Also moves the cursor back one step if possible to maintain
-	 * relative position, and removes the corresponding item from the non-active side
+	 * Also moves the cursor back one step if possible to maintain relative
+	 * position, and removes the corresponding item from the non-active side
 	 *
 	 * @return The removed item from the active side.
 	 */
 	public T remove() {
-		if(currentTape == null) return null;
+		if (currentTape == null)
+			return null;
 
 		return currentTape.remove();
 	}
@@ -113,7 +125,8 @@ public class TapeChanger<T> implements Tape<T> {
 	 * Move the cursor to the left-most position.
 	 */
 	public void first() {
-		if(currentTape == null) return;
+		if (currentTape == null)
+			return;
 
 		currentTape.first();
 	}
@@ -122,7 +135,8 @@ public class TapeChanger<T> implements Tape<T> {
 	 * Move the cursor the right-most position.
 	 */
 	public void last() {
-		if(currentTape == null) return;
+		if (currentTape == null)
+			return;
 
 		currentTape.last();
 	}
@@ -141,20 +155,20 @@ public class TapeChanger<T> implements Tape<T> {
 	/**
 	 * Move the cursor the specified amount left.
 	 *
-	 * The cursor can't go past zero.
-	 * Attempts to move the cursor by amounts that would exceed zero
-	 * don't move the cursor at all.
+	 * The cursor can't go past zero. Attempts to move the cursor by amounts
+	 * that would exceed zero don't move the cursor at all.
 	 *
-	 * @param amt The amount to attempt to move the cursor left.
+	 * @param amt
+	 *                The amount to attempt to move the cursor left.
 	 *
 	 * @return True if the cursor was moved left.
 	 */
 	public boolean left(int amt) {
-		if(currentTape == null) return false;
+		if (currentTape == null)
+			return false;
 
 		return currentTape.left(amt);
 	}
-
 
 	/**
 	 * Move the cursor one space right.
@@ -172,12 +186,14 @@ public class TapeChanger<T> implements Tape<T> {
 	 *
 	 * Moving the cursor right will auto-extend the tape if that is enabled.
 	 *
-	 * @param amt The amount to move the cursor right by.
+	 * @param amt
+	 *                The amount to move the cursor right by.
 	 *
 	 * @return Whether the cursor was moved right.
 	 */
 	public boolean right(int amt) {
-		if(currentTape == null) return false;
+		if (currentTape == null)
+			return false;
 
 		return currentTape.right(amt);
 	}
@@ -185,21 +201,24 @@ public class TapeChanger<T> implements Tape<T> {
 	/**
 	 * Flips the tape.
 	 *
-	 * The active side becomes inactive, and the inactive side becomes active.
+	 * The active side becomes inactive, and the inactive side becomes
+	 * active.
 	 *
 	 * If the current tape is not double-sided, does nothing.
 	 */
 	public void flip() {
-		if(currentTape == null) return;
+		if (currentTape == null)
+			return;
 
-		if(currentTape.isDoubleSided()) {
-			((DoubleTape<T>)currentTape).flip();
+		if (currentTape.isDoubleSided()) {
+			((DoubleTape<T>) currentTape).flip();
 		}
 	}
 
 	@Override
 	public boolean isDoubleSided() {
-		if(currentTape == null) return false;
+		if (currentTape == null)
+			return false;
 
 		return currentTape.isDoubleSided();
 	}
@@ -216,14 +235,16 @@ public class TapeChanger<T> implements Tape<T> {
 	/**
 	 * Move to the next tape in the changer.
 	 *
-	 * Attempting to load a tape that isn't there won't eject the current tape.
+	 * Attempting to load a tape that isn't there won't eject the current
+	 * tape.
 	 *
 	 * @return Whether or not the next tape was loaded.
 	 */
 	public boolean nextTape() {
 		boolean succ = tapes.right();
 
-		if(succ) currentTape = tapes.item();
+		if (succ)
+			currentTape = tapes.item();
 
 		return succ;
 	}
@@ -231,14 +252,16 @@ public class TapeChanger<T> implements Tape<T> {
 	/**
 	 * Move to the previous tape in the changer.
 	 *
-	 * Attempting to load a tape that isn't there won't eject the current tape.
+	 * Attempting to load a tape that isn't there won't eject the current
+	 * tape.
 	 *
 	 * @return Whether or not the previous tape was loaded.
 	 */
 	public boolean prevTape() {
 		boolean succ = tapes.left();
 
-		if(succ) currentTape = tapes.item();
+		if (succ)
+			currentTape = tapes.item();
 
 		return succ;
 	}
@@ -250,12 +273,13 @@ public class TapeChanger<T> implements Tape<T> {
 	 *
 	 * The specified tape is loaded.
 	 *
-	 * @param The tape to insert and load.
+	 * @param The
+	 *                tape to insert and load.
 	 */
 	public void insertTape(Tape<T> tp) {
 		tapes.insertAfter(tp);
 		tapes.right();
-		
+
 		currentTape = tapes.item();
 	}
 
@@ -269,7 +293,8 @@ public class TapeChanger<T> implements Tape<T> {
 	 * @return The removed tape.
 	 */
 	public Tape<T> removeTape() {
-		if(currentTape == null) return null;
+		if (currentTape == null)
+			return null;
 
 		Tape<T> tp = tapes.remove();
 		currentTape = tapes.item();

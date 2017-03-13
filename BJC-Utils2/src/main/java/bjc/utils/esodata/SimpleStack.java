@@ -6,7 +6,8 @@ import java.util.LinkedList;
 /**
  * Simple implementation of a stack.
  *
- * @param T The datatype stored in the stack.
+ * @param T
+ *                The datatype stored in the stack.
  * @author Ben Culkin
  */
 public class SimpleStack<T> extends Stack<T> {

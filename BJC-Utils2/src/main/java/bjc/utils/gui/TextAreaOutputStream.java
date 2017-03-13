@@ -18,7 +18,7 @@ public class TextAreaOutputStream extends OutputStream {
 	 * Create a new output stream attached to a textarea
 	 * 
 	 * @param console
-	 *            The textarea to write to
+	 *                The textarea to write to
 	 */
 	public TextAreaOutputStream(JTextArea console) {
 		this.textArea = console;

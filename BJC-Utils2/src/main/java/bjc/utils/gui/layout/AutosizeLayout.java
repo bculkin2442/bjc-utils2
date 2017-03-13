@@ -3,8 +3,8 @@ package bjc.utils.gui.layout;
 import java.awt.GridLayout;
 
 /**
- * A layout that simply holds one component that it auto-resizes whenever
- * it is resized.
+ * A layout that simply holds one component that it auto-resizes whenever it is
+ * resized.
  * 
  * @author ben
  *

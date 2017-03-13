@@ -20,7 +20,7 @@ import bjc.utils.gui.layout.VLayout;
  * @author ben
  *
  * @param <E>
- *            The type of data stored in the list
+ *                The type of data stored in the list
  */
 public class ListParameterPanel<E> extends JPanel {
 	// Version id for serialization
@@ -30,14 +30,13 @@ public class ListParameterPanel<E> extends JPanel {
 	 * Create a new panel using the specified actions for doing things
 	 * 
 	 * @param add
-	 *            The action that provides items
+	 *                The action that provides items
 	 * @param edit
-	 *            The action that edits items
+	 *                The action that edits items
 	 * @param remove
-	 *            The action that removes items
+	 *                The action that removes items
 	 */
-	public ListParameterPanel(Supplier<E> add,
-			Consumer<E> edit, Consumer<E> remove) {
+	public ListParameterPanel(Supplier<E> add, Consumer<E> edit, Consumer<E> remove) {
 		this(add, edit, remove, null);
 	}
 
@@ -45,17 +44,15 @@ public class ListParameterPanel<E> extends JPanel {
 	 * Create a new panel using the specified actions for doing things
 	 * 
 	 * @param add
-	 *            The action that provides items
+	 *                The action that provides items
 	 * @param edit
-	 *            The action that edits items
+	 *                The action that edits items
 	 * @param remove
-	 *            The action that removes items
+	 *                The action that removes items
 	 * @param defaults
-	 *            The default values to put in the list
+	 *                The default values to put in the list
 	 */
-	public ListParameterPanel(Supplier<E> add,
-			Consumer<E> edit, Consumer<E> remove,
-			IList<E> defaults) {
+	public ListParameterPanel(Supplier<E> add, Consumer<E> edit, Consumer<E> remove, IList<E> defaults) {
 		setLayout(new VLayout(2));
 
 		JList<E> list;
@@ -91,8 +88,7 @@ public class ListParameterPanel<E> extends JPanel {
 		if (add != null) {
 			addParam = new JButton("Add...");
 			addParam.addActionListener((event) -> {
-				DefaultListModel<
-						E> model = (DefaultListModel<E>) list.getModel();
+				DefaultListModel<E> model = (DefaultListModel<E>) list.getModel();
 
 				model.addElement(add.get());
 			});
@@ -112,8 +108,7 @@ public class ListParameterPanel<E> extends JPanel {
 		if (remove != null) {
 			removeParam = new JButton("Remove...");
 			removeParam.addActionListener((event) -> {
-				DefaultListModel<
-						E> model = (DefaultListModel<E>) list.getModel();
+				DefaultListModel<E> model = (DefaultListModel<E>) list.getModel();
 
 				remove.accept(model.remove(list.getSelectedIndex()));
 			});

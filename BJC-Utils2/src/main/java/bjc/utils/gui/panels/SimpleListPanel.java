@@ -24,10 +24,8 @@ import bjc.utils.gui.layout.HLayout;
 public class SimpleListPanel extends JPanel {
 	private static final long serialVersionUID = 2719963952350133541L;
 
-	private static void addItem(DefaultListModel<String> model,
-			Predicate<String> verifier,
-			Consumer<String> onFailure,
-			JTextField addItemField) {
+	private static void addItem(DefaultListModel<String> model, Predicate<String> verifier,
+			Consumer<String> onFailure, JTextField addItemField) {
 		String potentialItem = addItemField.getText();
 
 		if (verifier == null || verifier.test(potentialItem)) {
@@ -43,17 +41,15 @@ public class SimpleListPanel extends JPanel {
 	 * Create a new list panel
 	 * 
 	 * @param type
-	 *            The type of things in the list
+	 *                The type of things in the list
 	 * @param model
-	 *            The model to put items into
+	 *                The model to put items into
 	 * @param verifier
-	 *            The predicate to use to verify items
+	 *                The predicate to use to verify items
 	 * @param onFailure
-	 *            The function to call when an item doesn't verify
+	 *                The function to call when an item doesn't verify
 	 */
-	public SimpleListPanel(String type,
-			DefaultListModel<String> model,
-			Predicate<String> verifier,
+	public SimpleListPanel(String type, DefaultListModel<String> model, Predicate<String> verifier,
 			Consumer<String> onFailure) {
 		setLayout(new AutosizeLayout());
 
@@ -77,13 +73,11 @@ public class SimpleListPanel extends JPanel {
 		JButton removeItemButton = new JButton("Remove " + type);
 
 		addItemButton.addActionListener((ev) -> {
-			addItem(model, verifier, onFailure,
-					addItemField);
+			addItem(model, verifier, onFailure, addItemField);
 		});
 
 		addItemField.addActionListener((ev) -> {
-			addItem(model, verifier, onFailure,
-					addItemField);
+			addItem(model, verifier, onFailure, addItemField);
 		});
 
 		removeItemButton.addActionListener((ev) -> {

@@ -17,7 +17,7 @@ import bjc.utils.funcutils.StringUtils;
  * @author ben
  *
  * @param <TokenType>
- *            The type of tokens being shunted
+ *                The type of tokens being shunted
  */
 public class ShuntingYard<TokenType> {
 	/**
@@ -58,9 +58,9 @@ public class ShuntingYard<TokenType> {
 	}
 
 	private final class TokenShunter implements Consumer<String> {
-		private IList<TokenType>			output;
-		private Deque<String>				stack;
-		private Function<String, TokenType>	transformer;
+		private IList<TokenType> output;
+		private Deque<String> stack;
+		private Function<String, TokenType> transformer;
 
 		public TokenShunter(IList<TokenType> outpt, Deque<String> stack,
 				Function<String, TokenType> transformer) {
@@ -73,19 +73,21 @@ public class ShuntingYard<TokenType> {
 		public void accept(String token) {
 			// Handle operators
 			if (operators.containsKey(token)) {
-				// Pop operators while there isn't a higher precedence one
-				while (!stack.isEmpty()
-						&& isHigherPrec(token, stack.peek())) {
+				// Pop operators while there isn't a higher
+				// precedence one
+				while (!stack.isEmpty() && isHigherPrec(token, stack.peek())) {
 					output.add(transformer.apply(stack.pop()));
 				}
 
 				// Put this operator onto the stack
 				stack.push(token);
 			} else if (StringUtils.containsOnly(token, "\\(")) {
-				// Handle groups of parenthesis for multiple nesting levels
+				// Handle groups of parenthesis for multiple
+				// nesting levels
 				stack.push(token);
 			} else if (StringUtils.containsOnly(token, "\\)")) {
-				// Handle groups of parenthesis for multiple nesting levels
+				// Handle groups of parenthesis for multiple
+				// nesting levels
 				String swappedToken = token.replace(')', '(');
 
 				// Remove tokens up to a matching parenthesis
@@ -111,7 +113,7 @@ public class ShuntingYard<TokenType> {
 	 * Create a new shunting yard with a default set of operators
 	 * 
 	 * @param configureBasics
-	 *            Whether or not basic math operators should be provided
+	 *                Whether or not basic math operators should be provided
 	 */
 	public ShuntingYard(boolean configureBasics) {
 		operators = new FunctionalMap<>();
@@ -129,9 +131,9 @@ public class ShuntingYard<TokenType> {
 	 * Add an operator to the list of shuntable operators
 	 * 
 	 * @param operatorToken
-	 *            The token representing the operator
+	 *                The token representing the operator
 	 * @param precedence
-	 *            The precedence of the operator to add
+	 *                The precedence of the operator to add
 	 */
 	public void addOp(String operator, int precedence) {
 		// Create the precedence marker
@@ -144,15 +146,15 @@ public class ShuntingYard<TokenType> {
 	 * Add an operator to the list of shuntable operators
 	 * 
 	 * @param operatorToken
-	 *            The token representing the operator
+	 *                The token representing the operator
 	 * @param precedence
-	 *            The precedence of the operator
+	 *                The precedence of the operator
 	 */
 	public void addOp(String operator, IPrecedent precedence) {
 		// Complain about trying to add an incorrect operator
 		if (operator == null) {
 			throw new NullPointerException("Operator must not be null");
-		} else if(precedence == null) {
+		} else if (precedence == null) {
 			throw new NullPointerException("Precedence must not be null");
 		}
 
@@ -181,13 +183,12 @@ public class ShuntingYard<TokenType> {
 	 * Transform a string of tokens from infix notation to postfix
 	 * 
 	 * @param input
-	 *            The string to transform
+	 *                The string to transform
 	 * @param transformer
-	 *            The function to use to transform strings to tokens
+	 *                The function to use to transform strings to tokens
 	 * @return A list of tokens in postfix notation
 	 */
-	public IList<TokenType> postfix(IList<String> input,
-			Function<String, TokenType> transformer) {
+	public IList<TokenType> postfix(IList<String> input, Function<String, TokenType> transformer) {
 		// Check our input
 		if (input == null) {
 			throw new NullPointerException("Input must not be null");
@@ -216,8 +217,8 @@ public class ShuntingYard<TokenType> {
 	 * Remove an operator from the list of shuntable operators
 	 * 
 	 * @param token
-	 *            The token representing the operator. If null, remove all
-	 *            operators
+	 *                The token representing the operator. If null, remove
+	 *                all operators
 	 */
 	public void removeOp(String operator) {
 		// Check if we want to remove all operators

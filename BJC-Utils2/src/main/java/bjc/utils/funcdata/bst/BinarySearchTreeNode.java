@@ -16,31 +16,30 @@ import java.util.function.Predicate;
  * @author ben
  *
  * @param <T>
- *            The data type stored in the tree.
+ *                The data type stored in the tree.
  */
 public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 	/*
 	 * The left child of this node
 	 */
-	private ITreePart<T>	left;
+	private ITreePart<T> left;
 
 	/*
 	 * The right child of this node
 	 */
-	private ITreePart<T>	right;
+	private ITreePart<T> right;
 
 	/**
 	 * Create a new node with the specified data and children.
 	 * 
 	 * @param element
-	 *            The data to store in this node.
+	 *                The data to store in this node.
 	 * @param lft
-	 *            The left child of this node.
+	 *                The left child of this node.
 	 * @param rght
-	 *            The right child of this node.
+	 *                The right child of this node.
 	 */
-	public BinarySearchTreeNode(T element, ITreePart<T> lft,
-			ITreePart<T> rght) {
+	public BinarySearchTreeNode(T element, ITreePart<T> lft, ITreePart<T> rght) {
 		super(element);
 		this.left = lft;
 		this.right = rght;
@@ -53,29 +52,29 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 		}
 
 		switch (comparator.compare(data, element)) {
-			case -1:
-				if (left == null) {
-					left = new BinarySearchTreeNode<>(element, null, null);
-				} else {
-					left.add(element, comparator);
-				}
-				break;
-			case 0:
-				if (isDeleted) {
-					isDeleted = false;
-				} else {
-					throw new IllegalArgumentException("Can't add duplicate values");
-				}
-				break;
-			case 1:
-				if (right == null) {
-					right = new BinarySearchTreeNode<>(element, null, null);
-				} else {
-					right.add(element, comparator);
-				}
-				break;
-			default:
-				throw new IllegalStateException("Error: Comparator yielded invalid value");
+		case -1:
+			if (left == null) {
+				left = new BinarySearchTreeNode<>(element, null, null);
+			} else {
+				left.add(element, comparator);
+			}
+			break;
+		case 0:
+			if (isDeleted) {
+				isDeleted = false;
+			} else {
+				throw new IllegalArgumentException("Can't add duplicate values");
+			}
+			break;
+		case 1:
+			if (right == null) {
+				right = new BinarySearchTreeNode<>(element, null, null);
+			} else {
+				right.add(element, comparator);
+			}
+			break;
+		default:
+			throw new IllegalStateException("Error: Comparator yielded invalid value");
 		}
 	}
 
@@ -118,14 +117,14 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 
 		return directedWalk(currentElement -> {
 			switch (comparator.compare(element, currentElement)) {
-				case -1:
-					return LEFT;
-				case 0:
-					return isDeleted ? FAILURE : SUCCESS;
-				case 1:
-					return RIGHT;
-				default:
-					return FAILURE;
+			case -1:
+				return LEFT;
+			case 0:
+				return isDeleted ? FAILURE : SUCCESS;
+			case 1:
+				return RIGHT;
+			default:
+				return FAILURE;
 			}
 		});
 	}
@@ -138,15 +137,15 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 
 		directedWalk(currentElement -> {
 			switch (comparator.compare(data, element)) {
-				case -1:
-					return left == null ? FAILURE : LEFT;
-				case 0:
-					isDeleted = true;
-					return FAILURE;
-				case 1:
-					return right == null ? FAILURE : RIGHT;
-				default:
-					return FAILURE;
+			case -1:
+				return left == null ? FAILURE : LEFT;
+			case 0:
+				isDeleted = true;
+				return FAILURE;
+			case 1:
+				return right == null ? FAILURE : RIGHT;
+			default:
+				return FAILURE;
 			}
 		});
 	}
@@ -158,16 +157,16 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 		}
 
 		switch (treeWalker.walk(data)) {
-			case SUCCESS:
-				return true;
-			case LEFT:
-				return left.directedWalk(treeWalker);
-			case RIGHT:
-				return right.directedWalk(treeWalker);
-			case FAILURE:
-				return false;
-			default:
-				return false;
+		case SUCCESS:
+			return true;
+		case LEFT:
+			return left.directedWalk(treeWalker);
+		case RIGHT:
+			return right.directedWalk(treeWalker);
+		case FAILURE:
+			return false;
+		default:
+			return false;
 		}
 	}
 
@@ -180,20 +179,19 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 		}
 
 		switch (linearizationMethod) {
-			case PREORDER:
-				return preorderTraverse(linearizationMethod, traversalPredicate);
-			case INORDER:
-				return inorderTraverse(linearizationMethod, traversalPredicate);
-			case POSTORDER:
-				return postorderTraverse(linearizationMethod, traversalPredicate);
-			default:
-				throw new IllegalArgumentException(
-						"Passed an incorrect TreeLinearizationMethod "
-								+ linearizationMethod + ". WAT");
+		case PREORDER:
+			return preorderTraverse(linearizationMethod, traversalPredicate);
+		case INORDER:
+			return inorderTraverse(linearizationMethod, traversalPredicate);
+		case POSTORDER:
+			return postorderTraverse(linearizationMethod, traversalPredicate);
+		default:
+			throw new IllegalArgumentException(
+					"Passed an incorrect TreeLinearizationMethod " + linearizationMethod + ". WAT");
 		}
 	}
 
-	private boolean inorderTraverse( TreeLinearizationMethod linearizationMethod, Predicate<T> traversalPredicate) {
+	private boolean inorderTraverse(TreeLinearizationMethod linearizationMethod, Predicate<T> traversalPredicate) {
 		if (!traverseLeftBranch(linearizationMethod, traversalPredicate)) {
 			return false;
 		}
@@ -209,7 +207,8 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 		return true;
 	}
 
-	private boolean postorderTraverse(TreeLinearizationMethod linearizationMethod, Predicate<T> traversalPredicate) {
+	private boolean postorderTraverse(TreeLinearizationMethod linearizationMethod,
+			Predicate<T> traversalPredicate) {
 		if (!traverseLeftBranch(linearizationMethod, traversalPredicate)) {
 			return false;
 		}
@@ -254,7 +253,8 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 		return nodeSuccesfullyTraversed;
 	}
 
-	private boolean traverseLeftBranch(TreeLinearizationMethod linearizationMethod, Predicate<T> traversalPredicate) {
+	private boolean traverseLeftBranch(TreeLinearizationMethod linearizationMethod,
+			Predicate<T> traversalPredicate) {
 		boolean leftSuccesfullyTraversed;
 
 		if (left == null) {
@@ -266,7 +266,8 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 		return leftSuccesfullyTraversed;
 	}
 
-	private boolean traverseRightBranch(TreeLinearizationMethod linearizationMethod, Predicate<T> traversalPredicate) {
+	private boolean traverseRightBranch(TreeLinearizationMethod linearizationMethod,
+			Predicate<T> traversalPredicate) {
 		boolean rightSuccesfullyTraversed;
 
 		if (right == null) {

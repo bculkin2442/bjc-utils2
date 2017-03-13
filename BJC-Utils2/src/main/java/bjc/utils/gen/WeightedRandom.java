@@ -9,46 +9,45 @@ import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IList;
 
 /**
- * Represents a random number generator where certain results are weighted
- * more heavily than others.
+ * Represents a random number generator where certain results are weighted more
+ * heavily than others.
  * 
  * @author ben
  *
  * @param <E>
- *            The type of values that are randomly selected.
+ *                The type of values that are randomly selected.
  */
 public class WeightedRandom<E> {
 	/*
 	 * The list of probabilities for each result
 	 */
-	private IList<Integer>	probabilities;
+	private IList<Integer> probabilities;
 
 	/*
 	 * The list of possible results to pick from
 	 */
-	private IList<E>		results;
+	private IList<E> results;
 
 	/*
 	 * The source for any needed random numbers
 	 */
-	private Random			source;
+	private Random source;
 
-	private int				totalChance;
+	private int totalChance;
 
 	/**
 	 * Create a new weighted random generator with the specified source of
 	 * randomness
 	 * 
 	 * @param src
-	 *            The source of randomness to use.
+	 *                The source of randomness to use.
 	 */
 	public WeightedRandom(Random src) {
 		probabilities = new FunctionalList<>();
 		results = new FunctionalList<>();
 
 		if (src == null) {
-			throw new NullPointerException(
-					"Source of randomness must not be null");
+			throw new NullPointerException("Source of randomness must not be null");
 		}
 
 		source = src;
@@ -58,9 +57,9 @@ public class WeightedRandom<E> {
 	 * Add a probability for a specific result to be given.
 	 * 
 	 * @param chance
-	 *            The chance to get this result.
+	 *                The chance to get this result.
 	 * @param result
-	 *            The result to get when the chance comes up.
+	 *                The result to get when the chance comes up.
 	 */
 	public void addProbability(int chance, E result) {
 		probabilities.add(chance);
@@ -104,8 +103,8 @@ public class WeightedRandom<E> {
 	}
 
 	/**
-	 * Return a list containing values that can be generated paired with
-	 * the probability of those values being generated
+	 * Return a list containing values that can be generated paired with the
+	 * probability of those values being generated
 	 * 
 	 * @return A list of pairs of values and value probabilities
 	 */

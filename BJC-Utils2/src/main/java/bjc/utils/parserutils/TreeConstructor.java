@@ -25,20 +25,18 @@ public class TreeConstructor {
 	 * Only binary operators are accepted.
 	 * 
 	 * @param <TokenType>
-	 *            The elements of the parse tree
+	 *                The elements of the parse tree
 	 * @param tokens
-	 *            The list of tokens to build a tree from
+	 *                The list of tokens to build a tree from
 	 * @param isOperator
-	 *            The predicate to use to determine if something is a
-	 *            operator
+	 *                The predicate to use to determine if something is a
+	 *                operator
 	 * @return A AST from the expression
 	 */
-	public static <TokenType> ITree<TokenType> constructTree(
-			IList<TokenType> tokens,
+	public static <TokenType> ITree<TokenType> constructTree(IList<TokenType> tokens,
 			Predicate<TokenType> isOperator) {
 		// Construct a tree with no special operators
-		return constructTree(tokens, isOperator, (op) -> false,
-				null);
+		return constructTree(tokens, isOperator, (op) -> false, null);
 	}
 
 	/**
@@ -48,49 +46,42 @@ public class TreeConstructor {
 	 * parameters to handle non-binary operators
 	 * 
 	 * @param <TokenType>
-	 *            The elements of the parse tree
+	 *                The elements of the parse tree
 	 * @param tokens
-	 *            The list of tokens to build a tree from
+	 *                The list of tokens to build a tree from
 	 * @param isOperator
-	 *            The predicate to use to determine if something is a
-	 *            operator
+	 *                The predicate to use to determine if something is a
+	 *                operator
 	 * @param isSpecialOperator
-	 *            The predicate to use to determine if an operator needs
-	 *            special handling
+	 *                The predicate to use to determine if an operator needs
+	 *                special handling
 	 * @param handleSpecialOperator
-	 *            The function to use to handle special case operators
+	 *                The function to use to handle special case operators
 	 * @return A AST from the expression
 	 * 
 	 *         FIXME The handleSpecialOp function seems like an ugly
-	 *         interface. Maybe there's a better way to express how
-	 *         that works.
+	 *         interface. Maybe there's a better way to express how that
+	 *         works.
 	 */
-	public static <TokenType> ITree<TokenType> constructTree(
-			IList<TokenType> tokens,
-			Predicate<TokenType> isOperator,
-			Predicate<TokenType> isSpecialOperator,
-			Function<TokenType, Function<Deque<ITree<TokenType>>,
-					ITree<TokenType>>> handleSpecialOperator) {
+	public static <TokenType> ITree<TokenType> constructTree(IList<TokenType> tokens,
+			Predicate<TokenType> isOperator, Predicate<TokenType> isSpecialOperator,
+			Function<TokenType, Function<Deque<ITree<TokenType>>, ITree<TokenType>>> handleSpecialOperator) {
 		// Make sure our parameters are valid
 		if (tokens == null) {
 			throw new NullPointerException("Tokens must not be null");
 		} else if (isOperator == null) {
-			throw new NullPointerException(
-					"Operator predicate must not be null");
+			throw new NullPointerException("Operator predicate must not be null");
 		} else if (isSpecialOperator == null) {
-			throw new NullPointerException(
-					"Special operator determiner must not be null");
+			throw new NullPointerException("Special operator determiner must not be null");
 		}
 
 		// Here is the state for the tree construction
-		IHolder<IPair<Deque<ITree<TokenType>>,
-				ITree<TokenType>>> initialState = new Identity<>(
-						new Pair<>(new LinkedList<>(), null));
+		IHolder<IPair<Deque<ITree<TokenType>>, ITree<TokenType>>> initialState = new Identity<>(
+				new Pair<>(new LinkedList<>(), null));
 
 		// Transform each of the tokens
-		tokens.forEach(
-				new TokenTransformer<>(initialState, isOperator,
-						isSpecialOperator, handleSpecialOperator));
+		tokens.forEach(new TokenTransformer<>(initialState, isOperator, isSpecialOperator,
+				handleSpecialOperator));
 
 		// Grab the tree from the state
 		return initialState.unwrap((pair) -> {

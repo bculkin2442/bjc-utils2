@@ -16,9 +16,9 @@ public class CLICommander {
 	/*
 	 * The streams used for input and normal/error output
 	 */
-	private InputStream	input;
-	private OutputStream	output;
-	private OutputStream	error;
+	private InputStream input;
+	private OutputStream output;
+	private OutputStream error;
 
 	/*
 	 * The command mode to start execution in
@@ -29,11 +29,11 @@ public class CLICommander {
 	 * Create a new CLI interface powered by streams.
 	 * 
 	 * @param input
-	 *            The stream to get user input from.
+	 *                The stream to get user input from.
 	 * @param output
-	 *            The stream to send normal output to.
+	 *                The stream to send normal output to.
 	 * @param error
-	 *            The stream to send error output to.
+	 *                The stream to send error output to.
 	 */
 	public CLICommander(InputStream input, OutputStream output, OutputStream error) {
 		if (input == null) {
@@ -76,8 +76,8 @@ public class CLICommander {
 		// Process commands until we're told to stop
 		while (currentMode != null) {
 			/*
-			 * Print out the command prompt, using a custom prompt if one
-			 * is specified
+			 * Print out the command prompt, using a custom prompt
+			 * if one is specified
 			 */
 			if (currentMode.isCustomPromptEnabled()) {
 				normalOutput.print(currentMode.getCustomPrompt());
@@ -99,7 +99,7 @@ public class CLICommander {
 				}
 
 				// Process command
-				currentMode = currentMode. process(commandTokens[0], commandArgs);
+				currentMode = currentMode.process(commandTokens[0], commandArgs);
 			} else {
 				errorOutput.print("Error: Unrecognized command " + currentLine);
 			}
@@ -112,7 +112,7 @@ public class CLICommander {
 	 * Set the initial command mode to use
 	 * 
 	 * @param initialMode
-	 *            The initial command mode to use
+	 *                The initial command mode to use
 	 */
 	public void setInitialCommandMode(ICommandMode initialMode) {
 		if (initialMode == null) {

@@ -6,36 +6,34 @@ package bjc.utils.graph;
  * @author ben
  *
  * @param <T>
- *            The type of the nodes in the graph
+ *                The type of the nodes in the graph
  */
 public class Edge<T> {
 	/*
 	 * The distance from initial to terminal node
 	 */
-	private final int	distance;
+	private final int distance;
 
 	/*
 	 * The initial and terminal nodes of this edge
 	 */
-	private final T		source, target;
+	private final T source, target;
 
 	/**
 	 * Create a new edge with set parameters
 	 * 
 	 * @param initial
-	 *            The initial node of the edge
+	 *                The initial node of the edge
 	 * @param terminal
-	 *            The terminal node of the edge
+	 *                The terminal node of the edge
 	 * @param distance
-	 *            The distance between initial and terminal edge
+	 *                The distance between initial and terminal edge
 	 */
 	public Edge(T initial, T terminal, int distance) {
 		if (initial == null) {
-			throw new NullPointerException(
-					"Initial node must not be null");
+			throw new NullPointerException("Initial node must not be null");
 		} else if (terminal == null) {
-			throw new NullPointerException(
-					"Terminal node must not be null");
+			throw new NullPointerException("Terminal node must not be null");
 		}
 
 		this.source = initial;
@@ -109,17 +107,14 @@ public class Edge<T> {
 		int result = 1;
 
 		result = prime * result + distance;
-		result = prime * result
-				+ ((source == null) ? 0 : source.hashCode());
-		result = prime * result
-				+ ((target == null) ? 0 : target.hashCode());
+		result = prime * result + ((source == null) ? 0 : source.hashCode());
+		result = prime * result + ((target == null) ? 0 : target.hashCode());
 
 		return result;
 	}
 
 	@Override
 	public String toString() {
-		return " first vertex " + source + " to vertex " + target
-				+ " with distance: " + distance;
+		return " first vertex " + source + " to vertex " + target + " with distance: " + distance;
 	}
 }

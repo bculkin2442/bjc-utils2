@@ -3,8 +3,8 @@ package bjc.utils.gui.layout;
 import java.awt.GridLayout;
 
 /**
- * A layout manager that lays out its components horizontally, evenly
- * sizing them.
+ * A layout manager that lays out its components horizontally, evenly sizing
+ * them.
  * 
  * @author ben
  *
@@ -17,7 +17,7 @@ public class HLayout extends GridLayout {
 	 * Create a new horizontal layout with the specified number of columns.
 	 * 
 	 * @param columns
-	 *            The number of columns in this layout.
+	 *                The number of columns in this layout.
 	 */
 	public HLayout(int columns) {
 		super(1, columns);

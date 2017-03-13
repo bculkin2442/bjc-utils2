@@ -22,11 +22,10 @@ public class ExtensionFileFilter implements FilenameFilter {
 	private IList<String> extensions;
 
 	/**
-	 * Create a new filter only showing files with the specified
-	 * extensions.
+	 * Create a new filter only showing files with the specified extensions.
 	 * 
 	 * @param exts
-	 *            The extensions to show in this filter.
+	 *                The extensions to show in this filter.
 	 */
 	public ExtensionFileFilter(List<String> exts) {
 		if (exts == null) {
@@ -37,11 +36,10 @@ public class ExtensionFileFilter implements FilenameFilter {
 	}
 
 	/**
-	 * Create a new filter only showing files with the specified
-	 * extensions.
+	 * Create a new filter only showing files with the specified extensions.
 	 * 
 	 * @param exts
-	 *            The extensions to show in this filter.
+	 *                The extensions to show in this filter.
 	 */
 	public ExtensionFileFilter(String... exts) {
 		extensions = new FunctionalList<>(exts);
