@@ -13,7 +13,7 @@ import java.util.Map;
  * @param T The element type of the tapes.
  */
 public class TapeLibrary<T> implements Tape<T> {
-	private Map<String, Tape> tapes;
+	private Map<String, Tape<T>> tapes;
 	private Tape<T>           currentTape;
 
 	/**

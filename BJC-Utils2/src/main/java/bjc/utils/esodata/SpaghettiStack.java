@@ -1,11 +1,5 @@
 package bjc.utils.esodata;
 
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.function.Consumer;
-
 /*
  * Implements a spaghetti stack, which is a stack that is branched off of a
  * parent stack.
@@ -24,7 +18,7 @@ class SpaghettiStack<T> extends Stack<T> {
 	 * @param par The parent stack
 	 */
 	public SpaghettiStack(Stack<T> par) {
-		backing = new SimpleStack();
+		backing = new SimpleStack<>();
 
 		parent = par;
 	}

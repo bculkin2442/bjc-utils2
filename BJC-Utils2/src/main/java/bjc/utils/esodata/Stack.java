@@ -1,9 +1,7 @@
 package bjc.utils.esodata;
 
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
-import java.util.LinkedList;
 import java.util.function.Consumer;
 
 /**
