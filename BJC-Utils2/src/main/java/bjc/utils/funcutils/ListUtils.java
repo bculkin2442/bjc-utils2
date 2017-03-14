@@ -80,21 +80,11 @@ public class ListUtils {
 	 *                The affixes to remove
 	 * @return The tokens that have been deaffixed
 	 *
+	 * @deprecated Replaced by NeoTokenSplitter.
 	 */
+	@Deprecated
 	public static IList<String> deAffixTokens(IList<String> input, Deque<IPair<String, String>> operators) {
-		if(input == null)
-			throw new NullPointerException("Input must not be null");
-		else if(operators == null) throw new NullPointerException("Set of operators must not be null");
-
-		IList<String> returned = input;
-
-		for(IPair<String, String> op : operators) {
-			returned = returned.flatMap(token -> {
-				return op.merge(new TokenDeaffixer(token));
-			});
-		}
-
-		return returned;
+		return null;
 	}
 
 	/**
@@ -311,20 +301,10 @@ public class ListUtils {
 	 *                those operators
 	 * @return A list of tokens split on all the operators
 	 *
+	 * @deprecated Use NeoTokenSplitter now
 	 */
+	@Deprecated
 	public static IList<String> splitTokens(IList<String> input, Deque<IPair<String, String>> operators) {
-		if(input == null)
-			throw new NullPointerException("Input must not be null");
-		else if(operators == null) throw new NullPointerException("Set of operators must not be null");
-
-		IList<String> returned = input;
-
-		for(IPair<String, String> op : operators) {
-			returned = returned.flatMap(token -> {
-				return op.merge(new TokenSplitter(token));
-			});
-		}
-
-		return returned;
+		return null;
 	}
 }
