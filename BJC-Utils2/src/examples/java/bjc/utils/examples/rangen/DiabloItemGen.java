@@ -14,7 +14,8 @@ public class DiabloItemGen {
 	private static WeightedGrammar<String> rules = new WeightedGrammar<>();
 
 	private static void addCase(String ruleName, int probability, String ruleParts) {
-		IList<String> parts = FunctionalStringTokenizer.fromString(ruleParts).toList(strang -> strang);
+		IList<String> parts = FunctionalStringTokenizer.fromString(ruleParts)
+			.toList(strang -> strang);
 
 		rules.addCase(ruleName, probability, parts);
 	}

@@ -11,8 +11,12 @@ public class NeoTokenSplitter {
 	/*
 	 * This string is a format template for the delimiter matching regex
 	 *
-	 * It does two things 1. Match the provided delimiter by positive
-	 * lookahead 2. Match the provided delimiter by positive lookbehind
+	 * It does two things:
+	 * 
+	 * <ol>
+	 * <li> Match to the left of the provided delimiter by positive lookahead </li>
+	 * <li> Match to the right of the provided delimiter by positive lookbehind </li>
+	 * </ol>
 	 *
 	 * Thus, it will only match in places where the delimiter is, but won't
 	 * actually match the delimiter, leaving split to put it into the stream
@@ -29,9 +33,17 @@ public class NeoTokenSplitter {
 	 */
 	private static String WITH_MULTI_DELIM = "((?<=%1$s+)(?!%1$s)|(?<!%1$s)(?=%1$s+))";
 
+	/*
+	 * These represent the internal state of the splitter.
+	 */
 	private StringBuilder	currPatt;
 	private StringBuilder	currExclusionPatt;
 
+	/*
+	 * These represent the external state of the splitter.
+	 *
+	 * Compilation causes internal to become external.
+	 */
 	private Pattern	compPatt;
 	private Pattern	exclusionPatt;
 
@@ -78,10 +90,10 @@ public class NeoTokenSplitter {
 	 */
 	public void addDelimiter(String delim) {
 		String quoteDelim = Pattern.quote(delim);
-		String delimPat = String.format(WITH_DELIM, quoteDelim);
+		String delimPat   = String.format(WITH_DELIM, quoteDelim);
 
 		if(currPatt == null) {
-			currPatt = new StringBuilder();
+			currPatt          = new StringBuilder();
 			currExclusionPatt = new StringBuilder();
 
 			currPatt.append("(?:" + delimPat + ")");
@@ -105,7 +117,7 @@ public class NeoTokenSplitter {
 		String delimPat = String.format(WITH_MULTI_DELIM, "(?:" + delim + ")");
 
 		if(currPatt == null) {
-			currPatt = new StringBuilder();
+			currPatt          = new StringBuilder();
 			currExclusionPatt = new StringBuilder();
 
 			currPatt.append("(?:" + delimPat + ")");
@@ -133,14 +145,13 @@ public class NeoTokenSplitter {
 			currExclusionPatt.append("|(?:" + delim + ")");
 		}
 	}
-
 	/**
 	 * Compiles the current set of delimiters to a pattern.
 	 *
 	 * Makes this splitter ready to use.
 	 */
 	public void compile() {
-		compPatt = Pattern.compile(currPatt.toString());
+		compPatt      = Pattern.compile(currPatt.toString());
 		exclusionPatt = Pattern.compile(currExclusionPatt.toString());
 	}
 }

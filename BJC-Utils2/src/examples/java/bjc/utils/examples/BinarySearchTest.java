@@ -61,13 +61,10 @@ public class BinarySearchTest {
 	 */
 	public static void main(String[] args) {
 		Scanner input = new Scanner(System.in);
-
 		System.out.println("Binary Tree Constructor/Searcher");
-
-		char command = ' ';
-
 		BinarySearchTree<Character> tree = new BinarySearchTree<>((o1, o2) -> o1 - o2);
 
+		char command = ' ';
 		while(command != 'e') {
 			System.out.print("Enter a command (m for help): ");
 			command = input.nextLine().charAt(0);

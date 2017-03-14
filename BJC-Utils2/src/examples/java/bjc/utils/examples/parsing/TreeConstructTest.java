@@ -29,8 +29,7 @@ public class TreeConstructTest {
 	private static final class OperatorPicker implements Predicate<String> {
 		@Override
 		public boolean test(String token) {
-			if(StringUtils.containsOnly(token, "\\["))
-				return true;
+			if(StringUtils.containsOnly(token, "\\["))      return true;
 			else if(StringUtils.containsOnly(token, "\\]")) return true;
 
 			switch(token) {
@@ -87,14 +86,14 @@ public class TreeConstructTest {
 		System.out.println("Shunted: " + shuntedTokens.toString());
 
 		Predicate<String> specialPicker = (operator) -> {
-			if(StringUtils.containsOnly(operator, "\\["))
-				return true;
+			if(StringUtils.containsOnly(operator, "\\["))      return true;
 			else if(StringUtils.containsOnly(operator, "\\]")) return true;
 
 			return false;
 		};
 
-		IMap<String, Function<Deque<ITree<String>>, ITree<String>>> operators = new FunctionalMap<>();
+		IMap<String, Function<Deque<ITree<String>>, ITree<String>>> operators
+			= new FunctionalMap<>();
 
 		operators.put("[", (queuedTrees) -> {
 			return null;
@@ -120,8 +119,8 @@ public class TreeConstructTest {
 			return arrayTree;
 		});
 
-		ITree<String> constructedTree = TreeConstructor.constructTree(shuntedTokens, new OperatorPicker(),
-				specialPicker, operators::get);
+		ITree<String> constructedTree = TreeConstructor.constructTree(shuntedTokens,
+				new OperatorPicker(), specialPicker, operators::get);
 
 		System.out.println("AST: " + constructedTree.toString());
 

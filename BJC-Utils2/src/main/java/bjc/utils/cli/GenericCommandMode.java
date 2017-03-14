@@ -24,20 +24,30 @@ public class GenericCommandMode implements ICommandMode {
 	private IMap<String, ICommand>	commandHandlers;
 	private IMap<String, ICommand>	defaultHandlers;
 
-	// Contains help topics without an associated command
+	/*
+	 *  Contains help topics without an associated command
+	 */
 	private IMap<String, ICommandHelp> helpTopics;
 
-	// The action to execute upon encountering an unknown command
+	/*
+	 *  The action to execute upon encountering an unknown command
+	 */
 	private BiConsumer<String, String[]> unknownCommandHandler;
 
-	// The functions to use for input/output
+	/*
+	 *  The functions to use for input/output
+	 */
 	private Consumer<String>	errorOutput;
 	private Consumer<String>	normalOutput;
 
-	// The name of this command mode, or null if it is unnamed
+	/*
+	 *  The name of this command mode, or null if it is unnamed
+	 */
 	private String modeName;
 
-	// The custom prompt to use, or null if none is specified
+	/*
+	 *  The custom prompt to use, or null if none is specified
+	 */
 	private String customPrompt;
 
 	/**
@@ -49,18 +59,21 @@ public class GenericCommandMode implements ICommandMode {
 	 *                The function to use for error output
 	 */
 	public GenericCommandMode(Consumer<String> normalOutput, Consumer<String> errorOutput) {
-		if(normalOutput == null)
-			throw new NullPointerException("Normal output source must be non-null");
+		if(normalOutput == null)     throw new NullPointerException("Normal output source must be non-null");
 		else if(errorOutput == null) throw new NullPointerException("Error output source must be non-null");
 
 		this.normalOutput = normalOutput;
-		this.errorOutput = errorOutput;
+		this.errorOutput  = errorOutput;
 
-		// Initialize handler maps so that they sort in alphabetical
-		// order
+		/*
+		 *  Initialize handler maps so that they sort in alphabetical
+		 */
+		/*
+		 *  order
+		 */
 		commandHandlers = new FunctionalMap<>(new TreeMap<>());
 		defaultHandlers = new FunctionalMap<>(new TreeMap<>());
-		helpTopics = new FunctionalMap<>(new TreeMap<>());
+		helpTopics      = new FunctionalMap<>(new TreeMap<>());
 
 		setupDefaultCommands();
 	}
@@ -144,8 +157,8 @@ public class GenericCommandMode implements ICommandMode {
 	private GenericCommand buildAliasCommand() {
 		String aliasShortHelp = "alias\tAlias one command to another";
 		String aliasLongHelp = "Gives a command another name it can be invoked by."
-				+ " Invoke with two arguments: the name of the command to alias"
-				+ "followed by the name of the alias to give that command.";
+			+ " Invoke with two arguments: the name of the command to alias"
+			+ "followed by the name of the alias to give that command.";
 
 		return new GenericCommand((args) -> {
 			doAliasCommands(args);
@@ -168,7 +181,7 @@ public class GenericCommandMode implements ICommandMode {
 	private GenericCommand buildExitCommand() {
 		String exitShortHelp = "exit\tExit the console";
 		String exitLongHelp = "First prompts the user to make sure they want to"
-				+ " exit, then quits if they say they do";
+			+ " exit, then quits if they say they do";
 
 		return new GenericCommand((args) -> {
 			errorOutput.accept("ERROR: This console doesn't support auto-exiting");
@@ -180,16 +193,20 @@ public class GenericCommandMode implements ICommandMode {
 	private GenericCommand buildHelpCommand() {
 		String helpShortHelp = "help\tConsult the help system";
 		String helpLongHelp = "Consults the internal help system."
-				+ " Invoked in two different ways. Invoking with no arguments"
-				+ " causes all the topics you can ask for details on to be list,"
-				+ " while invoking with the name of a topic will print the entry" + " for that topic";
+			+ " Invoked in two different ways. Invoking with no arguments"
+			+ " causes all the topics you can ask for details on to be list,"
+			+ " while invoking with the name of a topic will print the entry" + " for that topic";
 
 		return new GenericCommand((args) -> {
 			if(args == null || args.length == 0) {
-				// Invoke general help
+				/*
+				 *  Invoke general help
+				 */
 				doHelpSummary();
 			} else {
-				// Invoke help for a command
+				/*
+				 *  Invoke help for a command
+				 */
 				doHelpCommand(args[0]);
 			}
 
@@ -200,7 +217,7 @@ public class GenericCommandMode implements ICommandMode {
 	private GenericCommand buildListCommand() {
 		String listShortHelp = "list\tList available commands";
 		String listLongHelp = "Lists all of the commands available in this mode,"
-				+ " as well as commands available in any mode";
+			+ " as well as commands available in any mode";
 
 		return new GenericCommand((args) -> {
 			doListCommands();
@@ -387,11 +404,19 @@ public class GenericCommandMode implements ICommandMode {
 
 		addCommandAlias("help", "man");
 
-		// Add commands handled in a upper layer.
+		/*
+		 *  Add commands handled in a upper layer.
+		 */
 
-		// @TODO figure out a place to put commands that apply across
-		// all
-		// modes, but only apply to a specific application
+		/*
+		 *  @TODO figure out a place to put commands that apply across
+		 */
+		/*
+		 *  all
+		 */
+		/*
+		 *  modes, but only apply to a specific application
+		 */
 		defaultHandlers.put("clear", buildClearCommands());
 		defaultHandlers.put("exit", buildExitCommand());
 	}

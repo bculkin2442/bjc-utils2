@@ -18,7 +18,8 @@ public class RandomStringExamples {
 		IList<IList<String>> cses = new FunctionalList<>();
 
 		for(String strang : cases) {
-			IList<String> lst = FunctionalStringTokenizer.fromString(strang).toList(s -> s);
+			IList<String> lst = FunctionalStringTokenizer.fromString(strang)
+				.toList(s -> s);
 
 			cses.add(lst);
 		}
