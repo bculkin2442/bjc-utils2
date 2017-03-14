@@ -59,9 +59,10 @@ public class NeoTokenSplitter {
 		if(compPatt == null) throw new IllegalStateException("Token splitter has not been compiled yet");
 
 		/*
-		 * Don't split something that matches only an operator
+		 * Don't split something that we should exclude from being split.
 		 */
 		if(exclusionPatt.matcher(inp).matches()) return new String[] { inp };
+
 		return compPatt.split(inp);
 	}
 
@@ -113,6 +114,23 @@ public class NeoTokenSplitter {
 		} else {
 			currPatt.append("|(?:" + delimPat + ")");
 			currExclusionPatt.append("|(?:(?:" + delim + ")+)");
+		}
+	}
+
+	/**
+	 * Marks strings matching the pattern delim as non-splittable.
+	 *
+	 * @param delim
+	 * 		The regex to not splitting matching strings.
+	 */
+	public void addNonMatcher(String delim) {
+		if(currPatt == null) {
+			currPatt          = new StringBuilder();
+			currExclusionPatt = new StringBuilder();
+
+			currExclusionPatt.append("(?:" + delim + ")");
+		} else {
+			currExclusionPatt.append("|(?:" + delim + ")");
 		}
 	}
 
