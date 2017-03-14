@@ -1,8 +1,5 @@
 package bjc.utils.esodata;
 
-import bjc.utils.funcdata.FunctionalMap;
-import bjc.utils.funcdata.IMap;
-
 /**
  * Represents a hierarchical map.
  *
@@ -14,51 +11,7 @@ import bjc.utils.funcdata.IMap;
  * @param V
  *                The value type of the map.
  */
-public class Directory<K, V> {
-	private IMap<K, Directory<K, V>> children;
-
-	private IMap<K, V> data;
-
-	/**
-	 * Create a new directory.
-	 */
-	public Directory() {
-		children = new FunctionalMap<>();
-		data = new FunctionalMap<>();
-	}
-
-	/**
-	 * Create a new sub-directory.
-	 *
-	 * Will fail if a sub-directory of that name already exists.
-	 *
-	 * @param key
-	 *                The name of the new sub-directory.
-	 *
-	 * @return The new sub-directory, or null if one by that name already
-	 *         exists.
-	 */
-	public Directory<K, V> newSubdirectory(K key) {
-		if (children.containsKey(key))
-			return null;
-
-		Directory<K, V> kid = new Directory<>();
-		children.put(key, kid);
-		return kid;
-	}
-
-	/**
-	 * Check if a given sub-directory exists.
-	 *
-	 * @param key
-	 *                The key to look for the sub-directory under.
-	 *
-	 * @return Whether or not a sub-directory of that name exists.
-	 */
-	public boolean hasSubdirectory(K key) {
-		return children.containsKey(key);
-	}
-
+public interface Directory<K, V> {
 	/**
 	 * Retrieves a given sub-directory.
 	 *
@@ -70,9 +23,76 @@ public class Directory<K, V> {
 	 * @throws IllegalArgumentException
 	 *                 If the given sub-directory doesn't exist.
 	 */
-	public Directory<K, V> getSubdirectory(K key) {
-		return children.get(key);
+	Directory<K, V> getSubdirectory(K key);
+
+	/**
+	 * Check if a given sub-directory exists.
+	 *
+	 * @param key
+	 *                The key to look for the sub-directory under.
+	 *
+	 * @return Whether or not a sub-directory of that name exists.
+	 */
+	boolean hasSubdirectory(K key);
+
+	/**
+	 * Insert a sub-directory into the dictionary.
+	 * 
+	 * @param key
+	 *                The name of the new sub-directory
+	 * @param value
+	 *                The sub-directory to insert
+	 * 
+	 * @return The old sub-directory attached to this key, or null if such a
+	 *         sub-directory didn't exist
+	 */
+	Directory<K, V> putSubdirectory(K key, Directory<K, V> value);
+	
+	/**
+	 * Create a new sub-directory.
+	 *
+	 * Will fail if a sub-directory of that name already exists.
+	 *
+	 * @param key
+	 *                The name of the new sub-directory.
+	 *
+	 * @return The new sub-directory, or null if one by that name already
+	 *         exists.
+	 */
+	default Directory<K, V> newSubdirectory(K key) {
+		if(hasSubdirectory(key)) {
+			return null;
+		}
+		
+		Directory<K, V> dir = new SimpleDirectory<>();
+		
+		putSubdirectory(key, dir);
+		
+		return dir;
 	}
+
+	/**
+	 * Check if the directory contains a data-item under the given key.
+	 *
+	 * @param key
+	 *                The key to check for.
+	 *
+	 * @return Whether or not there is a data item for the given key.
+	 */
+	boolean containsKey(K key);
+
+	/**
+	 * Retrieve a given data-item from the directory.
+	 *
+	 * @param key
+	 *                The key to retrieve data for.
+	 *
+	 * @return The value for the given key.
+	 *
+	 * @throws IllegalArgumentException
+	 *                 If no value exists for the given key.
+	 */
+	V getKey(K key);
 
 	/**
 	 * Insert a data-item into the directory.
@@ -84,34 +104,5 @@ public class Directory<K, V> {
 	 *
 	 * @return The old value of key, or null if such a value didn't exist.
 	 */
-	public V put(K key, V val) {
-		return data.put(key, val);
-	}
-
-	/**
-	 * Check if the directory contains a data-item under the given key.
-	 *
-	 * @param key
-	 *                The key to check for.
-	 *
-	 * @return Whether or not there is a data item for the given key.
-	 */
-	public boolean containsKey(K key) {
-		return data.containsKey(key);
-	}
-
-	/**
-	 * Retrive a given data-item from the directory.
-	 *
-	 * @param key
-	 *                The key to retrieve data for.
-	 *
-	 * @return The value for the given key.
-	 *
-	 * @throws IllegalArgumentException
-	 *                 If no value exists for the given key.
-	 */
-	public V get(K key) {
-		return data.get(key);
-	}
+	V putKey(K key, V val);
 }
