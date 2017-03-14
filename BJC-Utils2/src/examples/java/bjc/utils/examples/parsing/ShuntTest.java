@@ -1,21 +1,21 @@
 package bjc.utils.examples.parsing;
 
-import java.util.Scanner;
-
 import bjc.utils.funcdata.FunctionalStringTokenizer;
 import bjc.utils.funcdata.IList;
 import bjc.utils.parserutils.ShuntingYard;
 
+import java.util.Scanner;
+
 /**
  * Test of shunting yard
- * 
+ *
  * @author ben
  *
  */
 public class ShuntTest {
 	/**
 	 * Main method
-	 * 
+	 *
 	 * @param args
 	 *                Unused CLI args
 	 */

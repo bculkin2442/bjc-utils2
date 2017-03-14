@@ -8,25 +8,25 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static bjc.utils.data.TopDownTransformResult.*;
+import static bjc.utils.data.TopDownTransformResult.RTRANSFORM;
 
 public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<ContainedType>> {
-	private Function<ContainedType, TopDownTransformResult> picker;
-	private BiFunction<ITree<ContainedType>, Consumer<Iterator<ITree<ContainedType>>>, ITree<ContainedType>> transform;
+	private Function<ContainedType, TopDownTransformResult>								picker;
+	private BiFunction<ITree<ContainedType>, Consumer<Iterator<ITree<ContainedType>>>, ITree<ContainedType>>	transform;
 
-	private ITree<ContainedType> preParent;
-	private ITree<ContainedType> postParent;
+	private ITree<ContainedType>	preParent;
+	private ITree<ContainedType>	postParent;
 
-	private Deque<ITree<ContainedType>> preChildren;
-	private Deque<ITree<ContainedType>> postChildren;
+	private Deque<ITree<ContainedType>>	preChildren;
+	private Deque<ITree<ContainedType>>	postChildren;
 
 	private TopDownTransformIterator<ContainedType> curChild;
 
-	private boolean done;
-	private boolean initial;
+	private boolean	done;
+	private boolean	initial;
 
-	private Deque<Iterator<ITree<ContainedType>>> toYield;
-	private Iterator<ITree<ContainedType>> curYield;
+	private Deque<Iterator<ITree<ContainedType>>>	toYield;
+	private Iterator<ITree<ContainedType>>		curYield;
 
 	public TopDownTransformIterator(Function<ContainedType, TopDownTransformResult> pickr,
 			BiFunction<ITree<ContainedType>, Consumer<Iterator<ITree<ContainedType>>>, ITree<ContainedType>> transfrm,
@@ -45,69 +45,67 @@ public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<C
 	}
 
 	public void addYield(Iterator<ITree<ContainedType>> src) {
-		if (curYield != null) {
+		if(curYield != null) {
 			toYield.push(curYield);
 		}
 
 		curYield = src;
 	}
 
+	@Override
 	public boolean hasNext() {
 		return !done;
 	}
 
 	public ITree<ContainedType> flushYields(ITree<ContainedType> val) {
-		if (curYield != null) {
+		if(curYield != null) {
 			toYield.add(new SingleIterator<>(val));
 
-			if (curYield.hasNext()) {
+			if(curYield.hasNext())
 				return curYield.next();
-			} else {
-				while (toYield.size() != 0 && !curYield.hasNext()) {
+			else {
+				while(toYield.size() != 0 && !curYield.hasNext()) {
 					curYield = toYield.pop();
 				}
 
-				if (toYield.size() == 0 && !curYield.hasNext()) {
+				if(toYield.size() == 0 && !curYield.hasNext()) {
 					curYield = null;
 					return val;
-				} else {
+				} else
 					return curYield.next();
-				}
 			}
-		} else {
+		} else
 			return val;
-		}
 	}
 
+	@Override
 	public ITree<ContainedType> next() {
-		if (done)
-			throw new NoSuchElementException();
+		if(done) throw new NoSuchElementException();
 
-		if (curYield != null) {
-			if (curYield.hasNext()) {
+		if(curYield != null) {
+			if(curYield.hasNext())
 				return curYield.next();
-			} else {
-				while (toYield.size() != 0 && !curYield.hasNext()) {
+			else {
+				while(toYield.size() != 0 && !curYield.hasNext()) {
 					curYield = toYield.pop();
 				}
 
-				if (toYield.size() == 0 && !curYield.hasNext()) {
+				if(toYield.size() == 0 && !curYield.hasNext()) {
 					curYield = null;
-				} else {
+				} else
 					return curYield.next();
-				}
 			}
 		}
 
-		if (initial) {
+		if(initial) {
 			TopDownTransformResult res = picker.apply(preParent.getHead());
 
-			switch (res) {
+			switch(res) {
 			case PASSTHROUGH:
 				postParent = new Tree<>(preParent.getHead());
 
-				if (preParent.getChildrenCount() != 0) {
-					for (int i = 0; i < preParent.getChildrenCount(); i++) {
+				if(preParent.getChildrenCount() != 0) {
+					for(int i = 0; i < preParent.getChildrenCount(); i++) {
 						preChildren.add(preParent.getChild(i));
 					}
 
@@ -127,8 +125,8 @@ public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<C
 				preParent = transform.apply(preParent, this::addYield);
 				return flushYields(preParent);
 			case PUSHDOWN:
-				if (preParent.getChildrenCount() != 0) {
-					for (int i = 0; i < preParent.getChildrenCount(); i++) {
+				if(preParent.getChildrenCount() != 0) {
+					for(int i = 0; i < preParent.getChildrenCount(); i++) {
 						preChildren.add(preParent.getChild(i));
 					}
 
@@ -144,8 +142,8 @@ public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<C
 
 				postParent = new Tree<>(intRes.getHead());
 
-				if (intRes.getChildrenCount() != 0) {
-					for (int i = 0; i < intRes.getChildrenCount(); i++) {
+				if(intRes.getChildrenCount() != 0) {
+					for(int i = 0; i < intRes.getChildrenCount(); i++) {
 						preChildren.add(intRes.getChild(i));
 					}
 
@@ -159,12 +157,13 @@ public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<C
 				throw new IllegalArgumentException("Unknown result type " + res);
 			}
 
-			if (res != RTRANSFORM)
+			if(res != RTRANSFORM) {
 				initial = false;
+			}
 		}
 
-		if (curChild == null || !curChild.hasNext()) {
-			if (preChildren.size() != 0) {
+		if(curChild == null || !curChild.hasNext()) {
+			if(preChildren.size() != 0) {
 				curChild = new TopDownTransformIterator<>(picker, transform, preChildren.pop());
 
 				ITree<ContainedType> res = curChild.next();
@@ -175,12 +174,12 @@ public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<C
 			} else {
 				ITree<ContainedType> res = null;
 
-				if (postParent == null) {
+				if(postParent == null) {
 					res = new Tree<>(preParent.getHead());
 
 					System.out.println("\t\tTRACE: adding nodes " + postChildren + " to " + res);
 
-					for (ITree<ContainedType> child : postChildren) {
+					for(ITree<ContainedType> child : postChildren) {
 						res.addChild(child);
 					}
 
@@ -190,7 +189,7 @@ public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<C
 					res = postParent;
 
 					System.out.println("\t\tTRACE: adding nodes " + postChildren + " to " + res);
-					for (ITree<ContainedType> child : postChildren) {
+					for(ITree<ContainedType> child : postChildren) {
 						res.addChild(child);
 					}
 				}

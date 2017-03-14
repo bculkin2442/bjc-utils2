@@ -1,18 +1,18 @@
 package bjc.utils.gui;
 
+import bjc.utils.funcdata.FunctionalList;
+import bjc.utils.funcdata.IList;
+
 import java.io.File;
 import java.util.List;
 
 import javax.swing.filechooser.FileFilter;
 
-import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.IList;
-
 /**
  * A file filter based on extensions.
- * 
+ *
  * Built for Swing.
- * 
+ *
  * @author ben
  *
  */
@@ -24,7 +24,7 @@ public class ExtensionFileFilter extends FileFilter {
 
 	/**
 	 * Create a new filter only showing files with the specified extensions.
-	 * 
+	 *
 	 * @param exts
 	 *                The extensions to show in this filter.
 	 */
@@ -34,7 +34,7 @@ public class ExtensionFileFilter extends FileFilter {
 
 	/**
 	 * Create a new filter only showing files with the specified extensions.
-	 * 
+	 *
 	 * @param exts
 	 *                The extensions to show in this filter.
 	 */
@@ -44,9 +44,7 @@ public class ExtensionFileFilter extends FileFilter {
 
 	@Override
 	public boolean accept(File pathname) {
-		if (pathname == null) {
-			throw new NullPointerException("Pathname must not be null");
-		}
+		if(pathname == null) throw new NullPointerException("Pathname must not be null");
 
 		return extensions.anyMatch(pathname.getName()::endsWith);
 	}

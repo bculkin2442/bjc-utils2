@@ -1,21 +1,21 @@
 package bjc.utils.funcutils;
 
-import java.util.Random;
-import java.util.function.Consumer;
-
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IList;
 
+import java.util.Random;
+import java.util.function.Consumer;
+
 /**
  * Utility methods on enums
- * 
+ *
  * @author ben
  *
  */
 public class EnumUtils {
 	/**
 	 * Do an action for a random number of enum values
-	 * 
+	 *
 	 * @param <E>
 	 *                The type of the enum
 	 * @param clasz
@@ -35,7 +35,7 @@ public class EnumUtils {
 
 		int randomValueCount = enumValues.length - nValues;
 
-		for (int i = 0; i <= randomValueCount; i++) {
+		for(int i = 0; i <= randomValueCount; i++) {
 			E rDir = valueList.randItem(rnd::nextInt);
 
 			valueList.removeMatching(rDir);
@@ -46,7 +46,7 @@ public class EnumUtils {
 
 	/**
 	 * Get a random value from an enum
-	 * 
+	 *
 	 * @param <E>
 	 *                The type of the enum
 	 * @param clasz

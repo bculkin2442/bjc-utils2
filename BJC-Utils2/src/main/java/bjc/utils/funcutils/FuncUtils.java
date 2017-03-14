@@ -6,7 +6,7 @@ import java.util.function.Function;
 
 /**
  * Utility things for functions
- * 
+ *
  * @author ben
  *
  */
@@ -14,7 +14,7 @@ public class FuncUtils {
 	/**
 	 * Convert a binary function into a unary function that returns a
 	 * function
-	 * 
+	 *
 	 * @param <A>
 	 *                The initial type of the function
 	 * @param <B>
@@ -34,14 +34,14 @@ public class FuncUtils {
 
 	/**
 	 * Do the specified action the specified number of times
-	 * 
+	 *
 	 * @param nTimes
 	 *                The number of times to do the action
 	 * @param cons
 	 *                The action to perform
 	 */
 	public static void doTimes(int nTimes, Consumer<Integer> cons) {
-		for (int i = 0; i < nTimes; i++) {
+		for(int i = 0; i < nTimes; i++) {
 			cons.accept(i);
 		}
 	}

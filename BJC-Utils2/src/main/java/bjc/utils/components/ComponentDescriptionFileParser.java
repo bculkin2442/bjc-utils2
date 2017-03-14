@@ -1,15 +1,15 @@
 package bjc.utils.components;
 
-import static bjc.utils.parserutils.RuleBasedReaderPragmas.buildInteger;
-import static bjc.utils.parserutils.RuleBasedReaderPragmas.buildStringCollapser;
+import bjc.utils.parserutils.RuleBasedConfigReader;
 
 import java.io.InputStream;
 
-import bjc.utils.parserutils.RuleBasedConfigReader;
+import static bjc.utils.parserutils.RuleBasedReaderPragmas.buildInteger;
+import static bjc.utils.parserutils.RuleBasedReaderPragmas.buildStringCollapser;
 
 /**
  * Read a component description from a file
- * 
+ *
  * @author ben
  *
  */
@@ -35,15 +35,13 @@ public class ComponentDescriptionFileParser {
 
 	/**
 	 * Parse a component description from a stream
-	 * 
+	 *
 	 * @param inputSource
 	 *                The stream to parse from
 	 * @return The description parsed from the stream
 	 */
 	public static ComponentDescription fromStream(InputStream inputSource) {
-		if (inputSource == null) {
-			throw new NullPointerException("Input source must not be null");
-		}
+		if(inputSource == null) throw new NullPointerException("Input source must not be null");
 
 		ComponentDescriptionState readState = reader.fromStream(inputSource, new ComponentDescriptionState());
 

@@ -2,31 +2,29 @@ package bjc.utils.components;
 
 /**
  * Generic implementation of a description for a component
- * 
+ *
  * @author ben
  *
  */
 public class ComponentDescription implements IDescribedComponent {
 	private static void sanityCheckArgs(String name, String author, String description, int version) {
-		if (name == null) {
+		if(name == null)
 			throw new NullPointerException("Component name can't be null");
-		} else if (version <= 0) {
-			throw new IllegalArgumentException("Component version must be greater than 0");
-		}
+		else if(version <= 0) throw new IllegalArgumentException("Component version must be greater than 0");
 	}
 
 	/**
 	 * The author of the component
 	 */
-	private String author;
+	private String	author;
 	/**
 	 * The description of the component
 	 */
-	private String description;
+	private String	description;
 	/**
 	 * The name of the component
 	 */
-	private String name;
+	private String	name;
 
 	/**
 	 * The version of the component
@@ -35,7 +33,7 @@ public class ComponentDescription implements IDescribedComponent {
 
 	/**
 	 * Create a new component description
-	 * 
+	 *
 	 * @param name
 	 *                The name of the component
 	 * @param author
@@ -58,18 +56,14 @@ public class ComponentDescription implements IDescribedComponent {
 
 	@Override
 	public String getAuthor() {
-		if (author == null) {
-			return IDescribedComponent.super.getAuthor();
-		}
+		if(author == null) return IDescribedComponent.super.getAuthor();
 
 		return author;
 	}
 
 	@Override
 	public String getDescription() {
-		if (description == null) {
-			return IDescribedComponent.super.getDescription();
-		}
+		if(description == null) return IDescribedComponent.super.getDescription();
 
 		return description;
 	}

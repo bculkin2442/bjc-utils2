@@ -1,10 +1,10 @@
 package bjc.utils.funcdata;
 
+import bjc.utils.funcutils.ListUtils;
+
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
-
-import bjc.utils.funcutils.ListUtils;
 
 class ExtendedMap<KeyType, ValueType> implements IMap<KeyType, ValueType> {
 	private IMap<KeyType, ValueType> delegate;
@@ -23,9 +23,7 @@ class ExtendedMap<KeyType, ValueType> implements IMap<KeyType, ValueType> {
 
 	@Override
 	public boolean containsKey(KeyType key) {
-		if (store.containsKey(key)) {
-			return true;
-		}
+		if(store.containsKey(key)) return true;
 
 		return delegate.containsKey(key);
 	}
@@ -58,9 +56,7 @@ class ExtendedMap<KeyType, ValueType> implements IMap<KeyType, ValueType> {
 
 	@Override
 	public ValueType get(KeyType key) {
-		if (store.containsKey(key)) {
-			return store.get(key);
-		}
+		if(store.containsKey(key)) return store.get(key);
 
 		return delegate.get(key);
 	}

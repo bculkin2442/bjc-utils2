@@ -1,29 +1,29 @@
 package bjc.utils.gui.panels;
 
+import bjc.utils.data.IHolder;
+import bjc.utils.gui.layout.HLayout;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import bjc.utils.data.IHolder;
-import bjc.utils.gui.layout.HLayout;
-
 /**
  * A panel that outputs a value bound to a {@link IHolder}
- * 
+ *
  * @author ben
  *
  */
 public class HolderOutputPanel extends JPanel {
 	private static final long serialVersionUID = 166573313903782080L;
 
-	private Timer updater;
-	private JLabel value;
-	private int nDelay;
-	private IHolder<String> val;
+	private Timer		updater;
+	private JLabel		value;
+	private int		nDelay;
+	private IHolder<String>	val;
 
 	/**
 	 * Create a new display panel, backed by a holder
-	 * 
+	 *
 	 * @param lab
 	 *                The label to attach to this field
 	 * @param valueHolder

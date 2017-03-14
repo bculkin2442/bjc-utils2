@@ -2,7 +2,7 @@ package bjc.utils.funcutils;
 
 /**
  * Generic interface for objects that implement the builder pattern
- * 
+ *
  * @author ben
  *
  * @param <E>
@@ -11,7 +11,7 @@ package bjc.utils.funcutils;
 public interface IBuilder<E> {
 	/**
 	 * Build the object this builder is building
-	 * 
+	 *
 	 * @return The built object
 	 * @throws IllegalStateException
 	 *                 if the data in the builder cannot be built into its
@@ -21,7 +21,7 @@ public interface IBuilder<E> {
 
 	/**
 	 * Reset the state of this builder to its initial state
-	 * 
+	 *
 	 * @throws UnsupportedOperationException
 	 *                 if the builder doesn't support resetting its state
 	 */

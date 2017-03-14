@@ -6,7 +6,7 @@ import bjc.utils.funcdata.IMap;
 /**
  * A collection of implementations of a particular type of
  * {@link IDescribedComponent}
- * 
+ *
  * @author ben
  *
  * @param <ComponentType>
@@ -15,7 +15,7 @@ import bjc.utils.funcdata.IMap;
 public interface IComponentRepository<ComponentType extends IDescribedComponent> {
 	/**
 	 * Get all of the components this repository knows about
-	 * 
+	 *
 	 * @return A map from component name to component, containing all of the
 	 *         components in the repositories
 	 */
@@ -23,7 +23,7 @@ public interface IComponentRepository<ComponentType extends IDescribedComponent>
 
 	/**
 	 * Get a component with a specific name
-	 * 
+	 *
 	 * @param name
 	 *                The name of the component to retrieve
 	 * @return The named component, or null if no component with that name
@@ -33,7 +33,7 @@ public interface IComponentRepository<ComponentType extends IDescribedComponent>
 
 	/**
 	 * Get a list of all the registered componets
-	 * 
+	 *
 	 * @return A list of all the registered components
 	 */
 	public default IList<ComponentType> getList() {
@@ -42,7 +42,7 @@ public interface IComponentRepository<ComponentType extends IDescribedComponent>
 
 	/**
 	 * Get the source from which these components came
-	 * 
+	 *
 	 * @return The source from which these components came
 	 */
 	public String getSource();

@@ -1,20 +1,20 @@
 package bjc.utils.funcutils;
 
-import java.util.stream.Collector;
-
 import bjc.utils.data.IHolder;
 import bjc.utils.data.IPair;
 
+import java.util.stream.Collector;
+
 /**
  * Utilities for producing implementations of {@link Collector}
- * 
+ *
  * @author ben
  *
  */
 public class CollectorUtils {
 	/**
 	 * Create a collector that applies two collectors at once
-	 * 
+	 *
 	 * @param <InitialType>
 	 *                The type of the collection to collect from
 	 * @param <AuxType1>

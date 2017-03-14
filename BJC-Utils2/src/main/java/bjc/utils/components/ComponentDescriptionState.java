@@ -2,7 +2,7 @@ package bjc.utils.components;
 
 /**
  * Internal state of component description parser
- * 
+ *
  * @author ben
  *
  */
@@ -21,7 +21,7 @@ public class ComponentDescriptionState {
 
 	/**
 	 * Set the author of this component
-	 * 
+	 *
 	 * @param author
 	 *                The author of this component
 	 */
@@ -31,7 +31,7 @@ public class ComponentDescriptionState {
 
 	/**
 	 * Set the description of this component
-	 * 
+	 *
 	 * @param description
 	 *                The description of this component
 	 */
@@ -41,7 +41,7 @@ public class ComponentDescriptionState {
 
 	/**
 	 * Set the name of this component
-	 * 
+	 *
 	 * @param name
 	 *                The name of this component
 	 */
@@ -51,7 +51,7 @@ public class ComponentDescriptionState {
 
 	/**
 	 * Set the version of this component
-	 * 
+	 *
 	 * @param version
 	 *                The version of this component
 	 */
@@ -61,7 +61,7 @@ public class ComponentDescriptionState {
 
 	/**
 	 * Convert this state into the description it represents
-	 * 
+	 *
 	 * @return The description represented by this state
 	 */
 	public ComponentDescription toDescription() {

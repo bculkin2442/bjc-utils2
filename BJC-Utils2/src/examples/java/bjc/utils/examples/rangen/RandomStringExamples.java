@@ -7,7 +7,7 @@ import bjc.utils.gen.RandomGrammar;
 
 /**
  * Examples of random grammar
- * 
+ *
  * @author ben
  *
  */
@@ -17,7 +17,7 @@ public class RandomStringExamples {
 	private static void addRule(String rule, String... cases) {
 		IList<IList<String>> cses = new FunctionalList<>();
 
-		for (String strang : cases) {
+		for(String strang : cases) {
 			IList<String> lst = FunctionalStringTokenizer.fromString(strang).toList(s -> s);
 
 			cses.add(lst);
@@ -28,7 +28,7 @@ public class RandomStringExamples {
 
 	/**
 	 * Main method
-	 * 
+	 *
 	 * @param args
 	 *                Unused CLI args
 	 */
@@ -52,7 +52,7 @@ public class RandomStringExamples {
 
 		addRule("<something>", "<activity>", "<activity> with <person>", "<object>");
 
-		for (int i = 0; i < 10; i++) {
+		for(int i = 0; i < 10; i++) {
 			IList<String> ls = rg.generateListValues("<sentance>", " ");
 
 			StringBuilder sb = new StringBuilder();

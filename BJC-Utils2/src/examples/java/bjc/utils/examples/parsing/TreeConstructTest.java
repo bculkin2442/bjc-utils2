@@ -1,11 +1,5 @@
 package bjc.utils.examples.parsing;
 
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.Scanner;
-import java.util.function.Function;
-import java.util.function.Predicate;
-
 import bjc.utils.data.IPair;
 import bjc.utils.data.ITree;
 import bjc.utils.data.Pair;
@@ -19,9 +13,15 @@ import bjc.utils.funcutils.StringUtils;
 import bjc.utils.parserutils.ShuntingYard;
 import bjc.utils.parserutils.TreeConstructor;
 
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.Scanner;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
 /**
  * Test of tree constructor
- * 
+ *
  * @author ben
  *
  */
@@ -29,13 +29,11 @@ public class TreeConstructTest {
 	private static final class OperatorPicker implements Predicate<String> {
 		@Override
 		public boolean test(String token) {
-			if (StringUtils.containsOnly(token, "\\[")) {
+			if(StringUtils.containsOnly(token, "\\["))
 				return true;
-			} else if (StringUtils.containsOnly(token, "\\]")) {
-				return true;
-			}
+			else if(StringUtils.containsOnly(token, "\\]")) return true;
 
-			switch (token) {
+			switch(token) {
 			case "+":
 			case "-":
 			case "*":
@@ -49,7 +47,7 @@ public class TreeConstructTest {
 
 	/**
 	 * Main method
-	 * 
+	 *
 	 * @param args
 	 *                Unused CLI args
 	 */
@@ -89,11 +87,9 @@ public class TreeConstructTest {
 		System.out.println("Shunted: " + shuntedTokens.toString());
 
 		Predicate<String> specialPicker = (operator) -> {
-			if (StringUtils.containsOnly(operator, "\\[")) {
+			if(StringUtils.containsOnly(operator, "\\["))
 				return true;
-			} else if (StringUtils.containsOnly(operator, "\\]")) {
-				return true;
-			}
+			else if(StringUtils.containsOnly(operator, "\\]")) return true;
 
 			return false;
 		};
@@ -115,7 +111,7 @@ public class TreeConstructTest {
 		operators.put("]", (queuedTrees) -> {
 			ITree<String> arrayTree = new Tree<>("[]");
 
-			while (!queuedTrees.peek().getHead().equals("[")) {
+			while(!queuedTrees.peek().getHead().equals("[")) {
 				arrayTree.addChild(queuedTrees.pop());
 			}
 

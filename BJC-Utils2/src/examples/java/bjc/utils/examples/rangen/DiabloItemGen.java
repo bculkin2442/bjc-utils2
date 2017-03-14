@@ -6,7 +6,7 @@ import bjc.utils.gen.WeightedGrammar;
 
 /**
  * Example showing how to use the weighted random number generator.
- * 
+ *
  * @author ben
  *
  */
@@ -65,7 +65,7 @@ public class DiabloItemGen {
 
 	/**
 	 * Main Method
-	 * 
+	 *
 	 * @param args
 	 *                Unused CLI args
 	 */
@@ -82,7 +82,7 @@ public class DiabloItemGen {
 		rules.addRule("<infix>");
 		addInfixRules();
 
-		for (int i = 0; i < 100; i++) {
+		for(int i = 0; i < 100; i++) {
 			IList<String> ls = rules.generateListValues("<item>", " ");
 
 			StringBuilder sb = new StringBuilder();

@@ -8,8 +8,8 @@ import java.util.regex.Pattern;
  * Uses a regex from the javadoc for Double.valueOf()
  */
 class DoubleMatcher {
-	private static final String Digits = "(\\p{Digit}+)";
-	private static final String HexDigits = "(\\p{XDigit}+)";
+	private static final String	Digits		= "(\\p{Digit}+)";
+	private static final String	HexDigits	= "(\\p{XDigit}+)";
 
 	/*
 	 * an exponent is 'e' or 'E' followed by an optionally signed decimal
@@ -17,7 +17,7 @@ class DoubleMatcher {
 	 */
 	private static final String Exp = "[eE][+-]?" + Digits;
 
-	private static final String fpRegex = ("[\\x00-\\x20]*" + // Optional
+	private static final String fpRegex = "[\\x00-\\x20]*" + // Optional
 									// leading
 									// "whitespace"
 			"[+-]?(" + // Optional sign character
@@ -64,7 +64,7 @@ class DoubleMatcher {
 			 */
 			"(0[xX]" + HexDigits + "?(\\.)" + HexDigits + ")" +
 
-			")[pP][+-]?" + Digits + "))" + "[fFdD]?))" + "[\\x00-\\x20]*"); // Optional
+			")[pP][+-]?" + Digits + "))" + "[fFdD]?))" + "[\\x00-\\x20]*"; // Optional
 											// trailing
 											// "whitespace"
 

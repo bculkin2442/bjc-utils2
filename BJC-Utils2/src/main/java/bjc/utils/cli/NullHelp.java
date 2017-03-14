@@ -2,7 +2,7 @@ package bjc.utils.cli;
 
 /**
  * Implementation of a help topic that doesn't exist
- * 
+ *
  * @author ben
  *
  */

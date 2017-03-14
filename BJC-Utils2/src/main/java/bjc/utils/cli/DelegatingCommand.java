@@ -2,7 +2,7 @@ package bjc.utils.cli;
 
 /**
  * A class for a command that delegates to another command
- * 
+ *
  * @author ben
  *
  */
@@ -12,7 +12,7 @@ class DelegatingCommand implements ICommand {
 
 	/**
 	 * Create a new command that delegates to another command
-	 * 
+	 *
 	 * @param delegate
 	 *                The command to delegate to
 	 */

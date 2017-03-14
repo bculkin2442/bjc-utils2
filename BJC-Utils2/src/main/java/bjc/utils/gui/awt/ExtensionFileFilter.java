@@ -1,17 +1,17 @@
 package bjc.utils.gui.awt;
 
+import bjc.utils.funcdata.FunctionalList;
+import bjc.utils.funcdata.IList;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.List;
 
-import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.IList;
-
 /**
  * Filter a set of filenames by extension.
- * 
+ *
  * Built for AWT
- * 
+ *
  * @author ben
  *
  */
@@ -23,21 +23,19 @@ public class ExtensionFileFilter implements FilenameFilter {
 
 	/**
 	 * Create a new filter only showing files with the specified extensions.
-	 * 
+	 *
 	 * @param exts
 	 *                The extensions to show in this filter.
 	 */
 	public ExtensionFileFilter(List<String> exts) {
-		if (exts == null) {
-			throw new NullPointerException("Extensions must not be null");
-		}
+		if(exts == null) throw new NullPointerException("Extensions must not be null");
 
 		extensions = new FunctionalList<>(exts);
 	}
 
 	/**
 	 * Create a new filter only showing files with the specified extensions.
-	 * 
+	 *
 	 * @param exts
 	 *                The extensions to show in this filter.
 	 */

@@ -1,6 +1,6 @@
 /**
  * Holds classes for easier CLI design
- * 
+ *
  * @author ben
  *
  */

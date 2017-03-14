@@ -1,6 +1,6 @@
 /**
  * This package contains utilities for components
- * 
+ *
  * @author ben
  *
  */

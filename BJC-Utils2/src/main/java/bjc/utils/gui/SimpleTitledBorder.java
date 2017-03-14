@@ -5,7 +5,7 @@ import javax.swing.border.TitledBorder;
 
 /**
  * A simple border with a title attached to it.
- * 
+ *
  * @author ben
  *
  */
@@ -15,7 +15,7 @@ public class SimpleTitledBorder extends TitledBorder {
 
 	/**
 	 * Create a new border with the specified title.
-	 * 
+	 *
 	 * @param title
 	 *                The title for the border.
 	 */

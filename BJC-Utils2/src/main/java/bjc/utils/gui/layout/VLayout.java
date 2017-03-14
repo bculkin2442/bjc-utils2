@@ -5,7 +5,7 @@ import java.awt.GridLayout;
 /**
  * A layout that lays out its components vertically, evenly sharing space among
  * them.
- * 
+ *
  * @author ben
  *
  */
@@ -15,7 +15,7 @@ public class VLayout extends GridLayout {
 
 	/**
 	 * Create a new vertical layout with the specified number of rows.
-	 * 
+	 *
 	 * @param rows
 	 *                The number of rows.
 	 */

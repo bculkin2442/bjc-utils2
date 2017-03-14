@@ -1,5 +1,7 @@
 package bjc.utils.funcdata;
 
+import bjc.utils.data.IPair;
+
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.function.BiConsumer;
@@ -9,11 +11,9 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collector;
 
-import bjc.utils.data.IPair;
-
 /**
  * A wrapper over another list that provides functional operations over it.
- * 
+ *
  * @author ben
  *
  * @param <ContainedType>
@@ -22,7 +22,7 @@ import bjc.utils.data.IPair;
 public interface IList<ContainedType> extends Iterable<ContainedType> {
 	/**
 	 * Add an item to this list
-	 * 
+	 *
 	 * @param item
 	 *                The item to add to this list.
 	 * @return Whether the item was added to the list successfully.
@@ -31,7 +31,7 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 
 	/**
 	 * Add all of the elements in the provided list to this list
-	 * 
+	 *
 	 * @param items
 	 *                The list of items to add
 	 * @return True if every item was successfully added to the list, false
@@ -44,7 +44,7 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 	/**
 	 * Check if all of the elements of this list match the specified
 	 * predicate.
-	 * 
+	 *
 	 * @param matcher
 	 *                The predicate to use for checking.
 	 * @return Whether all of the elements of the list match the specified
@@ -54,7 +54,7 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 
 	/**
 	 * Check if any of the elements in this list match the specified list.
-	 * 
+	 *
 	 * @param matcher
 	 *                The predicate to use for checking.
 	 * @return Whether any element in the list matches the provided
@@ -64,7 +64,7 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 
 	/**
 	 * Reduce the contents of this list using a collector
-	 * 
+	 *
 	 * @param <StateType>
 	 *                The intermediate accumulation type
 	 * @param <ReducedType>
@@ -90,15 +90,15 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 	 *
 	 * Works sort of like a combined zip/map over resulting pairs. Does not
 	 * change the underlying list.
-	 * 
+	 *
 	 * NOTE: The returned list will have the length of the shorter of this
 	 * list and the combined one.
-	 * 
+	 *
 	 * @param <OtherType>
 	 *                The type of the second list
 	 * @param <CombinedType>
 	 *                The type of the combined list
-	 * 
+	 *
 	 * @param list
 	 *                The list to combine with
 	 * @param combiner
@@ -110,7 +110,7 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 
 	/**
 	 * Check if the list contains the specified item
-	 * 
+	 *
 	 * @param item
 	 *                The item to see if it is contained
 	 * @return Whether or not the specified item is in the list
@@ -119,7 +119,7 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 
 	/**
 	 * Get the first element in the list
-	 * 
+	 *
 	 * @return The first element in this list.
 	 */
 	ContainedType first();
@@ -129,10 +129,10 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 	 * results.
 	 *
 	 * Does not change the underlying list.
-	 * 
+	 *
 	 * @param <MappedType>
 	 *                The type of the flattened list
-	 * 
+	 *
 	 * @param expander
 	 *                The function to apply to each member of the list.
 	 * @return A new list containing the flattened results of applying the
@@ -142,15 +142,16 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 
 	/**
 	 * Apply a given action for each member of the list
-	 * 
+	 *
 	 * @param action
 	 *                The action to apply to each member of the list.
 	 */
+	@Override
 	void forEach(Consumer<? super ContainedType> action);
 
 	/**
 	 * Apply a given function to each element in the list and its index.
-	 * 
+	 *
 	 * @param action
 	 *                The function to apply to each element in the list and
 	 *                its index.
@@ -159,7 +160,7 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 
 	/**
 	 * Retrieve a value in the list by its index.
-	 * 
+	 *
 	 * @param index
 	 *                The index to retrieve a value from.
 	 * @return The value at the specified index in the list.
@@ -168,7 +169,7 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 
 	/**
 	 * Retrieve a list containing all elements matching a predicate
-	 * 
+	 *
 	 * @param predicate
 	 *                The predicate to match by
 	 * @return A list containing all elements that match the predicate
@@ -177,14 +178,14 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 
 	/**
 	 * Retrieve the size of the wrapped list
-	 * 
+	 *
 	 * @return The size of the wrapped list
 	 */
 	int getSize();
 
 	/**
 	 * Check if this list is empty.
-	 * 
+	 *
 	 * @return Whether or not this list is empty.
 	 */
 	boolean isEmpty();
@@ -194,10 +195,10 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 	 * the list.
 	 *
 	 * Does not change the underlying list.
-	 * 
+	 *
 	 * @param <MappedType>
 	 *                The type of the transformed list
-	 * 
+	 *
 	 * @param transformer
 	 *                The function to apply to each element in the list
 	 * @return A new list containing the mapped elements of this list.
@@ -206,10 +207,10 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 
 	/**
 	 * Zip two lists into a list of pairs
-	 * 
+	 *
 	 * @param <OtherType>
 	 *                The type of the second list
-	 * 
+	 *
 	 * @param list
 	 *                The list to use as the left side of the pair
 	 * @return A list containing pairs of this element and the specified
@@ -219,7 +220,7 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 
 	/**
 	 * Partition this list into a list of sublists
-	 * 
+	 *
 	 * @param partitionSize
 	 *                The size of elements to put into each one of the
 	 *                sublists
@@ -229,7 +230,7 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 
 	/**
 	 * Prepend an item to the list
-	 * 
+	 *
 	 * @param item
 	 *                The item to prepend to the list
 	 */
@@ -238,7 +239,7 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 	/**
 	 * Select a random item from the list, using a default random number
 	 * generator
-	 * 
+	 *
 	 * @return A random item from the list
 	 */
 	default ContainedType randItem() {
@@ -248,7 +249,7 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 	/**
 	 * Select a random item from this list, using the provided random number
 	 * generator.
-	 * 
+	 *
 	 * @param rnd
 	 *                The random number generator to use.
 	 * @return A random element from this list.
@@ -257,12 +258,12 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 
 	/**
 	 * Reduce this list to a single value, using a accumulative approach.
-	 * 
+	 *
 	 * @param <StateType>
 	 *                The in-between type of the values
 	 * @param <ReducedType>
 	 *                The final value type
-	 * 
+	 *
 	 * @param initial
 	 *                The initial value of the accumulative state.
 	 * @param accumulator
@@ -280,7 +281,7 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 
 	/**
 	 * Remove all elements that match a given predicate
-	 * 
+	 *
 	 * @param predicate
 	 *                The predicate to use to determine elements to delete
 	 * @return Whether there was anything that satisfied the predicate
@@ -289,7 +290,7 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 
 	/**
 	 * Remove all parameters that match a given parameter
-	 * 
+	 *
 	 * @param element
 	 *                The object to remove all matching copies of
 	 */
@@ -306,7 +307,7 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 	 *
 	 * Since this IS a binary search, the list must have been sorted before
 	 * hand.
-	 * 
+	 *
 	 * @param key
 	 *                The key to search for.
 	 * @param comparator
@@ -321,7 +322,7 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 	 * elements.
 	 *
 	 * Does change the underlying list.
-	 * 
+	 *
 	 * @param comparator
 	 *                The way to compare elements for sorting. Pass null to
 	 *                use E's natural ordering
@@ -330,14 +331,14 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 
 	/**
 	 * Get the tail of this list (the list without the first element
-	 * 
+	 *
 	 * @return The list without the first element
 	 */
 	IList<ContainedType> tail();
 
 	/**
 	 * Convert this list into an array
-	 * 
+	 *
 	 * @param type
 	 *                The type of array to return
 	 * @return The list, as an array
@@ -346,7 +347,7 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 
 	/**
 	 * Convert the list into a Iterable
-	 * 
+	 *
 	 * @return An iterable view onto the list
 	 */
 	Iterable<ContainedType> toIterable();

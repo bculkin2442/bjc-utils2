@@ -1,19 +1,19 @@
 package bjc.utils.funcutils;
 
+import bjc.utils.data.IPair;
+import bjc.utils.funcdata.FunctionalList;
+import bjc.utils.funcdata.IList;
+
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import bjc.utils.data.IPair;
-import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.IList;
-
 /**
  * Utilities for manipulating FunctionalLists that don't belong in the class
  * itself
- * 
+ *
  * @author ben
  *
  */
@@ -23,15 +23,13 @@ public class ListUtils {
 	/**
 	 * Collapse a string of tokens into a single string without adding any
 	 * spaces
-	 * 
+	 *
 	 * @param input
 	 *                The list of tokens to collapse
 	 * @return The collapsed string of tokens
 	 */
 	public static String collapseTokens(IList<String> input) {
-		if (input == null) {
-			throw new NullPointerException("Input must not be null");
-		}
+		if(input == null) throw new NullPointerException("Input must not be null");
 
 		return collapseTokens(input, "");
 	}
@@ -39,7 +37,7 @@ public class ListUtils {
 	/**
 	 * Collapse a string of tokens into a single string, adding the desired
 	 * seperator after each token
-	 * 
+	 *
 	 * @param input
 	 *                The list of tokens to collapse
 	 * @param seperator
@@ -47,24 +45,22 @@ public class ListUtils {
 	 * @return The collapsed string of tokens
 	 */
 	public static String collapseTokens(IList<String> input, String seperator) {
-		if (input == null) {
+		if(input == null)
 			throw new NullPointerException("Input must not be null");
-		} else if (seperator == null) {
-			throw new NullPointerException("Seperator must not be null");
-		}
+		else if(seperator == null) throw new NullPointerException("Seperator must not be null");
 
-		if (input.getSize() < 1) {
+		if(input.getSize() < 1)
 			return "";
-		} else if (input.getSize() == 1) {
+		else if(input.getSize() == 1)
 			return input.first();
-		} else {
+		else {
 			StringBuilder state = new StringBuilder();
 
 			int i = 1;
-			for (String itm : input.toIterable()) {
+			for(String itm : input.toIterable()) {
 				state.append(itm);
 
-				if (i != input.getSize()) {
+				if(i != input.getSize()) {
 					state.append(seperator);
 				}
 
@@ -77,24 +73,22 @@ public class ListUtils {
 
 	/**
 	 * Split off affixes from tokens
-	 * 
+	 *
 	 * @param input
 	 *                The tokens to deaffix
 	 * @param operators
 	 *                The affixes to remove
 	 * @return The tokens that have been deaffixed
-	 * 
+	 *
 	 */
 	public static IList<String> deAffixTokens(IList<String> input, Deque<IPair<String, String>> operators) {
-		if (input == null) {
+		if(input == null)
 			throw new NullPointerException("Input must not be null");
-		} else if (operators == null) {
-			throw new NullPointerException("Set of operators must not be null");
-		}
+		else if(operators == null) throw new NullPointerException("Set of operators must not be null");
 
 		IList<String> returned = input;
 
-		for (IPair<String, String> op : operators) {
+		for(IPair<String, String> op : operators) {
 			returned = returned.flatMap(token -> {
 				return op.merge(new TokenDeaffixer(token));
 			});
@@ -105,7 +99,7 @@ public class ListUtils {
 
 	/**
 	 * Select a number of random items from the list without replacement
-	 * 
+	 *
 	 * @param <E>
 	 *                The type of items to select
 	 * @param list
@@ -127,7 +121,7 @@ public class ListUtils {
 		Iterator<E> itr = list.toIterable().iterator();
 		E element = null;
 
-		for (int index = 0; itr.hasNext(); element = itr.next()) {
+		for(int index = 0; itr.hasNext(); element = itr.next()) {
 			int winningChance = number - selected.getSize();
 			// n - m
 
@@ -135,7 +129,7 @@ public class ListUtils {
 			// N - t
 
 			// Probability of selecting the t+1'th element
-			if (NumberUtils.isProbable(winningChance, totalChance, rng)) {
+			if(NumberUtils.isProbable(winningChance, totalChance, rng)) {
 				selected.add(element);
 			}
 		}
@@ -145,7 +139,7 @@ public class ListUtils {
 
 	/**
 	 * Select a number of random items from the list, with replacement
-	 * 
+	 *
 	 * @param <E>
 	 *                The type of items to select
 	 * @param list
@@ -161,7 +155,7 @@ public class ListUtils {
 	public static <E> IList<E> drawWithReplacement(IList<E> list, int number, Function<Integer, Integer> rng) {
 		IList<E> selected = new FunctionalList<>(new ArrayList<>(number));
 
-		for (int i = 0; i < number; i++) {
+		for(int i = 0; i < number; i++) {
 			selected.add(list.randItem(rng));
 		}
 
@@ -171,10 +165,10 @@ public class ListUtils {
 	/**
 	 * Partition a list into a list of lists, where each element can count
 	 * for more than one element in a partition
-	 * 
+	 *
 	 * @param <E>
 	 *                The type of elements in the list to partition
-	 * 
+	 *
 	 * @param input
 	 *                The list to partition
 	 * @param counter
@@ -182,19 +176,18 @@ public class ListUtils {
 	 *                for
 	 * @param partitionSize
 	 *                The number of elements to put in each partition
-	 * 
+	 *
 	 * @return A list partitioned according to the above rules
 	 */
 	public static <E> IList<IList<E>> groupPartition(IList<E> input, Function<E, Integer> counter,
 			int partitionSize) {
-		if (input == null) {
+		if(input == null)
 			throw new NullPointerException("Input list must not be null");
-		} else if (counter == null) {
+		else if(counter == null)
 			throw new NullPointerException("Counter must not be null");
-		} else if (partitionSize < 1 || partitionSize > input.getSize()) {
+		else if(partitionSize < 1 || partitionSize > input.getSize())
 			throw new IllegalArgumentException("" + partitionSize + " is not a valid"
 					+ " partition size. Must be between 1 and " + input.getSize());
-		}
 
 		/*
 		 * List that holds our results
@@ -211,14 +204,13 @@ public class ListUtils {
 		/*
 		 * Run up to a certain number of passes
 		 */
-		for (int numberOfIterations = 0; numberOfIterations < MAX_NTRIESPART
+		for(int numberOfIterations = 0; numberOfIterations < MAX_NTRIESPART
 				&& !rejected.isEmpty(); numberOfIterations++) {
 			input.forEach(it);
 
-			if (rejected.isEmpty()) {
-				// Nothing was rejected, so we're done
+			if(rejected.isEmpty()) // Nothing was rejected, so we're
+						// done
 				return returned;
-			}
 		}
 
 		throw new IllegalArgumentException("Heuristic (more than " + MAX_NTRIESPART
@@ -230,7 +222,7 @@ public class ListUtils {
 
 	/**
 	 * Merge the contents of a bunch of lists together into a single list
-	 * 
+	 *
 	 * @param <E>
 	 *                The type of value in this lists
 	 * @param lists
@@ -241,8 +233,8 @@ public class ListUtils {
 	public static <E> IList<E> mergeLists(IList<E>... lists) {
 		IList<E> returned = new FunctionalList<>();
 
-		for (IList<E> list : lists) {
-			for (E itm : list.toIterable()) {
+		for(IList<E> list : lists) {
+			for(E itm : list.toIterable()) {
 				returned.add(itm);
 			}
 		}
@@ -252,7 +244,7 @@ public class ListUtils {
 
 	/**
 	 * Pad the provided list out to the desired size
-	 * 
+	 *
 	 * @param <E>
 	 *                The type of elements in the list
 	 * @param list
@@ -272,22 +264,22 @@ public class ListUtils {
 
 		IList<E> returned = new FunctionalList<>();
 
-		for (E itm : list.toIterable()) {
+		for(E itm : list.toIterable()) {
 			count += counter.apply(itm);
 
 			returned.add(itm);
 		}
 
-		if ((count % size) != 0) {
+		if(count % size != 0) {
 			// We need to pad
 			int needed = count % size;
 			int threshold = 0;
 
-			while (needed > 0 && threshold <= MAX_NTRIESPART) {
+			while(needed > 0 && threshold <= MAX_NTRIESPART) {
 				E val = padder.get();
 				int newCount = counter.apply(val);
 
-				if (newCount <= needed) {
+				if(newCount <= needed) {
 					returned.add(val);
 
 					threshold = 0;
@@ -298,10 +290,9 @@ public class ListUtils {
 				}
 			}
 
-			if (threshold > MAX_NTRIESPART) {
+			if(threshold > MAX_NTRIESPART)
 				throw new IllegalArgumentException("Heuristic (more than " + MAX_NTRIESPART
 						+ " iterations of attempting to pad) detected unpaddable list ");
-			}
 		}
 
 		return returned;
@@ -309,28 +300,26 @@ public class ListUtils {
 
 	/**
 	 * Split tokens in a list of tokens into multiple tokens.
-	 * 
+	 *
 	 * The intended use is for expression parsers so that you can enter
 	 * something like 1+1 instead of 1 + 1.
-	 * 
+	 *
 	 * @param input
 	 *                The tokens to split
 	 * @param operators
 	 *                Pairs of operators to split on and regexes that match
 	 *                those operators
 	 * @return A list of tokens split on all the operators
-	 * 
+	 *
 	 */
 	public static IList<String> splitTokens(IList<String> input, Deque<IPair<String, String>> operators) {
-		if (input == null) {
+		if(input == null)
 			throw new NullPointerException("Input must not be null");
-		} else if (operators == null) {
-			throw new NullPointerException("Set of operators must not be null");
-		}
+		else if(operators == null) throw new NullPointerException("Set of operators must not be null");
 
 		IList<String> returned = input;
 
-		for (IPair<String, String> op : operators) {
+		for(IPair<String, String> op : operators) {
 			returned = returned.flatMap(token -> {
 				return op.merge(new TokenSplitter(token));
 			});

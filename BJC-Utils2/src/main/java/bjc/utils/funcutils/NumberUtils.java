@@ -4,14 +4,14 @@ import java.util.function.Function;
 
 /**
  * Utility functions for dealing with numbers
- * 
+ *
  * @author ben
  *
  */
 public class NumberUtils {
 	/**
 	 * Compute the falling factorial of a number
-	 * 
+	 *
 	 * @param value
 	 *                The number to compute
 	 * @param power
@@ -19,14 +19,14 @@ public class NumberUtils {
 	 * @return The falling factorial of the number to the power
 	 */
 	public static int fallingFactorial(int value, int power) {
-		if (power == 0) {
+		if(power == 0)
 			return 1;
-		} else if (power == 1) {
+		else if(power == 1)
 			return value;
-		} else {
+		else {
 			int result = 1;
 
-			for (int currentSub = 0; currentSub < power + 1; currentSub++) {
+			for(int currentSub = 0; currentSub < power + 1; currentSub++) {
 				result *= value - currentSub;
 			}
 
@@ -36,7 +36,7 @@ public class NumberUtils {
 
 	/**
 	 * Evaluates a linear probability distribution
-	 * 
+	 *
 	 * @param winning
 	 *                The number of winning possibilities
 	 * @param total

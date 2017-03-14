@@ -16,7 +16,7 @@ public class TextAreaOutputStream extends OutputStream {
 
 	/**
 	 * Create a new output stream attached to a textarea
-	 * 
+	 *
 	 * @param console
 	 *                The textarea to write to
 	 */
@@ -28,7 +28,7 @@ public class TextAreaOutputStream extends OutputStream {
 	public void write(int b) throws IOException {
 		textArea.append("" + (char) b);
 
-		if (b == '\n') {
+		if(b == '\n') {
 			textArea.repaint();
 		}
 	}

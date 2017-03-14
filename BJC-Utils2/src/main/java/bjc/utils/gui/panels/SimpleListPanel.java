@@ -1,5 +1,8 @@
 package bjc.utils.gui.panels;
 
+import bjc.utils.gui.layout.AutosizeLayout;
+import bjc.utils.gui.layout.HLayout;
+
 import java.awt.BorderLayout;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -12,12 +15,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
-import bjc.utils.gui.layout.AutosizeLayout;
-import bjc.utils.gui.layout.HLayout;
-
 /**
  * A simple list of strings
- * 
+ *
  * @author ben
  *
  */
@@ -28,7 +28,7 @@ public class SimpleListPanel extends JPanel {
 			Consumer<String> onFailure, JTextField addItemField) {
 		String potentialItem = addItemField.getText();
 
-		if (verifier == null || verifier.test(potentialItem)) {
+		if(verifier == null || verifier.test(potentialItem)) {
 			model.addElement(potentialItem);
 		} else {
 			onFailure.accept(potentialItem);
@@ -39,7 +39,7 @@ public class SimpleListPanel extends JPanel {
 
 	/**
 	 * Create a new list panel
-	 * 
+	 *
 	 * @param type
 	 *                The type of things in the list
 	 * @param model

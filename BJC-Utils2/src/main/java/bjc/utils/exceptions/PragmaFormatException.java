@@ -4,7 +4,7 @@ import java.util.InputMismatchException;
 
 /**
  * The exception to throw whenever a pragma is used with invalid syntax
- * 
+ *
  * @author ben
  *
  */
@@ -21,7 +21,7 @@ public class PragmaFormatException extends InputMismatchException {
 
 	/**
 	 * Create a new exception with the given message
-	 * 
+	 *
 	 * @param message
 	 *                The message to explain why the exception was thrown
 	 */

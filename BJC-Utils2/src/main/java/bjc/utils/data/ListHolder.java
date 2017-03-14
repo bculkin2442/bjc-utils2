@@ -1,15 +1,15 @@
 package bjc.utils.data;
 
-import java.util.function.Function;
-import java.util.function.UnaryOperator;
-
 import bjc.utils.data.internals.BoundListHolder;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IList;
 
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
+
 /**
  * A holder that represents a set of non-deterministic computations
- * 
+ *
  * @author ben
  *
  * @param <ContainedType>
@@ -20,7 +20,7 @@ public class ListHolder<ContainedType> implements IHolder<ContainedType> {
 
 	/**
 	 * Create a new list holder
-	 * 
+	 *
 	 * @param values
 	 *                The possible values for the computation
 	 */
@@ -28,8 +28,8 @@ public class ListHolder<ContainedType> implements IHolder<ContainedType> {
 	public ListHolder(ContainedType... values) {
 		heldValues = new FunctionalList<>();
 
-		if (values != null) {
-			for (ContainedType containedValue : values) {
+		if(values != null) {
+			for(ContainedType containedValue : values) {
 				heldValues.add(containedValue);
 			}
 		}

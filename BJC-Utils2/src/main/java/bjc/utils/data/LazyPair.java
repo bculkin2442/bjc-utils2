@@ -1,36 +1,36 @@
 package bjc.utils.data;
 
+import bjc.utils.data.internals.BoundLazyPair;
+import bjc.utils.data.internals.HalfBoundLazyPair;
+
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import bjc.utils.data.internals.BoundLazyPair;
-import bjc.utils.data.internals.HalfBoundLazyPair;
-
 /**
  * A lazy implementation of a pair
- * 
+ *
  * @author ben
  *
  * @param <LeftType>
  *                The type on the left side of the pair
  * @param <RightType>
  *                The type on the right side of the pair
- * 
+ *
  */
 public class LazyPair<LeftType, RightType> implements IPair<LeftType, RightType> {
-	private LeftType leftValue;
-	private RightType rightValue;
+	private LeftType	leftValue;
+	private RightType	rightValue;
 
-	private Supplier<LeftType> leftSupplier;
-	private Supplier<RightType> rightSupplier;
+	private Supplier<LeftType>	leftSupplier;
+	private Supplier<RightType>	rightSupplier;
 
-	private boolean leftMaterialized;
-	private boolean rightMaterialized;
+	private boolean	leftMaterialized;
+	private boolean	rightMaterialized;
 
 	/**
 	 * Create a new lazy pair, using the set values
-	 * 
+	 *
 	 * @param leftVal
 	 *                The value for the left side of the pair
 	 * @param rightVal
@@ -46,7 +46,7 @@ public class LazyPair<LeftType, RightType> implements IPair<LeftType, RightType>
 
 	/**
 	 * Create a new lazy pair from the given value sources
-	 * 
+	 *
 	 * @param leftSupp
 	 *                The source for a value on the left side of the pair
 	 * @param rightSupp
@@ -71,9 +71,7 @@ public class LazyPair<LeftType, RightType> implements IPair<LeftType, RightType>
 	public <BoundLeft> IPair<BoundLeft, RightType> bindLeft(
 			Function<LeftType, IPair<BoundLeft, RightType>> leftBinder) {
 		Supplier<LeftType> leftSupp = () -> {
-			if (leftMaterialized) {
-				return leftValue;
-			}
+			if(leftMaterialized) return leftValue;
 
 			return leftSupplier.get();
 		};
@@ -85,9 +83,7 @@ public class LazyPair<LeftType, RightType> implements IPair<LeftType, RightType>
 	public <BoundRight> IPair<LeftType, BoundRight> bindRight(
 			Function<RightType, IPair<LeftType, BoundRight>> rightBinder) {
 		Supplier<RightType> rightSupp = () -> {
-			if (rightMaterialized) {
-				return rightValue;
-			}
+			if(rightMaterialized) return rightValue;
 
 			return rightSupplier.get();
 		};
@@ -110,7 +106,7 @@ public class LazyPair<LeftType, RightType> implements IPair<LeftType, RightType>
 
 	@Override
 	public LeftType getLeft() {
-		if (!leftMaterialized) {
+		if(!leftMaterialized) {
 			leftValue = leftSupplier.get();
 
 			leftMaterialized = true;
@@ -121,7 +117,7 @@ public class LazyPair<LeftType, RightType> implements IPair<LeftType, RightType>
 
 	@Override
 	public RightType getRight() {
-		if (!rightMaterialized) {
+		if(!rightMaterialized) {
 			rightValue = rightSupplier.get();
 
 			rightMaterialized = true;
@@ -133,17 +129,13 @@ public class LazyPair<LeftType, RightType> implements IPair<LeftType, RightType>
 	@Override
 	public <NewLeft> IPair<NewLeft, RightType> mapLeft(Function<LeftType, NewLeft> mapper) {
 		Supplier<NewLeft> leftSupp = () -> {
-			if (leftMaterialized) {
-				return mapper.apply(leftValue);
-			}
+			if(leftMaterialized) return mapper.apply(leftValue);
 
 			return mapper.apply(leftSupplier.get());
 		};
 
 		Supplier<RightType> rightSupp = () -> {
-			if (rightMaterialized) {
-				return rightValue;
-			}
+			if(rightMaterialized) return rightValue;
 
 			return rightSupplier.get();
 		};
@@ -154,17 +146,13 @@ public class LazyPair<LeftType, RightType> implements IPair<LeftType, RightType>
 	@Override
 	public <NewRight> IPair<LeftType, NewRight> mapRight(Function<RightType, NewRight> mapper) {
 		Supplier<LeftType> leftSupp = () -> {
-			if (leftMaterialized) {
-				return leftValue;
-			}
+			if(leftMaterialized) return leftValue;
 
 			return leftSupplier.get();
 		};
 
 		Supplier<NewRight> rightSupp = () -> {
-			if (rightMaterialized) {
-				return mapper.apply(rightValue);
-			}
+			if(rightMaterialized) return mapper.apply(rightValue);
 
 			return mapper.apply(rightSupplier.get());
 		};
@@ -174,13 +162,13 @@ public class LazyPair<LeftType, RightType> implements IPair<LeftType, RightType>
 
 	@Override
 	public <MergedType> MergedType merge(BiFunction<LeftType, RightType, MergedType> merger) {
-		if (!leftMaterialized) {
+		if(!leftMaterialized) {
 			leftValue = leftSupplier.get();
 
 			leftMaterialized = true;
 		}
 
-		if (!rightMaterialized) {
+		if(!rightMaterialized) {
 			rightValue = rightSupplier.get();
 
 			rightMaterialized = true;
@@ -193,7 +181,7 @@ public class LazyPair<LeftType, RightType> implements IPair<LeftType, RightType>
 	public String toString() {
 		StringBuilder sb = new StringBuilder("pair[l=");
 
-		if (leftMaterialized) {
+		if(leftMaterialized) {
 			sb.append(leftValue.toString());
 		} else {
 			sb.append("(un-materialized)");
@@ -201,7 +189,7 @@ public class LazyPair<LeftType, RightType> implements IPair<LeftType, RightType>
 
 		sb.append(", r=");
 
-		if (rightMaterialized) {
+		if(rightMaterialized) {
 			sb.append(rightValue.toString());
 		} else {
 			sb.append("(un-materialized)");

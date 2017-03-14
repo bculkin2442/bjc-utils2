@@ -37,17 +37,17 @@ public interface Directory<K, V> {
 
 	/**
 	 * Insert a sub-directory into the dictionary.
-	 * 
+	 *
 	 * @param key
 	 *                The name of the new sub-directory
 	 * @param value
 	 *                The sub-directory to insert
-	 * 
+	 *
 	 * @return The old sub-directory attached to this key, or null if such a
 	 *         sub-directory didn't exist
 	 */
 	Directory<K, V> putSubdirectory(K key, Directory<K, V> value);
-	
+
 	/**
 	 * Create a new sub-directory.
 	 *
@@ -60,14 +60,12 @@ public interface Directory<K, V> {
 	 *         exists.
 	 */
 	default Directory<K, V> newSubdirectory(K key) {
-		if(hasSubdirectory(key)) {
-			return null;
-		}
-		
+		if(hasSubdirectory(key)) return null;
+
 		Directory<K, V> dir = new SimpleDirectory<>();
-		
+
 		putSubdirectory(key, dir);
-		
+
 		return dir;
 	}
 

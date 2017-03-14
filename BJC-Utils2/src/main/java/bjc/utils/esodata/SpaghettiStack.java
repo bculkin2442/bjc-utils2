@@ -31,18 +31,14 @@ class SpaghettiStack<T> extends Stack<T> {
 
 	@Override
 	public T pop() {
-		if (backing.empty()) {
-			return parent.pop();
-		}
+		if(backing.empty()) return parent.pop();
 
 		return backing.pop();
 	}
 
 	@Override
 	public T top() {
-		if (backing.empty()) {
-			return parent.top();
-		}
+		if(backing.empty()) return parent.top();
 
 		return backing.top();
 	}

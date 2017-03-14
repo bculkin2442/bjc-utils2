@@ -6,7 +6,7 @@ import java.util.function.Function;
 
 /**
  * A map that transforms values from one type to another
- * 
+ *
  * @author ben
  *
  * @param <OldKey>
@@ -17,8 +17,8 @@ import java.util.function.Function;
  *                The type of the transformed values
  */
 final class TransformedValueMap<OldKey, OldValue, NewValue> implements IMap<OldKey, NewValue> {
-	private IMap<OldKey, OldValue> backing;
-	private Function<OldValue, NewValue> transformer;
+	private IMap<OldKey, OldValue>		backing;
+	private Function<OldValue, NewValue>	transformer;
 
 	public TransformedValueMap(IMap<OldKey, OldValue> backingMap, Function<OldValue, NewValue> transform) {
 		backing = backingMap;

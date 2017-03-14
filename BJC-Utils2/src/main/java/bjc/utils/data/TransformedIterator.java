@@ -13,10 +13,12 @@ public class TransformedIterator<PreType, PostType> implements Iterator<PostType
 		trans = transform;
 	}
 
+	@Override
 	public boolean hasNext() {
 		return source.hasNext();
 	}
 
+	@Override
 	public PostType next() {
 		return transform.apply(source.next());
 	}

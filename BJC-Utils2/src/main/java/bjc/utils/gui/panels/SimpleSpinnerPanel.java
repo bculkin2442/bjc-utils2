@@ -9,7 +9,7 @@ import javax.swing.SpinnerModel;
 
 /**
  * A simple spinner control
- * 
+ *
  * @author ben
  *
  */
@@ -23,7 +23,7 @@ public class SimpleSpinnerPanel extends JPanel {
 
 	/**
 	 * Create a new spinner panel
-	 * 
+	 *
 	 * @param label
 	 *                The label for the spinner
 	 * @param model

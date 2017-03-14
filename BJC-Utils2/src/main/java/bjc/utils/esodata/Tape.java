@@ -49,7 +49,7 @@ public interface Tape<T> {
 
 	/**
 	 * Remove the current element.
-	 * 
+	 *
 	 * Also moves the cursor back one step if possible to maintain relative
 	 * position.
 	 *

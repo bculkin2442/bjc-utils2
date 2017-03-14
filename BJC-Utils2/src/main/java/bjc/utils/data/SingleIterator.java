@@ -13,10 +13,12 @@ public class SingleIterator<T> implements Iterator<T> {
 		yielded = false;
 	}
 
+	@Override
 	public boolean hasNext() {
 		return !yielded;
 	}
 
+	@Override
 	public T next() {
 		yielded = true;
 

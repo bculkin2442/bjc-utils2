@@ -1,11 +1,5 @@
 package bjc.utils.graph;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.util.InputMismatchException;
-import java.util.Scanner;
-
 import bjc.utils.data.IHolder;
 import bjc.utils.data.Identity;
 import bjc.utils.funcdata.FunctionalList;
@@ -14,9 +8,15 @@ import bjc.utils.funcdata.IList;
 import bjc.utils.funcdata.IMap;
 import bjc.utils.funcutils.FuncUtils;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
 /**
  * An adjacency map representing a graph
- * 
+ *
  * @author ben
  *
  * @param <T>
@@ -25,20 +25,18 @@ import bjc.utils.funcutils.FuncUtils;
 public class AdjacencyMap<T> {
 	/**
 	 * Create an adjacency map from a stream of text
-	 * 
+	 *
 	 * @param stream
 	 *                The stream of text to read in
 	 * @return An adjacency map defined by the text
 	 */
 	public static AdjacencyMap<Integer> fromStream(InputStream stream) {
-		if (stream == null) {
-			throw new NullPointerException("Input source must not be null");
-		}
+		if(stream == null) throw new NullPointerException("Input source must not be null");
 
 		// Create the adjacency map
 		AdjacencyMap<Integer> adjacency;
 
-		try (Scanner input = new Scanner(stream)) {
+		try(Scanner input = new Scanner(stream)) {
 			input.useDelimiter("\n");
 
 			int vertexCount;
@@ -48,7 +46,7 @@ public class AdjacencyMap<T> {
 			try {
 				// First, read in number of vertices
 				vertexCount = Integer.parseInt(possible);
-			} catch (NumberFormatException nfex) {
+			} catch(NumberFormatException nfex) {
 				InputMismatchException imex = new InputMismatchException(
 						"The first line must contain the number of vertices. " + possible
 								+ " is not a valid number");
@@ -58,9 +56,8 @@ public class AdjacencyMap<T> {
 				throw imex;
 			}
 
-			if (vertexCount <= 0) {
+			if(vertexCount <= 0)
 				throw new InputMismatchException("The number of vertices must be greater than 0");
-			}
 
 			IList<Integer> vertices = new FunctionalList<>();
 
@@ -82,18 +79,17 @@ public class AdjacencyMap<T> {
 			String strang) {
 		String[] parts = strang.split(" ");
 
-		if (parts.length != vertexCount) {
+		if(parts.length != vertexCount)
 			throw new InputMismatchException("Must specify a weight for all " + vertexCount + " vertices");
-		}
 
 		int column = 0;
 
-		for (String part : parts) {
+		for(String part : parts) {
 			int weight;
 
 			try {
 				weight = Integer.parseInt(part);
-			} catch (NumberFormatException nfex) {
+			} catch(NumberFormatException nfex) {
 				InputMismatchException imex = new InputMismatchException(
 						"" + part + " is not a valid weight.");
 
@@ -117,14 +113,12 @@ public class AdjacencyMap<T> {
 
 	/**
 	 * Create a new map from a set of vertices
-	 * 
+	 *
 	 * @param vertices
 	 *                The set of vertices to create a map from
 	 */
 	public AdjacencyMap(IList<T> vertices) {
-		if (vertices == null) {
-			throw new NullPointerException("Vertices must not be null");
-		}
+		if(vertices == null) throw new NullPointerException("Vertices must not be null");
 
 		vertices.forEach(vertex -> {
 			IMap<T, Integer> row = new FunctionalMap<>();
@@ -139,7 +133,7 @@ public class AdjacencyMap<T> {
 
 	/**
 	 * Check if the graph is directed
-	 * 
+	 *
 	 * @return Whether or not the graph is directed
 	 */
 	public boolean isDirected() {
@@ -149,7 +143,7 @@ public class AdjacencyMap<T> {
 			sourceValue.forEach((targetKey, targetValue) -> {
 				int inverseValue = adjacency.get(targetKey).get(sourceKey);
 
-				if (targetValue != inverseValue) {
+				if(targetValue != inverseValue) {
 					result.replace(false);
 				}
 			});
@@ -160,7 +154,7 @@ public class AdjacencyMap<T> {
 
 	/**
 	 * Set the weight of an edge
-	 * 
+	 *
 	 * @param source
 	 *                The source node of the edge
 	 * @param target
@@ -169,24 +163,21 @@ public class AdjacencyMap<T> {
 	 *                The weight of the edge
 	 */
 	public void setWeight(T source, T target, int weight) {
-		if (source == null) {
+		if(source == null)
 			throw new NullPointerException("Source vertex must not be null");
-		} else if (target == null) {
-			throw new NullPointerException("Target vertex must not be null");
-		}
+		else if(target == null) throw new NullPointerException("Target vertex must not be null");
 
-		if (!adjacency.containsKey(source)) {
+		if(!adjacency.containsKey(source))
 			throw new IllegalArgumentException("Source vertex " + source + " isn't present in map");
-		} else if (!adjacency.containsKey(target)) {
+		else if(!adjacency.containsKey(target))
 			throw new IllegalArgumentException("Target vertex " + target + " isn't present in map");
-		}
 
 		adjacency.get(source).put(target, weight);
 	}
 
 	/**
 	 * Convert this to a different graph representation
-	 * 
+	 *
 	 * @return The new representation of this graph
 	 */
 	public Graph<T> toGraph() {
@@ -203,14 +194,12 @@ public class AdjacencyMap<T> {
 
 	/**
 	 * Convert an adjacency map back into a stream
-	 * 
+	 *
 	 * @param sink
 	 *                The stream to convert to
 	 */
 	public void toStream(OutputStream sink) {
-		if (sink == null) {
-			throw new NullPointerException("Output source must not be null");
-		}
+		if(sink == null) throw new NullPointerException("Output source must not be null");
 
 		PrintStream outputPrinter = new PrintStream(sink);
 

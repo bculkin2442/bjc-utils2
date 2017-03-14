@@ -5,7 +5,7 @@ import java.util.function.Function;
 
 /**
  * A pair of values, with nothing special about them.
- * 
+ *
  * @author ben
  *
  * @param <LeftType>
@@ -29,7 +29,7 @@ public class Pair<LeftType, RightType> implements IPair<LeftType, RightType> {
 
 	/**
 	 * Create a new pair with both sides set to the specified values
-	 * 
+	 *
 	 * @param left
 	 *                The value of the left side
 	 * @param right
@@ -43,9 +43,7 @@ public class Pair<LeftType, RightType> implements IPair<LeftType, RightType> {
 	@Override
 	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind(
 			BiFunction<LeftType, RightType, IPair<BoundLeft, BoundRight>> binder) {
-		if (binder == null) {
-			throw new NullPointerException("Binder must not be null.");
-		}
+		if(binder == null) throw new NullPointerException("Binder must not be null.");
 
 		return binder.apply(leftValue, rightValue);
 	}
@@ -53,9 +51,7 @@ public class Pair<LeftType, RightType> implements IPair<LeftType, RightType> {
 	@Override
 	public <BoundLeft> IPair<BoundLeft, RightType> bindLeft(
 			Function<LeftType, IPair<BoundLeft, RightType>> leftBinder) {
-		if (leftBinder == null) {
-			throw new NullPointerException("Binder must not be null");
-		}
+		if(leftBinder == null) throw new NullPointerException("Binder must not be null");
 
 		return leftBinder.apply(leftValue);
 	}
@@ -63,9 +59,7 @@ public class Pair<LeftType, RightType> implements IPair<LeftType, RightType> {
 	@Override
 	public <BoundRight> IPair<LeftType, BoundRight> bindRight(
 			Function<RightType, IPair<LeftType, BoundRight>> rightBinder) {
-		if (rightBinder == null) {
-			throw new NullPointerException("Binder must not be null");
-		}
+		if(rightBinder == null) throw new NullPointerException("Binder must not be null");
 
 		return rightBinder.apply(rightValue);
 	}
@@ -83,27 +77,21 @@ public class Pair<LeftType, RightType> implements IPair<LeftType, RightType> {
 
 	@Override
 	public <NewLeft> IPair<NewLeft, RightType> mapLeft(Function<LeftType, NewLeft> mapper) {
-		if (mapper == null) {
-			throw new NullPointerException("Mapper must not be null");
-		}
+		if(mapper == null) throw new NullPointerException("Mapper must not be null");
 
 		return new Pair<>(mapper.apply(leftValue), rightValue);
 	}
 
 	@Override
 	public <NewRight> IPair<LeftType, NewRight> mapRight(Function<RightType, NewRight> mapper) {
-		if (mapper == null) {
-			throw new NullPointerException("Mapper must not be null");
-		}
+		if(mapper == null) throw new NullPointerException("Mapper must not be null");
 
 		return new Pair<>(leftValue, mapper.apply(rightValue));
 	}
 
 	@Override
 	public <MergedType> MergedType merge(BiFunction<LeftType, RightType, MergedType> merger) {
-		if (merger == null) {
-			throw new NullPointerException("Merger must not be null");
-		}
+		if(merger == null) throw new NullPointerException("Merger must not be null");
 
 		return merger.apply(leftValue, rightValue);
 	}

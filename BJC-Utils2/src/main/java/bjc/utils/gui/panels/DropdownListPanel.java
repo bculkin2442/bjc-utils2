@@ -1,5 +1,9 @@
 package bjc.utils.gui.panels;
 
+import bjc.utils.funcdata.IList;
+import bjc.utils.gui.layout.AutosizeLayout;
+import bjc.utils.gui.layout.HLayout;
+
 import java.awt.BorderLayout;
 
 import javax.swing.DefaultListModel;
@@ -9,13 +13,9 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 
-import bjc.utils.funcdata.IList;
-import bjc.utils.gui.layout.AutosizeLayout;
-import bjc.utils.gui.layout.HLayout;
-
 /**
  * A panel that allows you to select choices from a dropdown list
- * 
+ *
  * @author ben
  *
  */
@@ -24,7 +24,7 @@ public class DropdownListPanel extends JPanel {
 
 	/**
 	 * Create a new dropdown list panel
-	 * 
+	 *
 	 * @param <T>
 	 *                The type of items in the dropdown list
 	 * @param type

@@ -10,7 +10,7 @@ import java.util.function.UnaryOperator;
  */
 /**
  * Simple implementation of IHolder that has no hidden behavior
- * 
+ *
  * @author ben
  *
  * @param <ContainedType>
@@ -28,7 +28,7 @@ public class Identity<ContainedType> implements IHolder<ContainedType> {
 
 	/**
 	 * Create a holder holding the specified value
-	 * 
+	 *
 	 * @param value
 	 *                The value to hold
 	 */
@@ -43,35 +43,29 @@ public class Identity<ContainedType> implements IHolder<ContainedType> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if(this == obj)
 			return true;
-		} else if (obj == null) {
+		else if(obj == null)
 			return false;
-		} else if (getClass() != obj.getClass()) {
-			return false;
-		}
+		else if(getClass() != obj.getClass()) return false;
 
 		Identity<?> other = (Identity<?>) obj;
 
-		if (heldValue == null) {
-			if (other.heldValue != null) {
-				return false;
-			}
-		} else if (!heldValue.equals(other.heldValue)) {
-			return false;
-		}
+		if(heldValue == null) {
+			if(other.heldValue != null) return false;
+		} else if(!heldValue.equals(other.heldValue)) return false;
 
 		return true;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -80,7 +74,7 @@ public class Identity<ContainedType> implements IHolder<ContainedType> {
 
 		int result = 1;
 
-		int fieldHash = (heldValue == null) ? 0 : heldValue.hashCode();
+		int fieldHash = heldValue == null ? 0 : heldValue.hashCode();
 
 		result = prime * result + fieldHash;
 

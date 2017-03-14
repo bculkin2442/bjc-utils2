@@ -4,7 +4,7 @@ import java.util.function.Function;
 
 /**
  * A functor over a pair of heterogenous types
- * 
+ *
  * @author ben
  * @param <LeftType>
  *                The type stored on the 'left' of the pair
@@ -16,7 +16,7 @@ public interface Bifunctor<LeftType, RightType> {
 	/**
 	 * Lift a pair of functions to a single function that maps over both
 	 * parts of a pair
-	 * 
+	 *
 	 * @param <OldLeft>
 	 *                The old left type of the pair
 	 * @param <OldRight>
@@ -49,7 +49,7 @@ public interface Bifunctor<LeftType, RightType> {
 
 	/**
 	 * Lift a function to operate over the left part of this pair
-	 * 
+	 *
 	 * @param <OldLeft>
 	 *                The old left type of the pair
 	 * @param <OldRight>
@@ -66,7 +66,7 @@ public interface Bifunctor<LeftType, RightType> {
 
 	/**
 	 * Lift a function to operate over the right part of this pair
-	 * 
+	 *
 	 * @param <OldLeft>
 	 *                The old left type of the pair
 	 * @param <OldRight>
@@ -83,14 +83,14 @@ public interface Bifunctor<LeftType, RightType> {
 
 	/**
 	 * Get the value contained on the left of this bifunctor
-	 * 
+	 *
 	 * @return The value on the left side of this bifunctor
 	 */
 	public LeftType getLeft();
 
 	/**
 	 * Get the value contained on the right of this bifunctor
-	 * 
+	 *
 	 * @return The value on the right of this bifunctor
 	 */
 	public RightType getRight();

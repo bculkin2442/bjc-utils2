@@ -1,14 +1,14 @@
 package bjc.utils.parserutils;
 
-import java.util.function.BiConsumer;
-
 import bjc.utils.exceptions.PragmaFormatException;
 import bjc.utils.funcdata.FunctionalStringTokenizer;
 import bjc.utils.funcutils.ListUtils;
 
+import java.util.function.BiConsumer;
+
 /**
  * Contains factory methods for common pragma types
- * 
+ *
  * @author ben
  *
  */
@@ -16,7 +16,7 @@ public class RuleBasedReaderPragmas {
 
 	/**
 	 * Creates a pragma that takes a single integer argument
-	 * 
+	 *
 	 * @param <StateType>
 	 *                The type of state that goes along with this pragma
 	 * @param name
@@ -29,9 +29,8 @@ public class RuleBasedReaderPragmas {
 			BiConsumer<Integer, StateType> consumer) {
 		return (tokenizer, state) -> {
 			// Check our input is correct
-			if (!tokenizer.hasMoreTokens()) {
+			if(!tokenizer.hasMoreTokens())
 				throw new PragmaFormatException("Pragma " + name + " requires one integer argument");
-			}
 
 			// Read the argument
 			String token = tokenizer.nextToken();
@@ -39,7 +38,7 @@ public class RuleBasedReaderPragmas {
 			try {
 				// Run the pragma
 				consumer.accept(Integer.parseInt(token), state);
-			} catch (NumberFormatException nfex) {
+			} catch(NumberFormatException nfex) {
 				// Tell the user their argument isn't correct
 				PragmaFormatException pfex = new PragmaFormatException(
 						"Argument " + token + " to " + name + " pragma isn't a valid integer. "
@@ -55,7 +54,7 @@ public class RuleBasedReaderPragmas {
 	/**
 	 * Creates a pragma that takes any number of arguments and collapses
 	 * them all into a single string
-	 * 
+	 *
 	 * @param <StateType>
 	 *                The type of state that goes along with this pragma
 	 * @param name
@@ -68,10 +67,8 @@ public class RuleBasedReaderPragmas {
 			BiConsumer<String, StateType> consumer) {
 		return (tokenizer, state) -> {
 			// Check our input
-			if (!tokenizer.hasMoreTokens()) {
-				throw new PragmaFormatException(
-						"Pragma " + name + " requires one or more string arguments");
-			}
+			if(!tokenizer.hasMoreTokens()) throw new PragmaFormatException(
+					"Pragma " + name + " requires one or more string arguments");
 
 			// Build our argument
 			String collapsed = ListUtils.collapseTokens(tokenizer.toList());

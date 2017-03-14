@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 
 /**
  * A interface for the fundamental things that want to be part of a tree.
- * 
+ *
  * @author ben
  *
  * @param <T>
@@ -16,7 +16,7 @@ import java.util.function.Predicate;
 public interface ITreePart<T> {
 	/**
 	 * Add a element below this tree part somewhere.
-	 * 
+	 *
 	 * @param element
 	 *                The element to add below this tree part
 	 * @param comparator
@@ -28,10 +28,10 @@ public interface ITreePart<T> {
 	/**
 	 * Collapses this tree part into a single value. Does not change the
 	 * underlying tree.
-	 * 
+	 *
 	 * @param <E>
 	 *                The type of the final collapsed value
-	 * 
+	 *
 	 * @param nodeCollapser
 	 *                The function to use to transform data into mapped
 	 *                form.
@@ -44,7 +44,7 @@ public interface ITreePart<T> {
 
 	/**
 	 * Check if this tre part or below it contains the specified data item
-	 * 
+	 *
 	 * @param element
 	 *                The data item to look for.
 	 * @param comparator
@@ -56,14 +56,14 @@ public interface ITreePart<T> {
 
 	/**
 	 * Get the data associated with this tree part.
-	 * 
+	 *
 	 * @return The data associated with this tree part.
 	 */
 	public T data();
 
 	/**
 	 * Remove the given node from this tree part and any of its children.
-	 * 
+	 *
 	 * @param element
 	 *                The data item to remove.
 	 * @param comparator
@@ -73,7 +73,7 @@ public interface ITreePart<T> {
 
 	/**
 	 * Execute a directed walk through the tree.
-	 * 
+	 *
 	 * @param walker
 	 *                The function to use to direct the walk through the
 	 *                tree.
@@ -84,7 +84,7 @@ public interface ITreePart<T> {
 	/**
 	 * Execute a provided function for each element of tree it succesfully
 	 * completes for
-	 * 
+	 *
 	 * @param linearizationMethod
 	 *                The way to linearize the tree for executing
 	 * @param predicate

@@ -1,16 +1,16 @@
 package bjc.utils.funcdata.bst;
 
+import bjc.utils.funcdata.FunctionalList;
+import bjc.utils.funcdata.IList;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 
-import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.IList;
-
 /**
  * A binary search tree, with some mild support for functional traversal.
- * 
+ *
  * @author ben
  *
  * @param <T>
@@ -34,14 +34,12 @@ public class BinarySearchTree<T> {
 
 	/**
 	 * Create a new tree using the specified way to compare elements.
-	 * 
+	 *
 	 * @param cmp
 	 *                The thing to use for comparing elements
 	 */
 	public BinarySearchTree(Comparator<T> cmp) {
-		if (cmp == null) {
-			throw new NullPointerException("Comparator must not be null");
-		}
+		if(cmp == null) throw new NullPointerException("Comparator must not be null");
 
 		elementCount = 0;
 		comparator = cmp;
@@ -49,14 +47,14 @@ public class BinarySearchTree<T> {
 
 	/**
 	 * Add a node to the binary search tree.
-	 * 
+	 *
 	 * @param element
 	 *                The data to add to the binary search tree.
 	 */
 	public void addNode(T element) {
 		elementCount++;
 
-		if (root == null) {
+		if(root == null) {
 			root = new BinarySearchTreeNode<>(element, null, null);
 		} else {
 			root.add(element, comparator);
@@ -65,7 +63,7 @@ public class BinarySearchTree<T> {
 
 	/**
 	 * Check if an adjusted pivot falls with the bounds of a list
-	 * 
+	 *
 	 * @param elements
 	 *                The list to get bounds from
 	 * @param pivot
@@ -75,7 +73,7 @@ public class BinarySearchTree<T> {
 	 * @return Whether the adjusted pivot is with the list
 	 */
 	private boolean adjustedPivotInBounds(IList<T> elements, int pivot, int pivotAdjustment) {
-		return (pivot - pivotAdjustment) >= 0 && (pivot + pivotAdjustment) < elements.getSize();
+		return pivot - pivotAdjustment >= 0 && pivot + pivotAdjustment < elements.getSize();
 	}
 
 	/**
@@ -97,8 +95,8 @@ public class BinarySearchTree<T> {
 		int pivotAdjustment = 0;
 
 		// Add elements until there aren't any left
-		while (adjustedPivotInBounds(elements, pivot, pivotAdjustment)) {
-			if (root == null) {
+		while(adjustedPivotInBounds(elements, pivot, pivotAdjustment)) {
+			if(root == null) {
 				// Create a new root element
 				root = new BinarySearchTreeNode<>(elements.getByIndex(pivot), null, null);
 			} else {
@@ -114,9 +112,9 @@ public class BinarySearchTree<T> {
 		}
 
 		// Add any trailing unbalanced elements
-		if ((pivot - pivotAdjustment) >= 0) {
+		if(pivot - pivotAdjustment >= 0) {
 			root.add(elements.getByIndex(pivot - pivotAdjustment), comparator);
-		} else if ((pivot + pivotAdjustment) < elements.getSize()) {
+		} else if(pivot + pivotAdjustment < elements.getSize()) {
 			root.add(elements.getByIndex(pivot + pivotAdjustment), comparator);
 		}
 	}
@@ -126,7 +124,7 @@ public class BinarySearchTree<T> {
 	 *
 	 * Soft-deleted nodes stay in the tree until trim()/balance() is
 	 * invoked, and are not included in traversals/finds.
-	 * 
+	 *
 	 * @param element
 	 *                The node to delete
 	 */
@@ -138,7 +136,7 @@ public class BinarySearchTree<T> {
 
 	/**
 	 * Get the root of the tree.
-	 * 
+	 *
 	 * @return The root of the tree.
 	 */
 	public ITreePart<T> getRoot() {
@@ -147,7 +145,7 @@ public class BinarySearchTree<T> {
 
 	/**
 	 * Check if a node is in the tree
-	 * 
+	 *
 	 * @param element
 	 *                The node to check the presence of for the tree.
 	 * @return Whether or not the node is in the tree.
@@ -158,18 +156,16 @@ public class BinarySearchTree<T> {
 
 	/**
 	 * Traverse the tree in a specified way until the function fails
-	 * 
+	 *
 	 * @param linearizationMethod
 	 *                The way to linearize the tree for traversal
 	 * @param traversalPredicate
 	 *                The function to use until it fails
 	 */
 	public void traverse(TreeLinearizationMethod linearizationMethod, Predicate<T> traversalPredicate) {
-		if (linearizationMethod == null) {
+		if(linearizationMethod == null)
 			throw new NullPointerException("Linearization method must not be null");
-		} else if (traversalPredicate == null) {
-			throw new NullPointerException("Predicate must not be nulls");
-		}
+		else if(traversalPredicate == null) throw new NullPointerException("Predicate must not be nulls");
 
 		root.forEach(linearizationMethod, traversalPredicate);
 	}

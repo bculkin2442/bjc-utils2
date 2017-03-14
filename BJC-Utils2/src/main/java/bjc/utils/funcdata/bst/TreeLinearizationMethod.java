@@ -2,7 +2,7 @@ package bjc.utils.funcdata.bst;
 
 /**
  * Represents the ways to linearize a tree for traversal.
- * 
+ *
  * @author ben
  *
  */

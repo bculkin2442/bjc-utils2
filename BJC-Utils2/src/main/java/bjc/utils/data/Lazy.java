@@ -1,17 +1,17 @@
 package bjc.utils.data;
 
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
-
 import bjc.utils.data.internals.BoundLazy;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IList;
 
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
+
 /**
  * A holder that holds a means to create a value, but doesn't actually compute
  * the value until it's needed
- * 
+ *
  * @author ben
  *
  * @param <ContainedType>
@@ -27,7 +27,7 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 
 	/**
 	 * Create a new lazy value from the specified seed value
-	 * 
+	 *
 	 * @param value
 	 *                The seed value to use
 	 */
@@ -39,7 +39,7 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 
 	/**
 	 * Create a new lazy value from the specified value source
-	 * 
+	 *
 	 * @param supp
 	 *                The source of a value to use
 	 */
@@ -62,9 +62,7 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 		actions.forEach(pendingActions::add);
 
 		Supplier<ContainedType> supplier = () -> {
-			if (valueMaterialized) {
-				return heldValue;
-			}
+			if(valueMaterialized) return heldValue;
 
 			return valueSupplier.get();
 		};
@@ -90,7 +88,7 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 		return new Lazy<>(() -> {
 			ContainedType currVal = heldValue;
 
-			if (!valueMaterialized) {
+			if(!valueMaterialized) {
 				currVal = valueSupplier.get();
 			}
 
@@ -101,10 +99,8 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 
 	@Override
 	public String toString() {
-		if (valueMaterialized) {
-			if (actions.isEmpty()) {
-				return "value[v='" + heldValue + "']";
-			}
+		if(valueMaterialized) {
+			if(actions.isEmpty()) return "value[v='" + heldValue + "']";
 
 			return "value[v='" + heldValue + "'] (has pending transforms)";
 		}
@@ -121,7 +117,7 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 
 	@Override
 	public <UnwrappedType> UnwrappedType unwrap(Function<ContainedType, UnwrappedType> unwrapper) {
-		if (!valueMaterialized) {
+		if(!valueMaterialized) {
 			heldValue = valueSupplier.get();
 
 			valueMaterialized = true;

@@ -1,5 +1,11 @@
 package bjc.utils.graph;
 
+import bjc.utils.data.IHolder;
+import bjc.utils.data.Identity;
+import bjc.utils.funcdata.FunctionalMap;
+import bjc.utils.funcdata.IList;
+import bjc.utils.funcdata.IMap;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -10,15 +16,9 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 
-import bjc.utils.data.IHolder;
-import bjc.utils.data.Identity;
-import bjc.utils.funcdata.FunctionalMap;
-import bjc.utils.funcdata.IList;
-import bjc.utils.funcdata.IMap;
-
 /**
  * A directed weighted graph, where the vertices have some arbitrary label
- * 
+ *
  * @author ben
  *
  * @param <T>
@@ -27,10 +27,10 @@ import bjc.utils.funcdata.IMap;
 public class Graph<T> {
 	/**
 	 * Create a graph from a list of edges
-	 * 
+	 *
 	 * @param <E>
 	 *                The type of data stored in the edges
-	 * 
+	 *
 	 * @param edges
 	 *                The list of edges to build from
 	 * @return A graph built from the provided edge-list
@@ -59,7 +59,7 @@ public class Graph<T> {
 
 	/**
 	 * Add a edge to the graph
-	 * 
+	 *
 	 * @param source
 	 *                The source vertex for this edge
 	 * @param target
@@ -72,14 +72,12 @@ public class Graph<T> {
 	 */
 	public void addEdge(T source, T target, int distance, boolean directed) {
 		// Can't add edges with a null source or target
-		if (source == null) {
+		if(source == null)
 			throw new NullPointerException("The source vertex cannot be null");
-		} else if (target == null) {
-			throw new NullPointerException("The target vertex cannot be null");
-		}
+		else if(target == null) throw new NullPointerException("The target vertex cannot be null");
 
 		// Initialize adjacency list for vertices if necessary
-		if (!backing.containsKey(source)) {
+		if(!backing.containsKey(source)) {
 			backing.put(source, new FunctionalMap<T, Integer>());
 		}
 
@@ -87,8 +85,8 @@ public class Graph<T> {
 		backing.get(source).put(target, distance);
 
 		// Handle possible directed edges
-		if (!directed) {
-			if (!backing.containsKey(target)) {
+		if(!directed) {
+			if(!backing.containsKey(target)) {
 				backing.put(target, new FunctionalMap<T, Integer>());
 			}
 
@@ -99,7 +97,7 @@ public class Graph<T> {
 	/**
 	 * Execute an action for all edges of a specific vertex matching
 	 * conditions
-	 * 
+	 *
 	 * @param source
 	 *                The vertex to test edges for
 	 * @param matcher
@@ -108,14 +106,12 @@ public class Graph<T> {
 	 *                The action to execute for matching edges
 	 */
 	public void forAllEdgesMatchingAt(T source, BiPredicate<T, Integer> matcher, BiConsumer<T, Integer> action) {
-		if (matcher == null) {
+		if(matcher == null)
 			throw new NullPointerException("Matcher must not be null");
-		} else if (action == null) {
-			throw new NullPointerException("Action must not be null");
-		}
+		else if(action == null) throw new NullPointerException("Action must not be null");
 
 		getEdges(source).forEach((target, weight) -> {
-			if (matcher.test(target, weight)) {
+			if(matcher.test(target, weight)) {
 				action.accept(target, weight);
 			}
 		});
@@ -123,25 +119,24 @@ public class Graph<T> {
 
 	/**
 	 * Get all the edges that begin at a particular source vertex
-	 * 
+	 *
 	 * @param source
 	 *                The vertex to use as a source
 	 * @return All of the edges with the specified vertex as a source
 	 */
 	public IMap<T, Integer> getEdges(T source) {
 		// Can't find edges for a null source
-		if (source == null) {
+		if(source == null)
 			throw new NullPointerException("The source cannot be null.");
-		} else if (!backing.containsKey(source)) {
+		else if(!backing.containsKey(source))
 			throw new IllegalArgumentException("Vertex " + source + " is not in graph");
-		}
 
 		return backing.get(source);
 	}
 
 	/**
 	 * Get the initial vertex of the graph
-	 * 
+	 *
 	 * @return The initial vertex of the graph
 	 */
 	public T getInitial() {
@@ -153,7 +148,7 @@ public class Graph<T> {
 	 *
 	 * If the graph is non-connected, this will lead to unpredictable
 	 * results.
-	 * 
+	 *
 	 * @return a list of edges that constitute the MST
 	 */
 	public List<Edge<T>> getMinimumSpanningTree() {
@@ -173,7 +168,7 @@ public class Graph<T> {
 		visited.add(source.getValue());
 
 		// Make sure we visit all the nodes
-		while (visited.size() != getVertexCount()) {
+		while(visited.size() != getVertexCount()) {
 			// Grab all edges adjacent to the provided edge
 
 			forAllEdgesMatchingAt(source.getValue(), (target, weight) -> {
@@ -188,7 +183,7 @@ public class Graph<T> {
 			// Only consider edges where we haven't visited the
 			// target of
 			// the edge
-			while (visited.contains(minimum.getValue())) {
+			while(visited.contains(minimum.getValue())) {
 				minimum.transform((edge) -> available.poll());
 			}
 
@@ -207,7 +202,7 @@ public class Graph<T> {
 
 	/**
 	 * Get the count of the vertices in this graph
-	 * 
+	 *
 	 * @return A count of the vertices in this graph
 	 */
 	public int getVertexCount() {
@@ -216,7 +211,7 @@ public class Graph<T> {
 
 	/**
 	 * Get all of the vertices in this graph.
-	 * 
+	 *
 	 * @return A unmodifiable set of all the vertices in the graph.
 	 */
 	public IList<T> getVertices() {
@@ -225,7 +220,7 @@ public class Graph<T> {
 
 	/**
 	 * Remove the edge starting at the source and ending at the target
-	 * 
+	 *
 	 * @param source
 	 *                The source vertex for the edge
 	 * @param target
@@ -233,20 +228,16 @@ public class Graph<T> {
 	 */
 	public void removeEdge(T source, T target) {
 		// Can't remove things w/ null vertices
-		if (source == null) {
+		if(source == null)
 			throw new NullPointerException("The source vertex cannot be null");
-		} else if (target == null) {
-			throw new NullPointerException("The target vertex cannot be null");
-		}
+		else if(target == null) throw new NullPointerException("The target vertex cannot be null");
 
 		// Can't remove if one vertice doesn't exists
-		if (!backing.containsKey(source)) {
+		if(!backing.containsKey(source))
 			throw new NoSuchElementException("vertex " + source + " does not exist.");
-		}
 
-		if (!backing.containsKey(target)) {
+		if(!backing.containsKey(target))
 			throw new NoSuchElementException("vertex " + target + " does not exist.");
-		}
 
 		backing.get(source).remove(target);
 
@@ -256,7 +247,7 @@ public class Graph<T> {
 
 	/**
 	 * Convert a graph into a adjacency map/matrix
-	 * 
+	 *
 	 * @return A adjacency map representing this graph
 	 */
 	public AdjacencyMap<T> toAdjacencyMap() {

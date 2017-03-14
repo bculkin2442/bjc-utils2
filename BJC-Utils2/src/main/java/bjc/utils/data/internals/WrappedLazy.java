@@ -1,10 +1,10 @@
 package bjc.utils.data.internals;
 
-import java.util.function.Function;
-import java.util.function.UnaryOperator;
-
 import bjc.utils.data.IHolder;
 import bjc.utils.data.Lazy;
+
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 public class WrappedLazy<ContainedType> implements IHolder<ContainedType> {
 	private IHolder<IHolder<ContainedType>> held;

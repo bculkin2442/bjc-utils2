@@ -2,7 +2,7 @@ package bjc.utils.cli;
 
 /**
  * Generic command implementation
- * 
+ *
  * @author ben
  *
  */
@@ -15,7 +15,7 @@ public class GenericCommand implements ICommand {
 
 	/**
 	 * Create a new generic command
-	 * 
+	 *
 	 * @param handler
 	 *                The handler to use for the command
 	 * @param description
@@ -24,13 +24,11 @@ public class GenericCommand implements ICommand {
 	 *                The detailed help message for the command. May be null
 	 */
 	public GenericCommand(ICommandHandler handler, String description, String help) {
-		if (handler == null) {
-			throw new NullPointerException("Command handler must not be null");
-		}
+		if(handler == null) throw new NullPointerException("Command handler must not be null");
 
 		this.handler = handler;
 
-		if (description == null) {
+		if(description == null) {
 			this.help = new NullHelp();
 		} else {
 			this.help = new GenericHelp(description, help);

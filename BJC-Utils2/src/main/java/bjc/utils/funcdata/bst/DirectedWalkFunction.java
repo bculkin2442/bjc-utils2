@@ -2,7 +2,7 @@ package bjc.utils.funcdata.bst;
 
 /**
  * Represents a function for doing a directed walk of a binary tree.
- * 
+ *
  * @author ben
  *
  * @param <T>
@@ -12,7 +12,7 @@ package bjc.utils.funcdata.bst;
 public interface DirectedWalkFunction<T> {
 	/**
 	 * Represents the results used to direct a walk in a binary tree.
-	 * 
+	 *
 	 * @author ben
 	 *
 	 */
@@ -33,14 +33,14 @@ public interface DirectedWalkFunction<T> {
 		RIGHT,
 		/**
 		 * Specifies that the function has succesfully completed
-		 * 
+		 *
 		 */
 		SUCCESS
 	}
 
 	/**
 	 * Perform a directed walk on a node of a tree.
-	 * 
+	 *
 	 * @param element
 	 *                The data stored in the node currently being visited
 	 * @return The way the function wants the walk to go next.

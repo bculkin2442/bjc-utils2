@@ -1,14 +1,14 @@
 package bjc.utils.data;
 
+import bjc.utils.funcdata.theory.Bifunctor;
+
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import bjc.utils.funcdata.theory.Bifunctor;
-
 /**
  * Represents a pair of values
- * 
+ *
  * @author ben
  * @param <LeftType>
  *                The type of the left side of the pair
@@ -19,7 +19,7 @@ import bjc.utils.funcdata.theory.Bifunctor;
 public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightType> {
 	/**
 	 * Bind a function across the values in this pair
-	 * 
+	 *
 	 * @param <BoundLeft>
 	 *                The type of the bound left
 	 * @param <BoundRight>
@@ -33,7 +33,7 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 
 	/**
 	 * Bind a function to the left value in this pair
-	 * 
+	 *
 	 * @param <BoundLeft>
 	 *                The type of the bound value
 	 * @param leftBinder
@@ -45,7 +45,7 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 
 	/**
 	 * Bind a function to the right value in this pair
-	 * 
+	 *
 	 * @param <BoundRight>
 	 *                The type of the bound value
 	 * @param rightBinder
@@ -57,7 +57,7 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 
 	/**
 	 * Pairwise combine two pairs together
-	 * 
+	 *
 	 * @param <OtherLeft>
 	 *                The left type of the other pair
 	 * @param <OtherRight>
@@ -74,7 +74,7 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 
 	/**
 	 * Combine the contents of two pairs together
-	 * 
+	 *
 	 * @param <OtherLeft>
 	 *                The type of the left value of the other pair
 	 * @param <OtherRight>
@@ -97,7 +97,7 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 	/**
 	 * Immediately perfom the specified action with the contents of this
 	 * pair
-	 * 
+	 *
 	 * @param consumer
 	 *                The action to perform on the pair
 	 */
@@ -113,10 +113,8 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 	default <OldLeft, OldRight, NewLeft> Function<Bifunctor<OldLeft, OldRight>, Bifunctor<NewLeft, OldRight>> fmapLeft(
 			Function<OldLeft, NewLeft> func) {
 		return (argumentPair) -> {
-			if (!(argumentPair instanceof IPair<?, ?>)) {
-				throw new IllegalArgumentException(
-						"This function can only be applied to instances of IPair");
-			}
+			if(!(argumentPair instanceof IPair<?, ?>)) throw new IllegalArgumentException(
+					"This function can only be applied to instances of IPair");
 
 			IPair<OldLeft, OldRight> argPair = (IPair<OldLeft, OldRight>) argumentPair;
 
@@ -129,10 +127,8 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 
 			fmapRight(Function<OldRight, NewRight> func) {
 		return (argumentPair) -> {
-			if (!(argumentPair instanceof IPair<?, ?>)) {
-				throw new IllegalArgumentException(
-						"This function can only be applied to instances of IPair");
-			}
+			if(!(argumentPair instanceof IPair<?, ?>)) throw new IllegalArgumentException(
+					"This function can only be applied to instances of IPair");
 
 			IPair<OldLeft, OldRight> argPair = (IPair<OldLeft, OldRight>) argumentPair;
 
@@ -142,7 +138,7 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 
 	/**
 	 * Get the value on the left side of the pair
-	 * 
+	 *
 	 * @return The value on the left side of the pair
 	 */
 	@Override
@@ -152,7 +148,7 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 
 	/**
 	 * Get the value on the right side of the pair
-	 * 
+	 *
 	 * @return The value on the right side of the pair
 	 */
 	@Override
@@ -163,7 +159,7 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 	/**
 	 * Transform the value on the left side of the pair. Doesn't modify the
 	 * pair
-	 * 
+	 *
 	 * @param <NewLeft>
 	 *                The new type of the left part of the pair
 	 * @param mapper
@@ -176,7 +172,7 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 	/**
 	 * Transform the value on the right side of the pair. Doesn't modify the
 	 * pair
-	 * 
+	 *
 	 * @param <NewRight>
 	 *                The new type of the right part of the pair
 	 * @param mapper
@@ -188,7 +184,7 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 
 	/**
 	 * Merge the two values in this pair into a single value
-	 * 
+	 *
 	 * @param <MergedType>
 	 *                The type of the single value
 	 * @param merger

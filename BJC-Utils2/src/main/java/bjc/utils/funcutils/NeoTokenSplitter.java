@@ -29,11 +29,11 @@ public class NeoTokenSplitter {
 	 */
 	private static String WITH_MULTI_DELIM = "((?<=%1$s+)(?!%1$s)|(?<!%1$s)(?=%1$s+))";
 
-	private StringBuilder currPatt;
-	private StringBuilder currExclusionPatt;
+	private StringBuilder	currPatt;
+	private StringBuilder	currExclusionPatt;
 
-	private Pattern compPatt;
-	private Pattern exclusionPatt;
+	private Pattern	compPatt;
+	private Pattern	exclusionPatt;
 
 	/**
 	 * Create a new token splitter.
@@ -56,15 +56,12 @@ public class NeoTokenSplitter {
 	 *                 If the splitter isn't compiled.
 	 */
 	public String[] split(String inp) {
-		if (compPatt == null) {
-			throw new IllegalStateException("Token splitter has not been compiled yet");
-		}
+		if(compPatt == null) throw new IllegalStateException("Token splitter has not been compiled yet");
 
 		/*
 		 * Don't split something that matches only an operator
 		 */
-		if (exclusionPatt.matcher(inp).matches())
-			return new String[] { inp };
+		if(exclusionPatt.matcher(inp).matches()) return new String[] { inp };
 		return compPatt.split(inp);
 	}
 
@@ -82,7 +79,7 @@ public class NeoTokenSplitter {
 		String quoteDelim = Pattern.quote(delim);
 		String delimPat = String.format(WITH_DELIM, quoteDelim);
 
-		if (currPatt == null) {
+		if(currPatt == null) {
 			currPatt = new StringBuilder();
 			currExclusionPatt = new StringBuilder();
 
@@ -106,7 +103,7 @@ public class NeoTokenSplitter {
 	public void addMultiDelimiter(String delim) {
 		String delimPat = String.format(WITH_MULTI_DELIM, "(?:" + delim + ")");
 
-		if (currPatt == null) {
+		if(currPatt == null) {
 			currPatt = new StringBuilder();
 			currExclusionPatt = new StringBuilder();
 

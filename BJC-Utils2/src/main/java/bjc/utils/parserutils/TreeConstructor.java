@@ -1,10 +1,5 @@
 package bjc.utils.parserutils;
 
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.function.Function;
-import java.util.function.Predicate;
-
 import bjc.utils.data.IHolder;
 import bjc.utils.data.IPair;
 import bjc.utils.data.ITree;
@@ -12,18 +7,23 @@ import bjc.utils.data.Identity;
 import bjc.utils.data.Pair;
 import bjc.utils.funcdata.IList;
 
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
 /**
  * Creates a parse tree from a postfix expression
- * 
+ *
  * @author ben
  *
  */
 public class TreeConstructor {
 	/**
 	 * Construct a tree from a list of tokens in postfix notation
-	 * 
+	 *
 	 * Only binary operators are accepted.
-	 * 
+	 *
 	 * @param <TokenType>
 	 *                The elements of the parse tree
 	 * @param tokens
@@ -41,10 +41,10 @@ public class TreeConstructor {
 
 	/**
 	 * Construct a tree from a list of tokens in postfix notation
-	 * 
+	 *
 	 * Only binary operators are accepted by default. Use the last two
 	 * parameters to handle non-binary operators
-	 * 
+	 *
 	 * @param <TokenType>
 	 *                The elements of the parse tree
 	 * @param tokens
@@ -58,7 +58,7 @@ public class TreeConstructor {
 	 * @param handleSpecialOperator
 	 *                The function to use to handle special case operators
 	 * @return A AST from the expression
-	 * 
+	 *
 	 *         FIXME The handleSpecialOp function seems like an ugly
 	 *         interface. Maybe there's a better way to express how that
 	 *         works.
@@ -67,13 +67,12 @@ public class TreeConstructor {
 			Predicate<TokenType> isOperator, Predicate<TokenType> isSpecialOperator,
 			Function<TokenType, Function<Deque<ITree<TokenType>>, ITree<TokenType>>> handleSpecialOperator) {
 		// Make sure our parameters are valid
-		if (tokens == null) {
+		if(tokens == null)
 			throw new NullPointerException("Tokens must not be null");
-		} else if (isOperator == null) {
+		else if(isOperator == null)
 			throw new NullPointerException("Operator predicate must not be null");
-		} else if (isSpecialOperator == null) {
+		else if(isSpecialOperator == null)
 			throw new NullPointerException("Special operator determiner must not be null");
-		}
 
 		// Here is the state for the tree construction
 		IHolder<IPair<Deque<ITree<TokenType>>, ITree<TokenType>>> initialState = new Identity<>(

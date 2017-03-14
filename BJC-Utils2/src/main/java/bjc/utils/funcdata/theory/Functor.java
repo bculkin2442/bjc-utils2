@@ -5,7 +5,7 @@ import java.util.function.Function;
 /**
  * Represents a container or context some sort usually, but the precise
  * definition is that it represents exactly what it is defined as
- * 
+ *
  * @author ben
  * @param <ContainedType>
  *                The value inside the functor
@@ -13,11 +13,11 @@ import java.util.function.Function;
 public interface Functor<ContainedType> {
 	/**
 	 * Converts a normal function to operate over values in a functor.
-	 * 
+	 *
 	 * N.B: Even though the type signature implies that you can apply the
 	 * resulting function to any type of functor, it is only safe to call it
 	 * on instances of the type of functor you called fmap on.
-	 * 
+	 *
 	 * @param <ArgType>
 	 *                The argument of the function
 	 * @param <ReturnType>
@@ -32,7 +32,7 @@ public interface Functor<ContainedType> {
 
 	/**
 	 * Retrieve the thing inside this functor
-	 * 
+	 *
 	 * @return The thing inside this functor
 	 */
 	public ContainedType getValue();

@@ -8,15 +8,15 @@ import java.util.function.BiPredicate;
 
 /**
  * Utilities for doing things with files
- * 
+ *
  * @author ben
  *
  */
 public class FileUtils {
 	/**
 	 * Traverse a directory recursively. This is a depth-first traversal
-	 * 
-	 * 
+	 *
+	 *
 	 * @param root
 	 *                The directory to start the traversal at
 	 * @param predicate
@@ -28,7 +28,7 @@ public class FileUtils {
 	 *                returning false stops it
 	 * @throws IOException
 	 *                 if the walk throws an exception
-	 * 
+	 *
 	 *                 TODO If it becomes necessary, write another overload
 	 *                 for this with all the buttons and knobs from
 	 *                 walkFileTree

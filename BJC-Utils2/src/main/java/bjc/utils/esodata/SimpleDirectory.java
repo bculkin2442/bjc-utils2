@@ -5,13 +5,15 @@ import bjc.utils.funcdata.IMap;
 
 /**
  * Simple implementation of {@link Directory}.
- * 
+ *
  * Has a split namespace for data and children.
- * 
+ *
  * @author EVE
  *
- * @param <K> The key type of the directory.
- * @param <V> The value type of the directory.
+ * @param <K>
+ *                The key type of the directory.
+ * @param <V>
+ *                The value type of the directory.
  */
 public class SimpleDirectory<K, V> implements Directory<K, V> {
 	private IMap<K, Directory<K, V>> children;

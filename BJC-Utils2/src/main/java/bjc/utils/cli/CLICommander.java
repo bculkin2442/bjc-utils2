@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 /**
  * Runs a CLI interface from the provided set of streams.
- * 
+ *
  * @author ben
  *
  */
@@ -16,9 +16,9 @@ public class CLICommander {
 	/*
 	 * The streams used for input and normal/error output
 	 */
-	private InputStream input;
-	private OutputStream output;
-	private OutputStream error;
+	private InputStream	input;
+	private OutputStream	output;
+	private OutputStream	error;
 
 	/*
 	 * The command mode to start execution in
@@ -27,7 +27,7 @@ public class CLICommander {
 
 	/**
 	 * Create a new CLI interface powered by streams.
-	 * 
+	 *
 	 * @param input
 	 *                The stream to get user input from.
 	 * @param output
@@ -36,13 +36,11 @@ public class CLICommander {
 	 *                The stream to send error output to.
 	 */
 	public CLICommander(InputStream input, OutputStream output, OutputStream error) {
-		if (input == null) {
+		if(input == null)
 			throw new NullPointerException("Input stream must not be null");
-		} else if (output == null) {
+		else if(output == null)
 			throw new NullPointerException("Output stream must not be null");
-		} else if (error == null) {
-			throw new NullPointerException("Error stream must not be null");
-		}
+		else if(error == null) throw new NullPointerException("Error stream must not be null");
 
 		this.input = input;
 		this.output = output;
@@ -59,7 +57,7 @@ public class CLICommander {
 
 		/*
 		 * Set up input streams.
-		 * 
+		 *
 		 * We're suppressing the warning because we might use the input
 		 * stream multiple times
 		 */
@@ -68,18 +66,18 @@ public class CLICommander {
 
 		/*
 		 * The mode currently being used to handle commands.
-		 * 
+		 *
 		 * Used to preserve the initial mode
 		 */
 		ICommandMode currentMode = initialMode;
 
 		// Process commands until we're told to stop
-		while (currentMode != null) {
+		while(currentMode != null) {
 			/*
 			 * Print out the command prompt, using a custom prompt
 			 * if one is specified
 			 */
-			if (currentMode.isCustomPromptEnabled()) {
+			if(currentMode.isCustomPromptEnabled()) {
 				normalOutput.print(currentMode.getCustomPrompt());
 			} else {
 				normalOutput.print(currentMode.getName() + ">> ");
@@ -89,12 +87,12 @@ public class CLICommander {
 			String currentLine = inputSource.nextLine();
 
 			// Handle commands we can handle
-			if (currentMode.canHandle(currentLine)) {
+			if(currentMode.canHandle(currentLine)) {
 				String[] commandTokens = currentLine.split(" ");
 				String[] commandArgs = null;
 
 				// Parse args if they are present
-				if (commandTokens.length > 1) {
+				if(commandTokens.length > 1) {
 					commandArgs = Arrays.copyOfRange(commandTokens, 1, commandTokens.length);
 				}
 
@@ -110,14 +108,12 @@ public class CLICommander {
 
 	/**
 	 * Set the initial command mode to use
-	 * 
+	 *
 	 * @param initialMode
 	 *                The initial command mode to use
 	 */
 	public void setInitialCommandMode(ICommandMode initialMode) {
-		if (initialMode == null) {
-			throw new NullPointerException("Initial mode must be non-zero");
-		}
+		if(initialMode == null) throw new NullPointerException("Initial mode must be non-zero");
 
 		this.initialMode = initialMode;
 	}

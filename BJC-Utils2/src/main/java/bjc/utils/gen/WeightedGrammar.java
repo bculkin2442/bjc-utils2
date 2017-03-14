@@ -1,11 +1,5 @@
 package bjc.utils.gen;
 
-import java.util.Random;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.function.Predicate;
-
 import bjc.utils.data.IPair;
 import bjc.utils.data.Pair;
 import bjc.utils.funcdata.FunctionalList;
@@ -13,9 +7,15 @@ import bjc.utils.funcdata.FunctionalMap;
 import bjc.utils.funcdata.IList;
 import bjc.utils.funcdata.IMap;
 
+import java.util.Random;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+
 /**
  * A random grammar, where certain rules will come up more often than others.
- * 
+ *
  * @author ben
  *
  * @param <E>
@@ -70,16 +70,14 @@ public class WeightedGrammar<E> {
 	/**
 	 * Create a new weighted grammar that uses the specified source of
 	 * randomness.
-	 * 
+	 *
 	 * @param source
 	 *                The source of randomness to use
 	 */
 	public WeightedGrammar(Random source) {
 		this();
 
-		if (source == null) {
-			throw new NullPointerException("Source of randomness must be non-null");
-		}
+		if(source == null) throw new NullPointerException("Source of randomness must be non-null");
 
 		rng = source;
 	}
@@ -90,18 +88,16 @@ public class WeightedGrammar<E> {
 	}
 
 	public void addSpecialRule(E ruleName, Supplier<IList<E>> cse) {
-		if (ruleName == null) {
+		if(ruleName == null)
 			throw new NullPointerException("Rule name must not be null");
-		} else if (cse == null) {
-			throw new NullPointerException("Case must not be null");
-		}
+		else if(cse == null) throw new NullPointerException("Case must not be null");
 
 		specialRules.put(ruleName, cse);
 	}
 
 	/**
 	 * Add a case to an already existing rule.
-	 * 
+	 *
 	 * @param ruleName
 	 *                The rule to add a case to.
 	 * @param probability
@@ -110,18 +106,16 @@ public class WeightedGrammar<E> {
 	 *                The case being added.
 	 */
 	public void addCase(E ruleName, int probability, IList<E> cse) {
-		if (ruleName == null) {
+		if(ruleName == null)
 			throw new NullPointerException("Rule name must be not null");
-		} else if (cse == null) {
-			throw new NullPointerException("Case body must not be null");
-		}
+		else if(cse == null) throw new NullPointerException("Case body must not be null");
 
 		rules.get(ruleName).addProbability(probability, cse);
 	}
 
 	/**
 	 * Add a alias for an existing subgrammar
-	 * 
+	 *
 	 * @param name
 	 *                The name of the subgrammar to alias
 	 * @param alias
@@ -129,17 +123,13 @@ public class WeightedGrammar<E> {
 	 * @return Whether the alias was succesfully created
 	 */
 	public boolean addGrammarAlias(E name, E alias) {
-		if (name == null) {
+		if(name == null)
 			throw new NullPointerException("Subgrammar name must not be null");
-		} else if (alias == null) {
-			throw new NullPointerException("Subgrammar alias must not be null");
-		}
+		else if(alias == null) throw new NullPointerException("Subgrammar alias must not be null");
 
-		if (subgrammars.containsKey(alias)) {
-			return false;
-		}
+		if(subgrammars.containsKey(alias)) return false;
 
-		if (subgrammars.containsKey(name)) {
+		if(subgrammars.containsKey(name)) {
 			subgrammars.put(alias, subgrammars.get(name));
 			return true;
 		}
@@ -149,26 +139,24 @@ public class WeightedGrammar<E> {
 
 	/**
 	 * Add a new rule with no cases.
-	 * 
+	 *
 	 * @param name
 	 *                The name of the rule to add.
 	 * @return Whether or not the rule was succesfully added.
 	 */
 	public boolean addRule(E name) {
-		if (rng == null) {
+		if(rng == null) {
 			rng = new Random();
 		}
 
-		if (name == null) {
-			throw new NullPointerException("Rule name must not be null");
-		}
+		if(name == null) throw new NullPointerException("Rule name must not be null");
 
 		return addRule(name, new WeightedRandom<>(rng));
 	}
 
 	/**
 	 * Add a new rule with a set of cases.
-	 * 
+	 *
 	 * @param name
 	 *                The name of the rule to add.
 	 * @param cases
@@ -176,15 +164,11 @@ public class WeightedGrammar<E> {
 	 * @return Whether or not the rule was succesfully added.
 	 */
 	public boolean addRule(E name, WeightedRandom<IList<E>> cases) {
-		if (name == null) {
+		if(name == null)
 			throw new NullPointerException("Name must not be null");
-		} else if (cases == null) {
-			throw new NullPointerException("Cases must not be null");
-		}
+		else if(cases == null) throw new NullPointerException("Cases must not be null");
 
-		if (rules.containsKey(name)) {
-			return false;
-		}
+		if(rules.containsKey(name)) return false;
 
 		rules.put(name, cases);
 		return true;
@@ -192,7 +176,7 @@ public class WeightedGrammar<E> {
 
 	/**
 	 * Add a subgrammar.
-	 * 
+	 *
 	 * @param name
 	 *                The name of the subgrammar.
 	 * @param subgrammar
@@ -200,15 +184,11 @@ public class WeightedGrammar<E> {
 	 * @return Whether or not the subgrammar was succesfully added.
 	 */
 	public boolean addSubgrammar(E name, WeightedGrammar<E> subgrammar) {
-		if (name == null) {
+		if(name == null)
 			throw new NullPointerException("Subgrammar name must not be null");
-		} else if (subgrammar == null) {
-			throw new NullPointerException("Subgrammar must not be null");
-		}
+		else if(subgrammar == null) throw new NullPointerException("Subgrammar must not be null");
 
-		if (subgrammars.containsKey(name)) {
-			return false;
-		}
+		if(subgrammars.containsKey(name)) return false;
 
 		subgrammars.put(name, subgrammar);
 		return true;
@@ -216,28 +196,24 @@ public class WeightedGrammar<E> {
 
 	/**
 	 * Remove a rule with the specified name.
-	 * 
+	 *
 	 * @param name
 	 *                The name of the rule to remove.
 	 */
 	public void deleteRule(E name) {
-		if (name == null) {
-			throw new NullPointerException("Rule name must not be null");
-		}
+		if(name == null) throw new NullPointerException("Rule name must not be null");
 
 		rules.remove(name);
 	}
 
 	/**
 	 * Remove a subgrammar with the specified name.
-	 * 
+	 *
 	 * @param name
 	 *                The name of the subgrammar to remove.
 	 */
 	public void deleteSubgrammar(E name) {
-		if (name == null) {
-			throw new NullPointerException("Rule name must not be null");
-		}
+		if(name == null) throw new NullPointerException("Rule name must not be null");
 
 		subgrammars.remove(name);
 	}
@@ -246,21 +222,19 @@ public class WeightedGrammar<E> {
 	 * Generate a set of debug sentences for the specified rule.
 	 *
 	 * Only generates sentances one layer deep.
-	 * 
+	 *
 	 * @param ruleName
 	 *                The rule to test.
 	 * @return A set of sentances generated by the specified rule.
 	 */
 	public IList<IList<E>> generateDebugValues(E ruleName) {
-		if (ruleName == null) {
-			throw new NullPointerException("Rule name must not be null");
-		}
+		if(ruleName == null) throw new NullPointerException("Rule name must not be null");
 
 		IList<IList<E>> returnedList = new FunctionalList<>();
 
 		WeightedRandom<IList<E>> ruleGenerator = rules.get(ruleName);
 
-		for (int i = 0; i < 10; i++) {
+		for(int i = 0; i < 10; i++) {
 			returnedList.add(ruleGenerator.generateValue());
 		}
 
@@ -269,10 +243,10 @@ public class WeightedGrammar<E> {
 
 	/**
 	 * Generate a generic sentance from a initial rule.
-	 * 
+	 *
 	 * @param <T>
 	 *                The type of the transformed output
-	 * 
+	 *
 	 * @param initRule
 	 *                The initial rule to start with.
 	 * @param tokenTransformer
@@ -284,51 +258,49 @@ public class WeightedGrammar<E> {
 	 *         rule.
 	 */
 	public <T> IList<T> generateGenericValues(E initRules, Function<E, T> tokenTransformer, T spacer) {
-		if (initRules == null) {
+		if(initRules == null)
 			throw new NullPointerException("Initial rule must not be null");
-		} else if (tokenTransformer == null) {
+		else if(tokenTransformer == null)
 			throw new NullPointerException("Transformer must not be null");
-		} else if (spacer == null) {
-			throw new NullPointerException("Spacer must not be null");
-		}
+		else if(spacer == null) throw new NullPointerException("Spacer must not be null");
 
 		IList<T> returnedList = new FunctionalList<>();
 
 		IList<E> genRules = new FunctionalList<>(initRules);
 
-		if (specialMarker != null) {
-			if (specialMarker.test(initRules)) {
+		if(specialMarker != null) {
+			if(specialMarker.test(initRules)) {
 				genRules = specialAction.apply(initRules, this);
 			}
 		}
 
-		for (E initRule : genRules.toIterable()) {
-			if (specialRules.containsKey(initRule)) {
-				for (E rulePart : specialRules.get(initRule).get().toIterable()) {
+		for(E initRule : genRules.toIterable()) {
+			if(specialRules.containsKey(initRule)) {
+				for(E rulePart : specialRules.get(initRule).get().toIterable()) {
 					Iterable<T> generatedRuleParts = generateGenericValues(rulePart,
 							tokenTransformer, spacer).toIterable();
 
-					for (T generatedRulePart : generatedRuleParts) {
+					for(T generatedRulePart : generatedRuleParts) {
 						returnedList.add(generatedRulePart);
 						returnedList.add(spacer);
 					}
 				}
-			} else if (subgrammars.containsKey(initRule)) {
+			} else if(subgrammars.containsKey(initRule)) {
 				Iterable<T> ruleParts = subgrammars.get(initRule)
 						.generateGenericValues(initRule, tokenTransformer, spacer).toIterable();
 
-				for (T rulePart : ruleParts) {
+				for(T rulePart : ruleParts) {
 					returnedList.add(rulePart);
 					returnedList.add(spacer);
 				}
-			} else if (rules.containsKey(initRule)) {
+			} else if(rules.containsKey(initRule)) {
 				Iterable<E> ruleParts = rules.get(initRule).generateValue().toIterable();
 
-				for (E rulePart : ruleParts) {
+				for(E rulePart : ruleParts) {
 					Iterable<T> generatedRuleParts = generateGenericValues(rulePart,
 							tokenTransformer, spacer).toIterable();
 
-					for (T generatedRulePart : generatedRuleParts) {
+					for(T generatedRulePart : generatedRuleParts) {
 						returnedList.add(generatedRulePart);
 						returnedList.add(spacer);
 					}
@@ -336,9 +308,8 @@ public class WeightedGrammar<E> {
 			} else {
 				T transformedToken = tokenTransformer.apply(initRule);
 
-				if (transformedToken == null) {
+				if(transformedToken == null)
 					throw new NullPointerException("Transformer created null token");
-				}
 
 				returnedList.add(transformedToken);
 				returnedList.add(spacer);
@@ -350,7 +321,7 @@ public class WeightedGrammar<E> {
 
 	/**
 	 * Generate a random list of grammar elements from a given initial rule.
-	 * 
+	 *
 	 * @param initRule
 	 *                The initial rule to start with.
 	 * @param spacer
@@ -366,7 +337,7 @@ public class WeightedGrammar<E> {
 
 	/**
 	 * Get the initial rule of this grammar
-	 * 
+	 *
 	 * @return The initial rule of this grammar
 	 */
 	public String getInitialRule() {
@@ -375,7 +346,7 @@ public class WeightedGrammar<E> {
 
 	/**
 	 * Returns the number of rules in this grammar
-	 * 
+	 *
 	 * @return The number of rules in this grammar
 	 */
 	public int getRuleCount() {
@@ -384,7 +355,7 @@ public class WeightedGrammar<E> {
 
 	/**
 	 * Returns a set containing all of the rules in this grammar
-	 * 
+	 *
 	 * @return The set of all rule names in this grammar
 	 */
 	public IList<E> getRuleNames() {
@@ -398,22 +369,20 @@ public class WeightedGrammar<E> {
 
 	/**
 	 * Get the subgrammar with the specified name.
-	 * 
+	 *
 	 * @param name
 	 *                The name of the subgrammar to get.
 	 * @return The subgrammar with the specified name.
 	 */
 	public WeightedGrammar<E> getSubgrammar(E name) {
-		if (name == null) {
-			throw new NullPointerException("Subgrammar name must not be null");
-		}
+		if(name == null) throw new NullPointerException("Subgrammar name must not be null");
 
 		return subgrammars.get(name);
 	}
 
 	/**
 	 * Check if this grammar has an initial rule
-	 * 
+	 *
 	 * @return Whether or not this grammar has an initial rule
 	 */
 	public boolean hasInitialRule() {
@@ -426,7 +395,7 @@ public class WeightedGrammar<E> {
 
 	/**
 	 * Prefix a given rule with a token multiple times
-	 * 
+	 *
 	 * @param ruleName
 	 *                The name of the rule to prefix
 	 * @param prefixToken
@@ -437,13 +406,12 @@ public class WeightedGrammar<E> {
 	 *                The number of times to prefix the token
 	 */
 	public void multiPrefixRule(E ruleName, E prefixToken, int additionalProbability, int numberOfTimes) {
-		if (ruleName == null) {
+		if(ruleName == null)
 			throw new NullPointerException("Rule name must not be null");
-		} else if (prefixToken == null) {
+		else if(prefixToken == null)
 			throw new NullPointerException("Prefix token must not be null");
-		} else if (numberOfTimes < 1) {
+		else if(numberOfTimes < 1)
 			throw new IllegalArgumentException("Number of times to prefix must be positive.");
-		}
 
 		WeightedRandom<IList<E>> rule = rules.get(ruleName);
 
@@ -452,18 +420,18 @@ public class WeightedGrammar<E> {
 		rule.getValues().forEach((pair) -> {
 			IList<IList<E>> newRule = new FunctionalList<>();
 
-			for (int i = 1; i <= numberOfTimes; i++) {
+			for(int i = 1; i <= numberOfTimes; i++) {
 				IList<E> newCase = pair.merge((left, right) -> {
 					IList<E> returnVal = new FunctionalList<>();
 
-					for (E val : right.toIterable()) {
+					for(E val : right.toIterable()) {
 						returnVal.add(val);
 					}
 
 					return returnVal;
 				});
 
-				for (int j = 1; j <= i; j++) {
+				for(int j = 1; j <= i; j++) {
 					newCase.prepend(prefixToken);
 				}
 
@@ -487,7 +455,7 @@ public class WeightedGrammar<E> {
 	/**
 	 * Create a series of alternatives for a rule by prefixing them with a
 	 * given token
-	 * 
+	 *
 	 * @param additionalProbability
 	 *                The amount to adjust the probability by
 	 * @param ruleName
@@ -496,11 +464,9 @@ public class WeightedGrammar<E> {
 	 *                The token to prefix to the rule
 	 */
 	public void prefixRule(E ruleName, E prefixToken, int additionalProbability) {
-		if (ruleName == null) {
+		if(ruleName == null)
 			throw new NullPointerException("Rule name must not be null");
-		} else if (prefixToken == null) {
-			throw new NullPointerException("Prefix token must not be null");
-		}
+		else if(prefixToken == null) throw new NullPointerException("Prefix token must not be null");
 
 		WeightedRandom<IList<E>> rule = rules.get(ruleName);
 
@@ -510,7 +476,7 @@ public class WeightedGrammar<E> {
 			IList<E> newCase = pair.merge((left, right) -> {
 				IList<E> returnVal = new FunctionalList<>();
 
-				for (E val : right.toIterable()) {
+				for(E val : right.toIterable()) {
 					returnVal.add(val);
 				}
 
@@ -527,7 +493,7 @@ public class WeightedGrammar<E> {
 
 	/**
 	 * Set the initial rule of the graphic
-	 * 
+	 *
 	 * @param initRule
 	 *                The initial rule of this grammar
 	 */
@@ -537,7 +503,7 @@ public class WeightedGrammar<E> {
 
 	/**
 	 * Suffix a token to a rule
-	 * 
+	 *
 	 * @param ruleName
 	 *                The rule to suffix
 	 * @param suffixToken
@@ -546,11 +512,9 @@ public class WeightedGrammar<E> {
 	 *                Additional probability of the prefixed rule
 	 */
 	public void suffixRule(E ruleName, E suffixToken, int additionalProbability) {
-		if (ruleName == null) {
+		if(ruleName == null)
 			throw new NullPointerException("Rule name must not be null");
-		} else if (suffixToken == null) {
-			throw new NullPointerException("Prefix token must not be null");
-		}
+		else if(suffixToken == null) throw new NullPointerException("Prefix token must not be null");
 
 		WeightedRandom<IList<E>> rule = rules.get(ruleName);
 
@@ -560,7 +524,7 @@ public class WeightedGrammar<E> {
 			IList<E> newCase = par.merge((left, right) -> {
 				IList<E> returnVal = new FunctionalList<>();
 
-				for (E val : right.toIterable()) {
+				for(E val : right.toIterable()) {
 					returnVal.add(val);
 				}
 

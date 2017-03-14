@@ -1,16 +1,16 @@
 package bjc.utils.parserutils;
 
-import java.util.Deque;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.UnaryOperator;
-
 import bjc.utils.data.IHolder;
 import bjc.utils.data.IPair;
 import bjc.utils.data.ITree;
 import bjc.utils.data.Pair;
 import bjc.utils.data.Tree;
+
+import java.util.Deque;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 
 final class TokenTransformer<TokenType> implements Consumer<TokenType> {
 	// Handle operators
@@ -37,18 +37,15 @@ final class TokenTransformer<TokenType> implements Consumer<TokenType> {
 			ITree<TokenType> newAST;
 
 			// Handle special operators
-			if (isSpecialOperator.test(element)) {
+			if(isSpecialOperator.test(element)) {
 				newAST = handleSpecialOperator.apply(element).apply(queuedASTs);
 			} else {
 				// Error if we don't have enough for a binary
 				// operator
-				if (queuedASTs.size() < 2) {
-					throw new IllegalStateException(
-							"Attempted to parse binary operator without enough operands.\n"
-									+ "Problem operator is " + element
-									+ "\nPossible operand is: \n\t"
-									+ queuedASTs.peek());
-				}
+				if(queuedASTs.size() < 2) throw new IllegalStateException(
+						"Attempted to parse binary operator without enough operands.\n"
+								+ "Problem operator is " + element
+								+ "\nPossible operand is: \n\t" + queuedASTs.peek());
 
 				// Grab the two operands
 				ITree<TokenType> right = queuedASTs.pop();
@@ -70,8 +67,8 @@ final class TokenTransformer<TokenType> implements Consumer<TokenType> {
 
 	private Predicate<TokenType> operatorPredicate;
 
-	private Predicate<TokenType> isSpecialOperator;
-	private Function<TokenType, Function<Deque<ITree<TokenType>>, ITree<TokenType>>> handleSpecialOperator;
+	private Predicate<TokenType>								isSpecialOperator;
+	private Function<TokenType, Function<Deque<ITree<TokenType>>, ITree<TokenType>>>	handleSpecialOperator;
 
 	// Create a new transformer
 	public TokenTransformer(IHolder<IPair<Deque<ITree<TokenType>>, ITree<TokenType>>> initialState,
@@ -86,7 +83,7 @@ final class TokenTransformer<TokenType> implements Consumer<TokenType> {
 	@Override
 	public void accept(TokenType element) {
 		// Handle operators
-		if (operatorPredicate.test(element)) {
+		if(operatorPredicate.test(element)) {
 			initialState.transform(new OperatorHandler(element));
 		} else {
 			ITree<TokenType> newAST = new Tree<>(element);

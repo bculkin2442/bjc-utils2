@@ -4,7 +4,7 @@ import javax.swing.JInternalFrame;
 
 /**
  * A simple internal frame class
- * 
+ *
  * @author ben
  *
  */
@@ -20,7 +20,7 @@ public class SimpleInternalFrame extends JInternalFrame {
 
 	/**
 	 * Create a new blank internal frame with a specific title
-	 * 
+	 *
 	 * @param title
 	 *                The title of the internal frame
 	 */

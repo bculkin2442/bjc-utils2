@@ -2,7 +2,7 @@ package bjc.utils.graph;
 
 /**
  * An edge in a weighted graph
- * 
+ *
  * @author ben
  *
  * @param <T>
@@ -21,7 +21,7 @@ public class Edge<T> {
 
 	/**
 	 * Create a new edge with set parameters
-	 * 
+	 *
 	 * @param initial
 	 *                The initial node of the edge
 	 * @param terminal
@@ -30,11 +30,9 @@ public class Edge<T> {
 	 *                The distance between initial and terminal edge
 	 */
 	public Edge(T initial, T terminal, int distance) {
-		if (initial == null) {
+		if(initial == null)
 			throw new NullPointerException("Initial node must not be null");
-		} else if (terminal == null) {
-			throw new NullPointerException("Terminal node must not be null");
-		}
+		else if(terminal == null) throw new NullPointerException("Terminal node must not be null");
 
 		this.source = initial;
 		this.target = terminal;
@@ -43,30 +41,24 @@ public class Edge<T> {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if(this == obj)
 			return true;
-		} else if (obj == null) {
+		else if(obj == null)
 			return false;
-		} else if (getClass() != obj.getClass()) {
+		else if(getClass() != obj.getClass())
 			return false;
-		} else {
+		else {
 			Edge<?> other = (Edge<?>) obj;
 
-			if (distance != other.distance) {
+			if(distance != other.distance)
 				return false;
-			} else if (source == null) {
-				if (other.source != null) {
-					return false;
-				}
-			} else if (!source.equals(other.source)) {
+			else if(source == null) {
+				if(other.source != null) return false;
+			} else if(!source.equals(other.source))
 				return false;
-			} else if (target == null) {
-				if (other.target != null) {
-					return false;
-				}
-			} else if (!target.equals(other.target)) {
-				return false;
-			}
+			else if(target == null) {
+				if(other.target != null) return false;
+			} else if(!target.equals(other.target)) return false;
 
 			return true;
 		}
@@ -74,7 +66,7 @@ public class Edge<T> {
 
 	/**
 	 * Get the distance in this edge
-	 * 
+	 *
 	 * @return The distance between the initial and terminal nodes of this
 	 *         edge
 	 */
@@ -84,7 +76,7 @@ public class Edge<T> {
 
 	/**
 	 * Get the initial node of an edge
-	 * 
+	 *
 	 * @return The initial node of this edge
 	 */
 	public T getSource() {
@@ -93,7 +85,7 @@ public class Edge<T> {
 
 	/**
 	 * Get the target node of an edge
-	 * 
+	 *
 	 * @return The target node of this edge
 	 */
 	public T getTarget() {
@@ -107,8 +99,8 @@ public class Edge<T> {
 		int result = 1;
 
 		result = prime * result + distance;
-		result = prime * result + ((source == null) ? 0 : source.hashCode());
-		result = prime * result + ((target == null) ? 0 : target.hashCode());
+		result = prime * result + (source == null ? 0 : source.hashCode());
+		result = prime * result + (target == null ? 0 : target.hashCode());
 
 		return result;
 	}

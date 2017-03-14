@@ -1,14 +1,14 @@
 package bjc.utils.funcutils;
 
-import java.util.function.Consumer;
-import java.util.function.Function;
-
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IList;
 
+import java.util.function.Consumer;
+import java.util.function.Function;
+
 /**
  * Implements a single group partitioning pass on a list
- * 
+ *
  * @author ben
  *
  * @param <E>
@@ -17,11 +17,11 @@ import bjc.utils.funcdata.IList;
 final class GroupPartIteration<E> implements Consumer<E> {
 	private IList<IList<E>> returnedList;
 
-	public IList<E> currentPartition;
-	private IList<E> rejectedItems;
+	public IList<E>		currentPartition;
+	private IList<E>	rejectedItems;
 
-	private int numberInCurrentPartition;
-	private int numberPerPartition;
+	private int	numberInCurrentPartition;
+	private int	numberPerPartition;
 
 	private Function<E, Integer> elementCounter;
 
@@ -40,7 +40,7 @@ final class GroupPartIteration<E> implements Consumer<E> {
 	public void accept(E value) {
 		boolean shouldStartPartition = numberInCurrentPartition >= numberPerPartition;
 
-		if (shouldStartPartition) {
+		if(shouldStartPartition) {
 			returnedList.add(currentPartition);
 
 			currentPartition = new FunctionalList<>();
@@ -48,9 +48,9 @@ final class GroupPartIteration<E> implements Consumer<E> {
 		} else {
 			int currentElementCount = elementCounter.apply(value);
 
-			boolean shouldReject = (numberInCurrentPartition + currentElementCount) >= numberPerPartition;
+			boolean shouldReject = numberInCurrentPartition + currentElementCount >= numberPerPartition;
 
-			if (shouldReject) {
+			if(shouldReject) {
 				rejectedItems.add(value);
 			} else {
 				currentPartition.add(value);

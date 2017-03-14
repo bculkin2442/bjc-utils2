@@ -16,7 +16,7 @@ package bjc.utils.esodata;
  *
  * All operations that refer to the tape refer to the currently active side of
  * the tape, except for flip.
- * 
+ *
  * Flip refers to the entire tape for 'obvious' reasons.
  *
  * @param T
@@ -24,8 +24,8 @@ package bjc.utils.esodata;
  * @author bjculkin
  */
 public class DoubleTape<T> implements Tape<T> {
-	private Tape<T> front;
-	private Tape<T> back;
+	private Tape<T>	front;
+	private Tape<T>	back;
 
 	/**
 	 * Create a new empty double-sided tape that doesn't autoextend.
@@ -52,6 +52,7 @@ public class DoubleTape<T> implements Tape<T> {
 	 *
 	 * @return The item the tape is on.
 	 */
+	@Override
 	public T item() {
 		return front.item();
 	}
@@ -62,6 +63,7 @@ public class DoubleTape<T> implements Tape<T> {
 	 * @param itm
 	 *                The new value for the tape item.
 	 */
+	@Override
 	public void item(T itm) {
 		front.item(itm);
 	}
@@ -71,6 +73,7 @@ public class DoubleTape<T> implements Tape<T> {
 	 *
 	 * @return The current number of elements in the tape.
 	 */
+	@Override
 	public int size() {
 		return front.size();
 	}
@@ -81,6 +84,7 @@ public class DoubleTape<T> implements Tape<T> {
 	 * @param itm
 	 *                The item to add.
 	 */
+	@Override
 	public void insertBefore(T itm) {
 		front.insertBefore(itm);
 		back.insertAfter(null);
@@ -89,6 +93,7 @@ public class DoubleTape<T> implements Tape<T> {
 	/**
 	 * Insert an element after the current item.
 	 */
+	@Override
 	public void insertAfter(T itm) {
 		front.insertAfter(itm);
 		back.insertBefore(itm);
@@ -96,12 +101,13 @@ public class DoubleTape<T> implements Tape<T> {
 
 	/**
 	 * Remove the current element.
-	 * 
+	 *
 	 * Also moves the cursor back one step if possible to maintain relative
 	 * position, and removes the corresponding item from the non-active side
 	 *
 	 * @return The removed item from the active side.
 	 */
+	@Override
 	public T remove() {
 		back.remove();
 
@@ -111,6 +117,7 @@ public class DoubleTape<T> implements Tape<T> {
 	/**
 	 * Move the cursor to the left-most position.
 	 */
+	@Override
 	public void first() {
 		front.first();
 		back.last();
@@ -119,6 +126,7 @@ public class DoubleTape<T> implements Tape<T> {
 	/**
 	 * Move the cursor the right-most position.
 	 */
+	@Override
 	public void last() {
 		front.last();
 		back.first();
@@ -131,6 +139,7 @@ public class DoubleTape<T> implements Tape<T> {
 	 *
 	 * @return True if the cursor was moved left.
 	 */
+	@Override
 	public boolean left() {
 		return left(1);
 	}
@@ -146,11 +155,13 @@ public class DoubleTape<T> implements Tape<T> {
 	 *
 	 * @return True if the cursor was moved left.
 	 */
+	@Override
 	public boolean left(int amt) {
 		boolean succ = front.left(amt);
 
-		if (succ)
+		if(succ) {
 			back.right(amt);
+		}
 
 		return succ;
 	}
@@ -162,6 +173,7 @@ public class DoubleTape<T> implements Tape<T> {
 	 *
 	 * @return Whether the cursor was moved right.
 	 */
+	@Override
 	public boolean right() {
 		return right(1);
 	}
@@ -176,11 +188,13 @@ public class DoubleTape<T> implements Tape<T> {
 	 *
 	 * @return Whether the cursor was moved right.
 	 */
+	@Override
 	public boolean right(int amt) {
 		boolean succ = front.right(amt);
 
-		if (succ)
+		if(succ) {
 			back.left(amt);
+		}
 
 		return succ;
 	}

@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 /**
  * Utility methods for operations on strings
- * 
+ *
  * @author ben
  *
  */
@@ -16,7 +16,7 @@ public class StringUtils {
 	/**
 	 * Checks if the given expression contains the specified operator in a
 	 * situation that indicates its use as an infix operator.
-	 * 
+	 *
 	 * @param expression
 	 *                The expression to check
 	 * @param operator
@@ -35,7 +35,7 @@ public class StringUtils {
 	/**
 	 * Check if a string consists only of one or more matches of a regular
 	 * expression
-	 * 
+	 *
 	 * @param input
 	 *                The string to check
 	 * @param regex
@@ -45,15 +45,13 @@ public class StringUtils {
 	 *         of the provided regex
 	 */
 	public static boolean containsOnly(String input, String regex) {
-		if (input == null) {
+		if(input == null)
 			throw new NullPointerException("Input must not be null");
-		} else if (regex == null) {
-			throw new NullPointerException("Regex must not be null");
-		}
+		else if(regex == null) throw new NullPointerException("Regex must not be null");
 
 		/*
 		 * This regular expression is fairly simple.
-		 * 
+		 *
 		 * First, we match the beginning of the string. Then, we start a
 		 * non-capturing group whose contents are the passed in regex.
 		 * That group is then matched one or more times and the pattern
@@ -64,14 +62,14 @@ public class StringUtils {
 
 	/**
 	 * Indent the string being built in a StringBuilder n levels
-	 * 
+	 *
 	 * @param builder
 	 *                The builder to indent in
 	 * @param levels
 	 *                The number of levels to indent
 	 */
 	public static void indentNLevels(StringBuilder builder, int levels) {
-		for (int i = 0; i < levels; i++) {
+		for(int i = 0; i < levels; i++) {
 			builder.append("\t");
 		}
 	}
@@ -79,7 +77,7 @@ public class StringUtils {
 	/**
 	 * Print out a deque with a special case for easily showing a deque is
 	 * empty
-	 * 
+	 *
 	 * @param <ContainedType>
 	 *                The type in the deque
 	 * @param queue
@@ -94,16 +92,23 @@ public class StringUtils {
 	/*
 	 * This regex matches java-style string escapes
 	 */
-	private static String escapeString = "\\\\([btnfr\"'\\\\]" // Match
-									// shortform
-									// escape
-									// sequences
-									// like
-									// \t or
-									// \"
-			+ "|[0-3]?[0-7]{1,2}" // Match octal escape sequences
-			+ "|u[0-9a-fA-F]{4})"; // Match unicode escape sequences
-	private static Pattern escapePatt = Pattern.compile(escapeString);
+	private static String	escapeString	= "\\\\([btnfr\"'\\\\]"		// Match
+										// shortform
+										// escape
+										// sequences
+										// like
+										// \t
+										// or
+										// \"
+			+ "|[0-3]?[0-7]{1,2}"					// Match
+										// octal
+										// escape
+										// sequences
+			+ "|u[0-9a-fA-F]{4})";					// Match
+										// unicode
+										// escape
+										// sequences
+	private static Pattern	escapePatt	= Pattern.compile(escapeString);
 
 	/*
 	 * This regular expression matches java style double quoted strings
@@ -139,7 +144,7 @@ public class StringUtils {
 
 		Matcher mt = doubleQuotePatt.matcher(inp);
 
-		while (mt.find()) {
+		while(mt.find()) {
 			mt.appendReplacement(work, "");
 
 			res.add(work.toString());
@@ -166,11 +171,11 @@ public class StringUtils {
 		StringBuffer work = new StringBuffer();
 
 		Matcher escapeFinder = escapePatt.matcher(inp);
-		while (escapeFinder.find()) {
+		while(escapeFinder.find()) {
 			String escapeSeq = escapeFinder.group();
 
 			String escapeRep = "";
-			switch (escapeSeq) {
+			switch(escapeSeq) {
 			case "\\b":
 				escapeRep = "\b";
 				break;
@@ -196,7 +201,7 @@ public class StringUtils {
 				escapeRep = "\\";
 				break;
 			default:
-				if (escapeSeq.startsWith("u")) {
+				if(escapeSeq.startsWith("u")) {
 					escapeRep = handleUnicodeEscape(escapeSeq.substring(1));
 				} else {
 					escapeRep = handleOctalEscape(escapeSeq);

@@ -3,8 +3,8 @@ package bjc.utils.data;
 import java.util.Iterator;
 
 public class CircularIterator<E> implements Iterator<E> {
-	private Iterable<E> source;
-	private Iterator<E> curr;
+	private Iterable<E>	source;
+	private Iterator<E>	curr;
 
 	private E curElm;
 
@@ -21,18 +21,19 @@ public class CircularIterator<E> implements Iterator<E> {
 		this(src, true);
 	}
 
+	@Override
 	public boolean hasNext() {
 		// We always have something
 		return true;
 	}
 
+	@Override
 	public E next() {
-		if (!curr.hasNext()) {
-			if (doCircle) {
+		if(!curr.hasNext()) {
+			if(doCircle) {
 				curr = source.iterator();
-			} else {
+			} else
 				return curElm;
-			}
 		}
 
 		curElm = curr.next();
@@ -40,6 +41,7 @@ public class CircularIterator<E> implements Iterator<E> {
 		return curElm;
 	}
 
+	@Override
 	public void remove() {
 		curr.remove();
 	}

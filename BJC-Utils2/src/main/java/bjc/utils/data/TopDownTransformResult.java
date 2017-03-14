@@ -2,7 +2,7 @@ package bjc.utils.data;
 
 /**
  * Represents the results for doing a top-down transform of a tree
- * 
+ *
  * @author ben
  *
  */

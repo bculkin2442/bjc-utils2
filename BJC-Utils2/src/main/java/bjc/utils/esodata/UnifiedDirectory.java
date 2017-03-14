@@ -5,9 +5,9 @@ import bjc.utils.funcdata.IMap;
 
 /**
  * Simple implementation of {@link Directory}.
- * 
+ *
  * Has a unified namespace for data and children.
- * 
+ *
  * @author EVE
  *
  * @param <K>
@@ -40,9 +40,8 @@ public class UnifiedDirectory<K, V> implements Directory<K, V> {
 
 	@Override
 	public Directory<K, V> putSubdirectory(K key, Directory<K, V> val) {
-		if(data.containsKey(key)) {
+		if(data.containsKey(key))
 			throw new IllegalArgumentException("Key " + key + " is already used for data.");
-		}
 
 		return children.put(key, val);
 	}
@@ -59,10 +58,9 @@ public class UnifiedDirectory<K, V> implements Directory<K, V> {
 
 	@Override
 	public V putKey(K key, V val) {
-		if(children.containsKey(key)) {
+		if(children.containsKey(key))
 			throw new IllegalArgumentException("Key " + key + " is already used for sub-directories.");
-		}
-		
+
 		return data.put(key, val);
 	}
 }

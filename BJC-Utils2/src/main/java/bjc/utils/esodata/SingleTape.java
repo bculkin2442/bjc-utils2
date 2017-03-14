@@ -19,8 +19,8 @@ import java.util.ArrayList;
  * @author bjculkin
  */
 public class SingleTape<T> implements Tape<T> {
-	protected ArrayList<T> backing;
-	protected int pos;
+	protected ArrayList<T>	backing;
+	protected int		pos;
 
 	protected boolean autoExtend;
 
@@ -50,6 +50,7 @@ public class SingleTape<T> implements Tape<T> {
 	 *
 	 * @return The item the tape is on.
 	 */
+	@Override
 	public T item() {
 		return backing.get(pos);
 	}
@@ -60,6 +61,7 @@ public class SingleTape<T> implements Tape<T> {
 	 * @param itm
 	 *                The new value for the tape item.
 	 */
+	@Override
 	public void item(T itm) {
 		backing.set(pos, itm);
 	}
@@ -69,6 +71,7 @@ public class SingleTape<T> implements Tape<T> {
 	 *
 	 * @return The current number of elements in the tape.
 	 */
+	@Override
 	public int size() {
 		return backing.size();
 	}
@@ -79,6 +82,7 @@ public class SingleTape<T> implements Tape<T> {
 	 * @param itm
 	 *                The item to add.
 	 */
+	@Override
 	public void insertBefore(T itm) {
 		backing.add(pos, itm);
 	}
@@ -86,31 +90,36 @@ public class SingleTape<T> implements Tape<T> {
 	/**
 	 * Insert an element after the current item.
 	 */
+	@Override
 	public void insertAfter(T itm) {
-		if (pos == (backing.size() - 1))
+		if(pos == backing.size() - 1) {
 			backing.add(itm);
-		else
+		} else {
 			backing.add(pos + 1, itm);
+		}
 	}
 
 	/**
 	 * Remove the current element.
-	 * 
+	 *
 	 * Also moves the cursor back one step if possible to maintain relative
 	 * position.
 	 *
 	 * @return The removed item.
 	 */
+	@Override
 	public T remove() {
 		T res = backing.remove(pos);
-		if (pos != 0)
+		if(pos != 0) {
 			pos -= 1;
+		}
 		return res;
 	}
 
 	/**
 	 * Move the cursor to the left-most position.
 	 */
+	@Override
 	public void first() {
 		pos = 0;
 	}
@@ -118,6 +127,7 @@ public class SingleTape<T> implements Tape<T> {
 	/**
 	 * Move the cursor the right-most position.
 	 */
+	@Override
 	public void last() {
 		pos = backing.size() - 1;
 	}
@@ -129,6 +139,7 @@ public class SingleTape<T> implements Tape<T> {
 	 *
 	 * @return True if the cursor was moved left.
 	 */
+	@Override
 	public boolean left() {
 		return left(1);
 	}
@@ -144,9 +155,9 @@ public class SingleTape<T> implements Tape<T> {
 	 *
 	 * @return True if the cursor was moved left.
 	 */
+	@Override
 	public boolean left(int amt) {
-		if ((pos - amt) < 0)
-			return false;
+		if(pos - amt < 0) return false;
 
 		pos -= amt;
 		return true;
@@ -159,6 +170,7 @@ public class SingleTape<T> implements Tape<T> {
 	 *
 	 * @return Whether the cursor was moved right.
 	 */
+	@Override
 	public boolean right() {
 		return right(1);
 	}
@@ -173,15 +185,15 @@ public class SingleTape<T> implements Tape<T> {
 	 *
 	 * @return Whether the cursor was moved right.
 	 */
+	@Override
 	public boolean right(int amt) {
-		if ((pos + amt) >= (backing.size() - 1)) {
-			if (autoExtend) {
-				while ((pos + amt) >= (backing.size() - 1)) {
+		if(pos + amt >= backing.size() - 1) {
+			if(autoExtend) {
+				while(pos + amt >= backing.size() - 1) {
 					backing.add(null);
 				}
-			} else {
+			} else
 				return false;
-			}
 		}
 
 		pos += amt;

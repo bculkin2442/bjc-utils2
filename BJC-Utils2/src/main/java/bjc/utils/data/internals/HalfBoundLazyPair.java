@@ -1,13 +1,13 @@
 package bjc.utils.data.internals;
 
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
 import bjc.utils.data.IHolder;
 import bjc.utils.data.IPair;
 import bjc.utils.data.Identity;
 import bjc.utils.data.LazyPair;
+
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /*
  * A lazy pair, with only one side bound
@@ -17,8 +17,8 @@ public class HalfBoundLazyPair<OldType, NewLeft, NewRight> implements IPair<NewL
 
 	private Function<OldType, IPair<NewLeft, NewRight>> binder;
 
-	private IPair<NewLeft, NewRight> boundPair;
-	private boolean pairBound;
+	private IPair<NewLeft, NewRight>	boundPair;
+	private boolean				pairBound;
 
 	public HalfBoundLazyPair(Supplier<OldType> oldSupp, Function<OldType, IPair<NewLeft, NewRight>> bindr) {
 		oldSupplier = oldSupp;
@@ -32,7 +32,7 @@ public class HalfBoundLazyPair<OldType, NewLeft, NewRight> implements IPair<NewL
 		IHolder<Boolean> newPairMade = new Identity<>(pairBound);
 
 		Supplier<NewLeft> leftSupp = () -> {
-			if (!newPairMade.getValue()) {
+			if(!newPairMade.getValue()) {
 				newPair.replace(binder.apply(oldSupplier.get()));
 				newPairMade.replace(true);
 			}
@@ -41,7 +41,7 @@ public class HalfBoundLazyPair<OldType, NewLeft, NewRight> implements IPair<NewL
 		};
 
 		Supplier<NewRight> rightSupp = () -> {
-			if (!newPairMade.getValue()) {
+			if(!newPairMade.getValue()) {
 				newPair.replace(binder.apply(oldSupplier.get()));
 				newPairMade.replace(true);
 			}
@@ -58,7 +58,7 @@ public class HalfBoundLazyPair<OldType, NewLeft, NewRight> implements IPair<NewL
 		Supplier<NewLeft> leftSupp = () -> {
 			IPair<NewLeft, NewRight> newPair = boundPair;
 
-			if (!pairBound) {
+			if(!pairBound) {
 				newPair = binder.apply(oldSupplier.get());
 			}
 
@@ -74,7 +74,7 @@ public class HalfBoundLazyPair<OldType, NewLeft, NewRight> implements IPair<NewL
 		Supplier<NewRight> rightSupp = () -> {
 			IPair<NewLeft, NewRight> newPair = boundPair;
 
-			if (!pairBound) {
+			if(!pairBound) {
 				newPair = binder.apply(oldSupplier.get());
 			}
 
@@ -100,9 +100,7 @@ public class HalfBoundLazyPair<OldType, NewLeft, NewRight> implements IPair<NewL
 	@Override
 	public <NewLeftType> IPair<NewLeftType, NewRight> mapLeft(Function<NewLeft, NewLeftType> mapper) {
 		Supplier<NewLeftType> leftSupp = () -> {
-			if (pairBound) {
-				return mapper.apply(boundPair.getLeft());
-			}
+			if(pairBound) return mapper.apply(boundPair.getLeft());
 
 			NewLeft leftVal = binder.apply(oldSupplier.get()).getLeft();
 
@@ -110,9 +108,7 @@ public class HalfBoundLazyPair<OldType, NewLeft, NewRight> implements IPair<NewL
 		};
 
 		Supplier<NewRight> rightSupp = () -> {
-			if (pairBound) {
-				return boundPair.getRight();
-			}
+			if(pairBound) return boundPair.getRight();
 
 			return binder.apply(oldSupplier.get()).getRight();
 		};
@@ -123,17 +119,13 @@ public class HalfBoundLazyPair<OldType, NewLeft, NewRight> implements IPair<NewL
 	@Override
 	public <NewRightType> IPair<NewLeft, NewRightType> mapRight(Function<NewRight, NewRightType> mapper) {
 		Supplier<NewLeft> leftSupp = () -> {
-			if (pairBound) {
-				return boundPair.getLeft();
-			}
+			if(pairBound) return boundPair.getLeft();
 
 			return binder.apply(oldSupplier.get()).getLeft();
 		};
 
 		Supplier<NewRightType> rightSupp = () -> {
-			if (pairBound) {
-				return mapper.apply(boundPair.getRight());
-			}
+			if(pairBound) return mapper.apply(boundPair.getRight());
 
 			NewRight rightVal = binder.apply(oldSupplier.get()).getRight();
 
@@ -145,7 +137,7 @@ public class HalfBoundLazyPair<OldType, NewLeft, NewRight> implements IPair<NewL
 
 	@Override
 	public <MergedType> MergedType merge(BiFunction<NewLeft, NewRight, MergedType> merger) {
-		if (!pairBound) {
+		if(!pairBound) {
 			boundPair = binder.apply(oldSupplier.get());
 
 			pairBound = true;

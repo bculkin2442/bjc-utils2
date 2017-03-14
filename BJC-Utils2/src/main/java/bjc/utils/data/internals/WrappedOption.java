@@ -1,10 +1,10 @@
 package bjc.utils.data.internals;
 
-import java.util.function.Function;
-import java.util.function.UnaryOperator;
-
 import bjc.utils.data.IHolder;
 import bjc.utils.data.Option;
+
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 public class WrappedOption<ContainedType> implements IHolder<ContainedType> {
 	private IHolder<IHolder<ContainedType>> held;
@@ -21,9 +21,7 @@ public class WrappedOption<ContainedType> implements IHolder<ContainedType> {
 	public <BoundType> IHolder<BoundType> bind(Function<ContainedType, IHolder<BoundType>> binder) {
 		IHolder<IHolder<BoundType>> newHolder = held.map((containedHolder) -> {
 			return containedHolder.bind((containedValue) -> {
-				if (containedValue == null) {
-					return new Option<>(null);
-				}
+				if(containedValue == null) return new Option<>(null);
 
 				return binder.apply(containedValue);
 			});
@@ -43,9 +41,7 @@ public class WrappedOption<ContainedType> implements IHolder<ContainedType> {
 	public <MappedType> IHolder<MappedType> map(Function<ContainedType, MappedType> mapper) {
 		IHolder<IHolder<MappedType>> newHolder = held.map((containedHolder) -> {
 			return containedHolder.map((containedValue) -> {
-				if (containedValue == null) {
-					return null;
-				}
+				if(containedValue == null) return null;
 
 				return mapper.apply(containedValue);
 			});
@@ -58,9 +54,7 @@ public class WrappedOption<ContainedType> implements IHolder<ContainedType> {
 	public IHolder<ContainedType> transform(UnaryOperator<ContainedType> transformer) {
 		held.transform((containedHolder) -> {
 			return containedHolder.transform((containedValue) -> {
-				if (containedValue == null) {
-					return null;
-				}
+				if(containedValue == null) return null;
 
 				return transformer.apply(containedValue);
 			});
@@ -73,9 +67,7 @@ public class WrappedOption<ContainedType> implements IHolder<ContainedType> {
 	public <UnwrappedType> UnwrappedType unwrap(Function<ContainedType, UnwrappedType> unwrapper) {
 		return held.unwrap((containedHolder) -> {
 			return containedHolder.unwrap((containedValue) -> {
-				if (containedValue == null) {
-					return null;
-				}
+				if(containedValue == null) return null;
 
 				return unwrapper.apply(containedValue);
 			});

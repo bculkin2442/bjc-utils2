@@ -1,5 +1,10 @@
 package bjc.utils.funcutils;
 
+import bjc.utils.data.IHolder;
+import bjc.utils.data.IPair;
+import bjc.utils.data.Identity;
+import bjc.utils.data.Pair;
+
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
@@ -7,18 +12,13 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 
-import bjc.utils.data.IHolder;
-import bjc.utils.data.IPair;
-import bjc.utils.data.Identity;
-import bjc.utils.data.Pair;
-
 final class CompoundCollector<InitialType, AuxType1, AuxType2, FinalType1, FinalType2>
 		implements Collector<InitialType, IHolder<IPair<AuxType1, AuxType2>>, IPair<FinalType1, FinalType2>> {
 
 	private Set<java.util.stream.Collector.Characteristics> characteristicSet;
 
-	private Collector<InitialType, AuxType1, FinalType1> first;
-	private Collector<InitialType, AuxType2, FinalType2> second;
+	private Collector<InitialType, AuxType1, FinalType1>	first;
+	private Collector<InitialType, AuxType2, FinalType2>	second;
 
 	public CompoundCollector(Collector<InitialType, AuxType1, FinalType1> first,
 			Collector<InitialType, AuxType2, FinalType2> second) {

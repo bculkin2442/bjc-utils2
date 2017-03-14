@@ -1,16 +1,16 @@
 package bjc.utils.data;
 
+import bjc.utils.funcdata.IList;
+import bjc.utils.funcdata.bst.TreeLinearizationMethod;
+
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
-import bjc.utils.funcdata.IList;
-import bjc.utils.funcdata.bst.TreeLinearizationMethod;
-
 /**
  * A node in a homogenous tree with a unlimited amount of children
- * 
+ *
  * @author ben
  * @param <ContainedType>
  *                The type of data contained in the tree nodes
@@ -19,7 +19,7 @@ import bjc.utils.funcdata.bst.TreeLinearizationMethod;
 public interface ITree<ContainedType> {
 	/**
 	 * Add a child to this node
-	 * 
+	 *
 	 * @param child
 	 *                The child to add to this node
 	 */
@@ -27,7 +27,7 @@ public interface ITree<ContainedType> {
 
 	/**
 	 * Collapse a tree into a single version
-	 * 
+	 *
 	 * @param <NewType>
 	 *                The intermediate type being folded
 	 * @param <ReturnedType>
@@ -48,7 +48,7 @@ public interface ITree<ContainedType> {
 
 	/**
 	 * Execute a given action for each of this tree's children
-	 * 
+	 *
 	 * @param action
 	 *                The action to execute for each child
 	 */
@@ -57,7 +57,7 @@ public interface ITree<ContainedType> {
 	/**
 	 * Expand the nodes of a tree into trees, and then merge the contents of
 	 * those trees into a single tree
-	 * 
+	 *
 	 * @param mapper
 	 *                The function to use to map values into trees
 	 * @return A tree, with some nodes expanded into trees
@@ -66,7 +66,7 @@ public interface ITree<ContainedType> {
 
 	/**
 	 * Get the specified child of this tree
-	 * 
+	 *
 	 * @param childNo
 	 *                The number of the child to get
 	 * @return The specified child of this tree
@@ -77,14 +77,14 @@ public interface ITree<ContainedType> {
 
 	/**
 	 * Get a count of the number of direct children this node has
-	 * 
+	 *
 	 * @return The number of direct children this node has
 	 */
 	public int getChildrenCount();
 
 	/**
 	 * Get the data stored in this node
-	 * 
+	 *
 	 * @return The data stored in this node
 	 */
 	default ContainedType getHead() {
@@ -93,7 +93,7 @@ public interface ITree<ContainedType> {
 
 	/**
 	 * Rebuild the tree with the same structure, but different nodes
-	 * 
+	 *
 	 * @param <MappedType>
 	 *                The type of the new tree
 	 * @param leafTransformer
@@ -107,7 +107,7 @@ public interface ITree<ContainedType> {
 
 	/**
 	 * Transform some of the nodes in this tree
-	 * 
+	 *
 	 * @param nodePicker
 	 *                The predicate to use to pick nodes to transform
 	 * @param transformer
@@ -117,7 +117,7 @@ public interface ITree<ContainedType> {
 
 	/**
 	 * Do a top-down transform of the tree
-	 * 
+	 *
 	 * @param transformPicker
 	 *                The function to use to pick how to progress
 	 * @param transformer
@@ -129,7 +129,7 @@ public interface ITree<ContainedType> {
 
 	/**
 	 * Transform one of this nodes children
-	 * 
+	 *
 	 * @param <TransformedType>
 	 *                The type of the transformed value
 	 * @param childNo
@@ -137,7 +137,7 @@ public interface ITree<ContainedType> {
 	 * @param transformer
 	 *                The function to use to transform the value
 	 * @return The transformed value
-	 * 
+	 *
 	 * @throws IllegalArgumentException
 	 *                 if the childNo is out of bounds (0 <= childNo <=
 	 *                 childCount())
@@ -147,7 +147,7 @@ public interface ITree<ContainedType> {
 
 	/**
 	 * Transform the value that is the head of this node
-	 * 
+	 *
 	 * @param <TransformedType>
 	 *                The type of the transformed value
 	 * @param transformer
@@ -158,7 +158,7 @@ public interface ITree<ContainedType> {
 
 	/**
 	 * Transform the tree into a tree with a different type of token
-	 * 
+	 *
 	 * @param <MappedType>
 	 *                The type of the new tree
 	 * @param transformer
@@ -169,7 +169,7 @@ public interface ITree<ContainedType> {
 
 	/**
 	 * Perform an action on each part of the tree
-	 * 
+	 *
 	 * @param linearizationMethod
 	 *                The way to traverse the tree
 	 * @param action

@@ -1,13 +1,13 @@
 package bjc.utils.examples;
 
-import java.util.Scanner;
-
 import bjc.utils.funcdata.bst.BinarySearchTree;
 import bjc.utils.funcdata.bst.TreeLinearizationMethod;
 
+import java.util.Scanner;
+
 /**
  * Example showing how to use the binary search tree.
- * 
+ *
  * @author ben
  *
  */
@@ -16,11 +16,11 @@ public class BinarySearchTest {
 		System.out.print("What order would you like the tree to be printed in (m for options): ");
 		char command;
 
-		while (true) {
+		while(true) {
 			command = input.nextLine().charAt(0);
 			TreeLinearizationMethod method = null;
 
-			switch (command) {
+			switch(command) {
 			case 'm':
 				System.out.println("Possible tree printing methods: ");
 				System.out.println("\tp: Preorder printing (print parent first, then left & right).");
@@ -40,7 +40,7 @@ public class BinarySearchTest {
 				System.out.println("ERROR: Unknown command.");
 			}
 
-			if (method != null) {
+			if(method != null) {
 				tree.traverse(method, (element) -> {
 					System.out.println("Node: " + element);
 					return true;
@@ -55,7 +55,7 @@ public class BinarySearchTest {
 
 	/**
 	 * Main method of class
-	 * 
+	 *
 	 * @param args
 	 *                Unused CLI args
 	 */
@@ -68,11 +68,11 @@ public class BinarySearchTest {
 
 		BinarySearchTree<Character> tree = new BinarySearchTree<>((o1, o2) -> o1 - o2);
 
-		while (command != 'e') {
+		while(command != 'e') {
 			System.out.print("Enter a command (m for help): ");
 			command = input.nextLine().charAt(0);
 
-			switch (command) {
+			switch(command) {
 			case 'm':
 				System.out.println("Valid commands: ");
 				System.out.println("\tm: Display this help message.");
@@ -104,7 +104,7 @@ public class BinarySearchTest {
 				command = input.nextLine().charAt(0);
 
 				boolean inTree = tree.isInTree(command);
-				if (inTree) {
+				if(inTree) {
 					System.out.printf("Node %s was found\n", command);
 				} else {
 					System.out.printf("Node %s was not found\n", command);

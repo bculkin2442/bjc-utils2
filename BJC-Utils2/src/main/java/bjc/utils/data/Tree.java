@@ -1,17 +1,17 @@
 package bjc.utils.data;
 
+import bjc.utils.funcdata.FunctionalList;
+import bjc.utils.funcdata.IList;
+import bjc.utils.funcdata.bst.TreeLinearizationMethod;
+
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
-import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.IList;
-import bjc.utils.funcdata.bst.TreeLinearizationMethod;
-
 /**
  * A node in a homogenous tree.
- * 
+ *
  * @author ben
  *
  * @param <ContainedType>
@@ -19,16 +19,16 @@ import bjc.utils.funcdata.bst.TreeLinearizationMethod;
 public class Tree<ContainedType> implements ITree<ContainedType> {
 	private ContainedType data;
 
-	private IList<ITree<ContainedType>> children;
-	private boolean hasChildren;
-	private int childCount = 0;
+	private IList<ITree<ContainedType>>	children;
+	private boolean				hasChildren;
+	private int				childCount	= 0;
 
-	private int ID;
-	private static int nextID = 0;
+	private int		ID;
+	private static int	nextID	= 0;
 
 	/**
 	 * Create a new leaf node in a tree
-	 * 
+	 *
 	 * @param leaf
 	 *                The data to store as a leaf node
 	 */
@@ -42,7 +42,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 	/**
 	 * Create a new tree node with the specified children
-	 * 
+	 *
 	 * @param leaf
 	 *                The data to hold in this node
 	 * @param childrn
@@ -58,7 +58,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 	/**
 	 * Create a new tree node with the specified children
-	 * 
+	 *
 	 * @param leaf
 	 *                The data to hold in this node
 	 * @param childrn
@@ -74,7 +74,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 		children = new FunctionalList<>();
 
-		for (ITree<ContainedType> child : childrn) {
+		for(ITree<ContainedType> child : childrn) {
 			children.add(child);
 
 			childCount++;
@@ -83,7 +83,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 	@Override
 	public void addChild(ITree<ContainedType> child) {
-		if (hasChildren == false) {
+		if(hasChildren == false) {
 			hasChildren = true;
 
 			children = new FunctionalList<>();
@@ -109,7 +109,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 	@Override
 	public ITree<ContainedType> flatMapTree(Function<ContainedType, ITree<ContainedType>> mapper) {
-		if (hasChildren) {
+		if(hasChildren) {
 			ITree<ContainedType> flatMappedData = mapper.apply(data);
 
 			children.map((child) -> child.flatMapTree(mapper))
@@ -128,10 +128,10 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 	protected <NewType> NewType internalCollapse(Function<ContainedType, NewType> leafTransform,
 			Function<ContainedType, Function<IList<NewType>, NewType>> nodeCollapser) {
-		if (hasChildren) {
+		if(hasChildren) {
 			Function<IList<NewType>, NewType> nodeTransformer = nodeCollapser.apply(data);
 
-			IList<NewType> collapsedChildren = (IList<NewType>) children.map((child) -> {
+			IList<NewType> collapsedChildren = children.map((child) -> {
 				return child.collapse(leafTransform, nodeCollapser, (subTreeVal) -> subTreeVal);
 			});
 
@@ -142,7 +142,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	}
 
 	protected void internalToString(StringBuilder builder, int indentLevel, boolean initial) {
-		for (int i = 0; i < indentLevel; i++) {
+		for(int i = 0; i < indentLevel; i++) {
 			builder.append(">\t");
 		}
 
@@ -152,7 +152,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 		builder.append(data == null ? "(null)" : data.toString());
 		builder.append("\n");
 
-		if (hasChildren) {
+		if(hasChildren) {
 			children.forEach((child) -> {
 				((Tree<ContainedType>) child).internalToString(builder, indentLevel + 1, false);
 			});
@@ -162,7 +162,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	@Override
 	public <MappedType> ITree<MappedType> rebuildTree(Function<ContainedType, MappedType> leafTransformer,
 			Function<ContainedType, MappedType> operatorTransformer) {
-		if (hasChildren) {
+		if(hasChildren) {
 			IList<ITree<MappedType>> mappedChildren = children.map((child) -> {
 				return child.rebuildTree(leafTransformer, operatorTransformer);
 			});
@@ -175,7 +175,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 	@Override
 	public void selectiveTransform(Predicate<ContainedType> nodePicker, UnaryOperator<ContainedType> transformer) {
-		if (hasChildren) {
+		if(hasChildren) {
 			children.forEach((child) -> child.selectiveTransform(nodePicker, transformer));
 		} else {
 			data = transformer.apply(data);
@@ -187,11 +187,11 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 			UnaryOperator<ITree<ContainedType>> transformer) {
 		TopDownTransformResult transformResult = transformPicker.apply(data);
 
-		switch (transformResult) {
+		switch(transformResult) {
 		case PASSTHROUGH:
 			ITree<ContainedType> result = new Tree<>(data);
 
-			if (hasChildren) {
+			if(hasChildren) {
 				children.forEach((child) -> {
 					result.addChild(child.topDownTransform(transformPicker, transformer));
 				});
@@ -207,7 +207,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 		case PUSHDOWN:
 			result = new Tree<>(data);
 
-			if (hasChildren) {
+			if(hasChildren) {
 				children.forEach((child) -> {
 					result.addChild(child.topDownTransform(transformPicker, transformer));
 				});
@@ -244,9 +244,8 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	@Override
 	public <TransformedType> TransformedType transformChild(int childNo,
 			Function<ITree<ContainedType>, TransformedType> transformer) {
-		if (childNo < 0 || childNo > (childCount - 1)) {
+		if(childNo < 0 || childNo > childCount - 1)
 			throw new IllegalArgumentException("Child index #" + childNo + " is invalid");
-		}
 
 		return transformer.apply(children.getByIndex(childNo));
 	}
@@ -258,7 +257,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 	@Override
 	public <MappedType> ITree<MappedType> transformTree(Function<ContainedType, MappedType> transformer) {
-		if (hasChildren) {
+		if(hasChildren) {
 			IList<ITree<MappedType>> transformedChildren = children
 					.map((child) -> child.transformTree(transformer));
 
@@ -270,13 +269,11 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 	@Override
 	public void traverse(TreeLinearizationMethod linearizationMethod, Consumer<ContainedType> action) {
-		if (hasChildren) {
-			switch (linearizationMethod) {
+		if(hasChildren) {
+			switch(linearizationMethod) {
 			case INORDER:
-				if (childCount != 2) {
-					throw new IllegalArgumentException(
-							"Can only do in-order traversal for binary trees.");
-				}
+				if(childCount != 2) throw new IllegalArgumentException(
+						"Can only do in-order traversal for binary trees.");
 
 				children.getByIndex(0).traverse(linearizationMethod, action);
 
@@ -303,32 +300,26 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 		}
 	}
 
+	@Override
 	public boolean equals(Object other) {
-		if (!(other instanceof Tree<?>))
-			return false;
+		if(!(other instanceof Tree<?>)) return false;
 
 		@SuppressWarnings("unchecked")
 		Tree<ContainedType> otr = (Tree<ContainedType>) other;
 
-		if (!otr.data.equals(data))
-			return false;
+		if(!otr.data.equals(data)) return false;
 
-		if (children == null && otr.children == null)
-			return true;
+		if(children == null && otr.children == null) return true;
 
-		if (children == null && otr.children != null)
-			return false;
-		if (children != null && otr.children == null)
-			return false;
+		if(children == null && otr.children != null) return false;
+		if(children != null && otr.children == null) return false;
 
-		if (children.getSize() != otr.children.getSize())
-			return false;
+		if(children.getSize() != otr.children.getSize()) return false;
 
 		int childNo = 0;
 
-		for (ITree<ContainedType> child : children) {
-			if (!otr.children.getByIndex(childNo).equals(child))
-				return false;
+		for(ITree<ContainedType> child : children) {
+			if(!otr.children.getByIndex(childNo).equals(child)) return false;
 
 			childNo += 1;
 		}

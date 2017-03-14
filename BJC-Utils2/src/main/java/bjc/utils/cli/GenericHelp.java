@@ -2,18 +2,18 @@ package bjc.utils.cli;
 
 /**
  * Generic implementation of a help topic
- * 
+ *
  * @author ben
  *
  */
 public class GenericHelp implements ICommandHelp {
 	// The strings for this help topic
-	private String summary;
-	private String description;
+	private String	summary;
+	private String	description;
 
 	/**
 	 * Create a new help topic
-	 * 
+	 *
 	 * @param summary
 	 *                The summary of this help topic
 	 * @param description
@@ -21,9 +21,7 @@ public class GenericHelp implements ICommandHelp {
 	 *                help topic doesn't have a more detailed description
 	 */
 	public GenericHelp(String summary, String description) {
-		if (summary == null) {
-			throw new NullPointerException("Help summary must be non-null");
-		}
+		if(summary == null) throw new NullPointerException("Help summary must be non-null");
 
 		this.summary = summary;
 		this.description = description;
@@ -31,9 +29,7 @@ public class GenericHelp implements ICommandHelp {
 
 	@Override
 	public String getDescription() {
-		if (description == null) {
-			return summary;
-		}
+		if(description == null) return summary;
 
 		return description;
 	}

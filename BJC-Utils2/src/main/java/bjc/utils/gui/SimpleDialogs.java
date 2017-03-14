@@ -1,5 +1,7 @@
 package bjc.utils.gui;
 
+import bjc.utils.gui.layout.VLayout;
+
 import java.awt.Component;
 import java.awt.Frame;
 import java.util.function.Function;
@@ -12,18 +14,16 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import bjc.utils.gui.layout.VLayout;
-
 /**
  * Utility class for getting simple input from the user.
- * 
+ *
  * @author ben
  *
  */
 public class SimpleDialogs {
 	/**
 	 * Get a bounded integer from the user.
-	 * 
+	 *
 	 * @param parent
 	 *                The parent component for the dialogs.
 	 * @param title
@@ -41,8 +41,8 @@ public class SimpleDialogs {
 			try {
 				int value = Integer.parseInt(strang);
 
-				return (value < upperBound) && (value > lowerBound);
-			} catch (NumberFormatException nfex) {
+				return value < upperBound && value > lowerBound;
+			} catch(NumberFormatException nfex) {
 				// We don't care about the specifics of the
 				// exception, just
 				// that this value isn't good
@@ -53,10 +53,10 @@ public class SimpleDialogs {
 
 	/**
 	 * Asks the user to pick an option from a series of choices.
-	 * 
+	 *
 	 * @param <E>
 	 *                The type of choices for the user to pick
-	 * 
+	 *
 	 * @param parent
 	 *                The parent frame for this dialog
 	 * @param title
@@ -69,13 +69,11 @@ public class SimpleDialogs {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <E> E getChoice(Frame parent, String title, String question, E... choices) {
-		if (parent == null) {
+		if(parent == null)
 			throw new NullPointerException("Parent must not be null");
-		} else if (title == null) {
+		else if(title == null)
 			throw new NullPointerException("Title must not be null");
-		} else if (question == null) {
-			throw new NullPointerException("Question must not be null");
-		}
+		else if(question == null) throw new NullPointerException("Question must not be null");
 
 		JDialog chooser = new JDialog(parent, title, true);
 		chooser.setLayout(new VLayout(2));
@@ -110,7 +108,7 @@ public class SimpleDialogs {
 
 	/**
 	 * Get a integer from the user
-	 * 
+	 *
 	 * @param parent
 	 *                The parent component for dialogs.
 	 * @param title
@@ -124,7 +122,7 @@ public class SimpleDialogs {
 			try {
 				Integer.parseInt(strang);
 				return true;
-			} catch (NumberFormatException nfex) {
+			} catch(NumberFormatException nfex) {
 				// We don't care about this exception, just mark
 				// the value
 				// as not good
@@ -135,7 +133,7 @@ public class SimpleDialogs {
 
 	/**
 	 * Get a string from the user
-	 * 
+	 *
 	 * @param parent
 	 *                The parent component for dialogs.
 	 * @param title
@@ -145,23 +143,21 @@ public class SimpleDialogs {
 	 * @return A string.
 	 */
 	public static String getString(Component parent, String title, String prompt) {
-		if (parent == null) {
+		if(parent == null)
 			throw new NullPointerException("Parent must not be null");
-		} else if (title == null) {
+		else if(title == null)
 			throw new NullPointerException("Title must not be null");
-		} else if (prompt == null) {
-			throw new NullPointerException("Prompt must not be null");
-		}
+		else if(prompt == null) throw new NullPointerException("Prompt must not be null");
 
 		return JOptionPane.showInputDialog(parent, prompt, title, JOptionPane.QUESTION_MESSAGE);
 	}
 
 	/**
 	 * Get a value parsable from a string from the user.
-	 * 
+	 *
 	 * @param <E>
 	 *                The type of the value parsed from the string
-	 * 
+	 *
 	 * @param parent
 	 *                The parent component for dialogs.
 	 * @param title
@@ -176,15 +172,13 @@ public class SimpleDialogs {
 	 */
 	public static <E> E getValue(Component parent, String title, String prompt, Predicate<String> validator,
 			Function<String, E> transformer) {
-		if (validator == null) {
+		if(validator == null)
 			throw new NullPointerException("Validator must not be null");
-		} else if (transformer == null) {
-			throw new NullPointerException("Transformer must not be null");
-		}
+		else if(transformer == null) throw new NullPointerException("Transformer must not be null");
 
 		String input = getString(parent, title, prompt);
 
-		while (!validator.test(input)) {
+		while(!validator.test(input)) {
 			showError(parent, "I/O Error", "Please enter a valid value");
 
 			input = getString(parent, title, prompt);
@@ -195,7 +189,7 @@ public class SimpleDialogs {
 
 	/**
 	 * Get a whole number from the user.
-	 * 
+	 *
 	 * @param parent
 	 *                The parent component for dialogs.
 	 * @param title
@@ -210,7 +204,7 @@ public class SimpleDialogs {
 
 	/**
 	 * Ask the user a Yes/No question.
-	 * 
+	 *
 	 * @param parent
 	 *                The parent component for dialogs.
 	 * @param title
@@ -220,22 +214,20 @@ public class SimpleDialogs {
 	 * @return True if the user said yes, false otherwise.
 	 */
 	public static boolean getYesNo(Component parent, String title, String question) {
-		if (parent == null) {
+		if(parent == null)
 			throw new NullPointerException("Parent must not be null");
-		} else if (title == null) {
+		else if(title == null)
 			throw new NullPointerException("Title must not be null");
-		} else if (question == null) {
-			throw new NullPointerException("Question must not be null");
-		}
+		else if(question == null) throw new NullPointerException("Question must not be null");
 
 		int result = JOptionPane.showConfirmDialog(parent, question, title, JOptionPane.YES_NO_OPTION);
 
-		return (result == JOptionPane.YES_OPTION ? true : false);
+		return result == JOptionPane.YES_OPTION ? true : false;
 	}
 
 	/**
 	 * Show a error message to the user
-	 * 
+	 *
 	 * @param parent
 	 *                The parent component for dialogs.
 	 * @param title
@@ -244,20 +236,18 @@ public class SimpleDialogs {
 	 *                The error to show the user.
 	 */
 	public static void showError(Component parent, String title, String message) {
-		if (parent == null) {
+		if(parent == null)
 			throw new NullPointerException("Parent must not be null");
-		} else if (title == null) {
+		else if(title == null)
 			throw new NullPointerException("Title must not be null");
-		} else if (message == null) {
-			throw new NullPointerException("Error message must not be null");
-		}
+		else if(message == null) throw new NullPointerException("Error message must not be null");
 
 		JOptionPane.showMessageDialog(parent, message, title, JOptionPane.ERROR_MESSAGE);
 	}
 
 	/**
 	 * Show an informative message to the user
-	 * 
+	 *
 	 * @param parent
 	 *                The parent for this dialog
 	 * @param title
@@ -266,13 +256,11 @@ public class SimpleDialogs {
 	 *                Show the message for this dialog
 	 */
 	public static void showMessage(Component parent, String title, String message) {
-		if (parent == null) {
+		if(parent == null)
 			throw new NullPointerException("Parent must not be null");
-		} else if (title == null) {
+		else if(title == null)
 			throw new NullPointerException("Title must not be null");
-		} else if (message == null) {
-			throw new NullPointerException("Message must not be null");
-		}
+		else if(message == null) throw new NullPointerException("Message must not be null");
 
 		JOptionPane.showMessageDialog(parent, title, message, JOptionPane.INFORMATION_MESSAGE);
 	}

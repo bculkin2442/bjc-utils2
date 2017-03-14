@@ -1,5 +1,7 @@
 package bjc.utils.gui.panels;
 
+import bjc.utils.gui.layout.HLayout;
+
 import java.util.function.Consumer;
 
 import javax.swing.JFormattedTextField;
@@ -7,11 +9,9 @@ import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import bjc.utils.gui.layout.HLayout;
-
 /**
  * A simple panel allowing for input of a single formatted value
- * 
+ *
  * @author ben
  *
  * @param <InputVal>
@@ -24,7 +24,7 @@ public class FormattedInputPanel<InputVal> extends JPanel {
 
 	/**
 	 * Create a new formatted input panel
-	 * 
+	 *
 	 * @param label
 	 *                The label for this panel
 	 * @param length
@@ -55,7 +55,7 @@ public class FormattedInputPanel<InputVal> extends JPanel {
 
 	/**
 	 * Reset the value in this panel to a specified value
-	 * 
+	 *
 	 * @param value
 	 *                The value to set the panel to
 	 */

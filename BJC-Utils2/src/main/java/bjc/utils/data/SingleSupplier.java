@@ -4,9 +4,9 @@ import java.util.function.Supplier;
 
 /**
  * A supplier that can only supply one value.
- * 
+ *
  * Attempting to retrieve another value will cause an exception to be thrown.
- * 
+ *
  * @author ben
  *
  * @param <T>
@@ -26,7 +26,7 @@ public class SingleSupplier<T> implements Supplier<T> {
 
 	/**
 	 * Create a new single supplier from an existing value
-	 * 
+	 *
 	 * @param supp
 	 *                The supplier to give a single value from
 	 */
@@ -40,7 +40,7 @@ public class SingleSupplier<T> implements Supplier<T> {
 
 	@Override
 	public T get() {
-		if (gotten == true) {
+		if(gotten == true) {
 			IllegalStateException isex = new IllegalStateException("Attempted to get value more than once"
 					+ " from single supplier #" + id + ". Previous instantiation below.");
 
@@ -53,7 +53,7 @@ public class SingleSupplier<T> implements Supplier<T> {
 
 		try {
 			throw new IllegalStateException("Previous instantiation here.");
-		} catch (IllegalStateException isex) {
+		} catch(IllegalStateException isex) {
 			instSite = isex;
 		}
 
