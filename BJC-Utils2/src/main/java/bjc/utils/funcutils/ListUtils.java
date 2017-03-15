@@ -80,7 +80,7 @@ public class ListUtils {
 	 *                The affixes to remove
 	 * @return The tokens that have been deaffixed
 	 *
-	 * @deprecated Replaced by NeoTokenSplitter.
+	 * @deprecated Replaced by TokenSplitter.
 	 */
 	@Deprecated
 	public static IList<String> deAffixTokens(IList<String> input, Deque<IPair<String, String>> operators) {
@@ -301,7 +301,7 @@ public class ListUtils {
 	 *                those operators
 	 * @return A list of tokens split on all the operators
 	 *
-	 * @deprecated Use NeoTokenSplitter now
+	 * @deprecated Use TokenSplitter now
 	 */
 	@Deprecated
 	public static IList<String> splitTokens(IList<String> input, Deque<IPair<String, String>> operators) {
