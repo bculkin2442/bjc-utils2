@@ -1,5 +1,8 @@
 package bjc.utils.esodata;
 
+import java.util.Arrays;
+import java.util.stream.Stream;
+
 /*
  * Implements a spaghetti stack, which is a stack that is branched off of a
  * parent stack.
@@ -51,5 +54,16 @@ class SpaghettiStack<T> extends Stack<T> {
 	@Override
 	public boolean empty() {
 		return backing.empty() && parent.empty();
+	}
+
+	@Override
+	public String toString() {
+		return "[base=" + parent.toString() + ", own=" + backing.toString() + "]";
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public T[] toArray() {
+		return (T[]) Stream.concat(Arrays.stream(parent.toArray()), Arrays.stream(backing.toArray())).toArray();
 	}
 }

@@ -28,11 +28,15 @@ public class SimpleStack<T> extends Stack<T> {
 
 	@Override
 	public T pop() {
+		if(backing.isEmpty()) throw new StackUnderflowException();
+		
 		return backing.pop();
 	}
 
 	@Override
 	public T top() {
+		if(backing.isEmpty()) throw new StackUnderflowException();
+		
 		return backing.peek();
 	}
 
@@ -44,5 +48,15 @@ public class SimpleStack<T> extends Stack<T> {
 	@Override
 	public boolean empty() {
 		return backing.size() == 0;
+	}
+	
+	@Override
+	public String toString() {
+		return backing.toString();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public T[] toArray() {
+		return (T[]) backing.toArray();
 	}
 }

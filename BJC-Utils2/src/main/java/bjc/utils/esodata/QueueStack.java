@@ -6,7 +6,7 @@ import java.util.LinkedList;
 /**
  * A FIFO implementation of a stack.
  *
- * @param T
+ * @param <T>
  *                The datatype stored in the stack.
  * @author Ben Culkin
  */
@@ -28,11 +28,15 @@ public class QueueStack<T> extends Stack<T> {
 
 	@Override
 	public T pop() {
+		if(backing.isEmpty()) throw new StackUnderflowException();
+		
 		return backing.remove();
 	}
 
 	@Override
 	public T top() {
+		if(backing.isEmpty()) throw new StackUnderflowException();
+		
 		return backing.peek();
 	}
 
@@ -44,5 +48,16 @@ public class QueueStack<T> extends Stack<T> {
 	@Override
 	public boolean empty() {
 		return backing.size() == 0;
+	}
+	
+	@Override
+	public String toString() {
+		return backing.toString();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public T[] toArray() {
+		return (T[]) backing.toArray();
 	}
 }

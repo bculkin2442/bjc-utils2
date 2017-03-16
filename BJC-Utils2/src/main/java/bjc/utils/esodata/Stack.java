@@ -9,11 +9,31 @@ import java.util.function.Consumer;
  *
  * A FILO stack with support for forth/factor style combinators.
  *
- * @param T
+ * <p>
+ * <h2>Stack underflow</h2>
+ * <p>
+ * NOTE: In general, using any operation that attempts to remove more data from
+ * the stack than exists will cause a {@link StackUnderflowException} to be
+ * thrown. Check the size of the stack if you want to avoid this.
+ * <p>
+ * </p>
+ * 
+ * @param <T>
  *                The datatype stored in the stack.
+ * 
  * @author Ben Culkin
  */
 public abstract class Stack<T> {
+	/**
+	 * The exception thrown when attempting to access an element from the
+	 * stack that isn't there.
+	 * 
+	 * @author EVE
+	 *
+	 */
+	public static class StackUnderflowException extends RuntimeException {
+	}
+
 	/**
 	 * Push an element onto the stack.
 	 *
@@ -29,6 +49,12 @@ public abstract class Stack<T> {
 	 */
 	public abstract T pop();
 
+	/**
+	 * Retrieve the top element of this stack without removing it from the
+	 * stack.
+	 * 
+	 * @return The top element of this stack.
+	 */
 	public abstract T top();
 
 	/**
@@ -53,7 +79,7 @@ public abstract class Stack<T> {
 	public Stack<T> spaghettify() {
 		return new SpaghettiStack<>(this);
 	}
-
+	
 	/*
 	 * Basic combinators
 	 */
@@ -377,7 +403,7 @@ public abstract class Stack<T> {
 	/**
 	 * Apply the actions in cons to corresponding elements from the stack.
 	 *
-	 * @parma conses The actions to execute.
+	 * @param conses The actions to execute.
 	 */
 	public void spread(List<Consumer<Stack<T>>> conses) {
 		multispread(1, conses);
@@ -414,4 +440,14 @@ public abstract class Stack<T> {
 	public void apply(int n, Consumer<Stack<T>> cons) {
 		multiapply(1, n, cons);
 	}
+	
+	/*
+	 * Misc. functions
+	 */
+	/**
+	 * Get an array representing this stack.
+	 * 
+	 * @return The stack as an array.
+	 */
+	public abstract T[] toArray();
 }
