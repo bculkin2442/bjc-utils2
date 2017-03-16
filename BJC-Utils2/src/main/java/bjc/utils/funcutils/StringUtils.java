@@ -92,22 +92,22 @@ public class StringUtils {
 	/*
 	 * This regex matches java-style string escapes
 	 */
-	private static String	escapeString	= "\\\\([btnfr\"'\\\\]"		// Match
-										// shortform
-										// escape
-										// sequences
-										// like
-										// \t
-										// or
-										// \"
-			+ "|[0-3]?[0-7]{1,2}"					// Match
-										// octal
-										// escape
-										// sequences
-			+ "|u[0-9a-fA-F]{4})";					// Match
-										// unicode
-										// escape
-										// sequences
+	private static String	escapeString	= "\\\\([btnfr\"'\\\\]"												// Match
+																				// shortform
+																				// escape
+																				// sequences
+																				// like
+																				// \t
+																				// or
+																				// \"
+			+ "|[0-3]?[0-7]{1,2}"															// Match
+																				// octal
+																				// escape
+																				// sequences
+			+ "|u[0-9a-fA-F]{4})";															// Match
+																				// unicode
+																				// escape
+																				// sequences
 	private static Pattern	escapePatt	= Pattern.compile(escapeString);
 
 	/*
@@ -235,5 +235,103 @@ public class StringUtils {
 
 	public static boolean isInt(String inp) {
 		return intLitPattern.matcher(inp).matches();
+	}
+
+	/**
+	 * Converts a sequence to an English list.
+	 * 
+	 * @param objects
+	 *                The sequence to convert to an English list.
+	 * @param join
+	 *                The string to use for separating the last element from
+	 *                the rest.
+	 * @param comma
+	 *                The string to use as a comma
+	 * 
+	 * @return
+	 */
+	public static String toEnglishList(Object[] objects, String join, String comma) {
+		if(objects == null) {
+			throw new NullPointerException("Sequence must not be null");
+		}
+
+		StringBuilder sb = new StringBuilder();
+
+		String joiner = " " + join + " ";
+		String coma = comma + " ";
+
+		switch(objects.length) {
+		case 0:
+			/*
+			 * Empty list.
+			 */
+			break;
+		case 1:
+			/*
+			 * One item.
+			 */
+			sb.append(objects[0].toString());
+			break;
+		case 2:
+			/*
+			 * Two items.
+			 */
+			sb.append(objects[0].toString());
+			sb.append(joiner);
+			sb.append(objects[1].toString());
+			break;
+		default:
+			/*
+			 * Three or more items.
+			 */
+			for(int i = 0; i < objects.length - 1; i++) {
+				sb.append(objects[i].toString());
+				sb.append(coma);
+			}
+			/*
+			 * Uncomment this to remove serial commas.
+			 * 
+			 * int lc = sb.length() - 1;
+			 * 
+			 * sb.delete(lc - coma.length(), lc);
+			 */
+			sb.append(joiner);
+			sb.append(objects[objects.length - 1].toString());
+		}
+
+		return sb.toString();
+	}
+
+	/**
+	 * Converts a sequence to an English list.
+	 * 
+	 * @param objects
+	 *                The sequence to convert to an English list.
+	 * @param join
+	 *                The string to use for separating the last element from
+	 *                the rest.
+	 * 
+	 * @return
+	 */
+	public static String toEnglishList(Object[] objects, String join) {
+		return toEnglishList(objects, join, ",");
+	}
+
+	/**
+	 * Converts a sequence to an English list.
+	 * 
+	 * @param objects
+	 *                The sequence to convert to an English list.
+	 * @param and
+	 *                Whether to use 'and' or 'or'.
+	 * 
+	 * @return
+	 */
+	public static String toEnglishList(Object[] objects, boolean and) {
+		if(and) {
+			return toEnglishList(objects, "and");
+		} else {
+			return toEnglishList(objects, "or");
+		}
 	}
 }
