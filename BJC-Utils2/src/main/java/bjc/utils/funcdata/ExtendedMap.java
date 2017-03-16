@@ -83,6 +83,8 @@ class ExtendedMap<KeyType, ValueType> implements IMap<KeyType, ValueType> {
 
 	@Override
 	public ValueType remove(KeyType key) {
+		if(!store.containsKey(key)) return delegate.remove(key);
+		
 		return store.remove(key);
 	}
 
