@@ -96,7 +96,8 @@ public class CLICommander {
 			if(currentMode.canHandle(currentLine)) {
 				String[] commandTokens = currentLine.split(" ");
 				String[] commandArgs   = null;
-				int      argCount      = commandTokens.length;
+
+				int argCount = commandTokens.length;
 
 				/*
 				 *  Parse args if they are present.
