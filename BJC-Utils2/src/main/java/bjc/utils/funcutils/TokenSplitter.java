@@ -21,7 +21,7 @@ public class TokenSplitter {
 	 * Thus, it will only match in places where the delimiter is, but won't
 	 * actually match the delimiter, leaving split to put it into the stream
 	 */
-	private static String WITH_DELIM = "((?<=%1$s)|(?=%1$s))";
+	private static String WITH_DELIM = "(?:(?<=%1$s)|(?=%1$s))";
 
 	/*
 	 * This string is a format template for the multi-delimiter matching
@@ -31,7 +31,7 @@ public class TokenSplitter {
 	 * some negative lookahead/lookbehind assertions to avoid splitting a
 	 * delimiter into pieces.
 	 */
-	private static String WITH_MULTI_DELIM = "((?<=%1$s+)(?!%1$s)|(?<!%1$s)(?=%1$s+))";
+	private static String WITH_MULTI_DELIM = "(?:(?<=%1$s+)(?!%1$s)|(?<!%1$s)(?=%1$s+))";
 
 	/*
 	 * These represent the internal state of the splitter.
@@ -57,8 +57,10 @@ public class TokenSplitter {
 	 * Split a provided string using configured delimiters, and keeping the
 	 * delimiters.
 	 *
+	 * <p>
 	 * The splitter must be compiled first.
-	 *
+	 * </p>
+	 * 
 	 * @param inp
 	 *                The string to split.
 	 *
@@ -79,28 +81,30 @@ public class TokenSplitter {
 	}
 
 	/**
-	 * Adds a string as a matched delimiter to split on.
+	 * Adds one or more strings as matched delimiters to split on.
 	 *
 	 * Only works for fixed length delimiters.
 	 *
-	 * The provided string is regex-escaped before being used.
+	 * The provided strings are regex-escaped before being used.
 	 *
-	 * @param delim
-	 *                The delimiter to match on.
+	 * @param delims
+	 *                The delimiters to match on.
 	 */
-	public void addDelimiter(String delim) {
-		String quoteDelim = Pattern.quote(delim);
-		String delimPat   = String.format(WITH_DELIM, quoteDelim);
-
-		if(currPatt == null) {
-			currPatt          = new StringBuilder();
-			currExclusionPatt = new StringBuilder();
-
-			currPatt.append("(?:" + delimPat + ")");
-			currExclusionPatt.append("(?:" + quoteDelim + ")");
-		} else {
-			currPatt.append("|(?:" + delimPat + ")");
-			currExclusionPatt.append("|(?:" + quoteDelim + ")");
+	public void addDelimiter(String... delims) {
+		for(String delim : delims) {
+			String quoteDelim = Pattern.quote(delim);
+			String delimPat   = String.format(WITH_DELIM, quoteDelim);
+	
+			if(currPatt == null) {
+				currPatt          = new StringBuilder();
+				currExclusionPatt = new StringBuilder();
+	
+				currPatt.append("(?:" + delimPat + ")");
+				currExclusionPatt.append("(?:" + quoteDelim + ")");
+			} else {
+				currPatt.append("|(?:" + delimPat + ")");
+				currExclusionPatt.append("|(?:" + quoteDelim + ")");
+			}
 		}
 	}
 

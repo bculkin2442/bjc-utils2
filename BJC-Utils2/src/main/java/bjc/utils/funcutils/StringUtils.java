@@ -210,6 +210,7 @@ public class StringUtils {
 
 			escapeFinder.appendReplacement(work, escapeRep);
 		}
+
 		escapeFinder.appendTail(work);
 
 		return work.toString();
