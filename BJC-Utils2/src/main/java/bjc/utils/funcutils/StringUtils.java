@@ -86,8 +86,8 @@ public class StringUtils {
 
 		StringBuilder sb = new StringBuilder();
 
-		String joiner = " " + join + " ";
-		String coma = comma + " ";
+		String joiner = join;
+		String coma = comma;
 
 		switch(objects.length) {
 		case 0:
@@ -106,7 +106,7 @@ public class StringUtils {
 			 * Two items.
 			 */
 			sb.append(objects[0].toString());
-			sb.append(joiner);
+			sb.append(" " + joiner + " ");
 			sb.append(objects[1].toString());
 			break;
 		default:
@@ -115,7 +115,7 @@ public class StringUtils {
 			 */
 			for(int i = 0; i < objects.length - 1; i++) {
 				sb.append(objects[i].toString());
-				sb.append(coma);
+				sb.append(coma + " ");
 			}
 			/*
 			 * Uncomment this to remove serial commas.
@@ -124,7 +124,7 @@ public class StringUtils {
 			 * 
 			 * sb.delete(lc - coma.length(), lc);
 			 */
-			sb.append(joiner);
+			sb.append(joiner + " ");
 			sb.append(objects[objects.length - 1].toString());
 		}
 
