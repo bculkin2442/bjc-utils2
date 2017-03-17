@@ -3,6 +3,7 @@ package bjc.utils.examples;
 import bjc.utils.data.ITree;
 import bjc.utils.funcutils.SequenceDelimiter;
 import bjc.utils.funcutils.SequenceDelimiter.DelimiterException;
+import bjc.utils.funcutils.StringDelimiter;
 import bjc.utils.funcutils.TokenSplitter;
 
 import java.util.Arrays;
@@ -31,7 +32,7 @@ public class DelimSplitterTest {
 		split.addDelimiter("+", "-", "*", "/");
 		split.compile();
 
-		SequenceDelimiter dlm = new SequenceDelimiter();
+		StringDelimiter dlm = new StringDelimiter();
 		dlm.addGroup(new String[] { "(" }, "parens", ")");
 		dlm.addGroup(new String[] { "[" }, "brackets", "]");
 		dlm.addGroup(new String[] { "{" }, "braces", "}");
@@ -39,7 +40,7 @@ public class DelimSplitterTest {
 		System.out.print("Enter a sequence to delimit (blank line to quit): ");
 		String inp = scn.nextLine();
 		System.out.println();
-		
+
 		while(!inp.equals("")) {
 			String[] strings = split.split(inp);
 

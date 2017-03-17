@@ -22,34 +22,38 @@ import java.util.Set;
  * 
  * @author EVE
  *
+ * @param <T>
+ *                The type of items in the sequence.
  */
-public class SequenceDelimiter {
+public class SequenceDelimiter<T> {
 	/**
 	 * Represents a possible delimiter group to match.
 	 * 
 	 * @author EVE
 	 *
+	 * @param <T2>
+	 *                The type of items in the sequence.
 	 */
-	public static class DelimiterGroup {
+	public static class DelimiterGroup<T2> {
 		/**
 		 * The name of this delimiter group.
 		 */
-		public final String groupName;
+		public final T2 groupName;
 
 		/*
 		 * The delimiters that close this group.
 		 */
-		private Set<String> closingDelimiters;
+		private Set<T2> closingDelimiters;
 
 		/*
 		 * The groups that can't occur in the top level of this group.
 		 */
-		private Set<String> topLevelExclusions;
+		private Set<T2> topLevelExclusions;
 
 		/*
 		 * The groups that can't occur anywhere inside this group.
 		 */
-		private Set<String> groupExclusions;
+		private Set<T2> groupExclusions;
 
 		/**
 		 * Create a new empty delimiter group.
@@ -57,7 +61,7 @@ public class SequenceDelimiter {
 		 * @param name
 		 *                The name of the delimiter group
 		 */
-		public DelimiterGroup(String name) {
+		public DelimiterGroup(T2 name) {
 			if(name == null) throw new NullPointerException("Group name must not be null");
 
 			groupName = name;
@@ -76,7 +80,7 @@ public class SequenceDelimiter {
 		 * @return Whether or not the provided delimiter closes this
 		 *         group.
 		 */
-		public boolean isClosing(String del) {
+		public boolean isClosing(T2 del) {
 			return closingDelimiters.contains(del);
 		}
 
@@ -86,15 +90,20 @@ public class SequenceDelimiter {
 		 * @param closers
 		 *                Delimiters that close this group.
 		 */
-		public void addClosing(String... closers) {
-			List<String> closerList = Arrays.asList(closers);
+		@SafeVarargs
+		public final void addClosing(T2... closers) {
+			List<T2> closerList = Arrays.asList(closers);
 
-			for(String closer : closerList) {
+			for(T2 closer : closerList) {
 				if(closer == null) {
 					throw new NullPointerException("Closing delimiter must not be null");
 				} else if(closer.equals("")) {
-					throw new IllegalArgumentException(
-							"Empty string is not a valid closing delimiter");
+					/*
+					 * We can do this because equals works
+					 * on arbitrary objects, not just those
+					 * of the same type.
+					 */
+					throw new IllegalArgumentException("Empty string is not a valid exclusion");
 				} else {
 					closingDelimiters.add(closer);
 				}
@@ -109,11 +118,17 @@ public class SequenceDelimiter {
 		 *                The groups forbidden in the top level of this
 		 *                group.
 		 */
-		public void addTopLevelForbid(String... exclusions) {
-			for(String exclusion : exclusions) {
+		@SafeVarargs
+		public final void addTopLevelForbid(T2... exclusions) {
+			for(T2 exclusion : exclusions) {
 				if(exclusion == null) {
 					throw new NullPointerException("Exclusion must not be null");
 				} else if(exclusion.equals("")) {
+					/*
+					 * We can do this because equals works
+					 * on arbitrary objects, not just those
+					 * of the same type.
+					 */
 					throw new IllegalArgumentException("Empty string is not a valid exclusion");
 				} else {
 					topLevelExclusions.add(exclusion);
@@ -128,11 +143,17 @@ public class SequenceDelimiter {
 		 * @param exclusions
 		 *                The groups forbidden inside this group.
 		 */
-		public void addGroupForbid(String... exclusions) {
-			for(String exclusion : exclusions) {
+		@SafeVarargs
+		public final void addGroupForbid(T2... exclusions) {
+			for(T2 exclusion : exclusions) {
 				if(exclusion == null) {
 					throw new NullPointerException("Exclusion must not be null");
 				} else if(exclusion.equals("")) {
+					/*
+					 * We can do this because equals works
+					 * on arbitrary objects, not just those
+					 * of the same type.
+					 */
 					throw new IllegalArgumentException("Empty string is not a valid exclusion");
 				} else {
 					groupExclusions.add(exclusion);
@@ -151,7 +172,7 @@ public class SequenceDelimiter {
 			builder.append("], ");
 
 			builder.append("closingDelimiters=[");
-			for(String closer : closingDelimiters) {
+			for(T2 closer : closingDelimiters) {
 				builder.append(closer + ",");
 			}
 			builder.deleteCharAt(builder.length() - 1);
@@ -160,7 +181,7 @@ public class SequenceDelimiter {
 			if(topLevelExclusions != null && !topLevelExclusions.isEmpty()) {
 				builder.append(", ");
 				builder.append("topLevelExclusions=[");
-				for(String exclusion : topLevelExclusions) {
+				for(T2 exclusion : topLevelExclusions) {
 					builder.append(exclusion + ",");
 				}
 				builder.deleteCharAt(builder.length() - 1);
@@ -170,7 +191,7 @@ public class SequenceDelimiter {
 			if(groupExclusions != null && !groupExclusions.isEmpty()) {
 				builder.append(", ");
 				builder.append("groupExclusions=[");
-				for(String exclusion : topLevelExclusions) {
+				for(T2 exclusion : topLevelExclusions) {
 					builder.append(exclusion + ",");
 				}
 				builder.deleteCharAt(builder.length() - 1);
@@ -202,12 +223,12 @@ public class SequenceDelimiter {
 	/*
 	 * Mapping from opening delimiters to the names of the groups they open
 	 */
-	private Map<String, String> openDelimiters;
+	private Map<T, T> openDelimiters;
 
 	/*
 	 * Mapping from group names to actual groups.
 	 */
-	private Map<String, DelimiterGroup> groups;
+	private Map<T, DelimiterGroup<T>> groups;
 
 	/**
 	 * Create a new sequence delimiter.
@@ -236,6 +257,12 @@ public class SequenceDelimiter {
 	 * @param seq
 	 *                The sequence to delimit.
 	 * 
+	 * @param root
+	 *                The root of the returned tree.
+	 * 
+	 * @param contents
+	 *                The item to use to mark the contents of a group
+	 * 
 	 * @return The sequence as a tree that matches its group structure. Each
 	 *         node in the tree is either a data node or a group node.
 	 * 
@@ -254,17 +281,17 @@ public class SequenceDelimiter {
 	 *                 delimitation.
 	 * 
 	 */
-	public ITree<String> delimitSequence(String[] seq) throws DelimiterException {
+	public ITree<T> delimitSequence(T root, T contents, @SuppressWarnings("unchecked") T... seq) throws DelimiterException {
 		/*
 		 * The root node of the tree to give back.
 		 */
-		ITree<String> res = new Tree<>("");
+		ITree<T> res = new Tree<>(root);
 
 		/*
 		 * Handle the trivial case where there are no groups.
 		 */
 		if(openDelimiters.isEmpty()) {
-			for(String tok : seq) {
+			for(T tok : seq) {
 				res.addChild(new Tree<>(tok));
 			}
 
@@ -274,33 +301,33 @@ public class SequenceDelimiter {
 		/*
 		 * The stack of trees that represent the sequence.
 		 */
-		Stack<ITree<String>> trees = new SimpleStack<>();
+		Stack<ITree<T>> trees = new SimpleStack<>();
 		trees.push(res);
 
 		/*
 		 * The stack of opened and not yet closed groups.
 		 */
-		Stack<DelimiterGroup> groupStack = new SimpleStack<>();
+		Stack<DelimiterGroup<T>> groupStack = new SimpleStack<>();
 
 		/*
 		 * Groups that aren't allowed to be opened at the moment.
 		 */
-		Multiset<String> forbiddenDelimiters = HashMultiset.create();
+		Multiset<T> forbiddenDelimiters = HashMultiset.create();
 
 		/*
 		 * Map of who forbid what for debugging purposes.
 		 */
-		IMap<String, String> whoForbid = new PushdownMap<>();
+		IMap<T, T> whoForbid = new PushdownMap<>();
 
 		for(int i = 0; i < seq.length; i++) {
-			String tok = seq[i];
+			T tok = seq[i];
 
 			/*
 			 * If we have an opening delimiter, handle it.
 			 */
 			if(openDelimiters.containsKey(tok)) {
-				String groupName = openDelimiters.get(tok);
-				DelimiterGroup group = groups.get(groupName);
+				T groupName = openDelimiters.get(tok);
+				DelimiterGroup<T> group = groups.get(groupName);
 
 				/*
 				 * Error on groups that can't open in this
@@ -313,7 +340,7 @@ public class SequenceDelimiter {
 				if(isForbidden(groupStack, forbiddenDelimiters, groupName)) {
 					StringBuilder msgBuilder = new StringBuilder();
 
-					String forbiddenBy;
+					T forbiddenBy;
 
 					if(whoForbid.containsKey(tok)) {
 						forbiddenBy = whoForbid.get(tok);
@@ -342,14 +369,14 @@ public class SequenceDelimiter {
 				/*
 				 * The tree that represents the opened group.
 				 */
-				ITree<String> groupTree = new Tree<>(groupName);
+				ITree<T> groupTree = new Tree<>(groupName);
 				groupTree.addChild(new Tree<>(tok));
 
 				/*
 				 * The tree that represents the contents of the
 				 * opened group.
 				 */
-				ITree<String> groupContents = new Tree<>("contents");
+				ITree<T> groupContents = new Tree<>(contents);
 
 				/*
 				 * Add the trees to the open trees.
@@ -360,28 +387,28 @@ public class SequenceDelimiter {
 				/*
 				 * Add the nested exclusions from this group
 				 */
-				for(String exclusion : group.groupExclusions) {
+				for(T exclusion : group.groupExclusions) {
 					forbiddenDelimiters.add(exclusion);
-					
+
 					whoForbid.put(exclusion, groupName);
 				}
 			} else if(!groupStack.empty() && groupStack.top().isClosing(tok)) {
 				/*
 				 * Close the group.
 				 */
-				DelimiterGroup closed = groupStack.pop();
+				DelimiterGroup<T> closed = groupStack.pop();
 
 				/*
 				 * Remove the contents of the group and the
 				 * group itself from the stack.
 				 */
-				ITree<String> contents = trees.pop();
-				ITree<String> groupTree = trees.pop();
+				ITree<T> contentTree = trees.pop();
+				ITree<T> groupTree = trees.pop();
 
 				/*
 				 * Fill in the group node.
 				 */
-				groupTree.addChild(contents);
+				groupTree.addChild(contentTree);
 				groupTree.addChild(new Tree<>(tok));
 
 				/*
@@ -393,9 +420,9 @@ public class SequenceDelimiter {
 				/*
 				 * Remove nested exclusions from this group.
 				 */
-				for(String excludedGroup : closed.groupExclusions) {
+				for(T excludedGroup : closed.groupExclusions) {
 					forbiddenDelimiters.remove(excludedGroup);
-					
+
 					whoForbid.remove(excludedGroup);
 				}
 			} else {
@@ -407,7 +434,7 @@ public class SequenceDelimiter {
 		 * Error if not all groups were closed.
 		 */
 		if(!groupStack.empty()) {
-			DelimiterGroup group = groupStack.top();
+			DelimiterGroup<T> group = groupStack.top();
 			StringBuilder msgBuilder = new StringBuilder();
 
 			String closingDelims = StringUtils.toEnglishList(group.closingDelimiters.toArray(), false);
@@ -427,8 +454,7 @@ public class SequenceDelimiter {
 		return res;
 	}
 
-	private boolean isForbidden(Stack<DelimiterGroup> groupStack, Multiset<String> forbiddenDelimiters,
-			String groupName) {
+	private boolean isForbidden(Stack<DelimiterGroup<T>> groupStack, Multiset<T> forbiddenDelimiters, T groupName) {
 		boolean localForbid;
 		if(groupStack.empty())
 			localForbid = false;
@@ -446,7 +472,7 @@ public class SequenceDelimiter {
 	 * @param groupName
 	 *                The name of the group it opens.
 	 */
-	public void addOpener(String open, String groupName) {
+	public void addOpener(T open, T groupName) {
 		if(open == null) {
 			throw new NullPointerException("Opener must not be null");
 		} else if(open.equals("")) {
@@ -456,7 +482,7 @@ public class SequenceDelimiter {
 		} else if(!groups.containsKey(groupName)) {
 			throw new IllegalArgumentException("Group " + groupName + " doesn't exist.");
 		}
-		
+
 		openDelimiters.put(open, groupName);
 	}
 
@@ -466,11 +492,11 @@ public class SequenceDelimiter {
 	 * @param group
 	 *                The delimiter group.
 	 */
-	public void addGroup(DelimiterGroup group) {
+	public void addGroup(DelimiterGroup<T> group) {
 		if(group == null) {
 			throw new NullPointerException("Group must not be null");
 		}
-		
+
 		groups.put(group.groupName, group);
 	}
 
@@ -484,14 +510,14 @@ public class SequenceDelimiter {
 	 * @param closers
 	 *                The tokens that close this group
 	 */
-	public void addGroup(String[] openers, String groupName, String... closers) {
-		DelimiterGroup group = new DelimiterGroup(groupName);
+	public void addGroup(T[] openers, T groupName, @SuppressWarnings("unchecked") T... closers) {
+		DelimiterGroup<T> group = new DelimiterGroup<>(groupName);
 
 		group.addClosing(closers);
 
 		addGroup(group);
 
-		for(String open : openers) {
+		for(T open : openers) {
 			addOpener(open, groupName);
 		}
 	}
