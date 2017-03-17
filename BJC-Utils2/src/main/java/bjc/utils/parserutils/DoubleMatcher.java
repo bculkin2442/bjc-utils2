@@ -1,4 +1,4 @@
-package bjc.utils.funcutils;
+package bjc.utils.parserutils;
 
 import java.util.regex.Pattern;
 
