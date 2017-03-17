@@ -71,4 +71,40 @@ public class ListHolder<ContainedType> implements IHolder<ContainedType> {
 	public <UnwrappedType> UnwrappedType unwrap(Function<ContainedType, UnwrappedType> unwrapper) {
 		return unwrapper.apply(heldValues.randItem());
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+
+		builder.append("ListHolder [heldValues=");
+		builder.append(heldValues);
+		builder.append("]");
+
+		return builder.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+
+		result = prime * result + ((heldValues == null) ? 0 : heldValues.hashCode());
+
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(this == obj) return true;
+		if(obj == null) return false;
+		if(getClass() != obj.getClass()) return false;
+
+		ListHolder<?> other = (ListHolder<?>) obj;
+
+		if(heldValues == null) {
+			if(other.heldValues != null) return false;
+		} else if(!heldValues.equals(other.heldValues)) return false;
+
+		return true;
+	}
 }

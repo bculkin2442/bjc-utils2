@@ -204,10 +204,12 @@ public class LazyPair<LeftType, RightType> implements IPair<LeftType, RightType>
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+
 		result = prime * result + (leftMaterialized ? 1231 : 1237);
 		result = prime * result + ((leftValue == null) ? 0 : leftValue.hashCode());
 		result = prime * result + (rightMaterialized ? 1231 : 1237);
 		result = prime * result + ((rightValue == null) ? 0 : rightValue.hashCode());
+
 		return result;
 	}
 
@@ -216,15 +218,28 @@ public class LazyPair<LeftType, RightType> implements IPair<LeftType, RightType>
 		if(this == obj) return true;
 		if(obj == null) return false;
 		if(getClass() != obj.getClass()) return false;
-		LazyPair other = (LazyPair) obj;
+
+		LazyPair<?, ?> other = (LazyPair<?, ?>) obj;
+
 		if(leftMaterialized != other.leftMaterialized) return false;
-		if(leftValue == null) {
-			if(other.leftValue != null) return false;
-		} else if(!leftValue.equals(other.leftValue)) return false;
+
+		if(leftMaterialized) {
+			if(leftValue == null) {
+				if(other.leftValue != null) return false;
+			} else if(!leftValue.equals(other.leftValue)) return false;
+		} else {
+			return false;
+		}
+		
 		if(rightMaterialized != other.rightMaterialized) return false;
-		if(rightValue == null) {
-			if(other.rightValue != null) return false;
-		} else if(!rightValue.equals(other.rightValue)) return false;
+		if(rightMaterialized) {
+			if(rightValue == null) {
+				if(other.rightValue != null) return false;
+			} else if(!rightValue.equals(other.rightValue)) return false;
+		} else {
+			return false;
+		}
+
 		return true;
 	}
 }

@@ -60,4 +60,44 @@ public class Option<ContainedType> implements IHolder<ContainedType> {
 
 		return unwrapper.apply(held);
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+
+		builder.append("Option [");
+
+		if(held != null) {
+			builder.append("held=");
+			builder.append(held);
+		}
+
+		builder.append("]");
+		return builder.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+
+		int result = 1;
+		result = prime * result + ((held == null) ? 0 : held.hashCode());
+
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(this == obj) return true;
+		if(obj == null) return false;
+		if(getClass() != obj.getClass()) return false;
+
+		Option<?> other = (Option<?>) obj;
+
+		if(held == null) {
+			if(other.held != null) return false;
+		} else if(!held.equals(other.held)) return false;
+
+		return true;
+	}
 }

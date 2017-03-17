@@ -10,6 +10,11 @@ import java.util.function.Function;
 
 import static bjc.utils.data.TopDownTransformResult.RTRANSFORM;
 
+
+/*
+ * FIXME something is broken in here. fix it.
+ */
+@SuppressWarnings("javadoc")
 public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<ContainedType>> {
 	private Function<ContainedType, TopDownTransformResult>								picker;
 	private BiFunction<ITree<ContainedType>, Consumer<Iterator<ITree<ContainedType>>>, ITree<ContainedType>>	transform;

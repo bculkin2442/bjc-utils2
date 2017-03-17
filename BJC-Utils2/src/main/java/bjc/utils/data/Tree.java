@@ -301,28 +301,34 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	}
 
 	@Override
-	public boolean equals(Object other) {
-		if(!(other instanceof Tree<?>)) return false;
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
 
-		@SuppressWarnings("unchecked")
-		Tree<ContainedType> otr = (Tree<ContainedType>) other;
+		result = prime * result + childCount;
+		result = prime * result + ((children == null) ? 0 : children.hashCode());
+		result = prime * result + ((data == null) ? 0 : data.hashCode());
 
-		if(!otr.data.equals(data)) return false;
+		return result;
+	}
 
-		if(children == null && otr.children == null) return true;
+	@Override
+	public boolean equals(Object obj) {
+		if(this == obj) return true;
+		if(obj == null) return false;
+		if(getClass() != obj.getClass()) return false;
 
-		if(children == null && otr.children != null) return false;
-		if(children != null && otr.children == null) return false;
+		Tree<?> other = (Tree<?>) obj;
 
-		if(children.getSize() != otr.children.getSize()) return false;
+		if(data == null) {
+			if(other.data != null) return false;
+		} else if(!data.equals(other.data)) return false;
 
-		int childNo = 0;
+		if(childCount != other.childCount) return false;
 
-		for(ITree<ContainedType> child : children) {
-			if(!otr.children.getByIndex(childNo).equals(child)) return false;
-
-			childNo += 1;
-		}
+		if(children == null) {
+			if(other.children != null) return false;
+		} else if(!children.equals(other.children)) return false;
 
 		return true;
 	}

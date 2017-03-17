@@ -10,6 +10,7 @@ import java.util.function.Supplier;
  * @author ben
  *
  * @param <T>
+ *                The supplied type
  */
 public class SingleSupplier<T> implements Supplier<T> {
 	private static long nextID = 0;
@@ -20,8 +21,10 @@ public class SingleSupplier<T> implements Supplier<T> {
 
 	private long id;
 
-	// This is bad practice, but I want to know where the single
-	// instantiation was, in case of duplicate initiations
+	/*
+	 * This is bad practice, but I want to know where the single
+	 * instantiation was, in case of duplicate initiations.
+	 */
 	private Exception instSite;
 
 	/**
@@ -58,5 +61,32 @@ public class SingleSupplier<T> implements Supplier<T> {
 		}
 
 		return source.get();
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("SingleSupplier [");
+
+		if(source != null) {
+			builder.append("source=");
+			builder.append(source);
+			builder.append(", ");
+		}
+
+		builder.append("gotten=");
+		builder.append(gotten);
+		builder.append(", id=");
+		builder.append(id);
+		builder.append(", ");
+
+		if(instSite != null) {
+			builder.append("instSite=");
+			builder.append(instSite);
+		}
+
+		builder.append("]");
+
+		return builder.toString();
 	}
 }
