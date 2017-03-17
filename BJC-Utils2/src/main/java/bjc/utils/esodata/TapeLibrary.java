@@ -12,7 +12,7 @@ import java.util.Map;
  * If there is no tape currently loaded into the changer, all the methods will
  * either return null/false.
  *
- * @param T
+ * @param <T>
  *                The element type of the tapes.
  */
 public class TapeLibrary<T> implements Tape<T> {
@@ -240,9 +240,12 @@ public class TapeLibrary<T> implements Tape<T> {
 	 * The specified tape is loaded.
 	 *
 	 * Adding a duplicate tape will overwrite any existing types.
+	 * 
+	 * @param label
+	 *                The label of the tape to add.
 	 *
-	 * @param The
-	 *                tape to insert and load.
+	 * @param tp
+	 *                The tape to insert and load.
 	 */
 	public void insertTape(String label, Tape<T> tp) {
 		tapes.put(label, tp);
@@ -292,5 +295,48 @@ public class TapeLibrary<T> implements Tape<T> {
 	 */
 	public boolean hasTape(String label) {
 		return tapes.containsKey(label);
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+
+		int result = 1;
+		result = prime * result + ((currentTape == null) ? 0 : currentTape.hashCode());
+		result = prime * result + ((tapes == null) ? 0 : tapes.hashCode());
+
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(this == obj) return true;
+		if(obj == null) return false;
+		if(getClass() != obj.getClass()) return false;
+
+		TapeLibrary<?> other = (TapeLibrary<?>) obj;
+
+		if(currentTape == null) {
+			if(other.currentTape != null) return false;
+		} else if(!currentTape.equals(other.currentTape)) return false;
+
+		if(tapes == null) {
+			if(other.tapes != null) return false;
+		} else if(!tapes.equals(other.tapes)) return false;
+
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+
+		builder.append("TapeLibrary [tapes=");
+		builder.append(tapes);
+		builder.append(", currentTape=");
+		builder.append(currentTape);
+		builder.append("]");
+
+		return builder.toString();
 	}
 }

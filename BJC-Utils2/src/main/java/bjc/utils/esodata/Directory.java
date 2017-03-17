@@ -6,9 +6,9 @@ package bjc.utils.esodata;
  * What's useful about this is that you can hand sub-directories to people and
  * be able to ensure that they can't write outside of it.
  *
- * @param K
+ * @param <K>
  *                The key type of the map.
- * @param V
+ * @param <V>
  *                The value type of the map.
  */
 public interface Directory<K, V> {

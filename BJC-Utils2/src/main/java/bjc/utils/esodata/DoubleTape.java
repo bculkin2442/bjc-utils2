@@ -19,7 +19,7 @@ package bjc.utils.esodata;
  *
  * Flip refers to the entire tape for 'obvious' reasons.
  *
- * @param T
+ * @param <T>
  *                The element type of the tape.
  * @author bjculkin
  */
@@ -216,5 +216,46 @@ public class DoubleTape<T> implements Tape<T> {
 	@Override
 	public boolean isDoubleSided() {
 		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((back == null) ? 0 : back.hashCode());
+		result = prime * result + ((front == null) ? 0 : front.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(this == obj) return true;
+		if(obj == null) return false;
+		if(getClass() != obj.getClass()) return false;
+		
+		DoubleTape<?> other = (DoubleTape<?>) obj;
+		
+		if(back == null) {
+			if(other.back != null) return false;
+		} else if(!back.equals(other.back)) return false;
+		
+		if(front == null) {
+			if(other.front != null) return false;
+		} else if(!front.equals(other.front)) return false;
+	
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		
+		builder.append("DoubleTape [front=");
+		builder.append(front);
+		builder.append(", back=");
+		builder.append(back);
+		builder.append("]");
+	
+		return builder.toString();
 	}
 }

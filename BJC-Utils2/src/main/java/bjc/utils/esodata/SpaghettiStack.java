@@ -66,4 +66,34 @@ class SpaghettiStack<T> extends Stack<T> {
 	public T[] toArray() {
 		return (T[]) Stream.concat(Arrays.stream(parent.toArray()), Arrays.stream(backing.toArray())).toArray();
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+
+		int result = 1;
+		result = prime * result + ((backing == null) ? 0 : backing.hashCode());
+		result = prime * result + ((parent == null) ? 0 : parent.hashCode());
+
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(this == obj) return true;
+		if(obj == null) return false;
+		if(getClass() != obj.getClass()) return false;
+
+		SpaghettiStack<?> other = (SpaghettiStack<?>) obj;
+
+		if(backing == null) {
+			if(other.backing != null) return false;
+		} else if(!backing.equals(other.backing)) return false;
+
+		if(parent == null) {
+			if(other.parent != null) return false;
+		} else if(!parent.equals(other.parent)) return false;
+
+		return true;
+	}
 }

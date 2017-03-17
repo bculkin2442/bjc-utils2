@@ -11,11 +11,12 @@ import java.util.ArrayList;
  * unbounded to the right, but in practice bounded by available memory.
  *
  * You can choose whether or not you want the tape to automatically extend
- * itself to the right with null elements by specifiying its auto-extension
+ * itself to the right with null elements by specifying its auto-extension
  * policy.
  *
- * @param T
+ * @param <T>
  *                The element type of the tape.
+ * 
  * @author bjculkin
  */
 public class SingleTape<T> implements Tape<T> {
@@ -203,5 +204,45 @@ public class SingleTape<T> implements Tape<T> {
 	@Override
 	public boolean isDoubleSided() {
 		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+
+		int result = 1;
+		result = prime * result + ((backing == null) ? 0 : backing.hashCode());
+
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(this == obj) return true;
+		if(obj == null) return false;
+		if(getClass() != obj.getClass()) return false;
+
+		SingleTape<?> other = (SingleTape<?>) obj;
+
+		if(backing == null) {
+			if(other.backing != null) return false;
+		} else if(!backing.equals(other.backing)) return false;
+
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+
+		builder.append("SingleTape [backing=");
+		builder.append(backing);
+		builder.append(", pos=");
+		builder.append(pos);
+		builder.append(", autoExtend=");
+		builder.append(autoExtend);
+		builder.append("]");
+
+		return builder.toString();
 	}
 }
