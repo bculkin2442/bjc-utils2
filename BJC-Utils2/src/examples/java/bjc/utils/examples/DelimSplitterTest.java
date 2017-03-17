@@ -1,10 +1,10 @@
 package bjc.utils.examples;
 
 import bjc.utils.data.ITree;
-import bjc.utils.funcutils.SequenceDelimiter;
-import bjc.utils.funcutils.SequenceDelimiter.DelimiterException;
-import bjc.utils.funcutils.StringDelimiter;
-import bjc.utils.funcutils.TokenSplitter;
+import bjc.utils.parserutils.SequenceDelimiter;
+import bjc.utils.parserutils.StringDelimiter;
+import bjc.utils.parserutils.TokenSplitter;
+import bjc.utils.parserutils.SequenceDelimiter.DelimiterException;
 
 import java.util.Arrays;
 import java.util.Scanner;

@@ -1,4 +1,4 @@
-package bjc.utils.funcutils;
+package bjc.utils.parserutils;
 
 import bjc.utils.data.ITree;
 import bjc.utils.data.Tree;
@@ -6,6 +6,7 @@ import bjc.utils.esodata.PushdownMap;
 import bjc.utils.esodata.SimpleStack;
 import bjc.utils.esodata.Stack;
 import bjc.utils.funcdata.IMap;
+import bjc.utils.funcutils.StringUtils;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
