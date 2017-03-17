@@ -2,14 +2,42 @@ package bjc.utils.data;
 
 import java.util.Iterator;
 
+/**
+ * An iterator that repeats elements from a provided iterable.
+ * 
+ * @author EVE
+ *
+ * @param <E>
+ *                The type of the iterable.
+ */
 public class CircularIterator<E> implements Iterator<E> {
+	/*
+	 * The iterable, and our current iterator into it.
+	 */
 	private Iterable<E>	source;
 	private Iterator<E>	curr;
 
+	/*
+	 * Our current element.
+	 */
 	private E curElm;
 
+	/*
+	 * Should we actually get new iterators, or just repeat the last
+	 * element?
+	 */
 	private boolean doCircle;
 
+	/**
+	 * Create a new circular iterator.
+	 * 
+	 * @param src
+	 *                The iterable to iterate from.
+	 * 
+	 * @param circ
+	 *                Should we actually do circular iteration, or just
+	 *                repeat the terminal element?
+	 */
 	public CircularIterator(Iterable<E> src, boolean circ) {
 		source = src;
 		curr = source.iterator();
@@ -17,6 +45,12 @@ public class CircularIterator<E> implements Iterator<E> {
 		doCircle = circ;
 	}
 
+	/**
+	 * Create a new circular iterator that does actual circular iteration.
+	 * 
+	 * @param src
+	 *                The iterable to iterate from.
+	 */
 	public CircularIterator(Iterable<E> src) {
 		this(src, true);
 	}

@@ -131,4 +131,41 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 
 		return unwrapper.apply(heldValue);
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+
+		result = prime * result + ((actions == null) ? 0 : actions.hashCode());
+		result = prime * result + ((heldValue == null) ? 0 : heldValue.hashCode());
+		result = prime * result + (valueMaterialized ? 1231 : 1237);
+
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(this == obj) return true;
+		if(obj == null) return false;
+		if(getClass() != obj.getClass()) return false;
+
+		Lazy<?> other = (Lazy<?>) obj;
+		
+		if(valueMaterialized != other.valueMaterialized) return false;
+
+		if(valueMaterialized) {
+			if(heldValue == null) {
+				if(other.heldValue != null) return false;
+			} else if(!heldValue.equals(other.heldValue)) return false;
+		} else {
+			return false;
+		}
+		
+		if(actions == null) {
+			if(other.actions != null) return false;
+		} else if(actions.getSize() > 0 || other.actions.getSize() > 0) return false;
+
+		return true;
+	}
 }

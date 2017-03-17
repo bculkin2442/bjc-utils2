@@ -132,4 +132,58 @@ public class Either<LeftType, RightType> implements IPair<LeftType, RightType> {
 
 		return merger.apply(leftVal, rightVal);
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+
+		int result = 1;
+		result = prime * result + (isLeft ? 1231 : 1237);
+		result = prime * result + ((leftVal == null) ? 0 : leftVal.hashCode());
+		result = prime * result + ((rightVal == null) ? 0 : rightVal.hashCode());
+		
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(this == obj) return true;
+		if(obj == null) return false;
+		if(getClass() != obj.getClass()) return false;
+
+		Either<?, ?> other = (Either<?, ?>) obj;
+
+		if(isLeft != other.isLeft) return false;
+
+		if(leftVal == null) {
+			if(other.leftVal != null) return false;
+		} else if(!leftVal.equals(other.leftVal)) return false;
+
+		if(rightVal == null) {
+			if(other.rightVal != null) return false;
+		} else if(!rightVal.equals(other.rightVal)) return false;
+
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+
+		builder.append("Either [");
+
+		if(leftVal != null) {
+			builder.append("leftVal=");
+			builder.append(leftVal);
+			builder.append(", ");
+		}
+
+		if(rightVal != null) {
+			builder.append("rightVal=");
+			builder.append(rightVal);
+			builder.append(", ");
+		}
+
+		return builder.toString();
+	}
 }
