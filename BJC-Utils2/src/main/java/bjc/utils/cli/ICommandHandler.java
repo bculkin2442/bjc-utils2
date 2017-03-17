@@ -18,7 +18,7 @@ public interface ICommandHandler extends Function<String[], ICommandMode> {
 	 * @return The command mode to switch to after this command, or null to
 	 *         stop executing commands
 	 */
-	public default ICommandMode handle(String[] args) {
+	default ICommandMode handle(String[] args) {
 		return this.apply(args);
 	}
 }

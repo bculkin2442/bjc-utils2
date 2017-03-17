@@ -12,7 +12,7 @@ public interface ICommandHelp {
 	 *
 	 * @return The description of a command
 	 */
-	public String getDescription();
+	String getDescription();
 
 	/**
 	 * Get the summary line for a command.
@@ -23,5 +23,5 @@ public interface ICommandHelp {
 	 *
 	 * @return The summary line line for a command
 	 */
-	public String getSummary();
+	String getSummary();
 }

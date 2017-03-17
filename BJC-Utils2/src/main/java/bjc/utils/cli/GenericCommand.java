@@ -8,12 +8,12 @@ package bjc.utils.cli;
  */
 public class GenericCommand implements ICommand {
 	/*
-	 *  The behavior for invoking the command.
+	 * The behavior for invoking the command.
 	 */
 	private ICommandHandler handler;
 
 	/*
-	 *  The help for the command.
+	 * The help for the command.
 	 */
 	private ICommandHelp help;
 
@@ -23,11 +23,12 @@ public class GenericCommand implements ICommand {
 	 * @param handler
 	 *                The handler to use for the command.
 	 * @param description
-	 *                The description of the command. May be null, in which case a default is
-	 *                provided.
+	 *                The description of the command. May be null, in which
+	 *                case a default is provided.
 	 * @param help
-	 *                The detailed help message for the command. May be null, in which case the
-	 *                description is repeated for the detailed help.
+	 *                The detailed help message for the command. May be
+	 *                null, in which case the description is repeated for
+	 *                the detailed help.
 	 */
 	public GenericCommand(ICommandHandler handler, String description, String help) {
 		if(handler == null) throw new NullPointerException("Command handler must not be null");
@@ -59,5 +60,25 @@ public class GenericCommand implements ICommand {
 	@Override
 	public boolean isAlias() {
 		return false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("GenericCommand [");
+
+		if(help != null) {
+			builder.append("help=");
+			builder.append(help);
+		}
+
+		builder.append("]");
+
+		return builder.toString();
 	}
 }

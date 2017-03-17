@@ -12,28 +12,28 @@ public interface ICommand {
 	 *
 	 * @return A command that serves as an alias to this one
 	 */
-	public ICommand aliased();
+	ICommand aliased();
 
 	/**
 	 * Get the handler that executes this command
 	 *
 	 * @return The handler that executes this command
 	 */
-	public ICommandHandler getHandler();
+	ICommandHandler getHandler();
 
 	/**
 	 * Get the help entry for this command
 	 *
 	 * @return The help entry for this command
 	 */
-	public ICommandHelp getHelp();
+	ICommandHelp getHelp();
 
 	/**
 	 * Check if this command is an alias of another command
 	 *
 	 * @return Whether or not this command is an alias of another
 	 */
-	public default boolean isAlias() {
+	default boolean isAlias() {
 		return false;
 	}
 }

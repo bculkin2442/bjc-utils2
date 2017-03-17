@@ -32,7 +32,7 @@ public interface IComponentRepository<ComponentType extends IDescribedComponent>
 	public ComponentType getByName(String name);
 
 	/**
-	 * Get a list of all the registered componets
+	 * Get a list of all the registered components
 	 *
 	 * @return A list of all the registered components
 	 */

@@ -39,4 +39,25 @@ public class GenericHelp implements ICommandHelp {
 		return summary;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		
+		builder.append("GenericHelp [");
+		
+		if(summary != null) {
+			builder.append("summary=");
+			builder.append(summary);
+		}
+		
+		if(description != null) {
+			builder.append(", ");
+			builder.append("description=");
+			builder.append(description);
+		}
+		
+		builder.append("]");
+		
+		return builder.toString();
+	}
 }

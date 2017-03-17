@@ -7,7 +7,7 @@ package bjc.utils.cli;
  * @author ben
  *
  */
-public interface ICommandMode {
+public interface ICommandMode extends Comparable<ICommandMode> {
 	/**
 	 * Check to see if this mode can handle the specified command
 	 *
@@ -16,7 +16,7 @@ public interface ICommandMode {
 	 * @return Whether or not this mode can handle the command. It is
 	 *         assumed not by default
 	 */
-	public default boolean canHandle(String command) {
+	default boolean canHandle(String command) {
 		return false;
 	};
 
@@ -28,7 +28,7 @@ public interface ICommandMode {
 	 * @throws UnsupportedOperationException
 	 *                 if this mode doesn't support a custom prompt
 	 */
-	public default String getCustomPrompt() {
+	default String getCustomPrompt() {
 		throw new UnsupportedOperationException("This mode doesn't support a custom prompt");
 	}
 
@@ -47,7 +47,7 @@ public interface ICommandMode {
 	 *
 	 * @return Whether or not this mode uses a custom prompt
 	 */
-	public default boolean isCustomPromptEnabled() {
+	default boolean isCustomPromptEnabled() {
 		return false;
 	}
 
@@ -61,7 +61,12 @@ public interface ICommandMode {
 	 * @return The command mode to use for the next command. Defaults to
 	 *         returning this, and doing nothing else
 	 */
-	public default ICommandMode process(String command, String[] args) {
+	default ICommandMode process(String command, String[] args) {
 		return this;
+	}
+
+	@Override
+	default int compareTo(ICommandMode o) {
+		return getName().compareTo(o.getName());
 	}
 }

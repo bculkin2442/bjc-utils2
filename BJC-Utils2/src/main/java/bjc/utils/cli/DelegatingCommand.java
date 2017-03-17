@@ -8,7 +8,7 @@ package bjc.utils.cli;
  */
 class DelegatingCommand implements ICommand {
 	/*
-	 *  The command to delegate to.
+	 * The command to delegate to.
 	 */
 	private ICommand delegate;
 
@@ -40,5 +40,25 @@ class DelegatingCommand implements ICommand {
 	@Override
 	public boolean isAlias() {
 		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("DelegatingCommand [");
+
+		if(delegate != null) {
+			builder.append("delegate=");
+			builder.append(delegate);
+		}
+
+		builder.append("]");
+
+		return builder.toString();
 	}
 }

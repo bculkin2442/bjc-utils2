@@ -148,4 +148,30 @@ public class FileComponentRepository<ComponentType extends IDescribedComponent>
 					+ pth.toString() + ". This component will not be loaded");
 		}
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("FileComponentRepository [");
+
+		if(components != null) {
+			builder.append("components=");
+			builder.append(components);
+			builder.append(", ");
+		}
+
+		if(sourceDirectory != null) {
+			builder.append("sourceDirectory=");
+			builder.append(sourceDirectory);
+		}
+
+		builder.append("]");
+
+		return builder.toString();
+	}
 }
