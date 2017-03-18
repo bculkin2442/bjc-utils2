@@ -186,5 +186,5 @@ public interface ITree<ContainedType> {
 	 * @return The index of the right-most child that satisfies the
 	 *         predicate, or -1 if one doesn't exist.
 	 */
-	int revFind(Predicate<ContainedType> childPred);
+	int revFind(Predicate<ITree<ContainedType>> childPred);
 }

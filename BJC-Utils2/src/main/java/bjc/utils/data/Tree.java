@@ -334,12 +334,12 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	}
 
 	@Override
-	public int revFind(Predicate<ContainedType> childPred) {
+	public int revFind(Predicate<ITree<ContainedType>> childPred) {
 		if(childCount == 0) {
 			return -1;
 		} else {
 			for(int i = childCount - 1; i >= 0; i--) {
-				if(childPred.test(getChild(i).getHead())) {
+				if(childPred.test(getChild(i))) {
 					return i;
 				}
 			}
