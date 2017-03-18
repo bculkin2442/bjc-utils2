@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
 /**
- * A node in a homogenous tree.
+ * A node in a homogeneous tree.
  *
  * @author ben
  *
@@ -331,5 +331,20 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 		} else if(!children.equals(other.children)) return false;
 
 		return true;
+	}
+
+	@Override
+	public int revFind(Predicate<ContainedType> childPred) {
+		if(childCount == 0) {
+			return -1;
+		} else {
+			for(int i = childCount - 1; i >= 0; i--) {
+				if(childPred.test(getChild(i).getHead())) {
+					return i;
+				}
+			}
+		}
+
+		return -1;
 	}
 }

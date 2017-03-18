@@ -9,7 +9,7 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
 /**
- * A node in a homogenous tree with a unlimited amount of children
+ * A node in a homogeneous tree with a unlimited amount of children
  *
  * @author ben
  * @param <ContainedType>
@@ -176,4 +176,15 @@ public interface ITree<ContainedType> {
 	 *                The action to perform on each tree node
 	 */
 	public void traverse(TreeLinearizationMethod linearizationMethod, Consumer<ContainedType> action);
+
+	/**
+	 * Find the farthest to right child that satisfies the given predicate.
+	 * 
+	 * @param childPred
+	 *                The predicate to satisfy.
+	 * 
+	 * @return The index of the right-most child that satisfies the
+	 *         predicate, or -1 if one doesn't exist.
+	 */
+	int revFind(Predicate<ContainedType> childPred);
 }
