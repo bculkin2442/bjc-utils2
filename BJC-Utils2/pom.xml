@@ -12,6 +12,14 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<resources>
+			<resource>
+				<directory>data/</directory>
+				<includes>
+					<include>**/*.txt</include>
+				</includes>
+			</resource>
+		</resources>
 	</build>
 
 	<groupId>bjc</groupId>
