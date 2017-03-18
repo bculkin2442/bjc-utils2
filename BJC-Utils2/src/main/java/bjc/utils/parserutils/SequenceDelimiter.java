@@ -56,6 +56,12 @@ public class SequenceDelimiter<T> {
 		 */
 		private Set<T2> groupExclusions;
 
+		/*
+		 * Mapping from sub-group delimiters, to any sub-groups enclosed
+		 * in them.
+		 */
+		private Map<T2, Set<T2>> subgroups;
+
 		/**
 		 * Create a new empty delimiter group.
 		 * 
@@ -162,6 +168,33 @@ public class SequenceDelimiter<T> {
 			}
 		}
 
+		/**
+		 * Adds sub-group markers to this group.
+		 * 
+		 * @param subgroup
+		 *                The token to mark a sub-group.
+		 * 
+		 * @param contained
+		 *                Any sub-groups to enclose in this group.
+		 */
+		@SafeVarargs
+		public final void addSubgroup(T2 subgroup, T2... contained) {
+			if(subgroup == null) {
+				throw new NullPointerException("Subgroup marker must not be null");
+			}
+
+			Set<T2> contains = new HashSet<>();
+			for(T2 contain : contained) {
+				if(contain == null) {
+					throw new NullPointerException("Contained group must not be null");
+				}
+
+				contains.add(contain);
+			}
+
+			subgroups.put(subgroup, contains);
+		}
+
 		@Override
 		public String toString() {
 			StringBuilder builder = new StringBuilder();
@@ -248,11 +281,14 @@ public class SequenceDelimiter<T> {
 	 * following grammar while obeying the defined group rules.
 	 * 
 	 * <pre>
-	 *         <tree>  -> (<data> | <group>)*
-	 *         <group> -> <open> <tree> <close>
-	 *         <data>  -> STRING
-	 *         <open>  -> STRING
-	 *         <close> -> STRING
+	 *         <tree>     -> (<data> | <subgroup> | <group>)*
+	 *         <subgroup> -> <tree> <marker>
+	 *         <group>    -> <open> <tree> <close>
+	 *         
+	 *         <data>     -> STRING
+	 *         <open>     -> STRING
+	 *         <close>    -> STRING
+	 *         <marker>   -> STRING
 	 * </pre>
 	 * 
 	 * @param seq
@@ -264,25 +300,36 @@ public class SequenceDelimiter<T> {
 	 * @param contents
 	 *                The item to use to mark the contents of a group
 	 * 
+	 * @param subgroup
+	 *                The item to use to mark a sub-group.
+	 * 
 	 * @return The sequence as a tree that matches its group structure. Each
-	 *         node in the tree is either a data node or a group node.
+	 *         node in the tree is either a data node, a subgroup node, or a
+	 *         group node.
 	 * 
 	 *         A data node is a leaf node whose data is the string it
 	 *         represents.
+	 * 
+	 *         A subgroup node is a node with two children, and the name of
+	 *         the sub-group as its label. The first child is the contents
+	 *         of the sub-group, and the second is the marker that started
+	 *         the subgroup. The marker is a leaf node labeled with its
+	 *         contents, and the contents contains a recursive tree.
 	 * 
 	 *         A group node is a node with three children, and the name of
 	 *         the group as its label. The first child is the opening
 	 *         delimiter, the second is the group contents, and the third is
 	 *         the closing delimiter. The delimiters are leaf nodes labeled
-	 *         with their contents, while the group node contains a list of
-	 *         data and group nodes.
+	 *         with their contents, while the group node contains a
+	 *         recursive tree.
 	 * 
 	 * @throws DelimiterException
 	 *                 Thrown if something went wrong during sequence
 	 *                 delimitation.
 	 * 
 	 */
-	public ITree<T> delimitSequence(T root, T contents, @SuppressWarnings("unchecked") T... seq) throws DelimiterException {
+	public ITree<T> delimitSequence(T root, T contents, T subgroup, @SuppressWarnings("unchecked") T... seq)
+			throws DelimiterException {
 		/*
 		 * The root node of the tree to give back.
 		 */
@@ -426,6 +473,64 @@ public class SequenceDelimiter<T> {
 
 					whoForbid.remove(excludedGroup);
 				}
+			} else if(!groupStack.empty() && groupStack.top().subgroups.containsKey(tok)){
+				/*
+				 * Parse a sub-group.
+				 */
+				
+				/*
+				 * The set of enclosed groups.
+				 */
+				Set<T> enclosed = groupStack.top().subgroups.get(tok);
+				
+				/*
+				 * The current contents of this group.
+				 */
+				ITree<T> contentTree = trees.pop();
+				
+				/*
+				 * Find the first element to enclose in the subgroup.
+				 */
+				int ind = contentTree.revFind((chd) -> {
+					if(chd.getHead().equals(subgroup)) {
+						return !enclosed.contains(chd.getChild(1));
+					} else {
+						return false;
+					}
+				});
+				
+				ITree<T> newContentTree = new Tree<>(contentTree.getHead());
+				ITree<T> subgroupContents = new Tree<>(contents);
+				
+				/*
+				 * Split content tree into an untouched tree, and the subgroup.
+				 */
+				for(int j = 0; j < contentTree.getChildrenCount(); j++) {
+					ITree<T> child = contentTree.getChild(j);
+					
+					if(j < ind) {
+						newContentTree.addChild(child);
+					} else {
+						subgroupContents.addChild(child);
+					}
+				}
+				
+				/*
+				 * Construct the subgroup.
+				 */
+				ITree<T> subgroupTree = new Tree<>(subgroup);
+				subgroupTree.addChild(subgroupContents);
+				subgroupTree.addChild(new Tree<>(tok));
+				
+				/*
+				 * Add the subgroup to the group.
+				 */
+				newContentTree.addChild(subgroupTree);
+				
+				/*
+				 * Add the group contents.
+				 */
+				trees.push(newContentTree);
 			} else {
 				trees.top().addChild(new Tree<>(tok));
 			}
