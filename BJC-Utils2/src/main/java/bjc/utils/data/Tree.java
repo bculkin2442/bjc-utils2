@@ -104,7 +104,9 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 	@Override
 	public void doForChildren(Consumer<ITree<ContainedType>> action) {
-		children.forEach(action);
+		if(childCount > 0) {
+			children.forEach(action);
+		}
 	}
 
 	@Override

@@ -76,6 +76,7 @@ public class SequenceDelimiter<T> {
 			closingDelimiters = new HashSet<>();
 			topLevelExclusions = new HashSet<>();
 			groupExclusions = new HashSet<>();
+			subgroups = new HashMap<>();
 		}
 
 		/**
@@ -473,60 +474,60 @@ public class SequenceDelimiter<T> {
 
 					whoForbid.remove(excludedGroup);
 				}
-			} else if(!groupStack.empty() && groupStack.top().subgroups.containsKey(tok)){
+			} else if(!groupStack.empty() && groupStack.top().subgroups.containsKey(tok)) {
 				/*
 				 * Parse a sub-group.
 				 */
-				
+
 				/*
 				 * The set of enclosed groups.
 				 */
 				Set<T> enclosed = groupStack.top().subgroups.get(tok);
-				
+
 				/*
 				 * The current contents of this group.
 				 */
 				ITree<T> contentTree = trees.pop();
-				
+
 				/*
-				 * Find the first element to enclose in the subgroup.
+				 * Find the first element to enclose in the
+				 * subgroup.
 				 */
 				int ind = contentTree.revFind((chd) -> {
-					if(chd.getHead().equals(subgroup)) {
-						return !enclosed.contains(chd.getChild(1));
-					} else {
-						return false;
-					}
+					return checkChild(subgroup, enclosed, chd);
 				});
-				
+
+				if(ind == -1) ind = 0;
+
 				ITree<T> newContentTree = new Tree<>(contentTree.getHead());
 				ITree<T> subgroupContents = new Tree<>(contents);
-				
+
 				/*
-				 * Split content tree into an untouched tree, and the subgroup.
+				 * Split content tree into an untouched tree,
+				 * and the subgroup.
 				 */
 				for(int j = 0; j < contentTree.getChildrenCount(); j++) {
 					ITree<T> child = contentTree.getChild(j);
-					
+
 					if(j < ind) {
 						newContentTree.addChild(child);
 					} else {
 						subgroupContents.addChild(child);
 					}
 				}
-				
+
 				/*
 				 * Construct the subgroup.
 				 */
 				ITree<T> subgroupTree = new Tree<>(subgroup);
 				subgroupTree.addChild(subgroupContents);
 				subgroupTree.addChild(new Tree<>(tok));
-				
+
 				/*
 				 * Add the subgroup to the group.
 				 */
 				newContentTree.addChild(subgroupTree);
-				
+
 				/*
 				 * Add the group contents.
 				 */
@@ -558,6 +559,19 @@ public class SequenceDelimiter<T> {
 		}
 
 		return res;
+	}
+
+	private boolean checkChild(T subgroup, Set<T> enclosed, ITree<T> chd) {
+		System.out.println("Checking child '" + chd.getHead() + "' for subgroups.");
+
+		if(chd.getHead().equals(subgroup)) {
+			System.out.println("Checking if '" + chd.getChild(1) + "' is a subordinate group.");
+			boolean contains = enclosed.contains(chd.getChild(1));
+			System.out.println("It " + (contains ? "was" : "wasn't"));
+			return contains;
+		} else {
+			return false;
+		}
 	}
 
 	private boolean isForbidden(Stack<DelimiterGroup<T>> groupStack, Multiset<T> forbiddenDelimiters, T groupName) {
@@ -626,5 +640,27 @@ public class SequenceDelimiter<T> {
 		for(T open : openers) {
 			addOpener(open, groupName);
 		}
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+
+		builder.append("SequenceDelimiter [");
+
+		if(openDelimiters != null) {
+			builder.append("openDelimiters=");
+			builder.append(openDelimiters);
+			builder.append(", ");
+		}
+
+		if(groups != null) {
+			builder.append("groups=");
+			builder.append(groups);
+		}
+
+		builder.append("]");
+
+		return builder.toString();
 	}
 }
