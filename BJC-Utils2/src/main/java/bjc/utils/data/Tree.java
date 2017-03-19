@@ -349,4 +349,17 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 		return -1;
 	}
+
+	@Override
+	public void prependChild(ITree<ContainedType> child) {
+		if(hasChildren == false) {
+			hasChildren = true;
+
+			children = new FunctionalList<>();
+		}
+
+		childCount++;
+
+		children.prepend(child);
+	}
 }

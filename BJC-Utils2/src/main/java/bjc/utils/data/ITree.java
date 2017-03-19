@@ -18,13 +18,20 @@ import java.util.function.UnaryOperator;
  */
 public interface ITree<ContainedType> {
 	/**
-	 * Add a child to this node
+	 * Append a child to this node.
 	 *
 	 * @param child
-	 *                The child to add to this node
+	 *                The child to append to this node.
 	 */
 	public void addChild(ITree<ContainedType> child);
 
+	/**
+	 * Prepend a child to this node.
+	 * 
+	 * @param child The child to prepend to this node.
+	 */
+	void prependChild(ITree<ContainedType> child);
+	
 	/**
 	 * Collapse a tree into a single version
 	 *
