@@ -7,16 +7,13 @@ import bjc.utils.esodata.SimpleStack;
 import bjc.utils.esodata.Stack;
 import bjc.utils.funcdata.IMap;
 import bjc.utils.funcutils.StringUtils;
+import bjc.utils.parserutils.DelimiterGroup.OpenGroup;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Convert linear sequences into trees that represent group structure.
@@ -27,234 +24,6 @@ import java.util.Set;
  *                The type of items in the sequence.
  */
 public class SequenceDelimiter<T> {
-	/**
-	 * Represents a possible delimiter group to match.
-	 * 
-	 * @author EVE
-	 *
-	 * @param <T2>
-	 *                The type of items in the sequence.
-	 */
-	public static class DelimiterGroup<T2> {
-		/**
-		 * The name of this delimiter group.
-		 */
-		public final T2 groupName;
-
-		/*
-		 * The delimiters that close this group.
-		 */
-		private Set<T2> closingDelimiters;
-
-		/*
-		 * The groups that can't occur in the top level of this group.
-		 */
-		private Set<T2> topLevelExclusions;
-
-		/*
-		 * The groups that can't occur anywhere inside this group.
-		 */
-		private Set<T2> groupExclusions;
-
-		/*
-		 * Mapping from sub-group delimiters, to any sub-groups enclosed
-		 * in them.
-		 */
-		private Map<T2, Set<T2>> subgroups;
-
-		/**
-		 * Create a new empty delimiter group.
-		 * 
-		 * @param name
-		 *                The name of the delimiter group
-		 */
-		public DelimiterGroup(T2 name) {
-			if(name == null) throw new NullPointerException("Group name must not be null");
-
-			groupName = name;
-
-			closingDelimiters = new HashSet<>();
-			topLevelExclusions = new HashSet<>();
-			groupExclusions = new HashSet<>();
-			subgroups = new HashMap<>();
-		}
-
-		/**
-		 * Check if the provided delimiter would close this group.
-		 * 
-		 * @param del
-		 *                The string to check as a closing delimiter.
-		 * 
-		 * @return Whether or not the provided delimiter closes this
-		 *         group.
-		 */
-		public boolean isClosing(T2 del) {
-			return closingDelimiters.contains(del);
-		}
-
-		/**
-		 * Adds one or more delimiters that close this group.
-		 * 
-		 * @param closers
-		 *                Delimiters that close this group.
-		 */
-		@SafeVarargs
-		public final void addClosing(T2... closers) {
-			List<T2> closerList = Arrays.asList(closers);
-
-			for(T2 closer : closerList) {
-				if(closer == null) {
-					throw new NullPointerException("Closing delimiter must not be null");
-				} else if(closer.equals("")) {
-					/*
-					 * We can do this because equals works
-					 * on arbitrary objects, not just those
-					 * of the same type.
-					 */
-					throw new IllegalArgumentException("Empty string is not a valid exclusion");
-				} else {
-					closingDelimiters.add(closer);
-				}
-			}
-		}
-
-		/**
-		 * Adds one or more groups that cannot occur in the top level of
-		 * this group.
-		 * 
-		 * @param exclusions
-		 *                The groups forbidden in the top level of this
-		 *                group.
-		 */
-		@SafeVarargs
-		public final void addTopLevelForbid(T2... exclusions) {
-			for(T2 exclusion : exclusions) {
-				if(exclusion == null) {
-					throw new NullPointerException("Exclusion must not be null");
-				} else if(exclusion.equals("")) {
-					/*
-					 * We can do this because equals works
-					 * on arbitrary objects, not just those
-					 * of the same type.
-					 */
-					throw new IllegalArgumentException("Empty string is not a valid exclusion");
-				} else {
-					topLevelExclusions.add(exclusion);
-				}
-			}
-		}
-
-		/**
-		 * Adds one or more groups that cannot occur at all in this
-		 * group.
-		 * 
-		 * @param exclusions
-		 *                The groups forbidden inside this group.
-		 */
-		@SafeVarargs
-		public final void addGroupForbid(T2... exclusions) {
-			for(T2 exclusion : exclusions) {
-				if(exclusion == null) {
-					throw new NullPointerException("Exclusion must not be null");
-				} else if(exclusion.equals("")) {
-					/*
-					 * We can do this because equals works
-					 * on arbitrary objects, not just those
-					 * of the same type.
-					 */
-					throw new IllegalArgumentException("Empty string is not a valid exclusion");
-				} else {
-					groupExclusions.add(exclusion);
-				}
-			}
-		}
-
-		/**
-		 * Adds sub-group markers to this group.
-		 * 
-		 * @param subgroup
-		 *                The token to mark a sub-group.
-		 * 
-		 * @param contained
-		 *                Any sub-groups to enclose in this group.
-		 */
-		@SafeVarargs
-		public final void addSubgroup(T2 subgroup, T2... contained) {
-			if(subgroup == null) {
-				throw new NullPointerException("Subgroup marker must not be null");
-			}
-
-			Set<T2> contains = new HashSet<>();
-			for(T2 contain : contained) {
-				if(contain == null) {
-					throw new NullPointerException("Contained group must not be null");
-				}
-
-				contains.add(contain);
-			}
-
-			subgroups.put(subgroup, contains);
-		}
-
-		@Override
-		public String toString() {
-			StringBuilder builder = new StringBuilder();
-
-			builder.append("(");
-
-			builder.append("groupName=[");
-			builder.append(groupName);
-			builder.append("], ");
-
-			builder.append("closingDelimiters=[");
-			for(T2 closer : closingDelimiters) {
-				builder.append(closer + ",");
-			}
-			builder.deleteCharAt(builder.length() - 1);
-			builder.append("]");
-
-			if(topLevelExclusions != null && !topLevelExclusions.isEmpty()) {
-				builder.append(", ");
-				builder.append("topLevelExclusions=[");
-				for(T2 exclusion : topLevelExclusions) {
-					builder.append(exclusion + ",");
-				}
-				builder.deleteCharAt(builder.length() - 1);
-				builder.append("]");
-			}
-
-			if(groupExclusions != null && !groupExclusions.isEmpty()) {
-				builder.append(", ");
-				builder.append("groupExclusions=[");
-				for(T2 exclusion : topLevelExclusions) {
-					builder.append(exclusion + ",");
-				}
-				builder.deleteCharAt(builder.length() - 1);
-				builder.append("]");
-			}
-
-			builder.append(" )");
-
-			return builder.toString();
-		}
-
-	}
-
-	/**
-	 * The superclass for exceptions thrown during sequence delimitation.
-	 */
-	public static class DelimiterException extends RuntimeException {
-		/**
-		 * Create a new generic delimiter exception.
-		 * 
-		 * @param res
-		 *                The reason for this exception.
-		 */
-		public DelimiterException(String res) {
-			super(res);
-		}
-	}
-
 	/*
 	 * Mapping from opening delimiters to the names of the groups they open
 	 */
@@ -264,6 +33,8 @@ public class SequenceDelimiter<T> {
 	 * Mapping from group names to actual groups.
 	 */
 	private Map<T, DelimiterGroup<T>> groups;
+
+	private DelimiterGroup<T> initialGroup;
 
 	/**
 	 * Create a new sequence delimiter.
@@ -292,17 +63,11 @@ public class SequenceDelimiter<T> {
 	 *         <marker>   -> STRING
 	 * </pre>
 	 * 
+	 * @param chars
+	 *                The parameters on how to mark certain portions of the
+	 *                tre.
 	 * @param seq
 	 *                The sequence to delimit.
-	 * 
-	 * @param root
-	 *                The root of the returned tree.
-	 * 
-	 * @param contents
-	 *                The item to use to mark the contents of a group
-	 * 
-	 * @param subgroup
-	 *                The item to use to mark a sub-group.
 	 * 
 	 * @return The sequence as a tree that matches its group structure. Each
 	 *         node in the tree is either a data node, a subgroup node, or a
@@ -329,34 +94,32 @@ public class SequenceDelimiter<T> {
 	 *                 delimitation.
 	 * 
 	 */
-	public ITree<T> delimitSequence(T root, T contents, T subgroup, @SuppressWarnings("unchecked") T... seq)
+	public ITree<T> delimitSequence(SequenceCharacteristics<T> chars, @SuppressWarnings("unchecked") T... seq)
 			throws DelimiterException {
+		if(initialGroup == null) {
+			throw new NullPointerException("Initial group must be specified.");
+		}
+
 		/*
-		 * The root node of the tree to give back.
+		 * The stack of opened and not yet closed groups.
 		 */
-		ITree<T> res = new Tree<>(root);
+		Stack<DelimiterGroup<T>.OpenGroup> groupStack = new SimpleStack<>();
+
+		/*
+		 * Open initial group.
+		 */
+		groupStack.push(initialGroup.open(chars.root));
 
 		/*
 		 * Handle the trivial case where there are no groups.
 		 */
 		if(openDelimiters.isEmpty()) {
 			for(T tok : seq) {
-				res.addChild(new Tree<>(tok));
+				groupStack.top().addItem(new Tree<>(tok));
 			}
 
-			return res;
+			return groupStack.pop().toTree(chars.root, chars);
 		}
-
-		/*
-		 * The stack of trees that represent the sequence.
-		 */
-		Stack<ITree<T>> trees = new SimpleStack<>();
-		trees.push(res);
-
-		/*
-		 * The stack of opened and not yet closed groups.
-		 */
-		Stack<DelimiterGroup<T>> groupStack = new SimpleStack<>();
 
 		/*
 		 * Groups that aren't allowed to be opened at the moment.
@@ -394,7 +157,7 @@ public class SequenceDelimiter<T> {
 					if(whoForbid.containsKey(tok)) {
 						forbiddenBy = whoForbid.get(tok);
 					} else {
-						forbiddenBy = groupStack.top().groupName;
+						forbiddenBy = groupStack.top().getName();
 					}
 
 					String ctxList = StringUtils.toEnglishList(groupStack.toArray(), "then");
@@ -413,30 +176,13 @@ public class SequenceDelimiter<T> {
 				/*
 				 * Add an open group.
 				 */
-				groupStack.push(group);
-
-				/*
-				 * The tree that represents the opened group.
-				 */
-				ITree<T> groupTree = new Tree<>(groupName);
-				groupTree.addChild(new Tree<>(tok));
-
-				/*
-				 * The tree that represents the contents of the
-				 * opened group.
-				 */
-				ITree<T> groupContents = new Tree<>(contents);
-
-				/*
-				 * Add the trees to the open trees.
-				 */
-				trees.push(groupTree);
-				trees.push(groupContents);
+				DelimiterGroup<T>.OpenGroup open = group.open(tok);
+				groupStack.push(open);
 
 				/*
 				 * Add the nested exclusions from this group
 				 */
-				for(T exclusion : group.groupExclusions) {
+				for(T exclusion : open.getNestingExclusions()) {
 					forbiddenDelimiters.add(exclusion);
 
 					whoForbid.put(exclusion, groupName);
@@ -445,111 +191,39 @@ public class SequenceDelimiter<T> {
 				/*
 				 * Close the group.
 				 */
-				DelimiterGroup<T> closed = groupStack.pop();
+				DelimiterGroup<T>.OpenGroup closed = groupStack.pop();
 
-				/*
-				 * Remove the contents of the group and the
-				 * group itself from the stack.
-				 */
-				ITree<T> contentTree = trees.pop();
-				ITree<T> groupTree = trees.pop();
-
-				/*
-				 * Fill in the group node.
-				 */
-				groupTree.addChild(contentTree);
-				groupTree.addChild(new Tree<>(tok));
-
-				/*
-				 * Add the group node to the group that
-				 * contained it.
-				 */
-				trees.top().addChild(groupTree);
+				groupStack.top().addItem(closed.toTree(tok, chars));
 
 				/*
 				 * Remove nested exclusions from this group.
 				 */
-				for(T excludedGroup : closed.groupExclusions) {
+				for(T excludedGroup : closed.getNestingExclusions()) {
 					forbiddenDelimiters.remove(excludedGroup);
 
 					whoForbid.remove(excludedGroup);
 				}
-			} else if(!groupStack.empty() && groupStack.top().subgroups.containsKey(tok)) {
-				/*
-				 * Parse a sub-group.
-				 */
-
-				/*
-				 * The set of enclosed groups.
-				 */
-				Set<T> enclosed = groupStack.top().subgroups.get(tok);
-
-				/*
-				 * The current contents of this group.
-				 */
-				ITree<T> contentTree = trees.pop();
-
-				/*
-				 * Find the first element to enclose in the
-				 * subgroup.
-				 */
-				int ind = contentTree.revFind((chd) -> {
-					return checkChild(subgroup, enclosed, chd);
-				});
-
-				if(ind == -1) ind = 0;
-
-				ITree<T> newContentTree = new Tree<>(contentTree.getHead());
-				ITree<T> subgroupContents = new Tree<>(contents);
-
-				/*
-				 * Split content tree into an untouched tree,
-				 * and the subgroup.
-				 */
-				for(int j = 0; j < contentTree.getChildrenCount(); j++) {
-					ITree<T> child = contentTree.getChild(j);
-
-					if(j < ind) {
-						newContentTree.addChild(child);
-					} else {
-						subgroupContents.addChild(child);
-					}
-				}
-
-				/*
-				 * Construct the subgroup.
-				 */
-				ITree<T> subgroupTree = new Tree<>(subgroup);
-				subgroupTree.addChild(subgroupContents);
-				subgroupTree.addChild(new Tree<>(tok));
-
-				/*
-				 * Add the subgroup to the group.
-				 */
-				newContentTree.addChild(subgroupTree);
-
-				/*
-				 * Add the group contents.
-				 */
-				trees.push(newContentTree);
+			} else if(!groupStack.empty() && groupStack.top().marksSubgroup(tok)) {
+				groupStack.top().markSubgroup(tok, chars);
 			} else {
-				trees.top().addChild(new Tree<>(tok));
+				groupStack.top().addItem(new Tree<>(tok));
 			}
 		}
 
 		/*
 		 * Error if not all groups were closed.
 		 */
-		if(!groupStack.empty()) {
-			DelimiterGroup<T> group = groupStack.top();
+		if(groupStack.size() > 1) {
+			DelimiterGroup<T>.OpenGroup group = groupStack.top();
+
 			StringBuilder msgBuilder = new StringBuilder();
 
-			String closingDelims = StringUtils.toEnglishList(group.closingDelimiters.toArray(), false);
+			String closingDelims = StringUtils.toEnglishList(group.getNestingExclusions().toArray(), false);
 
 			String ctxList = StringUtils.toEnglishList(groupStack.toArray(), "then");
 
 			msgBuilder.append("Unclosed group '");
-			msgBuilder.append(group.groupName);
+			msgBuilder.append(group.getName());
 			msgBuilder.append("'. Expected one of ");
 			msgBuilder.append(closingDelims);
 			msgBuilder.append(" to close it\nOpen groups: ");
@@ -558,28 +232,16 @@ public class SequenceDelimiter<T> {
 			throw new DelimiterException(msgBuilder.toString());
 		}
 
-		return res;
+		return groupStack.pop().toTree(chars.root, chars);
 	}
 
-	private boolean checkChild(T subgroup, Set<T> enclosed, ITree<T> chd) {
-		System.out.println("Checking child '" + chd.getHead() + "' for subgroups.");
-
-		if(chd.getHead().equals(subgroup)) {
-			System.out.println("Checking if '" + chd.getChild(1) + "' is a subordinate group.");
-			boolean contains = enclosed.contains(chd.getChild(1));
-			System.out.println("It " + (contains ? "was" : "wasn't"));
-			return contains;
-		} else {
-			return false;
-		}
-	}
-
-	private boolean isForbidden(Stack<DelimiterGroup<T>> groupStack, Multiset<T> forbiddenDelimiters, T groupName) {
+	private boolean isForbidden(Stack<DelimiterGroup<T>.OpenGroup> groupStack, Multiset<T> forbiddenDelimiters,
+			T groupName) {
 		boolean localForbid;
 		if(groupStack.empty())
 			localForbid = false;
 		else
-			localForbid = groupStack.top().topLevelExclusions.contains(groupName);
+			localForbid = groupStack.top().excludes(groupName);
 
 		return localForbid || forbiddenDelimiters.contains(groupName);
 	}
@@ -657,10 +319,26 @@ public class SequenceDelimiter<T> {
 		if(groups != null) {
 			builder.append("groups=");
 			builder.append(groups);
+			builder.append(",");
+		}
+
+		if(initialGroup != null) {
+			builder.append("initialGroup=");
+			builder.append(initialGroup);
 		}
 
 		builder.append("]");
 
 		return builder.toString();
+	}
+
+	/**
+	 * Set the initial group of this delimiter.
+	 * 
+	 * @param initialGroup
+	 *                The initial group of this delimiter.
+	 */
+	public void setInitialGroup(DelimiterGroup<T> initialGroup) {
+		this.initialGroup = initialGroup;
 	}
 }
