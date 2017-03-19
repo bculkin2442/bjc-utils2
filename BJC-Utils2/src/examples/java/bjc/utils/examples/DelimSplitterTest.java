@@ -1,15 +1,12 @@
 package bjc.utils.examples;
 
 import bjc.utils.data.ITree;
-import bjc.utils.data.TopDownTransformResult;
-import bjc.utils.funcdata.bst.TreeLinearizationMethod;
 import bjc.utils.funcutils.StringUtils;
+import bjc.utils.parserutils.DelimiterException;
+import bjc.utils.parserutils.DelimiterGroup;
 import bjc.utils.parserutils.SequenceDelimiter;
 import bjc.utils.parserutils.StringDelimiter;
 import bjc.utils.parserutils.TokenSplitter;
-
-import bjc.utils.parserutils.SequenceDelimiter.DelimiterException;
-import bjc.utils.parserutils.SequenceDelimiter.DelimiterGroup;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -37,6 +34,8 @@ public class DelimSplitterTest {
 
 	private Map<String, DelimiterGroup<String>> groups;
 
+	boolean verbose;
+
 	/*
 	 * Create a new tester.
 	 */
@@ -48,6 +47,8 @@ public class DelimSplitterTest {
 		split = new TokenSplitter();
 
 		dlm = new StringDelimiter();
+
+		verbose = true;
 	}
 
 	private void loadMirrorDB() {
@@ -133,42 +134,67 @@ public class DelimSplitterTest {
 			break;
 		case "splitter-compile":
 			split.compile();
-			System.out.println("Compiled splitter");
+			if(verbose) {
+				System.out.println("Compiled splitter");
+			}
 			break;
 		case "splitter-add":
 			split.addDelimiter(argArray);
-			System.out.println("Added delimiters " + StringUtils.toEnglishList(argArray, true));
+			if(verbose) {
+				System.out.println("Added delimiters " + StringUtils.toEnglishList(argArray, true));
+			}
 			break;
 		case "splitter-addmulti":
 			split.addMultiDelimiter(argArray);
-			System.out.println("Added multi-delimiters " + StringUtils.toEnglishList(argArray, true));
+			if(verbose) {
+				System.out.println("Added multi-delimiters "
+						+ StringUtils.toEnglishList(argArray, true));
+			}
 			break;
 		case "splitter-addnon":
 			split.addNonMatcher(argArray);
-			System.out.println("Added non-splitters " + StringUtils.toEnglishList(argArray, true));
+			if(verbose) {
+				System.out.println("Added non-splitters "
+						+ StringUtils.toEnglishList(argArray, true));
+			}
 			break;
 		case "splitter-addmatch":
 			for(String arg : argArray) {
 				split.addDelimiter(arg, mirrored.get(arg));
 			}
-			System.out.println("Added matched delimiters " + StringUtils.toEnglishList(argArray, true));
+			if(verbose) {
+				System.out.println("Added matched delimiters "
+						+ StringUtils.toEnglishList(argArray, true));
+			}
 			break;
 		case "splitter-debug":
 			System.out.println(split.toString());
 			break;
 		case "splitter-reset":
 			split = new TokenSplitter();
-			System.out.println("Reset splitter");
+			if(verbose) {
+				System.out.println("Reset splitter");
+			}
 			break;
 		case "delims-addopen":
 			dlm.addOpener(argArray[0], argArray[1]);
-			System.out.printf("Added opener '%s' for group '%s'\n", argArray[0], argArray[1]);
+			if(verbose) {
+				System.out.printf("Added opener '%s' for group '%s'\n", argArray[0], argArray[1]);
+			}
 			break;
 		case "delims-addgroup":
 			for(String arg : argArray) {
 				dlm.addGroup(groups.get(arg));
 			}
-			System.out.println("Added groups " + StringUtils.toEnglishList(argArray, true));
+			if(verbose) {
+				System.out.println("Added groups " + StringUtils.toEnglishList(argArray, true));
+			}
+			break;
+		case "delims-setinitial":
+			dlm.setInitialGroup(groups.get(argArray[0]));
+			if(verbose) {
+				System.out.println("Set initial group");
+			}
 			break;
 		case "delims-debug":
 			System.out.println(dlm.toString());
@@ -178,13 +204,17 @@ public class DelimSplitterTest {
 			break;
 		case "delims-reset":
 			dlm = new StringDelimiter();
-			System.out.println("Reset delimiter");
+			if(verbose) {
+				System.out.println("Reset delimiter");
+			}
 			break;
 		case "delimgroups-new":
 			for(String arg : argArray) {
 				groups.put(arg, new DelimiterGroup<>(arg));
 			}
-			System.out.println("Created groups " + StringUtils.toEnglishList(argArray, true));
+			if(verbose) {
+				System.out.println("Created groups " + StringUtils.toEnglishList(argArray, true));
+			}
 			break;
 		case "delimgroups-edit":
 			for(String arg : argArray) {
@@ -199,7 +229,9 @@ public class DelimSplitterTest {
 		case "delimgroups-reset":
 			dlm = new StringDelimiter();
 			groups = new HashMap<>();
-			System.out.println("Reset delimiter groups + delimiter");
+			if(verbose) {
+				System.out.println("Reset delimiter groups + delimiter");
+			}
 			break;
 		case "load-file":
 			handleLoadFile(args);
@@ -214,7 +246,13 @@ public class DelimSplitterTest {
 	 * Load script commands from a file.
 	 */
 	private void handleLoadFile(String args) {
-		try(FileInputStream fis = new FileInputStream(args)) {
+		String pth = args;
+
+		if(args.startsWith("\"")) {
+			pth = args.substring(1, args.length() - 1);
+		}
+
+		try(FileInputStream fis = new FileInputStream(pth)) {
 			Scanner scn = new Scanner(fis);
 
 			while(scn.hasNextLine()) {
@@ -223,7 +261,9 @@ public class DelimSplitterTest {
 				if(ln.equals("")) continue;
 				if(ln.startsWith("#")) continue;
 
-				System.out.println("\nRead command '" + ln + "' from file\n");
+				if(verbose) {
+					System.out.println("\nRead command '" + ln + "' from file\n");
+				}
 				handleCommand(ln, scn, false);
 			}
 
@@ -246,8 +286,9 @@ public class DelimSplitterTest {
 
 		DelimiterGroup<String> group = groups.get(arg);
 
-		System.out.println("Editing group '" + arg + "'");
-
+		if(verbose) {
+			System.out.println("Editing group '" + arg + "'");
+		}
 		if(isInteractive) {
 			System.out.println("Enter command (blank line to stop editing): ");
 		}
@@ -269,21 +310,31 @@ public class DelimSplitterTest {
 			switch(command) {
 			case "add-closing":
 				group.addClosing(argArray);
-				System.out.println("Added closers " + StringUtils.toEnglishList(argArray, true));
+				if(verbose) {
+					System.out.println("Added closers "
+							+ StringUtils.toEnglishList(argArray, true));
+				}
 				break;
 			case "add-tlexclude":
 				group.addTopLevelForbid(argArray);
-				System.out.println("Added top-level exclusions "
-						+ StringUtils.toEnglishList(argArray, true));
+				if(verbose) {
+					System.out.println("Added top-level exclusions "
+							+ StringUtils.toEnglishList(argArray, true));
+				}
 				break;
 			case "add-exclude":
 				group.addTopLevelForbid(argArray);
-				System.out.println(
-						"Added nested exclusions " + StringUtils.toEnglishList(argArray, true));
+				if(verbose) {
+					System.out.println("Added nested exclusions "
+							+ StringUtils.toEnglishList(argArray, true));
+				}
 				break;
 			case "add-subgroup":
-				group.addSubgroup(argArray[0], Arrays.copyOfRange(argArray, 1, argArray.length));
-				System.out.println("Added subgroups");
+				group.addSubgroup(argArray[0], Integer.parseInt(argArray[1]));
+				if(verbose) {
+					System.out.println(String.format("Added subgroup %s with priority %s",
+							argArray[0], argArray[1]));
+				}
 				break;
 			case "debug":
 				System.out.println(group.toString());
@@ -299,7 +350,9 @@ public class DelimSplitterTest {
 			ln = scn.nextLine().trim();
 		}
 
-		System.out.println("Finished editing group '" + arg + "'");
+		if(verbose) {
+			System.out.println("Finished editing group '" + arg + "'");
+		}
 	}
 
 	private void handleDelim(String args) {
@@ -354,24 +407,29 @@ public class DelimSplitterTest {
 	}
 
 	private void printDelimSeq(ITree<String> delim) {
-		System.out.println("Delimited tokens:\n" + delim.toString());
-		System.out.print("Delimited expr:\n");
+		System.out.println("Delimited tokens:\n" + delim.getChild(1).toString());
+		System.out.print("Delimited expr: ");
 		printDelimTree(delim);
 		System.out.println();
-
-		ITree<String> transform = delim.topDownTransform(this::pickNode, this::transformNode);
-		System.out.println("Transformed tree: " + transform);
 		System.out.println();
 
-		System.out.print("Transformed expr:\n");
+		/*
+		ITree<String> transform = delim.topDownTransform(this::pickNode, this::transformNode);
+		System.out.println("Transformed tree:\n" + transform.getChild(1));
+		System.out.println();
+		System.out.println();
+
+		System.out.print("Transformed expr: ");
 		printDelimTree(transform);
+		 */
+		
 		System.out.println();
 	}
 
 	private void printDelimTree(ITree<String> tree) {
 		StringBuilder sb = new StringBuilder();
 
-		intPrintDelimTree(tree, sb);
+		intPrintDelimTree(tree.getChild(1), sb);
 
 		System.out.println(sb.toString().replaceAll("\\s+", " "));
 	}
@@ -415,6 +473,7 @@ public class DelimSplitterTest {
 		}
 	}
 
+	/*
 	private TopDownTransformResult pickNode(String node) {
 		if(groups.containsKey(node) || node.equals("subgroup"))
 			return TopDownTransformResult.PUSHDOWN;
@@ -429,7 +488,7 @@ public class DelimSplitterTest {
 
 		return tree;
 	}
-
+*/
 	/**
 	 * Main method
 	 * 

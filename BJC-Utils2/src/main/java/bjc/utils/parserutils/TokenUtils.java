@@ -20,11 +20,12 @@ public class TokenUtils {
 	 * situation that indicates its use as an infix operator.
 	 *
 	 * @param expression
-	 *                The expression to check
+	 *                The expression to check.
 	 * @param operator
-	 *                The operator to see if it is contained
+	 *                The operator to see if it is contained.
+	 *                
 	 * @return Whether or not the given expression contains the specified
-	 *         operator as a infix operator
+	 *         operator as a infix operator.
 	 */
 	public static boolean containsInfixOperator(String expression, String operator) {
 		return StringUtils.countMatches(expression, operator) == 1 && !expression.equalsIgnoreCase(operator)

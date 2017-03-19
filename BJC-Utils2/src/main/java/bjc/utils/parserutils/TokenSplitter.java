@@ -104,6 +104,8 @@ public class TokenSplitter {
 	 */
 	public void addDelimiter(String... delims) {
 		for(String delim : delims) {
+			if(delim == null) throw new NullPointerException("Delim must not be null");
+			
 			String quoteDelim = Pattern.quote(delim);
 			String delimPat = String.format(WITH_DELIM, quoteDelim);
 
@@ -133,6 +135,8 @@ public class TokenSplitter {
 	 */
 	public void addMultiDelimiter(String... delims) {
 		for(String delim : delims) {
+			if(delim == null) throw new NullPointerException("Delim must not be null");
+			
 			String delimPat = String.format(WITH_MULTI_DELIM, "(?:" + delim + ")");
 
 			if(currPatt == null) {
@@ -154,11 +158,13 @@ public class TokenSplitter {
 	/**
 	 * Marks strings matching the pattern delim as non-splittable.
 	 *
-	 * @param delimSet
+	 * @param delims
 	 *                The regex to not splitting matching strings.
 	 */
 	public void addNonMatcher(String... delims) {
 		for(String delim : delims) {
+			if(delim == null) throw new NullPointerException("Delim must not be null");
+			
 			if(currPatt == null) {
 				currPatt = new StringBuilder();
 				currExclusionPatt = new StringBuilder();
