@@ -153,7 +153,8 @@ public class TokenUtils {
 
 		while (possibleEscapeFinder.find()) {
 			if (!escapeFinder.find()) {
-				throw new IllegalArgumentException("Illegal escape sequence " + possibleEscapeFinder.group());
+				throw new IllegalArgumentException(
+						String.format("Illegal escape sequence '%s' at position %d", possibleEscapeFinder.group(), possibleEscapeFinder.start()));
 			}
 
 			String escapeSeq = escapeFinder.group();
