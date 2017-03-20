@@ -1,14 +1,14 @@
 package bjc.utils.examples;
 
-import bjc.utils.data.IPair;
 import bjc.utils.data.ITree;
-import bjc.utils.data.Pair;
 import bjc.utils.funcutils.StringUtils;
-import bjc.utils.parserutils.DelimiterException;
-import bjc.utils.parserutils.DelimiterGroup;
-import bjc.utils.parserutils.SequenceDelimiter;
-import bjc.utils.parserutils.StringDelimiter;
 import bjc.utils.parserutils.TokenSplitter;
+import bjc.utils.parserutils.delims.DelimiterException;
+import bjc.utils.parserutils.delims.DelimiterGroup;
+import bjc.utils.parserutils.delims.RegexCloser;
+import bjc.utils.parserutils.delims.RegexOpener;
+import bjc.utils.parserutils.delims.SequenceDelimiter;
+import bjc.utils.parserutils.delims.StringDelimiter;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -20,10 +20,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.function.BiPredicate;
-import java.util.function.Function;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Test for {@link SequenceDelimiter} as well as {@link TokenSplitter}
@@ -32,56 +28,6 @@ import java.util.regex.Pattern;
  *
  */
 public class DelimSplitterTest {
-	private final class RegexCloser implements BiPredicate<String, String[]> {
-		private String rep;
-
-		public RegexCloser(String closer) {
-			rep = closer;
-		}
-
-		@Override
-		public boolean test(String closer, String[] params) {
-			/*
-			 * Confirm passing an array instead of a single var-arg.
-			 */
-			String work = String.format(rep, (Object[])params);
-			
-			return work.equals(closer);
-		}
-
-	}
-
-	private final class RegexOpener implements Function<String, IPair<String, String[]>> {
-		private String name;
-
-		private Pattern patt;
-
-		public RegexOpener(String groupName, String groupRegex) {
-			name = groupName;
-
-			patt = Pattern.compile(groupRegex);
-		}
-
-		@Override
-		public IPair<String, String[]> apply(String str) {
-			Matcher m = patt.matcher(str);
-
-			if(m.matches()) {
-				int numGroups = m.groupCount();
-
-				String[] parms = new String[numGroups + 1];
-
-				for(int i = 0; i <= numGroups; i++) {
-					parms[i] = m.group(i);
-				}
-
-				return new Pair<>(name, parms);
-			}
-
-			return new Pair<>(null, null);
-		}
-	}
-
 	private TokenSplitter split;
 
 	private StringDelimiter dlm;
