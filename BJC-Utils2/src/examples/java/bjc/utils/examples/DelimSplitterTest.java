@@ -1,6 +1,8 @@
 package bjc.utils.examples;
 
+import bjc.utils.data.IPair;
 import bjc.utils.data.ITree;
+import bjc.utils.data.Pair;
 import bjc.utils.funcutils.StringUtils;
 import bjc.utils.parserutils.DelimiterException;
 import bjc.utils.parserutils.DelimiterGroup;
@@ -18,6 +20,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.function.BiPredicate;
+import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Test for {@link SequenceDelimiter} as well as {@link TokenSplitter}
@@ -26,6 +32,56 @@ import java.util.Scanner;
  *
  */
 public class DelimSplitterTest {
+	private final class RegexCloser implements BiPredicate<String, String[]> {
+		private String rep;
+
+		public RegexCloser(String closer) {
+			rep = closer;
+		}
+
+		@Override
+		public boolean test(String closer, String[] params) {
+			/*
+			 * Confirm passing an array instead of a single var-arg.
+			 */
+			String work = String.format(rep, (Object[])params);
+			
+			return work.equals(closer);
+		}
+
+	}
+
+	private final class RegexOpener implements Function<String, IPair<String, String[]>> {
+		private String name;
+
+		private Pattern patt;
+
+		public RegexOpener(String groupName, String groupRegex) {
+			name = groupName;
+
+			patt = Pattern.compile(groupRegex);
+		}
+
+		@Override
+		public IPair<String, String[]> apply(String str) {
+			Matcher m = patt.matcher(str);
+
+			if(m.matches()) {
+				int numGroups = m.groupCount();
+
+				String[] parms = new String[numGroups + 1];
+
+				for(int i = 0; i <= numGroups; i++) {
+					parms[i] = m.group(i);
+				}
+
+				return new Pair<>(name, parms);
+			}
+
+			return new Pair<>(null, null);
+		}
+	}
+
 	private TokenSplitter split;
 
 	private StringDelimiter dlm;
@@ -147,15 +203,14 @@ public class DelimSplitterTest {
 		case "splitter-addmulti":
 			split.addMultiDelimiter(argArray);
 			if(verbose) {
-				System.out.println("Added multi-delimiters "
-						+ StringUtils.toEnglishList(argArray, true));
+				System.out.println(
+						"Added multi-delimiters " + StringUtils.toEnglishList(argArray, true));
 			}
 			break;
 		case "splitter-addnon":
 			split.addNonMatcher(argArray);
 			if(verbose) {
-				System.out.println("Added non-splitters "
-						+ StringUtils.toEnglishList(argArray, true));
+				System.out.println("Added non-splitters " + StringUtils.toEnglishList(argArray, true));
 			}
 			break;
 		case "splitter-addmatch":
@@ -306,8 +361,8 @@ public class DelimSplitterTest {
 			case "add-closing":
 				group.addClosing(argArray);
 				if(verbose) {
-					System.out.println("Added closers "
-							+ StringUtils.toEnglishList(argArray, true));
+					System.out.println(
+							"Added closers " + StringUtils.toEnglishList(argArray, true));
 				}
 				break;
 			case "add-tlexclude":
@@ -327,14 +382,35 @@ public class DelimSplitterTest {
 			case "add-subgroup":
 				group.addSubgroup(argArray[0], Integer.parseInt(argArray[1]));
 				if(verbose) {
-					System.out.println(String.format("Added subgroup %s with priority %s",
-							argArray[0], argArray[1]));
+					System.out.printf("Added subgroup %s with priority %s\n", argArray[0],
+							argArray[1]);
+				}
+				break;
+			case "add-implied-subgroup":
+				group.implySubgroup(argArray[0], argArray[1]);
+				if(verbose) {
+					System.out.printf("Made closer '%s' imply a '%s' subgroup\n", argArray[0],
+							argArray[1]);
 				}
 				break;
 			case "add-opener":
 				group.addOpener(argArray[0], argArray[1]);
 				if(verbose) {
-					System.out.printf("Added opener '%s' for group '%s'\n", argArray[0], argArray[1]);
+					System.out.printf("Added opener '%s' for group '%s'\n", argArray[0],
+							argArray[1]);
+				}
+				break;
+			case "add-reopener":
+				group.addPredOpener(new RegexOpener(argArray[0], argArray[1]));
+				if(verbose) {
+					System.out.printf("Added regex '%s' as opener for '%s'\n", argArray[1],
+							argArray[0]);
+				}
+				break;
+			case "add-recloser":
+				group.addPredCloser(new RegexCloser(argArray[0]));
+				if(verbose) {
+					System.out.printf("Added parameterized string '%s' as closer\n", argArray[0]);
 				}
 				break;
 			case "debug":
@@ -362,7 +438,8 @@ public class DelimSplitterTest {
 
 			printDelimSeq(res);
 		} catch(DelimiterException dex) {
-			System.out.println("Expression 'args' isn't properly delimited.\n\tCause: " + dex.getMessage());
+			System.out.println("Expression '" + args + "' isn't properly delimited.\n\tCause: "
+					+ dex.getMessage());
 		}
 	}
 
@@ -415,15 +492,16 @@ public class DelimSplitterTest {
 		System.out.println();
 
 		/*
-		ITree<String> transform = delim.topDownTransform(this::pickNode, this::transformNode);
-		System.out.println("Transformed tree:\n" + transform.getChild(1));
-		System.out.println();
-		System.out.println();
-
-		System.out.print("Transformed expr: ");
-		printDelimTree(transform);
+		 * ITree<String> transform =
+		 * delim.topDownTransform(this::pickNode, this::transformNode);
+		 * System.out.println("Transformed tree:\n" +
+		 * transform.getChild(1)); System.out.println();
+		 * System.out.println();
+		 * 
+		 * System.out.print("Transformed expr: ");
+		 * printDelimTree(transform);
 		 */
-		
+
 		System.out.println();
 	}
 
@@ -475,21 +553,18 @@ public class DelimSplitterTest {
 	}
 
 	/*
-	private TopDownTransformResult pickNode(String node) {
-		if(groups.containsKey(node) || node.equals("subgroup"))
-			return TopDownTransformResult.PUSHDOWN;
-		else
-			return TopDownTransformResult.PASSTHROUGH;
-	}
-
-	private ITree<String> transformNode(ITree<String> tree) {
-		if(groups.containsKey(tree.getHead())) {
-
-		}
-
-		return tree;
-	}
-*/
+	 * private TopDownTransformResult pickNode(String node) {
+	 * if(groups.containsKey(node) || node.equals("subgroup")) return
+	 * TopDownTransformResult.PUSHDOWN; else return
+	 * TopDownTransformResult.PASSTHROUGH; }
+	 * 
+	 * private ITree<String> transformNode(ITree<String> tree) {
+	 * if(groups.containsKey(tree.getHead())) {
+	 * 
+	 * }
+	 * 
+	 * return tree; }
+	 */
 	/**
 	 * Main method
 	 * 
