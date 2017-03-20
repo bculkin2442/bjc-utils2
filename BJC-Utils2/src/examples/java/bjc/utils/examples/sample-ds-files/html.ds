@@ -1,0 +1,10 @@
+delimgroups-new tag initial
+
+delimgroups-edit tag
+	add-recloser </%2$s>
+
+delimgroups-edit initial
+	add-reopener tag <(\w+)>
+
+delims-addgroup tag initial
+delims-setinitial initial

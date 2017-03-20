@@ -1,0 +1,23 @@
+splitter-addmatch ( { [
+splitter-add : , "
+splitter-compile
+
+delimgroups-new braces brackets initial	
+delimgroups-edit braces
+	add-closing }
+	add-subgroup : 0
+	add-subgroup , 1
+	add-implied-subgroup } ,
+	
+delimgroups-edit brackets
+	add-subgroup , 0
+	add-closing ]
+	add-implied-subgroup ] ,
+
+delimgroups-edit initial
+	add-opener { braces
+	add-opener [ brackets
+	
+delims-addgroup braces brackets initial
+
+delims-setinitial initial
