@@ -176,12 +176,7 @@ public class DelimSplitterTest {
 				System.out.println("Reset splitter");
 			}
 			break;
-		case "delims-addopen":
-			dlm.addOpener(argArray[0], argArray[1]);
-			if(verbose) {
-				System.out.printf("Added opener '%s' for group '%s'\n", argArray[0], argArray[1]);
-			}
-			break;
+
 		case "delims-addgroup":
 			for(String arg : argArray) {
 				dlm.addGroup(groups.get(arg));
@@ -334,6 +329,12 @@ public class DelimSplitterTest {
 				if(verbose) {
 					System.out.println(String.format("Added subgroup %s with priority %s",
 							argArray[0], argArray[1]));
+				}
+				break;
+			case "add-opener":
+				group.addOpener(argArray[0], argArray[1]);
+				if(verbose) {
+					System.out.printf("Added opener '%s' for group '%s'\n", argArray[0], argArray[1]);
 				}
 				break;
 			case "debug":

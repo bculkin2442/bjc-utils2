@@ -7,7 +7,6 @@ import bjc.utils.esodata.SimpleStack;
 import bjc.utils.esodata.Stack;
 import bjc.utils.funcdata.IMap;
 import bjc.utils.funcutils.StringUtils;
-import bjc.utils.parserutils.DelimiterGroup.OpenGroup;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
@@ -27,7 +26,6 @@ public class SequenceDelimiter<T> {
 	/*
 	 * Mapping from opening delimiters to the names of the groups they open
 	 */
-	private Map<T, T> openDelimiters;
 
 	/*
 	 * Mapping from group names to actual groups.
@@ -40,8 +38,6 @@ public class SequenceDelimiter<T> {
 	 * Create a new sequence delimiter.
 	 */
 	public SequenceDelimiter() {
-		openDelimiters = new HashMap<>();
-
 		groups = new HashMap<>();
 	}
 
@@ -65,7 +61,7 @@ public class SequenceDelimiter<T> {
 	 * 
 	 * @param chars
 	 *                The parameters on how to mark certain portions of the
-	 *                tre.
+	 *                tree.
 	 * @param seq
 	 *                The sequence to delimit.
 	 * 
@@ -109,18 +105,7 @@ public class SequenceDelimiter<T> {
 		 * Open initial group.
 		 */
 		groupStack.push(initialGroup.open(chars.root));
-
-		/*
-		 * Handle the trivial case where there are no groups.
-		 */
-		if(openDelimiters.isEmpty()) {
-			for(T tok : seq) {
-				groupStack.top().addItem(new Tree<>(tok));
-			}
-
-			return groupStack.pop().toTree(chars.root, chars);
-		}
-
+		
 		/*
 		 * Groups that aren't allowed to be opened at the moment.
 		 */
@@ -134,12 +119,12 @@ public class SequenceDelimiter<T> {
 		for(int i = 0; i < seq.length; i++) {
 			T tok = seq[i];
 
+			T possibleOpen = groupStack.top().doesOpen(tok);
 			/*
 			 * If we have an opening delimiter, handle it.
 			 */
-			if(openDelimiters.containsKey(tok)) {
-				T groupName = openDelimiters.get(tok);
-				DelimiterGroup<T> group = groups.get(groupName);
+			if(possibleOpen != null) {
+				DelimiterGroup<T> group = groups.get(possibleOpen);
 
 				/*
 				 * Error on groups that can't open in this
@@ -149,7 +134,7 @@ public class SequenceDelimiter<T> {
 				 * top-level of this group, as well as nested
 				 * exclusions from all enclosing groups.
 				 */
-				if(isForbidden(groupStack, forbiddenDelimiters, groupName)) {
+				if(isForbidden(groupStack, forbiddenDelimiters, possibleOpen)) {
 					StringBuilder msgBuilder = new StringBuilder();
 
 					T forbiddenBy;
@@ -185,7 +170,7 @@ public class SequenceDelimiter<T> {
 				for(T exclusion : open.getNestingExclusions()) {
 					forbiddenDelimiters.add(exclusion);
 
-					whoForbid.put(exclusion, groupName);
+					whoForbid.put(exclusion, possibleOpen);
 				}
 			} else if(!groupStack.empty() && groupStack.top().isClosing(tok)) {
 				/*
@@ -247,28 +232,6 @@ public class SequenceDelimiter<T> {
 	}
 
 	/**
-	 * Add a open delimiter for the specified group.
-	 * 
-	 * @param open
-	 *                The open delimiter.
-	 * @param groupName
-	 *                The name of the group it opens.
-	 */
-	public void addOpener(T open, T groupName) {
-		if(open == null) {
-			throw new NullPointerException("Opener must not be null");
-		} else if(open.equals("")) {
-			throw new IllegalArgumentException("Empty string is not a valid opening delimiter");
-		} else if(groupName == null) {
-			throw new NullPointerException("Group name must not be null");
-		} else if(!groups.containsKey(groupName)) {
-			throw new IllegalArgumentException("Group " + groupName + " doesn't exist.");
-		}
-
-		openDelimiters.put(open, groupName);
-	}
-
-	/**
 	 * Add a delimiter group.
 	 * 
 	 * @param group
@@ -300,7 +263,7 @@ public class SequenceDelimiter<T> {
 		addGroup(group);
 
 		for(T open : openers) {
-			addOpener(open, groupName);
+			group.addOpener(open, groupName);
 		}
 	}
 
@@ -309,12 +272,6 @@ public class SequenceDelimiter<T> {
 		StringBuilder builder = new StringBuilder();
 
 		builder.append("SequenceDelimiter [");
-
-		if(openDelimiters != null) {
-			builder.append("openDelimiters=");
-			builder.append(openDelimiters);
-			builder.append(", ");
-		}
 
 		if(groups != null) {
 			builder.append("groups=");

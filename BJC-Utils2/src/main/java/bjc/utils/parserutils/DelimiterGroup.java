@@ -195,6 +195,14 @@ public class DelimiterGroup<T> {
 		public boolean marksSubgroup(T tok) {
 			return subgroups.containsKey(tok);
 		}
+		
+		public T doesOpen(T name) {
+			if(openDelimiters.containsKey(name)) {
+				return openDelimiters.get(name);
+			}
+			
+			return null;
+		}
 	}
 
 	/**
@@ -202,6 +210,11 @@ public class DelimiterGroup<T> {
 	 */
 	public final T groupName;
 
+	/*
+	 * The delimiters that open groups in this group,
+	 */
+	private Map<T, T> openDelimiters;
+	
 	/*
 	 * The delimiters that close this group.
 	 */
@@ -234,6 +247,7 @@ public class DelimiterGroup<T> {
 
 		groupName = name;
 
+		openDelimiters = new HashMap<>();
 		closingDelimiters = new HashSet<>();
 		topLevelExclusions = new HashSet<>();
 		groupExclusions = new HashSet<>();
@@ -333,6 +347,10 @@ public class DelimiterGroup<T> {
 		}
 
 		subgroups.put(subgroup, priority);
+	}
+	
+	public void addOpener(T opener, T group) {
+		openDelimiters.put(opener, group);
 	}
 
 	@Override
