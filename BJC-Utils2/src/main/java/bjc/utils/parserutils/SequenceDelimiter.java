@@ -1,5 +1,6 @@
 package bjc.utils.parserutils;
 
+import bjc.utils.data.IPair;
 import bjc.utils.data.ITree;
 import bjc.utils.data.Tree;
 import bjc.utils.esodata.PushdownMap;
@@ -104,7 +105,7 @@ public class SequenceDelimiter<T> {
 		/*
 		 * Open initial group.
 		 */
-		groupStack.push(initialGroup.open(chars.root));
+		groupStack.push(initialGroup.open(chars.root, null));
 		
 		/*
 		 * Groups that aren't allowed to be opened at the moment.
@@ -119,7 +120,9 @@ public class SequenceDelimiter<T> {
 		for(int i = 0; i < seq.length; i++) {
 			T tok = seq[i];
 
-			T possibleOpen = groupStack.top().doesOpen(tok);
+			IPair<T, T[]> possibleOpenPar = groupStack.top().doesOpen(tok);
+			T possibleOpen = possibleOpenPar.getLeft();
+			
 			/*
 			 * If we have an opening delimiter, handle it.
 			 */
@@ -161,7 +164,7 @@ public class SequenceDelimiter<T> {
 				/*
 				 * Add an open group.
 				 */
-				DelimiterGroup<T>.OpenGroup open = group.open(tok);
+				DelimiterGroup<T>.OpenGroup open = group.open(tok, possibleOpenPar.getRight());
 				groupStack.push(open);
 
 				/*

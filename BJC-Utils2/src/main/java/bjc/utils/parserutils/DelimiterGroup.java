@@ -1,6 +1,8 @@
 package bjc.utils.parserutils;
 
+import bjc.utils.data.IPair;
 import bjc.utils.data.ITree;
+import bjc.utils.data.Pair;
 import bjc.utils.data.Tree;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IList;
@@ -12,7 +14,10 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.BiPredicate;
+import java.util.function.Function;
 
 /**
  * Represents a possible delimiter group to match.
@@ -36,14 +41,20 @@ public class DelimiterGroup<T> {
 
 		private T opener;
 
+		private T[] params;
+
 		/**
 		 * Create a new instance of a delimiter group.
 		 * 
 		 * @param open
 		 *                The item that opened this group.
+		 * 
+		 * @param parms
+		 *                Any parameters from the opener.
 		 */
-		public OpenGroup(T open) {
+		public OpenGroup(T open, T[] parms) {
 			opener = open;
+			params = parms;
 
 			contents = new LinkedList<>();
 
@@ -111,6 +122,10 @@ public class DelimiterGroup<T> {
 		 * @return This group as a tree.
 		 */
 		public ITree<T> toTree(T closer, SequenceCharacteristics<T> chars) {
+			if(impliedSubgroups.containsKey(closer)) {
+				markSubgroup(impliedSubgroups.get(closer), chars);
+			}
+
 			ITree<T> res = new Tree<>(chars.contents);
 
 			if(contents.isEmpty()) {
@@ -163,6 +178,16 @@ public class DelimiterGroup<T> {
 		 *         group.
 		 */
 		public boolean isClosing(T del) {
+			if(closingDelimiters.contains(del)) {
+				return true;
+			}
+
+			for(BiPredicate<T, T[]> pred : predClosers) {
+				if(pred.test(del, params)) {
+					return true;
+				}
+			}
+
 			return closingDelimiters.contains(del);
 		}
 
@@ -195,13 +220,30 @@ public class DelimiterGroup<T> {
 		public boolean marksSubgroup(T tok) {
 			return subgroups.containsKey(tok);
 		}
-		
-		public T doesOpen(T name) {
-			if(openDelimiters.containsKey(name)) {
-				return openDelimiters.get(name);
+
+		/**
+		 * Checks if a given token opens a group.
+		 * 
+		 * @param marker
+		 *                The token to check.
+		 * 
+		 * @return The name of the group T opens, or null if it doesn't
+		 *         open one.
+		 */
+		public IPair<T, T[]> doesOpen(T marker) {
+			if(openDelimiters.containsKey(marker)) {
+				return new Pair<>(openDelimiters.get(marker), null);
 			}
-			
-			return null;
+
+			for(Function<T, IPair<T, T[]>> pred : predOpeners) {
+				IPair<T, T[]> par = pred.apply(marker);
+
+				if(par.getLeft() != null) {
+					return par;
+				}
+			}
+
+			return new Pair<>(null, null);
 		}
 	}
 
@@ -211,10 +253,10 @@ public class DelimiterGroup<T> {
 	public final T groupName;
 
 	/*
-	 * The delimiters that open groups in this group,
+	 * The delimiters that open groups at the top level of this group.
 	 */
 	private Map<T, T> openDelimiters;
-	
+
 	/*
 	 * The delimiters that close this group.
 	 */
@@ -236,6 +278,21 @@ public class DelimiterGroup<T> {
 	 */
 	private Map<T, Integer> subgroups;
 
+	/*
+	 * Subgroups implied by a particular closing delimiter
+	 */
+	private Map<T, T> impliedSubgroups;
+
+	/*
+	 * Allows more complex openings
+	 */
+	private List<Function<T, IPair<T, T[]>>> predOpeners;
+
+	/*
+	 * Allow more complex closings
+	 */
+	private List<BiPredicate<T, T[]>> predClosers;
+
 	/**
 	 * Create a new empty delimiter group.
 	 * 
@@ -249,9 +306,15 @@ public class DelimiterGroup<T> {
 
 		openDelimiters = new HashMap<>();
 		closingDelimiters = new HashSet<>();
+
 		topLevelExclusions = new HashSet<>();
 		groupExclusions = new HashSet<>();
+
 		subgroups = new HashMap<>();
+		impliedSubgroups = new HashMap<>();
+
+		predOpeners = new LinkedList<>();
+		predClosers = new LinkedList<>();
 	}
 
 	/**
@@ -348,9 +411,13 @@ public class DelimiterGroup<T> {
 
 		subgroups.put(subgroup, priority);
 	}
-	
+
 	public void addOpener(T opener, T group) {
 		openDelimiters.put(opener, group);
+	}
+
+	public void implySubgroup(T closer, T subgroup) {
+		impliedSubgroups.put(closer, subgroup);
 	}
 
 	@Override
@@ -403,8 +470,16 @@ public class DelimiterGroup<T> {
 	 * 
 	 * @return An opened instance of this group.
 	 */
-	public OpenGroup open(T opener) {
-		return new OpenGroup(opener);
+	public OpenGroup open(T opener, T[] parms) {
+		return new OpenGroup(opener, parms);
+	}
+
+	public void addPredOpener(Function<T, IPair<T, T[]>> pred) {
+		predOpeners.add(pred);
+	}
+
+	public void addPredCloser(BiPredicate<T, T[]> pred) {
+		predClosers.add(pred);
 	}
 
 }

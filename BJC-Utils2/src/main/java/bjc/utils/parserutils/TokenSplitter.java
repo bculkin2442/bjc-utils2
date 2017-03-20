@@ -105,7 +105,7 @@ public class TokenSplitter {
 	public void addDelimiter(String... delims) {
 		for(String delim : delims) {
 			if(delim == null) throw new NullPointerException("Delim must not be null");
-			
+
 			String quoteDelim = Pattern.quote(delim);
 			String delimPat = String.format(WITH_DELIM, quoteDelim);
 
@@ -136,7 +136,7 @@ public class TokenSplitter {
 	public void addMultiDelimiter(String... delims) {
 		for(String delim : delims) {
 			if(delim == null) throw new NullPointerException("Delim must not be null");
-			
+
 			String delimPat = String.format(WITH_MULTI_DELIM, "(?:" + delim + ")");
 
 			if(currPatt == null) {
@@ -164,7 +164,7 @@ public class TokenSplitter {
 	public void addNonMatcher(String... delims) {
 		for(String delim : delims) {
 			if(delim == null) throw new NullPointerException("Delim must not be null");
-			
+
 			if(currPatt == null) {
 				currPatt = new StringBuilder();
 				currExclusionPatt = new StringBuilder();
@@ -184,6 +184,9 @@ public class TokenSplitter {
 	 * Makes this splitter ready to use.
 	 */
 	public void compile() {
+		if(currPatt == null) currPatt = new StringBuilder();
+		if(currExclusionPatt == null) currExclusionPatt = new StringBuilder();
+
 		compPatt = Pattern.compile(currPatt.toString());
 		exclusionPatt = Pattern.compile(currExclusionPatt.toString());
 	}
