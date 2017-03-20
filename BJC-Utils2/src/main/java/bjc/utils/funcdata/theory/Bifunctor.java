@@ -3,7 +3,7 @@ package bjc.utils.funcdata.theory;
 import java.util.function.Function;
 
 /**
- * A functor over a pair of heterogenous types
+ * A functor over a pair of heterogeneous types
  *
  * @author ben
  * @param <LeftType>
