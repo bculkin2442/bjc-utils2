@@ -12,6 +12,10 @@ import org.junit.rules.ExpectedException;
 
 import static bjc.utils.parserutils.TokenUtils.*;
 
+/*
+ * Tests for TokenUtils
+ */
+@SuppressWarnings("javadoc")
 public class TokenUtilsTest {
 	@Rule
 	public ExpectedException exp = ExpectedException.none();
