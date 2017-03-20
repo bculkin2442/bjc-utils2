@@ -1,4 +1,4 @@
-package bjc.utils.parserutils;
+package bjc.utils.parserutils.delims;
 
 /**
  * The superclass for exceptions thrown during sequence delimitation.

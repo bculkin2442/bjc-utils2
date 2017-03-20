@@ -1,4 +1,4 @@
-package bjc.utils.parserutils;
+package bjc.utils.parserutils.delims;
 
 /**
  * Marks the parameters for building a sequence tree.

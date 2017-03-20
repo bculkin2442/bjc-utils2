@@ -1,4 +1,4 @@
-package bjc.utils.parserutils;
+package bjc.utils.parserutils.delims;
 
 import bjc.utils.data.IPair;
 import bjc.utils.data.ITree;
