@@ -14,24 +14,10 @@ import org.apache.commons.lang3.StringUtils;
  *
  */
 public class TokenUtils {
-
-	/**
-	 * Checks if the given expression contains the specified operator in a
-	 * situation that indicates its use as an infix operator.
-	 *
-	 * @param expression
-	 *                The expression to check.
-	 * @param operator
-	 *                The operator to see if it is contained.
-	 *                
-	 * @return Whether or not the given expression contains the specified
-	 *         operator as a infix operator.
+	/*
+	 * This regex matches potential single character escape sequences.
 	 */
-	public static boolean containsInfixOperator(String expression, String operator) {
-		return StringUtils.countMatches(expression, operator) == 1 && !expression.equalsIgnoreCase(operator)
-				&& !expression.startsWith(operator);
-	}
-
+	private static Pattern possibleEscape = Pattern.compile("\\\\.");
 	/*
 	 * This regex matches java-style string escapes
 	 */
@@ -60,6 +46,10 @@ public class TokenUtils {
 	 *         embedded double-quoted strings that separated them.
 	 */
 	public static List<String> removeDQuotedStrings(String inp) {
+		if(inp == null) {
+			throw new NullPointerException("inp must not be null");
+		}
+
 		StringBuffer work = new StringBuffer();
 		List<String> res = new LinkedList<>();
 
@@ -90,10 +80,21 @@ public class TokenUtils {
 	 *         characters.
 	 */
 	public static String descapeString(String inp) {
+		if(inp == null) {
+			throw new NullPointerException("inp must not be null");
+		}
+
 		StringBuffer work = new StringBuffer();
 
+		Matcher possibleEscapeFinder = possibleEscape.matcher(inp);
 		Matcher escapeFinder = escapePatt.matcher(inp);
-		while(escapeFinder.find()) {
+
+		while(possibleEscapeFinder.find()) {
+			if(!escapeFinder.find()) {
+				throw new IllegalArgumentException(
+						"Illegal escape sequence " + possibleEscapeFinder.group());
+			}
+
 			String escapeSeq = escapeFinder.group();
 
 			String escapeRep = "";
@@ -120,6 +121,10 @@ public class TokenUtils {
 				escapeRep = "'";
 				break;
 			case "\\\\":
+				/*
+				 * Skip past the second slash.
+				 */
+				possibleEscapeFinder.find();
 				escapeRep = "\\";
 				break;
 			default:
@@ -139,15 +144,38 @@ public class TokenUtils {
 	}
 
 	private static String handleUnicodeEscape(String seq) {
-		int codepoint = Integer.parseInt(seq, 16);
+		try {
+			int codepoint = Integer.parseInt(seq, 16);
 
-		return new String(Character.toChars(codepoint));
+			return new String(Character.toChars(codepoint));
+		} catch(IllegalArgumentException iaex) {
+			IllegalArgumentException reiaex = new IllegalArgumentException(
+					String.format("'%s' is not a valid Unicode escape sequence'", seq));
+
+			reiaex.initCause(iaex);
+
+			throw reiaex;
+		}
 	}
 
 	private static String handleOctalEscape(String seq) {
-		int codepoint = Integer.parseInt(seq, 8);
+		try {
+			int codepoint = Integer.parseInt(seq, 8);
 
-		return new String(Character.toChars(codepoint));
+			if(codepoint > 255) {
+				throw new IllegalArgumentException(String
+						.format("'%d' is outside the range of octal escapes', codepoint"));
+			}
+
+			return new String(Character.toChars(codepoint));
+		} catch(IllegalArgumentException iaex) {
+			IllegalArgumentException reiaex = new IllegalArgumentException(
+					String.format("'%s' is not a valid octal escape sequence'", seq));
+
+			reiaex.initCause(iaex);
+
+			throw reiaex;
+		}
 	}
 
 	/**
