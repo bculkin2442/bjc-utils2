@@ -5,6 +5,7 @@ import java.io.Reader;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.function.Consumer;
+import java.util.regex.Pattern;
 
 /**
  * Implements reading numbered blocks from a source.
@@ -130,7 +131,11 @@ public class BlockReader implements AutoCloseable {
 		lnReader = new LineNumberReader(source);
 
 		blockReader = new Scanner(lnReader);
-		blockReader.useDelimiter(String.format("(?:%s)|\\Z", blockDelim));
+		
+		String pattern = String.format("(?:%s)|\\Z", blockDelim);
+		Pattern pt = Pattern.compile(pattern, Pattern.MULTILINE);
+		
+		blockReader.useDelimiter(pt);
 	}
 
 	/**
