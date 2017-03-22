@@ -100,8 +100,8 @@ public class BlockReader implements AutoCloseable {
 
 		@Override
 		public String toString() {
-			return String.format("Block #%d (from lines %d to %d) length: %d characters", blockNo, endLine,
-					startLine, contents.length());
+			return String.format("Block #%d (from lines %d to %d) length: %d characters", blockNo, startLine,
+					endLine, contents.length());
 		}
 	}
 
