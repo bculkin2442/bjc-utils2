@@ -26,6 +26,6 @@ public class StringDelimiter extends SequenceDelimiter<String> {
 	 * @see SequenceDelimiter
 	 */
 	public ITree<String> delimitSequence(String... seq) throws DelimiterException {
-		return super.delimitSequence(new SequenceCharacteristics("root", "contents", "subgroup"), seq);
+		return super.delimitSequence(new SequenceCharacteristics<>("root", "contents", "subgroup"), seq);
 	}
 }

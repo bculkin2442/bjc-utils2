@@ -9,11 +9,14 @@ import bjc.utils.esodata.Stack;
 import bjc.utils.funcdata.IMap;
 import bjc.utils.funcutils.StringUtils;
 
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Convert linear sequences into trees that represent group structure.
@@ -24,10 +27,6 @@ import java.util.Map;
  *                The type of items in the sequence.
  */
 public class SequenceDelimiter<T> {
-	/*
-	 * Mapping from opening delimiters to the names of the groups they open
-	 */
-
 	/*
 	 * Mapping from group names to actual groups.
 	 */
@@ -47,7 +46,7 @@ public class SequenceDelimiter<T> {
 	 * structure.
 	 * 
 	 * Essentially, creates a parse tree of the expression against the
-	 * following grammar while obeying the defined group rules.
+	 * following grammar while obeying the defined grouping rules.
 	 * 
 	 * <pre>
 	 *         <tree>     -> (<data> | <subgroup> | <group>)*
@@ -95,6 +94,8 @@ public class SequenceDelimiter<T> {
 			throws DelimiterException {
 		if(initialGroup == null) {
 			throw new NullPointerException("Initial group must be specified.");
+		} else if(chars == null) {
+			throw new NullPointerException("Sequence characteristics must not be null");
 		}
 
 		/*
@@ -106,11 +107,18 @@ public class SequenceDelimiter<T> {
 		 * Open initial group.
 		 */
 		groupStack.push(initialGroup.open(chars.root, null));
-		
+
 		/*
 		 * Groups that aren't allowed to be opened at the moment.
 		 */
-		Multiset<T> forbiddenDelimiters = HashMultiset.create();
+		Stack<Multiset<T>> forbiddenDelimiters = new SimpleStack<>();
+		forbiddenDelimiters.push(HashMultiset.create());
+
+		/*
+		 * Groups that are allowed to be opened at the moment.
+		 */
+		Stack<Multimap<T, T>> allowedDelimiters = new SimpleStack<>();
+		allowedDelimiters.push(HashMultimap.create());
 
 		/*
 		 * Map of who forbid what for debugging purposes.
@@ -122,7 +130,19 @@ public class SequenceDelimiter<T> {
 
 			IPair<T, T[]> possibleOpenPar = groupStack.top().doesOpen(tok);
 			T possibleOpen = possibleOpenPar.getLeft();
-			
+
+			if(possibleOpen == null) {
+				/*
+				 * Handle nested openers.
+				 * 
+				 * Local openers take priority over nested ones
+				 * if they overlap.
+				 */
+				if(allowedDelimiters.top().containsKey(tok)) {
+					possibleOpen = allowedDelimiters.top().get(tok).iterator().next();
+				}
+			}
+
 			/*
 			 * If we have an opening delimiter, handle it.
 			 */
@@ -168,10 +188,27 @@ public class SequenceDelimiter<T> {
 				groupStack.push(open);
 
 				/*
+				 * Handle 'forgetful' groups that reset nesting
+				 */
+				if(open.isForgetful()) {
+					allowedDelimiters.push(HashMultimap.create());
+					forbiddenDelimiters.push(HashMultiset.create());
+				}
+
+				/*
+				 * Add the nested opens from this group.
+				 */
+				Multimap<T, T> currentAllowed = allowedDelimiters.top();
+				for(Entry<T, T> opener : open.getNestingOpeners().entrySet()) {
+					currentAllowed.put(opener.getKey(), opener.getValue());
+				}
+
+				/*
 				 * Add the nested exclusions from this group
 				 */
+				Multiset<T> currentForbidden = forbiddenDelimiters.top();
 				for(T exclusion : open.getNestingExclusions()) {
-					forbiddenDelimiters.add(exclusion);
+					currentForbidden.add(exclusion);
 
 					whoForbid.put(exclusion, possibleOpen);
 				}
@@ -186,10 +223,27 @@ public class SequenceDelimiter<T> {
 				/*
 				 * Remove nested exclusions from this group.
 				 */
+				Multiset<T> currentForbidden = forbiddenDelimiters.top();
 				for(T excludedGroup : closed.getNestingExclusions()) {
-					forbiddenDelimiters.remove(excludedGroup);
+					currentForbidden.remove(excludedGroup);
 
 					whoForbid.remove(excludedGroup);
+				}
+
+				/*
+				 * Remove the nested opens from this group.
+				 */
+				Multimap<T, T> currentAllowed = allowedDelimiters.top();
+				for(Entry<T, T> closer : closed.getNestingOpeners().entrySet()) {
+					currentAllowed.remove(closer.getKey(), closer.getValue());
+				}
+
+				/*
+				 * Handle 'forgetful' groups that reset nesting.
+				 */
+				if(closed.isForgetful()) {
+					allowedDelimiters.drop();
+					forbiddenDelimiters.drop();
 				}
 			} else if(!groupStack.empty() && groupStack.top().marksSubgroup(tok)) {
 				groupStack.top().markSubgroup(tok, chars);
@@ -223,15 +277,16 @@ public class SequenceDelimiter<T> {
 		return groupStack.pop().toTree(chars.root, chars);
 	}
 
-	private boolean isForbidden(Stack<DelimiterGroup<T>.OpenGroup> groupStack, Multiset<T> forbiddenDelimiters,
-			T groupName) {
+	private boolean isForbidden(Stack<DelimiterGroup<T>.OpenGroup> groupStack,
+			Stack<Multiset<T>> forbiddenDelimiters, T groupName) {
 		boolean localForbid;
+
 		if(groupStack.empty())
 			localForbid = false;
 		else
 			localForbid = groupStack.top().excludes(groupName);
 
-		return localForbid || forbiddenDelimiters.contains(groupName);
+		return localForbid || forbiddenDelimiters.top().contains(groupName);
 	}
 
 	/**

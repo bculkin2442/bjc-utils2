@@ -14,7 +14,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
@@ -210,6 +209,17 @@ public class DelimiterGroup<T> {
 		}
 
 		/**
+		 * Get the groups that are allowed to open anywhere inside this
+		 * group.
+		 * 
+		 * @return The groups allowed to open anywhere inside this
+		 *         group.
+		 */
+		public Map<T, T> getNestingOpeners() {
+			return nestedOpenDelimiters;
+		}
+
+		/**
 		 * Checks if a given token marks a subgroup.
 		 * 
 		 * @param tok
@@ -245,6 +255,15 @@ public class DelimiterGroup<T> {
 
 			return new Pair<>(null, null);
 		}
+
+		/**
+		 * Check if this group starts a new nesting scope.
+		 * 
+		 * @return Whether this group starts a new nesting scope.
+		 */
+		public boolean isForgetful() {
+			return forgetful;
+		}
 	}
 
 	/**
@@ -256,6 +275,11 @@ public class DelimiterGroup<T> {
 	 * The delimiters that open groups at the top level of this group.
 	 */
 	private Map<T, T> openDelimiters;
+
+	/*
+	 * The delimiters that open groups inside of this group.
+	 */
+	private Map<T, T> nestedOpenDelimiters;
 
 	/*
 	 * The delimiters that close this group.
@@ -293,6 +317,11 @@ public class DelimiterGroup<T> {
 	 */
 	private List<BiPredicate<T, T[]>> predClosers;
 
+	/*
+	 * Whether or not this group starts a new nesting set.
+	 */
+	private boolean forgetful;
+
 	/**
 	 * Create a new empty delimiter group.
 	 * 
@@ -305,6 +334,8 @@ public class DelimiterGroup<T> {
 		groupName = name;
 
 		openDelimiters = new HashMap<>();
+		nestedOpenDelimiters = new HashMap<>();
+
 		closingDelimiters = new HashSet<>();
 
 		topLevelExclusions = new HashSet<>();
@@ -412,11 +443,64 @@ public class DelimiterGroup<T> {
 		subgroups.put(subgroup, priority);
 	}
 
+	/**
+	 * Adds a marker that opens a group at the top level of this group.
+	 * 
+	 * @param opener
+	 *                The marker that opens the group.
+	 * 
+	 * @param group
+	 *                The group opened by the marker.
+	 */
 	public void addOpener(T opener, T group) {
+		if(opener == null) {
+			throw new NullPointerException("Opener must not be null");
+		} else if(group == null) {
+			throw new NullPointerException("Group to open must not be null");
+		}
+
 		openDelimiters.put(opener, group);
 	}
 
+	/**
+	 * Adds a marker that opens a group inside of this group.
+	 * 
+	 * @param opener
+	 *                The marker that opens the group.
+	 * 
+	 * @param group
+	 *                The group opened by the marker.
+	 */
+	public void addNestedOpener(T opener, T group) {
+		if(opener == null) {
+			throw new NullPointerException("Opener must not be null");
+		} else if(group == null) {
+			throw new NullPointerException("Group to open must not be null");
+		}
+
+		nestedOpenDelimiters.put(opener, group);
+	}
+
+	/**
+	 * Mark a closing delimiter as implying a subgroup.
+	 * 
+	 * @param closer
+	 *                The closing delimiter.
+	 * 
+	 * @param subgroup
+	 *                The subgroup to imply.
+	 */
 	public void implySubgroup(T closer, T subgroup) {
+		if(closer == null) {
+			throw new NullPointerException("Closer must not be null");
+		} else if(subgroup == null) {
+			throw new NullPointerException("Subgroup must not be null");
+		} else if(!closingDelimiters.contains(closer)) {
+			throw new IllegalArgumentException(String.format("No closing delimiter '%s' defined", closer));
+		} else if(!subgroups.containsKey(subgroup)) {
+			throw new IllegalArgumentException(String.format("No subgroup '%s' defined", subgroup));
+		}
+
 		impliedSubgroups.put(closer, subgroup);
 	}
 
@@ -468,18 +552,43 @@ public class DelimiterGroup<T> {
 	 * @param opener
 	 *                The item that opened this group.
 	 * 
+	 * @param parms
+	 *                The parameters that opened this group
+	 * 
 	 * @return An opened instance of this group.
 	 */
 	public OpenGroup open(T opener, T[] parms) {
 		return new OpenGroup(opener, parms);
 	}
 
+	/**
+	 * Adds a predicated opener to the top level of this group.
+	 * 
+	 * @param pred
+	 *                The predicate that defines the opener and its
+	 *                parameters.
+	 */
 	public void addPredOpener(Function<T, IPair<T, T[]>> pred) {
 		predOpeners.add(pred);
 	}
 
+	/**
+	 * Adds a predicated closer to the top level of this group.
+	 * 
+	 * @param pred
+	 *                The predicate that defines the closer.
+	 */
 	public void addPredCloser(BiPredicate<T, T[]> pred) {
 		predClosers.add(pred);
 	}
 
+	/**
+	 * Set whether or not this group starts a new nesting set.
+	 * 
+	 * @param forgetful
+	 *                Whether this group starts a new nesting set.
+	 */
+	public void setForgetful(boolean forgetful) {
+		this.forgetful = forgetful;
+	}
 }

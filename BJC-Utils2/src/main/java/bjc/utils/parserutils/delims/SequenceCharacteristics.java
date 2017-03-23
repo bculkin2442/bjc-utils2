@@ -41,26 +41,18 @@ public class SequenceCharacteristics<T> {
 		this.subgroup = subgroup;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+
 		result = prime * result + ((contents == null) ? 0 : contents.hashCode());
 		result = prime * result + ((root == null) ? 0 : root.hashCode());
 		result = prime * result + ((subgroup == null) ? 0 : subgroup.hashCode());
+
 		return result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if(this == obj) return true;
