@@ -19,7 +19,8 @@ import bjc.utils.parserutils.ParserException;
  * 
  *
  */
-public abstract class NullCommand<K, V, C> {
+@FunctionalInterface
+public interface InitialCommand<K, V, C> {
 	/**
 	 * Construct the null denotation of this command.
 	 * 
@@ -33,6 +34,5 @@ public abstract class NullCommand<K, V, C> {
 	 * @throws ParserException
 	 *                 If something goes wrong during parsing.
 	 */
-	public abstract ITree<Token<K, V>> nullDenotation(Token<K, V> operator, ParserContext<K, V, C> ctx)
-			throws ParserException;
+	ITree<Token<K, V>> denote(Token<K, V> operator, ParserContext<K, V, C> ctx) throws ParserException;
 }

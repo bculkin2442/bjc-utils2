@@ -18,7 +18,7 @@ import bjc.utils.parserutils.ParserException;
  *                The state type of the parser.
  *
  */
-public abstract class LeftCommand<K, V, C> {
+public abstract class NonInitialCommand<K, V, C> {
 	/**
 	 * Construct the left denotation of this command.
 	 * 
@@ -35,7 +35,7 @@ public abstract class LeftCommand<K, V, C> {
 	 * @throws ParserException
 	 *                 If something went wrong during parsing.
 	 */
-	public abstract ITree<Token<K, V>> leftDenote(ITree<Token<K, V>> operand, Token<K, V> operator,
+	public abstract ITree<Token<K, V>> denote(ITree<Token<K, V>> operand, Token<K, V> operator,
 			ParserContext<K, V, C> ctx) throws ParserException;
 
 	/**

@@ -2,12 +2,14 @@ package bjc.utils.examples.parsing;
 
 import bjc.utils.data.ITree;
 import bjc.utils.data.TransformIterator;
+import bjc.utils.esodata.Directory;
 import bjc.utils.parserutils.ParserException;
-import bjc.utils.parserutils.TokenSplitter;
 import bjc.utils.parserutils.pratt.PrattParser;
 import bjc.utils.parserutils.pratt.StringToken;
 import bjc.utils.parserutils.pratt.StringTokenStream;
 import bjc.utils.parserutils.pratt.Token;
+import bjc.utils.parserutils.splitter.TokenSplitter;
+import bjc.utils.parserutils.splitter.TwoLevelSplitter;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -17,9 +19,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.function.UnaryOperator;
 
-import static bjc.utils.parserutils.pratt.LeftCommands.*;
-import static bjc.utils.parserutils.pratt.NullCommands.*;
+import static bjc.utils.parserutils.pratt.commands.NonInitialCommands.*;
+import static bjc.utils.parserutils.pratt.commands.InitialCommands.*;
 
 /**
  * Simple test for pratt parser.
@@ -28,11 +31,37 @@ import static bjc.utils.parserutils.pratt.NullCommands.*;
  *
  */
 public class PrattParserTest {
+	private static final class BlockExit implements UnaryOperator<TestContext> {
+		@Override
+		public TestContext apply(TestContext state) {
+			state.scopes.pop();
+
+			state.blockCount.pop();
+
+			return state;
+		}
+	}
+
+	private static final class BlockEnter implements UnaryOperator<TestContext> {
+		@Override
+		public TestContext apply(TestContext state) {
+			Directory<String, String> enclosing = state.scopes.top();
+			int currBlockNumber = state.blockCount.pop();
+
+			state.scopes.push(enclosing.newSubdirectory("block" + currBlockNumber));
+
+			state.blockCount.push(currBlockNumber + 1);
+			state.blockCount.push(0);
+
+			return state;
+		}
+	}
+
 	/**
 	 * Main method.
 	 * 
 	 * @param args
-	 *            Unused CLI arguments.
+	 *                Unused CLI arguments.
 	 */
 	public static void main(String[] args) {
 		/*
@@ -45,11 +74,13 @@ public class PrattParserTest {
 		ops.addAll(Arrays.asList("<=", ">="));
 
 		ops.add(".");
+		ops.add(";");
 		ops.addAll(Arrays.asList("=", "<", ">"));
 		ops.addAll(Arrays.asList("+", "-", "*", "/"));
 		ops.addAll(Arrays.asList("^", "!"));
 		ops.addAll(Arrays.asList("(", ")"));
 		ops.addAll(Arrays.asList("[", "]"));
+		ops.addAll(Arrays.asList("{", "}"));
 
 		/*
 		 * Reserved words that represent themselves, not literals.
@@ -57,23 +88,36 @@ public class PrattParserTest {
 		Set<String> reserved = new LinkedHashSet<>();
 		reserved.addAll(Arrays.asList("if", "then", "else"));
 		reserved.addAll(Arrays.asList("and", "or"));
-		
-		TokenSplitter split = new TokenSplitter();
-		ops.forEach(split::addDelimiter);
+		reserved.addAll(Arrays.asList("begin", "end"));
 
-		split.addNonMatcher("<=", ">=");
+		TwoLevelSplitter split = new TwoLevelSplitter();
+
+		split.addCompoundDelim(":=");
+		split.addCompoundDelim("||", "&&");
+		split.addCompoundDelim("<=", ">=");
+
+		split.addSimpleDelim(".");
+		split.addSimpleDelim(";");
+		split.addSimpleDelim("=", "<", ">");
+		split.addSimpleDelim("+", "-", "*", "/");
+		split.addSimpleDelim("^", "!");
+		split.addSimpleMulti("\\(", "\\)");
+		split.addSimpleMulti("\\[", "\\]");
+		split.addSimpleMulti("\\{", "\\}");
 
 		split.compile();
 
-		PrattParser<String, String, Object> parser = createParser();
+		PrattParser<String, String, TestContext> parser = createParser();
+
+		TestContext ctx = new TestContext();
 
 		Scanner scn = new Scanner(System.in);
 
 		System.out.print("Enter a command (blank line to exit): ");
 		String ln = scn.nextLine();
 
-		while (!ln.trim().equals("")) {
-			Iterator<Token<String, String>> tokens = preprocessInput(ops, split, ln, reserved);
+		while(!ln.trim().equals("")) {
+			Iterator<Token<String, String>> tokens = preprocessInput(ops, split, ln, reserved, ctx);
 
 			try {
 				StringTokenStream tokenStream = new StringTokenStream(tokens);
@@ -83,14 +127,14 @@ public class PrattParserTest {
 				 */
 				tokenStream.next();
 
-				ITree<Token<String, String>> tree = parser.parseExpression(0, tokenStream, null, true);
+				ITree<Token<String, String>> tree = parser.parseExpression(0, tokenStream, ctx, true);
 
-				if (!tokenStream.current().getKey().equals("(end)")) {
+				if(!tokenStream.current().getKey().equals("(end)")) {
 					System.out.println("Multipe expressions on line");
 				}
 
 				System.out.println("Parsed expression:\n" + tree);
-			} catch (ParserException pex) {
+			} catch(ParserException pex) {
 				pex.printStackTrace();
 			}
 
@@ -98,16 +142,19 @@ public class PrattParserTest {
 			ln = scn.nextLine();
 		}
 
+		System.out.println();
+		System.out.println("Context is:\n" + ctx);
+
 		scn.close();
 	}
 
 	private static Iterator<Token<String, String>> preprocessInput(Set<String> ops, TokenSplitter split, String ln,
-			Set<String> reserved) {
+			Set<String> reserved, TestContext ctx) {
 		String[] rawTokens = ln.split("\\s+");
 
 		List<String> splitTokens = new LinkedList<>();
 
-		for (String raw : rawTokens) {
+		for(String raw : rawTokens) {
 			String[] strangs = split.split(raw);
 
 			splitTokens.addAll(Arrays.asList(strangs));
@@ -118,7 +165,7 @@ public class PrattParserTest {
 		Iterator<String> source = splitTokens.iterator();
 
 		Iterator<Token<String, String>> tokens = new TransformIterator<>(source, (String strang) -> {
-			if (ops.contains(strang) || reserved.contains(strang)) {
+			if(ops.contains(strang) || reserved.contains(strang)) {
 				return new StringToken(strang, strang);
 			} else {
 				return new StringToken("(literal)", strang);
@@ -127,7 +174,7 @@ public class PrattParserTest {
 		return tokens;
 	}
 
-	private static PrattParser<String, String, Object> createParser() {
+	private static PrattParser<String, String, TestContext> createParser() {
 		/*
 		 * Set of which relational operators chain with each other.
 		 */
@@ -139,7 +186,7 @@ public class PrattParserTest {
 		 */
 		StringToken chainToken = new StringToken("and", "and");
 
-		PrattParser<String, String, Object> parser = new PrattParser<>();
+		PrattParser<String, String, TestContext> parser = new PrattParser<>();
 
 		parser.addNonInitialCommand("if", ternary(5, 0, "else", new StringToken("cond", "cond"), false));
 
@@ -147,7 +194,7 @@ public class PrattParserTest {
 
 		parser.addNonInitialCommand("and", infixLeft(13));
 		parser.addNonInitialCommand("or", infixLeft(13));
-		
+
 		parser.addNonInitialCommand("=", chain(15, relChain, chainToken));
 		parser.addNonInitialCommand("<", chain(15, relChain, chainToken));
 		parser.addNonInitialCommand(">", chain(15, relChain, chainToken));
@@ -156,7 +203,7 @@ public class PrattParserTest {
 
 		parser.addNonInitialCommand("&&", infixRight(17));
 		parser.addNonInitialCommand("||", infixRight(17));
-		
+
 		parser.addNonInitialCommand("+", infixLeft(20));
 		parser.addNonInitialCommand("-", infixLeft(20));
 
@@ -168,12 +215,16 @@ public class PrattParserTest {
 		parser.addNonInitialCommand("^", infixRight(50));
 
 		parser.addNonInitialCommand(".", infixLeft(60));
-		
+
 		parser.addNonInitialCommand("[", postCircumfix(60, 0, "]", new StringToken("idx", "idx")));
 
-		parser.addInitialCommand("if", preTernary(0, 0, 0, "then", "else", new StringToken("ifelse", "ifelse")));
+		parser.addInitialCommand("if",
+				preTernary(0, 0, 0, "then", "else", new StringToken("ifelse", "ifelse")));
 
-		parser.addInitialCommand("(", grouping(0, ")", new StringToken("()", "()")));
+		parser.addInitialCommand("(", grouping(0, ")", new StringToken("parens", "parens")));
+
+		parser.addInitialCommand("{", delimited(0, ";", "}", new StringToken("block", "block"),
+				new BlockEnter(), (state) -> state, new BlockExit(), true));
 
 		parser.addInitialCommand("-", unary(30));
 

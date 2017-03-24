@@ -1,15 +1,16 @@
-package bjc.utils.parserutils;
+package bjc.utils.parserutils.splitter;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
- * Split a string and keep given delimiters.
+ * Simple implementation of {@link TokenSplitter}
+ * 
+ * @author EVE
  *
- * @author Ben Culkin
  */
-public class TokenSplitter {
+public class SimpleTokenSplitter implements TokenSplitter {
 	/*
 	 * This string is a format template for the delimiter matching regex
 	 *
@@ -58,28 +59,13 @@ public class TokenSplitter {
 	/**
 	 * Create a new token splitter.
 	 */
-	public TokenSplitter() {
+	public SimpleTokenSplitter() {
 		delimSet = new HashSet<>();
 		multidelimSet = new HashSet<>();
 		exclusionSet = new HashSet<>();
 	}
 
-	/**
-	 * Split a provided string using configured delimiters, and keeping the
-	 * delimiters.
-	 *
-	 * <p>
-	 * The splitter must be compiled first.
-	 * </p>
-	 * 
-	 * @param inp
-	 *                The string to split.
-	 *
-	 * @return The split string, including delimiters.
-	 *
-	 * @throws IllegalStateException
-	 *                 If the splitter isn't compiled.
-	 */
+	@Override
 	public String[] split(String inp) {
 		if(compPatt == null) throw new IllegalStateException("Token splitter has not been compiled yet");
 
@@ -200,7 +186,7 @@ public class TokenSplitter {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 
-		builder.append("TokenSplitter [");
+		builder.append("SimpleTokenSplitter [");
 
 		if(currPatt != null) {
 			builder.append("currPatt=");

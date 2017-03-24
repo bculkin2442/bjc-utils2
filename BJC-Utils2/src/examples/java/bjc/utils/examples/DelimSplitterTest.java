@@ -2,13 +2,13 @@ package bjc.utils.examples;
 
 import bjc.utils.data.ITree;
 import bjc.utils.funcutils.StringUtils;
-import bjc.utils.parserutils.TokenSplitter;
 import bjc.utils.parserutils.delims.DelimiterException;
 import bjc.utils.parserutils.delims.DelimiterGroup;
 import bjc.utils.parserutils.delims.RegexCloser;
 import bjc.utils.parserutils.delims.RegexOpener;
 import bjc.utils.parserutils.delims.SequenceDelimiter;
 import bjc.utils.parserutils.delims.StringDelimiter;
+import bjc.utils.parserutils.splitter.SimpleTokenSplitter;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -22,13 +22,13 @@ import java.util.Map;
 import java.util.Scanner;
 
 /**
- * Test for {@link SequenceDelimiter} as well as {@link TokenSplitter}
+ * Test for {@link SequenceDelimiter} as well as {@link SimpleTokenSplitter}
  * 
  * @author EVE
  *
  */
 public class DelimSplitterTest {
-	private TokenSplitter split;
+	private SimpleTokenSplitter split;
 
 	private StringDelimiter dlm;
 
@@ -46,7 +46,7 @@ public class DelimSplitterTest {
 
 		groups = new HashMap<>();
 
-		split = new TokenSplitter();
+		split = new SimpleTokenSplitter();
 
 		dlm = new StringDelimiter();
 
@@ -172,7 +172,7 @@ public class DelimSplitterTest {
 			System.out.println(split.toString());
 			break;
 		case "splitter-reset":
-			split = new TokenSplitter();
+			split = new SimpleTokenSplitter();
 			if(verbose) {
 				System.out.println("Reset splitter");
 			}
