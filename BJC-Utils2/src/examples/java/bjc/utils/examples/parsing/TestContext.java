@@ -1,9 +1,11 @@
 package bjc.utils.examples.parsing;
 
+import bjc.utils.data.ITree;
 import bjc.utils.esodata.Directory;
 import bjc.utils.esodata.SimpleDirectory;
 import bjc.utils.esodata.SimpleStack;
 import bjc.utils.esodata.Stack;
+import bjc.utils.parserutils.pratt.Token;
 
 /**
  * Simple context for the parser.
@@ -15,7 +17,7 @@ public class TestContext {
 	/**
 	 * The variable scoping information.
 	 */
-	public Stack<Directory<String, String>> scopes;
+	public Stack<Directory<String, ITree<Token<String, String>>>> scopes;
 
 	/**
 	 * The current number of scopes inside this scope.
@@ -35,6 +37,6 @@ public class TestContext {
 
 	@Override
 	public String toString() {
-		return String.format("TestContext [scopes=%s, blockCount=%s]", scopes, blockCount);
+		return String.format("TestContext [scopes=%s\n, blockCount=%s]", scopes, blockCount);
 	}
 }

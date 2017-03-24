@@ -100,6 +100,20 @@ public class TwoLevelSplitter implements TokenSplitter {
 	}
 
 	/**
+	 * Exclude strings matching a regex from both splits.
+	 *
+	 * @param exclusions
+	 *                The regexes to exclude matches for.
+	 */
+	public void exclude(String... exclusions) {
+		for(String exclusion : exclusions) {
+			high.addNonMatcher(exclusion);
+
+			low.addNonMatcher(exclusion);
+		}
+	}
+
+	/**
 	 * Ready the splitter for use.
 	 */
 	public void compile() {
