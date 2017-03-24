@@ -22,9 +22,10 @@ public class StringUtils {
 	 *         of the provided regex
 	 */
 	public static boolean containsOnly(String input, String regex) {
-		if(input == null)
+		if (input == null)
 			throw new NullPointerException("Input must not be null");
-		else if(regex == null) throw new NullPointerException("Regex must not be null");
+		else if (regex == null)
+			throw new NullPointerException("Regex must not be null");
 
 		/*
 		 * This regular expression is fairly simple.
@@ -46,7 +47,7 @@ public class StringUtils {
 	 *                The number of levels to indent
 	 */
 	public static void indentNLevels(StringBuilder builder, int levels) {
-		for(int i = 0; i < levels; i++) {
+		for (int i = 0; i < levels; i++) {
 			builder.append("\t");
 		}
 	}
@@ -80,7 +81,7 @@ public class StringUtils {
 	 * @return
 	 */
 	public static String toEnglishList(Object[] objects, String join, String comma) {
-		if(objects == null) {
+		if (objects == null) {
 			throw new NullPointerException("Sequence must not be null");
 		}
 
@@ -89,7 +90,7 @@ public class StringUtils {
 		String joiner = join;
 		String coma = comma;
 
-		switch(objects.length) {
+		switch (objects.length) {
 		case 0:
 			/*
 			 * Empty list.
@@ -113,7 +114,7 @@ public class StringUtils {
 			/*
 			 * Three or more items.
 			 */
-			for(int i = 0; i < objects.length - 1; i++) {
+			for (int i = 0; i < objects.length - 1; i++) {
 				sb.append(objects[i].toString());
 				sb.append(coma + " ");
 			}
@@ -157,7 +158,7 @@ public class StringUtils {
 	 * @return
 	 */
 	public static String toEnglishList(Object[] objects, boolean and) {
-		if(and) {
+		if (and) {
 			return toEnglishList(objects, "and");
 		} else {
 			return toEnglishList(objects, "or");

@@ -130,8 +130,11 @@ public class LeftCommands {
 
 		private boolean nonassoc;
 
-		public TernaryCommand(int leftPower, K terminator, Token<K, V> mark, boolean isNonassoc) {
+		public TernaryCommand(int leftPower, K terminator, Token<K, V> marker, boolean isNonassoc) {
 			super(leftPower);
+
+			term = terminator;
+			mark = marker;
 			nonassoc = isNonassoc;
 		}
 
@@ -150,10 +153,10 @@ public class LeftCommands {
 
 		@Override
 		public int nextBinding() {
-			if(nonassoc) {
+			if (nonassoc) {
 				return leftBinding() - 1;
 			} else {
-				return super.nextBinding();
+				return leftBinding();
 			}
 		}
 	}
@@ -177,7 +180,7 @@ public class LeftCommands {
 
 			ITree<Token<K, V>> res = new Tree<>(operator, operand, tree);
 
-			if(chainWith.contains(ctx.tokens.current().getKey())) {
+			if (chainWith.contains(ctx.tokens.current().getKey())) {
 				Token<K, V> tok = ctx.tokens.current();
 				ctx.tokens.next();
 

@@ -9,11 +9,14 @@ import bjc.utils.parserutils.pratt.StringToken;
 import bjc.utils.parserutils.pratt.StringTokenStream;
 import bjc.utils.parserutils.pratt.Token;
 
-import com.google.common.collect.Iterators;
-
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 import static bjc.utils.parserutils.pratt.LeftCommands.*;
 import static bjc.utils.parserutils.pratt.NullCommands.*;
@@ -29,60 +32,46 @@ public class PrattParserTest {
 	 * Main method.
 	 * 
 	 * @param args
-	 *                Unused CLI args.
+	 *                Unused CLI arguments.
 	 */
 	public static void main(String[] args) {
+		/*
+		 * Use a linked hash set to preserve insertion order.
+		 */
+		Set<String> ops = new LinkedHashSet<>();
+
+		ops.add(":=");
+		ops.addAll(Arrays.asList("<=", ">="));
+
+		ops.addAll(Arrays.asList("=", "<", ">"));
+		ops.addAll(Arrays.asList("+", "-", "*", "/"));
+		ops.addAll(Arrays.asList("^", "!"));
+		ops.addAll(Arrays.asList("(", ")"));
+		ops.addAll(Arrays.asList("[", "]"));
+
+		/*
+		 * Reserved words that represent themselves, not literals.
+		 */
+		Set<String> reserved = new LinkedHashSet<>();
+		reserved.add("if");
+		reserved.add("else");
+
 		TokenSplitter split = new TokenSplitter();
-		split.addDelimiter("+", "-", "*", "/");
-		split.addDelimiter("^", "!");
-		split.addDelimiter("(", ")");
+		ops.forEach(split::addDelimiter);
+
+		split.addNonMatcher("<=", ">=");
+
 		split.compile();
 
-		PrattParser<String, String, Object> parser = new PrattParser<>();
-
-		parser.addNonInitialCommand("+", infixLeft(20));
-		parser.addNonInitialCommand("-", infixLeft(20));
-
-		parser.addNonInitialCommand("*", infixLeft(30));
-		parser.addNonInitialCommand("/", infixLeft(30));
-
-		parser.addNonInitialCommand("!", postfix(40));
-
-		parser.addNonInitialCommand("^", infixRight(50));
-
-		parser.addInitialCommand("(", grouping(0, ")", new StringToken("()", "()")));
-		parser.addInitialCommand("(literal)", leaf());
+		PrattParser<String, String, Object> parser = createParser();
 
 		Scanner scn = new Scanner(System.in);
 
 		System.out.print("Enter a command (blank line to exit): ");
 		String ln = scn.nextLine();
 
-		while(!ln.trim().equals("")) {
-			String[] strangs = split.split(ln);
-
-			System.out.println("Split string: " + Arrays.toString(strangs));
-
-			Iterator<String> source = Iterators.forArray(strangs);
-
-			Iterator<Token<String, String>> tokens = new TransformIterator<>(source, (strang) -> {
-				String type;
-
-				switch(strang) {
-				case "+":
-				case "-":
-				case "*":
-				case "/":
-				case "(":
-				case ")":
-					type = strang;
-					break;
-				default:
-					type = "(literal)";
-				}
-
-				return new StringToken(type, strang);
-			});
+		while (!ln.trim().equals("")) {
+			Iterator<Token<String, String>> tokens = preprocessInput(ops, split, ln, reserved);
 
 			try {
 				StringTokenStream tokenStream = new StringTokenStream(tokens);
@@ -94,8 +83,12 @@ public class PrattParserTest {
 
 				ITree<Token<String, String>> tree = parser.parseExpression(0, tokenStream, null);
 
+				if (!tokenStream.current().getKey().equals("(end)")) {
+					System.out.println("Multipe expressions on line");
+				}
+
 				System.out.println("Parsed expression:\n" + tree);
-			} catch(ParserException pex) {
+			} catch (ParserException pex) {
 				pex.printStackTrace();
 			}
 
@@ -104,5 +97,72 @@ public class PrattParserTest {
 		}
 
 		scn.close();
+	}
+
+	private static Iterator<Token<String, String>> preprocessInput(Set<String> ops, TokenSplitter split, String ln,
+			Set<String> reserved) {
+		String[] rawTokens = ln.split("\\s+");
+
+		List<String> splitTokens = new LinkedList<>();
+
+		for (String raw : rawTokens) {
+			String[] strangs = split.split(raw);
+
+			splitTokens.addAll(Arrays.asList(strangs));
+		}
+
+		System.out.println("Split string: " + splitTokens);
+
+		Iterator<String> source = splitTokens.iterator();
+
+		Iterator<Token<String, String>> tokens = new TransformIterator<>(source, (String strang) -> {
+			if (ops.contains(strang) || reserved.contains(strang)) {
+				return new StringToken(strang, strang);
+			} else {
+				return new StringToken("(literal)", strang);
+			}
+		});
+		return tokens;
+	}
+
+	private static PrattParser<String, String, Object> createParser() {
+		/*
+		 * Set of which relational operators chain with each other.
+		 */
+		HashSet<String> chainSet = new HashSet<>();
+		chainSet.addAll(Arrays.asList("=", "<", ">", "<=", ">="));
+
+		/*
+		 * Token for marking chains.
+		 */
+		StringToken chainToken = new StringToken("and", "and");
+
+		PrattParser<String, String, Object> parser = new PrattParser<>();
+
+		parser.addNonInitialCommand("if", ternary(5, 0, "else", new StringToken("cond", "cond"), false));
+
+		parser.addNonInitialCommand(":=", infixNon(10));
+
+		parser.addNonInitialCommand("=", chain(10, chainSet, chainToken));
+		parser.addNonInitialCommand("<", chain(10, chainSet, chainToken));
+		parser.addNonInitialCommand(">", chain(10, chainSet, chainToken));
+		parser.addNonInitialCommand("<=", chain(10, chainSet, chainToken));
+		parser.addNonInitialCommand(">=", chain(10, chainSet, chainToken));
+
+		parser.addNonInitialCommand("+", infixLeft(20));
+		parser.addNonInitialCommand("-", infixLeft(20));
+
+		parser.addNonInitialCommand("*", infixLeft(30));
+		parser.addNonInitialCommand("/", infixLeft(30));
+
+		parser.addNonInitialCommand("!", postfix(40));
+
+		parser.addNonInitialCommand("^", infixRight(50));
+
+		parser.addNonInitialCommand("[", postCircumfix(60, 0, "]", new StringToken("idx", "idx")));
+
+		parser.addInitialCommand("(", grouping(0, ")", new StringToken("()", "()")));
+		parser.addInitialCommand("(literal)", leaf());
+		return parser;
 	}
 }

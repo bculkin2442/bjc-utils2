@@ -47,25 +47,32 @@ public class StringToken implements Token<String, String> {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj) return true;
-		if(obj == null) return false;
-		if(!(obj instanceof StringToken)) return false;
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof StringToken))
+			return false;
 
 		StringToken other = (StringToken) obj;
 
-		if(key == null) {
-			if(other.key != null) return false;
-		} else if(!key.equals(other.key)) return false;
+		if (key == null) {
+			if (other.key != null)
+				return false;
+		} else if (!key.equals(other.key))
+			return false;
 
-		if(val == null) {
-			if(other.val != null) return false;
-		} else if(!val.equals(other.val)) return false;
+		if (val == null) {
+			if (other.val != null)
+				return false;
+		} else if (!val.equals(other.val))
+			return false;
 
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return String.format("StringToken [key=%s, val=%s]", key, val);
+		return String.format("StringToken [key='%s', val='%s']", key, val);
 	}
 }
