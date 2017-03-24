@@ -174,7 +174,9 @@ public class Graph<T> {
 			forAllEdgesMatchingAt(source.getValue(), (target, weight) -> {
 				return !visited.contains(target);
 			}, (target, weight) -> {
-				available.add(new Edge<>(source.unwrap(vertex -> vertex), target, weight));
+				T vert = source.unwrap(vertex -> vertex);
+
+				available.add(new Edge<>(vert, target, weight));
 			});
 
 			// Get the edge with the minimum distance

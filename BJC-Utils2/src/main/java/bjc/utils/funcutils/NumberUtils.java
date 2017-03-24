@@ -48,4 +48,22 @@ public class NumberUtils {
 	public static boolean isProbable(int winning, int total, Function<Integer, Integer> rng) {
 		return rng.apply(total) < winning;
 	}
+
+	/**
+	 * Check if a number is in an inclusive range.
+	 * 
+	 * @param min
+	 *                The minimum value of the range.
+	 * 
+	 * @param max
+	 *                The maximum value of the range.
+	 * 
+	 * @param i
+	 *                The number to check.
+	 * 
+	 * @return Whether the number is in the range.
+	 */
+	public static boolean between(int min, int max, int i) {
+		return (i >= min) && (i <= max);
+	}
 }
