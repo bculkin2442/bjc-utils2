@@ -40,7 +40,7 @@ public class LeftCommands {
 		@Override
 		public ITree<Token<K, V>> leftDenote(ITree<Token<K, V>> operand, Token<K, V> operator,
 				ParserContext<K, V, C> ctx) throws ParserException {
-			ITree<Token<K, V>> opr = ctx.parse.parseExpression(rightBinding(), ctx.tokens, ctx.state);
+			ITree<Token<K, V>> opr = ctx.parse.parseExpression(rightBinding(), ctx.tokens, ctx.state, false);
 
 			return new Tree<>(operator, operand, opr);
 		}
@@ -101,7 +101,7 @@ public class LeftCommands {
 		@Override
 		public ITree<Token<K, V>> leftDenote(ITree<Token<K, V>> operand, Token<K, V> operator,
 				ParserContext<K, V, C> ctx) throws ParserException {
-			ITree<Token<K, V>> inside = ctx.parse.parseExpression(insidePrec, ctx.tokens, ctx.state);
+			ITree<Token<K, V>> inside = ctx.parse.parseExpression(insidePrec, ctx.tokens, ctx.state, false);
 
 			ctx.tokens.expect(term);
 
@@ -142,11 +142,11 @@ public class LeftCommands {
 		@Override
 		public ITree<Token<K, V>> leftDenote(ITree<Token<K, V>> operand, Token<K, V> operator,
 				ParserContext<K, V, C> ctx) throws ParserException {
-			ITree<Token<K, V>> inner = ctx.parse.parseExpression(innerExp, ctx.tokens, ctx.state);
+			ITree<Token<K, V>> inner = ctx.parse.parseExpression(innerExp, ctx.tokens, ctx.state, false);
 
 			ctx.tokens.expect(term);
 
-			ITree<Token<K, V>> outer = ctx.parse.parseExpression(1 + leftBinding(), ctx.tokens, ctx.state);
+			ITree<Token<K, V>> outer = ctx.parse.parseExpression(1 + leftBinding(), ctx.tokens, ctx.state, false);
 
 			return new Tree<>(mark, inner, operand, outer);
 		}
@@ -176,7 +176,7 @@ public class LeftCommands {
 		@Override
 		public ITree<Token<K, V>> leftDenote(ITree<Token<K, V>> operand, Token<K, V> operator,
 				ParserContext<K, V, C> ctx) throws ParserException {
-			ITree<Token<K, V>> tree = ctx.parse.parseExpression(1 + leftBinding(), ctx.tokens, ctx.state);
+			ITree<Token<K, V>> tree = ctx.parse.parseExpression(1 + leftBinding(), ctx.tokens, ctx.state, false);
 
 			ITree<Token<K, V>> res = new Tree<>(operator, operand, tree);
 

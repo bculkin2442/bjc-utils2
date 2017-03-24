@@ -32,7 +32,7 @@ public class PrattParserTest {
 	 * Main method.
 	 * 
 	 * @param args
-	 *                Unused CLI arguments.
+	 *            Unused CLI arguments.
 	 */
 	public static void main(String[] args) {
 		/*
@@ -41,8 +41,10 @@ public class PrattParserTest {
 		Set<String> ops = new LinkedHashSet<>();
 
 		ops.add(":=");
+		ops.addAll(Arrays.asList("||", "&&"));
 		ops.addAll(Arrays.asList("<=", ">="));
 
+		ops.add(".");
 		ops.addAll(Arrays.asList("=", "<", ">"));
 		ops.addAll(Arrays.asList("+", "-", "*", "/"));
 		ops.addAll(Arrays.asList("^", "!"));
@@ -53,9 +55,9 @@ public class PrattParserTest {
 		 * Reserved words that represent themselves, not literals.
 		 */
 		Set<String> reserved = new LinkedHashSet<>();
-		reserved.add("if");
-		reserved.add("else");
-
+		reserved.addAll(Arrays.asList("if", "then", "else"));
+		reserved.addAll(Arrays.asList("and", "or"));
+		
 		TokenSplitter split = new TokenSplitter();
 		ops.forEach(split::addDelimiter);
 
@@ -81,7 +83,7 @@ public class PrattParserTest {
 				 */
 				tokenStream.next();
 
-				ITree<Token<String, String>> tree = parser.parseExpression(0, tokenStream, null);
+				ITree<Token<String, String>> tree = parser.parseExpression(0, tokenStream, null, true);
 
 				if (!tokenStream.current().getKey().equals("(end)")) {
 					System.out.println("Multipe expressions on line");
@@ -129,8 +131,8 @@ public class PrattParserTest {
 		/*
 		 * Set of which relational operators chain with each other.
 		 */
-		HashSet<String> chainSet = new HashSet<>();
-		chainSet.addAll(Arrays.asList("=", "<", ">", "<=", ">="));
+		HashSet<String> relChain = new HashSet<>();
+		relChain.addAll(Arrays.asList("=", "<", ">", "<=", ">="));
 
 		/*
 		 * Token for marking chains.
@@ -143,12 +145,18 @@ public class PrattParserTest {
 
 		parser.addNonInitialCommand(":=", infixNon(10));
 
-		parser.addNonInitialCommand("=", chain(10, chainSet, chainToken));
-		parser.addNonInitialCommand("<", chain(10, chainSet, chainToken));
-		parser.addNonInitialCommand(">", chain(10, chainSet, chainToken));
-		parser.addNonInitialCommand("<=", chain(10, chainSet, chainToken));
-		parser.addNonInitialCommand(">=", chain(10, chainSet, chainToken));
+		parser.addNonInitialCommand("and", infixLeft(13));
+		parser.addNonInitialCommand("or", infixLeft(13));
+		
+		parser.addNonInitialCommand("=", chain(15, relChain, chainToken));
+		parser.addNonInitialCommand("<", chain(15, relChain, chainToken));
+		parser.addNonInitialCommand(">", chain(15, relChain, chainToken));
+		parser.addNonInitialCommand("<=", chain(15, relChain, chainToken));
+		parser.addNonInitialCommand(">=", chain(15, relChain, chainToken));
 
+		parser.addNonInitialCommand("&&", infixRight(17));
+		parser.addNonInitialCommand("||", infixRight(17));
+		
 		parser.addNonInitialCommand("+", infixLeft(20));
 		parser.addNonInitialCommand("-", infixLeft(20));
 
@@ -159,10 +167,18 @@ public class PrattParserTest {
 
 		parser.addNonInitialCommand("^", infixRight(50));
 
+		parser.addNonInitialCommand(".", infixLeft(60));
+		
 		parser.addNonInitialCommand("[", postCircumfix(60, 0, "]", new StringToken("idx", "idx")));
 
+		parser.addInitialCommand("if", preTernary(0, 0, 0, "then", "else", new StringToken("ifelse", "ifelse")));
+
 		parser.addInitialCommand("(", grouping(0, ")", new StringToken("()", "()")));
+
+		parser.addInitialCommand("-", unary(30));
+
 		parser.addInitialCommand("(literal)", leaf());
+
 		return parser;
 	}
 }
