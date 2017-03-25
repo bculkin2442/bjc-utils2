@@ -72,12 +72,12 @@ public class Graph<T> {
 	 */
 	public void addEdge(T source, T target, int distance, boolean directed) {
 		// Can't add edges with a null source or target
-		if(source == null)
+		if (source == null)
 			throw new NullPointerException("The source vertex cannot be null");
-		else if(target == null) throw new NullPointerException("The target vertex cannot be null");
+		else if (target == null) throw new NullPointerException("The target vertex cannot be null");
 
 		// Initialize adjacency list for vertices if necessary
-		if(!backing.containsKey(source)) {
+		if (!backing.containsKey(source)) {
 			backing.put(source, new FunctionalMap<T, Integer>());
 		}
 
@@ -85,8 +85,8 @@ public class Graph<T> {
 		backing.get(source).put(target, distance);
 
 		// Handle possible directed edges
-		if(!directed) {
-			if(!backing.containsKey(target)) {
+		if (!directed) {
+			if (!backing.containsKey(target)) {
 				backing.put(target, new FunctionalMap<T, Integer>());
 			}
 
@@ -106,12 +106,12 @@ public class Graph<T> {
 	 *                The action to execute for matching edges
 	 */
 	public void forAllEdgesMatchingAt(T source, BiPredicate<T, Integer> matcher, BiConsumer<T, Integer> action) {
-		if(matcher == null)
+		if (matcher == null)
 			throw new NullPointerException("Matcher must not be null");
-		else if(action == null) throw new NullPointerException("Action must not be null");
+		else if (action == null) throw new NullPointerException("Action must not be null");
 
 		getEdges(source).forEach((target, weight) -> {
-			if(matcher.test(target, weight)) {
+			if (matcher.test(target, weight)) {
 				action.accept(target, weight);
 			}
 		});
@@ -126,9 +126,9 @@ public class Graph<T> {
 	 */
 	public IMap<T, Integer> getEdges(T source) {
 		// Can't find edges for a null source
-		if(source == null)
+		if (source == null)
 			throw new NullPointerException("The source cannot be null.");
-		else if(!backing.containsKey(source))
+		else if (!backing.containsKey(source))
 			throw new IllegalArgumentException("Vertex " + source + " is not in graph");
 
 		return backing.get(source);
@@ -168,7 +168,7 @@ public class Graph<T> {
 		visited.add(source.getValue());
 
 		// Make sure we visit all the nodes
-		while(visited.size() != getVertexCount()) {
+		while (visited.size() != getVertexCount()) {
 			// Grab all edges adjacent to the provided edge
 
 			forAllEdgesMatchingAt(source.getValue(), (target, weight) -> {
@@ -185,7 +185,7 @@ public class Graph<T> {
 			// Only consider edges where we haven't visited the
 			// target of
 			// the edge
-			while(visited.contains(minimum.getValue())) {
+			while (visited.contains(minimum.getValue().getTarget())) {
 				minimum.transform((edge) -> available.poll());
 			}
 
@@ -230,15 +230,15 @@ public class Graph<T> {
 	 */
 	public void removeEdge(T source, T target) {
 		// Can't remove things w/ null vertices
-		if(source == null)
+		if (source == null)
 			throw new NullPointerException("The source vertex cannot be null");
-		else if(target == null) throw new NullPointerException("The target vertex cannot be null");
+		else if (target == null) throw new NullPointerException("The target vertex cannot be null");
 
 		// Can't remove if one vertice doesn't exists
-		if(!backing.containsKey(source))
+		if (!backing.containsKey(source))
 			throw new NoSuchElementException("vertex " + source + " does not exist.");
 
-		if(!backing.containsKey(target))
+		if (!backing.containsKey(target))
 			throw new NoSuchElementException("vertex " + target + " does not exist.");
 
 		backing.get(source).remove(target);

@@ -431,9 +431,6 @@ public class DelimiterGroup<T> {
 	 * 
 	 * @param priority
 	 *                The priority of this sub-group.
-	 * 
-	 * @param contained
-	 *                Any sub-groups to enclose in this group.
 	 */
 	public void addSubgroup(T subgroup, int priority) {
 		if(subgroup == null) {

@@ -50,7 +50,7 @@ public class TreeConstructTest {
 	 * @param args
 	 *                Unused CLI args
 	 */
-	@SuppressWarnings("resource")
+	@SuppressWarnings({ "resource", "deprecation" })
 	public static void main(String[] args) {
 		Scanner inputSource = new Scanner(System.in);
 

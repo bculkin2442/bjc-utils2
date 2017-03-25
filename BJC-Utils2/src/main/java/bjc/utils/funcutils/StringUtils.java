@@ -24,8 +24,7 @@ public class StringUtils {
 	public static boolean containsOnly(String input, String regex) {
 		if (input == null)
 			throw new NullPointerException("Input must not be null");
-		else if (regex == null)
-			throw new NullPointerException("Regex must not be null");
+		else if (regex == null) throw new NullPointerException("Regex must not be null");
 
 		/*
 		 * This regular expression is fairly simple.
@@ -78,7 +77,7 @@ public class StringUtils {
 	 * @param comma
 	 *                The string to use as a comma
 	 * 
-	 * @return
+	 * @return The sequence as an English list.
 	 */
 	public static String toEnglishList(Object[] objects, String join, String comma) {
 		if (objects == null) {
@@ -141,7 +140,7 @@ public class StringUtils {
 	 *                The string to use for separating the last element from
 	 *                the rest.
 	 * 
-	 * @return
+	 * @return The sequence as an English list.
 	 */
 	public static String toEnglishList(Object[] objects, String join) {
 		return toEnglishList(objects, join, ",");
@@ -155,7 +154,7 @@ public class StringUtils {
 	 * @param and
 	 *                Whether to use 'and' or 'or'.
 	 * 
-	 * @return
+	 * @return The sequence as an English list.
 	 */
 	public static String toEnglishList(Object[] objects, boolean and) {
 		if (and) {

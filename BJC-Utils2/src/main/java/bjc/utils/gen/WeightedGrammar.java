@@ -242,19 +242,22 @@ public class WeightedGrammar<E> {
 	}
 
 	/**
-	 * Generate a generic sentance from a initial rule.
+	 * Generate a generic sentence from a initial rule.
 	 *
 	 * @param <T>
 	 *                The type of the transformed output
 	 *
-	 * @param initRule
+	 * @param initRules
 	 *                The initial rule to start with.
+	 * 
 	 * @param tokenTransformer
 	 *                The function to transform grammar output into
 	 *                something.
+	 * 
 	 * @param spacer
 	 *                The spacer element to add in between output tokens.
-	 * @return A randomly generated sentance from the specified initial
+	 * 
+	 * @return A randomly generated sentence from the specified initial
 	 *         rule.
 	 */
 	public <T> IList<T> generateGenericValues(E initRules, Function<E, T> tokenTransformer, T spacer) {

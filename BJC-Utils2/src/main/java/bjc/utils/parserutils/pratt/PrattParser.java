@@ -36,8 +36,6 @@ public class PrattParser<K, V, C> {
 	/**
 	 * Create a new Pratt parser.
 	 * 
-	 * @param terminal
-	 *                The terminal symbol.
 	 */
 	public PrattParser() {
 		leftCommands = new HashMap<>();

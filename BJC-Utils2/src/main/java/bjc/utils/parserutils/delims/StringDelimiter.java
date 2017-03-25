@@ -12,7 +12,7 @@ public class StringDelimiter extends SequenceDelimiter<String> {
 
 	/**
 	 * Override of
-	 * {@link SequenceDelimiter#delimitSequence(Object, Object, Object...)}
+	 * {@link SequenceDelimiter#delimitSequence(SequenceCharacteristics, Object...)}
 	 * for ease of use for strings.
 	 * 
 	 * @param seq

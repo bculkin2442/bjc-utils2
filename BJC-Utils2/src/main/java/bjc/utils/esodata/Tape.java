@@ -7,8 +7,9 @@ package bjc.utils.esodata;
  * only affect elements at that cursor. The size of the array is theoretically
  * unbounded to the right, but in practice bounded by available memory.
  *
- * @param T
+ * @param <T>
  *                The element type of the tape.
+ * 
  * @author bjculkin
  */
 public interface Tape<T> {
