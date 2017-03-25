@@ -48,17 +48,17 @@ public class Identity<ContainedType> implements IHolder<ContainedType> {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj)
+		if (this == obj)
 			return true;
-		else if(obj == null)
+		else if (obj == null)
 			return false;
-		else if(getClass() != obj.getClass()) return false;
+		else if (getClass() != obj.getClass()) return false;
 
 		Identity<?> other = (Identity<?>) obj;
 
-		if(heldValue == null) {
-			if(other.heldValue != null) return false;
-		} else if(!heldValue.equals(other.heldValue)) return false;
+		if (heldValue == null) {
+			if (other.heldValue != null) return false;
+		} else if (!heldValue.equals(other.heldValue)) return false;
 
 		return true;
 	}
@@ -103,5 +103,26 @@ public class Identity<ContainedType> implements IHolder<ContainedType> {
 	@Override
 	public <UnwrappedType> UnwrappedType unwrap(Function<ContainedType, UnwrappedType> unwrapper) {
 		return unwrapper.apply(heldValue);
+	}
+
+	/**
+	 * Create a new identity container.
+	 * 
+	 * @param val
+	 *                The contained value.
+	 * 
+	 * @return A new identity container.
+	 */
+	public static <ContainedType> Identity<ContainedType> id(ContainedType val) {
+		return new Identity<>(val);
+	}
+
+	/**
+	 * Create a new empty identity container.
+	 * 
+	 * @return A new empty identity container.
+	 */
+	public static <ContainedType> Identity<ContainedType> id() {
+		return new Identity<>();
 	}
 }

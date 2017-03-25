@@ -62,7 +62,7 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 		actions.forEach(pendingActions::add);
 
 		Supplier<ContainedType> supplier = () -> {
-			if(valueMaterialized) return heldValue;
+			if (valueMaterialized) return heldValue;
 
 			return valueSupplier.get();
 		};
@@ -88,7 +88,7 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 		return new Lazy<>(() -> {
 			ContainedType currVal = heldValue;
 
-			if(!valueMaterialized) {
+			if (!valueMaterialized) {
 				currVal = valueSupplier.get();
 			}
 
@@ -99,8 +99,8 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 
 	@Override
 	public String toString() {
-		if(valueMaterialized) {
-			if(actions.isEmpty()) return "value[v='" + heldValue + "']";
+		if (valueMaterialized) {
+			if (actions.isEmpty()) return "value[v='" + heldValue + "']";
 
 			return "value[v='" + heldValue + "'] (has pending transforms)";
 		}
@@ -117,7 +117,7 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 
 	@Override
 	public <UnwrappedType> UnwrappedType unwrap(Function<ContainedType, UnwrappedType> unwrapper) {
-		if(!valueMaterialized) {
+		if (!valueMaterialized) {
 			heldValue = valueSupplier.get();
 
 			valueMaterialized = true;
@@ -146,26 +146,51 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj) return true;
-		if(obj == null) return false;
-		if(getClass() != obj.getClass()) return false;
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
 
 		Lazy<?> other = (Lazy<?>) obj;
-		
-		if(valueMaterialized != other.valueMaterialized) return false;
 
-		if(valueMaterialized) {
-			if(heldValue == null) {
-				if(other.heldValue != null) return false;
-			} else if(!heldValue.equals(other.heldValue)) return false;
+		if (valueMaterialized != other.valueMaterialized) return false;
+
+		if (valueMaterialized) {
+			if (heldValue == null) {
+				if (other.heldValue != null) return false;
+			} else if (!heldValue.equals(other.heldValue)) return false;
 		} else {
 			return false;
 		}
-		
-		if(actions == null) {
-			if(other.actions != null) return false;
-		} else if(actions.getSize() > 0 || other.actions.getSize() > 0) return false;
+
+		if (actions == null) {
+			if (other.actions != null) return false;
+		} else if (actions.getSize() > 0 || other.actions.getSize() > 0) return false;
 
 		return true;
+	}
+
+	/**
+	 * Create a new lazy container with an already present value.
+	 * 
+	 * @param val
+	 *                The value for the lazy container.
+	 * 
+	 * @return A new lazy container holding that value.
+	 */
+	public static <ContainedType> Lazy<ContainedType> lazy(ContainedType val) {
+		return new Lazy<>(val);
+	}
+
+	/**
+	 * Create a new lazy container with a suspended value.
+	 * 
+	 * @param supp
+	 *                The suspended value for the lazy container.
+	 * 
+	 * @return A new lazy container that will un-suspend the value when
+	 *         necessary.
+	 */
+	public static <ContainedType> Lazy<ContainedType> lazy(Supplier<ContainedType> supp) {
+		return new Lazy<>(supp);
 	}
 }

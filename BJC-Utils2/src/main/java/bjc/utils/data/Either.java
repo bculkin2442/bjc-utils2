@@ -25,7 +25,7 @@ public class Either<LeftType, RightType> implements IPair<LeftType, RightType> {
 	 *                The value to put on the left
 	 * @return An either with the left side occupied
 	 */
-	public static <LeftType, RightType> Either<LeftType, RightType> fromLeft(LeftType left) {
+	public static <LeftType, RightType> Either<LeftType, RightType> left(LeftType left) {
 		return new Either<>(left, null);
 	}
 
@@ -40,7 +40,7 @@ public class Either<LeftType, RightType> implements IPair<LeftType, RightType> {
 	 *                The value to put on the right
 	 * @return An either with the right side occupied
 	 */
-	public static <LeftType, RightType> Either<LeftType, RightType> fromRight(RightType right) {
+	public static <LeftType, RightType> Either<LeftType, RightType> right(RightType right) {
 		return new Either<>(null, right);
 	}
 
