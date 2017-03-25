@@ -1,4 +1,6 @@
-package bjc.utils.parserutils.pratt;
+package bjc.utils.parserutils.pratt.tokens;
+
+import bjc.utils.parserutils.pratt.Token;
 
 /**
  * Simple token implementation for strings.

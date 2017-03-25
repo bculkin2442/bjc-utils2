@@ -2,7 +2,11 @@ package bjc.utils.parserutils.pratt.commands;
 
 import bjc.utils.data.ITree;
 import bjc.utils.parserutils.pratt.InitialCommand;
+import bjc.utils.parserutils.pratt.ParseBlock;
 import bjc.utils.parserutils.pratt.Token;
+import bjc.utils.parserutils.pratt.blocks.RepeatingParseBlock;
+import bjc.utils.parserutils.pratt.blocks.SimpleParseBlock;
+import bjc.utils.parserutils.pratt.blocks.TriggeredParseBlock;
 
 import java.util.function.UnaryOperator;
 
@@ -41,7 +45,9 @@ public class InitialCommands {
 	 * @return A command implementing the operator.
 	 */
 	public static <K, V, C> InitialCommand<K, V, C> grouping(int precedence, K term, Token<K, V> mark) {
-		return new GroupingCommand<>(precedence, term, mark);
+		ParseBlock<K, V, C> innerBlock = new SimpleParseBlock<>(precedence, term, null);
+
+		return new GroupingCommand<>(innerBlock, mark);
 	}
 
 	/**
@@ -78,7 +84,11 @@ public class InitialCommands {
 	 */
 	public static <K, V, C> InitialCommand<K, V, C> preTernary(int cond1, int block1, int block2, K mark1, K mark2,
 			Token<K, V> term) {
-		return new PreTernaryCommand<>(cond1, block1, block2, mark1, mark2, term);
+		ParseBlock<K, V, C> condBlock = new SimpleParseBlock<>(cond1, mark1, null);
+		ParseBlock<K, V, C> opblock1 = new SimpleParseBlock<>(block1, mark2, null);
+		ParseBlock<K, V, C> opblock2 = new SimpleParseBlock<>(block2, null, null);
+
+		return new PreTernaryCommand<>(condBlock, opblock1, opblock2, term);
 	}
 
 	/**
@@ -129,6 +139,16 @@ public class InitialCommands {
 	public static <K, V, C> InitialCommand<K, V, C> delimited(int inner, K delim, K mark, Token<K, V> term,
 			UnaryOperator<C> onEnter, UnaryOperator<C> onDelim, UnaryOperator<C> onExit,
 			boolean statement) {
-		return new DelimitedCommand<>(inner, delim, mark, term, onEnter, onDelim, onExit, statement);
+		ParseBlock<K, V, C> innerBlock = new SimpleParseBlock<>(inner, null, null);
+		ParseBlock<K, V, C> delimsBlock = new RepeatingParseBlock<>(innerBlock, delim, mark, term, onDelim);
+		ParseBlock<K, V, C> scopedBlock = new TriggeredParseBlock<>(onEnter, onExit, delimsBlock);
+
+		GroupingCommand<K, V, C> command = new GroupingCommand<>(scopedBlock, term);
+
+		/*
+		 * Remove the wrapper layer from grouping-command on top of
+		 * RepeatingParseBlock.
+		 */
+		return new TransformingInitialCommand<>(command, (tree) -> tree.getChild(0));
 	}
 }

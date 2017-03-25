@@ -1,7 +1,9 @@
 package bjc.utils.parserutils.pratt.commands;
 
 import bjc.utils.parserutils.pratt.NonInitialCommand;
+import bjc.utils.parserutils.pratt.ParseBlock;
 import bjc.utils.parserutils.pratt.Token;
+import bjc.utils.parserutils.pratt.blocks.SimpleParseBlock;
 
 import java.util.Set;
 
@@ -101,7 +103,9 @@ public class NonInitialCommands {
 	 */
 	public static <K, V, C> NonInitialCommand<K, V, C> postCircumfix(int precedence, int insidePrecedence, K closer,
 			Token<K, V> marker) {
-		return new PostCircumfixCommand<>(precedence, insidePrecedence, closer, marker);
+		ParseBlock<K, V, C> innerBlock = new SimpleParseBlock<>(insidePrecedence, closer, null);
+
+		return new PostCircumfixCommand<>(precedence, innerBlock, marker);
 	}
 
 	/**
@@ -129,6 +133,8 @@ public class NonInitialCommands {
 	 */
 	public static <K, V, C> NonInitialCommand<K, V, C> ternary(int precedence, int insidePrecedence, K closer,
 			Token<K, V> marker, boolean nonassoc) {
-		return new TernaryCommand<>(insidePrecedence, closer, marker, nonassoc);
+		ParseBlock<K, V, C> innerBlock = new SimpleParseBlock<>(insidePrecedence, closer, null);
+
+		return new TernaryCommand<>(precedence, innerBlock, marker, nonassoc);
 	}
 }

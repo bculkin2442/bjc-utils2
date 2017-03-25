@@ -5,9 +5,9 @@ import bjc.utils.data.TransformIterator;
 import bjc.utils.esodata.Directory;
 import bjc.utils.parserutils.ParserException;
 import bjc.utils.parserutils.pratt.PrattParser;
-import bjc.utils.parserutils.pratt.StringToken;
-import bjc.utils.parserutils.pratt.StringTokenStream;
 import bjc.utils.parserutils.pratt.Token;
+import bjc.utils.parserutils.pratt.tokens.StringToken;
+import bjc.utils.parserutils.pratt.tokens.StringTokenStream;
 import bjc.utils.parserutils.splitter.TokenSplitter;
 import bjc.utils.parserutils.splitter.TwoLevelSplitter;
 

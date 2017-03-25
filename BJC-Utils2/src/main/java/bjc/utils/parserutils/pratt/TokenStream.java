@@ -4,6 +4,7 @@ import bjc.utils.funcutils.StringUtils;
 import bjc.utils.parserutils.ParserException;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -17,7 +18,7 @@ import java.util.Set;
  * @param <V>
  *                The value type of the token.
  */
-public interface TokenStream<K, V> {
+public abstract class TokenStream<K, V> implements Iterator<Token<K, V>> {
 	/**
 	 * The exception thrown when an expectation fails.
 	 * 
@@ -41,14 +42,13 @@ public interface TokenStream<K, V> {
 	 * 
 	 * @return The current token.
 	 */
-	Token<K, V> current();
+	public abstract Token<K, V> current();
 
-	/**
-	 * Advance to the next token in the stream.
-	 * 
-	 * Has no effect when the end of the stream is reached.
-	 */
-	void next();
+	@Override
+	public abstract Token<K, V> next();
+
+	@Override
+	public abstract boolean hasNext();
 
 	/**
 	 * Utility method for checking that the next token is one of a specific
@@ -60,10 +60,10 @@ public interface TokenStream<K, V> {
 	 * @throws ExpectationException
 	 *                 If the token is not one of the expected types.
 	 */
-	default void expect(Set<K> expectedKeys) throws ExpectationException {
+	public void expect(Set<K> expectedKeys) throws ExpectationException {
 		K curKey = current().getKey();
 
-		if(!expectedKeys.contains(curKey)) {
+		if (!expectedKeys.contains(curKey)) {
 			String expectedList = StringUtils.toEnglishList(expectedKeys.toArray(), false);
 
 			throw new ExpectationException("One of '" + expectedList + "' was expected, not " + curKey);
@@ -82,7 +82,8 @@ public interface TokenStream<K, V> {
 	 * @throws ExpectationException
 	 *                 If the token is not one of the expected types.
 	 */
-	default void expect(@SuppressWarnings("unchecked") K... expectedKeys) throws ExpectationException {
+	@SafeVarargs
+	public final void expect(K... expectedKeys) throws ExpectationException {
 		expect(new HashSet<>(Arrays.asList(expectedKeys)));
 	}
 }

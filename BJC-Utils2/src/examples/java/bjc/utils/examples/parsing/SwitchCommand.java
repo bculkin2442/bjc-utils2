@@ -5,8 +5,8 @@ import bjc.utils.data.Tree;
 import bjc.utils.parserutils.ParserException;
 import bjc.utils.parserutils.pratt.InitialCommand;
 import bjc.utils.parserutils.pratt.ParserContext;
-import bjc.utils.parserutils.pratt.StringToken;
 import bjc.utils.parserutils.pratt.Token;
+import bjc.utils.parserutils.pratt.tokens.StringToken;
 
 class SwitchCommand implements InitialCommand<String, String, TestContext> {
 	@Override

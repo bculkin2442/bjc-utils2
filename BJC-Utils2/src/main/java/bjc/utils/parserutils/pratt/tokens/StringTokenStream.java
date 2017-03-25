@@ -1,6 +1,9 @@
-package bjc.utils.parserutils.pratt;
+package bjc.utils.parserutils.pratt.tokens;
 
 import java.util.Iterator;
+
+import bjc.utils.parserutils.pratt.Token;
+import bjc.utils.parserutils.pratt.TokenStream;
 
 /**
  * Simple implementation of token stream for strings.
@@ -11,7 +14,7 @@ import java.util.Iterator;
  * @author EVE
  *
  */
-public class StringTokenStream implements TokenStream<String, String> {
+public class StringTokenStream extends TokenStream<String, String> {
 	private Iterator<Token<String, String>> iter;
 
 	private Token<String, String> curr;
@@ -34,11 +37,18 @@ public class StringTokenStream implements TokenStream<String, String> {
 	}
 
 	@Override
-	public void next() {
-		if(iter.hasNext()) {
+	public Token<String, String> next() {
+		if (iter.hasNext()) {
 			curr = iter.next();
 		} else {
 			curr = new StringToken("(end)", null);
 		}
+
+		return curr;
+	}
+
+	@Override
+	public boolean hasNext() {
+		return iter.hasNext();
 	}
 }
