@@ -6,7 +6,7 @@ package bjc.utils.cli;
  * @author ben
  *
  */
-public class GenericHelp implements ICommandHelp {
+public class GenericHelp implements CommandHelp {
 	// The strings for this help topic
 	private String	summary;
 	private String	description;

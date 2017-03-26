@@ -9,7 +9,7 @@ import java.util.function.Function;
  *
  */
 @FunctionalInterface
-public interface ICommandHandler extends Function<String[], ICommandMode> {
+public interface CommandHandler extends Function<String[], CommandMode> {
 	/**
 	 * Execute this command
 	 *
@@ -18,7 +18,7 @@ public interface ICommandHandler extends Function<String[], ICommandMode> {
 	 * @return The command mode to switch to after this command, or null to
 	 *         stop executing commands
 	 */
-	default ICommandMode handle(String[] args) {
+	default CommandMode handle(String[] args) {
 		return this.apply(args);
 	}
 }

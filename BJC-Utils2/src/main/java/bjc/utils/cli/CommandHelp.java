@@ -6,7 +6,7 @@ package bjc.utils.cli;
  * @author ben
  *
  */
-public interface ICommandHelp {
+public interface CommandHelp {
 	/**
 	 * Get the description of a command.
 	 *

@@ -208,7 +208,7 @@ public class Graph<T> {
 	 * @return A count of the vertices in this graph
 	 */
 	public int getVertexCount() {
-		return backing.getSize();
+		return backing.size();
 	}
 
 	/**

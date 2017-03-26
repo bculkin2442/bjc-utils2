@@ -6,16 +6,16 @@ package bjc.utils.cli;
  * @author ben
  *
  */
-public class GenericCommand implements ICommand {
+public class GenericCommand implements Command {
 	/*
 	 * The behavior for invoking the command.
 	 */
-	private ICommandHandler handler;
+	private CommandHandler handler;
 
 	/*
 	 * The help for the command.
 	 */
-	private ICommandHelp help;
+	private CommandHelp help;
 
 	/**
 	 * Create a new generic command.
@@ -30,7 +30,7 @@ public class GenericCommand implements ICommand {
 	 *                null, in which case the description is repeated for
 	 *                the detailed help.
 	 */
-	public GenericCommand(ICommandHandler handler, String description, String help) {
+	public GenericCommand(CommandHandler handler, String description, String help) {
 		if(handler == null) throw new NullPointerException("Command handler must not be null");
 
 		this.handler = handler;
@@ -43,17 +43,17 @@ public class GenericCommand implements ICommand {
 	}
 
 	@Override
-	public ICommand aliased() {
+	public Command aliased() {
 		return new DelegatingCommand(this);
 	}
 
 	@Override
-	public ICommandHandler getHandler() {
+	public CommandHandler getHandler() {
 		return handler;
 	}
 
 	@Override
-	public ICommandHelp getHelp() {
+	public CommandHelp getHelp() {
 		return help;
 	}
 

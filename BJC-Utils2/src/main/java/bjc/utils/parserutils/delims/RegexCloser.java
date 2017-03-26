@@ -2,9 +2,21 @@ package bjc.utils.parserutils.delims;
 
 import java.util.function.BiPredicate;
 
+/**
+ * A predicated closer for use with {@link RegexOpener}.
+ * 
+ * @author bjculkin
+ *
+ */
 public class RegexCloser implements BiPredicate<String, String[]> {
 	private String rep;
 
+	/**
+	 * Create a new regex closer.
+	 * 
+	 * @param closer
+	 *                The format string to use for closing.
+	 */
 	public RegexCloser(String closer) {
 		rep = closer;
 	}
@@ -18,5 +30,4 @@ public class RegexCloser implements BiPredicate<String, String[]> {
 
 		return work.equals(closer);
 	}
-
 }

@@ -65,8 +65,8 @@ final class TransformedValueMap<OldKey, OldValue, NewValue> implements IMap<OldK
 	}
 
 	@Override
-	public int getSize() {
-		return backing.getSize();
+	public int size() {
+		return backing.size();
 	}
 
 	@Override
@@ -75,7 +75,7 @@ final class TransformedValueMap<OldKey, OldValue, NewValue> implements IMap<OldK
 	}
 
 	@Override
-	public <MappedValue> IMap<OldKey, MappedValue> mapValues(Function<NewValue, MappedValue> transform) {
+	public <MappedValue> IMap<OldKey, MappedValue> transform(Function<NewValue, MappedValue> transform) {
 		return new TransformedValueMap<>(this, transform);
 	}
 

@@ -9,9 +9,10 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-/**
+/*
  * Implements a lazy pair that has been bound
  */
+@SuppressWarnings("javadoc")
 public class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight> implements IPair<NewLeft, NewRight> {
 	/*
 	 * The supplier of the left value

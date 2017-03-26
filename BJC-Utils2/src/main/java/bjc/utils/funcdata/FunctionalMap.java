@@ -98,7 +98,7 @@ public class FunctionalMap<KeyType, ValueType> implements IMap<KeyType, ValueTyp
 	}
 
 	@Override
-	public int getSize() {
+	public int size() {
 		return wrappedMap.size();
 	}
 
@@ -114,7 +114,7 @@ public class FunctionalMap<KeyType, ValueType> implements IMap<KeyType, ValueTyp
 	}
 
 	@Override
-	public <MappedValue> IMap<KeyType, MappedValue> mapValues(Function<ValueType, MappedValue> transformer) {
+	public <MappedValue> IMap<KeyType, MappedValue> transform(Function<ValueType, MappedValue> transformer) {
 		if(transformer == null) throw new NullPointerException("Transformer must not be null");
 
 		return new TransformedValueMap<>(this, transformer);

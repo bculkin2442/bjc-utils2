@@ -10,6 +10,7 @@ import java.util.function.UnaryOperator;
 /*
  * Holds a list, converted into a holder
  */
+@SuppressWarnings("javadoc")
 public class BoundListHolder<ContainedType> implements IHolder<ContainedType> {
 	private IList<IHolder<ContainedType>> heldHolders;
 

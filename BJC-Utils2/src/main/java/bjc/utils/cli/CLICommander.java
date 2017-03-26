@@ -23,7 +23,7 @@ public class CLICommander {
 	/*
 	 * The command mode to start execution in.
 	 */
-	private ICommandMode initialMode;
+	private CommandMode initialMode;
 
 	/**
 	 * Create a new CLI interface powered by streams.
@@ -69,7 +69,7 @@ public class CLICommander {
 		 *
 		 * Used to preserve the initial mode.
 		 */
-		ICommandMode currentMode = initialMode;
+		CommandMode currentMode = initialMode;
 
 		/*
 		 *  Process commands until we're told to stop.
@@ -124,7 +124,7 @@ public class CLICommander {
 	 * @param initialMode
 	 *                The initial command mode to use.
 	 */
-	public void setInitialCommandMode(ICommandMode initialMode) {
+	public void setInitialCommandMode(CommandMode initialMode) {
 		if(initialMode == null) throw new NullPointerException("Initial mode must be non-zero");
 
 		this.initialMode = initialMode;

@@ -69,8 +69,8 @@ public class PushdownMap<KeyType, ValueType> implements IMap<KeyType, ValueType>
 	}
 
 	@Override
-	public int getSize() {
-		return backing.getSize();
+	public int size() {
+		return backing.size();
 	}
 
 	@Override
@@ -79,7 +79,7 @@ public class PushdownMap<KeyType, ValueType> implements IMap<KeyType, ValueType>
 	}
 
 	@Override
-	public <V2> IMap<KeyType, V2> mapValues(Function<ValueType, V2> transformer) {
+	public <V2> IMap<KeyType, V2> transform(Function<ValueType, V2> transformer) {
 		throw new UnsupportedOperationException("Cannot transform pushdown maps.");
 	}
 

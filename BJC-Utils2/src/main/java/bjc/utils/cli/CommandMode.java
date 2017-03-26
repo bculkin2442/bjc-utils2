@@ -7,7 +7,7 @@ package bjc.utils.cli;
  * @author ben
  *
  */
-public interface ICommandMode extends Comparable<ICommandMode> {
+public interface CommandMode extends Comparable<CommandMode> {
 	/**
 	 * Check to see if this mode can handle the specified command
 	 *
@@ -61,12 +61,12 @@ public interface ICommandMode extends Comparable<ICommandMode> {
 	 * @return The command mode to use for the next command. Defaults to
 	 *         returning this, and doing nothing else
 	 */
-	default ICommandMode process(String command, String[] args) {
+	default CommandMode process(String command, String[] args) {
 		return this;
 	}
 
 	@Override
-	default int compareTo(ICommandMode o) {
+	default int compareTo(CommandMode o) {
 		return getName().compareTo(o.getName());
 	}
 }

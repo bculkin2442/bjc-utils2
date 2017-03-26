@@ -5,132 +5,99 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * Functional wrapper over map providing some useful things
+ * Functional wrapper over map providing some useful things.
  *
  * @author ben
  *
  * @param <KeyType>
- *                The type of this map's keys
+ *                The type of this map's keys.
+ * 
  * @param <ValueType>
- *                The type of this map's values
- *
+ *                The type of this map's values.
  */
 public interface IMap<KeyType, ValueType> {
 	/**
-	 * Delete all the values in the map
-	 */
-	void clear();
-
-	/**
-	 * Check if this map contains the specified key
-	 *
-	 * @param key
-	 *                The key to check
-	 * @return Whether or not the map contains the key
-	 */
-	boolean containsKey(KeyType key);
-
-	/**
-	 * Extends this map, creating a new map that will delegate queries to
-	 * the map, but store any added values itself
-	 *
-	 * @return An extended map
-	 */
-	IMap<KeyType, ValueType> extend();
-
-	/**
-	 * Execute an action for each entry in the map
+	 * Execute an action for each entry in the map.
 	 *
 	 * @param action
-	 *                the action to execute for each entry in the map
+	 *                the action to execute for each entry in the map.
 	 */
 	void forEach(BiConsumer<KeyType, ValueType> action);
 
 	/**
-	 * Perform an action for each key in the map
+	 * Perform an action for each key in the map.
 	 *
 	 * @param action
-	 *                The action to perform on each key in the map
+	 *                The action to perform on each key in the map.
 	 */
-	void forEachKey(Consumer<KeyType> action);
+	default void forEachKey(Consumer<KeyType> action) {
+		forEach((key, val) -> action.accept(key));
+	}
 
 	/**
-	 * Perform an action for each value in the map
+	 * Perform an action for each value in the map.
 	 *
 	 * @param action
-	 *                The action to perform on each value in the map
+	 *                The action to perform on each value in the map.
 	 */
-	void forEachValue(Consumer<ValueType> action);
+	default void forEachValue(Consumer<ValueType> action) {
+		forEach((key, val) -> action.accept(val));
+	}
 
 	/**
-	 * Get the value assigned to the given key
+	 * Check if this map contains the specified key.
 	 *
 	 * @param key
-	 *                The key to look for a value under
-	 * @return The value of the key
+	 *                The key to check.
+	 * 
+	 * @return Whether or not the map contains the key.
+	 */
+	boolean containsKey(KeyType key);
+
+	/**
+	 * Get the value assigned to the given key.
 	 *
-	 *
+	 * @param key
+	 *                The key to look for a value under.
+	 * 
+	 * @return The value of the key.
 	 */
 	ValueType get(KeyType key);
 
 	/**
 	 * Get a value from the map, and return a default value if the key
-	 * doesn't exist
+	 * doesn't exist.
 	 *
 	 * @param key
-	 *                The key to attempt to retrieve
+	 *                The key to attempt to retrieve.
+	 * 
 	 * @param defaultValue
-	 *                The value to return if the key doesn't exist
+	 *                The value to return if the key doesn't exist.
+	 * 
 	 * @return The value associated with the key, or the default value if
-	 *         the key doesn't exist
+	 *         the key doesn't exist.
 	 */
 	default ValueType getOrDefault(KeyType key, ValueType defaultValue) {
 		try {
 			return get(key);
-		} catch(IllegalArgumentException iaex) {
-			// We don't care about this, because it indicates a key
-			// is
-			// missing
+		} catch (IllegalArgumentException iaex) {
+			/*
+			 * We don't care about this, because it indicates a key
+			 * is missing.
+			 */
 			return defaultValue;
 		}
 	}
 
 	/**
-	 * Get the number of entries in this map
-	 *
-	 * @return The number of entries in this map
-	 */
-	int getSize();
-
-	/**
-	 * Get a list of all the keys in this map
-	 *
-	 * @return A list of all the keys in this map
-	 */
-	IList<KeyType> keyList();
-
-	/**
-	 * Transform the values returned by this map.
-	 *
-	 * NOTE: This transform is applied once for each lookup of a value, so
-	 * the transform passed should be a proper function, or things will
-	 * likely not work as expected.
-	 *
-	 * @param <V2>
-	 *                The new type of returned values
-	 * @param transformer
-	 *                The function to use to transform values
-	 * @return The map where each value will be transformed after lookup
-	 */
-	<V2> IMap<KeyType, V2> mapValues(Function<ValueType, V2> transformer);
-
-	/**
-	 * Add an entry to the map
+	 * Add an entry to the map.
 	 *
 	 * @param key
-	 *                The key to put the value under
+	 *                The key to put the value under.
+	 * 
 	 * @param val
-	 *                The value to add
+	 *                The value to add.
+	 * 
 	 * @return The previous value of the key in the map, or null if the key
 	 *         wasn't in the map. However, note that it may also return null
 	 *         if the key was set to null.
@@ -142,21 +109,80 @@ public interface IMap<KeyType, ValueType> {
 	ValueType put(KeyType key, ValueType val);
 
 	/**
-	 * Remove the value bound to the key
+	 * Delete all the values in the map.
+	 */
+	default void clear() {
+		keyList().forEach((key) -> remove(key));
+	}
+
+	/**
+	 * Get the number of entries in this map.
+	 *
+	 * @return The number of entries in this map.
+	 */
+	default int size() {
+		return keyList().getSize();
+	}
+
+	/**
+	 * Transform the values returned by this map.
+	 *
+	 * NOTE: This transform is applied once for each lookup of a value, so
+	 * the transform passed should be a proper function, or things will
+	 * likely not work as expected.
+	 *
+	 * @param <V2>
+	 *                The new type of returned values.
+	 * 
+	 * @param transformer
+	 *                The function to use to transform values.
+	 * 
+	 * @return The map where each value will be transformed after lookup.
+	 */
+	default <V2> IMap<KeyType, V2> transform(Function<ValueType, V2> transformer) {
+		return new TransformedValueMap<>(this, transformer);
+	}
+
+	/**
+	 * Extends this map, creating a new map that will delegate queries to
+	 * the map, but store any added values itself.
+	 *
+	 * @return An extended map.
+	 */
+	IMap<KeyType, ValueType> extend();
+
+	/**
+	 * Remove the value bound to the key.
 	 *
 	 * @param key
-	 *                The key to remove from the map
+	 *                The key to remove from the map.
+	 * 
 	 * @return The previous value for the key in the map, or null if the key
 	 *         wasn't in the class. NOTE: Just because you received null,
 	 *         doesn't mean the map wasn't changed. It may mean that someone
-	 *         put a null value for that key into the map
+	 *         put a null value for that key into the map.
 	 */
 	ValueType remove(KeyType key);
 
 	/**
-	 * Get a list of the values in this map
+	 * Get a list of all the keys in this map.
 	 *
-	 * @return A list of values in this map
+	 * @return A list of all the keys in this map.
 	 */
-	IList<ValueType> valueList();
+	IList<KeyType> keyList();
+
+	/**
+	 * Get a list of the values in this map.
+	 *
+	 * @return A list of values in this map.
+	 */
+	default IList<ValueType> valueList() {
+		IList<ValueType> returns = new FunctionalList<>();
+
+		for (KeyType key : keyList()) {
+			returns.add(get(key));
+		}
+
+		return returns;
+	}
 }

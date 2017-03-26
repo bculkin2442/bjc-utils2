@@ -6,6 +6,7 @@ import bjc.utils.data.Option;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
+@SuppressWarnings("javadoc")
 public class WrappedOption<ContainedType> implements IHolder<ContainedType> {
 	private IHolder<IHolder<ContainedType>> held;
 

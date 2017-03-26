@@ -45,6 +45,8 @@ public interface Tape<T> {
 
 	/**
 	 * Insert an element after the current item.
+	 * 
+	 * @param itm  The item to insert.
 	 */
 	void insertAfter(T itm);
 

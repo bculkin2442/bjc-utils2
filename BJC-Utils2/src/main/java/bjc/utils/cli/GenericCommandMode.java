@@ -17,17 +17,17 @@ import java.util.function.Consumer;
  * @author ben
  *
  */
-public class GenericCommandMode implements ICommandMode {
+public class GenericCommandMode implements CommandMode {
 	/*
 	 * Contains the commands this mode handles
 	 */
-	private IMap<String, ICommand>	commandHandlers;
-	private IMap<String, ICommand>	defaultHandlers;
+	private IMap<String, Command>	commandHandlers;
+	private IMap<String, Command>	defaultHandlers;
 
 	/*
 	 * Contains help topics without an associated command
 	 */
-	private IMap<String, ICommandHelp> helpTopics;
+	private IMap<String, CommandHelp> helpTopics;
 
 	/*
 	 * The action to execute upon encountering an unknown command
@@ -103,7 +103,7 @@ public class GenericCommandMode implements ICommandMode {
 			throw new IllegalArgumentException(
 					"Cannot bind alias '" + aliasName + "' to a command with a bound handler");
 		else {
-			ICommand aliasedCommand;
+			Command aliasedCommand;
 
 			if(defaultHandlers.containsKey(commandName)) {
 				aliasedCommand = defaultHandlers.get(commandName).aliased();
@@ -127,7 +127,7 @@ public class GenericCommandMode implements ICommandMode {
 	 *                 if the specified command already has a handler
 	 *                 registered
 	 */
-	public void addCommandHandler(String command, ICommand handler) {
+	public void addCommandHandler(String command, Command handler) {
 		if(command == null)
 			throw new NullPointerException("Command must not be null");
 		else if(handler == null)
@@ -147,7 +147,7 @@ public class GenericCommandMode implements ICommandMode {
 	 * @param topic
 	 *                The contents of the topic
 	 */
-	public void addHelpTopic(String topicName, ICommandHelp topic) {
+	public void addHelpTopic(String topicName, CommandHelp topic) {
 		helpTopics.put(topicName, topic);
 	}
 
@@ -274,7 +274,7 @@ public class GenericCommandMode implements ICommandMode {
 	private void doHelpSummary() {
 		normalOutput.accept("Help topics for this command mode are as follows:\n");
 
-		if(commandHandlers.getSize() > 0) {
+		if(commandHandlers.size() > 0) {
 			commandHandlers.forEachValue(command -> {
 				if(!command.isAlias()) {
 					normalOutput.accept("\t" + command.getHelp().getSummary() + "\n");
@@ -285,7 +285,7 @@ public class GenericCommandMode implements ICommandMode {
 		}
 
 		normalOutput.accept("\nHelp topics available in all command modes are as follows\n");
-		if(defaultHandlers.getSize() > 0) {
+		if(defaultHandlers.size() > 0) {
 			defaultHandlers.forEachValue(command -> {
 				if(!command.isAlias()) {
 					normalOutput.accept("\t" + command.getHelp().getSummary() + "\n");
@@ -296,7 +296,7 @@ public class GenericCommandMode implements ICommandMode {
 		}
 
 		normalOutput.accept("\nHelp topics not associated with a command are as follows\n");
-		if(helpTopics.getSize() > 0) {
+		if(helpTopics.size() > 0) {
 			helpTopics.forEachValue(topic -> {
 				normalOutput.accept("\t" + topic.getSummary() + "\n");
 			});
@@ -324,14 +324,14 @@ public class GenericCommandMode implements ICommandMode {
 	public String getCustomPrompt() {
 		if(customPrompt != null) return customPrompt;
 
-		return ICommandMode.super.getCustomPrompt();
+		return CommandMode.super.getCustomPrompt();
 	}
 
 	@Override
 	public String getName() {
 		if(modeName != null) return modeName;
 
-		return ICommandMode.super.getName();
+		return CommandMode.super.getName();
 	}
 
 	@Override
@@ -340,7 +340,7 @@ public class GenericCommandMode implements ICommandMode {
 	}
 
 	@Override
-	public ICommandMode process(String command, String[] args) {
+	public CommandMode process(String command, String[] args) {
 		normalOutput.accept("\n");
 
 		if(defaultHandlers.containsKey(command))

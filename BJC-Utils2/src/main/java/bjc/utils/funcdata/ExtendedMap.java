@@ -62,8 +62,8 @@ class ExtendedMap<KeyType, ValueType> implements IMap<KeyType, ValueType> {
 	}
 
 	@Override
-	public int getSize() {
-		return store.getSize() + delegate.getSize();
+	public int size() {
+		return store.size() + delegate.size();
 	}
 
 	@Override
@@ -72,7 +72,7 @@ class ExtendedMap<KeyType, ValueType> implements IMap<KeyType, ValueType> {
 	}
 
 	@Override
-	public <MappedValue> IMap<KeyType, MappedValue> mapValues(Function<ValueType, MappedValue> transformer) {
+	public <MappedValue> IMap<KeyType, MappedValue> transform(Function<ValueType, MappedValue> transformer) {
 		return new TransformedValueMap<>(this, transformer);
 	}
 

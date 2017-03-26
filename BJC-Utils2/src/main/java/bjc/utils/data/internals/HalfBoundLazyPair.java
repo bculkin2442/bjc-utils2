@@ -12,6 +12,7 @@ import java.util.function.Supplier;
 /*
  * A lazy pair, with only one side bound
  */
+@SuppressWarnings("javadoc")
 public class HalfBoundLazyPair<OldType, NewLeft, NewRight> implements IPair<NewLeft, NewRight> {
 	private Supplier<OldType> oldSupplier;
 

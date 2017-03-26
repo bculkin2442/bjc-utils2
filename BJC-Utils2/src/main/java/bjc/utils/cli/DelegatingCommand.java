@@ -6,11 +6,11 @@ package bjc.utils.cli;
  * @author ben
  *
  */
-class DelegatingCommand implements ICommand {
+class DelegatingCommand implements Command {
 	/*
 	 * The command to delegate to.
 	 */
-	private ICommand delegate;
+	private Command delegate;
 
 	/**
 	 * Create a new command that delegates to another command.
@@ -18,22 +18,22 @@ class DelegatingCommand implements ICommand {
 	 * @param delegate
 	 *                The command to delegate to.
 	 */
-	public DelegatingCommand(ICommand delegate) {
+	public DelegatingCommand(Command delegate) {
 		this.delegate = delegate;
 	}
 
 	@Override
-	public ICommand aliased() {
+	public Command aliased() {
 		return new DelegatingCommand(delegate);
 	}
 
 	@Override
-	public ICommandHandler getHandler() {
+	public CommandHandler getHandler() {
 		return delegate.getHandler();
 	}
 
 	@Override
-	public ICommandHelp getHelp() {
+	public CommandHelp getHelp() {
 		return delegate.getHelp();
 	}
 
