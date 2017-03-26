@@ -1,11 +1,11 @@
 package bjc.utils.components;
 
-import bjc.utils.parserutils.RuleBasedConfigReader;
+import static bjc.utils.ioutils.RuleBasedReaderPragmas.buildInteger;
+import static bjc.utils.ioutils.RuleBasedReaderPragmas.buildStringCollapser;
 
 import java.io.InputStream;
 
-import static bjc.utils.parserutils.RuleBasedReaderPragmas.buildInteger;
-import static bjc.utils.parserutils.RuleBasedReaderPragmas.buildStringCollapser;
+import bjc.utils.ioutils.RuleBasedConfigReader;
 
 /**
  * Read a component description from a file

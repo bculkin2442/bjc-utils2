@@ -1,4 +1,4 @@
-package bjc.utils.parserutils;
+package bjc.utils.ioutils;
 
 import java.io.LineNumberReader;
 import java.io.Reader;

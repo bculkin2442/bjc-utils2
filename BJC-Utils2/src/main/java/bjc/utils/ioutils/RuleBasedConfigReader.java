@@ -1,4 +1,4 @@
-package bjc.utils.parserutils;
+package bjc.utils.ioutils;
 
 import bjc.utils.data.IHolder;
 import bjc.utils.data.IPair;

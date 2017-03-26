@@ -1,4 +1,4 @@
-package bjc.utils.parserutils;
+package bjc.utils.ioutils;
 
 import bjc.utils.exceptions.PragmaFormatException;
 import bjc.utils.funcdata.FunctionalStringTokenizer;
