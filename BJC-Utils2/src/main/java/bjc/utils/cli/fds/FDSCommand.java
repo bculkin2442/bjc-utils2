@@ -1,6 +1,6 @@
 package bjc.utils.cli.fds;
 
-import java.util.Iterator;
+import bjc.utils.ioutils.BlockReader;
 
 /**
  * A command attached to an FDS interface.
@@ -22,5 +22,5 @@ public interface FDSCommand<S> {
 	 * 
 	 * @return The new state, after running the command.
 	 */
-	S run(S state, Iterator<String> input);
+	S run(S state, BlockReader input);
 }

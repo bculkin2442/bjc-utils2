@@ -1,9 +1,7 @@
 package bjc.utils.cli.fds;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.PrintStream;
+
 import bjc.utils.ioutils.Block;
 import bjc.utils.ioutils.BlockReader;
 
@@ -22,19 +20,19 @@ public class FDS {
 	/**
 	 * Run a provided FDS mode until it is exited or there is no more input.
 	 * 
-	 * @param comin
+	 * @param blockSource
 	 *                The command input source for the FDS mode.
 	 * 
 	 * @param datain
 	 *                The data input source for the FDS mode.
 	 * 
-	 * @param out
+	 * @param printer
 	 *                The output source for the FDS mode.
 	 * 
-	 * @param initialMode
+	 * @param mode
 	 *                The mode to start in.
 	 * 
-	 * @param initialState
+	 * @param state
 	 *                The initial state for the mode.
 	 * 
 	 * @return The final state of the mode.
@@ -42,28 +40,46 @@ public class FDS {
 	 * @throws FDSException
 	 *                 If something went wrong during mode execution.
 	 */
-	public static <S> S runFDS(InputStream comin, InputStream datain, OutputStream out, FDSMode<S> initialMode,
-			S initialState) throws FDSException {
-		PrintStream printer = new PrintStream(out);
+	public static <S> S runFDS(BlockReader blockSource, BlockReader datain, PrintStream printer, FDSMode<S> mode,
+			FDSState<S> state) throws FDSException {
+		//printer.print("Enter a command (m for help): ");
 
-		try (BlockReader blockSource = new BlockReader("\\R", new InputStreamReader(comin))) {
-			printer.print("Enter a command (m for help): ");
+		while (blockSource.hasNext()) {
+			Block comBlock = blockSource.next();
 
-			while (blockSource.hasNext()) {
-				Block comBlock = blockSource.next();
+			handleCommandString(comBlock, blockSource, datain, printer, mode, state);
 
-				String comString = comBlock.contents.trim();
-				
-				char comChar = comString.charAt(0);
-				
-				printer.println(String.format("\nRecieved command '%s'\n", comChar));
-
-				printer.print("Enter a command (m for help): ");
-			}
-		} catch (Exception ex) {
-			throw new FDSException("Unexpected I/O error", ex);
+			//printer.print("Enter a command (m for help): ");
 		}
 
-		return initialState;
+		return state.state;
+	}
+
+	private static <S> void handleCommandString(Block comBlock, BlockReader blockSource, BlockReader datain,
+			PrintStream printer, FDSMode<S> mode, FDSState<S> state) throws FDSException {
+		String comString = comBlock.contents.trim();
+
+		switch (state.mode) {
+		case CHORD:
+			if (comString.length() > 1) {
+				for (char c : comString.substring(1).toCharArray()) {
+					Block newCom = new Block(comBlock.blockNo + 1, Character.toString(c),
+							comBlock.startLine, comBlock.startLine);
+
+					state.enqueCommand.accept(newCom);
+				}
+			}
+		case NORMAL:
+			handleCommand(comString.charAt(0), blockSource, datain, printer, mode, state);
+			break;
+
+		default:
+			throw new FDSException(String.format("Unknown input mode '%s'", state.mode));
+		}
+	}
+
+	private static <S> void handleCommand(char charAt, BlockReader blockSource, BlockReader datain,
+			PrintStream printer, FDSMode<S> mode, FDSState<S> state) {
+		printer.printf("Recieved command '%s'\n", charAt);
 	}
 }
