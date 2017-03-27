@@ -2,6 +2,8 @@ package bjc.utils.cli.fds;
 
 import java.util.function.Consumer;
 
+import bjc.utils.esodata.SimpleStack;
+import bjc.utils.esodata.Stack;
 import bjc.utils.ioutils.Block;
 
 /**
@@ -57,6 +59,11 @@ public class FDSState<S> {
 	public InputMode	mode;
 
 	/**
+	 * The modes being used.
+	 */
+	public Stack<FDSMode<S>> modes;
+	
+	/**
 	 * Function to add a command block to be processed.
 	 */
 	public Consumer<Block> enqueCommand;
@@ -79,6 +86,8 @@ public class FDSState<S> {
 		state = stat;
 		mode = inputMode;
 
+		modes = new SimpleStack<>();
+		
 		enqueCommand = comQueue;
 		enqueData = dataQueue;
 	}

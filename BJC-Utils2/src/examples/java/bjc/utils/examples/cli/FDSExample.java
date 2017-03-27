@@ -10,8 +10,8 @@ import bjc.utils.cli.fds.SimpleFDSMode;
 import bjc.utils.cli.fds.FDSState.InputMode;
 import bjc.utils.ioutils.BlockReader;
 import bjc.utils.ioutils.PushbackBlockReader;
-import bjc.utils.ioutils.SimpleBlockReader;
-import bjc.utils.ioutils.TriggeredBlockReader;
+
+import static bjc.utils.ioutils.BlockReaders.*;
 
 /**
  * Simple example for FDS.
@@ -31,7 +31,7 @@ public class FDSExample {
 	 * Main method.
 	 * 
 	 * @param args
-	 *                Unused CLI arguments.
+	 *            Unused CLI arguments.
 	 */
 	public static void main(String[] args) {
 		System.out.println("Entering rudimentary FDS");
@@ -43,21 +43,22 @@ public class FDSExample {
 		InputStreamReader reader = new InputStreamReader(System.in);
 
 		try {
-			BlockReader input = new SimpleBlockReader("\\R", reader);
+			BlockReader input = simple("\\R", reader);
 
 			Prompter comPrompter = new Prompter();
 			Prompter dataPrompter = new Prompter();
 
-			BlockReader rawComInput = new TriggeredBlockReader(input, comPrompter);
-			BlockReader rawDataInput = new TriggeredBlockReader(input, dataPrompter);
+			BlockReader rawComInput = trigger(input, comPrompter);
+			BlockReader rawDataInput = trigger(input, dataPrompter);
 
-			PushbackBlockReader comInput = new PushbackBlockReader(rawComInput);
-			PushbackBlockReader dataInput = new PushbackBlockReader(rawDataInput);
+			PushbackBlockReader comInput = pushback(rawComInput);
+			PushbackBlockReader dataInput = pushback(rawDataInput);
 
 			FDSState<TestContext> fdsState = new FDSState<>(ctx, InputMode.CHORD, comInput::addBlock,
 					dataInput::addBlock);
+			fdsState.modes.push(testMode);
 
-			FDS.runFDS(comInput, dataInput, System.out, testMode, fdsState);
+			FDS.runFDS(comInput, dataInput, System.out, fdsState);
 		} catch (FDSException fex) {
 			fex.printStackTrace();
 		}
