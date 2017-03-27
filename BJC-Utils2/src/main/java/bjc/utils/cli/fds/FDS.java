@@ -2,6 +2,7 @@ package bjc.utils.cli.fds;
 
 import java.io.PrintStream;
 
+import bjc.utils.cli.CommandHelp;
 import bjc.utils.cli.fds.FDSState.InputMode;
 import bjc.utils.ioutils.Block;
 import bjc.utils.ioutils.BlockReader;
@@ -22,28 +23,28 @@ public class FDS {
 	 * Run a provided FDS mode until it is exited or there is no more input.
 	 * 
 	 * @param blockSource
-	 *            The command input source for the FDS mode.
+	 *                The command input source for the FDS mode.
 	 * 
 	 * @param datain
-	 *            The data input source for the FDS mode.
+	 *                The data input source for the FDS mode.
 	 * 
 	 * @param printer
-	 *            The output source for the FDS mode.
+	 *                The output source for the FDS mode.
 	 * 
 	 * @param mode
-	 *            The mode to start in.
+	 *                The mode to start in.
 	 * 
 	 * @param state
-	 *            The initial state for the mode.
+	 *                The initial state for the mode.
 	 * 
 	 * @return The final state of the mode.
 	 * 
 	 * @throws FDSException
-	 *             If something went wrong during mode execution.
+	 *                 If something went wrong during mode execution.
 	 */
 	public static <S> S runFDS(BlockReader blockSource, BlockReader datain, PrintStream printer, FDSState<S> state)
 			throws FDSException {
-		while (blockSource.hasNext()) {
+		while(blockSource.hasNext() && !state.modes.empty()) {
 			Block comBlock = blockSource.next();
 
 			handleCommandString(comBlock, blockSource, datain, printer, state);
@@ -56,11 +57,15 @@ public class FDS {
 			PrintStream printer, FDSState<S> state) throws FDSException {
 		String comString = comBlock.contents.trim();
 
-		switch (state.mode) {
+		switch(state.mode) {
 		case CHORD:
 			chordCommand(comBlock, state, comString);
 		case NORMAL:
 			handleCommand(comString.charAt(0), blockSource, datain, printer, state);
+			break;
+		case INLINE:
+			break;
+		case CHARINLINE:
 			break;
 		default:
 			throw new FDSException(String.format("Unknown input mode '%s'", state.mode));
@@ -68,7 +73,7 @@ public class FDS {
 	}
 
 	private static <S> void chordCommand(Block comBlock, FDSState<S> state, String comString) {
-		for (int i = 1; i < comString.length(); i++) {
+		for(int i = 1; i < comString.length(); i++) {
 			char c = comString.charAt(i);
 
 			Block newCom = new Block(comBlock.blockNo + 1, Character.toString(c), comBlock.startLine,
@@ -78,16 +83,18 @@ public class FDS {
 		}
 	}
 
-	private static <S> void handleCommand(char com, BlockReader blockSource, BlockReader datain, PrintStream printer,
-			FDSState<S> state) throws FDSException {
+	private static <S> void handleCommand(char com, BlockReader blockSource, BlockReader datain,
+			PrintStream printer, FDSState<S> state) throws FDSException {
+		if(state.modes.empty()) return;
+
 		/*
 		 * Handle built-in commands over user commands.
 		 */
-		switch (com) {
+		switch(com) {
 		case 'x':
-			if (state.mode == InputMode.CHORD) {
+			if(state.mode == InputMode.CHORD) {
 				state.mode = InputMode.NORMAL;
-			} else if (state.mode == InputMode.NORMAL) {
+			} else if(state.mode == InputMode.NORMAL) {
 				state.mode = InputMode.CHORD;
 			} else {
 				printer.println("? CNV\n");
@@ -98,16 +105,38 @@ public class FDS {
 			 * TODO implement loading scripts from file.
 			 */
 			break;
+
+		case 'q':
+			state.modes.drop();
+			break;
+		case 'Q':
+			state.modes.drop(state.modes.size());
+			break;
+		case 'm':
+			helpSummary(printer, state);
+			break;
 		default:
 			FDSMode<S> curMode = state.modes.top();
 
-			if (curMode.hasSubmode(com)) {
+			if(curMode.hasSubmode(com)) {
 				curMode.getCommand(com).run(state.state, datain);
-			} else if (curMode.hasCommand(com)) {
+			} else if(curMode.hasCommand(com)) {
 				state.modes.push(curMode.getSubmode(com));
 			} else {
-				printer.printf("? UBC '%s'", com);
+				printer.printf("? UBC '%s'\n", com);
 			}
+		}
+	}
+
+	private static <S> void helpSummary(PrintStream printer, FDSState<S> state) {
+		FDSMode<S> mode = state.modes.top();
+
+		printer.printf("Help for mode %s:\n", mode.getName());
+
+		for(char bound : mode.registeredChars()) {
+			CommandHelp help = mode.getHelp(bound);
+			
+			printer.printf("%s\t-\t%s", help.getSummary());
 		}
 	}
 }

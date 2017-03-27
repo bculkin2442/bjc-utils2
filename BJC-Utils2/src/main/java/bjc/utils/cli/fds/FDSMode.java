@@ -13,6 +13,15 @@ import bjc.utils.cli.NullHelp;
  */
 public interface FDSMode<S> {
 	/**
+	 * Get the name of this mode.
+	 * 
+	 * @return The mode of this name.
+	 */
+	default String getName() {
+		return "Unnamed Mode";
+	}
+
+	/**
 	 * Get all the characters that are registered to something in this mode.
 	 * 
 	 * In this context, something means a command or submode.

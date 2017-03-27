@@ -34,7 +34,7 @@ public class FDSState<S> {
 		CHORD,
 		/**
 		 * Reads every character in the block, but after a terminal
-		 * command, data will be read inline separated by spaces until a
+		 * command, data will be read in-line separated by spaces until a
 		 * semicolon is read.
 		 * 
 		 * The semicolon can be escaped with a backslash.
@@ -42,11 +42,12 @@ public class FDSState<S> {
 		INLINE,
 		/**
 		 * Reads every character in the block, but after a terminal
-		 * command, data will be read inline with each character being a
+		 * command, data will be read in-line with each character being a
 		 * separate item until a semicolon is read.
 		 * 
 		 * The semicolon can be escaped with a backslash.
 		 */
+		CHARINLINE,
 	}
 
 	/**
@@ -62,7 +63,7 @@ public class FDSState<S> {
 	 * The modes being used.
 	 */
 	public Stack<FDSMode<S>> modes;
-	
+
 	/**
 	 * Function to add a command block to be processed.
 	 */
@@ -81,13 +82,19 @@ public class FDSState<S> {
 	 * 
 	 * @param inputMode
 	 *                The input mode for the interface.
+	 * 
+	 * @param comQueue
+	 *                The function to call to add a command block.
+	 * 
+	 * @param dataQueue
+	 *                The function to call to add a data block.
 	 */
 	public FDSState(S stat, InputMode inputMode, Consumer<Block> comQueue, Consumer<Block> dataQueue) {
 		state = stat;
 		mode = inputMode;
 
 		modes = new SimpleStack<>();
-		
+
 		enqueCommand = comQueue;
 		enqueData = dataQueue;
 	}
