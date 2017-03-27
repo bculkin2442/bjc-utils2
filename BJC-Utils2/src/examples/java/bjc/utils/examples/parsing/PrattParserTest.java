@@ -4,6 +4,8 @@ import bjc.utils.data.ITree;
 import bjc.utils.data.TransformIterator;
 import bjc.utils.esodata.Directory;
 import bjc.utils.parserutils.ParserException;
+import bjc.utils.parserutils.pratt.InitialCommand;
+import bjc.utils.parserutils.pratt.NonInitialCommand;
 import bjc.utils.parserutils.pratt.PrattParser;
 import bjc.utils.parserutils.pratt.Token;
 import bjc.utils.parserutils.pratt.tokens.StringToken;
@@ -19,10 +21,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 import static bjc.utils.parserutils.pratt.commands.NonInitialCommands.*;
 import static bjc.utils.parserutils.pratt.commands.InitialCommands.*;
+
+import static bjc.utils.parserutils.pratt.tokens.StringToken.litToken;
+
+import static bjc.utils.functypes.ID.id;
 
 /**
  * Simple test for Pratt parser.
@@ -31,6 +38,29 @@ import static bjc.utils.parserutils.pratt.commands.InitialCommands.*;
  *
  */
 public class PrattParserTest {
+	private static final class Tokenizer implements Function<String, Token<String, String>> {
+		private Set<String>	ops;
+		private Set<String>	reserved;
+		private TestContext	ctx;
+
+		public Tokenizer(Set<String> operators, Set<String> reservedWords, TestContext context) {
+			ops = operators;
+			reserved = reservedWords;
+			ctx = context;
+		}
+
+		@Override
+		public Token<String, String> apply(String strang) {
+			if (ops.contains(strang) || reserved.contains(strang)) {
+				return litToken(strang);
+			} else if (ctx.scopes.top().containsKey(strang)) {
+				return new StringToken("(vref)", strang);
+			} else {
+				return new StringToken("(literal)", strang);
+			}
+		}
+	}
+
 	private static final class BlockExit implements UnaryOperator<TestContext> {
 		@Override
 		public TestContext apply(TestContext state) {
@@ -119,7 +149,7 @@ public class PrattParserTest {
 		System.out.print("Enter a command (blank line to exit): ");
 		String ln = scn.nextLine();
 
-		while(!ln.trim().equals("")) {
+		while (!ln.trim().equals("")) {
 			Iterator<Token<String, String>> tokens = preprocessInput(ops, split, ln, reserved, ctx);
 
 			try {
@@ -132,12 +162,12 @@ public class PrattParserTest {
 
 				ITree<Token<String, String>> tree = parser.parseExpression(0, tokenStream, ctx, true);
 
-				if(!tokenStream.current().getKey().equals("(end)")) {
+				if (!tokenStream.headIs("(end)")) {
 					System.out.println("Multiple expressions on line");
 				}
 
 				System.out.println("Parsed expression:\n" + tree);
-			} catch(ParserException pex) {
+			} catch (ParserException pex) {
 				pex.printStackTrace();
 			}
 
@@ -157,17 +187,17 @@ public class PrattParserTest {
 
 		List<String> splitTokens = new LinkedList<>();
 
-		for(String raw : rawTokens) {
+		for (String raw : rawTokens) {
 			boolean doSplit = false;
 
-			for(String op : ops) {
-				if(raw.contains(op)) {
+			for (String op : ops) {
+				if (raw.contains(op)) {
 					doSplit = true;
 					break;
 				}
 			}
 
-			if(doSplit) {
+			if (doSplit) {
 				String[] strangs = split.split(raw);
 
 				splitTokens.addAll(Arrays.asList(strangs));
@@ -180,15 +210,8 @@ public class PrattParserTest {
 
 		Iterator<String> source = splitTokens.iterator();
 
-		Iterator<Token<String, String>> tokens = new TransformIterator<>(source, (String strang) -> {
-			if(ops.contains(strang) || reserved.contains(strang)) {
-				return new StringToken(strang, strang);
-			} else if(ctx.scopes.top().containsKey(strang)) {
-				return new StringToken("(vref)", strang);
-			} else {
-				return new StringToken("(literal)", strang);
-			}
-		});
+		Iterator<Token<String, String>> tokens = new TransformIterator<>(source,
+				new Tokenizer(ops, reserved, ctx));
 		return tokens;
 	}
 
@@ -202,33 +225,43 @@ public class PrattParserTest {
 		/*
 		 * Token for marking chains.
 		 */
-		StringToken chainToken = new StringToken("and", "and");
+		StringToken chainToken = litToken("and");
+
+		/*
+		 * ID function.
+		 */
+		UnaryOperator<TestContext> idfun = id();
 
 		PrattParser<String, String, TestContext> parser = new PrattParser<>();
 
 		parser.addNonInitialCommand(":", infixNon(3));
 
-		parser.addNonInitialCommand("if", ternary(5, 0, "else", new StringToken("cond", "cond"), false));
+		parser.addNonInitialCommand("if", ternary(5, 0, "else", litToken("cond"), false));
 
 		parser.addNonInitialCommand(":=", new AssignCommand());
 
-		parser.addNonInitialCommand("and", infixLeft(13));
-		parser.addNonInitialCommand("or", infixLeft(13));
+		NonInitialCommand<String, String, TestContext> nonSSRelJoin = infixLeft(13);
+		parser.addNonInitialCommand("and", nonSSRelJoin);
+		parser.addNonInitialCommand("or", nonSSRelJoin);
 
-		parser.addNonInitialCommand("=", chain(15, relChain, chainToken));
-		parser.addNonInitialCommand("<", chain(15, relChain, chainToken));
-		parser.addNonInitialCommand(">", chain(15, relChain, chainToken));
-		parser.addNonInitialCommand("<=", chain(15, relChain, chainToken));
-		parser.addNonInitialCommand(">=", chain(15, relChain, chainToken));
+		NonInitialCommand<String, String, TestContext> chainRelOp = chain(15, relChain, chainToken);
+		parser.addNonInitialCommand("=", chainRelOp);
+		parser.addNonInitialCommand("<", chainRelOp);
+		parser.addNonInitialCommand(">", chainRelOp);
+		parser.addNonInitialCommand("<=", chainRelOp);
+		parser.addNonInitialCommand(">=", chainRelOp);
 
-		parser.addNonInitialCommand("&&", infixRight(17));
-		parser.addNonInitialCommand("||", infixRight(17));
+		NonInitialCommand<String, String, TestContext> ssRelJoin = infixRight(17);
+		parser.addNonInitialCommand("&&", ssRelJoin);
+		parser.addNonInitialCommand("||", ssRelJoin);
 
-		parser.addNonInitialCommand("+", infixLeft(20));
-		parser.addNonInitialCommand("-", infixLeft(20));
+		NonInitialCommand<String, String, TestContext> addSub = infixLeft(20);
+		parser.addNonInitialCommand("+", addSub);
+		parser.addNonInitialCommand("-", addSub);
 
-		parser.addNonInitialCommand("*", infixLeft(30));
-		parser.addNonInitialCommand("/", infixLeft(30));
+		NonInitialCommand<String, String, TestContext> mulDiv = infixLeft(30);
+		parser.addNonInitialCommand("*", mulDiv);
+		parser.addNonInitialCommand("/", mulDiv);
 
 		parser.addNonInitialCommand("!", postfix(40));
 
@@ -236,28 +269,26 @@ public class PrattParserTest {
 
 		parser.addNonInitialCommand(".", infixLeft(60));
 
-		parser.addNonInitialCommand("[", postCircumfix(60, 0, "]", new StringToken("idx", "idx")));
+		parser.addNonInitialCommand("[", postCircumfix(60, 0, "]", litToken("idx")));
 
-		parser.addInitialCommand("if",
-				preTernary(0, 0, 0, "then", "else", new StringToken("ifelse", "ifelse")));
+		parser.addInitialCommand("if", preTernary(0, 0, 0, "then", "else", litToken("ifelse")));
 
-		parser.addInitialCommand("(", grouping(0, ")", new StringToken("parens", "parens")));
+		parser.addInitialCommand("(", grouping(0, ")", litToken("parens")));
 
-		parser.addInitialCommand("begin", delimited(0, ";", "end", new StringToken("block", "block"),
-				new BlockEnter(), (state) -> state, new BlockExit(), true));
+		parser.addInitialCommand("begin", delimited(0, ";", "end", litToken("block"), new BlockEnter(), idfun,
+				new BlockExit(), true));
 
-		parser.addInitialCommand("[", delimited(0, ",", "]", new StringToken("array", "array"),
-				(state) -> state, (state) -> state, (state) -> state, false));
+		parser.addInitialCommand("[", delimited(0, ",", "]", litToken("array"), idfun, idfun, idfun, false));
 
-		parser.addInitialCommand("{", delimited(0, ",", "}", new StringToken("json", "json"), (state) -> state,
-				(state) -> state, (state) -> state, false));
+		parser.addInitialCommand("{", delimited(0, ",", "}", litToken("json"), idfun, idfun, idfun, false));
 
 		parser.addInitialCommand("case", unary(5));
 
 		parser.addInitialCommand("-", unary(30));
 
-		parser.addInitialCommand("(literal)", leaf());
-		parser.addInitialCommand("(vref)", leaf());
+		InitialCommand<String, String, TestContext> leaf = leaf();
+		parser.addInitialCommand("(literal)", leaf);
+		parser.addInitialCommand("(vref)", leaf);
 
 		parser.addInitialCommand("var", new VarCommand());
 

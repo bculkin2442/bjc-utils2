@@ -5,11 +5,13 @@ import java.util.Iterator;
 import bjc.utils.parserutils.pratt.Token;
 import bjc.utils.parserutils.pratt.TokenStream;
 
+import static bjc.utils.parserutils.pratt.tokens.StringToken.litToken;
+
 /**
  * Simple implementation of token stream for strings.
  * 
- * The terminal token here is represented by a token with type '(end)' and null
- * value.
+ * The terminal token here is represented by a token with type and value
+ * '(end)'.
  * 
  * @author EVE
  *
@@ -41,7 +43,7 @@ public class StringTokenStream extends TokenStream<String, String> {
 		if (iter.hasNext()) {
 			curr = iter.next();
 		} else {
-			curr = new StringToken("(end)", null);
+			curr = litToken("(end)");
 		}
 
 		return curr;

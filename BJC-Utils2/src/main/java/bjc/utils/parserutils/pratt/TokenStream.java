@@ -86,4 +86,8 @@ public abstract class TokenStream<K, V> implements Iterator<Token<K, V>> {
 	public final void expect(K... expectedKeys) throws ExpectationException {
 		expect(new HashSet<>(Arrays.asList(expectedKeys)));
 	}
+	
+	public boolean headIs(K val) {
+		return current().getKey().equals(val);
+	}
 }

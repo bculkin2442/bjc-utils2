@@ -77,4 +77,8 @@ public class StringToken implements Token<String, String> {
 	public String toString() {
 		return String.format("StringToken [key='%s', val='%s']", key, val);
 	}
+	
+	public static StringToken litToken(String val) {
+		return new StringToken(val, val);
+	}
 }

@@ -26,18 +26,37 @@ import java.util.Map;
  *
  */
 public class PrattParser<K, V, C> {
+	/*
+	 * Default commands that error when used.
+	 */
 	private final NonInitialCommand<K, V, C>	DEFAULT_LEFT_COMMAND	= new DefaultNonInitialCommand<>();
-	private final InitialCommand<K, V, C>	DEFAULT_NULL_COMMAND	= new DefaultInitialCommand<>();
+	private final InitialCommand<K, V, C>		DEFAULT_NULL_COMMAND	= new DefaultInitialCommand<>();
 
-	private Map<K, NonInitialCommand<K, V, C>>	leftCommands;
-	private Map<K, InitialCommand<K, V, C>>	nullCommands;
-	private Map<K, InitialCommand<K, V, C>>	statementCommands;
+	/*
+	 * Left-commands that depend on what the null command was.
+	 */
+	private Map<K, Map<K, NonInitialCommand<K, V, C>>> dependantLeftCommands;
+
+	/*
+	 * The left commands.
+	 */
+	private Map<K, NonInitialCommand<K, V, C>> leftCommands;
+	/*
+	 * The initial commands.
+	 */
+	private Map<K, InitialCommand<K, V, C>> nullCommands;
+	/*
+	 * Initial commands only checked for statements.
+	 */
+	private Map<K, InitialCommand<K, V, C>> statementCommands;
 
 	/**
 	 * Create a new Pratt parser.
 	 * 
 	 */
 	public PrattParser() {
+		dependantLeftCommands = new HashMap<>();
+
 		leftCommands = new HashMap<>();
 		nullCommands = new HashMap<>();
 		statementCommands = new HashMap<>();
@@ -65,34 +84,41 @@ public class PrattParser<K, V, C> {
 	 */
 	public ITree<Token<K, V>> parseExpression(int precedence, TokenStream<K, V> tokens, C state,
 			boolean isStatement) throws ParserException {
-		if(precedence < 0) {
+		if (precedence < 0) {
 			throw new IllegalArgumentException("Precedence must be greater than zero");
 		}
 
 		Token<K, V> initToken = tokens.current();
 		tokens.next();
 
+		K initKey = initToken.getKey();
+
 		ITree<Token<K, V>> ast;
 
-		if(isStatement && statementCommands.containsKey(initToken.getKey())) {
-			ast = statementCommands.getOrDefault(initToken.getKey(), DEFAULT_NULL_COMMAND)
-					.denote(initToken, new ParserContext<>(tokens, this, state));
+		if (isStatement && statementCommands.containsKey(initKey)) {
+			ast = statementCommands.getOrDefault(initKey, DEFAULT_NULL_COMMAND).denote(initToken,
+					new ParserContext<>(tokens, this, state));
 		} else {
-			ast = nullCommands.getOrDefault(initToken.getKey(), DEFAULT_NULL_COMMAND)
-					.denote(initToken, new ParserContext<>(tokens, this, state));
+			ast = nullCommands.getOrDefault(initKey, DEFAULT_NULL_COMMAND).denote(initToken,
+					new ParserContext<>(tokens, this, state));
 		}
 
 		int rightPrec = Integer.MAX_VALUE;
 
-		while(true) {
+		while (true) {
 			Token<K, V> tok = tokens.current();
 
 			K key = tok.getKey();
 
 			NonInitialCommand<K, V, C> command = leftCommands.getOrDefault(key, DEFAULT_LEFT_COMMAND);
+
+			if (dependantLeftCommands.containsKey(initKey)) {
+				command = dependantLeftCommands.get(initKey).getOrDefault(key, command);
+			}
+
 			int leftBind = command.leftBinding();
 
-			if(NumberUtils.between(precedence, rightPrec, leftBind)) {
+			if (NumberUtils.between(precedence, rightPrec, leftBind)) {
 				tokens.next();
 
 				ast = command.denote(ast, tok, new ParserContext<>(tokens, this, state));
@@ -145,5 +171,20 @@ public class PrattParser<K, V, C> {
 	 */
 	public void addStatementCommand(K marker, InitialCommand<K, V, C> comm) {
 		statementCommands.put(marker, comm);
+	}
+
+	/**
+	 * Add a dependant non-initial command to this parser.
+	 */
+	public void addDependantCommand(K dependant, K marker, NonInitialCommand<K, V, C> comm) {
+		if (dependantLeftCommands.containsKey(dependant)) {
+			dependantLeftCommands.get(dependant).put(marker, comm);
+		} else {
+			Map<K, NonInitialCommand<K, V, C>> comms = new HashMap<>();
+
+			comms.put(marker, comm);
+
+			dependantLeftCommands.put(dependant, comms);
+		}
 	}
 }
