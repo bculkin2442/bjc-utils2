@@ -13,10 +13,10 @@ public class BlockReaders {
 	 * Create a new simple block reader that works off a regex.
 	 * 
 	 * @param blockDelim
-	 *            The regex that seperates blocks.
+	 *                The regex that separates blocks.
 	 * 
 	 * @param source
-	 *            The reader to get blocks from.
+	 *                The reader to get blocks from.
 	 * 
 	 * @return A configured simple reader.
 	 */
@@ -28,7 +28,7 @@ public class BlockReaders {
 	 * Create a new pushback block reader.
 	 * 
 	 * @param src
-	 *            The block reader to read blocks from.
+	 *                The block reader to read blocks from.
 	 * 
 	 * @return A configured pushback reader.
 	 */
@@ -40,14 +40,42 @@ public class BlockReaders {
 	 * Create a new triggered block reader.
 	 * 
 	 * @param source
-	 *            The block reader to read blocks from.
+	 *                The block reader to read blocks from.
 	 * 
 	 * @param action
-	 *            The action to execute before reading a block.
+	 *                The action to execute before reading a block.
 	 * 
 	 * @return A configured triggered block reader.
 	 */
 	public static BlockReader trigger(BlockReader source, Runnable action) {
 		return new TriggeredBlockReader(source, action);
+	}
+
+	/**
+	 * Create a new layered block reader.
+	 *
+	 * @param primary
+	 *                The first source to read blocks from.
+	 * 
+	 * @param secondary
+	 *                The second source to read blocks from.
+	 * 
+	 * @return A configured layered block reader.
+	 */
+	public static BlockReader layered(BlockReader primary, BlockReader secondary) {
+		return new LayeredBlockReader(primary, secondary);
+	}
+
+	/**
+	 * Create a new serial block reader.
+	 * 
+	 * @param readers
+	 *                The readers to pull from, in the order to pull from
+	 *                them.
+	 * 
+	 * @return A configured serial block reader.
+	 */
+	public static BlockReader serial(BlockReader... readers) {
+		return new SerialBlockReader(readers);
 	}
 }

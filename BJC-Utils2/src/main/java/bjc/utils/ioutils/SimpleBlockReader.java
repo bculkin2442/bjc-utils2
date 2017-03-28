@@ -72,6 +72,8 @@ public class SimpleBlockReader implements BlockReader {
 
 			return true;
 		} catch (NoSuchElementException nseex) {
+			currBlock = null;
+
 			return false;
 		}
 	}
