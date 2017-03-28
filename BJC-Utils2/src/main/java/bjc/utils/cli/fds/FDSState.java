@@ -1,9 +1,14 @@
 package bjc.utils.cli.fds;
 
 import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 
 import bjc.utils.esodata.SimpleStack;
 import bjc.utils.esodata.Stack;
+import bjc.utils.ioutils.Block;
 import bjc.utils.ioutils.PushbackBlockReader;
 
 /**
@@ -39,15 +44,7 @@ public class FDSState<S> {
 		 * 
 		 * The semicolon can be escaped with a backslash.
 		 */
-		INLINE,
-		/**
-		 * Reads every character in the block, but after a terminal
-		 * command, data will be read in-line with each character being
-		 * a separate item until a semicolon is read.
-		 * 
-		 * The semicolon can be escaped with a backslash.
-		 */
-		CHARINLINE,
+		INLINE;
 	}
 
 	/**
@@ -80,6 +77,29 @@ public class FDSState<S> {
 	public PrintStream printer;
 
 	/**
+	 * The repository for data macros.
+	 */
+	public Map<String, List<Block>> dataMacros;
+
+	/**
+	 * The repository for command macros.
+	 */
+	public Map<String, List<Block>> commandMacros;
+
+	FDSMode<S>	dataMacroMode;
+	FDSMode<S>	comMacroMode;
+
+	/**
+	 * Function to change the current data prompt.
+	 */
+	public Consumer<String> dataPrompter;
+
+	/**
+	 * The default data prompt.
+	 */
+	public String defaultPrompt;
+
+	/**
 	 * Create a new interface state.
 	 * 
 	 * @param stat
@@ -95,9 +115,14 @@ public class FDSState<S> {
 	 * 
 	 * @param print
 	 *                The destination for output.
+	 * @param dataPrompt
+	 *                The function to use for changing the data prompt.
+	 * 
+	 * @param normalPrompt
+	 *                The default data prompt.
 	 */
 	public FDSState(S stat, InputMode inputMode, PushbackBlockReader cmin, PushbackBlockReader datin,
-			PrintStream print) {
+			PrintStream print, Consumer<String> dataPrompt, String normalPrompt) {
 		state = stat;
 		mode = inputMode;
 
@@ -105,6 +130,15 @@ public class FDSState<S> {
 		datain = datin;
 		printer = print;
 
+		dataPrompter = dataPrompt;
+		defaultPrompt = normalPrompt;
+
 		modes = new SimpleStack<>();
+
+		dataMacros = new HashMap<>();
+		commandMacros = new HashMap<>();
+
+		dataMacroMode = new MacroFDSMode<>(dataMacros, datain::addBlock);
+		comMacroMode = new MacroFDSMode<>(commandMacros, comin::addBlock);
 	}
 }

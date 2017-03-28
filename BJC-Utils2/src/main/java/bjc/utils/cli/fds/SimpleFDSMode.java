@@ -22,13 +22,15 @@ import static java.lang.String.format;
  *                The FDS state type.
  */
 public class SimpleFDSMode<S> implements FDSMode<S> {
-	private Map<Character, FDSCommand<S>>		commands;
-	private Map<Character, FDSMode<S>>		modes;
-	private Multimap<Character, CommandHelp>	help;
+	private Map<String, FDSCommand<S>>	commands;
+	private Map<String, FDSMode<S>>		modes;
+	private Multimap<String, CommandHelp>	help;
 
-	private Set<Character>	registered;
-	private char[]		registeredArray;
+	private Set<String>	registered;
+	private String[]	registeredArray;
 	private boolean		changed;
+
+	private String modeName;
 
 	/**
 	 * Create a new empty FDS mode.
@@ -40,6 +42,26 @@ public class SimpleFDSMode<S> implements FDSMode<S> {
 
 		registered = new HashSet<>();
 		changed = true;
+	}
+
+	/**
+	 * Create a new empty mode with a given name.
+	 * 
+	 * @param name
+	 *                The name of the mode.
+	 */
+	public SimpleFDSMode(String name) {
+		this();
+
+		modeName = name;
+	}
+
+	@Override
+	public String getName() {
+		if(modeName == null)
+			return FDSMode.super.getName();
+		else
+			return modeName;
 	}
 
 	/**
@@ -57,17 +79,17 @@ public class SimpleFDSMode<S> implements FDSMode<S> {
 	 * @throws IllegalArgumentException
 	 *                 If the character is already bound to a command.
 	 */
-	public void addCommand(char c, FDSCommand<S> comm, CommandHelp hlp) {
-		if (comm == null)
+	public void addCommand(String c, FDSCommand<S> comm, CommandHelp hlp) {
+		if(comm == null)
 			throw new NullPointerException("Command must not be null");
-		else if (commands.containsKey(c))
+		else if(commands.containsKey(c))
 			throw new IllegalArgumentException(format("Character '%s' is already bound"));
 
 		commands.put(c, comm);
 		help.put(c, hlp);
 
 		registered.add(c);
-		if (!changed) changed = true;
+		if(!changed) changed = true;
 	}
 
 	/**
@@ -79,30 +101,33 @@ public class SimpleFDSMode<S> implements FDSMode<S> {
 	 * @param mode
 	 *                The submode to add.
 	 * 
+	 * @param hlp
+	 *                The help for the submode.
+	 * 
 	 * @throws IllegalArgumentException
 	 *                 If the character is already bound to a submode.
 	 */
-	public void addSubmode(char c, FDSMode<S> mode, CommandHelp hlp) {
-		if (mode == null)
+	public void addSubmode(String c, FDSMode<S> mode, CommandHelp hlp) {
+		if(mode == null)
 			throw new NullPointerException("Mode must not be null");
-		else if (modes.containsKey(c))
+		else if(modes.containsKey(c))
 			throw new IllegalArgumentException(format("Character '%s' is already bound"));
 
 		modes.put(c, mode);
 		help.put(c, hlp);
 
 		registered.add(c);
-		if (!changed) changed = true;
+		if(!changed) changed = true;
 	}
 
 	@Override
-	public char[] registeredChars() {
-		if (!changed) return registeredArray;
+	public String[] registeredChars() {
+		if(!changed) return registeredArray;
 
-		registeredArray = new char[registered.size()];
+		registeredArray = new String[registered.size()];
 
 		int i = 0;
-		for (char c : registered) {
+		for(String c : registered) {
 			registeredArray[i] = c;
 
 			i += 1;
@@ -114,18 +139,18 @@ public class SimpleFDSMode<S> implements FDSMode<S> {
 	}
 
 	@Override
-	public boolean hasCommand(char c) {
+	public boolean hasCommand(String c) {
 		return commands.containsKey(c);
 	}
 
 	@Override
-	public boolean hasSubmode(char c) {
+	public boolean hasSubmode(String c) {
 		return modes.containsKey(c);
 	}
 
 	@Override
-	public FDSCommand<S> getCommand(char c) throws FDSException {
-		if (!commands.containsKey(c)) {
+	public FDSCommand<S> getCommand(String c) throws FDSException {
+		if(!commands.containsKey(c)) {
 			throw new FDSException(String.format("No command bound to '%s'", c));
 		}
 
@@ -133,8 +158,8 @@ public class SimpleFDSMode<S> implements FDSMode<S> {
 	}
 
 	@Override
-	public FDSMode<S> getSubmode(char c) throws FDSException {
-		if (!modes.containsKey(c)) {
+	public FDSMode<S> getSubmode(String c) throws FDSException {
+		if(!modes.containsKey(c)) {
 			throw new FDSException(String.format("No mode bound to '%s'", c));
 		}
 
@@ -142,7 +167,7 @@ public class SimpleFDSMode<S> implements FDSMode<S> {
 	}
 
 	@Override
-	public Collection<CommandHelp> getHelp(char c) {
+	public Collection<CommandHelp> getHelp(String c) {
 		return help.get(c);
 	}
 }

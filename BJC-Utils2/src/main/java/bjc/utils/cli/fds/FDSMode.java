@@ -37,7 +37,7 @@ public interface FDSMode<S> {
 	 * 
 	 * @return All of the characters registered to something in this mode.
 	 */
-	char[] registeredChars();
+	String[] registeredChars();
 
 	/*
 	 * Check for the existence of commands/submodes.
@@ -51,7 +51,7 @@ public interface FDSMode<S> {
 	 * 
 	 * @return Whether or not there is a command bound to that character.
 	 */
-	boolean hasCommand(char c);
+	boolean hasCommand(String c);
 
 	/**
 	 * Check if there is a submode registered to the given character.
@@ -61,7 +61,7 @@ public interface FDSMode<S> {
 	 * 
 	 * @return Whether or not there is a submode bound to that character.
 	 */
-	boolean hasSubmode(char c);
+	boolean hasSubmode(String c);
 
 	/*
 	 * Get commands and submodes.
@@ -78,7 +78,7 @@ public interface FDSMode<S> {
 	 * @throws FDSException
 	 *                 If there is no command bound to that character.
 	 */
-	FDSCommand<S> getCommand(char c) throws FDSException;
+	FDSCommand<S> getCommand(String c) throws FDSException;
 
 	/**
 	 * Get the command attached to a given character.
@@ -91,7 +91,7 @@ public interface FDSMode<S> {
 	 * @throws FDSException
 	 *                 If there is no command bound to that character.
 	 */
-	FDSMode<S> getSubmode(char c) throws FDSException;
+	FDSMode<S> getSubmode(String c) throws FDSException;
 
 	/*
 	 * Help utilities
@@ -106,7 +106,7 @@ public interface FDSMode<S> {
 	 * 
 	 * @return The help for what's bound to the character.
 	 */
-	default Collection<CommandHelp> getHelp(char c) {
+	default Collection<CommandHelp> getHelp(String c) {
 		return DEFAULT_HELP;
 	}
 }

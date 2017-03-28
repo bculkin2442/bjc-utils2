@@ -51,7 +51,9 @@ public class FDSUtils {
 		PushbackBlockReader comInput = pushback(rawComInput);
 		PushbackBlockReader dataInput = pushback(rawDataInput);
 
-		FDSState<S> fdsState = new FDSState<>(ctx, InputMode.INLINE, comInput, dataInput, out);
+		FDSState<S> fdsState = new FDSState<>(ctx, InputMode.NORMAL, comInput, dataInput, out,
+				dataPrompter::setPrompt, "> ");
+
 		fdsState.modes.push(mode);
 
 		FDS.runFDS(fdsState);
