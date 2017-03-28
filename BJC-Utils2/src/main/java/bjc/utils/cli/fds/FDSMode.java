@@ -1,5 +1,9 @@
 package bjc.utils.cli.fds;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
 import bjc.utils.cli.CommandHelp;
 import bjc.utils.cli.NullHelp;
 
@@ -12,6 +16,11 @@ import bjc.utils.cli.NullHelp;
  *                The FDS state type.
  */
 public interface FDSMode<S> {
+	/**
+	 * The default help for anything in a mode command.
+	 */
+	public static final List<CommandHelp> DEFAULT_HELP = Arrays.asList(new NullHelp());
+
 	/**
 	 * Get the name of this mode.
 	 * 
@@ -97,7 +106,7 @@ public interface FDSMode<S> {
 	 * 
 	 * @return The help for what's bound to the character.
 	 */
-	default CommandHelp getHelp(char c) {
-		return new NullHelp();
+	default Collection<CommandHelp> getHelp(char c) {
+		return DEFAULT_HELP;
 	}
 }

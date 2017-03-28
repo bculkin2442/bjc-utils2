@@ -1,9 +1,13 @@
 package bjc.utils.cli.fds;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 
 import bjc.utils.cli.CommandHelp;
 
@@ -18,9 +22,9 @@ import static java.lang.String.format;
  *                The FDS state type.
  */
 public class SimpleFDSMode<S> implements FDSMode<S> {
-	private Map<Character, FDSCommand<S>>	commands;
-	private Map<Character, FDSMode<S>>	modes;
-	private Map<Character, CommandHelp>	help;
+	private Map<Character, FDSCommand<S>>		commands;
+	private Map<Character, FDSMode<S>>		modes;
+	private Multimap<Character, CommandHelp>	help;
 
 	private Set<Character>	registered;
 	private char[]		registeredArray;
@@ -32,7 +36,7 @@ public class SimpleFDSMode<S> implements FDSMode<S> {
 	public SimpleFDSMode() {
 		commands = new HashMap<>();
 		modes = new HashMap<>();
-		help = new HashMap<>();
+		help = HashMultimap.create();
 
 		registered = new HashSet<>();
 		changed = true;
@@ -50,16 +54,17 @@ public class SimpleFDSMode<S> implements FDSMode<S> {
 	 * @param hlp
 	 *                The help for the command.
 	 * 
-	 * @throws FDSException
+	 * @throws IllegalArgumentException
 	 *                 If the character is already bound to a command.
 	 */
-	public void addCommand(char c, FDSCommand<S> comm, CommandHelp hlp) throws FDSException {
+	public void addCommand(char c, FDSCommand<S> comm, CommandHelp hlp) {
 		if (comm == null)
 			throw new NullPointerException("Command must not be null");
-		else if (commands.containsKey(c) || modes.containsKey(c))
-			throw new FDSException(format("Character '%s' is already bound"));
+		else if (commands.containsKey(c))
+			throw new IllegalArgumentException(format("Character '%s' is already bound"));
 
 		commands.put(c, comm);
+		help.put(c, hlp);
 
 		registered.add(c);
 		if (!changed) changed = true;
@@ -74,16 +79,17 @@ public class SimpleFDSMode<S> implements FDSMode<S> {
 	 * @param mode
 	 *                The submode to add.
 	 * 
-	 * @throws FDSException
+	 * @throws IllegalArgumentException
 	 *                 If the character is already bound to a submode.
 	 */
-	public void addSubmode(char c, FDSMode<S> mode) throws FDSException {
+	public void addSubmode(char c, FDSMode<S> mode, CommandHelp hlp) {
 		if (mode == null)
 			throw new NullPointerException("Mode must not be null");
-		else if (modes.containsKey(c) || commands.containsKey(c))
-			throw new FDSException(format("Character '%s' is already bound"));
+		else if (modes.containsKey(c))
+			throw new IllegalArgumentException(format("Character '%s' is already bound"));
 
 		modes.put(c, mode);
+		help.put(c, hlp);
 
 		registered.add(c);
 		if (!changed) changed = true;
@@ -136,7 +142,7 @@ public class SimpleFDSMode<S> implements FDSMode<S> {
 	}
 
 	@Override
-	public CommandHelp getHelp(char c) {
+	public Collection<CommandHelp> getHelp(char c) {
 		return help.get(c);
 	}
 }

@@ -1,10 +1,10 @@
 package bjc.utils.cli.fds;
 
-import java.util.function.Consumer;
+import java.io.PrintStream;
 
 import bjc.utils.esodata.SimpleStack;
 import bjc.utils.esodata.Stack;
-import bjc.utils.ioutils.Block;
+import bjc.utils.ioutils.PushbackBlockReader;
 
 /**
  * Internal state for an FDS interface.
@@ -34,16 +34,16 @@ public class FDSState<S> {
 		CHORD,
 		/**
 		 * Reads every character in the block, but after a terminal
-		 * command, data will be read in-line separated by spaces until a
-		 * semicolon is read.
+		 * command, data will be read in-line separated by spaces until
+		 * a semicolon is read.
 		 * 
 		 * The semicolon can be escaped with a backslash.
 		 */
 		INLINE,
 		/**
 		 * Reads every character in the block, but after a terminal
-		 * command, data will be read in-line with each character being a
-		 * separate item until a semicolon is read.
+		 * command, data will be read in-line with each character being
+		 * a separate item until a semicolon is read.
 		 * 
 		 * The semicolon can be escaped with a backslash.
 		 */
@@ -65,14 +65,19 @@ public class FDSState<S> {
 	public Stack<FDSMode<S>> modes;
 
 	/**
-	 * Function to add a command block to be processed.
+	 * The source to read command blocks from.
 	 */
-	public Consumer<Block> enqueCommand;
+	public PushbackBlockReader comin;
 
 	/**
-	 * Function to add a data block to be processed.
+	 * The source to read data blocks from.
 	 */
-	public Consumer<Block> enqueData;
+	public PushbackBlockReader datain;
+
+	/**
+	 * The destination for output.
+	 */
+	public PrintStream printer;
 
 	/**
 	 * Create a new interface state.
@@ -82,20 +87,24 @@ public class FDSState<S> {
 	 * 
 	 * @param inputMode
 	 *                The input mode for the interface.
+	 * @param cmin
+	 *                The source of command blocks.
 	 * 
-	 * @param comQueue
-	 *                The function to call to add a command block.
+	 * @param datin
+	 *                The source of data blocks.
 	 * 
-	 * @param dataQueue
-	 *                The function to call to add a data block.
+	 * @param print
+	 *                The destination for output.
 	 */
-	public FDSState(S stat, InputMode inputMode, Consumer<Block> comQueue, Consumer<Block> dataQueue) {
+	public FDSState(S stat, InputMode inputMode, PushbackBlockReader cmin, PushbackBlockReader datin,
+			PrintStream print) {
 		state = stat;
 		mode = inputMode;
 
-		modes = new SimpleStack<>();
+		comin = cmin;
+		datain = datin;
+		printer = print;
 
-		enqueCommand = comQueue;
-		enqueData = dataQueue;
+		modes = new SimpleStack<>();
 	}
 }
