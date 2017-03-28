@@ -32,9 +32,22 @@ public class FDS {
 	static {
 		miscMode = new SimpleFDSMode<>();
 
-		miscMode.addCommand('X', (stat) -> {
+		GenericHelp loadScriptHelp = new GenericHelp("load-script\tLoad a script from a file", "");
+		miscMode.addCommand('X', FDS::loadScript, loadScriptHelp);
 
-		}, new GenericHelp("load-script\tLoad a script from a file", ""));
+		GenericHelp quitProgramHelp = new GenericHelp("quit-program\tQuit the program", "");
+		miscMode.addCommand('Q', (state) -> state.modes.drop(state.modes.size()), quitProgramHelp);
+
+		GenericHelp inlineInputHelp = new GenericHelp("", "");
+		miscMode.addCommand('I', (state) -> {
+			if (state.mode == InputMode.CHORD) {
+				state.mode = InputMode.INLINE;
+			} else if (state.mode == InputMode.INLINE) {
+				state.mode = InputMode.CHORD;
+			} else {
+				state.printer.printf("? MNV\n");
+			}
+		}, inlineInputHelp);
 	}
 
 	/**
@@ -64,12 +77,18 @@ public class FDS {
 		String comString = comBlock.contents.trim();
 
 		switch (state.mode) {
+		case INLINE:
+			if (comString.contains(" ")) {
+				handleInlineCommand(comString.split(" "), state, comBlock);
+				break;
+			}
 		case CHORD:
-			chordCommand(comBlock, state, comString);
+			if (comString.length() > 1) {
+				chordCommand(comBlock, state, comString);
+				break;
+			}
 		case NORMAL:
 			handleCommand(comString.charAt(0), state);
-			break;
-		case INLINE:
 			break;
 		case CHARINLINE:
 			break;
@@ -78,10 +97,34 @@ public class FDS {
 		}
 	}
 
-	private static <S> void chordCommand(Block comBlock, FDSState<S> state, String comString) {
+	private static <S> void handleInlineCommand(String[] commands, FDSState<S> state, Block comBlock)
+			throws FDSException {
+		boolean dataInput = false;
+
+		for (int i = 0; i < commands.length; i++) {
+			String strang = commands[i].trim();
+
+			if (dataInput) {
+				if (strang.equals(";")) {
+					dataInput = false;
+				} else {
+					Block dataBlock = new Block(comBlock.blockNo + i, strang, comBlock.startLine,
+							comBlock.endLine);
+
+					state.datain.addBlock(dataBlock);
+				}
+			} else {
+				chordCommand(comBlock, state, strang);
+
+				dataInput = true;
+			}
+		}
+	}
+
+	private static <S> void chordCommand(Block comBlock, FDSState<S> state, String comString) throws FDSException {
 		PushbackBlockReader source = state.comin;
 
-		for (int i = 1; i < comString.length(); i++) {
+		for (int i = 0; i < comString.length(); i++) {
 			char c = comString.charAt(i);
 
 			Block newCom = new Block(comBlock.blockNo + 1, Character.toString(c), comBlock.startLine,
@@ -107,17 +150,11 @@ public class FDS {
 			} else if (state.mode == InputMode.NORMAL) {
 				state.mode = InputMode.CHORD;
 			} else {
-				printer.println("? CNV\n");
+				printer.println("? MNV\n");
 			}
-			break;
-		case 'X':
-			loadScript(state);
 			break;
 		case 'q':
 			state.modes.drop();
-			break;
-		case 'Q':
-			state.modes.drop(state.modes.size());
 			break;
 		case 'm':
 			helpSummary(printer, state);
