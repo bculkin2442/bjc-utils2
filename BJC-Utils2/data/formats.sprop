@@ -1,0 +1,11 @@
+# File storage for format strings
+
+####################################################
+# Format strings for handling double-quoted strings.
+####################################################
+
+## Format the three types of string escapes into a valid pattern.
+stringEscape \\(%1$s|%2$s|%3$s)
+
+## Format the parts of a regex into one that matches java-style double-quoted strings
+doubleQuotes ("(%1$s|%2$s)*")

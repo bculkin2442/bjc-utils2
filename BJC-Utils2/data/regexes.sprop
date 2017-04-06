@@ -1,0 +1,19 @@
+# File storage for static regular expressions.
+
+########################################################
+# Regular expressions for handling double-quoted strings
+########################################################
+
+## Match a possible single character escape
+possibleStringEscape \\.
+
+## Match valid string escapes
+shortFormStringEscape [btnfr"'\\]
+octalStringEscape [0-3]?[0-7]{1,2}
+unicodeStringEscape u[0-9a-fA-F]{4}
+
+## Match an unescaped quote in a string.
+unescapedQuote (?<!\\)\"
+
+## Match characters that aren't escapes.
+nonStringEscape [^\\\"]+
