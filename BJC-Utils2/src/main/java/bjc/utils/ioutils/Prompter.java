@@ -1,5 +1,7 @@
 package bjc.utils.ioutils;
 
+import bjc.utils.ioutils.blocks.TriggeredBlockReader;
+
 import java.io.PrintStream;
 
 /**

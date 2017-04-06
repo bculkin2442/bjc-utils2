@@ -1,4 +1,4 @@
-package bjc.utils.ioutils;
+package bjc.utils.ioutils.blocks;
 
 import java.io.IOException;
 import java.util.Deque;

@@ -1,4 +1,4 @@
-package bjc.utils.ioutils;
+package bjc.utils.ioutils.blocks;
 
 /**
  * Represents a block of text read in from a source.
