@@ -5,7 +5,14 @@
 ####################################################
 
 ## Format the three types of string escapes into a valid pattern.
+##	The three types are:
+##	1) Short escapes.
+##	2) Octal escapes.
+##	3) Unicode escapes.
 stringEscape \\(%1$s|%2$s|%3$s)
 
-## Format the parts of a regex into one that matches java-style double-quoted strings
+## Format the parts of a regex into one that matches java-style double-quoted strings.
+##	The parts are:
+##	1) Anything that's not a possible escape sequence or quote.
+##	2) A possible escape sequence.
 doubleQuotes ("(%1$s|%2$s)*")

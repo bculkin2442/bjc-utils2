@@ -16,39 +16,23 @@ import static bjc.utils.PropertyDB.applyFormat;
  *
  */
 public class TokenUtils {
-	/*
-	 * This regex matches potential single character escape sequences.
-	 */
-	private static Pattern possibleEscape = getCompiledRegex("possibleStringEscape");
+	private static String possibleEscapeString = getRegex("possibleStringEscape");
+
+	private static Pattern possibleEscapePatt = Pattern.compile(possibleEscapeString);
 
 	private static String	shortEscape	= getRegex("shortFormStringEscape");
 	private static String	octalEscape	= getRegex("octalStringEscape");
 	private static String	unicodeEscape	= getRegex("unicodeStringEscape");
 
-	/*
-	 * This regex matches java-style string escapes
-	 */
 	private static String escapeString = applyFormat("stringEscape", shortEscape, octalEscape, unicodeEscape);
 
 	private static Pattern escapePatt = Pattern.compile(escapeString);
 
-	/*
-	 * The regular expression does the following, making sure to capture the
-	 * string contents.
-	 * 
-	 * Match one or more characters that aren't quotes or slashes.
-	 * 
-	 * Match escape sequences.
-	 * 
-	 * Match all of those things zero or more times, followed by a closing
-	 * quote
-	 */
-	private static Pattern doubleQuotePatt = Pattern
-			.compile("(\"(" + getRegex("nonEscape") + "|" + escapeString + ")*\")");
+	private static String doubleQuoteString = applyFormat("doubleQuotes", getRegex("nonEscape"),
+			possibleEscapeString);
 
-	/*
-	 * This regular expression matches non-escaped quotes.
-	 */
+	private static Pattern doubleQuotePatt = Pattern.compile(doubleQuoteString);
+
 	private static Pattern quotePatt = getCompiledRegex("unescapedQuote");
 
 	/**
@@ -95,8 +79,8 @@ public class TokenUtils {
 			mt.appendReplacement(work, "");
 
 			/*
-			 * Add the string preceeeding the double-quoted string
-			 * and the double-quoted string to the list.
+			 * Add the string preceding the double-quoted string and
+			 * the double-quoted string to the list.
 			 */
 			res.add(work.toString());
 			res.add(mt.group(1));
@@ -149,7 +133,7 @@ public class TokenUtils {
 
 		StringBuffer work = new StringBuffer();
 
-		Matcher possibleEscapeFinder = possibleEscape.matcher(inp);
+		Matcher possibleEscapeFinder = possibleEscapePatt.matcher(inp);
 		Matcher escapeFinder = escapePatt.matcher(inp);
 
 		while(possibleEscapeFinder.find()) {
@@ -254,7 +238,7 @@ public class TokenUtils {
 		return DoubleMatcher.floatingLiteral.matcher(inp).matches();
 	}
 
-	private static Pattern intLitPattern = Pattern.compile("\\A[+\\-]?\\d+\\Z");
+	private static Pattern intLitPattern = getCompiledRegex("intLiteral");
 
 	/**
 	 * Check if a given string would be successfully converted to a integer

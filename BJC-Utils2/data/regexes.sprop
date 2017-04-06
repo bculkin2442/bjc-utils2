@@ -15,5 +15,10 @@ unicodeStringEscape u[0-9a-fA-F]{4}
 ## Match an unescaped quote in a string.
 unescapedQuote (?<!\\)\"
 
-## Match characters that aren't escapes.
+## Match one or more characters that aren't part of an escape or a quote.
 nonStringEscape [^\\\"]+
+
+##################################
+# Miscellaneous validation regexes
+##################################
+intLiteral \A[+\-]\d+\Z
