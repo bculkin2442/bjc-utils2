@@ -2,6 +2,7 @@ package bjc.utils.funcutils;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Supplier;
 
 /**
@@ -14,6 +15,13 @@ import java.util.function.Supplier;
 public class LambdaLock {
 	private Lock	readLock;
 	private Lock	writeLock;
+
+	/**
+	 * Create a new lambda-enabled lock around a new lock.
+	 */
+	public LambdaLock() {
+		this(new ReentrantReadWriteLock());
+	}
 
 	/**
 	 * Create a new lambda-enabled lock.
