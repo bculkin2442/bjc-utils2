@@ -17,6 +17,7 @@
 				<directory>data/</directory>
 				<includes>
 					<include>**/*.txt</include>
+					<include>**/*.sprop</include>
 				</includes>
 			</resource>
 		</resources>
