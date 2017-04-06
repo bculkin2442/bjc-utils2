@@ -16,3 +16,95 @@ stringEscape \\(%1$s|%2$s|%3$s)
 ##	1) Anything that's not a possible escape sequence or quote.
 ##	2) A possible escape sequence.
 doubleQuotes ("(%1$s|%2$s)*")
+
+#####################################
+# Format strings for handling doubles
+#####################################
+
+## Format a floating point exponent regex.
+##	The parts are:
+##	1) Exponent indicator,
+##	2) One or more digits.
+fpExponent %1$s%2$s
+
+## Format a decimal number with an integer part.
+##	The parts are:
+##	1) A series of decimal digits
+##	2) An exponent.
+##
+##	The number format is:
+##	1) An integer part
+##	2) An optional dot
+##	3) An optional decimal part
+##	4) An optional exponent
+fpDecimalInteger (?:%1$s(?:\.?)(?:%1$s?)(?:%2$s)?)
+
+## Format a decimal number with no integer part.
+##	The parts are:
+##	1) A series of decimal digits
+##	2) An exponent.
+##
+##	The number format is:
+##	1) A dot
+##	2) A decimal part
+##	3) An optional exponent
+fpDecimalDecimal (?:\.(?:%1$s)(?:%2$s)?)
+
+## Format a hexadecimal number with no decimal part.
+##	The parts are:
+##	1) A series of hex digits
+##
+##	The number format is:
+##	1) A hex leader.
+##	2) A series of hex digits.
+##	3) An optional dot.
+fpHexInteger (?:0[xX]%1$s(?:\.)?)
+
+## Format a hexadecimal number with a decimal part
+##	The parts are:
+##	1) A series of hex digits.
+##
+##	The number format is:
+##	1) A hex leader.
+##	2) A optional series of hex digits.
+##	3) A dot.
+##	4) A series of hex digits.
+fpHexDecimal (?:0[xX]%1$s?(?:\.)%1$s)
+
+## Format a hexadecimal leader before a prefix.
+##	The parts are:
+##	1) A hex number with no decimal part
+##	2) A hex number with a decimal part
+fpHexLeader (?:%1$s|%2$s)
+
+## Format a hexadecimal floating point number.
+##	The parts are:
+##	1) A hexadecimal leader.
+##	2) A series of decimal digits.
+##
+##	The number format is:
+##	1) A hexadecimal leader.
+##	2) A exponent indicator.
+##	3) An optional sign.
+##	4) A series of decimal digits.
+fpHexString (?:%1$s[pP][+-]?%2$s)
+
+## Format the number part of a double.
+##	The parts are:
+##	1) A decimal double with an integer part.
+##	2) A decimal double without an integer part.
+##	3) A hexadecimal double.
+fpNumber (?:%1$s|%2$s|%3$s)
+
+## Format a floating point leader.
+##
+## NOTE: The other parts are completed by where we're inserted.
+
+## Format a double
+##	The parts are:
+##	1) A leader
+##	2) A number
+##
+## NOTE: The parens are not mismatched.
+##	 The other one is contributed by the leader.
+fpDouble %1$1(?:%2$s[fFdD]?))[\x00-\x20]*

@@ -18,7 +18,23 @@ unescapedQuote (?<!\\)\"
 ## Match one or more characters that aren't part of an escape or a quote.
 nonStringEscape [^\\\"]+
 
-##################################
-# Miscellaneous validation regexes
-##################################
+########################################
+# Double validation regular expressions.
+########################################
+
+## Unit pieces for doubles
+fpDigits (?:\p{Digit}+)
+fpHexDigits (?:\p{XDigit}+)
+
+## An exponent is e or E followed by a (optionally signed) decimal integer.
+fpExponent [eE][+-]?
+
+## A double leader
+##
+## NOTE: The incomplete parts are finished by where it is inserted.
+fpLeader [\x00-\x20]*[+-]?(?:NaN|Infinity|
+
+##############################################
+# Miscellaneous validation regular expressions
+##############################################
 intLiteral \A[+\-]\d+\Z
