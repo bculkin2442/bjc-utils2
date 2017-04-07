@@ -109,9 +109,9 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 	}
 
 	@Override
-	default <OldLeft, OldRight, NewLeft> Function<Bifunctor<OldLeft, OldRight>, Bifunctor<NewLeft, OldRight>> fmapLeft(
+	default <OldLeft, OldRight, NewLeft> LeftBifunctorMap<OldLeft, OldRight, NewLeft> fmapLeft(
 			Function<OldLeft, NewLeft> func) {
-		return (argumentPair) -> {
+		return argumentPair -> {
 			if(!(argumentPair instanceof IPair<?, ?>)) {
 				String msg = "This function can only be applied to instances of IPair";
 
@@ -125,10 +125,10 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 	}
 
 	@Override
-	default <OldLeft, OldRight, NewRight> Function<Bifunctor<OldLeft, OldRight>, Bifunctor<OldLeft, NewRight>>
+	default <OldLeft, OldRight, NewRight> RightBifunctorMap<OldLeft, OldRight, NewRight>
 
 			fmapRight(Function<OldRight, NewRight> func) {
-		return (argumentPair) -> {
+		return argumentPair -> {
 			if(!(argumentPair instanceof IPair<?, ?>)) {
 				String msg = "This function can only be applied to instances of IPair";
 

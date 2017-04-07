@@ -93,7 +93,7 @@ public class SingleTape<T> implements Tape<T> {
 	 */
 	@Override
 	public void insertAfter(T itm) {
-		if(pos == backing.size() - 1) {
+		if (pos == backing.size() - 1) {
 			backing.add(itm);
 		} else {
 			backing.add(pos + 1, itm);
@@ -111,7 +111,7 @@ public class SingleTape<T> implements Tape<T> {
 	@Override
 	public T remove() {
 		T res = backing.remove(pos);
-		if(pos != 0) {
+		if (pos != 0) {
 			pos -= 1;
 		}
 		return res;
@@ -158,7 +158,8 @@ public class SingleTape<T> implements Tape<T> {
 	 */
 	@Override
 	public boolean left(int amt) {
-		if(pos - amt < 0) return false;
+		if (pos - amt < 0)
+			return false;
 
 		pos -= amt;
 		return true;
@@ -188,9 +189,9 @@ public class SingleTape<T> implements Tape<T> {
 	 */
 	@Override
 	public boolean right(int amt) {
-		if(pos + amt >= backing.size() - 1) {
-			if(autoExtend) {
-				while(pos + amt >= backing.size() - 1) {
+		if (pos + amt >= backing.size() - 1) {
+			if (autoExtend) {
+				while (pos + amt >= backing.size() - 1) {
 					backing.add(null);
 				}
 			} else
@@ -218,31 +219,26 @@ public class SingleTape<T> implements Tape<T> {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj) return true;
-		if(obj == null) return false;
-		if(getClass() != obj.getClass()) return false;
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof SingleTape<?>))
+			return false;
 
 		SingleTape<?> other = (SingleTape<?>) obj;
 
-		if(backing == null) {
-			if(other.backing != null) return false;
-		} else if(!backing.equals(other.backing)) return false;
+		if (backing == null) {
+			if (other.backing != null)
+				return false;
+		} else if (!backing.equals(other.backing))
+			return false;
 
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-
-		builder.append("SingleTape [backing=");
-		builder.append(backing);
-		builder.append(", pos=");
-		builder.append(pos);
-		builder.append(", autoExtend=");
-		builder.append(autoExtend);
-		builder.append("]");
-
-		return builder.toString();
+		return String.format("SingleTape [backing=%s, pos=%s, autoExtend=%s]", backing, pos, autoExtend);
 	}
 }

@@ -37,7 +37,7 @@ public interface IHolder<ContainedType> extends Functor<ContainedType> {
 	 *                The action to apply to the value
 	 */
 	public default void doWith(Consumer<? super ContainedType> action) {
-		transform((value) -> {
+		transform(value -> {
 			action.accept(value);
 
 			return value;
@@ -47,9 +47,12 @@ public interface IHolder<ContainedType> extends Functor<ContainedType> {
 	@Override
 	default <ArgType, ReturnType> Function<Functor<ArgType>, Functor<ReturnType>> fmap(
 			Function<ArgType, ReturnType> func) {
-		return (argumentFunctor) -> {
-			if(!(argumentFunctor instanceof IHolder<?>)) throw new IllegalArgumentException(
-					"This functor only supports mapping over instances of IHolder");
+		return argumentFunctor -> {
+			if (!(argumentFunctor instanceof IHolder<?>)) {
+				String msg = "This functor only supports mapping over instances of IHolder";
+
+				throw new IllegalArgumentException(msg);
+			}
 
 			IHolder<ArgType> holder = (IHolder<ArgType>) argumentFunctor;
 
@@ -59,7 +62,7 @@ public interface IHolder<ContainedType> extends Functor<ContainedType> {
 
 	@Override
 	public default ContainedType getValue() {
-		return unwrap((value) -> value);
+		return unwrap(value -> value);
 	}
 
 	/**
@@ -122,7 +125,7 @@ public interface IHolder<ContainedType> extends Functor<ContainedType> {
 	 * @return The holder itself
 	 */
 	public default IHolder<ContainedType> replace(ContainedType newValue) {
-		return transform((oldValue) -> {
+		return transform(oldValue -> {
 			return newValue;
 		});
 	}

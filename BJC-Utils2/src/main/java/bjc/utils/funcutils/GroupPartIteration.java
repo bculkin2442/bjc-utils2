@@ -40,7 +40,7 @@ final class GroupPartIteration<E> implements Consumer<E> {
 	public void accept(E value) {
 		boolean shouldStartPartition = numberInCurrentPartition >= numberPerPartition;
 
-		if(shouldStartPartition) {
+		if (shouldStartPartition) {
 			returnedList.add(currentPartition);
 
 			currentPartition = new FunctionalList<>();
@@ -50,7 +50,7 @@ final class GroupPartIteration<E> implements Consumer<E> {
 
 			boolean shouldReject = numberInCurrentPartition + currentElementCount >= numberPerPartition;
 
-			if(shouldReject) {
+			if (shouldReject) {
 				rejectedItems.add(value);
 			} else {
 				currentPartition.add(value);

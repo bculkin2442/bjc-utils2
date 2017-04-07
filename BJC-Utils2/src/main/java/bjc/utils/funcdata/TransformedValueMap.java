@@ -54,7 +54,7 @@ final class TransformedValueMap<OldKey, OldValue, NewValue> implements IMap<OldK
 
 	@Override
 	public void forEachValue(Consumer<NewValue> action) {
-		backing.forEachValue((value) -> {
+		backing.forEachValue(value -> {
 			action.accept(transformer.apply(value));
 		});
 	}

@@ -60,7 +60,8 @@ public interface Directory<K, V> {
 	 *         exists.
 	 */
 	default Directory<K, V> newSubdirectory(K key) {
-		if(hasSubdirectory(key)) return null;
+		if (hasSubdirectory(key))
+			return null;
 
 		Directory<K, V> dir = new SimpleDirectory<>();
 

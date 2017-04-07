@@ -37,7 +37,7 @@ public class TapeChanger<T> implements Tape<T> {
 
 		tapes.insertBefore(current);
 
-		for(Tape<T> tp : others) {
+		for (Tape<T> tp : others) {
 			tapes.insertAfter(tp);
 			tapes.right();
 		}
@@ -53,7 +53,8 @@ public class TapeChanger<T> implements Tape<T> {
 	 */
 	@Override
 	public T item() {
-		if(currentTape == null) return null;
+		if (currentTape == null)
+			return null;
 
 		return currentTape.item();
 	}
@@ -66,7 +67,8 @@ public class TapeChanger<T> implements Tape<T> {
 	 */
 	@Override
 	public void item(T itm) {
-		if(currentTape == null) return;
+		if (currentTape == null)
+			return;
 
 		currentTape.item(itm);
 	}
@@ -78,7 +80,8 @@ public class TapeChanger<T> implements Tape<T> {
 	 */
 	@Override
 	public int size() {
-		if(currentTape == null) return 0;
+		if (currentTape == null)
+			return 0;
 
 		return currentTape.size();
 	}
@@ -91,7 +94,8 @@ public class TapeChanger<T> implements Tape<T> {
 	 */
 	@Override
 	public void insertBefore(T itm) {
-		if(currentTape == null) return;
+		if (currentTape == null)
+			return;
 
 		currentTape.insertBefore(itm);
 	}
@@ -101,7 +105,8 @@ public class TapeChanger<T> implements Tape<T> {
 	 */
 	@Override
 	public void insertAfter(T itm) {
-		if(currentTape == null) return;
+		if (currentTape == null)
+			return;
 
 		currentTape.insertAfter(itm);
 	}
@@ -116,7 +121,8 @@ public class TapeChanger<T> implements Tape<T> {
 	 */
 	@Override
 	public T remove() {
-		if(currentTape == null) return null;
+		if (currentTape == null)
+			return null;
 
 		return currentTape.remove();
 	}
@@ -126,7 +132,8 @@ public class TapeChanger<T> implements Tape<T> {
 	 */
 	@Override
 	public void first() {
-		if(currentTape == null) return;
+		if (currentTape == null)
+			return;
 
 		currentTape.first();
 	}
@@ -136,7 +143,8 @@ public class TapeChanger<T> implements Tape<T> {
 	 */
 	@Override
 	public void last() {
-		if(currentTape == null) return;
+		if (currentTape == null)
+			return;
 
 		currentTape.last();
 	}
@@ -166,7 +174,8 @@ public class TapeChanger<T> implements Tape<T> {
 	 */
 	@Override
 	public boolean left(int amt) {
-		if(currentTape == null) return false;
+		if (currentTape == null)
+			return false;
 
 		return currentTape.left(amt);
 	}
@@ -195,7 +204,8 @@ public class TapeChanger<T> implements Tape<T> {
 	 */
 	@Override
 	public boolean right(int amt) {
-		if(currentTape == null) return false;
+		if (currentTape == null)
+			return false;
 
 		return currentTape.right(amt);
 	}
@@ -209,16 +219,18 @@ public class TapeChanger<T> implements Tape<T> {
 	 * If the current tape is not double-sided, does nothing.
 	 */
 	public void flip() {
-		if(currentTape == null) return;
+		if (currentTape == null)
+			return;
 
-		if(currentTape.isDoubleSided()) {
+		if (currentTape.isDoubleSided()) {
 			((DoubleTape<T>) currentTape).flip();
 		}
 	}
 
 	@Override
 	public boolean isDoubleSided() {
-		if(currentTape == null) return false;
+		if (currentTape == null)
+			return false;
 
 		return currentTape.isDoubleSided();
 	}
@@ -243,7 +255,7 @@ public class TapeChanger<T> implements Tape<T> {
 	public boolean nextTape() {
 		boolean succ = tapes.right();
 
-		if(succ) {
+		if (succ) {
 			currentTape = tapes.item();
 		}
 
@@ -261,7 +273,7 @@ public class TapeChanger<T> implements Tape<T> {
 	public boolean prevTape() {
 		boolean succ = tapes.left();
 
-		if(succ) {
+		if (succ) {
 			currentTape = tapes.item();
 		}
 
@@ -295,7 +307,8 @@ public class TapeChanger<T> implements Tape<T> {
 	 * @return The removed tape.
 	 */
 	public Tape<T> removeTape() {
-		if(currentTape == null) return null;
+		if (currentTape == null)
+			return null;
 
 		Tape<T> tp = tapes.remove();
 		currentTape = tapes.item();
@@ -322,19 +335,6 @@ public class TapeChanger<T> implements Tape<T> {
 	}
 
 	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		
-		builder.append("TapeChanger [tapes=");
-		builder.append(tapes);
-		builder.append(", currentTape=");
-		builder.append(currentTape);
-		builder.append("]");
-	
-		return builder.toString();
-	}
-
-	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -345,20 +345,32 @@ public class TapeChanger<T> implements Tape<T> {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj) return true;
-		if(obj == null) return false;
-		if(getClass() != obj.getClass()) return false;
-		
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof TapeChanger<?>))
+			return false;
+
 		TapeChanger<?> other = (TapeChanger<?>) obj;
-		
-		if(currentTape == null) {
-			if(other.currentTape != null) return false;
-		} else if(!currentTape.equals(other.currentTape)) return false;
-		
-		if(tapes == null) {
-			if(other.tapes != null) return false;
-		} else if(!tapes.equals(other.tapes)) return false;
-	
+
+		if (currentTape == null) {
+			if (other.currentTape != null)
+				return false;
+		} else if (!currentTape.equals(other.currentTape))
+			return false;
+
+		if (tapes == null) {
+			if (other.tapes != null)
+				return false;
+		} else if (!tapes.equals(other.tapes))
+			return false;
+
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("TapeChanger [tapes=%s, currentTape='%s']", tapes, currentTape);
 	}
 }

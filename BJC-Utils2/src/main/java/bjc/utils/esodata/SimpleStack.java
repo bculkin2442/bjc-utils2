@@ -28,14 +28,16 @@ public class SimpleStack<T> extends Stack<T> {
 
 	@Override
 	public T pop() {
-		if(backing.isEmpty()) throw new StackUnderflowException();
+		if (backing.isEmpty())
+			throw new StackUnderflowException();
 
 		return backing.pop();
 	}
 
 	@Override
 	public T top() {
-		if(backing.isEmpty()) throw new StackUnderflowException();
+		if (backing.isEmpty())
+			throw new StackUnderflowException();
 
 		return backing.peek();
 	}
@@ -67,27 +69,26 @@ public class SimpleStack<T> extends Stack<T> {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj) return true;
-		if(obj == null) return false;
-		if(getClass() != obj.getClass()) return false;
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof SimpleStack<?>))
+			return false;
 
 		SimpleStack<?> other = (SimpleStack<?>) obj;
 
-		if(backing == null) {
-			if(other.backing != null) return false;
-		} else if(!backing.equals(other.backing)) return false;
+		if (backing == null) {
+			if (other.backing != null)
+				return false;
+		} else if (!backing.equals(other.backing))
+			return false;
 
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-
-		builder.append("SimpleStack [backing=");
-		builder.append(backing);
-		builder.append("]");
-
-		return builder.toString();
+		return String.format("SimpleStack [backing=%s]", backing);
 	}
 }

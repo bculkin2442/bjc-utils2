@@ -71,33 +71,32 @@ public class SimpleDirectory<K, V> implements Directory<K, V> {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj) return true;
-		if(obj == null) return false;
-		if(getClass() != obj.getClass()) return false;
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof SimpleDirectory<?, ?>))
+			return false;
 
 		SimpleDirectory<?, ?> other = (SimpleDirectory<?, ?>) obj;
 
-		if(children == null) {
-			if(other.children != null) return false;
-		} else if(!children.equals(other.children)) return false;
+		if (children == null) {
+			if (other.children != null)
+				return false;
+		} else if (!children.equals(other.children))
+			return false;
 
-		if(data == null) {
-			if(other.data != null) return false;
-		} else if(!data.equals(other.data)) return false;
+		if (data == null) {
+			if (other.data != null)
+				return false;
+		} else if (!data.equals(other.data))
+			return false;
 
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-
-		builder.append("SimpleDirectory [children=");
-		builder.append(children);
-		builder.append(", data=");
-		builder.append(data);
-		builder.append("]");
-
-		return builder.toString();
+		return String.format("SimpleDirectory [children=%s, data=%s]", children, data);
 	}
 }

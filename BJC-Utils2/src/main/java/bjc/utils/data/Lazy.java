@@ -62,7 +62,8 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 		actions.forEach(pendingActions::add);
 
 		Supplier<ContainedType> supplier = () -> {
-			if (valueMaterialized) return heldValue;
+			if (valueMaterialized)
+				return heldValue;
 
 			return valueSupplier.get();
 		};
@@ -74,7 +75,7 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 
 	@Override
 	public <NewType> Function<ContainedType, IHolder<NewType>> lift(Function<ContainedType, NewType> func) {
-		return (val) -> {
+		return val -> {
 			return new Lazy<>(func.apply(val));
 		};
 	}
@@ -93,16 +94,17 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 			}
 
 			return pendingActions.reduceAux(currVal, UnaryOperator<ContainedType>::apply,
-					(value) -> mapper.apply(value));
+					value -> mapper.apply(value));
 		});
 	}
 
 	@Override
 	public String toString() {
 		if (valueMaterialized) {
-			if (actions.isEmpty()) return "value[v='" + heldValue + "']";
-
-			return "value[v='" + heldValue + "'] (has pending transforms)";
+			if (actions.isEmpty())
+				return String.format("value[v='%s']", heldValue);
+			else
+				return String.format("value[v='%s'] (has pending transforms)", heldValue);
 		}
 
 		return "(unmaterialized)";
@@ -123,7 +125,7 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 			valueMaterialized = true;
 		}
 
-		actions.forEach((action) -> {
+		actions.forEach(action -> {
 			heldValue = action.apply(heldValue);
 		});
 
@@ -146,25 +148,33 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (getClass() != obj.getClass()) return false;
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof Lazy<?>))
+			return false;
 
 		Lazy<?> other = (Lazy<?>) obj;
 
-		if (valueMaterialized != other.valueMaterialized) return false;
+		if (valueMaterialized != other.valueMaterialized)
+			return false;
 
 		if (valueMaterialized) {
 			if (heldValue == null) {
-				if (other.heldValue != null) return false;
-			} else if (!heldValue.equals(other.heldValue)) return false;
+				if (other.heldValue != null)
+					return false;
+			} else if (!heldValue.equals(other.heldValue))
+				return false;
 		} else {
 			return false;
 		}
 
 		if (actions == null) {
-			if (other.actions != null) return false;
-		} else if (actions.getSize() > 0 || other.actions.getSize() > 0) return false;
+			if (other.actions != null)
+				return false;
+		} else if (actions.getSize() > 0 || other.actions.getSize() > 0)
+			return false;
 
 		return true;
 	}

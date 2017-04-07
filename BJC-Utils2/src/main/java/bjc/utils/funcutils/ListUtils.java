@@ -29,7 +29,8 @@ public class ListUtils {
 	 * @return The collapsed string of tokens
 	 */
 	public static String collapseTokens(IList<String> input) {
-		if(input == null) throw new NullPointerException("Input must not be null");
+		if (input == null)
+			throw new NullPointerException("Input must not be null");
 
 		return collapseTokens(input, "");
 	}
@@ -45,22 +46,23 @@ public class ListUtils {
 	 * @return The collapsed string of tokens
 	 */
 	public static String collapseTokens(IList<String> input, String seperator) {
-		if(input == null)
+		if (input == null)
 			throw new NullPointerException("Input must not be null");
-		else if(seperator == null) throw new NullPointerException("Seperator must not be null");
+		else if (seperator == null)
+			throw new NullPointerException("Seperator must not be null");
 
-		if(input.getSize() < 1)
+		if (input.getSize() < 1)
 			return "";
-		else if(input.getSize() == 1)
+		else if (input.getSize() == 1)
 			return input.first();
 		else {
 			StringBuilder state = new StringBuilder();
 
 			int i = 1;
-			for(String itm : input.toIterable()) {
+			for (String itm : input.toIterable()) {
 				state.append(itm);
 
-				if(i != input.getSize()) {
+				if (i != input.getSize()) {
 					state.append(seperator);
 				}
 
@@ -111,15 +113,15 @@ public class ListUtils {
 		Iterator<E> itr = list.toIterable().iterator();
 		E element = null;
 
-		for(int index = 0; itr.hasNext(); element = itr.next()) {
-			int winningChance = number - selected.getSize();
+		for (int index = 0; itr.hasNext(); element = itr.next()) {
 			// n - m
+			int winningChance = number - selected.getSize();
 
-			int totalChance = total - (index - 1);
 			// N - t
+			int totalChance = total - (index - 1);
 
 			// Probability of selecting the t+1'th element
-			if(NumberUtils.isProbable(winningChance, totalChance, rng)) {
+			if (NumberUtils.isProbable(winningChance, totalChance, rng)) {
 				selected.add(element);
 			}
 		}
@@ -145,7 +147,7 @@ public class ListUtils {
 	public static <E> IList<E> drawWithReplacement(IList<E> list, int number, Function<Integer, Integer> rng) {
 		IList<E> selected = new FunctionalList<>(new ArrayList<>(number));
 
-		for(int i = 0; i < number; i++) {
+		for (int i = 0; i < number; i++) {
 			selected.add(list.randItem(rng));
 		}
 
@@ -171,13 +173,16 @@ public class ListUtils {
 	 */
 	public static <E> IList<IList<E>> groupPartition(IList<E> input, Function<E, Integer> counter,
 			int partitionSize) {
-		if(input == null)
+		if (input == null)
 			throw new NullPointerException("Input list must not be null");
-		else if(counter == null)
+		else if (counter == null)
 			throw new NullPointerException("Counter must not be null");
-		else if(partitionSize < 1 || partitionSize > input.getSize())
-			throw new IllegalArgumentException("" + partitionSize + " is not a valid"
-					+ " partition size. Must be between 1 and " + input.getSize());
+		else if (partitionSize < 1 || partitionSize > input.getSize()) {
+			String fmt = "%d is not a valid partition size. Must be between 1 and %d";
+			String msg = String.format(fmt, partitionSize, input.getSize());
+
+			throw new IllegalArgumentException(msg);
+		}
 
 		/*
 		 * List that holds our results
@@ -194,11 +199,12 @@ public class ListUtils {
 		/*
 		 * Run up to a certain number of passes
 		 */
-		for(int numberOfIterations = 0; numberOfIterations < MAX_NTRIESPART
+		for (int numberOfIterations = 0; numberOfIterations < MAX_NTRIESPART
 				&& !rejected.isEmpty(); numberOfIterations++) {
 			input.forEach(it);
 
-			if(rejected.isEmpty()) // Nothing was rejected, so we're
+			if (rejected.isEmpty()) // Nothing was rejected, so
+						// we're
 						// done
 				return returned;
 		}
@@ -223,8 +229,8 @@ public class ListUtils {
 	public static <E> IList<E> mergeLists(IList<E>... lists) {
 		IList<E> returned = new FunctionalList<>();
 
-		for(IList<E> list : lists) {
-			for(E itm : list.toIterable()) {
+		for (IList<E> list : lists) {
+			for (E itm : list.toIterable()) {
 				returned.add(itm);
 			}
 		}
@@ -254,22 +260,22 @@ public class ListUtils {
 
 		IList<E> returned = new FunctionalList<>();
 
-		for(E itm : list.toIterable()) {
+		for (E itm : list.toIterable()) {
 			count += counter.apply(itm);
 
 			returned.add(itm);
 		}
 
-		if(count % size != 0) {
+		if (count % size != 0) {
 			// We need to pad
 			int needed = count % size;
 			int threshold = 0;
 
-			while(needed > 0 && threshold <= MAX_NTRIESPART) {
+			while (needed > 0 && threshold <= MAX_NTRIESPART) {
 				E val = padder.get();
 				int newCount = counter.apply(val);
 
-				if(newCount <= needed) {
+				if (newCount <= needed) {
 					returned.add(val);
 
 					threshold = 0;
@@ -280,7 +286,7 @@ public class ListUtils {
 				}
 			}
 
-			if(threshold > MAX_NTRIESPART)
+			if (threshold > MAX_NTRIESPART)
 				throw new IllegalArgumentException("Heuristic (more than " + MAX_NTRIESPART
 						+ " iterations of attempting to pad) detected unpaddable list ");
 		}

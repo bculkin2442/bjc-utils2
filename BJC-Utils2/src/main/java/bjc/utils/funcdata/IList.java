@@ -38,7 +38,7 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 	 *         otherwise
 	 */
 	default boolean addAll(IList<ContainedType> items) {
-		return items.map(this::add).anyMatch((bl) -> bl == false);
+		return items.map(this::add).anyMatch(bl -> bl == false);
 	}
 
 	/**
@@ -77,7 +77,8 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 			Collector<ContainedType, StateType, ReducedType> collector) {
 		BiConsumer<StateType, ContainedType> accumulator = collector.accumulator();
 
-		return reduceAux(collector.supplier().get(), (value, state) -> {
+		StateType initial = collector.supplier().get();
+		return reduceAux(initial, (value, state) -> {
 			accumulator.accept(state, value);
 
 			return state;
@@ -243,7 +244,7 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 	 * @return A random item from the list
 	 */
 	default ContainedType randItem() {
-		return randItem((num) -> (int) (Math.random() * num));
+		return randItem(num -> (int) (Math.random() * num));
 	}
 
 	/**

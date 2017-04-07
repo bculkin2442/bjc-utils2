@@ -19,14 +19,16 @@ final class FunctionalFileVisitor extends SimpleFileVisitor<Path> {
 
 	@Override
 	public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-		if(predicate.test(dir, attrs)) return FileVisitResult.CONTINUE;
+		if (predicate.test(dir, attrs))
+			return FileVisitResult.CONTINUE;
 
 		return FileVisitResult.SKIP_SUBTREE;
 	}
 
 	@Override
 	public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-		if(action.test(file, attrs)) return FileVisitResult.CONTINUE;
+		if (action.test(file, attrs))
+			return FileVisitResult.CONTINUE;
 
 		return FileVisitResult.TERMINATE;
 	}

@@ -34,14 +34,16 @@ class SpaghettiStack<T> extends Stack<T> {
 
 	@Override
 	public T pop() {
-		if(backing.empty()) return parent.pop();
+		if (backing.empty())
+			return parent.pop();
 
 		return backing.pop();
 	}
 
 	@Override
 	public T top() {
-		if(backing.empty()) return parent.top();
+		if (backing.empty())
+			return parent.top();
 
 		return backing.top();
 	}
@@ -54,11 +56,6 @@ class SpaghettiStack<T> extends Stack<T> {
 	@Override
 	public boolean empty() {
 		return backing.empty() && parent.empty();
-	}
-
-	@Override
-	public String toString() {
-		return "[base=" + parent.toString() + ", own=" + backing.toString() + "]";
 	}
 
 	@SuppressWarnings("unchecked")
@@ -80,20 +77,32 @@ class SpaghettiStack<T> extends Stack<T> {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj) return true;
-		if(obj == null) return false;
-		if(getClass() != obj.getClass()) return false;
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof SpaghettiStack<?>))
+			return false;
 
 		SpaghettiStack<?> other = (SpaghettiStack<?>) obj;
 
-		if(backing == null) {
-			if(other.backing != null) return false;
-		} else if(!backing.equals(other.backing)) return false;
+		if (backing == null) {
+			if (other.backing != null)
+				return false;
+		} else if (!backing.equals(other.backing))
+			return false;
 
-		if(parent == null) {
-			if(other.parent != null) return false;
-		} else if(!parent.equals(other.parent)) return false;
+		if (parent == null) {
+			if (other.parent != null)
+				return false;
+		} else if (!parent.equals(other.parent))
+			return false;
 
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("SpaghettiStack [backing=%s, parent=%s]", backing, parent);
 	}
 }

@@ -78,7 +78,7 @@ public interface ITree<ContainedType> {
 	 * @return A tree, with some nodes expanded into trees.
 	 */
 	default ITree<ContainedType> flatMapTree(Function<ContainedType, ITree<ContainedType>> mapper) {
-		return topDownTransform((dat) -> TopDownTransformResult.PUSHDOWN, (node) -> {
+		return topDownTransform(dat -> TopDownTransformResult.PUSHDOWN, node -> {
 			if (node.getChildrenCount() > 0) {
 				ITree<ContainedType> parent = node.transformHead(mapper);
 
@@ -100,7 +100,7 @@ public interface ITree<ContainedType> {
 	 * @return The specified child of this tree.
 	 */
 	default ITree<ContainedType> getChild(int childNo) {
-		return transformChild(childNo, (child) -> child);
+		return transformChild(childNo, child -> child);
 	}
 
 	/**
@@ -116,7 +116,7 @@ public interface ITree<ContainedType> {
 	 * @return The data stored in this node.
 	 */
 	default ContainedType getHead() {
-		return transformHead((head) -> head);
+		return transformHead(head -> head);
 	}
 
 	/**

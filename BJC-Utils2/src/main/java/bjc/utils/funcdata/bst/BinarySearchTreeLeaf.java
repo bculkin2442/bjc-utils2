@@ -41,7 +41,8 @@ public class BinarySearchTreeLeaf<T> implements ITreePart<T> {
 
 	@Override
 	public <E> E collapse(Function<T, E> leafTransformer, BiFunction<E, E, E> branchCollapser) {
-		if(leafTransformer == null) throw new NullPointerException("Transformer must not be null");
+		if (leafTransformer == null)
+			throw new NullPointerException("Transformer must not be null");
 
 		return leafTransformer.apply(data);
 	}
@@ -58,16 +59,17 @@ public class BinarySearchTreeLeaf<T> implements ITreePart<T> {
 
 	@Override
 	public void delete(T element, Comparator<T> comparator) {
-		if(data.equals(element)) {
+		if (data.equals(element)) {
 			isDeleted = true;
 		}
 	}
 
 	@Override
 	public boolean directedWalk(DirectedWalkFunction<T> treeWalker) {
-		if(treeWalker == null) throw new NullPointerException("Tree walker must not be null");
+		if (treeWalker == null)
+			throw new NullPointerException("Tree walker must not be null");
 
-		switch(treeWalker.walk(data)) {
+		switch (treeWalker.walk(data)) {
 		case SUCCESS:
 			return true;
 		// We don't have any children to care about
@@ -81,8 +83,45 @@ public class BinarySearchTreeLeaf<T> implements ITreePart<T> {
 
 	@Override
 	public boolean forEach(TreeLinearizationMethod linearizationMethod, Predicate<T> traversalPredicate) {
-		if(traversalPredicate == null) throw new NullPointerException("Predicate must not be null");
+		if (traversalPredicate == null)
+			throw new NullPointerException("Predicate must not be null");
 
 		return traversalPredicate.test(data);
+	}
+
+	@Override
+	public String toString() {
+		return String.format("BinarySearchTreeLeaf [data='%s', isDeleted=%s]", data, isDeleted);
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((data == null) ? 0 : data.hashCode());
+		result = prime * result + (isDeleted ? 1231 : 1237);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof BinarySearchTreeLeaf<?>))
+			return false;
+
+		BinarySearchTreeLeaf<?> other = (BinarySearchTreeLeaf<?>) obj;
+
+		if (data == null) {
+			if (other.data != null)
+				return false;
+		} else if (!data.equals(other.data))
+			return false;
+		if (isDeleted != other.isDeleted)
+			return false;
+
+		return true;
 	}
 }

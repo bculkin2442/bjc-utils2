@@ -85,7 +85,7 @@ public class PushdownMap<KeyType, ValueType> implements IMap<KeyType, ValueType>
 
 	@Override
 	public ValueType put(KeyType key, ValueType val) {
-		if(backing.containsKey(key)) {
+		if (backing.containsKey(key)) {
 			Stack<ValueType> stk = backing.get(key);
 
 			ValueType vl = stk.top();
@@ -106,7 +106,7 @@ public class PushdownMap<KeyType, ValueType> implements IMap<KeyType, ValueType>
 	public ValueType remove(KeyType key) {
 		Stack<ValueType> stk = backing.get(key);
 
-		if(stk.size() > 1) {
+		if (stk.size() > 1) {
 			return stk.pop();
 		} else {
 			return backing.remove(key).top();
@@ -130,27 +130,26 @@ public class PushdownMap<KeyType, ValueType> implements IMap<KeyType, ValueType>
 
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj) return true;
-		if(obj == null) return false;
-		if(getClass() != obj.getClass()) return false;
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof PushdownMap<?, ?>))
+			return false;
 
 		PushdownMap<?, ?> other = (PushdownMap<?, ?>) obj;
 
-		if(backing == null) {
-			if(other.backing != null) return false;
-		} else if(!backing.equals(other.backing)) return false;
+		if (backing == null) {
+			if (other.backing != null)
+				return false;
+		} else if (!backing.equals(other.backing))
+			return false;
 
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-
-		builder.append("PushdownMap [backing=");
-		builder.append(backing);
-		builder.append("]");
-
-		return builder.toString();
+		return String.format("PushdownMap [backing=%s]", backing);
 	}
 }

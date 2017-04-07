@@ -159,7 +159,7 @@ public class DoubleTape<T> implements Tape<T> {
 	public boolean left(int amt) {
 		boolean succ = front.left(amt);
 
-		if(succ) {
+		if (succ) {
 			back.right(amt);
 		}
 
@@ -192,7 +192,7 @@ public class DoubleTape<T> implements Tape<T> {
 	public boolean right(int amt) {
 		boolean succ = front.right(amt);
 
-		if(succ) {
+		if (succ) {
 			back.left(amt);
 		}
 
@@ -229,33 +229,32 @@ public class DoubleTape<T> implements Tape<T> {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj) return true;
-		if(obj == null) return false;
-		if(getClass() != obj.getClass()) return false;
-		
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof DoubleTape<?>))
+			return false;
+
 		DoubleTape<?> other = (DoubleTape<?>) obj;
-		
-		if(back == null) {
-			if(other.back != null) return false;
-		} else if(!back.equals(other.back)) return false;
-		
-		if(front == null) {
-			if(other.front != null) return false;
-		} else if(!front.equals(other.front)) return false;
-	
+
+		if (back == null) {
+			if (other.back != null)
+				return false;
+		} else if (!back.equals(other.back))
+			return false;
+
+		if (front == null) {
+			if (other.front != null)
+				return false;
+		} else if (!front.equals(other.front))
+			return false;
+
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		
-		builder.append("DoubleTape [front=");
-		builder.append(front);
-		builder.append(", back=");
-		builder.append(back);
-		builder.append("]");
-	
-		return builder.toString();
+		return String.format("DoubleTape [front=%s, back=%s]", front, back);
 	}
 }

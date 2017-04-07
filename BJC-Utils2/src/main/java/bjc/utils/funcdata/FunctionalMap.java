@@ -38,7 +38,7 @@ public class FunctionalMap<KeyType, ValueType> implements IMap<KeyType, ValueTyp
 	public FunctionalMap(IPair<KeyType, ValueType>... entries) {
 		this();
 
-		for(IPair<KeyType, ValueType> entry : entries) {
+		for (IPair<KeyType, ValueType> entry : entries) {
 			entry.doWith((key, val) -> {
 				wrappedMap.put(key, val);
 			});
@@ -52,7 +52,8 @@ public class FunctionalMap<KeyType, ValueType> implements IMap<KeyType, ValueTyp
 	 *                The map to wrap
 	 */
 	public FunctionalMap(Map<KeyType, ValueType> wrap) {
-		if(wrap == null) throw new NullPointerException("Map to wrap must not be null");
+		if (wrap == null)
+			throw new NullPointerException("Map to wrap must not be null");
 
 		wrappedMap = wrap;
 	}
@@ -89,10 +90,14 @@ public class FunctionalMap<KeyType, ValueType> implements IMap<KeyType, ValueTyp
 
 	@Override
 	public ValueType get(KeyType key) {
-		if(key == null) throw new NullPointerException("Key must not be null");
+		if (key == null)
+			throw new NullPointerException("Key must not be null");
 
-		if(!wrappedMap.containsKey(key))
-			throw new IllegalArgumentException("Key " + key + " is not present in the map");
+		if (!wrappedMap.containsKey(key)) {
+			String msg = String.format("Key %s is not present in the map", key);
+
+			throw new IllegalArgumentException(msg);
+		}
 
 		return wrappedMap.get(key);
 	}
@@ -106,7 +111,7 @@ public class FunctionalMap<KeyType, ValueType> implements IMap<KeyType, ValueTyp
 	public IList<KeyType> keyList() {
 		FunctionalList<KeyType> keys = new FunctionalList<>();
 
-		wrappedMap.keySet().forEach((key) -> {
+		wrappedMap.keySet().forEach(key -> {
 			keys.add(key);
 		});
 
@@ -115,14 +120,16 @@ public class FunctionalMap<KeyType, ValueType> implements IMap<KeyType, ValueTyp
 
 	@Override
 	public <MappedValue> IMap<KeyType, MappedValue> transform(Function<ValueType, MappedValue> transformer) {
-		if(transformer == null) throw new NullPointerException("Transformer must not be null");
+		if (transformer == null)
+			throw new NullPointerException("Transformer must not be null");
 
 		return new TransformedValueMap<>(this, transformer);
 	}
 
 	@Override
 	public ValueType put(KeyType key, ValueType val) {
-		if(key == null) throw new NullPointerException("Key must not be null");
+		if (key == null)
+			throw new NullPointerException("Key must not be null");
 
 		return wrappedMap.put(key, val);
 	}
@@ -141,10 +148,37 @@ public class FunctionalMap<KeyType, ValueType> implements IMap<KeyType, ValueTyp
 	public IList<ValueType> valueList() {
 		FunctionalList<ValueType> values = new FunctionalList<>();
 
-		wrappedMap.values().forEach((value) -> {
+		wrappedMap.values().forEach(value -> {
 			values.add(value);
 		});
 
 		return values;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((wrappedMap == null) ? 0 : wrappedMap.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof FunctionalMap))
+			return false;
+
+		FunctionalMap<?, ?> other = (FunctionalMap<?, ?>) obj;
+
+		if (wrappedMap == null) {
+			if (other.wrappedMap != null)
+				return false;
+		} else if (!wrappedMap.equals(other.wrappedMap))
+			return false;
+		return true;
 	}
 }

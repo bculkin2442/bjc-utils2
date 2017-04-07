@@ -41,39 +41,34 @@ public class Identity<ContainedType> implements IHolder<ContainedType> {
 		return binder.apply(heldValue);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+
+		result = prime * result + ((heldValue == null) ? 0 : heldValue.hashCode());
+
+		return result;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		else if (obj == null)
+		if (obj == null)
 			return false;
-		else if (getClass() != obj.getClass()) return false;
+		if (!(obj instanceof Identity))
+			return false;
 
 		Identity<?> other = (Identity<?>) obj;
 
 		if (heldValue == null) {
-			if (other.heldValue != null) return false;
-		} else if (!heldValue.equals(other.heldValue)) return false;
+			if (other.heldValue != null)
+				return false;
+		} else if (!heldValue.equals(other.heldValue))
+			return false;
 
 		return true;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-
-		int result = 1;
-
-		int fieldHash = heldValue == null ? 0 : heldValue.hashCode();
-
-		result = prime * result + fieldHash;
-
-		return result;
 	}
 
 	@Override
@@ -90,7 +85,7 @@ public class Identity<ContainedType> implements IHolder<ContainedType> {
 
 	@Override
 	public String toString() {
-		return "holding[v=" + heldValue + "]";
+		return String.format("Identity [heldValue=%s]", heldValue);
 	}
 
 	@Override

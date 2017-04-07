@@ -28,8 +28,8 @@ public class ListHolder<ContainedType> implements IHolder<ContainedType> {
 	public ListHolder(ContainedType... values) {
 		heldValues = new FunctionalList<>();
 
-		if(values != null) {
-			for(ContainedType containedValue : values) {
+		if (values != null) {
+			for (ContainedType containedValue : values) {
 				heldValues.add(containedValue);
 			}
 		}
@@ -48,7 +48,7 @@ public class ListHolder<ContainedType> implements IHolder<ContainedType> {
 
 	@Override
 	public <NewType> Function<ContainedType, IHolder<NewType>> lift(Function<ContainedType, NewType> func) {
-		return (val) -> {
+		return val -> {
 			return new ListHolder<>(new FunctionalList<>(func.apply(val)));
 		};
 	}
@@ -74,13 +74,7 @@ public class ListHolder<ContainedType> implements IHolder<ContainedType> {
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-
-		builder.append("ListHolder [heldValues=");
-		builder.append(heldValues);
-		builder.append("]");
-
-		return builder.toString();
+		return String.format("ListHolder [heldValues=%s]", heldValues);
 	}
 
 	@Override
@@ -95,15 +89,20 @@ public class ListHolder<ContainedType> implements IHolder<ContainedType> {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj) return true;
-		if(obj == null) return false;
-		if(getClass() != obj.getClass()) return false;
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof ListHolder<?>))
+			return false;
 
 		ListHolder<?> other = (ListHolder<?>) obj;
 
-		if(heldValues == null) {
-			if(other.heldValues != null) return false;
-		} else if(!heldValues.equals(other.heldValues)) return false;
+		if (heldValues == null) {
+			if (other.heldValues != null)
+				return false;
+		} else if (!heldValues.equals(other.heldValues))
+			return false;
 
 		return true;
 	}

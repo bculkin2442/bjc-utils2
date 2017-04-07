@@ -33,7 +33,8 @@ public class TapeLibrary<T> implements Tape<T> {
 	 */
 	@Override
 	public T item() {
-		if(currentTape == null) return null;
+		if (currentTape == null)
+			return null;
 
 		return currentTape.item();
 	}
@@ -46,7 +47,8 @@ public class TapeLibrary<T> implements Tape<T> {
 	 */
 	@Override
 	public void item(T itm) {
-		if(currentTape == null) return;
+		if (currentTape == null)
+			return;
 
 		currentTape.item(itm);
 	}
@@ -58,7 +60,8 @@ public class TapeLibrary<T> implements Tape<T> {
 	 */
 	@Override
 	public int size() {
-		if(currentTape == null) return 0;
+		if (currentTape == null)
+			return 0;
 
 		return currentTape.size();
 	}
@@ -71,7 +74,8 @@ public class TapeLibrary<T> implements Tape<T> {
 	 */
 	@Override
 	public void insertBefore(T itm) {
-		if(currentTape == null) return;
+		if (currentTape == null)
+			return;
 
 		currentTape.insertBefore(itm);
 	}
@@ -81,7 +85,8 @@ public class TapeLibrary<T> implements Tape<T> {
 	 */
 	@Override
 	public void insertAfter(T itm) {
-		if(currentTape == null) return;
+		if (currentTape == null)
+			return;
 
 		currentTape.insertAfter(itm);
 	}
@@ -96,7 +101,8 @@ public class TapeLibrary<T> implements Tape<T> {
 	 */
 	@Override
 	public T remove() {
-		if(currentTape == null) return null;
+		if (currentTape == null)
+			return null;
 
 		return currentTape.remove();
 	}
@@ -106,7 +112,8 @@ public class TapeLibrary<T> implements Tape<T> {
 	 */
 	@Override
 	public void first() {
-		if(currentTape == null) return;
+		if (currentTape == null)
+			return;
 
 		currentTape.first();
 	}
@@ -116,7 +123,8 @@ public class TapeLibrary<T> implements Tape<T> {
 	 */
 	@Override
 	public void last() {
-		if(currentTape == null) return;
+		if (currentTape == null)
+			return;
 
 		currentTape.last();
 	}
@@ -146,7 +154,8 @@ public class TapeLibrary<T> implements Tape<T> {
 	 */
 	@Override
 	public boolean left(int amt) {
-		if(currentTape == null) return false;
+		if (currentTape == null)
+			return false;
 
 		return currentTape.left(amt);
 	}
@@ -175,7 +184,8 @@ public class TapeLibrary<T> implements Tape<T> {
 	 */
 	@Override
 	public boolean right(int amt) {
-		if(currentTape == null) return false;
+		if (currentTape == null)
+			return false;
 
 		return currentTape.right(amt);
 	}
@@ -189,16 +199,18 @@ public class TapeLibrary<T> implements Tape<T> {
 	 * If the current tape is not double-sided, does nothing.
 	 */
 	public void flip() {
-		if(currentTape == null) return;
+		if (currentTape == null)
+			return;
 
-		if(currentTape.isDoubleSided()) {
+		if (currentTape.isDoubleSided()) {
 			((DoubleTape<T>) currentTape).flip();
 		}
 	}
 
 	@Override
 	public boolean isDoubleSided() {
-		if(currentTape == null) return false;
+		if (currentTape == null)
+			return false;
 
 		return currentTape.isDoubleSided();
 	}
@@ -224,7 +236,7 @@ public class TapeLibrary<T> implements Tape<T> {
 	 * @return Whether or not the next tape was loaded.
 	 */
 	public boolean switchTape(String label) {
-		if(tapes.containsKey(label)) {
+		if (tapes.containsKey(label)) {
 			currentTape = tapes.get(label);
 			return true;
 		}
@@ -310,33 +322,32 @@ public class TapeLibrary<T> implements Tape<T> {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj) return true;
-		if(obj == null) return false;
-		if(getClass() != obj.getClass()) return false;
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof TapeLibrary<?>))
+			return false;
 
 		TapeLibrary<?> other = (TapeLibrary<?>) obj;
 
-		if(currentTape == null) {
-			if(other.currentTape != null) return false;
-		} else if(!currentTape.equals(other.currentTape)) return false;
+		if (currentTape == null) {
+			if (other.currentTape != null)
+				return false;
+		} else if (!currentTape.equals(other.currentTape))
+			return false;
 
-		if(tapes == null) {
-			if(other.tapes != null) return false;
-		} else if(!tapes.equals(other.tapes)) return false;
+		if (tapes == null) {
+			if (other.tapes != null)
+				return false;
+		} else if (!tapes.equals(other.tapes))
+			return false;
 
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-
-		builder.append("TapeLibrary [tapes=");
-		builder.append(tapes);
-		builder.append(", currentTape=");
-		builder.append(currentTape);
-		builder.append("]");
-
-		return builder.toString();
+		return String.format("TapeLibrary [tapes=%s, currentTape='%s']", tapes, currentTape);
 	}
 }

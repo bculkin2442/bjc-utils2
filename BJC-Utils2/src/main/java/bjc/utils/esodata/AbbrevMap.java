@@ -62,7 +62,7 @@ public class AbbrevMap {
 
 		seen = new HashSet<>();
 
-		for(String word : wrds) {
+		for (String word : wrds) {
 			/*
 			 * A word always abbreviates to itself.
 			 */
@@ -81,7 +81,7 @@ public class AbbrevMap {
 	public void addWords(String... words) {
 		wrds.addAll(Arrays.asList(words));
 
-		for(String word : words) {
+		for (String word : words) {
 			/*
 			 * A word always abbreviates to itself.
 			 */
@@ -98,25 +98,26 @@ public class AbbrevMap {
 		/*
 		 * Skip blank words.
 		 */
-		if(word.equals("")) return;
+		if (word.equals(""))
+			return;
 
 		/*
 		 * Handle each possible abbreviation.
 		 */
-		for(int i = word.length(); i > 0; i--) {
+		for (int i = word.length(); i > 0; i--) {
 			String subword = word.substring(0, i);
 
-			if(seen.contains(subword)) {
+			if (seen.contains(subword)) {
 				/*
 				 * Remove a mapping if its ambiguous and not a
 				 * whole word.
 				 */
-				if(abbrevMap.containsKey(subword) && !wrds.contains(subword)) {
+				if (abbrevMap.containsKey(subword) && !wrds.contains(subword)) {
 					String oldword = abbrevMap.remove(subword);
 
 					ambMap.put(subword, oldword);
 					ambMap.put(subword, word);
-				} else if(!wrds.contains(subword)) {
+				} else if (!wrds.contains(subword)) {
 					ambMap.put(subword, word);
 				}
 			} else {
@@ -139,7 +140,7 @@ public class AbbrevMap {
 	public void removeWords(String... words) {
 		wrds.removeAll(Arrays.asList(words));
 
-		for(String word : words) {
+		for (String word : words) {
 			intRemoveWord(word);
 		}
 	}
@@ -151,24 +152,25 @@ public class AbbrevMap {
 		/*
 		 * Skip blank words.
 		 */
-		if(word.equals("")) return;
+		if (word.equals(""))
+			return;
 
 		/*
 		 * Handle each possible abbreviation.
 		 */
-		for(int i = word.length(); i > 0; i--) {
+		for (int i = word.length(); i > 0; i--) {
 			String subword = word.substring(0, i);
 
-			if(abbrevMap.containsKey(subword))
+			if (abbrevMap.containsKey(subword))
 				abbrevMap.remove(subword);
 			else {
 				ambMap.remove(subword, word);
 
 				Set<String> possWords = ambMap.get(subword);
 
-				if(possWords.size() == 0) {
+				if (possWords.size() == 0) {
 					seen.remove(subword);
-				} else if(possWords.size() == 1) {
+				} else if (possWords.size() == 1) {
 					String newWord = possWords.iterator().next();
 
 					abbrevMap.put(subword, newWord);
@@ -188,7 +190,7 @@ public class AbbrevMap {
 	 * @return All the expansions for the provided abbreviation.
 	 */
 	public String[] deabbrev(String abbrev) {
-		if(abbrevMap.containsKey(abbrev))
+		if (abbrevMap.containsKey(abbrev))
 			return new String[] { abbrevMap.get(abbrev) };
 		else
 			return ambMap.get(abbrev).toArray(new String[0]);
@@ -200,41 +202,34 @@ public class AbbrevMap {
 
 		int result = 1;
 		result = prime * result + ((wrds == null) ? 0 : wrds.hashCode());
-		
+
 		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj) return true;
-		if(obj == null) return false;
-		if(getClass() != obj.getClass()) return false;
-	
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof AbbrevMap))
+			return false;
+
 		AbbrevMap other = (AbbrevMap) obj;
-		
-		if(wrds == null) {
-			if(other.wrds != null) return false;
-		} else if(!wrds.equals(other.wrds)) return false;
-		
+
+		if (wrds == null) {
+			if (other.wrds != null)
+				return false;
+		} else if (!wrds.equals(other.wrds))
+			return false;
+
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-	
-		builder.append("AbbrevMap [wrds=");
-		builder.append(wrds);
-		builder.append("\n\t, abbrevMap=");
-		builder.append(abbrevMap);
-		builder.append("\n\t, seen=");
-		builder.append(seen);
-		builder.append("\n\t, ambMap=");
-		builder.append(ambMap);
-		builder.append("]");
-		
-		return builder.toString();
+		String fmt = "AbbrevMap [wrds=%s, abbrevMap=%s, seen=%s, ambMap=%s]";
+
+		return String.format(fmt, wrds, abbrevMap, seen, ambMap);
 	}
-	
-	
 }

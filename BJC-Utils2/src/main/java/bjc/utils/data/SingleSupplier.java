@@ -43,9 +43,11 @@ public class SingleSupplier<T> implements Supplier<T> {
 
 	@Override
 	public T get() {
-		if(gotten == true) {
-			IllegalStateException isex = new IllegalStateException("Attempted to get value more than once"
-					+ " from single supplier #" + id + ". Previous instantiation below.");
+		if (gotten == true) {
+			String msg = String.format(
+					"Attempted to retrieve value more than once from single supplier #%d", id);
+
+			IllegalStateException isex = new IllegalStateException(msg);
 
 			isex.initCause(instSite);
 
@@ -56,7 +58,7 @@ public class SingleSupplier<T> implements Supplier<T> {
 
 		try {
 			throw new IllegalStateException("Previous instantiation here.");
-		} catch(IllegalStateException isex) {
+		} catch (IllegalStateException isex) {
 			instSite = isex;
 		}
 
@@ -65,28 +67,6 @@ public class SingleSupplier<T> implements Supplier<T> {
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("SingleSupplier [");
-
-		if(source != null) {
-			builder.append("source=");
-			builder.append(source);
-			builder.append(", ");
-		}
-
-		builder.append("gotten=");
-		builder.append(gotten);
-		builder.append(", id=");
-		builder.append(id);
-		builder.append(", ");
-
-		if(instSite != null) {
-			builder.append("instSite=");
-			builder.append(instSite);
-		}
-
-		builder.append("]");
-
-		return builder.toString();
+		return String.format("SingleSupplier [source='%s', gotten=%s, id=%s]", source, gotten, id);
 	}
 }

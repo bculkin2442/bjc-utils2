@@ -23,7 +23,8 @@ class ExtendedMap<KeyType, ValueType> implements IMap<KeyType, ValueType> {
 
 	@Override
 	public boolean containsKey(KeyType key) {
-		if(store.containsKey(key)) return true;
+		if (store.containsKey(key))
+			return true;
 
 		return delegate.containsKey(key);
 	}
@@ -56,7 +57,8 @@ class ExtendedMap<KeyType, ValueType> implements IMap<KeyType, ValueType> {
 
 	@Override
 	public ValueType get(KeyType key) {
-		if(store.containsKey(key)) return store.get(key);
+		if (store.containsKey(key))
+			return store.get(key);
 
 		return delegate.get(key);
 	}
@@ -83,13 +85,53 @@ class ExtendedMap<KeyType, ValueType> implements IMap<KeyType, ValueType> {
 
 	@Override
 	public ValueType remove(KeyType key) {
-		if(!store.containsKey(key)) return delegate.remove(key);
-		
+		if (!store.containsKey(key))
+			return delegate.remove(key);
+
 		return store.remove(key);
 	}
 
 	@Override
 	public IList<ValueType> valueList() {
 		return ListUtils.mergeLists(store.valueList(), delegate.valueList());
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((delegate == null) ? 0 : delegate.hashCode());
+		result = prime * result + ((store == null) ? 0 : store.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof ExtendedMap))
+			return false;
+
+		ExtendedMap<?, ?> other = (ExtendedMap<?, ?>) obj;
+
+		if (delegate == null) {
+			if (other.delegate != null)
+				return false;
+		} else if (!delegate.equals(other.delegate))
+			return false;
+		if (store == null) {
+			if (other.store != null)
+				return false;
+		} else if (!store.equals(other.store))
+			return false;
+
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("ExtendedMap [delegate=%s, store=%s]", delegate, store);
 	}
 }

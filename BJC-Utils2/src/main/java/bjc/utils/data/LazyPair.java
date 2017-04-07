@@ -71,7 +71,8 @@ public class LazyPair<LeftType, RightType> implements IPair<LeftType, RightType>
 	public <BoundLeft> IPair<BoundLeft, RightType> bindLeft(
 			Function<LeftType, IPair<BoundLeft, RightType>> leftBinder) {
 		Supplier<LeftType> leftSupp = () -> {
-			if(leftMaterialized) return leftValue;
+			if (leftMaterialized)
+				return leftValue;
 
 			return leftSupplier.get();
 		};
@@ -83,7 +84,8 @@ public class LazyPair<LeftType, RightType> implements IPair<LeftType, RightType>
 	public <BoundRight> IPair<LeftType, BoundRight> bindRight(
 			Function<RightType, IPair<LeftType, BoundRight>> rightBinder) {
 		Supplier<RightType> rightSupp = () -> {
-			if(rightMaterialized) return rightValue;
+			if (rightMaterialized)
+				return rightValue;
 
 			return rightSupplier.get();
 		};
@@ -98,15 +100,17 @@ public class LazyPair<LeftType, RightType> implements IPair<LeftType, RightType>
 			BiFunction<RightType, OtherRight, CombinedRight> rightCombiner) {
 		return otherPair.bind((otherLeft, otherRight) -> {
 			return bind((leftVal, rightVal) -> {
-				return new LazyPair<>(leftCombiner.apply(leftVal, otherLeft),
-						rightCombiner.apply(rightVal, otherRight));
+				CombinedLeft left = leftCombiner.apply(leftVal, otherLeft);
+				CombinedRight right = rightCombiner.apply(rightVal, otherRight);
+
+				return new LazyPair<>(left, right);
 			});
 		});
 	}
 
 	@Override
 	public LeftType getLeft() {
-		if(!leftMaterialized) {
+		if (!leftMaterialized) {
 			leftValue = leftSupplier.get();
 
 			leftMaterialized = true;
@@ -117,7 +121,7 @@ public class LazyPair<LeftType, RightType> implements IPair<LeftType, RightType>
 
 	@Override
 	public RightType getRight() {
-		if(!rightMaterialized) {
+		if (!rightMaterialized) {
 			rightValue = rightSupplier.get();
 
 			rightMaterialized = true;
@@ -129,13 +133,15 @@ public class LazyPair<LeftType, RightType> implements IPair<LeftType, RightType>
 	@Override
 	public <NewLeft> IPair<NewLeft, RightType> mapLeft(Function<LeftType, NewLeft> mapper) {
 		Supplier<NewLeft> leftSupp = () -> {
-			if(leftMaterialized) return mapper.apply(leftValue);
+			if (leftMaterialized)
+				return mapper.apply(leftValue);
 
 			return mapper.apply(leftSupplier.get());
 		};
 
 		Supplier<RightType> rightSupp = () -> {
-			if(rightMaterialized) return rightValue;
+			if (rightMaterialized)
+				return rightValue;
 
 			return rightSupplier.get();
 		};
@@ -146,13 +152,15 @@ public class LazyPair<LeftType, RightType> implements IPair<LeftType, RightType>
 	@Override
 	public <NewRight> IPair<LeftType, NewRight> mapRight(Function<RightType, NewRight> mapper) {
 		Supplier<LeftType> leftSupp = () -> {
-			if(leftMaterialized) return leftValue;
+			if (leftMaterialized)
+				return leftValue;
 
 			return leftSupplier.get();
 		};
 
 		Supplier<NewRight> rightSupp = () -> {
-			if(rightMaterialized) return mapper.apply(rightValue);
+			if (rightMaterialized)
+				return mapper.apply(rightValue);
 
 			return mapper.apply(rightSupplier.get());
 		};
@@ -162,13 +170,13 @@ public class LazyPair<LeftType, RightType> implements IPair<LeftType, RightType>
 
 	@Override
 	public <MergedType> MergedType merge(BiFunction<LeftType, RightType, MergedType> merger) {
-		if(!leftMaterialized) {
+		if (!leftMaterialized) {
 			leftValue = leftSupplier.get();
 
 			leftMaterialized = true;
 		}
 
-		if(!rightMaterialized) {
+		if (!rightMaterialized) {
 			rightValue = rightSupplier.get();
 
 			rightMaterialized = true;
@@ -179,25 +187,22 @@ public class LazyPair<LeftType, RightType> implements IPair<LeftType, RightType>
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder("pair[l=");
+		String leftVal;
+		String rightVal;
 
-		if(leftMaterialized) {
-			sb.append(leftValue.toString());
+		if (leftMaterialized) {
+			leftVal = leftValue.toString();
 		} else {
-			sb.append("(un-materialized)");
+			leftVal = "(un-materialized)";
 		}
 
-		sb.append(", r=");
-
-		if(rightMaterialized) {
-			sb.append(rightValue.toString());
+		if (rightMaterialized) {
+			rightVal = rightValue.toString();
 		} else {
-			sb.append("(un-materialized)");
+			rightVal = "(un-materialized)";
 		}
 
-		sb.append("]");
-
-		return sb.toString();
+		return String.format("pair[l=%s,r=%s]", leftVal, rightVal);
 	}
 
 	@Override
@@ -215,27 +220,36 @@ public class LazyPair<LeftType, RightType> implements IPair<LeftType, RightType>
 
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj) return true;
-		if(obj == null) return false;
-		if(getClass() != obj.getClass()) return false;
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof LazyPair<?, ?>))
+			return false;
 
 		LazyPair<?, ?> other = (LazyPair<?, ?>) obj;
 
-		if(leftMaterialized != other.leftMaterialized) return false;
+		if (leftMaterialized != other.leftMaterialized)
+			return false;
 
-		if(leftMaterialized) {
-			if(leftValue == null) {
-				if(other.leftValue != null) return false;
-			} else if(!leftValue.equals(other.leftValue)) return false;
+		if (leftMaterialized) {
+			if (leftValue == null) {
+				if (other.leftValue != null)
+					return false;
+			} else if (!leftValue.equals(other.leftValue))
+				return false;
 		} else {
 			return false;
 		}
-		
-		if(rightMaterialized != other.rightMaterialized) return false;
-		if(rightMaterialized) {
-			if(rightValue == null) {
-				if(other.rightValue != null) return false;
-			} else if(!rightValue.equals(other.rightValue)) return false;
+
+		if (rightMaterialized != other.rightMaterialized)
+			return false;
+		if (rightMaterialized) {
+			if (rightValue == null) {
+				if (other.rightValue != null)
+					return false;
+			} else if (!rightValue.equals(other.rightValue))
+				return false;
 		} else {
 			return false;
 		}

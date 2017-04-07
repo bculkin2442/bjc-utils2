@@ -19,7 +19,8 @@ public class FunctionalStringTokenizer {
 	 * @return A new tokenizer that splits the provided string on spaces.
 	 */
 	public static FunctionalStringTokenizer fromString(String strang) {
-		if(strang == null) throw new NullPointerException("String to tokenize must be non-null");
+		if (strang == null)
+			throw new NullPointerException("String to tokenize must be non-null");
 
 		return new FunctionalStringTokenizer(new StringTokenizer(strang, " "));
 	}
@@ -36,7 +37,8 @@ public class FunctionalStringTokenizer {
 	 *                The string to tokenize
 	 */
 	public FunctionalStringTokenizer(String inp) {
-		if(inp == null) throw new NullPointerException("String to tokenize must be non-null");
+		if (inp == null)
+			throw new NullPointerException("String to tokenize must be non-null");
 
 		this.input = new StringTokenizer(inp);
 	}
@@ -51,9 +53,10 @@ public class FunctionalStringTokenizer {
 	 *                The set of separating tokens to use for splitting
 	 */
 	public FunctionalStringTokenizer(String input, String seperators) {
-		if(input == null)
+		if (input == null)
 			throw new NullPointerException("String to tokenize must not be null");
-		else if(seperators == null) throw new NullPointerException("Tokens to split on must not be null");
+		else if (seperators == null)
+			throw new NullPointerException("Tokens to split on must not be null");
 
 		this.input = new StringTokenizer(input, seperators);
 	}
@@ -65,7 +68,8 @@ public class FunctionalStringTokenizer {
 	 *                The non-functional string tokenizer to wrap
 	 */
 	public FunctionalStringTokenizer(StringTokenizer toWrap) {
-		if(toWrap == null) throw new NullPointerException("Wrapped tokenizer must not be null");
+		if (toWrap == null)
+			throw new NullPointerException("Wrapped tokenizer must not be null");
 
 		this.input = toWrap;
 	}
@@ -77,9 +81,10 @@ public class FunctionalStringTokenizer {
 	 *                The action to execute for each token
 	 */
 	public void forEachToken(Consumer<String> action) {
-		if(action == null) throw new NullPointerException("Action must not be null");
+		if (action == null)
+			throw new NullPointerException("Action must not be null");
 
-		while(input.hasMoreTokens()) {
+		while (input.hasMoreTokens()) {
 			action.accept(input.nextToken());
 		}
 	}
@@ -110,7 +115,7 @@ public class FunctionalStringTokenizer {
 	 * @return The next token from the tokenizer
 	 */
 	public String nextToken() {
-		if(input.hasMoreTokens()) // Return the next available token
+		if (input.hasMoreTokens()) // Return the next available token
 			return input.nextToken();
 
 		// Return no token
@@ -138,7 +143,8 @@ public class FunctionalStringTokenizer {
 	 * @return A list containing all of the converted tokens.
 	 */
 	public <E> IList<E> toList(Function<String, E> transformer) {
-		if(transformer == null) throw new NullPointerException("Transformer must not be null");
+		if (transformer == null)
+			throw new NullPointerException("Transformer must not be null");
 
 		IList<E> returned = new FunctionalList<>();
 
@@ -150,5 +156,10 @@ public class FunctionalStringTokenizer {
 		});
 
 		return returned;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("FunctionalStringTokenizer [input=%s]", input);
 	}
 }

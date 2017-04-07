@@ -39,7 +39,8 @@ public class BinarySearchTree<T> {
 	 *                The thing to use for comparing elements
 	 */
 	public BinarySearchTree(Comparator<T> cmp) {
-		if(cmp == null) throw new NullPointerException("Comparator must not be null");
+		if (cmp == null)
+			throw new NullPointerException("Comparator must not be null");
 
 		elementCount = 0;
 		comparator = cmp;
@@ -54,7 +55,7 @@ public class BinarySearchTree<T> {
 	public void addNode(T element) {
 		elementCount++;
 
-		if(root == null) {
+		if (root == null) {
 			root = new BinarySearchTreeNode<>(element, null, null);
 		} else {
 			root.add(element, comparator);
@@ -95,8 +96,8 @@ public class BinarySearchTree<T> {
 		int pivotAdjustment = 0;
 
 		// Add elements until there aren't any left
-		while(adjustedPivotInBounds(elements, pivot, pivotAdjustment)) {
-			if(root == null) {
+		while (adjustedPivotInBounds(elements, pivot, pivotAdjustment)) {
+			if (root == null) {
 				// Create a new root element
 				root = new BinarySearchTreeNode<>(elements.getByIndex(pivot), null, null);
 			} else {
@@ -112,9 +113,9 @@ public class BinarySearchTree<T> {
 		}
 
 		// Add any trailing unbalanced elements
-		if(pivot - pivotAdjustment >= 0) {
+		if (pivot - pivotAdjustment >= 0) {
 			root.add(elements.getByIndex(pivot - pivotAdjustment), comparator);
-		} else if(pivot + pivotAdjustment < elements.getSize()) {
+		} else if (pivot + pivotAdjustment < elements.getSize()) {
 			root.add(elements.getByIndex(pivot + pivotAdjustment), comparator);
 		}
 	}
@@ -163,9 +164,10 @@ public class BinarySearchTree<T> {
 	 *                The function to use until it fails
 	 */
 	public void traverse(TreeLinearizationMethod linearizationMethod, Predicate<T> traversalPredicate) {
-		if(linearizationMethod == null)
+		if (linearizationMethod == null)
 			throw new NullPointerException("Linearization method must not be null");
-		else if(traversalPredicate == null) throw new NullPointerException("Predicate must not be nulls");
+		else if (traversalPredicate == null)
+			throw new NullPointerException("Predicate must not be nulls");
 
 		root.forEach(linearizationMethod, traversalPredicate);
 	}
@@ -187,5 +189,41 @@ public class BinarySearchTree<T> {
 
 		// Add the nodes to the tree in the order they were inserted
 		nodes.forEach(node -> addNode(node));
+	}
+
+	@Override
+	public String toString() {
+		return String.format("BinarySearchTree [elementCount=%s, root='%s']", elementCount, root);
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + elementCount;
+		result = prime * result + ((root == null) ? 0 : root.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof BinarySearchTree<?>))
+			return false;
+
+		BinarySearchTree<?> other = (BinarySearchTree<?>) obj;
+
+		if (elementCount != other.elementCount)
+			return false;
+		if (root == null) {
+			if (other.root != null)
+				return false;
+		} else if (!root.equals(other.root))
+			return false;
+
+		return true;
 	}
 }

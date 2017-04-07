@@ -35,7 +35,7 @@ final class CompoundCollector<InitialType, AuxType1, AuxType2, FinalType1, Final
 		BiConsumer<AuxType2, InitialType> secondAccumulator = second.accumulator();
 
 		return (state, value) -> {
-			state.doWith((statePair) -> {
+			state.doWith(statePair -> {
 				statePair.doWith((left, right) -> {
 					firstAccumulator.accept(left, value);
 					secondAccumulator.accept(right, value);
@@ -55,8 +55,8 @@ final class CompoundCollector<InitialType, AuxType1, AuxType2, FinalType1, Final
 		BinaryOperator<AuxType2> secondCombiner = second.combiner();
 
 		return (leftState, rightState) -> {
-			return leftState.unwrap((leftPair) -> {
-				return rightState.transform((rightPair) -> {
+			return leftState.unwrap(leftPair -> {
+				return rightState.transform(rightPair -> {
 					return leftPair.combine(rightPair, firstCombiner, secondCombiner);
 				});
 			});
@@ -65,10 +65,13 @@ final class CompoundCollector<InitialType, AuxType1, AuxType2, FinalType1, Final
 
 	@Override
 	public Function<IHolder<IPair<AuxType1, AuxType2>>, IPair<FinalType1, FinalType2>> finisher() {
-		return (state) -> {
-			return state.unwrap((pair) -> {
+		return state -> {
+			return state.unwrap(pair -> {
 				return pair.bind((left, right) -> {
-					return new Pair<>(first.finisher().apply(left), second.finisher().apply(right));
+					FinalType1 finalLeft = first.finisher().apply(left);
+					FinalType2 finalRight = second.finisher().apply(right);
+
+					return new Pair<>(finalLeft, finalRight);
 				});
 			});
 		};
@@ -77,7 +80,10 @@ final class CompoundCollector<InitialType, AuxType1, AuxType2, FinalType1, Final
 	@Override
 	public Supplier<IHolder<IPair<AuxType1, AuxType2>>> supplier() {
 		return () -> {
-			return new Identity<>(new Pair<>(first.supplier().get(), second.supplier().get()));
+			AuxType1 initialLeft = first.supplier().get();
+			AuxType2 initialRight = second.supplier().get();
+
+			return new Identity<>(new Pair<>(initialLeft, initialRight));
 		};
 	}
 }

@@ -27,7 +27,7 @@ public class FuncUtils {
 	 *         function
 	 */
 	public static <A, B, C> Function<A, Function<B, C>> curry2(BiFunction<A, B, C> func) {
-		return (arg1) -> (arg2) -> {
+		return arg1 -> arg2 -> {
 			return func.apply(arg1, arg2);
 		};
 	}
@@ -41,7 +41,7 @@ public class FuncUtils {
 	 *                The action to perform
 	 */
 	public static void doTimes(int nTimes, Consumer<Integer> cons) {
-		for(int i = 0; i < nTimes; i++) {
+		for (int i = 0; i < nTimes; i++) {
 			cons.accept(i);
 		}
 	}

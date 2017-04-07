@@ -63,10 +63,10 @@ public class CircularIterator<E> implements Iterator<E> {
 
 	@Override
 	public E next() {
-		if(!curr.hasNext()) {
-			if(doCircle) {
+		if (!curr.hasNext()) {
+			if (doCircle)
 				curr = source.iterator();
-			} else
+			else
 				return curElm;
 		}
 

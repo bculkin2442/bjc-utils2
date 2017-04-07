@@ -112,7 +112,7 @@ public interface IMap<KeyType, ValueType> {
 	 * Delete all the values in the map.
 	 */
 	default void clear() {
-		keyList().forEach((key) -> remove(key));
+		keyList().forEach(key -> remove(key));
 	}
 
 	/**
