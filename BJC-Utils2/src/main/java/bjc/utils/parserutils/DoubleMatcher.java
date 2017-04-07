@@ -13,31 +13,31 @@ class DoubleMatcher {
 	/*
 	 * Unit pieces.
 	 */
-	private static final String	DecDigits	= getRegex("fpDigits");
-	private static final String	HexDigits	= getRegex("fpHexDigits");
-	private static final String	Exponent	= applyFormat("fpExponent", getRegex("fpExponent"), DecDigits);
+	private static final String	rDecDigits	= getRegex("fpDigits");
+	private static final String	rHexDigits	= getRegex("fpHexDigits");
+	private static final String	rExponent	= applyFormat("fpExponent", getRegex("fpExponent"), rDecDigits);
 
 	/*
 	 * Decimal floating point numbers.
 	 */
-	private static final String	SIMPLE_DEC	= applyFormat("fpDecimalDecimal", DecDigits, Exponent);
-	private static final String	SIMPLE_INTDEC	= applyFormat("fpDecimalInteger", DecDigits, Exponent);
+	private static final String	rSimpleDec	= applyFormat("fpDecimalDecimal", rDecDigits, rExponent);
+	private static final String	rSimpleIntDec	= applyFormat("fpDecimalInteger", rDecDigits, rExponent);
 
 	/*
 	 * Hex floating point numbers.
 	 */
-	private static final String	HEX_INT		= applyFormat("fpHexInteger", HexDigits);
-	private static final String	HEX_DEC		= applyFormat("fpHexDecimal", HexDigits);
-	private static final String	HEX_LEAD	= applyFormat("fpHexLeader", HEX_INT, HEX_DEC);
-	private static final String	HEX_STRING	= applyFormat("fpHexString", HEX_LEAD, DecDigits);
+	private static final String	rHexInt		= applyFormat("fpHexInteger", rHexDigits);
+	private static final String	rHexDec		= applyFormat("fpHexDecimal", rHexDigits);
+	private static final String	rHexLead	= applyFormat("fpHexLeader", rHexInt, rHexDec);
+	private static final String	rHexString	= applyFormat("fpHexString", rHexLead, rDecDigits);
 
 	/*
 	 * Floating point components.
 	 */
-	private static final String	FP_LEADER	= getRegex("fpLeader");
-	private static final String	FP_NUM		= applyFormat("fpNumber", SIMPLE_INTDEC, SIMPLE_DEC,
-			HEX_STRING);
+	private static final String	rFPLeader	= getRegex("fpLeader");
+	private static final String	rFPNum		= applyFormat("fpNumber", rSimpleIntDec, rSimpleDec,
+			rHexString);
 
-	private static final String	fpRegex		= applyFormat("fpDouble", FP_LEADER, FP_NUM);
-	public static final Pattern	floatingLiteral	= Pattern.compile("\\A" + fpRegex + "\\Z");
+	private static final String	rDouble		= applyFormat("fpDouble", rFPLeader, rFPNum);
+	public static final Pattern	doubleLiteral	= Pattern.compile("\\A" + rDouble + "\\Z");
 }

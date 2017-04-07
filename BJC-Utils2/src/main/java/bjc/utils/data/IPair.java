@@ -68,8 +68,7 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 	 */
 	public default <OtherLeft, OtherRight> IPair<IPair<LeftType, OtherLeft>, IPair<RightType, OtherRight>> combine(
 			IPair<OtherLeft, OtherRight> otherPair) {
-		return combine(otherPair, (left, otherLeft) -> new Pair<>(left, otherLeft),
-				(right, otherRight) -> new Pair<>(right, otherRight));
+		return combine(otherPair, Pair<LeftType, OtherLeft>::new, Pair<RightType, OtherRight>::new);
 	}
 
 	/**
@@ -113,8 +112,11 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 	default <OldLeft, OldRight, NewLeft> Function<Bifunctor<OldLeft, OldRight>, Bifunctor<NewLeft, OldRight>> fmapLeft(
 			Function<OldLeft, NewLeft> func) {
 		return (argumentPair) -> {
-			if(!(argumentPair instanceof IPair<?, ?>)) throw new IllegalArgumentException(
-					"This function can only be applied to instances of IPair");
+			if(!(argumentPair instanceof IPair<?, ?>)) {
+				String msg = "This function can only be applied to instances of IPair";
+
+				throw new IllegalArgumentException(msg);
+			}
 
 			IPair<OldLeft, OldRight> argPair = (IPair<OldLeft, OldRight>) argumentPair;
 
@@ -127,8 +129,11 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 
 			fmapRight(Function<OldRight, NewRight> func) {
 		return (argumentPair) -> {
-			if(!(argumentPair instanceof IPair<?, ?>)) throw new IllegalArgumentException(
-					"This function can only be applied to instances of IPair");
+			if(!(argumentPair instanceof IPair<?, ?>)) {
+				String msg = "This function can only be applied to instances of IPair";
+
+				throw new IllegalArgumentException(msg);
+			}
 
 			IPair<OldLeft, OldRight> argPair = (IPair<OldLeft, OldRight>) argumentPair;
 

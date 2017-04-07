@@ -1,10 +1,11 @@
 package bjc.utils.parserutils;
 
 import bjc.utils.data.IHolder;
-import bjc.utils.data.IPair;
 import bjc.utils.data.ITree;
 import bjc.utils.data.Pair;
 import bjc.utils.data.Tree;
+import bjc.utils.parserutils.TreeConstructor.ConstructorState;
+import bjc.utils.parserutils.TreeConstructor.QueueFlattener;
 
 import java.util.Deque;
 import java.util.function.Consumer;
@@ -14,7 +15,7 @@ import java.util.function.UnaryOperator;
 
 final class TokenTransformer<TokenType> implements Consumer<TokenType> {
 	// Handle operators
-	private final class OperatorHandler implements UnaryOperator<IPair<Deque<ITree<TokenType>>, ITree<TokenType>>> {
+	private final class OperatorHandler implements UnaryOperator<ConstructorState<TokenType>> {
 		private TokenType element;
 
 		public OperatorHandler(TokenType element) {
@@ -22,17 +23,15 @@ final class TokenTransformer<TokenType> implements Consumer<TokenType> {
 		}
 
 		@Override
-		public IPair<Deque<ITree<TokenType>>, ITree<TokenType>> apply(
-				IPair<Deque<ITree<TokenType>>, ITree<TokenType>> pair) {
+		public ConstructorState<TokenType> apply(ConstructorState<TokenType> pair) {
 			// Replace the current AST with the result of handling
 			// an operator
-			return pair.bindLeft((queuedASTs) -> {
+			return new ConstructorState<>(pair.bindLeft(queuedASTs -> {
 				return handleOperator(queuedASTs);
-			});
+			}));
 		}
 
-		private IPair<Deque<ITree<TokenType>>, ITree<TokenType>> handleOperator(
-				Deque<ITree<TokenType>> queuedASTs) {
+		private ConstructorState<TokenType> handleOperator(Deque<ITree<TokenType>> queuedASTs) {
 			// The AST we're going to hand back
 			ITree<TokenType> newAST;
 
@@ -42,10 +41,13 @@ final class TokenTransformer<TokenType> implements Consumer<TokenType> {
 			} else {
 				// Error if we don't have enough for a binary
 				// operator
-				if(queuedASTs.size() < 2) throw new IllegalStateException(
-						"Attempted to parse binary operator without enough operands.\n"
-								+ "Problem operator is " + element
-								+ "\nPossible operand is: \n\t" + queuedASTs.peek());
+				if(queuedASTs.size() < 2) {
+					String msg = String.format(
+							"Attempted to parse binary operator without enough operands\n\tProblem operator is: %s\n\tPossible operand is: %s",
+							element.toString(), queuedASTs.peek().toString());
+
+					throw new IllegalStateException(msg);
+				}
 
 				// Grab the two operands
 				ITree<TokenType> right = queuedASTs.pop();
@@ -59,21 +61,21 @@ final class TokenTransformer<TokenType> implements Consumer<TokenType> {
 			queuedASTs.push(newAST);
 
 			// Hand back the state
-			return new Pair<>(queuedASTs, newAST);
+			return new ConstructorState<>(queuedASTs, newAST);
 		}
 	}
 
-	private IHolder<IPair<Deque<ITree<TokenType>>, ITree<TokenType>>> initialState;
+	private IHolder<ConstructorState<TokenType>> initialState;
 
 	private Predicate<TokenType> operatorPredicate;
 
-	private Predicate<TokenType>								isSpecialOperator;
-	private Function<TokenType, Function<Deque<ITree<TokenType>>, ITree<TokenType>>>	handleSpecialOperator;
+	private Predicate<TokenType>				isSpecialOperator;
+	private Function<TokenType, QueueFlattener<TokenType>>	handleSpecialOperator;
 
 	// Create a new transformer
-	public TokenTransformer(IHolder<IPair<Deque<ITree<TokenType>>, ITree<TokenType>>> initialState,
+	public TokenTransformer(IHolder<ConstructorState<TokenType>> initialState,
 			Predicate<TokenType> operatorPredicate, Predicate<TokenType> isSpecialOperator,
-			Function<TokenType, Function<Deque<ITree<TokenType>>, ITree<TokenType>>> handleSpecialOperator) {
+			Function<TokenType, QueueFlattener<TokenType>> handleSpecialOperator) {
 		this.initialState = initialState;
 		this.operatorPredicate = operatorPredicate;
 		this.isSpecialOperator = isSpecialOperator;
@@ -89,15 +91,15 @@ final class TokenTransformer<TokenType> implements Consumer<TokenType> {
 			ITree<TokenType> newAST = new Tree<>(element);
 
 			// Insert the new tree into the AST
-			initialState.transform((pair) -> {
+			initialState.transform(pair -> {
 				// Transform the pair, ignoring the current AST
 				// in favor of the
 				// one consisting of the current element
-				return pair.bindLeft((queue) -> {
+				return new ConstructorState<>(pair.bindLeft(queue -> {
 					queue.push(newAST);
 
 					return new Pair<>(queue, newAST);
-				});
+				}));
 			});
 		}
 	}

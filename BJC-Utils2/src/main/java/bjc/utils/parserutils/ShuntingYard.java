@@ -12,36 +12,36 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * Utility to run the shunting yard algorithm on a bunch of tokens
+ * Utility to run the shunting yard algorithm on a bunch of tokens.
  *
  * @author ben
  *
  * @param <TokenType>
- *                The type of tokens being shunted
+ *                The type of tokens being shunted.
  */
 public class ShuntingYard<TokenType> {
 	/**
-	 * A enum representing the fundamental operator types
+	 * A enum representing the fundamental operator types.
 	 *
 	 * @author ben
 	 *
 	 */
 	public static enum Operator implements IPrecedent {
 		/**
-		 * Represents addition
+		 * Represents addition.
 		 */
 		ADD(1),
 		/**
-		 * Represents subtraction
+		 * Represents subtraction.
 		 */
 		SUBTRACT(2),
 
 		/**
-		 * Represents multiplication
+		 * Represents multiplication.
 		 */
 		MULTIPLY(3),
 		/**
-		 * Represents division
+		 * Represents division.
 		 */
 		DIVIDE(4);
 
@@ -72,26 +72,26 @@ public class ShuntingYard<TokenType> {
 		@Override
 		public void accept(String token) {
 			// Handle operators
-			if (operators.containsKey(token)) {
+			if(operators.containsKey(token)) {
 				// Pop operators while there isn't a higher
 				// precedence one
-				while (!stack.isEmpty() && isHigherPrec(token, stack.peek())) {
+				while(!stack.isEmpty() && isHigherPrec(token, stack.peek())) {
 					output.add(transformer.apply(stack.pop()));
 				}
 
 				// Put this operator onto the stack
 				stack.push(token);
-			} else if (StringUtils.containsOnly(token, "\\(")) {
+			} else if(StringUtils.containsOnly(token, "\\(")) {
 				// Handle groups of parenthesis for multiple
 				// nesting levels
 				stack.push(token);
-			} else if (StringUtils.containsOnly(token, "\\)")) {
+			} else if(StringUtils.containsOnly(token, "\\)")) {
 				// Handle groups of parenthesis for multiple
 				// nesting levels
 				String swappedToken = token.replace(')', '(');
 
 				// Remove tokens up to a matching parenthesis
-				while (!stack.peek().equals(swappedToken)) {
+				while(!stack.peek().equals(swappedToken)) {
 					output.add(transformer.apply(stack.pop()));
 				}
 
@@ -105,21 +105,22 @@ public class ShuntingYard<TokenType> {
 	}
 
 	/*
-	 * Holds all the shuntable operations
+	 * Holds all the shuntable operations.
 	 */
 	private IMap<String, IPrecedent> operators;
 
 	/**
-	 * Create a new shunting yard with a default set of operators
+	 * Create a new shunting yard with a default set of operators.
 	 *
 	 * @param configureBasics
-	 *                Whether or not basic math operators should be provided
+	 *                Whether or not basic math operators should be
+	 *                provided.
 	 */
 	public ShuntingYard(boolean configureBasics) {
 		operators = new FunctionalMap<>();
 
 		// Add basic operators if we're configured to do so
-		if (configureBasics) {
+		if(configureBasics) {
 			operators.put("+", Operator.ADD);
 			operators.put("-", Operator.SUBTRACT);
 			operators.put("*", Operator.MULTIPLY);
@@ -128,12 +129,13 @@ public class ShuntingYard<TokenType> {
 	}
 
 	/**
-	 * Add an operator to the list of shuntable operators
+	 * Add an operator to the list of shuntable operators.
 	 *
 	 * @param operator
-	 *                The token representing the operator
+	 *                The token representing the operator.
+	 * 
 	 * @param precedence
-	 *                The precedence of the operator to add
+	 *                The precedence of the operator to add.
 	 */
 	public void addOp(String operator, int precedence) {
 		/*
@@ -145,24 +147,24 @@ public class ShuntingYard<TokenType> {
 	}
 
 	/**
-	 * Add an operator to the list of shuntable operators
+	 * Add an operator to the list of shuntable operators.
 	 *
 	 * @param operator
-	 *                The token representing the operator
+	 *                The token representing the operator.
 	 * 
 	 * @param precedence
-	 *                The precedence of the operator
+	 *                The precedence of the operator.
 	 */
 	public void addOp(String operator, IPrecedent precedence) {
 		/*
-		 *  Complain about trying to add an incorrect operator
+		 * Complain about trying to add an incorrect operator
 		 */
-		if (operator == null)
+		if(operator == null)
 			throw new NullPointerException("Operator must not be null");
-		else if (precedence == null) throw new NullPointerException("Precedence must not be null");
+		else if(precedence == null) throw new NullPointerException("Precedence must not be null");
 
 		/*
-		 *  Add the operator to the ones we handle
+		 * Add the operator to the ones we handle
 		 */
 		operators.put(operator, precedence);
 	}
@@ -172,7 +174,7 @@ public class ShuntingYard<TokenType> {
 		boolean exists = operators.containsKey(right);
 
 		// If it doesn't, the left is higher precedence.
-		if (!exists) return false;
+		if(!exists) return false;
 
 		// Get the precedence of operators
 		int rightPrecedence = operators.get(right).getPrecedence();
@@ -183,19 +185,21 @@ public class ShuntingYard<TokenType> {
 	}
 
 	/**
-	 * Transform a string of tokens from infix notation to postfix
+	 * Transform a string of tokens from infix notation to postfix.
 	 *
 	 * @param input
-	 *                The string to transform
+	 *                The string to transform.
+	 * 
 	 * @param transformer
-	 *                The function to use to transform strings to tokens
-	 * @return A list of tokens in postfix notation
+	 *                The function to use to transform strings to tokens.
+	 * 
+	 * @return A list of tokens in postfix notation.
 	 */
 	public IList<TokenType> postfix(IList<String> input, Function<String, TokenType> transformer) {
 		// Check our input
-		if (input == null)
+		if(input == null)
 			throw new NullPointerException("Input must not be null");
-		else if (transformer == null) throw new NullPointerException("Transformer must not be null");
+		else if(transformer == null) throw new NullPointerException("Transformer must not be null");
 
 		// Here's what we're handing back
 		IList<TokenType> output = new FunctionalList<>();
@@ -207,7 +211,7 @@ public class ShuntingYard<TokenType> {
 		input.forEach(new TokenShunter(output, stack, transformer));
 
 		// Transform any resulting tokens
-		stack.forEach((token) -> {
+		stack.forEach(token -> {
 			output.add(transformer.apply(token));
 		});
 
@@ -215,15 +219,15 @@ public class ShuntingYard<TokenType> {
 	}
 
 	/**
-	 * Remove an operator from the list of shuntable operators
+	 * Remove an operator from the list of shuntable operators.
 	 *
 	 * @param operator
 	 *                The token representing the operator. If null, remove
-	 *                all operators
+	 *                all operators.
 	 */
 	public void removeOp(String operator) {
 		// Check if we want to remove all operators
-		if (operator == null) {
+		if(operator == null) {
 			operators = new FunctionalMap<>();
 		} else {
 			operators.remove(operator);

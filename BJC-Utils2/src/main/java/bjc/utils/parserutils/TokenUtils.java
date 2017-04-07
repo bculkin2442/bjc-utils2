@@ -14,26 +14,32 @@ import static bjc.utils.PropertyDB.applyFormat;
  *
  * @author EVE
  *
+ *         TODO add support for user defined escapes.
  */
 public class TokenUtils {
-	private static String possibleEscapeString = getRegex("possibleStringEscape");
+	/*
+	 * Patterns and pattern parts.
+	 */
+	private static String rPossibleEscapeString = getRegex("possibleStringEscape");
 
-	private static Pattern possibleEscapePatt = Pattern.compile(possibleEscapeString);
+	private static Pattern possibleEscapePatt = Pattern.compile(rPossibleEscapeString);
 
-	private static String	shortEscape	= getRegex("shortFormStringEscape");
-	private static String	octalEscape	= getRegex("octalStringEscape");
-	private static String	unicodeEscape	= getRegex("unicodeStringEscape");
+	private static String	rShortEscape	= getRegex("shortFormStringEscape");
+	private static String	rOctalEscape	= getRegex("octalStringEscape");
+	private static String	rUnicodeEscape	= getRegex("unicodeStringEscape");
 
-	private static String escapeString = applyFormat("stringEscape", shortEscape, octalEscape, unicodeEscape);
+	private static String rEscapeString = applyFormat("stringEscape", rShortEscape, rOctalEscape, rUnicodeEscape);
 
-	private static Pattern escapePatt = Pattern.compile(escapeString);
+	private static Pattern escapePatt = Pattern.compile(rEscapeString);
 
-	private static String doubleQuoteString = applyFormat("doubleQuotes", getRegex("nonEscape"),
-			possibleEscapeString);
+	private static String rDoubleQuoteString = applyFormat("doubleQuotes", getRegex("nonEscape"),
+			rPossibleEscapeString);
 
-	private static Pattern doubleQuotePatt = Pattern.compile(doubleQuoteString);
+	private static Pattern doubleQuotePatt = Pattern.compile(rDoubleQuoteString);
 
 	private static Pattern quotePatt = getCompiledRegex("unescapedQuote");
+
+	private static Pattern intLitPattern = getCompiledRegex("intLiteral");
 
 	/**
 	 * Remove double quoted strings from a string.
@@ -67,9 +73,10 @@ public class TokenUtils {
 			/*
 			 * There's a unmatched opening quote with no strings.
 			 */
-			throw new IllegalArgumentException(
-					String.format("Unclosed string literal '%s'. Opening quote was at position %d",
-							inp, inp.indexOf("\"")));
+			String msg = String.format("Unclosed string literal '%s'. Opening quote was at position %d",
+					inp, inp.indexOf("\""));
+
+			throw new IllegalArgumentException(msg);
 		}
 
 		while(mt.find()) {
@@ -102,9 +109,10 @@ public class TokenUtils {
 			 * There's a unmatched opening quote with at least one
 			 * string.
 			 */
-			throw new IllegalArgumentException(
-					String.format("Unclosed string literal '%s'. Opening quote was at position %d",
-							inp, inp.lastIndexOf("\"")));
+			String msg = String.format("Unclosed string literal '%s'. Opening quote was at position %d",
+					inp, inp.lastIndexOf("\""));
+
+			throw new IllegalArgumentException(msg);
 		}
 
 		/*
@@ -138,9 +146,10 @@ public class TokenUtils {
 
 		while(possibleEscapeFinder.find()) {
 			if(!escapeFinder.find()) {
-				throw new IllegalArgumentException(String.format(
-						"Illegal escape sequence '%s' at position %d",
-						possibleEscapeFinder.group(), possibleEscapeFinder.start()));
+				String msg = String.format("Illegal escape sequence '%s' at position %d",
+						possibleEscapeFinder.group(), possibleEscapeFinder.start());
+
+				throw new IllegalArgumentException(msg);
 			}
 
 			String escapeSeq = escapeFinder.group();
@@ -197,8 +206,9 @@ public class TokenUtils {
 
 			return new String(Character.toChars(codepoint));
 		} catch(IllegalArgumentException iaex) {
-			IllegalArgumentException reiaex = new IllegalArgumentException(
-					String.format("'%s' is not a valid Unicode escape sequence'", seq));
+			String msg = String.format("'%s' is not a valid Unicode escape sequence'", seq);
+
+			IllegalArgumentException reiaex = new IllegalArgumentException(msg);
 
 			reiaex.initCause(iaex);
 
@@ -211,14 +221,16 @@ public class TokenUtils {
 			int codepoint = Integer.parseInt(seq, 8);
 
 			if(codepoint > 255) {
-				throw new IllegalArgumentException(String
-						.format("'%d' is outside the range of octal escapes', codepoint"));
+				String msg = String.format("'%d' is outside the range of octal escapes', codepoint");
+
+				throw new IllegalArgumentException(msg);
 			}
 
 			return new String(Character.toChars(codepoint));
 		} catch(IllegalArgumentException iaex) {
-			IllegalArgumentException reiaex = new IllegalArgumentException(
-					String.format("'%s' is not a valid octal escape sequence'", seq));
+			String msg = String.format("'%s' is not a valid octal escape sequence'", seq);
+
+			IllegalArgumentException reiaex = new IllegalArgumentException(msg);
 
 			reiaex.initCause(iaex);
 
@@ -235,10 +247,8 @@ public class TokenUtils {
 	 * @return Whether the string is a valid double or not.
 	 */
 	public static boolean isDouble(String inp) {
-		return DoubleMatcher.floatingLiteral.matcher(inp).matches();
+		return DoubleMatcher.doubleLiteral.matcher(inp).matches();
 	}
-
-	private static Pattern intLitPattern = getCompiledRegex("intLiteral");
 
 	/**
 	 * Check if a given string would be successfully converted to a integer

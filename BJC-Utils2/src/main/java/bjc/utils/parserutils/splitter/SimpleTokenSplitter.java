@@ -1,5 +1,7 @@
 package bjc.utils.parserutils.splitter;
 
+import bjc.utils.ioutils.RegexStringEditor;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -9,6 +11,7 @@ import java.util.regex.Pattern;
  * 
  * @author EVE
  *
+ *         TODO rewrite using {@link RegexStringEditor}
  */
 public class SimpleTokenSplitter implements TokenSplitter {
 	/*

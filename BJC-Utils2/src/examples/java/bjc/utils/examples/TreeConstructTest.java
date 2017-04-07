@@ -12,11 +12,11 @@ import bjc.utils.funcutils.ListUtils;
 import bjc.utils.funcutils.StringUtils;
 import bjc.utils.parserutils.ShuntingYard;
 import bjc.utils.parserutils.TreeConstructor;
+import bjc.utils.parserutils.TreeConstructor.QueueFlattener;
 
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Scanner;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -92,7 +92,7 @@ public class TreeConstructTest {
 			return false;
 		};
 
-		IMap<String, Function<Deque<ITree<String>>, ITree<String>>> operators
+		IMap<String, QueueFlattener<String>> operators
 			= new FunctionalMap<>();
 
 		operators.put("[", (queuedTrees) -> {

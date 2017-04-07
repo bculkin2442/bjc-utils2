@@ -20,6 +20,29 @@ import java.util.function.Predicate;
  */
 public class TreeConstructor {
 	/**
+	 * Alias interface for special operator types.
+	 * 
+	 * @param <TokenType>
+	 *                The token type of the tree.
+	 */
+	public interface QueueFlattener<TokenType> extends Function<Deque<ITree<TokenType>>, ITree<TokenType>> {
+
+	}
+
+	/*
+	 * Alias for constructor state.
+	 */
+	static final class ConstructorState<TokenType> extends Pair<Deque<ITree<TokenType>>, ITree<TokenType>> {
+		public ConstructorState(Deque<ITree<TokenType>> left, ITree<TokenType> right) {
+			super(left, right);
+		}
+
+		public ConstructorState(IPair<Deque<ITree<TokenType>>, ITree<TokenType>> par) {
+			super(par.getLeft(), par.getRight());
+		}
+	}
+
+	/**
 	 * Construct a tree from a list of tokens in postfix notation
 	 *
 	 * Only binary operators are accepted.
@@ -36,36 +59,38 @@ public class TreeConstructor {
 	public static <TokenType> ITree<TokenType> constructTree(IList<TokenType> tokens,
 			Predicate<TokenType> isOperator) {
 		// Construct a tree with no special operators
-		return constructTree(tokens, isOperator, (op) -> false, null);
+		return constructTree(tokens, isOperator, op -> false, null);
 	}
 
 	/**
-	 * Construct a tree from a list of tokens in postfix notation
+	 * Construct a tree from a list of tokens in postfix notation.
 	 *
 	 * Only binary operators are accepted by default. Use the last two
-	 * parameters to handle non-binary operators
+	 * parameters to handle non-binary operators.
 	 *
 	 * @param <TokenType>
-	 *                The elements of the parse tree
+	 *                The elements of the parse tree.
+	 * 
 	 * @param tokens
-	 *                The list of tokens to build a tree from
+	 *                The list of tokens to build a tree from.
+	 * 
 	 * @param isOperator
 	 *                The predicate to use to determine if something is a
-	 *                operator
+	 *                operator.
+	 * 
 	 * @param isSpecialOperator
 	 *                The predicate to use to determine if an operator needs
-	 *                special handling
+	 *                special handling.
+	 * 
 	 * @param handleSpecialOperator
-	 *                The function to use to handle special case operators
+	 *                The function to use to handle special case operators.
+	 * 
 	 * @return A AST from the expression
 	 *
-	 *         FIXME The handleSpecialOp function seems like an ugly
-	 *         interface. Maybe there's a better way to express how that
-	 *         works.
 	 */
 	public static <TokenType> ITree<TokenType> constructTree(IList<TokenType> tokens,
 			Predicate<TokenType> isOperator, Predicate<TokenType> isSpecialOperator,
-			Function<TokenType, Function<Deque<ITree<TokenType>>, ITree<TokenType>>> handleSpecialOperator) {
+			Function<TokenType, QueueFlattener<TokenType>> handleSpecialOperator) {
 		// Make sure our parameters are valid
 		if(tokens == null)
 			throw new NullPointerException("Tokens must not be null");
@@ -75,15 +100,15 @@ public class TreeConstructor {
 			throw new NullPointerException("Special operator determiner must not be null");
 
 		// Here is the state for the tree construction
-		IHolder<IPair<Deque<ITree<TokenType>>, ITree<TokenType>>> initialState = new Identity<>(
-				new Pair<>(new LinkedList<>(), null));
+		IHolder<ConstructorState<TokenType>> initialState = new Identity<>(
+				new ConstructorState<>(new LinkedList<>(), null));
 
 		// Transform each of the tokens
 		tokens.forEach(new TokenTransformer<>(initialState, isOperator, isSpecialOperator,
 				handleSpecialOperator));
 
 		// Grab the tree from the state
-		return initialState.unwrap((pair) -> {
+		return initialState.unwrap(pair -> {
 			return pair.getRight();
 		});
 	}
