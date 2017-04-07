@@ -108,3 +108,28 @@ fpNumber (?:%1$s|%2$s|%3$s)
 ## NOTE: The parens are not mismatched.
 ##	 The other one is contributed by the leader.
 fpDouble %1$1(?:%2$s[fFdD]?))[\x00-\x20]*
+
+#########################################
+# Format strings for handling delimiters.
+#########################################
+
+## Format a raw delimiter
+##	The parts are
+##	1) A regular expression
+##
+##	This matches just the provided regular expression.
+rawDelim (?:%1$s)|
+
+## Format a repeating delimiter
+##	The parts are
+##	1) A string.
+##
+##	This matches one or more occurances of the provided string as a literal.
+multipleDelim (?:\Q%1$s\E)+|
+
+## Format a simple delimiter
+##	The parts are
+##	1) A string.
+##
+##	This matches one occurrence of the provided string as a literal.
+simpleDelim (?:\Q%1$s\E)|

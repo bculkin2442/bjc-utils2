@@ -42,6 +42,28 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 	}
 
 	/**
+	 * Add all of the elements in the provided array to this list.
+	 *
+	 * @param items
+	 *                The array of items to add.
+	 * 
+	 * @return True if every item was successfully added to the list, false
+	 *         otherwise.
+	 */
+	@SuppressWarnings("unchecked")
+	default boolean addAll(ContainedType... items) {
+		boolean succ = true;
+
+		for(ContainedType item : items) {
+			boolean addSucc = add(item);
+
+			succ = succ ? addSucc : false;
+		}
+
+		return succ;
+	}
+
+	/**
 	 * Check if all of the elements of this list match the specified
 	 * predicate.
 	 *
@@ -236,6 +258,19 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 	 *                The item to prepend to the list
 	 */
 	void prepend(ContainedType item);
+
+	/**
+	 * Prepend an array of items to the list.
+	 *
+	 * @param items
+	 *                The items to prepend to the list.
+	 */
+	@SuppressWarnings("unchecked")
+	default void prependAll(ContainedType... items) {
+		for(ContainedType item : items) {
+			prepend(item);
+		}
+	}
 
 	/**
 	 * Select a random item from the list, using a default random number

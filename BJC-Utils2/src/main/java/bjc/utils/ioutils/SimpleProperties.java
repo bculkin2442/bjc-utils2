@@ -32,27 +32,25 @@ public class SimpleProperties implements Map<String, String> {
 	 * All leading/trailing spaces from the name & body are removed.
 	 * 
 	 * @param is
-	 *            The stream to read from.
+	 *                The stream to read from.
 	 * 
 	 * @param allowDuplicates
-	 *            Whether or not duplicate keys should be allowed.
+	 *                Whether or not duplicate keys should be allowed.
 	 */
 	public void loadFrom(InputStream is, boolean allowDuplicates) {
-		try (Scanner scn = new Scanner(is)) {
-			while (scn.hasNextLine()) {
+		try(Scanner scn = new Scanner(is)) {
+			while(scn.hasNextLine()) {
 				String ln = scn.nextLine().trim();
 
 				/*
 				 * Skip blank lines/comments
 				 */
-				if (ln.equals(""))
-					continue;
-				if (ln.startsWith("#"))
-					continue;
+				if(ln.equals("")) continue;
+				if(ln.startsWith("#")) continue;
 
 				int sepIdx = ln.indexOf(' ');
 
-				if (sepIdx == -1) {
+				if(sepIdx == -1) {
 					String fmt = "Properties must be a name, a space, then the body.\n\tOffending line is '%s'";
 					String msg = String.format(fmt, ln);
 
@@ -62,7 +60,7 @@ public class SimpleProperties implements Map<String, String> {
 				String name = ln.substring(0, sepIdx).trim();
 				String body = ln.substring(sepIdx).trim();
 
-				if (!allowDuplicates && containsKey(name)) {
+				if(!allowDuplicates && containsKey(name)) {
 					String msg = String.format("Duplicate key '%s'", name);
 
 					throw new IllegalStateException(msg);
@@ -71,13 +69,19 @@ public class SimpleProperties implements Map<String, String> {
 				put(name, body);
 			}
 		}
+	}
 
+	/**
+	 * Output the set of read properties.
+	 */
+	public void outputProperties() {
 		System.out.println("Read properties:");
-		for (Entry<String, String> entry : entrySet()) {
+
+		for(Entry<String, String> entry : entrySet()) {
 			System.out.printf("\t'%s'\t'%s'\n", entry.getKey(), entry.getValue());
 		}
-		System.out.println();
 
+		System.out.println();
 	}
 
 	@Override

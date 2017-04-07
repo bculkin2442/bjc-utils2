@@ -5,6 +5,7 @@ package bjc.utils.parserutils.splitter;
  *
  * @author Ben Culkin
  */
+@Deprecated
 public interface TokenSplitter {
 	/**
 	 * Split a provided string using configured delimiters, and keeping the

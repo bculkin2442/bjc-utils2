@@ -1,6 +1,8 @@
 package bjc.utils.examples;
 
 import bjc.utils.data.ITree;
+import bjc.utils.funcdata.FunctionalList;
+import bjc.utils.funcdata.IList;
 import bjc.utils.funcutils.StringUtils;
 import bjc.utils.parserutils.delims.DelimiterException;
 import bjc.utils.parserutils.delims.DelimiterGroup;
@@ -8,7 +10,7 @@ import bjc.utils.parserutils.delims.RegexCloser;
 import bjc.utils.parserutils.delims.RegexOpener;
 import bjc.utils.parserutils.delims.SequenceDelimiter;
 import bjc.utils.parserutils.delims.StringDelimiter;
-import bjc.utils.parserutils.splitter.SimpleTokenSplitter;
+import bjc.utils.parserutils.splitterv2.ConfigurableTokenSplitter;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -28,7 +30,7 @@ import java.util.Scanner;
  *
  */
 public class DelimSplitterTest {
-	private SimpleTokenSplitter split;
+	private ConfigurableTokenSplitter split;
 
 	private StringDelimiter dlm;
 
@@ -46,7 +48,7 @@ public class DelimSplitterTest {
 
 		groups = new HashMap<>();
 
-		split = new SimpleTokenSplitter();
+		split = new ConfigurableTokenSplitter(true);
 
 		dlm = new StringDelimiter();
 
@@ -141,27 +143,21 @@ public class DelimSplitterTest {
 			}
 			break;
 		case "splitter-add":
-			split.addDelimiter(argArray);
+			split.addSimpleDelimiters(argArray);
 			if(verbose) {
 				System.out.println("Added delimiters " + StringUtils.toEnglishList(argArray, true));
 			}
 			break;
 		case "splitter-addmulti":
-			split.addMultiDelimiter(argArray);
+			split.addMultiDelimiters(argArray);
 			if(verbose) {
 				System.out.println(
 						"Added multi-delimiters " + StringUtils.toEnglishList(argArray, true));
 			}
 			break;
-		case "splitter-addnon":
-			split.addNonMatcher(argArray);
-			if(verbose) {
-				System.out.println("Added non-splitters " + StringUtils.toEnglishList(argArray, true));
-			}
-			break;
 		case "splitter-addmatch":
 			for(String arg : argArray) {
-				split.addDelimiter(arg, mirrored.get(arg));
+				split.addSimpleDelimiters(arg, mirrored.get(arg));
 			}
 			if(verbose) {
 				System.out.println("Added matched delimiters "
@@ -172,7 +168,7 @@ public class DelimSplitterTest {
 			System.out.println(split.toString());
 			break;
 		case "splitter-reset":
-			split = new SimpleTokenSplitter();
+			split = new ConfigurableTokenSplitter(true);
 			if(verbose) {
 				System.out.println("Reset splitter");
 			}
@@ -393,14 +389,14 @@ public class DelimSplitterTest {
 		for(int i = 0; i < argArray.length; i++) {
 			String arg = argArray[i];
 
-			String[] res = split.split(arg);
+			IList<String> strangs = split.split(arg);
 
-			System.out.printf("%d '%s' %s\n", i, arg, Arrays.deepToString(res));
+			System.out.printf("%d '%s' %s\n", i, arg, strangs);
 		}
 	}
 
 	private void handleTest(String inp, boolean splitWS) {
-		String[] strings;
+		IList<String> strings;
 
 		try {
 			strings = split.split(inp);
@@ -409,7 +405,7 @@ public class DelimSplitterTest {
 			return;
 		}
 
-		System.out.println("Split tokens: " + Arrays.deepToString(strings));
+		System.out.println("Split tokens: " + strings);
 
 		if(splitWS) {
 			List<String> tks = new LinkedList<>();
@@ -418,10 +414,10 @@ public class DelimSplitterTest {
 				tks.addAll(Arrays.asList(strang.split(" ")));
 			}
 
-			strings = tks.toArray(new String[0]);
+			strings = new FunctionalList<>(tks);
 		}
 		try {
-			ITree<String> delim = dlm.delimitSequence(strings);
+			ITree<String> delim = dlm.delimitSequence(strings.toArray(new String[0]));
 
 			printDelimSeq(delim);
 		} catch(DelimiterException dex) {
@@ -436,17 +432,6 @@ public class DelimSplitterTest {
 		printDelimTree(delim);
 		System.out.println();
 		System.out.println();
-
-		/*
-		 * ITree<String> transform =
-		 * delim.topDownTransform(this::pickNode, this::transformNode);
-		 * System.out.println("Transformed tree:\n" +
-		 * transform.getChild(1)); System.out.println();
-		 * System.out.println();
-		 * 
-		 * System.out.print("Transformed expr: ");
-		 * printDelimTree(transform);
-		 */
 
 		System.out.println();
 	}
@@ -498,19 +483,6 @@ public class DelimSplitterTest {
 		}
 	}
 
-	/*
-	 * private TopDownTransformResult pickNode(String node) {
-	 * if(groups.containsKey(node) || node.equals("subgroup")) return
-	 * TopDownTransformResult.PUSHDOWN; else return
-	 * TopDownTransformResult.PASSTHROUGH; }
-	 * 
-	 * private ITree<String> transformNode(ITree<String> tree) {
-	 * if(groups.containsKey(tree.getHead())) {
-	 * 
-	 * }
-	 * 
-	 * return tree; }
-	 */
 	/**
 	 * Main method
 	 * 

@@ -1,5 +1,9 @@
 package bjc.utils.parserutils;
 
+import bjc.utils.funcdata.FunctionalList;
+import bjc.utils.funcdata.IList;
+import bjc.utils.parserutils.splitterv2.TokenSplitter;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -17,6 +21,17 @@ import static bjc.utils.PropertyDB.applyFormat;
  *         TODO add support for user defined escapes.
  */
 public class TokenUtils {
+	/**
+	 * @author EVE
+	 *
+	 */
+	public static class StringTokenSplitter implements TokenSplitter {
+		@Override
+		public IList<String> split(String input) {
+			return new FunctionalList<>(TokenUtils.removeDQuotedStrings(input));
+		}
+	}
+
 	/*
 	 * Patterns and pattern parts.
 	 */

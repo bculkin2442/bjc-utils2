@@ -1,7 +1,12 @@
 package bjc.utils.ioutils;
 
+import bjc.utils.data.Toggle;
+import bjc.utils.data.ValueToggle;
+import bjc.utils.funcdata.FunctionalList;
+import bjc.utils.funcdata.IList;
 import bjc.utils.functypes.ID;
 
+import java.util.function.BiFunction;
 import java.util.function.UnaryOperator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,6 +18,8 @@ import java.util.regex.Pattern;
  *
  */
 public class RegexStringEditor {
+	private static final UnaryOperator<String> SID = ID.id();
+
 	/**
 	 * Replace every occurrence of the pattern with the result of applying
 	 * the action to the string matched by the pattern.
@@ -29,7 +36,7 @@ public class RegexStringEditor {
 	 * @return The string, with matches replaced with the action.
 	 */
 	public static String onOccurances(String input, Pattern patt, UnaryOperator<String> action) {
-		return occurances(input, patt, ID.id(), action);
+		return reduceOccurances(input, patt, SID, action);
 	}
 
 	/**
@@ -49,7 +56,7 @@ public class RegexStringEditor {
 	 *         the action.
 	 */
 	public static String betweenOccurances(String input, Pattern patt, UnaryOperator<String> action) {
-		return occurances(input, patt, action, ID.id());
+		return reduceOccurances(input, patt, action, SID);
 	}
 
 	/**
@@ -58,7 +65,7 @@ public class RegexStringEditor {
 	 * @param input
 	 *                The input string.
 	 * 
-	 * @param patt
+	 * @param rPatt
 	 *                The pattern to match against the string.
 	 * 
 	 * @param betweenAction
@@ -69,11 +76,59 @@ public class RegexStringEditor {
 	 * 
 	 * @return The string, with both actions applied.
 	 */
-	public static String occurances(String input, Pattern patt, UnaryOperator<String> betweenAction,
+	public static String reduceOccurances(String input, Pattern rPatt, UnaryOperator<String> betweenAction,
 			UnaryOperator<String> onAction) {
-		Matcher matcher = patt.matcher(input);
+		IList<String> occurances = listOccurances(input, rPatt);
 
-		StringBuffer res = new StringBuffer();
+		Toggle<UnaryOperator<String>> actions = new ValueToggle<>(onAction, betweenAction);
+		BiFunction<String, StringBuilder, StringBuilder> reducer = (strang, state) -> {
+			return state.append(actions.get().apply(strang));
+		};
+
+		return occurances.reduceAux(new StringBuilder(), reducer, StringBuilder::toString);
+	}
+
+	/**
+	 * Execute actions between and on matches of a regular expression.
+	 * 
+	 * @param input
+	 *                The input string.
+	 * 
+	 * @param rPatt
+	 *                The pattern to match against the string.
+	 * 
+	 * @param betweenAction
+	 *                The function to execute between matches of the string.
+	 * 
+	 * @param onAction
+	 *                The function to execute on matches of the string.
+	 * 
+	 * @return The string, with both actions applied.
+	 */
+	public static IList<String> mapOccurances(String input, Pattern rPatt, UnaryOperator<String> betweenAction,
+			UnaryOperator<String> onAction) {
+		IList<String> occurances = listOccurances(input, rPatt);
+		Toggle<UnaryOperator<String>> actions = new ValueToggle<>(onAction, betweenAction);
+
+		return occurances.map(strang -> actions.get().apply(strang));
+	}
+
+	/**
+	 * Separate a string into match/non-match segments.
+	 * 
+	 * @param input
+	 *                The string to separate.
+	 * 
+	 * @param rPatt
+	 *                The pattern to use for separation.
+	 * 
+	 * @return The string, as a list of match/non-match segments,
+	 *         starting/ending with a non-match segment.
+	 */
+	public static IList<String> listOccurances(String input, Pattern rPatt) {
+		IList<String> res = new FunctionalList<>();
+
+		Matcher matcher = rPatt.matcher(input);
 
 		StringBuffer work = new StringBuffer();
 
@@ -82,17 +137,17 @@ public class RegexStringEditor {
 
 			matcher.appendReplacement(work, "");
 
-			res.append(betweenAction.apply(matcher.toString()));
-			res.append(onAction.apply(match));
+			res.add(work.toString());
+			res.add(match);
 
 			work = new StringBuffer();
 		}
 
 		matcher.appendTail(work);
 
-		res.append(betweenAction.apply(work.toString()));
+		res.add(work.toString());
 
-		return res.toString();
+		return res;
 	}
 
 	/**

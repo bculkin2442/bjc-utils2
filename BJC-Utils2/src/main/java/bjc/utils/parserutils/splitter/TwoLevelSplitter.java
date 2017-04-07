@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
  * @author EVE
  *
  */
+@Deprecated
 public class TwoLevelSplitter implements TokenSplitter {
 	private SimpleTokenSplitter	high;
 	private SimpleTokenSplitter	low;
