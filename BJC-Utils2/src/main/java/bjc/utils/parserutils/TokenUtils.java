@@ -32,7 +32,7 @@ public class TokenUtils {
 
 	private static Pattern escapePatt = Pattern.compile(rEscapeString);
 
-	private static String rDoubleQuoteString = applyFormat("doubleQuotes", getRegex("nonEscape"),
+	private static String rDoubleQuoteString = applyFormat("doubleQuotes", getRegex("nonStringEscape"),
 			rPossibleEscapeString);
 
 	private static Pattern doubleQuotePatt = Pattern.compile(rDoubleQuoteString);
