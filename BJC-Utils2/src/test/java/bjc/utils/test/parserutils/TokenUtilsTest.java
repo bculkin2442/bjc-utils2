@@ -1,16 +1,17 @@
 package bjc.utils.test.parserutils;
 
-import static org.junit.Assert.*;
+import static bjc.utils.parserutils.TokenUtils.descapeString;
+import static bjc.utils.parserutils.TokenUtils.removeDQuotedStrings;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 import java.util.List;
-
-import static org.hamcrest.CoreMatchers.*;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
-import static bjc.utils.parserutils.TokenUtils.*;
 
 /*
  * Tests for TokenUtils
@@ -19,11 +20,11 @@ import static bjc.utils.parserutils.TokenUtils.*;
 public class TokenUtilsTest {
 	@Rule
 	public ExpectedException exp = ExpectedException.none();
-	
+
 	/*
 	 * Test removeDQuoted
 	 */
-	
+
 	/*
 	 * Check handling of mismatched strings with no matching strings.
 	 */
@@ -51,7 +52,7 @@ public class TokenUtilsTest {
 	 */
 	@Test
 	public void testRemoveDQuoted_SingleString() {
-		List<String> onSingleMatchString = removeDQuotedStrings("hello\"there\"");
+		final List<String> onSingleMatchString = removeDQuotedStrings("hello\"there\"");
 
 		assertThat(onSingleMatchString, hasItems("hello", "\"there\""));
 	}
@@ -61,26 +62,27 @@ public class TokenUtilsTest {
 	 */
 	@Test
 	public void testRemoveDQuoted_MultipleSerialString() {
-		List<String> onMultipleSerialMatchString = removeDQuotedStrings("\"hello\"\"there\"");
-		
+		final List<String> onMultipleSerialMatchString = removeDQuotedStrings("\"hello\"\"there\"");
+
 		assertThat(onMultipleSerialMatchString, hasItems("\"hello\"", "\"there\""));
 	}
-	
+
 	/*
 	 * Check handling of strings with multiple interleaved strings.
 	 */
 	@Test
 	public void testRemoveDQuoted_MultipleInterleavedString() {
-		List<String> onMultipleInterleaveMatchString = removeDQuotedStrings("one\"two\"three\"four\"");
-		
+		final List<String> onMultipleInterleaveMatchString = removeDQuotedStrings("one\"two\"three\"four\"");
+
 		assertThat(onMultipleInterleaveMatchString, hasItems("one", "\"two\"", "three", "\"four\""));
 	}
+
 	/*
 	 * Check handling of strings without embedded strings.
 	 */
 	@Test
 	public void testRemoveDQuote_NoString() {
-		List<String> onNonmatchingString = removeDQuotedStrings("hello");
+		final List<String> onNonmatchingString = removeDQuotedStrings("hello");
 
 		assertThat(onNonmatchingString, hasItems("hello"));
 	}
@@ -90,11 +92,11 @@ public class TokenUtilsTest {
 	 */
 	@Test
 	public void testRemoveDQuote_EmptyString() {
-		List<String> onEmptyString = removeDQuotedStrings("");
+		final List<String> onEmptyString = removeDQuotedStrings("");
 
 		assertThat(onEmptyString, hasItems(""));
 	}
-	
+
 	/*
 	 * Test descapeString
 	 */
@@ -103,41 +105,41 @@ public class TokenUtilsTest {
 	 */
 	@Test
 	public void testDescapeString_EmptyString() {
-		String onEmptyString = descapeString("");
-		
+		final String onEmptyString = descapeString("");
+
 		assertThat(onEmptyString, is(""));
 	}
-	
+
 	/*
 	 * Check handling of strings without escapes
 	 */
 	@Test
 	public void testDescapeString_NonescapeString() {
-		String onNonescapeString = descapeString("hello there");
-		
+		final String onNonescapeString = descapeString("hello there");
+
 		assertThat(onNonescapeString, is("hello there"));
 	}
-	
+
 	/*
 	 * Check handling of strings with single escapes.
 	 */
 	@Test
 	public void testDescapeString_SingleEscapeString() {
-		String onSingleEscapeString = descapeString("hello\\tthere");
-		
+		final String onSingleEscapeString = descapeString("hello\\tthere");
+
 		assertThat(onSingleEscapeString, is("hello\tthere"));
 	}
-	
+
 	/*
 	 * Check handling of strings with multiple escapes.
 	 */
 	@Test
 	public void testDescapeString_MultipleEscapeString() {
-		String onMultipleEscapeString = descapeString("hello\\tthere\\tworld");
-		
+		final String onMultipleEscapeString = descapeString("hello\\tthere\\tworld");
+
 		assertThat(onMultipleEscapeString, is("hello\tthere\tworld"));
 	}
-	
+
 	/*
 	 * Check handling of strings with invalid single escapes.
 	 */
@@ -145,7 +147,7 @@ public class TokenUtilsTest {
 	public void testDescapeString_InvalidSingleEscapeString() throws IllegalArgumentException {
 		exp.expect(IllegalArgumentException.class);
 		exp.expectMessage(containsString("at position 0"));
-		
+
 		descapeString("\\x");
 	}
 }

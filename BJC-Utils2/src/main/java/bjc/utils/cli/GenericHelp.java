@@ -8,8 +8,8 @@ package bjc.utils.cli;
  */
 public class GenericHelp implements CommandHelp {
 	// The strings for this help topic
-	private String	summary;
-	private String	description;
+	private final String	summary;
+	private final String	description;
 
 	/**
 	 * Create a new help topic
@@ -20,8 +20,8 @@ public class GenericHelp implements CommandHelp {
 	 *                The description of this help topic, or null if this
 	 *                help topic doesn't have a more detailed description
 	 */
-	public GenericHelp(String summary, String description) {
-		if(summary == null) throw new NullPointerException("Help summary must be non-null");
+	public GenericHelp(final String summary, final String description) {
+		if (summary == null) throw new NullPointerException("Help summary must be non-null");
 
 		this.summary = summary;
 		this.description = description;
@@ -29,7 +29,7 @@ public class GenericHelp implements CommandHelp {
 
 	@Override
 	public String getDescription() {
-		if(description == null) return summary;
+		if (description == null) return summary;
 
 		return description;
 	}
@@ -41,23 +41,23 @@ public class GenericHelp implements CommandHelp {
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		
+		final StringBuilder builder = new StringBuilder();
+
 		builder.append("GenericHelp [");
-		
-		if(summary != null) {
+
+		if (summary != null) {
 			builder.append("summary=");
 			builder.append(summary);
 		}
-		
-		if(description != null) {
+
+		if (description != null) {
 			builder.append(", ");
 			builder.append("description=");
 			builder.append(description);
 		}
-		
+
 		builder.append("]");
-		
+
 		return builder.toString();
 	}
 }

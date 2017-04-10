@@ -16,9 +16,9 @@ public class CLICommander {
 	/*
 	 * The streams used for input and normal/error output.
 	 */
-	private InputStream	input;
-	private OutputStream	output;
-	private OutputStream	error;
+	private final InputStream	input;
+	private final OutputStream	output;
+	private final OutputStream	error;
 
 	/*
 	 * The command mode to start execution in.
@@ -35,14 +35,16 @@ public class CLICommander {
 	 * @param error
 	 *                The stream to send error output to.
 	 */
-	public CLICommander(InputStream input, OutputStream output, OutputStream error) {
-		if(input == null)       throw new NullPointerException("Input stream must not be null");
-		else if(output == null) throw new NullPointerException("Output stream must not be null");
-		else if(error == null)  throw new NullPointerException("Error stream must not be null");
+	public CLICommander(final InputStream input, final OutputStream output, final OutputStream error) {
+		if (input == null)
+			throw new NullPointerException("Input stream must not be null");
+		else if (output == null)
+			throw new NullPointerException("Output stream must not be null");
+		else if (error == null) throw new NullPointerException("Error stream must not be null");
 
-		this.input  = input;
+		this.input = input;
 		this.output = output;
-		this.error  = error;
+		this.error = error;
 	}
 
 	/**
@@ -50,10 +52,10 @@ public class CLICommander {
 	 */
 	public void runCommands() {
 		/*
-		 *  Setup output streams.
+		 * Setup output streams.
 		 */
-		PrintStream normalOutput = new PrintStream(output);
-		PrintStream errorOutput  = new PrintStream(error);
+		final PrintStream normalOutput = new PrintStream(output);
+		final PrintStream errorOutput = new PrintStream(error);
 
 		/*
 		 * Set up input streams.
@@ -62,7 +64,7 @@ public class CLICommander {
 		 * stream multiple times.
 		 */
 		@SuppressWarnings("resource")
-		Scanner inputSource = new Scanner(input);
+		final Scanner inputSource = new Scanner(input);
 
 		/*
 		 * The mode currently being used to handle commands.
@@ -72,42 +74,42 @@ public class CLICommander {
 		CommandMode currentMode = initialMode;
 
 		/*
-		 *  Process commands until we're told to stop.
+		 * Process commands until we're told to stop.
 		 */
-		while(currentMode != null) {
+		while (currentMode != null) {
 			/*
 			 * Print out the command prompt, using a custom prompt
 			 * if one is specified.
 			 */
-			if(currentMode.isCustomPromptEnabled()) {
+			if (currentMode.isCustomPromptEnabled()) {
 				normalOutput.print(currentMode.getCustomPrompt());
 			} else {
 				normalOutput.print(currentMode.getName() + ">> ");
 			}
 
 			/*
-			 *  Read in a command.
+			 * Read in a command.
 			 */
-			String currentLine = inputSource.nextLine();
+			final String currentLine = inputSource.nextLine();
 
 			/*
-			 *  Handle commands we can handle.
+			 * Handle commands we can handle.
 			 */
-			if(currentMode.canHandle(currentLine)) {
-				String[] commandTokens = currentLine.split(" ");
-				String[] commandArgs   = null;
+			if (currentMode.canHandle(currentLine)) {
+				final String[] commandTokens = currentLine.split(" ");
+				String[] commandArgs = null;
 
-				int argCount = commandTokens.length;
+				final int argCount = commandTokens.length;
 
 				/*
-				 *  Parse args if they are present.
+				 * Parse args if they are present.
 				 */
-				if(argCount > 1) {
+				if (argCount > 1) {
 					commandArgs = Arrays.copyOfRange(commandTokens, 1, argCount);
 				}
 
 				/*
-				 *  Process command.
+				 * Process command.
 				 */
 				currentMode = currentMode.process(commandTokens[0], commandArgs);
 			} else {
@@ -124,8 +126,8 @@ public class CLICommander {
 	 * @param initialMode
 	 *                The initial command mode to use.
 	 */
-	public void setInitialCommandMode(CommandMode initialMode) {
-		if(initialMode == null) throw new NullPointerException("Initial mode must be non-zero");
+	public void setInitialCommandMode(final CommandMode initialMode) {
+		if (initialMode == null) throw new NullPointerException("Initial mode must be non-zero");
 
 		this.initialMode = initialMode;
 	}

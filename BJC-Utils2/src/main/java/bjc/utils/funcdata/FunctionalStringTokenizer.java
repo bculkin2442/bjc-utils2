@@ -18,9 +18,8 @@ public class FunctionalStringTokenizer {
 	 *                The string to create a tokenizer from.
 	 * @return A new tokenizer that splits the provided string on spaces.
 	 */
-	public static FunctionalStringTokenizer fromString(String strang) {
-		if (strang == null)
-			throw new NullPointerException("String to tokenize must be non-null");
+	public static FunctionalStringTokenizer fromString(final String strang) {
+		if (strang == null) throw new NullPointerException("String to tokenize must be non-null");
 
 		return new FunctionalStringTokenizer(new StringTokenizer(strang, " "));
 	}
@@ -28,7 +27,7 @@ public class FunctionalStringTokenizer {
 	/*
 	 * The string tokenizer being driven
 	 */
-	private StringTokenizer input;
+	private final StringTokenizer input;
 
 	/**
 	 * Create a functional string tokenizer from a given string
@@ -36,9 +35,8 @@ public class FunctionalStringTokenizer {
 	 * @param inp
 	 *                The string to tokenize
 	 */
-	public FunctionalStringTokenizer(String inp) {
-		if (inp == null)
-			throw new NullPointerException("String to tokenize must be non-null");
+	public FunctionalStringTokenizer(final String inp) {
+		if (inp == null) throw new NullPointerException("String to tokenize must be non-null");
 
 		this.input = new StringTokenizer(inp);
 	}
@@ -52,11 +50,10 @@ public class FunctionalStringTokenizer {
 	 * @param seperators
 	 *                The set of separating tokens to use for splitting
 	 */
-	public FunctionalStringTokenizer(String input, String seperators) {
+	public FunctionalStringTokenizer(final String input, final String seperators) {
 		if (input == null)
 			throw new NullPointerException("String to tokenize must not be null");
-		else if (seperators == null)
-			throw new NullPointerException("Tokens to split on must not be null");
+		else if (seperators == null) throw new NullPointerException("Tokens to split on must not be null");
 
 		this.input = new StringTokenizer(input, seperators);
 	}
@@ -67,9 +64,8 @@ public class FunctionalStringTokenizer {
 	 * @param toWrap
 	 *                The non-functional string tokenizer to wrap
 	 */
-	public FunctionalStringTokenizer(StringTokenizer toWrap) {
-		if (toWrap == null)
-			throw new NullPointerException("Wrapped tokenizer must not be null");
+	public FunctionalStringTokenizer(final StringTokenizer toWrap) {
+		if (toWrap == null) throw new NullPointerException("Wrapped tokenizer must not be null");
 
 		this.input = toWrap;
 	}
@@ -80,9 +76,8 @@ public class FunctionalStringTokenizer {
 	 * @param action
 	 *                The action to execute for each token
 	 */
-	public void forEachToken(Consumer<String> action) {
-		if (action == null)
-			throw new NullPointerException("Action must not be null");
+	public void forEachToken(final Consumer<String> action) {
+		if (action == null) throw new NullPointerException("Action must not be null");
 
 		while (input.hasMoreTokens()) {
 			action.accept(input.nextToken());
@@ -128,7 +123,7 @@ public class FunctionalStringTokenizer {
 	 * @return This tokenizer, converted into a list of strings
 	 */
 	public IList<String> toList() {
-		return toList((String element) -> element);
+		return toList((final String element) -> element);
 	}
 
 	/**
@@ -142,15 +137,14 @@ public class FunctionalStringTokenizer {
 	 *                The function to use to convert tokens.
 	 * @return A list containing all of the converted tokens.
 	 */
-	public <E> IList<E> toList(Function<String, E> transformer) {
-		if (transformer == null)
-			throw new NullPointerException("Transformer must not be null");
+	public <E> IList<E> toList(final Function<String, E> transformer) {
+		if (transformer == null) throw new NullPointerException("Transformer must not be null");
 
-		IList<E> returned = new FunctionalList<>();
+		final IList<E> returned = new FunctionalList<>();
 
 		// Add each token to the list after transforming it
 		forEachToken(token -> {
-			E transformedToken = transformer.apply(token);
+			final E transformedToken = transformer.apply(token);
 
 			returned.add(transformedToken);
 		});

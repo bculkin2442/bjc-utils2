@@ -14,7 +14,7 @@ public interface TokenSplitter {
 	 * <p>
 	 * The splitter must be compiled first.
 	 * </p>
-	 * 
+	 *
 	 * @param inp
 	 *                The string to split.
 	 *

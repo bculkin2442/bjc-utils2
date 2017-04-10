@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 /**
  * An iterator that repeats elements from a provided iterable.
- * 
+ *
  * @author EVE
  *
  * @param <E>
@@ -30,15 +30,15 @@ public class CircularIterator<E> implements Iterator<E> {
 
 	/**
 	 * Create a new circular iterator.
-	 * 
+	 *
 	 * @param src
 	 *                The iterable to iterate from.
-	 * 
+	 *
 	 * @param circ
 	 *                Should we actually do circular iteration, or just
 	 *                repeat the terminal element?
 	 */
-	public CircularIterator(Iterable<E> src, boolean circ) {
+	public CircularIterator(final Iterable<E> src, final boolean circ) {
 		source = src;
 		curr = source.iterator();
 
@@ -47,11 +47,11 @@ public class CircularIterator<E> implements Iterator<E> {
 
 	/**
 	 * Create a new circular iterator that does actual circular iteration.
-	 * 
+	 *
 	 * @param src
 	 *                The iterable to iterate from.
 	 */
-	public CircularIterator(Iterable<E> src) {
+	public CircularIterator(final Iterable<E> src) {
 		this(src, true);
 	}
 
@@ -64,10 +64,9 @@ public class CircularIterator<E> implements Iterator<E> {
 	@Override
 	public E next() {
 		if (!curr.hasNext()) {
-			if (doCircle)
+			if (doCircle) {
 				curr = source.iterator();
-			else
-				return curElm;
+			} else return curElm;
 		}
 
 		curElm = curr.next();

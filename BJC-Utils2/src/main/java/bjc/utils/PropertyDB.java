@@ -1,16 +1,16 @@
 package bjc.utils;
 
-import bjc.utils.funcutils.LambdaLock;
-import bjc.utils.ioutils.SimpleProperties;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.regex.Pattern;
 
+import bjc.utils.funcutils.LambdaLock;
+import bjc.utils.ioutils.SimpleProperties;
+
 /**
  * Database for storage of properties from external files.
- * 
+ *
  * @author EVE
  *
  */
@@ -33,30 +33,30 @@ public class PropertyDB {
 
 	/**
 	 * Reload all the properties from their files.
-	 * 
+	 *
 	 * NOTE: Any attempts to read from the property DB while properties are
 	 * being loaded will block, to prevent reads from partial states.
 	 */
 	public static void reloadProperties() {
 		loadLock.write(() -> {
-			if(LOGLOAD) {
+			if (LOGLOAD) {
 				System.out.println("Reading regex properties:");
 			}
 			regexes = new SimpleProperties();
 			regexes.loadFrom(PropertyDB.class.getResourceAsStream("/regexes.sprop"), false);
-			if(LOGLOAD) {
+			if (LOGLOAD) {
 				regexes.outputProperties();
 				System.out.println();
 			}
 
 			compiledRegexes = new HashMap<>();
 
-			if(LOGLOAD) {
+			if (LOGLOAD) {
 				System.out.println("Reading format properties:");
 			}
 			formats = new SimpleProperties();
 			formats.loadFrom(PropertyDB.class.getResourceAsStream("/formats.sprop"), false);
-			if(LOGLOAD) {
+			if (LOGLOAD) {
 				formats.outputProperties();
 				System.out.println();
 			}
@@ -65,16 +65,16 @@ public class PropertyDB {
 
 	/**
 	 * Retrieve a persisted regular expression.
-	 * 
+	 *
 	 * @param key
 	 *                The name of the regular expression.
-	 * 
+	 *
 	 * @return The regular expression with that name.
 	 */
-	public static String getRegex(String key) {
+	public static String getRegex(final String key) {
 		return loadLock.read(() -> {
-			if(!regexes.containsKey(key)) {
-				String msg = String.format("No regular expression named '%s' found", key);
+			if (!regexes.containsKey(key)) {
+				final String msg = String.format("No regular expression named '%s' found", key);
 
 				throw new NoSuchElementException(msg);
 			}
@@ -86,16 +86,16 @@ public class PropertyDB {
 	/**
 	 * Retrieve a persisted regular expression, compiled into a regular
 	 * expression.
-	 * 
+	 *
 	 * @param key
 	 *                The name of the regular expression.
-	 * 
+	 *
 	 * @return The regular expression with that name.
 	 */
-	public static Pattern getCompiledRegex(String key) {
+	public static Pattern getCompiledRegex(final String key) {
 		return loadLock.read(() -> {
-			if(!regexes.containsKey(key)) {
-				String msg = String.format("No regular expression named '%s' found", key);
+			if (!regexes.containsKey(key)) {
+				final String msg = String.format("No regular expression named '%s' found", key);
 
 				throw new NoSuchElementException(msg);
 			}
@@ -108,16 +108,16 @@ public class PropertyDB {
 
 	/**
 	 * Retrieve a persisted format string.
-	 * 
+	 *
 	 * @param key
 	 *                The name of the format string.
-	 * 
+	 *
 	 * @return The format string with that name.
 	 */
-	public static String getFormat(String key) {
+	public static String getFormat(final String key) {
 		return loadLock.read(() -> {
-			if(!formats.containsKey(key)) {
-				String msg = String.format("No format string named '%s' found", key);
+			if (!formats.containsKey(key)) {
+				final String msg = String.format("No format string named '%s' found", key);
 
 				throw new NoSuchElementException(msg);
 			}
@@ -129,16 +129,16 @@ public class PropertyDB {
 	/**
 	 * Retrieve a persisted format string, and apply it to a set of
 	 * arguments.
-	 * 
+	 *
 	 * @param key
 	 *                The name of the format string.
-	 * 
+	 *
 	 * @param objects
 	 *                The parameters to the format string.
-	 * 
+	 *
 	 * @return The format string with that name.
 	 */
-	public static String applyFormat(String key, Object... objects) {
+	public static String applyFormat(final String key, final Object... objects) {
 		return String.format(getFormat(key), objects);
 	}
 }

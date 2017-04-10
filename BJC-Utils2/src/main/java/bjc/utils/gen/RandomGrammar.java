@@ -28,8 +28,8 @@ public class RandomGrammar<E> extends WeightedGrammar<E> {
 	 *                The cases to add for this rule.
 	 */
 	@SafeVarargs
-	public final void addCases(E rule, IList<E>... cases) {
-		for(IList<E> currentCase : cases) {
+	public final void addCases(final E rule, final IList<E>... cases) {
+		for (final IList<E> currentCase : cases) {
 			super.addCase(rule, 1, currentCase);
 		}
 	}
@@ -43,10 +43,10 @@ public class RandomGrammar<E> extends WeightedGrammar<E> {
 	 *                The cases to add for this rule.
 	 */
 	@SafeVarargs
-	public final void makeRule(E rule, IList<E>... cases) {
+	public final void makeRule(final E rule, final IList<E>... cases) {
 		super.addRule(rule);
 
-		for(IList<E> currentCase : cases) {
+		for (final IList<E> currentCase : cases) {
 			super.addCase(rule, 1, currentCase);
 		}
 	}
@@ -59,8 +59,8 @@ public class RandomGrammar<E> extends WeightedGrammar<E> {
 	 * @param cases
 	 *                The cases to add for this rule.
 	 */
-	public void makeRule(E rule, IList<IList<E>> cases) {
-		if(cases == null) throw new NullPointerException("Cases must not be null");
+	public void makeRule(final E rule, final IList<IList<E>> cases) {
+		if (cases == null) throw new NullPointerException("Cases must not be null");
 
 		super.addRule(rule);
 

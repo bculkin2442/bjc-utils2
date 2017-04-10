@@ -1,17 +1,17 @@
 package bjc.utils.funcdata;
 
-import bjc.utils.funcutils.ListUtils;
-
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import bjc.utils.funcutils.ListUtils;
+
 class ExtendedMap<KeyType, ValueType> implements IMap<KeyType, ValueType> {
-	private IMap<KeyType, ValueType> delegate;
+	private final IMap<KeyType, ValueType> delegate;
 
-	private IMap<KeyType, ValueType> store;
+	private final IMap<KeyType, ValueType> store;
 
-	public ExtendedMap(IMap<KeyType, ValueType> delegate, IMap<KeyType, ValueType> store) {
+	public ExtendedMap(final IMap<KeyType, ValueType> delegate, final IMap<KeyType, ValueType> store) {
 		this.delegate = delegate;
 		this.store = store;
 	}
@@ -22,9 +22,8 @@ class ExtendedMap<KeyType, ValueType> implements IMap<KeyType, ValueType> {
 	}
 
 	@Override
-	public boolean containsKey(KeyType key) {
-		if (store.containsKey(key))
-			return true;
+	public boolean containsKey(final KeyType key) {
+		if (store.containsKey(key)) return true;
 
 		return delegate.containsKey(key);
 	}
@@ -35,30 +34,29 @@ class ExtendedMap<KeyType, ValueType> implements IMap<KeyType, ValueType> {
 	}
 
 	@Override
-	public void forEach(BiConsumer<KeyType, ValueType> action) {
+	public void forEach(final BiConsumer<KeyType, ValueType> action) {
 		store.forEach(action);
 
 		delegate.forEach(action);
 	}
 
 	@Override
-	public void forEachKey(Consumer<KeyType> action) {
+	public void forEachKey(final Consumer<KeyType> action) {
 		store.forEachKey(action);
 
 		delegate.forEachKey(action);
 	}
 
 	@Override
-	public void forEachValue(Consumer<ValueType> action) {
+	public void forEachValue(final Consumer<ValueType> action) {
 		store.forEachValue(action);
 
 		delegate.forEachValue(action);
 	}
 
 	@Override
-	public ValueType get(KeyType key) {
-		if (store.containsKey(key))
-			return store.get(key);
+	public ValueType get(final KeyType key) {
+		if (store.containsKey(key)) return store.get(key);
 
 		return delegate.get(key);
 	}
@@ -74,19 +72,18 @@ class ExtendedMap<KeyType, ValueType> implements IMap<KeyType, ValueType> {
 	}
 
 	@Override
-	public <MappedValue> IMap<KeyType, MappedValue> transform(Function<ValueType, MappedValue> transformer) {
+	public <MappedValue> IMap<KeyType, MappedValue> transform(final Function<ValueType, MappedValue> transformer) {
 		return new TransformedValueMap<>(this, transformer);
 	}
 
 	@Override
-	public ValueType put(KeyType key, ValueType val) {
+	public ValueType put(final KeyType key, final ValueType val) {
 		return store.put(key, val);
 	}
 
 	@Override
-	public ValueType remove(KeyType key) {
-		if (!store.containsKey(key))
-			return delegate.remove(key);
+	public ValueType remove(final KeyType key) {
+		if (!store.containsKey(key)) return delegate.remove(key);
 
 		return store.remove(key);
 	}
@@ -100,32 +97,25 @@ class ExtendedMap<KeyType, ValueType> implements IMap<KeyType, ValueType> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((delegate == null) ? 0 : delegate.hashCode());
-		result = prime * result + ((store == null) ? 0 : store.hashCode());
+		result = prime * result + (delegate == null ? 0 : delegate.hashCode());
+		result = prime * result + (store == null ? 0 : store.hashCode());
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof ExtendedMap))
-			return false;
+	public boolean equals(final Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (!(obj instanceof ExtendedMap)) return false;
 
-		ExtendedMap<?, ?> other = (ExtendedMap<?, ?>) obj;
+		final ExtendedMap<?, ?> other = (ExtendedMap<?, ?>) obj;
 
 		if (delegate == null) {
-			if (other.delegate != null)
-				return false;
-		} else if (!delegate.equals(other.delegate))
-			return false;
+			if (other.delegate != null) return false;
+		} else if (!delegate.equals(other.delegate)) return false;
 		if (store == null) {
-			if (other.store != null)
-				return false;
-		} else if (!store.equals(other.store))
-			return false;
+			if (other.store != null) return false;
+		} else if (!store.equals(other.store)) return false;
 
 		return true;
 	}

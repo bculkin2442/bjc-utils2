@@ -25,7 +25,7 @@ public class Either<LeftType, RightType> implements IPair<LeftType, RightType> {
 	 *                The value to put on the left
 	 * @return An either with the left side occupied
 	 */
-	public static <LeftType, RightType> Either<LeftType, RightType> left(LeftType left) {
+	public static <LeftType, RightType> Either<LeftType, RightType> left(final LeftType left) {
 		return new Either<>(left, null);
 	}
 
@@ -40,7 +40,7 @@ public class Either<LeftType, RightType> implements IPair<LeftType, RightType> {
 	 *                The value to put on the right
 	 * @return An either with the right side occupied
 	 */
-	public static <LeftType, RightType> Either<LeftType, RightType> right(RightType right) {
+	public static <LeftType, RightType> Either<LeftType, RightType> right(final RightType right) {
 		return new Either<>(null, right);
 	}
 
@@ -50,7 +50,7 @@ public class Either<LeftType, RightType> implements IPair<LeftType, RightType> {
 
 	private boolean isLeft;
 
-	private Either(LeftType left, RightType right) {
+	private Either(final LeftType left, final RightType right) {
 		if (left == null) {
 			rightVal = right;
 		} else {
@@ -62,53 +62,46 @@ public class Either<LeftType, RightType> implements IPair<LeftType, RightType> {
 
 	@Override
 	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind(
-			BiFunction<LeftType, RightType, IPair<BoundLeft, BoundRight>> binder) {
-		if (binder == null)
-			throw new NullPointerException("Binder must not be null");
+			final BiFunction<LeftType, RightType, IPair<BoundLeft, BoundRight>> binder) {
+		if (binder == null) throw new NullPointerException("Binder must not be null");
 
 		return binder.apply(leftVal, rightVal);
 	}
 
 	@Override
 	public <BoundLeft> IPair<BoundLeft, RightType> bindLeft(
-			Function<LeftType, IPair<BoundLeft, RightType>> leftBinder) {
-		if (leftBinder == null)
-			throw new NullPointerException("Left binder must not be null");
+			final Function<LeftType, IPair<BoundLeft, RightType>> leftBinder) {
+		if (leftBinder == null) throw new NullPointerException("Left binder must not be null");
 
-		if (isLeft)
-			return leftBinder.apply(leftVal);
+		if (isLeft) return leftBinder.apply(leftVal);
 
 		return new Either<>(null, rightVal);
 	}
 
 	@Override
 	public <BoundRight> IPair<LeftType, BoundRight> bindRight(
-			Function<RightType, IPair<LeftType, BoundRight>> rightBinder) {
-		if (rightBinder == null)
-			throw new NullPointerException("Right binder must not be null");
+			final Function<RightType, IPair<LeftType, BoundRight>> rightBinder) {
+		if (rightBinder == null) throw new NullPointerException("Right binder must not be null");
 
-		if (isLeft)
-			return new Either<>(leftVal, null);
+		if (isLeft) return new Either<>(leftVal, null);
 
 		return rightBinder.apply(rightVal);
 	}
 
 	@Override
 	public <OtherLeft, OtherRight, CombinedLeft, CombinedRight> IPair<CombinedLeft, CombinedRight> combine(
-			IPair<OtherLeft, OtherRight> otherPair,
-			BiFunction<LeftType, OtherLeft, CombinedLeft> leftCombiner,
-			BiFunction<RightType, OtherRight, CombinedRight> rightCombiner) {
+			final IPair<OtherLeft, OtherRight> otherPair,
+			final BiFunction<LeftType, OtherLeft, CombinedLeft> leftCombiner,
+			final BiFunction<RightType, OtherRight, CombinedRight> rightCombiner) {
 		if (otherPair == null)
 			throw new NullPointerException("Other pair must not be null");
 		else if (leftCombiner == null)
 			throw new NullPointerException("Left combiner must not be null");
-		else if (rightCombiner == null)
-			throw new NullPointerException("Right combiner must not be null");
+		else if (rightCombiner == null) throw new NullPointerException("Right combiner must not be null");
 
-		if (isLeft)
-			return otherPair.bind((otherLeft, otherRight) -> {
-				return new Either<>(leftCombiner.apply(leftVal, otherLeft), null);
-			});
+		if (isLeft) return otherPair.bind((otherLeft, otherRight) -> {
+			return new Either<>(leftCombiner.apply(leftVal, otherLeft), null);
+		});
 
 		return otherPair.bind((otherLeft, otherRight) -> {
 			return new Either<>(null, rightCombiner.apply(rightVal, otherRight));
@@ -116,31 +109,26 @@ public class Either<LeftType, RightType> implements IPair<LeftType, RightType> {
 	}
 
 	@Override
-	public <NewLeft> IPair<NewLeft, RightType> mapLeft(Function<LeftType, NewLeft> mapper) {
-		if (mapper == null)
-			throw new NullPointerException("Mapper must not be null");
+	public <NewLeft> IPair<NewLeft, RightType> mapLeft(final Function<LeftType, NewLeft> mapper) {
+		if (mapper == null) throw new NullPointerException("Mapper must not be null");
 
-		if (isLeft)
-			return new Either<>(mapper.apply(leftVal), null);
+		if (isLeft) return new Either<>(mapper.apply(leftVal), null);
 
 		return new Either<>(null, rightVal);
 	}
 
 	@Override
-	public <NewRight> IPair<LeftType, NewRight> mapRight(Function<RightType, NewRight> mapper) {
-		if (mapper == null)
-			throw new NullPointerException("Mapper must not be null");
+	public <NewRight> IPair<LeftType, NewRight> mapRight(final Function<RightType, NewRight> mapper) {
+		if (mapper == null) throw new NullPointerException("Mapper must not be null");
 
-		if (isLeft)
-			return new Either<>(leftVal, null);
+		if (isLeft) return new Either<>(leftVal, null);
 
 		return new Either<>(null, mapper.apply(rightVal));
 	}
 
 	@Override
-	public <MergedType> MergedType merge(BiFunction<LeftType, RightType, MergedType> merger) {
-		if (merger == null)
-			throw new NullPointerException("Merger must not be null");
+	public <MergedType> MergedType merge(final BiFunction<LeftType, RightType, MergedType> merger) {
+		if (merger == null) throw new NullPointerException("Merger must not be null");
 
 		return merger.apply(leftVal, rightVal);
 	}
@@ -151,37 +139,29 @@ public class Either<LeftType, RightType> implements IPair<LeftType, RightType> {
 
 		int result = 1;
 		result = prime * result + (isLeft ? 1231 : 1237);
-		result = prime * result + ((leftVal == null) ? 0 : leftVal.hashCode());
-		result = prime * result + ((rightVal == null) ? 0 : rightVal.hashCode());
+		result = prime * result + (leftVal == null ? 0 : leftVal.hashCode());
+		result = prime * result + (rightVal == null ? 0 : rightVal.hashCode());
 
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof Either<?, ?>))
-			return false;
+	public boolean equals(final Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (!(obj instanceof Either<?, ?>)) return false;
 
-		Either<?, ?> other = (Either<?, ?>) obj;
+		final Either<?, ?> other = (Either<?, ?>) obj;
 
-		if (isLeft != other.isLeft)
-			return false;
+		if (isLeft != other.isLeft) return false;
 
 		if (leftVal == null) {
-			if (other.leftVal != null)
-				return false;
-		} else if (!leftVal.equals(other.leftVal))
-			return false;
+			if (other.leftVal != null) return false;
+		} else if (!leftVal.equals(other.leftVal)) return false;
 
 		if (rightVal == null) {
-			if (other.rightVal != null)
-				return false;
-		} else if (!rightVal.equals(other.rightVal))
-			return false;
+			if (other.rightVal != null) return false;
+		} else if (!rightVal.equals(other.rightVal)) return false;
 
 		return true;
 	}

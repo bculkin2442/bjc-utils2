@@ -25,7 +25,7 @@ public class ComponentDescriptionState {
 	 * @param author
 	 *                The author of this component
 	 */
-	public void setAuthor(String author) {
+	public void setAuthor(final String author) {
 		this.author = author;
 	}
 
@@ -35,7 +35,7 @@ public class ComponentDescriptionState {
 	 * @param description
 	 *                The description of this component
 	 */
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 
@@ -45,7 +45,7 @@ public class ComponentDescriptionState {
 	 * @param name
 	 *                The name of this component
 	 */
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -55,7 +55,7 @@ public class ComponentDescriptionState {
 	 * @param version
 	 *                The version of this component
 	 */
-	public void setVersion(int version) {
+	public void setVersion(final int version) {
 		this.version = version;
 	}
 
@@ -73,62 +73,62 @@ public class ComponentDescriptionState {
 		final int prime = 31;
 		int result = 1;
 
-		result = prime * result + ((author == null) ? 0 : author.hashCode());
-		result = prime * result + ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + (author == null ? 0 : author.hashCode());
+		result = prime * result + (description == null ? 0 : description.hashCode());
+		result = prime * result + (name == null ? 0 : name.hashCode());
 		result = prime * result + version;
 
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if(this == obj) return true;
-		if(obj == null) return false;
-		if(getClass() != obj.getClass()) return false;
+	public boolean equals(final Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
 
-		ComponentDescriptionState other = (ComponentDescriptionState) obj;
+		final ComponentDescriptionState other = (ComponentDescriptionState) obj;
 
-		if(author == null) {
-			if(other.author != null) return false;
-		} else if(!author.equals(other.author)) return false;
+		if (author == null) {
+			if (other.author != null) return false;
+		} else if (!author.equals(other.author)) return false;
 
-		if(description == null) {
-			if(other.description != null) return false;
-		} else if(!description.equals(other.description)) return false;
+		if (description == null) {
+			if (other.description != null) return false;
+		} else if (!description.equals(other.description)) return false;
 
-		if(name == null) {
-			if(other.name != null) return false;
-		} else if(!name.equals(other.name)) return false;
+		if (name == null) {
+			if (other.name != null) return false;
+		} else if (!name.equals(other.name)) return false;
 
-		if(version != other.version) return false;
+		if (version != other.version) return false;
 
 		return true;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
+		final StringBuilder builder = new StringBuilder();
 		builder.append("ComponentDescriptionState [");
 
-		if(name != null) {
+		if (name != null) {
 			builder.append("name=");
 			builder.append(name);
 			builder.append(", ");
 		}
 
-		if(description != null) {
+		if (description != null) {
 			builder.append("description=");
 			builder.append(description);
 			builder.append(", ");
 		}
 
-		if(author != null) {
+		if (author != null) {
 			builder.append("author=");
 			builder.append(author);
 			builder.append(", ");

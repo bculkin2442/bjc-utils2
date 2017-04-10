@@ -15,7 +15,7 @@ public interface IPrecedent {
 	 *                The precedence of the object to handle
 	 * @return A new object with set precedence
 	 */
-	public static IPrecedent newSimplePrecedent(int precedence) {
+	public static IPrecedent newSimplePrecedent(final int precedence) {
 		return () -> precedence;
 	}
 

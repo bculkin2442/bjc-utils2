@@ -10,7 +10,7 @@ class DelegatingCommand implements Command {
 	/*
 	 * The command to delegate to.
 	 */
-	private Command delegate;
+	private final Command delegate;
 
 	/**
 	 * Create a new command that delegates to another command.
@@ -18,7 +18,7 @@ class DelegatingCommand implements Command {
 	 * @param delegate
 	 *                The command to delegate to.
 	 */
-	public DelegatingCommand(Command delegate) {
+	public DelegatingCommand(final Command delegate) {
 		this.delegate = delegate;
 	}
 
@@ -44,15 +44,15 @@ class DelegatingCommand implements Command {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
+		final StringBuilder builder = new StringBuilder();
 		builder.append("DelegatingCommand [");
 
-		if(delegate != null) {
+		if (delegate != null) {
 			builder.append("delegate=");
 			builder.append(delegate);
 		}

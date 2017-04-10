@@ -30,25 +30,24 @@ public class BinarySearchTreeLeaf<T> implements ITreePart<T> {
 	 * @param element
 	 *                The data for the leaf to hold.
 	 */
-	public BinarySearchTreeLeaf(T element) {
+	public BinarySearchTreeLeaf(final T element) {
 		data = element;
 	}
 
 	@Override
-	public void add(T element, Comparator<T> comparator) {
+	public void add(final T element, final Comparator<T> comparator) {
 		throw new IllegalArgumentException("Can't add to a leaf.");
 	}
 
 	@Override
-	public <E> E collapse(Function<T, E> leafTransformer, BiFunction<E, E, E> branchCollapser) {
-		if (leafTransformer == null)
-			throw new NullPointerException("Transformer must not be null");
+	public <E> E collapse(final Function<T, E> leafTransformer, final BiFunction<E, E, E> branchCollapser) {
+		if (leafTransformer == null) throw new NullPointerException("Transformer must not be null");
 
 		return leafTransformer.apply(data);
 	}
 
 	@Override
-	public boolean contains(T element, Comparator<T> comparator) {
+	public boolean contains(final T element, final Comparator<T> comparator) {
 		return this.data.equals(element);
 	}
 
@@ -58,16 +57,15 @@ public class BinarySearchTreeLeaf<T> implements ITreePart<T> {
 	}
 
 	@Override
-	public void delete(T element, Comparator<T> comparator) {
+	public void delete(final T element, final Comparator<T> comparator) {
 		if (data.equals(element)) {
 			isDeleted = true;
 		}
 	}
 
 	@Override
-	public boolean directedWalk(DirectedWalkFunction<T> treeWalker) {
-		if (treeWalker == null)
-			throw new NullPointerException("Tree walker must not be null");
+	public boolean directedWalk(final DirectedWalkFunction<T> treeWalker) {
+		if (treeWalker == null) throw new NullPointerException("Tree walker must not be null");
 
 		switch (treeWalker.walk(data)) {
 		case SUCCESS:
@@ -82,9 +80,9 @@ public class BinarySearchTreeLeaf<T> implements ITreePart<T> {
 	}
 
 	@Override
-	public boolean forEach(TreeLinearizationMethod linearizationMethod, Predicate<T> traversalPredicate) {
-		if (traversalPredicate == null)
-			throw new NullPointerException("Predicate must not be null");
+	public boolean forEach(final TreeLinearizationMethod linearizationMethod,
+			final Predicate<T> traversalPredicate) {
+		if (traversalPredicate == null) throw new NullPointerException("Predicate must not be null");
 
 		return traversalPredicate.test(data);
 	}
@@ -98,29 +96,23 @@ public class BinarySearchTreeLeaf<T> implements ITreePart<T> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((data == null) ? 0 : data.hashCode());
+		result = prime * result + (data == null ? 0 : data.hashCode());
 		result = prime * result + (isDeleted ? 1231 : 1237);
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof BinarySearchTreeLeaf<?>))
-			return false;
+	public boolean equals(final Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (!(obj instanceof BinarySearchTreeLeaf<?>)) return false;
 
-		BinarySearchTreeLeaf<?> other = (BinarySearchTreeLeaf<?>) obj;
+		final BinarySearchTreeLeaf<?> other = (BinarySearchTreeLeaf<?>) obj;
 
 		if (data == null) {
-			if (other.data != null)
-				return false;
-		} else if (!data.equals(other.data))
-			return false;
-		if (isDeleted != other.isDeleted)
-			return false;
+			if (other.data != null) return false;
+		} else if (!data.equals(other.data)) return false;
+		if (isDeleted != other.isDeleted) return false;
 
 		return true;
 	}

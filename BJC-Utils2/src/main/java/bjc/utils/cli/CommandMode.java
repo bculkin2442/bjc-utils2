@@ -16,7 +16,7 @@ public interface CommandMode extends Comparable<CommandMode> {
 	 * @return Whether or not this mode can handle the command. It is
 	 *         assumed not by default
 	 */
-	default boolean canHandle(String command) {
+	default boolean canHandle(final String command) {
 		return false;
 	};
 
@@ -61,12 +61,12 @@ public interface CommandMode extends Comparable<CommandMode> {
 	 * @return The command mode to use for the next command. Defaults to
 	 *         returning this, and doing nothing else
 	 */
-	default CommandMode process(String command, String[] args) {
+	default CommandMode process(final String command, final String[] args) {
 		return this;
 	}
 
 	@Override
-	default int compareTo(CommandMode o) {
+	default int compareTo(final CommandMode o) {
 		return getName().compareTo(o.getName());
 	}
 }

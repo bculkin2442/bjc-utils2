@@ -1,12 +1,12 @@
 package bjc.utils.funcutils;
 
-import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.IList;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.function.Function;
 import java.util.function.Supplier;
+
+import bjc.utils.funcdata.FunctionalList;
+import bjc.utils.funcdata.IList;
 
 /**
  * Utilities for manipulating FunctionalLists that don't belong in the class
@@ -26,8 +26,8 @@ public class ListUtils {
 	 *                The list of tokens to collapse
 	 * @return The collapsed string of tokens
 	 */
-	public static String collapseTokens(IList<String> input) {
-		if(input == null) throw new NullPointerException("Input must not be null");
+	public static String collapseTokens(final IList<String> input) {
+		if (input == null) throw new NullPointerException("Input must not be null");
 
 		return collapseTokens(input, "");
 	}
@@ -42,23 +42,23 @@ public class ListUtils {
 	 *                The separator to use for separating tokens
 	 * @return The collapsed string of tokens
 	 */
-	public static String collapseTokens(IList<String> input, String seperator) {
-		if(input == null)
+	public static String collapseTokens(final IList<String> input, final String seperator) {
+		if (input == null)
 			throw new NullPointerException("Input must not be null");
-		else if(seperator == null) throw new NullPointerException("Seperator must not be null");
+		else if (seperator == null) throw new NullPointerException("Seperator must not be null");
 
-		if(input.getSize() < 1)
+		if (input.getSize() < 1)
 			return "";
-		else if(input.getSize() == 1)
+		else if (input.getSize() == 1)
 			return input.first();
 		else {
-			StringBuilder state = new StringBuilder();
+			final StringBuilder state = new StringBuilder();
 
 			int i = 1;
-			for(String itm : input.toIterable()) {
+			for (final String itm : input.toIterable()) {
 				state.append(itm);
 
-				if(i != input.getSize()) {
+				if (i != input.getSize()) {
 					state.append(seperator);
 				}
 
@@ -85,23 +85,24 @@ public class ListUtils {
 	 *         selected from the specified list without replacement
 	 */
 
-	public static <E> IList<E> drawWithoutReplacement(IList<E> list, int number, Function<Integer, Integer> rng) {
-		IList<E> selected = new FunctionalList<>(new ArrayList<>(number));
+	public static <E> IList<E> drawWithoutReplacement(final IList<E> list, final int number,
+			final Function<Integer, Integer> rng) {
+		final IList<E> selected = new FunctionalList<>(new ArrayList<>(number));
 
-		int total = list.getSize();
+		final int total = list.getSize();
 
-		Iterator<E> itr = list.toIterable().iterator();
+		final Iterator<E> itr = list.toIterable().iterator();
 		E element = null;
 
-		for(int index = 0; itr.hasNext(); element = itr.next()) {
+		for (final int index = 0; itr.hasNext(); element = itr.next()) {
 			// n - m
-			int winningChance = number - selected.getSize();
+			final int winningChance = number - selected.getSize();
 
 			// N - t
-			int totalChance = total - (index - 1);
+			final int totalChance = total - (index - 1);
 
 			// Probability of selecting the t+1'th element
-			if(NumberUtils.isProbable(winningChance, totalChance, rng)) {
+			if (NumberUtils.isProbable(winningChance, totalChance, rng)) {
 				selected.add(element);
 			}
 		}
@@ -124,10 +125,11 @@ public class ListUtils {
 	 * @return A new list containing the desired number of items randomly
 	 *         selected from the specified list
 	 */
-	public static <E> IList<E> drawWithReplacement(IList<E> list, int number, Function<Integer, Integer> rng) {
-		IList<E> selected = new FunctionalList<>(new ArrayList<>(number));
+	public static <E> IList<E> drawWithReplacement(final IList<E> list, final int number,
+			final Function<Integer, Integer> rng) {
+		final IList<E> selected = new FunctionalList<>(new ArrayList<>(number));
 
-		for(int i = 0; i < number; i++) {
+		for (int i = 0; i < number; i++) {
 			selected.add(list.randItem(rng));
 		}
 
@@ -151,15 +153,15 @@ public class ListUtils {
 	 *
 	 * @return A list partitioned according to the above rules
 	 */
-	public static <E> IList<IList<E>> groupPartition(IList<E> input, Function<E, Integer> counter,
-			int partitionSize) {
-		if(input == null)
+	public static <E> IList<IList<E>> groupPartition(final IList<E> input, final Function<E, Integer> counter,
+			final int partitionSize) {
+		if (input == null)
 			throw new NullPointerException("Input list must not be null");
-		else if(counter == null)
+		else if (counter == null)
 			throw new NullPointerException("Counter must not be null");
-		else if(partitionSize < 1 || partitionSize > input.getSize()) {
-			String fmt = "%d is not a valid partition size. Must be between 1 and %d";
-			String msg = String.format(fmt, partitionSize, input.getSize());
+		else if (partitionSize < 1 || partitionSize > input.getSize()) {
+			final String fmt = "%d is not a valid partition size. Must be between 1 and %d";
+			final String msg = String.format(fmt, partitionSize, input.getSize());
 
 			throw new IllegalArgumentException(msg);
 		}
@@ -167,23 +169,23 @@ public class ListUtils {
 		/*
 		 * List that holds our results
 		 */
-		IList<IList<E>> returned = new FunctionalList<>();
+		final IList<IList<E>> returned = new FunctionalList<>();
 
 		/*
 		 * List that holds elements rejected during current pass
 		 */
-		IList<E> rejected = new FunctionalList<>();
+		final IList<E> rejected = new FunctionalList<>();
 
-		GroupPartIteration<E> it = new GroupPartIteration<>(returned, rejected, partitionSize, counter);
+		final GroupPartIteration<E> it = new GroupPartIteration<>(returned, rejected, partitionSize, counter);
 
 		/*
 		 * Run up to a certain number of passes
 		 */
-		for(int numberOfIterations = 0; numberOfIterations < MAX_NTRIESPART
+		for (int numberOfIterations = 0; numberOfIterations < MAX_NTRIESPART
 				&& !rejected.isEmpty(); numberOfIterations++) {
 			input.forEach(it);
 
-			if(rejected.isEmpty()) // Nothing was rejected, so
+			if (rejected.isEmpty()) // Nothing was rejected, so
 				// we're
 				// done
 				return returned;
@@ -206,11 +208,11 @@ public class ListUtils {
 	 * @return A list containing all the elements of the lists
 	 */
 	@SafeVarargs
-	public static <E> IList<E> mergeLists(IList<E>... lists) {
-		IList<E> returned = new FunctionalList<>();
+	public static <E> IList<E> mergeLists(final IList<E>... lists) {
+		final IList<E> returned = new FunctionalList<>();
 
-		for(IList<E> list : lists) {
-			for(E itm : list.toIterable()) {
+		for (final IList<E> list : lists) {
+			for (final E itm : list.toIterable()) {
 				returned.add(itm);
 			}
 		}
@@ -235,27 +237,28 @@ public class ListUtils {
 	 * @throws IllegalArgumentException
 	 *                 if the list couldn't be padded to the desired size
 	 */
-	public static <E> IList<E> padList(IList<E> list, Function<E, Integer> counter, int size, Supplier<E> padder) {
+	public static <E> IList<E> padList(final IList<E> list, final Function<E, Integer> counter, final int size,
+			final Supplier<E> padder) {
 		int count = 0;
 
-		IList<E> returned = new FunctionalList<>();
+		final IList<E> returned = new FunctionalList<>();
 
-		for(E itm : list.toIterable()) {
+		for (final E itm : list.toIterable()) {
 			count += counter.apply(itm);
 
 			returned.add(itm);
 		}
 
-		if(count % size != 0) {
+		if (count % size != 0) {
 			// We need to pad
 			int needed = count % size;
 			int threshold = 0;
 
-			while(needed > 0 && threshold <= MAX_NTRIESPART) {
-				E val = padder.get();
-				int newCount = counter.apply(val);
+			while (needed > 0 && threshold <= MAX_NTRIESPART) {
+				final E val = padder.get();
+				final int newCount = counter.apply(val);
 
-				if(newCount <= needed) {
+				if (newCount <= needed) {
 					returned.add(val);
 
 					threshold = 0;
@@ -266,7 +269,7 @@ public class ListUtils {
 				}
 			}
 
-			if(threshold > MAX_NTRIESPART)
+			if (threshold > MAX_NTRIESPART)
 				throw new IllegalArgumentException("Heuristic (more than " + MAX_NTRIESPART
 						+ " iterations of attempting to pad) detected unpaddable list ");
 		}

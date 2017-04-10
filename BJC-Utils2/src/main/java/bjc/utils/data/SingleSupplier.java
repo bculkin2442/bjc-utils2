@@ -15,11 +15,11 @@ import java.util.function.Supplier;
 public class SingleSupplier<T> implements Supplier<T> {
 	private static long nextID = 0;
 
-	private Supplier<T> source;
+	private final Supplier<T> source;
 
 	private boolean gotten;
 
-	private long id;
+	private final long id;
 
 	/*
 	 * This is bad practice, but I want to know where the single
@@ -33,7 +33,7 @@ public class SingleSupplier<T> implements Supplier<T> {
 	 * @param supp
 	 *                The supplier to give a single value from
 	 */
-	public SingleSupplier(Supplier<T> supp) {
+	public SingleSupplier(final Supplier<T> supp) {
 		source = supp;
 
 		gotten = false;
@@ -44,10 +44,10 @@ public class SingleSupplier<T> implements Supplier<T> {
 	@Override
 	public T get() {
 		if (gotten == true) {
-			String msg = String.format(
+			final String msg = String.format(
 					"Attempted to retrieve value more than once from single supplier #%d", id);
 
-			IllegalStateException isex = new IllegalStateException(msg);
+			final IllegalStateException isex = new IllegalStateException(msg);
 
 			isex.initCause(instSite);
 
@@ -58,7 +58,7 @@ public class SingleSupplier<T> implements Supplier<T> {
 
 		try {
 			throw new IllegalStateException("Previous instantiation here.");
-		} catch (IllegalStateException isex) {
+		} catch (final IllegalStateException isex) {
 			instSite = isex;
 		}
 

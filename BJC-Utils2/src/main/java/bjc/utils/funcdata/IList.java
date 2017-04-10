@@ -1,7 +1,5 @@
 package bjc.utils.funcdata;
 
-import bjc.utils.data.IPair;
-
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.function.BiConsumer;
@@ -10,6 +8,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collector;
+
+import bjc.utils.data.IPair;
 
 /**
  * A wrapper over another list that provides functional operations over it.
@@ -37,7 +37,7 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 	 * @return True if every item was successfully added to the list, false
 	 *         otherwise
 	 */
-	default boolean addAll(IList<ContainedType> items) {
+	default boolean addAll(final IList<ContainedType> items) {
 		return items.map(this::add).anyMatch(bl -> bl == false);
 	}
 
@@ -46,16 +46,16 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 	 *
 	 * @param items
 	 *                The array of items to add.
-	 * 
+	 *
 	 * @return True if every item was successfully added to the list, false
 	 *         otherwise.
 	 */
 	@SuppressWarnings("unchecked")
-	default boolean addAll(ContainedType... items) {
+	default boolean addAll(final ContainedType... items) {
 		boolean succ = true;
 
-		for(ContainedType item : items) {
-			boolean addSucc = add(item);
+		for (final ContainedType item : items) {
+			final boolean addSucc = add(item);
 
 			succ = succ ? addSucc : false;
 		}
@@ -96,10 +96,10 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 	 * @return The reduced list
 	 */
 	default <StateType, ReducedType> ReducedType collect(
-			Collector<ContainedType, StateType, ReducedType> collector) {
-		BiConsumer<StateType, ContainedType> accumulator = collector.accumulator();
+			final Collector<ContainedType, StateType, ReducedType> collector) {
+		final BiConsumer<StateType, ContainedType> accumulator = collector.accumulator();
 
-		StateType initial = collector.supplier().get();
+		final StateType initial = collector.supplier().get();
 		return reduceAux(initial, (value, state) -> {
 			accumulator.accept(state, value);
 
@@ -266,8 +266,8 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 	 *                The items to prepend to the list.
 	 */
 	@SuppressWarnings("unchecked")
-	default void prependAll(ContainedType... items) {
-		for(ContainedType item : items) {
+	default void prependAll(final ContainedType... items) {
+		for (final ContainedType item : items) {
 			prepend(item);
 		}
 	}

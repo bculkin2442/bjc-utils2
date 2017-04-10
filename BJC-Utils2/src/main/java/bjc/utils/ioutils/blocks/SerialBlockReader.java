@@ -5,7 +5,7 @@ import java.util.Deque;
 
 /**
  * Provides a means of concatenating two block readers.
- * 
+ *
  * @author bjculkin
  *
  */
@@ -16,13 +16,13 @@ public class SerialBlockReader implements BlockReader {
 
 	/**
 	 * Create a new serial block reader.
-	 * 
+	 *
 	 * @param readers
 	 *                The readers to pull from, in the order to pull from
 	 *                them.
 	 */
-	public SerialBlockReader(BlockReader... readers) {
-		for (BlockReader reader : readers) {
+	public SerialBlockReader(final BlockReader... readers) {
+		for (final BlockReader reader : readers) {
 			readerQueue.add(reader);
 		}
 	}
@@ -38,7 +38,7 @@ public class SerialBlockReader implements BlockReader {
 		while (!cont) {
 			try {
 				readerQueue.pop().close();
-			} catch (IOException ioex) {
+			} catch (final IOException ioex) {
 				throw new IllegalStateException("Exception thrown by discarded reader", ioex);
 			}
 
@@ -68,7 +68,7 @@ public class SerialBlockReader implements BlockReader {
 		while (!cont) {
 			try {
 				readerQueue.pop().close();
-			} catch (IOException ioex) {
+			} catch (final IOException ioex) {
 				throw new IllegalStateException("Exception thrown by discarded reader", ioex);
 			}
 
@@ -77,7 +77,9 @@ public class SerialBlockReader implements BlockReader {
 			cont = gotBlock || readerQueue.isEmpty();
 		}
 
-		if (cont) blockNo += 1;
+		if (cont) {
+			blockNo += 1;
+		}
 
 		return cont;
 	}
@@ -90,7 +92,7 @@ public class SerialBlockReader implements BlockReader {
 	@Override
 	public void close() throws IOException {
 		while (!readerQueue.isEmpty()) {
-			BlockReader reader = readerQueue.pop();
+			final BlockReader reader = readerQueue.pop();
 
 			reader.close();
 		}

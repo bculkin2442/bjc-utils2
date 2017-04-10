@@ -2,7 +2,7 @@ package bjc.utils.data;
 
 /**
  * A simple {@link ValueToggle} that swaps between true and false.
- * 
+ *
  * @author EVE
  *
  */
@@ -18,17 +18,17 @@ public class BooleanToggle implements Toggle<Boolean> {
 
 	/**
 	 * Create a flip-flop with the specified initial value.
-	 * 
+	 *
 	 * @param initial
 	 *                The initial value of the flip-flop.
 	 */
-	public BooleanToggle(boolean initial) {
+	public BooleanToggle(final boolean initial) {
 		val = initial;
 	}
 
 	@Override
 	public Boolean get() {
-		boolean res = val;
+		final boolean res = val;
 
 		val = !res;
 
@@ -41,7 +41,7 @@ public class BooleanToggle implements Toggle<Boolean> {
 	}
 
 	@Override
-	public void set(boolean vl) {
+	public void set(final boolean vl) {
 		val = vl;
 	}
 
@@ -57,14 +57,14 @@ public class BooleanToggle implements Toggle<Boolean> {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if(this == obj) return true;
-		if(obj == null) return false;
-		if(!(obj instanceof BooleanToggle)) return false;
+	public boolean equals(final Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (!(obj instanceof BooleanToggle)) return false;
 
-		BooleanToggle other = (BooleanToggle) obj;
+		final BooleanToggle other = (BooleanToggle) obj;
 
-		if(val != other.val) return false;
+		if (val != other.val) return false;
 
 		return true;
 	}

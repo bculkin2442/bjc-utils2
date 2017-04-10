@@ -24,7 +24,7 @@ public class SimpleInternalFrame extends JInternalFrame {
 	 * @param title
 	 *                The title of the internal frame
 	 */
-	public SimpleInternalFrame(String title) {
+	public SimpleInternalFrame(final String title) {
 		super(title);
 	}
 

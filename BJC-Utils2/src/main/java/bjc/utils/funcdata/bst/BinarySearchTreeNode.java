@@ -1,14 +1,14 @@
 package bjc.utils.funcdata.bst;
 
-import java.util.Comparator;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.function.Predicate;
-
 import static bjc.utils.funcdata.bst.DirectedWalkFunction.DirectedWalkResult.FAILURE;
 import static bjc.utils.funcdata.bst.DirectedWalkFunction.DirectedWalkResult.LEFT;
 import static bjc.utils.funcdata.bst.DirectedWalkFunction.DirectedWalkResult.RIGHT;
 import static bjc.utils.funcdata.bst.DirectedWalkFunction.DirectedWalkResult.SUCCESS;
+
+import java.util.Comparator;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * A binary node in a tree.
@@ -39,16 +39,15 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 	 * @param rght
 	 *                The right child of this node.
 	 */
-	public BinarySearchTreeNode(T element, ITreePart<T> lft, ITreePart<T> rght) {
+	public BinarySearchTreeNode(final T element, final ITreePart<T> lft, final ITreePart<T> rght) {
 		super(element);
 		this.left = lft;
 		this.right = rght;
 	}
 
 	@Override
-	public void add(T element, Comparator<T> comparator) {
-		if (comparator == null)
-			throw new NullPointerException("Comparator must not be null");
+	public void add(final T element, final Comparator<T> comparator) {
+		if (comparator == null) throw new NullPointerException("Comparator must not be null");
 
 		switch (comparator.compare(data, element)) {
 		case -1:
@@ -61,8 +60,7 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 		case 0:
 			if (isDeleted) {
 				isDeleted = false;
-			} else
-				throw new IllegalArgumentException("Can't add duplicate values");
+			} else throw new IllegalArgumentException("Can't add duplicate values");
 			break;
 		case 1:
 			if (right == null) {
@@ -77,19 +75,20 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 	}
 
 	@Override
-	public <E> E collapse(Function<T, E> nodeCollapser, BiFunction<E, E, E> branchCollapser) {
+	public <E> E collapse(final Function<T, E> nodeCollapser, final BiFunction<E, E, E> branchCollapser) {
 		if (nodeCollapser == null || branchCollapser == null)
 			throw new NullPointerException("Collapser must not be null");
 
-		E collapsedNode = nodeCollapser.apply(data);
+		final E collapsedNode = nodeCollapser.apply(data);
 
 		if (left != null) {
-			E collapsedLeftBranch = left.collapse(nodeCollapser, branchCollapser);
+			final E collapsedLeftBranch = left.collapse(nodeCollapser, branchCollapser);
 
 			if (right != null) {
-				E collapsedRightBranch = right.collapse(nodeCollapser, branchCollapser);
+				final E collapsedRightBranch = right.collapse(nodeCollapser, branchCollapser);
 
-				E collapsedBranches = branchCollapser.apply(collapsedLeftBranch, collapsedRightBranch);
+				final E collapsedBranches = branchCollapser.apply(collapsedLeftBranch,
+						collapsedRightBranch);
 
 				return branchCollapser.apply(collapsedNode, collapsedBranches);
 			}
@@ -98,7 +97,7 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 		}
 
 		if (right != null) {
-			E collapsedRightBranch = right.collapse(nodeCollapser, branchCollapser);
+			final E collapsedRightBranch = right.collapse(nodeCollapser, branchCollapser);
 
 			return branchCollapser.apply(collapsedNode, collapsedRightBranch);
 		}
@@ -107,9 +106,8 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 	}
 
 	@Override
-	public boolean contains(T element, Comparator<T> comparator) {
-		if (comparator == null)
-			throw new NullPointerException("Comparator must not be null");
+	public boolean contains(final T element, final Comparator<T> comparator) {
+		if (comparator == null) throw new NullPointerException("Comparator must not be null");
 
 		return directedWalk(currentElement -> {
 			switch (comparator.compare(element, currentElement)) {
@@ -126,9 +124,8 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 	}
 
 	@Override
-	public void delete(T element, Comparator<T> comparator) {
-		if (comparator == null)
-			throw new NullPointerException("Comparator must not be null");
+	public void delete(final T element, final Comparator<T> comparator) {
+		if (comparator == null) throw new NullPointerException("Comparator must not be null");
 
 		directedWalk(currentElement -> {
 			switch (comparator.compare(data, element)) {
@@ -146,9 +143,8 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 	}
 
 	@Override
-	public boolean directedWalk(DirectedWalkFunction<T> treeWalker) {
-		if (treeWalker == null)
-			throw new NullPointerException("Walker must not be null");
+	public boolean directedWalk(final DirectedWalkFunction<T> treeWalker) {
+		if (treeWalker == null) throw new NullPointerException("Walker must not be null");
 
 		switch (treeWalker.walk(data)) {
 		case SUCCESS:
@@ -165,11 +161,11 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 	}
 
 	@Override
-	public boolean forEach(TreeLinearizationMethod linearizationMethod, Predicate<T> traversalPredicate) {
+	public boolean forEach(final TreeLinearizationMethod linearizationMethod,
+			final Predicate<T> traversalPredicate) {
 		if (linearizationMethod == null)
 			throw new NullPointerException("Linearization method must not be null");
-		else if (traversalPredicate == null)
-			throw new NullPointerException("Predicate must not be null");
+		else if (traversalPredicate == null) throw new NullPointerException("Predicate must not be null");
 
 		switch (linearizationMethod) {
 		case PREORDER:
@@ -184,48 +180,41 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 		}
 	}
 
-	private boolean inorderTraverse(TreeLinearizationMethod linearizationMethod, Predicate<T> traversalPredicate) {
-		if (!traverseLeftBranch(linearizationMethod, traversalPredicate))
-			return false;
+	private boolean inorderTraverse(final TreeLinearizationMethod linearizationMethod,
+			final Predicate<T> traversalPredicate) {
+		if (!traverseLeftBranch(linearizationMethod, traversalPredicate)) return false;
 
-		if (!traverseElement(traversalPredicate))
-			return false;
+		if (!traverseElement(traversalPredicate)) return false;
 
-		if (!traverseRightBranch(linearizationMethod, traversalPredicate))
-			return false;
+		if (!traverseRightBranch(linearizationMethod, traversalPredicate)) return false;
 
 		return true;
 	}
 
-	private boolean postorderTraverse(TreeLinearizationMethod linearizationMethod,
-			Predicate<T> traversalPredicate) {
-		if (!traverseLeftBranch(linearizationMethod, traversalPredicate))
-			return false;
+	private boolean postorderTraverse(final TreeLinearizationMethod linearizationMethod,
+			final Predicate<T> traversalPredicate) {
+		if (!traverseLeftBranch(linearizationMethod, traversalPredicate)) return false;
 
-		if (!traverseRightBranch(linearizationMethod, traversalPredicate))
-			return false;
+		if (!traverseRightBranch(linearizationMethod, traversalPredicate)) return false;
 
-		if (!traverseElement(traversalPredicate))
-			return false;
+		if (!traverseElement(traversalPredicate)) return false;
 
 		return true;
 
 	}
 
-	private boolean preorderTraverse(TreeLinearizationMethod linearizationMethod, Predicate<T> traversalPredicate) {
-		if (!traverseElement(traversalPredicate))
-			return false;
+	private boolean preorderTraverse(final TreeLinearizationMethod linearizationMethod,
+			final Predicate<T> traversalPredicate) {
+		if (!traverseElement(traversalPredicate)) return false;
 
-		if (!traverseLeftBranch(linearizationMethod, traversalPredicate))
-			return false;
+		if (!traverseLeftBranch(linearizationMethod, traversalPredicate)) return false;
 
-		if (!traverseRightBranch(linearizationMethod, traversalPredicate))
-			return false;
+		if (!traverseRightBranch(linearizationMethod, traversalPredicate)) return false;
 
 		return true;
 	}
 
-	private boolean traverseElement(Predicate<T> traversalPredicate) {
+	private boolean traverseElement(final Predicate<T> traversalPredicate) {
 		boolean nodeSuccesfullyTraversed;
 
 		if (isDeleted) {
@@ -237,8 +226,8 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 		return nodeSuccesfullyTraversed;
 	}
 
-	private boolean traverseLeftBranch(TreeLinearizationMethod linearizationMethod,
-			Predicate<T> traversalPredicate) {
+	private boolean traverseLeftBranch(final TreeLinearizationMethod linearizationMethod,
+			final Predicate<T> traversalPredicate) {
 		boolean leftSuccesfullyTraversed;
 
 		if (left == null) {
@@ -250,8 +239,8 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 		return leftSuccesfullyTraversed;
 	}
 
-	private boolean traverseRightBranch(TreeLinearizationMethod linearizationMethod,
-			Predicate<T> traversalPredicate) {
+	private boolean traverseRightBranch(final TreeLinearizationMethod linearizationMethod,
+			final Predicate<T> traversalPredicate) {
 		boolean rightSuccesfullyTraversed;
 
 		if (right == null) {
@@ -272,33 +261,26 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((left == null) ? 0 : left.hashCode());
-		result = prime * result + ((right == null) ? 0 : right.hashCode());
+		result = prime * result + (left == null ? 0 : left.hashCode());
+		result = prime * result + (right == null ? 0 : right.hashCode());
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (!(obj instanceof BinarySearchTreeNode<?>))
-			return false;
+	public boolean equals(final Object obj) {
+		if (this == obj) return true;
+		if (!super.equals(obj)) return false;
+		if (!(obj instanceof BinarySearchTreeNode<?>)) return false;
 
-		BinarySearchTreeNode<?> other = (BinarySearchTreeNode<?>) obj;
+		final BinarySearchTreeNode<?> other = (BinarySearchTreeNode<?>) obj;
 
 		if (left == null) {
-			if (other.left != null)
-				return false;
-		} else if (!left.equals(other.left))
-			return false;
+			if (other.left != null) return false;
+		} else if (!left.equals(other.left)) return false;
 
 		if (right == null) {
-			if (other.right != null)
-				return false;
-		} else if (!right.equals(other.right))
-			return false;
+			if (other.right != null) return false;
+		} else if (!right.equals(other.right)) return false;
 
 		return true;
 	}

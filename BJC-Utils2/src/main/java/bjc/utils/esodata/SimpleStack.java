@@ -11,7 +11,7 @@ import java.util.LinkedList;
  * @author Ben Culkin
  */
 public class SimpleStack<T> extends Stack<T> {
-	private Deque<T> backing;
+	private final Deque<T> backing;
 
 	/**
 	 * Create a new empty stack.
@@ -22,22 +22,20 @@ public class SimpleStack<T> extends Stack<T> {
 	}
 
 	@Override
-	public void push(T elm) {
+	public void push(final T elm) {
 		backing.push(elm);
 	}
 
 	@Override
 	public T pop() {
-		if (backing.isEmpty())
-			throw new StackUnderflowException();
+		if (backing.isEmpty()) throw new StackUnderflowException();
 
 		return backing.pop();
 	}
 
 	@Override
 	public T top() {
-		if (backing.isEmpty())
-			throw new StackUnderflowException();
+		if (backing.isEmpty()) throw new StackUnderflowException();
 
 		return backing.peek();
 	}
@@ -52,6 +50,7 @@ public class SimpleStack<T> extends Stack<T> {
 		return backing.size() == 0;
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public T[] toArray() {
 		return (T[]) backing.toArray();
@@ -62,27 +61,22 @@ public class SimpleStack<T> extends Stack<T> {
 		final int prime = 31;
 
 		int result = 1;
-		result = prime * result + ((backing == null) ? 0 : backing.hashCode());
+		result = prime * result + (backing == null ? 0 : backing.hashCode());
 
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof SimpleStack<?>))
-			return false;
+	public boolean equals(final Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (!(obj instanceof SimpleStack<?>)) return false;
 
-		SimpleStack<?> other = (SimpleStack<?>) obj;
+		final SimpleStack<?> other = (SimpleStack<?>) obj;
 
 		if (backing == null) {
-			if (other.backing != null)
-				return false;
-		} else if (!backing.equals(other.backing))
-			return false;
+			if (other.backing != null) return false;
+		} else if (!backing.equals(other.backing)) return false;
 
 		return true;
 	}

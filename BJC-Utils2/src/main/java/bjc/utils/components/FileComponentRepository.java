@@ -1,12 +1,5 @@
 package bjc.utils.components;
 
-import bjc.utils.data.IHolder;
-import bjc.utils.data.Identity;
-import bjc.utils.funcdata.FunctionalMap;
-import bjc.utils.funcdata.IList;
-import bjc.utils.funcdata.IMap;
-import bjc.utils.funcutils.FileUtils;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -15,6 +8,13 @@ import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import bjc.utils.data.IHolder;
+import bjc.utils.data.Identity;
+import bjc.utils.funcdata.FunctionalMap;
+import bjc.utils.funcdata.IList;
+import bjc.utils.funcdata.IMap;
+import bjc.utils.funcutils.FileUtils;
 
 /**
  * A component repository that loads its components from files in a directory
@@ -47,33 +47,37 @@ public class FileComponentRepository<ComponentType extends IDescribedComponent>
 	 * @param componentReader
 	 *                The function to use to convert files to components
 	 */
-	public FileComponentRepository(File directory, Function<File, ? extends ComponentType> componentReader) {
+	public FileComponentRepository(final File directory,
+			final Function<File, ? extends ComponentType> componentReader) {
 		// Make sure we have valid arguments
-		if(directory == null)
+		if (directory == null)
 			throw new NullPointerException("Directory must not be null");
-		else if(!directory.isDirectory())
+		else if (!directory.isDirectory())
 			throw new IllegalArgumentException("File " + directory + " is not a directory.\n"
 					+ "Components can only be read from a directory");
-		else if(componentReader == null) throw new NullPointerException("Component reader must not be null");
+		else if (componentReader == null) throw new NullPointerException("Component reader must not be null");
 
 		// Initialize our fields
 		components = new FunctionalMap<>();
 		sourceDirectory = directory.toPath().toAbsolutePath();
 
 		// Marker for making sure we don't skip the parent
-		IHolder<Boolean> isFirstDir = new Identity<>(true);
+		final IHolder<Boolean> isFirstDir = new Identity<>(true);
 
 		// Predicate to use to traverse all the files in a directory,
 		// but
 		// not recurse into sub-directories
-		BiPredicate<Path, BasicFileAttributes> firstLevelTraverser = (pth, attr) -> {
-			if(attr.isDirectory() && !isFirstDir
-					.getValue()) /*
-							 * Skip directories,
-							 * they probably have
-							 * component support
-							 * files.
-							 */
+		final BiPredicate<Path, BasicFileAttributes> firstLevelTraverser = (pth, attr) -> {
+			if (attr.isDirectory() && !isFirstDir.getValue()) /*
+										 * Skip
+										 * directories,
+										 * they
+										 * probably
+										 * have
+										 * component
+										 * support
+										 * files.
+										 */
 				return false;
 
 			/*
@@ -94,7 +98,7 @@ public class FileComponentRepository<ComponentType extends IDescribedComponent>
 				// failed
 				return true;
 			});
-		} catch(IOException ioex) {
+		} catch (final IOException ioex) {
 			CLASS_LOGGER.log(Level.WARNING, ioex, () -> "Error found reading component from file.");
 		}
 	}
@@ -105,7 +109,7 @@ public class FileComponentRepository<ComponentType extends IDescribedComponent>
 	}
 
 	@Override
-	public ComponentType getByName(String name) {
+	public ComponentType getByName(final String name) {
 		return components.get(name);
 	}
 
@@ -122,19 +126,19 @@ public class FileComponentRepository<ComponentType extends IDescribedComponent>
 	/*
 	 * Load a component from a file
 	 */
-	private void loadComponent(Function<File, ? extends ComponentType> componentReader, Path pth) {
+	private void loadComponent(final Function<File, ? extends ComponentType> componentReader, final Path pth) {
 		try {
 			// Try to load the component
-			ComponentType component = componentReader.apply(pth.toFile());
+			final ComponentType component = componentReader.apply(pth.toFile());
 
-			if(component == null)
+			if (component == null)
 				throw new NullPointerException("Component reader read null component");
-			else if(!components.containsKey(component.getName())) {
+			else if (!components.containsKey(component.getName())) {
 				// We only care about the latest version of a
 				// component
-				ComponentType oldComponent = components.put(component.getName(), component);
+				final ComponentType oldComponent = components.put(component.getName(), component);
 
-				if(oldComponent.getVersion() > component.getVersion()) {
+				if (oldComponent.getVersion() > component.getVersion()) {
 					components.put(oldComponent.getName(), oldComponent);
 				}
 			} else {
@@ -143,7 +147,7 @@ public class FileComponentRepository<ComponentType extends IDescribedComponent>
 						+ "Only the latest version of the component" + component
 						+ " will be registered .");
 			}
-		} catch(Exception ex) {
+		} catch (final Exception ex) {
 			CLASS_LOGGER.log(Level.WARNING, ex, () -> "Error found reading component from file "
 					+ pth.toString() + ". This component will not be loaded");
 		}
@@ -151,21 +155,21 @@ public class FileComponentRepository<ComponentType extends IDescribedComponent>
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
+		final StringBuilder builder = new StringBuilder();
 		builder.append("FileComponentRepository [");
 
-		if(components != null) {
+		if (components != null) {
 			builder.append("components=");
 			builder.append(components);
 			builder.append(", ");
 		}
 
-		if(sourceDirectory != null) {
+		if (sourceDirectory != null) {
 			builder.append("sourceDirectory=");
 			builder.append(sourceDirectory);
 		}

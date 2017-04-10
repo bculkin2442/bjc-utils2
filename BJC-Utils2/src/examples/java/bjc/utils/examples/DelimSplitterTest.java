@@ -1,5 +1,16 @@
 package bjc.utils.examples;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+
 import bjc.utils.data.ITree;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IList;
@@ -12,20 +23,10 @@ import bjc.utils.parserutils.delims.SequenceDelimiter;
 import bjc.utils.parserutils.delims.StringDelimiter;
 import bjc.utils.parserutils.splitterv2.ConfigurableTokenSplitter;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-
 /**
- * Test for {@link SequenceDelimiter} as well as {@link ConfigurableTokenSplitter}
- * 
+ * Test for {@link SequenceDelimiter} as well as
+ * {@link ConfigurableTokenSplitter}
+ *
  * @author EVE
  *
  */
@@ -58,25 +59,29 @@ public class DelimSplitterTest {
 	private void loadMirrorDB() {
 		mirrored = new HashMap<>();
 
-		InputStream stream = getClass().getResourceAsStream("/BidiMirrorDB.txt");
+		final InputStream stream = getClass().getResourceAsStream("/BidiMirrorDB.txt");
 
-		try(Scanner scn = new Scanner(stream)) {
+		try (Scanner scn = new Scanner(stream)) {
 			String ln = "";
 
-			while(scn.hasNextLine()) {
+			while (scn.hasNextLine()) {
 				ln = scn.nextLine();
 
-				if(ln.equals("")) continue;
-				if(ln.startsWith("#")) continue;
+				if (ln.equals("")) {
+					continue;
+				}
+				if (ln.startsWith("#")) {
+					continue;
+				}
 
-				int cp1 = Integer.parseInt(ln.substring(0, 4), 16);
-				int cp2 = Integer.parseInt(ln.substring(6, 10), 16);
+				final int cp1 = Integer.parseInt(ln.substring(0, 4), 16);
+				final int cp2 = Integer.parseInt(ln.substring(6, 10), 16);
 
-				char[] cpa1 = Character.toChars(cp1);
-				char[] cpa2 = Character.toChars(cp2);
+				final char[] cpa1 = Character.toChars(cp1);
+				final char[] cpa2 = Character.toChars(cp2);
 
-				String cps1 = new String(cpa1);
-				String cps2 = new String(cpa2);
+				final String cps1 = new String(cpa1);
+				final String cps2 = new String(cpa2);
 
 				mirrored.put(cps1, cps2);
 			}
@@ -87,13 +92,13 @@ public class DelimSplitterTest {
 	 * Run the tester interface.
 	 */
 	private void runLoop() {
-		Scanner scn = new Scanner(System.in);
+		final Scanner scn = new Scanner(System.in);
 
 		System.out.print("Enter a command (blank line to quit): ");
 		String inp = scn.nextLine().trim();
 		System.out.println();
 
-		while(!inp.equals("")) {
+		while (!inp.equals("")) {
 			handleCommand(inp, scn, true);
 
 			System.out.println();
@@ -110,23 +115,21 @@ public class DelimSplitterTest {
 	/*
 	 * Handle a input command.
 	 */
-	private void handleCommand(String inp, Scanner scn, boolean isInteractive) {
-		if(inp.equals("")) {
-			return;
-		}
+	private void handleCommand(final String inp, final Scanner scn, final boolean isInteractive) {
+		if (inp.equals("")) return;
 
 		int idx = inp.indexOf(' ');
 
-		if(idx == -1) {
+		if (idx == -1) {
 			idx = inp.length();
 		}
 
-		String command = inp.substring(0, idx);
+		final String command = inp.substring(0, idx);
 
-		String args = inp.substring(idx).trim();
-		String[] argArray = args.split(" ");
+		final String args = inp.substring(idx).trim();
+		final String[] argArray = args.split(" ");
 
-		switch(command) {
+		switch (command) {
 		case "test":
 			handleTest(args, false);
 			break;
@@ -138,28 +141,28 @@ public class DelimSplitterTest {
 			break;
 		case "splitter-compile":
 			split.compile();
-			if(verbose) {
+			if (verbose) {
 				System.out.println("Compiled splitter");
 			}
 			break;
 		case "splitter-add":
 			split.addSimpleDelimiters(argArray);
-			if(verbose) {
+			if (verbose) {
 				System.out.println("Added delimiters " + StringUtils.toEnglishList(argArray, true));
 			}
 			break;
 		case "splitter-addmulti":
 			split.addMultiDelimiters(argArray);
-			if(verbose) {
+			if (verbose) {
 				System.out.println(
 						"Added multi-delimiters " + StringUtils.toEnglishList(argArray, true));
 			}
 			break;
 		case "splitter-addmatch":
-			for(String arg : argArray) {
+			for (final String arg : argArray) {
 				split.addSimpleDelimiters(arg, mirrored.get(arg));
 			}
-			if(verbose) {
+			if (verbose) {
 				System.out.println("Added matched delimiters "
 						+ StringUtils.toEnglishList(argArray, true));
 			}
@@ -169,22 +172,22 @@ public class DelimSplitterTest {
 			break;
 		case "splitter-reset":
 			split = new ConfigurableTokenSplitter(true);
-			if(verbose) {
+			if (verbose) {
 				System.out.println("Reset splitter");
 			}
 			break;
 
 		case "delims-addgroup":
-			for(String arg : argArray) {
+			for (final String arg : argArray) {
 				dlm.addGroup(groups.get(arg));
 			}
-			if(verbose) {
+			if (verbose) {
 				System.out.println("Added groups " + StringUtils.toEnglishList(argArray, true));
 			}
 			break;
 		case "delims-setinitial":
 			dlm.setInitialGroup(groups.get(argArray[0]));
-			if(verbose) {
+			if (verbose) {
 				System.out.println("Set initial group");
 			}
 			break;
@@ -196,32 +199,32 @@ public class DelimSplitterTest {
 			break;
 		case "delims-reset":
 			dlm = new StringDelimiter();
-			if(verbose) {
+			if (verbose) {
 				System.out.println("Reset delimiter");
 			}
 			break;
 		case "delimgroups-new":
-			for(String arg : argArray) {
+			for (final String arg : argArray) {
 				groups.put(arg, new DelimiterGroup<>(arg));
 			}
-			if(verbose) {
+			if (verbose) {
 				System.out.println("Created groups " + StringUtils.toEnglishList(argArray, true));
 			}
 			break;
 		case "delimgroups-edit":
-			for(String arg : argArray) {
+			for (final String arg : argArray) {
 				handleEditGroup(arg, scn, isInteractive);
 			}
 			break;
 		case "delimgroups-debug":
-			for(DelimiterGroup<String> group : groups.values()) {
+			for (final DelimiterGroup<String> group : groups.values()) {
 				System.out.println(group.toString());
 			}
 			break;
 		case "delimgroups-reset":
 			dlm = new StringDelimiter();
 			groups = new HashMap<>();
-			if(verbose) {
+			if (verbose) {
 				System.out.println("Reset delimiter groups + delimiter");
 			}
 			break;
@@ -237,32 +240,36 @@ public class DelimSplitterTest {
 	/*
 	 * Load script commands from a file.
 	 */
-	private void handleLoadFile(String args) {
+	private void handleLoadFile(final String args) {
 		String pth = args;
 
-		if(args.startsWith("\"")) {
+		if (args.startsWith("\"")) {
 			pth = args.substring(1, args.length() - 1);
 		}
 
-		try(FileInputStream fis = new FileInputStream(pth)) {
-			Scanner scn = new Scanner(fis);
+		try (FileInputStream fis = new FileInputStream(pth)) {
+			final Scanner scn = new Scanner(fis);
 
-			while(scn.hasNextLine()) {
-				String ln = scn.nextLine().trim();
+			while (scn.hasNextLine()) {
+				final String ln = scn.nextLine().trim();
 
-				if(ln.equals("")) continue;
-				if(ln.startsWith("#")) continue;
+				if (ln.equals("")) {
+					continue;
+				}
+				if (ln.startsWith("#")) {
+					continue;
+				}
 
-				if(verbose) {
+				if (verbose) {
 					System.out.println("\nRead command '" + ln + "' from file\n");
 				}
 				handleCommand(ln, scn, false);
 			}
 
 			scn.close();
-		} catch(FileNotFoundException fnfex) {
+		} catch (final FileNotFoundException fnfex) {
 			System.out.println("Couldn't find file '" + args + "'");
-		} catch(IOException ioex) {
+		} catch (final IOException ioex) {
 			System.out.println("I/O error with file '" + args + "'\nCause: " + ioex.getMessage());
 		}
 	}
@@ -270,88 +277,88 @@ public class DelimSplitterTest {
 	/*
 	 * Handle editing a group.
 	 */
-	private void handleEditGroup(String arg, Scanner scn, boolean isInteractive) {
-		if(!groups.containsKey(arg)) {
+	private void handleEditGroup(final String arg, final Scanner scn, final boolean isInteractive) {
+		if (!groups.containsKey(arg)) {
 			System.out.println("No group named '" + arg + "'");
 			return;
 		}
 
-		DelimiterGroup<String> group = groups.get(arg);
+		final DelimiterGroup<String> group = groups.get(arg);
 
-		if(verbose) {
+		if (verbose) {
 			System.out.println("Editing group '" + arg + "'");
 		}
-		if(isInteractive) {
+		if (isInteractive) {
 			System.out.println("Enter command (blank line to stop editing): ");
 		}
 
 		String ln = scn.nextLine().trim();
 
-		while(!ln.equals("")) {
+		while (!ln.equals("")) {
 			int idx = ln.indexOf(' ');
 
-			if(idx == -1) {
+			if (idx == -1) {
 				idx = ln.length();
 			}
 
-			String command = ln.substring(0, idx);
+			final String command = ln.substring(0, idx);
 
-			String args = ln.substring(idx).trim();
-			String[] argArray = args.split(" ");
+			final String args = ln.substring(idx).trim();
+			final String[] argArray = args.split(" ");
 
-			switch(command) {
+			switch (command) {
 			case "add-closing":
 				group.addClosing(argArray);
-				if(verbose) {
+				if (verbose) {
 					System.out.println(
 							"Added closers " + StringUtils.toEnglishList(argArray, true));
 				}
 				break;
 			case "add-tlexclude":
 				group.addTopLevelForbid(argArray);
-				if(verbose) {
+				if (verbose) {
 					System.out.println("Added top-level exclusions "
 							+ StringUtils.toEnglishList(argArray, true));
 				}
 				break;
 			case "add-exclude":
 				group.addTopLevelForbid(argArray);
-				if(verbose) {
+				if (verbose) {
 					System.out.println("Added nested exclusions "
 							+ StringUtils.toEnglishList(argArray, true));
 				}
 				break;
 			case "add-subgroup":
 				group.addSubgroup(argArray[0], Integer.parseInt(argArray[1]));
-				if(verbose) {
+				if (verbose) {
 					System.out.printf("Added subgroup %s with priority %s\n", argArray[0],
 							argArray[1]);
 				}
 				break;
 			case "add-implied-subgroup":
 				group.implySubgroup(argArray[0], argArray[1]);
-				if(verbose) {
+				if (verbose) {
 					System.out.printf("Made closer '%s' imply a '%s' subgroup\n", argArray[0],
 							argArray[1]);
 				}
 				break;
 			case "add-opener":
 				group.addOpener(argArray[0], argArray[1]);
-				if(verbose) {
+				if (verbose) {
 					System.out.printf("Added opener '%s' for group '%s'\n", argArray[0],
 							argArray[1]);
 				}
 				break;
 			case "add-reopener":
 				group.addPredOpener(new RegexOpener(argArray[0], argArray[1]));
-				if(verbose) {
+				if (verbose) {
 					System.out.printf("Added regex '%s' as opener for '%s'\n", argArray[1],
 							argArray[0]);
 				}
 				break;
 			case "add-recloser":
 				group.addPredCloser(new RegexCloser(argArray[0]));
-				if(verbose) {
+				if (verbose) {
 					System.out.printf("Added parameterized string '%s' as closer\n", argArray[0]);
 				}
 				break;
@@ -362,71 +369,71 @@ public class DelimSplitterTest {
 				System.out.println("Unknown command " + command);
 			}
 
-			if(isInteractive) {
+			if (isInteractive) {
 				System.out.println("Enter command (blank line to stop editing): ");
 			}
 
 			ln = scn.nextLine().trim();
 		}
 
-		if(verbose) {
+		if (verbose) {
 			System.out.println("Finished editing group '" + arg + "'");
 		}
 	}
 
-	private void handleDelim(String args) {
+	private void handleDelim(final String args) {
 		try {
-			ITree<String> res = dlm.delimitSequence(args.split(" "));
+			final ITree<String> res = dlm.delimitSequence(args.split(" "));
 
 			printDelimSeq(res);
-		} catch(DelimiterException dex) {
+		} catch (final DelimiterException dex) {
 			System.out.println("Expression '" + args + "' isn't properly delimited.\n\tCause: "
 					+ dex.getMessage());
 		}
 	}
 
-	private void handleSplit(String[] argArray) {
-		for(int i = 0; i < argArray.length; i++) {
-			String arg = argArray[i];
+	private void handleSplit(final String[] argArray) {
+		for (int i = 0; i < argArray.length; i++) {
+			final String arg = argArray[i];
 
-			IList<String> strangs = split.split(arg);
+			final IList<String> strangs = split.split(arg);
 
 			System.out.printf("%d '%s' %s\n", i, arg, strangs);
 		}
 	}
 
-	private void handleTest(String inp, boolean splitWS) {
+	private void handleTest(final String inp, final boolean splitWS) {
 		IList<String> strings;
 
 		try {
 			strings = split.split(inp);
-		} catch(IllegalStateException isex) {
+		} catch (final IllegalStateException isex) {
 			System.out.println("Splitter must be compiled at least once before use.");
 			return;
 		}
 
 		System.out.println("Split tokens: " + strings);
 
-		if(splitWS) {
-			List<String> tks = new LinkedList<>();
+		if (splitWS) {
+			final List<String> tks = new LinkedList<>();
 
-			for(String strang : strings) {
+			for (final String strang : strings) {
 				tks.addAll(Arrays.asList(strang.split(" ")));
 			}
 
 			strings = new FunctionalList<>(tks);
 		}
 		try {
-			ITree<String> delim = dlm.delimitSequence(strings.toArray(new String[0]));
+			final ITree<String> delim = dlm.delimitSequence(strings.toArray(new String[0]));
 
 			printDelimSeq(delim);
-		} catch(DelimiterException dex) {
+		} catch (final DelimiterException dex) {
 			System.out.println("Expression isn't properly delimited.");
 			System.out.println("Cause: " + dex.getMessage());
 		}
 	}
 
-	private void printDelimSeq(ITree<String> delim) {
+	private void printDelimSeq(final ITree<String> delim) {
 		System.out.println("Delimited tokens:\n" + delim.getChild(1).toString());
 		System.out.print("Delimited expr: ");
 		printDelimTree(delim);
@@ -436,27 +443,27 @@ public class DelimSplitterTest {
 		System.out.println();
 	}
 
-	private void printDelimTree(ITree<String> tree) {
-		StringBuilder sb = new StringBuilder();
+	private void printDelimTree(final ITree<String> tree) {
+		final StringBuilder sb = new StringBuilder();
 
 		intPrintDelimTree(tree.getChild(1), sb);
 
 		System.out.println(sb.toString().replaceAll("\\s+", " "));
 	}
 
-	private void intPrintDelimTree(ITree<String> tree, StringBuilder sb) {
+	private void intPrintDelimTree(final ITree<String> tree, final StringBuilder sb) {
 		tree.doForChildren((child) -> {
 			intPrintDelimNode(child, sb);
 		});
 	}
 
-	private void intPrintDelimNode(ITree<String> tree, StringBuilder sb) {
-		if(tree.getHead().equals("contents")) {
+	private void intPrintDelimNode(final ITree<String> tree, final StringBuilder sb) {
+		if (tree.getHead().equals("contents")) {
 			intPrintDelimTree(tree, sb);
 			return;
 		}
 
-		switch(tree.getChildrenCount()) {
+		switch (tree.getChildrenCount()) {
 		case 0:
 			sb.append(tree.getHead());
 			sb.append(" ");
@@ -474,7 +481,7 @@ public class DelimSplitterTest {
 		case 3:
 			intPrintDelimNode(tree.getChild(0), sb);
 
-			ITree<String> contents = tree.getChild(1);
+			final ITree<String> contents = tree.getChild(1);
 
 			intPrintDelimTree(contents.getChild(0), sb);
 			intPrintDelimNode(tree.getChild(2), sb);
@@ -485,12 +492,12 @@ public class DelimSplitterTest {
 
 	/**
 	 * Main method
-	 * 
+	 *
 	 * @param args
 	 *                Unused CLI args.
 	 */
-	public static void main(String[] args) {
-		DelimSplitterTest tst = new DelimSplitterTest();
+	public static void main(final String[] args) {
+		final DelimSplitterTest tst = new DelimSplitterTest();
 
 		tst.runLoop();
 	}

@@ -13,15 +13,14 @@ import bjc.utils.gen.WeightedGrammar;
 public class DiabloItemGen {
 	private static WeightedGrammar<String> rules = new WeightedGrammar<>();
 
-	private static void addCase(String ruleName, int probability, String ruleParts) {
-		IList<String> parts = FunctionalStringTokenizer.fromString(ruleParts)
-			.toList(strang -> strang);
+	private static void addCase(final String ruleName, final int probability, final String ruleParts) {
+		final IList<String> parts = FunctionalStringTokenizer.fromString(ruleParts).toList(strang -> strang);
 
 		rules.addCase(ruleName, probability, parts);
 	}
 
 	private static void addInfixRules() {
-		String rn = "<infix>";
+		final String rn = "<infix>";
 
 		addCase(rn, 60, "sword");
 		addCase(rn, 50, "armor");
@@ -32,7 +31,7 @@ public class DiabloItemGen {
 	}
 
 	private static void addItemRules() {
-		String rn = "<item>";
+		final String rn = "<item>";
 
 		addCase(rn, 10, "<infix>");
 		addCase(rn, 20, "<prefix> <infix>");
@@ -43,7 +42,7 @@ public class DiabloItemGen {
 	}
 
 	private static void addPrefixRules() {
-		String rn = "<prefix>";
+		final String rn = "<prefix>";
 
 		addCase(rn, 60, "sturdy");
 		addCase(rn, 50, "fine");
@@ -54,7 +53,7 @@ public class DiabloItemGen {
 	}
 
 	private static void addSuffixRules() {
-		String rn = "<suffix>";
+		final String rn = "<suffix>";
 
 		addCase(rn, 60, "of Health");
 		addCase(rn, 50, "of Wealth");
@@ -70,7 +69,7 @@ public class DiabloItemGen {
 	 * @param args
 	 *                Unused CLI args
 	 */
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		rules.addRule("<item>");
 		addItemRules();
 
@@ -83,10 +82,10 @@ public class DiabloItemGen {
 		rules.addRule("<infix>");
 		addInfixRules();
 
-		for(int i = 0; i < 100; i++) {
-			IList<String> ls = rules.generateListValues("<item>", " ");
+		for (int i = 0; i < 100; i++) {
+			final IList<String> ls = rules.generateListValues("<item>", " ");
 
-			StringBuilder sb = new StringBuilder();
+			final StringBuilder sb = new StringBuilder();
 			ls.forEach(sb::append);
 
 			System.out.println(sb.toString().replaceAll("\\s+", " "));

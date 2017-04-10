@@ -11,9 +11,9 @@ import java.util.stream.Stream;
  * @author Ben Culkin
  */
 class SpaghettiStack<T> extends Stack<T> {
-	private Stack<T> backing;
+	private final Stack<T> backing;
 
-	private Stack<T> parent;
+	private final Stack<T> parent;
 
 	/**
 	 * Create a new empty spaghetti stack, off of the specified parent.
@@ -21,29 +21,27 @@ class SpaghettiStack<T> extends Stack<T> {
 	 * @param par
 	 *                The parent stack
 	 */
-	public SpaghettiStack(Stack<T> par) {
+	public SpaghettiStack(final Stack<T> par) {
 		backing = new SimpleStack<>();
 
 		parent = par;
 	}
 
 	@Override
-	public void push(T elm) {
+	public void push(final T elm) {
 		backing.push(elm);
 	}
 
 	@Override
 	public T pop() {
-		if (backing.empty())
-			return parent.pop();
+		if (backing.empty()) return parent.pop();
 
 		return backing.pop();
 	}
 
 	@Override
 	public T top() {
-		if (backing.empty())
-			return parent.top();
+		if (backing.empty()) return parent.top();
 
 		return backing.top();
 	}
@@ -69,34 +67,27 @@ class SpaghettiStack<T> extends Stack<T> {
 		final int prime = 31;
 
 		int result = 1;
-		result = prime * result + ((backing == null) ? 0 : backing.hashCode());
-		result = prime * result + ((parent == null) ? 0 : parent.hashCode());
+		result = prime * result + (backing == null ? 0 : backing.hashCode());
+		result = prime * result + (parent == null ? 0 : parent.hashCode());
 
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof SpaghettiStack<?>))
-			return false;
+	public boolean equals(final Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (!(obj instanceof SpaghettiStack<?>)) return false;
 
-		SpaghettiStack<?> other = (SpaghettiStack<?>) obj;
+		final SpaghettiStack<?> other = (SpaghettiStack<?>) obj;
 
 		if (backing == null) {
-			if (other.backing != null)
-				return false;
-		} else if (!backing.equals(other.backing))
-			return false;
+			if (other.backing != null) return false;
+		} else if (!backing.equals(other.backing)) return false;
 
 		if (parent == null) {
-			if (other.parent != null)
-				return false;
-		} else if (!parent.equals(other.parent))
-			return false;
+			if (other.parent != null) return false;
+		} else if (!parent.equals(other.parent)) return false;
 
 		return true;
 	}

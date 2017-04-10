@@ -1,35 +1,35 @@
 package bjc.utils.examples;
 
+import java.util.Scanner;
+
 import bjc.utils.esodata.AbbrevMap;
 import bjc.utils.funcutils.StringUtils;
 
-import java.util.Scanner;
-
 /**
  * Test for abbreviation map.
- * 
+ *
  * @author EVE
  *
  */
 public class AbbrevMapTest {
 	/**
 	 * Main method.
-	 * 
+	 *
 	 * @param args
 	 *                Unused CLI args.
 	 */
-	public static void main(String[] args) {
-		Scanner scn = new Scanner(System.in);
+	public static void main(final String[] args) {
+		final Scanner scn = new Scanner(System.in);
 
-		AbbrevMap map = new AbbrevMap();
+		final AbbrevMap map = new AbbrevMap();
 
 		System.out.print("Enter a command (blank line to quit): ");
 		String ln = scn.nextLine();
 
-		while(!ln.equals("")) {
-			String[] commParts = ln.split(" ");
+		while (!ln.equals("")) {
+			final String[] commParts = ln.split(" ");
 
-			switch(commParts[0]) {
+			switch (commParts[0]) {
 			case "add":
 				map.addWords(commParts[1]);
 				break;
@@ -40,7 +40,7 @@ public class AbbrevMapTest {
 				map.recalculate();
 				break;
 			case "check":
-				String list = StringUtils.toEnglishList(map.deabbrev(commParts[1]), false);
+				final String list = StringUtils.toEnglishList(map.deabbrev(commParts[1]), false);
 				System.out.println(list);
 				break;
 			case "debug":
@@ -49,7 +49,7 @@ public class AbbrevMapTest {
 			default:
 				System.out.println("Unknown command: " + ln);
 			}
-			
+
 			System.out.print("Enter a command (blank line to quit): ");
 			ln = scn.nextLine();
 		}

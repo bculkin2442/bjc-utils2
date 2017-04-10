@@ -1,11 +1,11 @@
 package bjc.utils.gui;
 
-import bjc.utils.exceptions.FileNotChosenException;
-
 import java.awt.Component;
 import java.io.File;
 
 import javax.swing.JFileChooser;
+
+import bjc.utils.exceptions.FileNotChosenException;
 
 /**
  * Utility class for easily prompting user for files.
@@ -16,19 +16,19 @@ import javax.swing.JFileChooser;
  *
  */
 public class SimpleFileChooser {
-	private static File doOpenFile(Component parent, String title, JFileChooser files) {
-		if(title == null) throw new NullPointerException("Title must not be null");
+	private static File doOpenFile(final Component parent, final String title, final JFileChooser files) {
+		if (title == null) throw new NullPointerException("Title must not be null");
 
 		files.setDialogTitle(title);
 
 		boolean success = false;
 
-		while(!success) {
+		while (!success) {
 			try {
 				maybeDoOpenFile(parent, files);
 
 				success = true;
-			} catch(FileNotChosenException fncx) {
+			} catch (final FileNotChosenException fncx) {
 				// We don't care about specifics
 				SimpleDialogs.showError(parent, "I/O Error", "Please pick a file to open");
 			}
@@ -37,25 +37,23 @@ public class SimpleFileChooser {
 		return files.getSelectedFile();
 	}
 
-	private static File doSaveFile(Component parent, String title, JFileChooser files) {
-		if(title == null) throw new NullPointerException("Title must not be null");
+	private static File doSaveFile(final Component parent, final String title, final JFileChooser files) {
+		if (title == null) throw new NullPointerException("Title must not be null");
 
 		files.setDialogTitle(title);
 
-		boolean success = false;
+		final boolean success = false;
 
-		while(!success) {
+		while (!success) {
 			try {
 				maybeDoSaveFile(parent, files);
 
 				return files.getSelectedFile();
-			} catch(FileNotChosenException fncex) {
+			} catch (final FileNotChosenException fncex) {
 				// We don't care about specifics
 				SimpleDialogs.showError(parent, "I/O Error", "Please pick a file to save to");
 			}
 		}
-
-		return files.getSelectedFile();
 	}
 
 	/**
@@ -68,8 +66,8 @@ public class SimpleFileChooser {
 	 *                The title of the dialog to prompt with.
 	 * @return The file the user has chosen.
 	 */
-	public static File getOpenFile(Component parent, String title) {
-		JFileChooser files = new JFileChooser();
+	public static File getOpenFile(final Component parent, final String title) {
+		final JFileChooser files = new JFileChooser();
 
 		return doOpenFile(parent, title, files);
 	}
@@ -86,8 +84,8 @@ public class SimpleFileChooser {
 	 *                The list of file extensions the file should have.
 	 * @return The file the user has chosen.
 	 */
-	public static File getOpenFile(Component parent, String title, String... extensions) {
-		JFileChooser files = new JFileChooser();
+	public static File getOpenFile(final Component parent, final String title, final String... extensions) {
+		final JFileChooser files = new JFileChooser();
 
 		files.addChoosableFileFilter(new ExtensionFileFilter(extensions));
 
@@ -103,8 +101,8 @@ public class SimpleFileChooser {
 	 *                The title of the dialog to prompt with.
 	 * @return The file the user chose.
 	 */
-	public static File getSaveFile(Component parent, String title) {
-		JFileChooser files = new JFileChooser();
+	public static File getSaveFile(final Component parent, final String title) {
+		final JFileChooser files = new JFileChooser();
 
 		return doSaveFile(parent, title, files);
 	}
@@ -120,32 +118,34 @@ public class SimpleFileChooser {
 	 *                The extensions of the files the user can choose.
 	 * @return The file the user chose.
 	 */
-	public static File getSaveFile(Component parent, String title, String... extensions) {
-		JFileChooser files = new JFileChooser();
+	public static File getSaveFile(final Component parent, final String title, final String... extensions) {
+		final JFileChooser files = new JFileChooser();
 
 		files.addChoosableFileFilter(new ExtensionFileFilter(extensions));
 
 		return doSaveFile(parent, title, files);
 	}
 
-	private static void maybeDoOpenFile(Component parent, JFileChooser files) throws FileNotChosenException {
-		if(parent == null)
+	private static void maybeDoOpenFile(final Component parent, final JFileChooser files)
+			throws FileNotChosenException {
+		if (parent == null)
 			throw new NullPointerException("Parent must not be null");
-		else if(files == null) throw new NullPointerException("File chooser must not be null");
+		else if (files == null) throw new NullPointerException("File chooser must not be null");
 
-		int result = files.showSaveDialog(parent);
+		final int result = files.showSaveDialog(parent);
 
-		if(result != JFileChooser.APPROVE_OPTION) throw new FileNotChosenException();
+		if (result != JFileChooser.APPROVE_OPTION) throw new FileNotChosenException();
 	}
 
-	private static void maybeDoSaveFile(Component parent, JFileChooser files) throws FileNotChosenException {
-		if(parent == null)
+	private static void maybeDoSaveFile(final Component parent, final JFileChooser files)
+			throws FileNotChosenException {
+		if (parent == null)
 			throw new NullPointerException("Parent must not be null");
-		else if(files == null) throw new NullPointerException("File chooser must not be null");
+		else if (files == null) throw new NullPointerException("File chooser must not be null");
 
-		int result = files.showSaveDialog(parent);
+		final int result = files.showSaveDialog(parent);
 
-		if(result != JFileChooser.APPROVE_OPTION) throw new FileNotChosenException();
+		if (result != JFileChooser.APPROVE_OPTION) throw new FileNotChosenException();
 	}
 
 	/**
@@ -157,15 +157,15 @@ public class SimpleFileChooser {
 	 *                The title of the dialog to prompt with.
 	 * @return The file if the user chose one or null if they didn't.
 	 */
-	public static File maybeOpenFile(Component parent, String title) {
-		if(title == null) throw new NullPointerException("Title must not be null");
+	public static File maybeOpenFile(final Component parent, final String title) {
+		if (title == null) throw new NullPointerException("Title must not be null");
 
-		JFileChooser files = new JFileChooser();
+		final JFileChooser files = new JFileChooser();
 		files.setDialogTitle(title);
 
 		try {
 			maybeDoOpenFile(parent, files);
-		} catch(FileNotChosenException fncex) {
+		} catch (final FileNotChosenException fncex) {
 			// We don't care about specifics
 		}
 
@@ -181,15 +181,15 @@ public class SimpleFileChooser {
 	 *                The title of the dialog to prompt with.
 	 * @return The file if the user chose one or null if they didn't.
 	 */
-	public static File maybeSaveFile(Component parent, String title) {
-		if(title == null) throw new NullPointerException("Title must not be null");
+	public static File maybeSaveFile(final Component parent, final String title) {
+		if (title == null) throw new NullPointerException("Title must not be null");
 
-		JFileChooser files = new JFileChooser();
+		final JFileChooser files = new JFileChooser();
 		files.setDialogTitle(title);
 
 		try {
 			maybeDoSaveFile(parent, files);
-		} catch(FileNotChosenException fncex) {
+		} catch (final FileNotChosenException fncex) {
 			// We don't care about specifics
 		}
 

@@ -1,17 +1,17 @@
 package bjc.utils.esodata;
 
-import bjc.utils.funcdata.FunctionalMap;
-import bjc.utils.funcdata.IList;
-import bjc.utils.funcdata.IMap;
-
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import bjc.utils.funcdata.FunctionalMap;
+import bjc.utils.funcdata.IList;
+import bjc.utils.funcdata.IMap;
+
 /**
  * A variant of a map where inserting a duplicate key shadows the existing value
  * instead of replacing it.
- * 
+ *
  * @author EVE
  *
  * @param <KeyType>
@@ -20,7 +20,7 @@ import java.util.function.Function;
  *                The values in the map.
  */
 public class PushdownMap<KeyType, ValueType> implements IMap<KeyType, ValueType> {
-	private IMap<KeyType, Stack<ValueType>> backing;
+	private final IMap<KeyType, Stack<ValueType>> backing;
 
 	/**
 	 * Create a new empty stack-based map.
@@ -29,7 +29,7 @@ public class PushdownMap<KeyType, ValueType> implements IMap<KeyType, ValueType>
 		backing = new FunctionalMap<>();
 	}
 
-	private PushdownMap(IMap<KeyType, Stack<ValueType>> back) {
+	private PushdownMap(final IMap<KeyType, Stack<ValueType>> back) {
 		backing = back;
 	}
 
@@ -39,7 +39,7 @@ public class PushdownMap<KeyType, ValueType> implements IMap<KeyType, ValueType>
 	}
 
 	@Override
-	public boolean containsKey(KeyType key) {
+	public boolean containsKey(final KeyType key) {
 		return backing.containsKey(key);
 	}
 
@@ -49,22 +49,22 @@ public class PushdownMap<KeyType, ValueType> implements IMap<KeyType, ValueType>
 	}
 
 	@Override
-	public void forEach(BiConsumer<KeyType, ValueType> action) {
+	public void forEach(final BiConsumer<KeyType, ValueType> action) {
 		backing.forEach((key, stk) -> action.accept(key, stk.top()));
 	}
 
 	@Override
-	public void forEachKey(Consumer<KeyType> action) {
+	public void forEachKey(final Consumer<KeyType> action) {
 		backing.forEachKey(action);
 	}
 
 	@Override
-	public void forEachValue(Consumer<ValueType> action) {
+	public void forEachValue(final Consumer<ValueType> action) {
 		backing.forEachValue(stk -> action.accept(stk.top()));
 	}
 
 	@Override
-	public ValueType get(KeyType key) {
+	public ValueType get(final KeyType key) {
 		return backing.get(key).top();
 	}
 
@@ -79,22 +79,22 @@ public class PushdownMap<KeyType, ValueType> implements IMap<KeyType, ValueType>
 	}
 
 	@Override
-	public <V2> IMap<KeyType, V2> transform(Function<ValueType, V2> transformer) {
+	public <V2> IMap<KeyType, V2> transform(final Function<ValueType, V2> transformer) {
 		throw new UnsupportedOperationException("Cannot transform pushdown maps.");
 	}
 
 	@Override
-	public ValueType put(KeyType key, ValueType val) {
+	public ValueType put(final KeyType key, final ValueType val) {
 		if (backing.containsKey(key)) {
-			Stack<ValueType> stk = backing.get(key);
+			final Stack<ValueType> stk = backing.get(key);
 
-			ValueType vl = stk.top();
+			final ValueType vl = stk.top();
 
 			stk.push(val);
 
 			return vl;
 		} else {
-			Stack<ValueType> stk = new SimpleStack<>();
+			final Stack<ValueType> stk = new SimpleStack<>();
 
 			stk.push(val);
 
@@ -103,14 +103,12 @@ public class PushdownMap<KeyType, ValueType> implements IMap<KeyType, ValueType>
 	}
 
 	@Override
-	public ValueType remove(KeyType key) {
-		Stack<ValueType> stk = backing.get(key);
+	public ValueType remove(final KeyType key) {
+		final Stack<ValueType> stk = backing.get(key);
 
-		if (stk.size() > 1) {
+		if (stk.size() > 1)
 			return stk.pop();
-		} else {
-			return backing.remove(key).top();
-		}
+		else return backing.remove(key).top();
 	}
 
 	@Override
@@ -123,27 +121,22 @@ public class PushdownMap<KeyType, ValueType> implements IMap<KeyType, ValueType>
 		final int prime = 31;
 
 		int result = 1;
-		result = prime * result + ((backing == null) ? 0 : backing.hashCode());
+		result = prime * result + (backing == null ? 0 : backing.hashCode());
 
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof PushdownMap<?, ?>))
-			return false;
+	public boolean equals(final Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (!(obj instanceof PushdownMap<?, ?>)) return false;
 
-		PushdownMap<?, ?> other = (PushdownMap<?, ?>) obj;
+		final PushdownMap<?, ?> other = (PushdownMap<?, ?>) obj;
 
 		if (backing == null) {
-			if (other.backing != null)
-				return false;
-		} else if (!backing.equals(other.backing))
-			return false;
+			if (other.backing != null) return false;
+		} else if (!backing.equals(other.backing)) return false;
 
 		return true;
 	}

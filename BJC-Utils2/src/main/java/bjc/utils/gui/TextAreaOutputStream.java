@@ -12,7 +12,7 @@ import javax.swing.JTextArea;
  * @author Levente S\u00e1ntha (lsantha@users.sourceforge.net)
  */
 public class TextAreaOutputStream extends OutputStream {
-	private JTextArea textArea;
+	private final JTextArea textArea;
 
 	/**
 	 * Create a new output stream attached to a textarea
@@ -20,15 +20,15 @@ public class TextAreaOutputStream extends OutputStream {
 	 * @param console
 	 *                The textarea to write to
 	 */
-	public TextAreaOutputStream(JTextArea console) {
+	public TextAreaOutputStream(final JTextArea console) {
 		this.textArea = console;
 	}
 
 	@Override
-	public void write(int b) throws IOException {
+	public void write(final int b) throws IOException {
 		textArea.append("" + (char) b);
 
-		if(b == '\n') {
+		if (b == '\n') {
 			textArea.repaint();
 		}
 	}

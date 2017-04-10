@@ -15,9 +15,9 @@ import java.util.function.Function;
 public interface Bifunctor<LeftType, RightType> {
 	/**
 	 * Alias for functor mapping.
-	 * 
+	 *
 	 * @author EVE
-	 * 
+	 *
 	 * @param <OldLeft>
 	 * @param <OldRight>
 	 * @param <NewLeft>
@@ -30,7 +30,7 @@ public interface Bifunctor<LeftType, RightType> {
 
 	/**
 	 * Alias for left functor mapping.
-	 * 
+	 *
 	 * @author EVE
 	 *
 	 * @param <OldLeft>
@@ -44,7 +44,7 @@ public interface Bifunctor<LeftType, RightType> {
 
 	/**
 	 * Alias for right functor mapping.
-	 * 
+	 *
 	 * @author EVE
 	 *
 	 * @param <OldLeft>
@@ -75,12 +75,12 @@ public interface Bifunctor<LeftType, RightType> {
 	 * @return A function that maps over both parts of the pair
 	 */
 	public default <OldLeft, OldRight, NewLeft, NewRight> BifunctorMap<OldLeft, OldRight, NewLeft, NewRight> bimap(
-			Function<OldLeft, NewLeft> leftFunc, Function<OldRight, NewRight> rightFunc) {
-		BifunctorMap<OldLeft, OldRight, NewLeft, NewRight> bimappedFunc = (argPair) -> {
-			LeftBifunctorMap<OldLeft, OldRight, NewLeft> leftMapper = argPair.fmapLeft(leftFunc);
+			final Function<OldLeft, NewLeft> leftFunc, final Function<OldRight, NewRight> rightFunc) {
+		final BifunctorMap<OldLeft, OldRight, NewLeft, NewRight> bimappedFunc = (argPair) -> {
+			final LeftBifunctorMap<OldLeft, OldRight, NewLeft> leftMapper = argPair.fmapLeft(leftFunc);
 
-			Bifunctor<NewLeft, OldRight> leftMappedFunctor = leftMapper.apply(argPair);
-			RightBifunctorMap<NewLeft, OldRight, NewRight> rightMapper = leftMappedFunctor
+			final Bifunctor<NewLeft, OldRight> leftMappedFunctor = leftMapper.apply(argPair);
+			final RightBifunctorMap<NewLeft, OldRight, NewRight> rightMapper = leftMappedFunctor
 					.fmapRight(rightFunc);
 
 			return rightMapper.apply(leftMappedFunctor);

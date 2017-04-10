@@ -1,12 +1,12 @@
 package bjc.utils.funcdata.bst;
 
-import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.IList;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
+
+import bjc.utils.funcdata.FunctionalList;
+import bjc.utils.funcdata.IList;
 
 /**
  * A binary search tree, with some mild support for functional traversal.
@@ -20,7 +20,7 @@ public class BinarySearchTree<T> {
 	/*
 	 * The comparator for use in ordering items
 	 */
-	private Comparator<T> comparator;
+	private final Comparator<T> comparator;
 
 	/*
 	 * The current count of elements in the tree
@@ -38,9 +38,8 @@ public class BinarySearchTree<T> {
 	 * @param cmp
 	 *                The thing to use for comparing elements
 	 */
-	public BinarySearchTree(Comparator<T> cmp) {
-		if (cmp == null)
-			throw new NullPointerException("Comparator must not be null");
+	public BinarySearchTree(final Comparator<T> cmp) {
+		if (cmp == null) throw new NullPointerException("Comparator must not be null");
 
 		elementCount = 0;
 		comparator = cmp;
@@ -52,7 +51,7 @@ public class BinarySearchTree<T> {
 	 * @param element
 	 *                The data to add to the binary search tree.
 	 */
-	public void addNode(T element) {
+	public void addNode(final T element) {
 		elementCount++;
 
 		if (root == null) {
@@ -73,7 +72,7 @@ public class BinarySearchTree<T> {
 	 *                The distance from the pivot
 	 * @return Whether the adjusted pivot is with the list
 	 */
-	private boolean adjustedPivotInBounds(IList<T> elements, int pivot, int pivotAdjustment) {
+	private boolean adjustedPivotInBounds(final IList<T> elements, final int pivot, final int pivotAdjustment) {
 		return pivot - pivotAdjustment >= 0 && pivot + pivotAdjustment < elements.getSize();
 	}
 
@@ -83,7 +82,7 @@ public class BinarySearchTree<T> {
 	 * Takes O(N) time, but also O(N) space.
 	 */
 	public void balance() {
-		IList<T> elements = new FunctionalList<>();
+		final IList<T> elements = new FunctionalList<>();
 
 		// Add each element to the list in sorted order
 		root.forEach(TreeLinearizationMethod.INORDER, element -> elements.add(element));
@@ -92,7 +91,7 @@ public class BinarySearchTree<T> {
 		root = null;
 
 		// Set up the pivot and adjustment for readding elements
-		int pivot = elements.getSize() / 2;
+		final int pivot = elements.getSize() / 2;
 		int pivotAdjustment = 0;
 
 		// Add elements until there aren't any left
@@ -129,7 +128,7 @@ public class BinarySearchTree<T> {
 	 * @param element
 	 *                The node to delete
 	 */
-	public void deleteNode(T element) {
+	public void deleteNode(final T element) {
 		elementCount--;
 
 		root.delete(element, comparator);
@@ -151,7 +150,7 @@ public class BinarySearchTree<T> {
 	 *                The node to check the presence of for the tree.
 	 * @return Whether or not the node is in the tree.
 	 */
-	public boolean isInTree(T element) {
+	public boolean isInTree(final T element) {
 		return root.contains(element, comparator);
 	}
 
@@ -163,11 +162,10 @@ public class BinarySearchTree<T> {
 	 * @param traversalPredicate
 	 *                The function to use until it fails
 	 */
-	public void traverse(TreeLinearizationMethod linearizationMethod, Predicate<T> traversalPredicate) {
+	public void traverse(final TreeLinearizationMethod linearizationMethod, final Predicate<T> traversalPredicate) {
 		if (linearizationMethod == null)
 			throw new NullPointerException("Linearization method must not be null");
-		else if (traversalPredicate == null)
-			throw new NullPointerException("Predicate must not be nulls");
+		else if (traversalPredicate == null) throw new NullPointerException("Predicate must not be nulls");
 
 		root.forEach(linearizationMethod, traversalPredicate);
 	}
@@ -176,7 +174,7 @@ public class BinarySearchTree<T> {
 	 * Remove all soft-deleted nodes from the tree.
 	 */
 	public void trim() {
-		List<T> nodes = new ArrayList<>(elementCount);
+		final List<T> nodes = new ArrayList<>(elementCount);
 
 		// Add all non-soft deleted nodes to the tree in insertion order
 		traverse(TreeLinearizationMethod.PREORDER, node -> {
@@ -201,28 +199,22 @@ public class BinarySearchTree<T> {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + elementCount;
-		result = prime * result + ((root == null) ? 0 : root.hashCode());
+		result = prime * result + (root == null ? 0 : root.hashCode());
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof BinarySearchTree<?>))
-			return false;
+	public boolean equals(final Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (!(obj instanceof BinarySearchTree<?>)) return false;
 
-		BinarySearchTree<?> other = (BinarySearchTree<?>) obj;
+		final BinarySearchTree<?> other = (BinarySearchTree<?>) obj;
 
-		if (elementCount != other.elementCount)
-			return false;
+		if (elementCount != other.elementCount) return false;
 		if (root == null) {
-			if (other.root != null)
-				return false;
-		} else if (!root.equals(other.root))
-			return false;
+			if (other.root != null) return false;
+		} else if (!root.equals(other.root)) return false;
 
 		return true;
 	}

@@ -1,13 +1,13 @@
 package bjc.utils.gui.panels;
 
-import bjc.utils.gui.layout.HLayout;
-
 import java.util.function.Consumer;
 
 import javax.swing.JFormattedTextField;
 import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import bjc.utils.gui.layout.HLayout;
 
 /**
  * A simple panel allowing for input of a single formatted value
@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 public class FormattedInputPanel<InputVal> extends JPanel {
 	private static final long serialVersionUID = 5232016563558588031L;
 
-	private JFormattedTextField field;
+	private final JFormattedTextField field;
 
 	/**
 	 * Create a new formatted input panel
@@ -35,10 +35,11 @@ public class FormattedInputPanel<InputVal> extends JPanel {
 	 *                The action to call whenever the value changes
 	 */
 	@SuppressWarnings("unchecked")
-	public FormattedInputPanel(String label, int length, AbstractFormatter formatter, Consumer<InputVal> reciever) {
+	public FormattedInputPanel(final String label, final int length, final AbstractFormatter formatter,
+			final Consumer<InputVal> reciever) {
 		setLayout(new HLayout(2));
 
-		JLabel lab = new JLabel(label);
+		final JLabel lab = new JLabel(label);
 		field = new JFormattedTextField(formatter);
 
 		field.setColumns(length);
@@ -59,7 +60,7 @@ public class FormattedInputPanel<InputVal> extends JPanel {
 	 * @param value
 	 *                The value to set the panel to
 	 */
-	public void resetValues(InputVal value) {
+	public void resetValues(final InputVal value) {
 		field.setValue(value);
 	}
 }

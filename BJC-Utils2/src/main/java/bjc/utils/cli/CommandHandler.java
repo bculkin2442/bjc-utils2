@@ -18,7 +18,7 @@ public interface CommandHandler extends Function<String[], CommandMode> {
 	 * @return The command mode to switch to after this command, or null to
 	 *         stop executing commands
 	 */
-	default CommandMode handle(String[] args) {
+	default CommandMode handle(final String[] args) {
 		return this.apply(args);
 	}
 }

@@ -1,10 +1,5 @@
 package bjc.utils.gui.panels;
 
-import bjc.utils.funcdata.IList;
-import bjc.utils.gui.SimpleJList;
-import bjc.utils.gui.layout.HLayout;
-import bjc.utils.gui.layout.VLayout;
-
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -13,6 +8,11 @@ import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
+
+import bjc.utils.funcdata.IList;
+import bjc.utils.gui.SimpleJList;
+import bjc.utils.gui.layout.HLayout;
+import bjc.utils.gui.layout.VLayout;
 
 /**
  * A panel that has a list of objects and ways of manipulating that list
@@ -36,7 +36,7 @@ public class ListParameterPanel<E> extends JPanel {
 	 * @param remove
 	 *                The action that removes items
 	 */
-	public ListParameterPanel(Supplier<E> add, Consumer<E> edit, Consumer<E> remove) {
+	public ListParameterPanel(final Supplier<E> add, final Consumer<E> edit, final Consumer<E> remove) {
 		this(add, edit, remove, null);
 	}
 
@@ -52,12 +52,13 @@ public class ListParameterPanel<E> extends JPanel {
 	 * @param defaults
 	 *                The default values to put in the list
 	 */
-	public ListParameterPanel(Supplier<E> add, Consumer<E> edit, Consumer<E> remove, IList<E> defaults) {
+	public ListParameterPanel(final Supplier<E> add, final Consumer<E> edit, final Consumer<E> remove,
+			final IList<E> defaults) {
 		setLayout(new VLayout(2));
 
 		JList<E> list;
 
-		if(defaults != null) {
+		if (defaults != null) {
 			list = SimpleJList.buildFromList(defaults.toIterable());
 		} else {
 			list = new JList<>(new DefaultListModel<>());
@@ -65,19 +66,19 @@ public class ListParameterPanel<E> extends JPanel {
 
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		JPanel buttonPanel = new JPanel();
+		final JPanel buttonPanel = new JPanel();
 
 		int numButtons = 0;
 
-		if(add != null) {
+		if (add != null) {
 			numButtons++;
 		}
 
-		if(edit != null) {
+		if (edit != null) {
 			numButtons++;
 		}
 
-		if(remove != null) {
+		if (remove != null) {
 			numButtons++;
 		}
 
@@ -85,10 +86,10 @@ public class ListParameterPanel<E> extends JPanel {
 
 		JButton addParam = null;
 
-		if(add != null) {
+		if (add != null) {
 			addParam = new JButton("Add...");
 			addParam.addActionListener((event) -> {
-				DefaultListModel<E> model = (DefaultListModel<E>) list.getModel();
+				final DefaultListModel<E> model = (DefaultListModel<E>) list.getModel();
 
 				model.addElement(add.get());
 			});
@@ -96,7 +97,7 @@ public class ListParameterPanel<E> extends JPanel {
 
 		JButton editParam = null;
 
-		if(edit != null) {
+		if (edit != null) {
 			editParam = new JButton("Edit...");
 			editParam.addActionListener((event) -> {
 				edit.accept(list.getSelectedValue());
@@ -105,24 +106,24 @@ public class ListParameterPanel<E> extends JPanel {
 
 		JButton removeParam = null;
 
-		if(remove != null) {
+		if (remove != null) {
 			removeParam = new JButton("Remove...");
 			removeParam.addActionListener((event) -> {
-				DefaultListModel<E> model = (DefaultListModel<E>) list.getModel();
+				final DefaultListModel<E> model = (DefaultListModel<E>) list.getModel();
 
 				remove.accept(model.remove(list.getSelectedIndex()));
 			});
 		}
 
-		if(add != null) {
+		if (add != null) {
 			buttonPanel.add(addParam);
 		}
 
-		if(edit != null) {
+		if (edit != null) {
 			buttonPanel.add(editParam);
 		}
 
-		if(remove != null) {
+		if (remove != null) {
 			buttonPanel.add(removeParam);
 		}
 

@@ -1,8 +1,9 @@
 package bjc.utils.parserutils;
 
-import java.util.regex.Pattern;
+import static bjc.utils.PropertyDB.applyFormat;
+import static bjc.utils.PropertyDB.getRegex;
 
-import static bjc.utils.PropertyDB.*;
+import java.util.regex.Pattern;
 
 /*
  * Checks if a string would pass Double.parseDouble.

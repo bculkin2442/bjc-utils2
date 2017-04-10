@@ -25,7 +25,7 @@ public class PragmaFormatException extends InputMismatchException {
 	 * @param message
 	 *                The message to explain why the exception was thrown
 	 */
-	public PragmaFormatException(String message) {
+	public PragmaFormatException(final String message) {
 		super(message);
 	}
 }

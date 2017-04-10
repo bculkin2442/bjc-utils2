@@ -6,7 +6,7 @@ import bjc.utils.funcdata.IList;
 
 /**
  * A function that flattens a list.
- * 
+ *
  * @author bjculkin
  *
  * @param <S>

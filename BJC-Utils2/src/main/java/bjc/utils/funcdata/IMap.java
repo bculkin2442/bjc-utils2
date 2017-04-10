@@ -11,7 +11,7 @@ import java.util.function.Function;
  *
  * @param <KeyType>
  *                The type of this map's keys.
- * 
+ *
  * @param <ValueType>
  *                The type of this map's values.
  */
@@ -30,7 +30,7 @@ public interface IMap<KeyType, ValueType> {
 	 * @param action
 	 *                The action to perform on each key in the map.
 	 */
-	default void forEachKey(Consumer<KeyType> action) {
+	default void forEachKey(final Consumer<KeyType> action) {
 		forEach((key, val) -> action.accept(key));
 	}
 
@@ -40,7 +40,7 @@ public interface IMap<KeyType, ValueType> {
 	 * @param action
 	 *                The action to perform on each value in the map.
 	 */
-	default void forEachValue(Consumer<ValueType> action) {
+	default void forEachValue(final Consumer<ValueType> action) {
 		forEach((key, val) -> action.accept(val));
 	}
 
@@ -49,7 +49,7 @@ public interface IMap<KeyType, ValueType> {
 	 *
 	 * @param key
 	 *                The key to check.
-	 * 
+	 *
 	 * @return Whether or not the map contains the key.
 	 */
 	boolean containsKey(KeyType key);
@@ -59,7 +59,7 @@ public interface IMap<KeyType, ValueType> {
 	 *
 	 * @param key
 	 *                The key to look for a value under.
-	 * 
+	 *
 	 * @return The value of the key.
 	 */
 	ValueType get(KeyType key);
@@ -70,17 +70,17 @@ public interface IMap<KeyType, ValueType> {
 	 *
 	 * @param key
 	 *                The key to attempt to retrieve.
-	 * 
+	 *
 	 * @param defaultValue
 	 *                The value to return if the key doesn't exist.
-	 * 
+	 *
 	 * @return The value associated with the key, or the default value if
 	 *         the key doesn't exist.
 	 */
-	default ValueType getOrDefault(KeyType key, ValueType defaultValue) {
+	default ValueType getOrDefault(final KeyType key, final ValueType defaultValue) {
 		try {
 			return get(key);
-		} catch (IllegalArgumentException iaex) {
+		} catch (final IllegalArgumentException iaex) {
 			/*
 			 * We don't care about this, because it indicates a key
 			 * is missing.
@@ -94,10 +94,10 @@ public interface IMap<KeyType, ValueType> {
 	 *
 	 * @param key
 	 *                The key to put the value under.
-	 * 
+	 *
 	 * @param val
 	 *                The value to add.
-	 * 
+	 *
 	 * @return The previous value of the key in the map, or null if the key
 	 *         wasn't in the map. However, note that it may also return null
 	 *         if the key was set to null.
@@ -133,13 +133,13 @@ public interface IMap<KeyType, ValueType> {
 	 *
 	 * @param <V2>
 	 *                The new type of returned values.
-	 * 
+	 *
 	 * @param transformer
 	 *                The function to use to transform values.
-	 * 
+	 *
 	 * @return The map where each value will be transformed after lookup.
 	 */
-	default <V2> IMap<KeyType, V2> transform(Function<ValueType, V2> transformer) {
+	default <V2> IMap<KeyType, V2> transform(final Function<ValueType, V2> transformer) {
 		return new TransformedValueMap<>(this, transformer);
 	}
 
@@ -156,7 +156,7 @@ public interface IMap<KeyType, ValueType> {
 	 *
 	 * @param key
 	 *                The key to remove from the map.
-	 * 
+	 *
 	 * @return The previous value for the key in the map, or null if the key
 	 *         wasn't in the class. NOTE: Just because you received null,
 	 *         doesn't mean the map wasn't changed. It may mean that someone
@@ -177,9 +177,9 @@ public interface IMap<KeyType, ValueType> {
 	 * @return A list of values in this map.
 	 */
 	default IList<ValueType> valueList() {
-		IList<ValueType> returns = new FunctionalList<>();
+		final IList<ValueType> returns = new FunctionalList<>();
 
-		for (KeyType key : keyList()) {
+		for (final KeyType key : keyList()) {
 			returns.add(get(key));
 		}
 

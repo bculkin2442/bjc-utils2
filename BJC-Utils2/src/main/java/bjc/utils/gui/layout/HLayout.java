@@ -19,7 +19,7 @@ public class HLayout extends GridLayout {
 	 * @param columns
 	 *                The number of columns in this layout.
 	 */
-	public HLayout(int columns) {
+	public HLayout(final int columns) {
 		super(1, columns);
 	}
 }

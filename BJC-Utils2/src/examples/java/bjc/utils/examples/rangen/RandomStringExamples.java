@@ -14,12 +14,11 @@ import bjc.utils.gen.RandomGrammar;
 public class RandomStringExamples {
 	private static RandomGrammar<String> rg;
 
-	private static void addRule(String rule, String... cases) {
-		IList<IList<String>> cses = new FunctionalList<>();
+	private static void addRule(final String rule, final String... cases) {
+		final IList<IList<String>> cses = new FunctionalList<>();
 
-		for(String strang : cases) {
-			IList<String> lst = FunctionalStringTokenizer.fromString(strang)
-				.toList(s -> s);
+		for (final String strang : cases) {
+			final IList<String> lst = FunctionalStringTokenizer.fromString(strang).toList(s -> s);
 
 			cses.add(lst);
 		}
@@ -33,7 +32,7 @@ public class RandomStringExamples {
 	 * @param args
 	 *                Unused CLI args
 	 */
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		rg = new RandomGrammar<>();
 
 		addRule("<sentance>", "<person> <opines> <something>", "<person> thinks that I am <property>",
@@ -53,10 +52,10 @@ public class RandomStringExamples {
 
 		addRule("<something>", "<activity>", "<activity> with <person>", "<object>");
 
-		for(int i = 0; i < 10; i++) {
-			IList<String> ls = rg.generateListValues("<sentance>", " ");
+		for (int i = 0; i < 10; i++) {
+			final IList<String> ls = rg.generateListValues("<sentance>", " ");
 
-			StringBuilder sb = new StringBuilder();
+			final StringBuilder sb = new StringBuilder();
 			ls.forEach(sb::append);
 
 			System.out.println(sb.toString().replaceAll("\\s+", " "));

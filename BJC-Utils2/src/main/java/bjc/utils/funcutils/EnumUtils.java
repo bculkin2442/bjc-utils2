@@ -1,10 +1,10 @@
 package bjc.utils.funcutils;
 
-import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.IList;
-
 import java.util.Random;
 import java.util.function.Consumer;
+
+import bjc.utils.funcdata.FunctionalList;
+import bjc.utils.funcdata.IList;
 
 /**
  * Utility methods on enums
@@ -27,16 +27,16 @@ public class EnumUtils {
 	 * @param rnd
 	 *                The source of randomness to use
 	 */
-	public static <E extends Enum<E>> void doForValues(Class<E> clasz, int nValues, Consumer<E> action,
-			Random rnd) {
-		E[] enumValues = clasz.getEnumConstants();
+	public static <E extends Enum<E>> void doForValues(final Class<E> clasz, final int nValues,
+			final Consumer<E> action, final Random rnd) {
+		final E[] enumValues = clasz.getEnumConstants();
 
-		IList<E> valueList = new FunctionalList<>(enumValues);
+		final IList<E> valueList = new FunctionalList<>(enumValues);
 
-		int randomValueCount = enumValues.length - nValues;
+		final int randomValueCount = enumValues.length - nValues;
 
-		for(int i = 0; i <= randomValueCount; i++) {
-			E rDir = valueList.randItem(rnd::nextInt);
+		for (int i = 0; i <= randomValueCount; i++) {
+			final E rDir = valueList.randItem(rnd::nextInt);
 
 			valueList.removeMatching(rDir);
 		}
@@ -55,8 +55,8 @@ public class EnumUtils {
 	 *                The random source to use
 	 * @return A random value from the specified enum
 	 */
-	public static <E extends Enum<E>> E getRandomValue(Class<E> clasz, Random rnd) {
-		E[] enumValues = clasz.getEnumConstants();
+	public static <E extends Enum<E>> E getRandomValue(final Class<E> clasz, final Random rnd) {
+		final E[] enumValues = clasz.getEnumConstants();
 
 		return new FunctionalList<>(enumValues).randItem(rnd::nextInt);
 	}

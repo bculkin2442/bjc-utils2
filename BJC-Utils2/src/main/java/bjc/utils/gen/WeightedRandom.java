@@ -1,12 +1,12 @@
 package bjc.utils.gen;
 
+import java.util.Random;
+
 import bjc.utils.data.IHolder;
 import bjc.utils.data.IPair;
 import bjc.utils.data.Identity;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IList;
-
-import java.util.Random;
 
 /**
  * Represents a random number generator where certain results are weighted more
@@ -21,17 +21,17 @@ public class WeightedRandom<E> {
 	/*
 	 * The list of probabilities for each result
 	 */
-	private IList<Integer> probabilities;
+	private final IList<Integer> probabilities;
 
 	/*
 	 * The list of possible results to pick from
 	 */
-	private IList<E> results;
+	private final IList<E> results;
 
 	/*
 	 * The source for any needed random numbers
 	 */
-	private Random source;
+	private final Random source;
 
 	private int totalChance;
 
@@ -42,11 +42,11 @@ public class WeightedRandom<E> {
 	 * @param src
 	 *                The source of randomness to use.
 	 */
-	public WeightedRandom(Random src) {
+	public WeightedRandom(final Random src) {
 		probabilities = new FunctionalList<>();
 		results = new FunctionalList<>();
 
-		if(src == null) throw new NullPointerException("Source of randomness must not be null");
+		if (src == null) throw new NullPointerException("Source of randomness must not be null");
 
 		source = src;
 	}
@@ -59,7 +59,7 @@ public class WeightedRandom<E> {
 	 * @param result
 	 *                The result to get when the chance comes up.
 	 */
-	public void addProbability(int chance, E result) {
+	public void addProbability(final int chance, final E result) {
 		probabilities.add(chance);
 		results.add(result);
 
@@ -72,13 +72,13 @@ public class WeightedRandom<E> {
 	 * @return A random value selected in a weighted fashion.
 	 */
 	public E generateValue() {
-		IHolder<Integer> value = new Identity<>(source.nextInt(totalChance));
-		IHolder<E> current = new Identity<>();
-		IHolder<Boolean> picked = new Identity<>(true);
+		final IHolder<Integer> value = new Identity<>(source.nextInt(totalChance));
+		final IHolder<E> current = new Identity<>();
+		final IHolder<Boolean> picked = new Identity<>(true);
 
 		probabilities.forEachIndexed((index, probability) -> {
-			if(picked.unwrap(bool -> bool)) {
-				if(value.unwrap((number) -> number < probability)) {
+			if (picked.unwrap(bool -> bool)) {
+				if (value.unwrap((number) -> number < probability)) {
 					current.transform((result) -> results.getByIndex(index));
 
 					picked.transform((bool) -> false);

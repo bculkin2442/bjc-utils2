@@ -2,9 +2,9 @@ package bjc.utils.funcutils;
 
 /**
  * Consumer that takes three arguments.
- * 
+ *
  * @author EVE
- * 
+ *
  * @param <A>
  *                Type of the first argument.
  * @param <B>
@@ -17,13 +17,13 @@ package bjc.utils.funcutils;
 public interface TriConsumer<A, B, C> {
 	/**
 	 * Perform the action.
-	 * 
+	 *
 	 * @param a
 	 *                The first parameter.
-	 * 
+	 *
 	 * @param b
 	 *                The second parameter.
-	 * 
+	 *
 	 * @param c
 	 *                The third parameter.
 	 */

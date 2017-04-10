@@ -7,29 +7,30 @@ package bjc.utils.components;
  *
  */
 public class ComponentDescription implements IDescribedComponent {
-	private static void sanityCheckArgs(String name, String author, String description, int version) {
-		if(name == null)
+	private static void sanityCheckArgs(final String name, final String author, final String description,
+			final int version) {
+		if (name == null)
 			throw new NullPointerException("Component name can't be null");
-		else if(version <= 0) throw new IllegalArgumentException("Component version must be greater than 0");
+		else if (version <= 0) throw new IllegalArgumentException("Component version must be greater than 0");
 	}
 
 	/**
 	 * The author of the component
 	 */
-	private String	author;
+	private final String	author;
 	/**
 	 * The description of the component
 	 */
-	private String	description;
+	private final String	description;
 	/**
 	 * The name of the component
 	 */
-	private String	name;
+	private final String	name;
 
 	/**
 	 * The version of the component
 	 */
-	private int version;
+	private final int version;
 
 	/**
 	 * Create a new component description
@@ -45,7 +46,8 @@ public class ComponentDescription implements IDescribedComponent {
 	 * @throws IllegalArgumentException
 	 *                 thrown if version is less than 1
 	 */
-	public ComponentDescription(String name, String author, String description, int version) {
+	public ComponentDescription(final String name, final String author, final String description,
+			final int version) {
 		sanityCheckArgs(name, author, description, version);
 
 		this.name = name;
@@ -56,14 +58,14 @@ public class ComponentDescription implements IDescribedComponent {
 
 	@Override
 	public String getAuthor() {
-		if(author == null) return IDescribedComponent.super.getAuthor();
+		if (author == null) return IDescribedComponent.super.getAuthor();
 
 		return author;
 	}
 
 	@Override
 	public String getDescription() {
-		if(description == null) return IDescribedComponent.super.getDescription();
+		if (description == null) return IDescribedComponent.super.getDescription();
 
 		return description;
 	}
@@ -85,7 +87,7 @@ public class ComponentDescription implements IDescribedComponent {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -93,9 +95,9 @@ public class ComponentDescription implements IDescribedComponent {
 		final int prime = 31;
 		int result = 1;
 
-		result = prime * result + ((author == null) ? 0 : author.hashCode());
-		result = prime * result + ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + (author == null ? 0 : author.hashCode());
+		result = prime * result + (description == null ? 0 : description.hashCode());
+		result = prime * result + (name == null ? 0 : name.hashCode());
 		result = prime * result + version;
 
 		return result;
@@ -103,30 +105,30 @@ public class ComponentDescription implements IDescribedComponent {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(Object obj) {
-		if(this == obj) return true;
-		if(obj == null) return false;
-		if(getClass() != obj.getClass()) return false;
+	public boolean equals(final Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
 
-		ComponentDescription other = (ComponentDescription) obj;
+		final ComponentDescription other = (ComponentDescription) obj;
 
-		if(author == null) {
-			if(other.author != null) return false;
-		} else if(!author.equals(other.author)) return false;
+		if (author == null) {
+			if (other.author != null) return false;
+		} else if (!author.equals(other.author)) return false;
 
-		if(description == null) {
-			if(other.description != null) return false;
-		} else if(!description.equals(other.description)) return false;
+		if (description == null) {
+			if (other.description != null) return false;
+		} else if (!description.equals(other.description)) return false;
 
-		if(name == null) {
-			if(other.name != null) return false;
-		} else if(!name.equals(other.name)) return false;
+		if (name == null) {
+			if (other.name != null) return false;
+		} else if (!name.equals(other.name)) return false;
 
-		if(version != other.version) return false;
+		if (version != other.version) return false;
 
 		return true;
 	}

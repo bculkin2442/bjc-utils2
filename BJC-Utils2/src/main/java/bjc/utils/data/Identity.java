@@ -32,12 +32,12 @@ public class Identity<ContainedType> implements IHolder<ContainedType> {
 	 * @param value
 	 *                The value to hold
 	 */
-	public Identity(ContainedType value) {
+	public Identity(final ContainedType value) {
 		heldValue = value;
 	}
 
 	@Override
-	public <BoundType> IHolder<BoundType> bind(Function<ContainedType, IHolder<BoundType>> binder) {
+	public <BoundType> IHolder<BoundType> bind(final Function<ContainedType, IHolder<BoundType>> binder) {
 		return binder.apply(heldValue);
 	}
 
@@ -46,40 +46,35 @@ public class Identity<ContainedType> implements IHolder<ContainedType> {
 		final int prime = 31;
 		int result = 1;
 
-		result = prime * result + ((heldValue == null) ? 0 : heldValue.hashCode());
+		result = prime * result + (heldValue == null ? 0 : heldValue.hashCode());
 
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof Identity))
-			return false;
+	public boolean equals(final Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (!(obj instanceof Identity)) return false;
 
-		Identity<?> other = (Identity<?>) obj;
+		final Identity<?> other = (Identity<?>) obj;
 
 		if (heldValue == null) {
-			if (other.heldValue != null)
-				return false;
-		} else if (!heldValue.equals(other.heldValue))
-			return false;
+			if (other.heldValue != null) return false;
+		} else if (!heldValue.equals(other.heldValue)) return false;
 
 		return true;
 	}
 
 	@Override
-	public <NewType> Function<ContainedType, IHolder<NewType>> lift(Function<ContainedType, NewType> func) {
+	public <NewType> Function<ContainedType, IHolder<NewType>> lift(final Function<ContainedType, NewType> func) {
 		return (val) -> {
 			return new Identity<>(func.apply(val));
 		};
 	}
 
 	@Override
-	public <MappedType> IHolder<MappedType> map(Function<ContainedType, MappedType> mapper) {
+	public <MappedType> IHolder<MappedType> map(final Function<ContainedType, MappedType> mapper) {
 		return new Identity<>(mapper.apply(heldValue));
 	}
 
@@ -89,32 +84,32 @@ public class Identity<ContainedType> implements IHolder<ContainedType> {
 	}
 
 	@Override
-	public IHolder<ContainedType> transform(UnaryOperator<ContainedType> transformer) {
+	public IHolder<ContainedType> transform(final UnaryOperator<ContainedType> transformer) {
 		heldValue = transformer.apply(heldValue);
 
 		return this;
 	}
 
 	@Override
-	public <UnwrappedType> UnwrappedType unwrap(Function<ContainedType, UnwrappedType> unwrapper) {
+	public <UnwrappedType> UnwrappedType unwrap(final Function<ContainedType, UnwrappedType> unwrapper) {
 		return unwrapper.apply(heldValue);
 	}
 
 	/**
 	 * Create a new identity container.
-	 * 
+	 *
 	 * @param val
 	 *                The contained value.
-	 * 
+	 *
 	 * @return A new identity container.
 	 */
-	public static <ContainedType> Identity<ContainedType> id(ContainedType val) {
+	public static <ContainedType> Identity<ContainedType> id(final ContainedType val) {
 		return new Identity<>(val);
 	}
 
 	/**
 	 * Create a new empty identity container.
-	 * 
+	 *
 	 * @return A new empty identity container.
 	 */
 	public static <ContainedType> Identity<ContainedType> id() {

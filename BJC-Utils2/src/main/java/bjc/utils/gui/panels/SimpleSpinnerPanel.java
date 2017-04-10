@@ -29,10 +29,10 @@ public class SimpleSpinnerPanel extends JPanel {
 	 * @param model
 	 *                The model to attach to the spinner
 	 */
-	public SimpleSpinnerPanel(String label, SpinnerModel model) {
+	public SimpleSpinnerPanel(final String label, final SpinnerModel model) {
 		setLayout(new BorderLayout());
 
-		JLabel inputLabel = new JLabel(label);
+		final JLabel inputLabel = new JLabel(label);
 
 		inputValue = new JSpinner(model);
 

@@ -9,10 +9,10 @@ import java.util.regex.Pattern;
 
 /**
  * Simple implementation of {@link BlockReader}
- * 
+ *
  * NOTE: The EOF marker is always treated as a delimiter. You are expected to
  * handle blocks that may be shorter than you expect.
- * 
+ *
  * @author EVE
  *
  */
@@ -20,8 +20,8 @@ public class SimpleBlockReader implements BlockReader {
 	/*
 	 * I/O source for blocks.
 	 */
-	private LineNumberReader	lnReader;
-	private Scanner			blockReader;
+	private final LineNumberReader	lnReader;
+	private final Scanner		blockReader;
 
 	/*
 	 * The current block.
@@ -31,21 +31,21 @@ public class SimpleBlockReader implements BlockReader {
 
 	/**
 	 * Create a new block reader.
-	 * 
+	 *
 	 * @param blockDelim
 	 *                The pattern that separates blocks. Note that the end
 	 *                of file is always considered to end a block.
-	 * 
+	 *
 	 * @param source
 	 *                The source to read blocks from.
 	 */
-	public SimpleBlockReader(String blockDelim, Reader source) {
+	public SimpleBlockReader(final String blockDelim, final Reader source) {
 		lnReader = new LineNumberReader(source);
 
 		blockReader = new Scanner(lnReader);
 
-		String pattern = String.format("(?:%s)|\\Z", blockDelim);
-		Pattern pt = Pattern.compile(pattern, Pattern.MULTILINE);
+		final String pattern = String.format("(?:%s)|\\Z", blockDelim);
+		final Pattern pt = Pattern.compile(pattern, Pattern.MULTILINE);
 
 		blockReader.useDelimiter(pt);
 	}
@@ -63,15 +63,15 @@ public class SimpleBlockReader implements BlockReader {
 	@Override
 	public boolean nextBlock() {
 		try {
-			int blockStartLine = lnReader.getLineNumber();
-			String blockContents = blockReader.next();
-			int blockEndLine = lnReader.getLineNumber();
+			final int blockStartLine = lnReader.getLineNumber();
+			final String blockContents = blockReader.next();
+			final int blockEndLine = lnReader.getLineNumber();
 			blockNo += 1;
 
 			currBlock = new Block(blockNo, blockContents, blockStartLine, blockEndLine);
 
 			return true;
-		} catch (NoSuchElementException nseex) {
+		} catch (final NoSuchElementException nseex) {
 			currBlock = null;
 
 			return false;
@@ -92,11 +92,11 @@ public class SimpleBlockReader implements BlockReader {
 
 	/**
 	 * Set the delimiter used to separate blocks.
-	 * 
+	 *
 	 * @param delim
 	 *                The delimiter used to separate blocks.
 	 */
-	public void setDelimiter(String delim) {
+	public void setDelimiter(final String delim) {
 		blockReader.useDelimiter(delim);
 	}
 

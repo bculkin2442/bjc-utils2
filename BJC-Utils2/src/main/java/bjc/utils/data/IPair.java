@@ -1,10 +1,10 @@
 package bjc.utils.data;
 
-import bjc.utils.funcdata.theory.Bifunctor;
-
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+
+import bjc.utils.funcdata.theory.Bifunctor;
 
 /**
  * Represents a pair of values
@@ -67,7 +67,7 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 	 * @return The pairs, pairwise combined together
 	 */
 	public default <OtherLeft, OtherRight> IPair<IPair<LeftType, OtherLeft>, IPair<RightType, OtherRight>> combine(
-			IPair<OtherLeft, OtherRight> otherPair) {
+			final IPair<OtherLeft, OtherRight> otherPair) {
 		return combine(otherPair, Pair<LeftType, OtherLeft>::new, Pair<RightType, OtherRight>::new);
 	}
 
@@ -100,7 +100,7 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 	 * @param consumer
 	 *                The action to perform on the pair
 	 */
-	public default void doWith(BiConsumer<LeftType, RightType> consumer) {
+	public default void doWith(final BiConsumer<LeftType, RightType> consumer) {
 		merge((leftValue, rightValue) -> {
 			consumer.accept(leftValue, rightValue);
 
@@ -110,15 +110,15 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 
 	@Override
 	default <OldLeft, OldRight, NewLeft> LeftBifunctorMap<OldLeft, OldRight, NewLeft> fmapLeft(
-			Function<OldLeft, NewLeft> func) {
+			final Function<OldLeft, NewLeft> func) {
 		return argumentPair -> {
-			if(!(argumentPair instanceof IPair<?, ?>)) {
-				String msg = "This function can only be applied to instances of IPair";
+			if (!(argumentPair instanceof IPair<?, ?>)) {
+				final String msg = "This function can only be applied to instances of IPair";
 
 				throw new IllegalArgumentException(msg);
 			}
 
-			IPair<OldLeft, OldRight> argPair = (IPair<OldLeft, OldRight>) argumentPair;
+			final IPair<OldLeft, OldRight> argPair = (IPair<OldLeft, OldRight>) argumentPair;
 
 			return argPair.mapLeft(func);
 		};
@@ -127,15 +127,15 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 	@Override
 	default <OldLeft, OldRight, NewRight> RightBifunctorMap<OldLeft, OldRight, NewRight>
 
-			fmapRight(Function<OldRight, NewRight> func) {
+			fmapRight(final Function<OldRight, NewRight> func) {
 		return argumentPair -> {
-			if(!(argumentPair instanceof IPair<?, ?>)) {
-				String msg = "This function can only be applied to instances of IPair";
+			if (!(argumentPair instanceof IPair<?, ?>)) {
+				final String msg = "This function can only be applied to instances of IPair";
 
 				throw new IllegalArgumentException(msg);
 			}
 
-			IPair<OldLeft, OldRight> argPair = (IPair<OldLeft, OldRight>) argumentPair;
+			final IPair<OldLeft, OldRight> argPair = (IPair<OldLeft, OldRight>) argumentPair;
 
 			return argPair.mapRight(func);
 		};

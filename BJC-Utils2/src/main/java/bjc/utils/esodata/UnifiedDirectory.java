@@ -16,9 +16,9 @@ import bjc.utils.funcdata.IMap;
  *                The value type of the directory.
  */
 public class UnifiedDirectory<K, V> implements Directory<K, V> {
-	private IMap<K, Directory<K, V>> children;
+	private final IMap<K, Directory<K, V>> children;
 
-	private IMap<K, V> data;
+	private final IMap<K, V> data;
 
 	/**
 	 * Create a new directory.
@@ -29,19 +29,19 @@ public class UnifiedDirectory<K, V> implements Directory<K, V> {
 	}
 
 	@Override
-	public Directory<K, V> getSubdirectory(K key) {
+	public Directory<K, V> getSubdirectory(final K key) {
 		return children.get(key);
 	}
 
 	@Override
-	public boolean hasSubdirectory(K key) {
+	public boolean hasSubdirectory(final K key) {
 		return children.containsKey(key);
 	}
 
 	@Override
-	public Directory<K, V> putSubdirectory(K key, Directory<K, V> val) {
+	public Directory<K, V> putSubdirectory(final K key, final Directory<K, V> val) {
 		if (data.containsKey(key)) {
-			String msg = String.format("Key %s is already used for data", key);
+			final String msg = String.format("Key %s is already used for data", key);
 
 			throw new IllegalArgumentException(msg);
 		}
@@ -50,19 +50,19 @@ public class UnifiedDirectory<K, V> implements Directory<K, V> {
 	}
 
 	@Override
-	public boolean containsKey(K key) {
+	public boolean containsKey(final K key) {
 		return data.containsKey(key);
 	}
 
 	@Override
-	public V getKey(K key) {
+	public V getKey(final K key) {
 		return data.get(key);
 	}
 
 	@Override
-	public V putKey(K key, V val) {
+	public V putKey(final K key, final V val) {
 		if (children.containsKey(key)) {
-			String msg = String.format("Key %s is already used for sub-directories.", key);
+			final String msg = String.format("Key %s is already used for sub-directories.", key);
 
 			throw new IllegalArgumentException(msg);
 		}
@@ -74,33 +74,26 @@ public class UnifiedDirectory<K, V> implements Directory<K, V> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((children == null) ? 0 : children.hashCode());
-		result = prime * result + ((data == null) ? 0 : data.hashCode());
+		result = prime * result + (children == null ? 0 : children.hashCode());
+		result = prime * result + (data == null ? 0 : data.hashCode());
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof UnifiedDirectory<?, ?>))
-			return false;
+	public boolean equals(final Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (!(obj instanceof UnifiedDirectory<?, ?>)) return false;
 
-		UnifiedDirectory<?, ?> other = (UnifiedDirectory<?, ?>) obj;
+		final UnifiedDirectory<?, ?> other = (UnifiedDirectory<?, ?>) obj;
 
 		if (children == null) {
-			if (other.children != null)
-				return false;
-		} else if (!children.equals(other.children))
-			return false;
+			if (other.children != null) return false;
+		} else if (!children.equals(other.children)) return false;
 
 		if (data == null) {
-			if (other.data != null)
-				return false;
-		} else if (!data.equals(other.data))
-			return false;
+			if (other.data != null) return false;
+		} else if (!data.equals(other.data)) return false;
 
 		return true;
 	}

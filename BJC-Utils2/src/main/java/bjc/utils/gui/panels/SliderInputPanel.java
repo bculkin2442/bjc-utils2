@@ -1,7 +1,5 @@
 package bjc.utils.gui.panels;
 
-import bjc.utils.gui.layout.HLayout;
-
 import java.text.ParseException;
 import java.util.function.Consumer;
 
@@ -9,6 +7,8 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+
+import bjc.utils.gui.layout.HLayout;
 
 /**
  * A simple input panel for a slider-controlled value and a manual-input field
@@ -21,12 +21,12 @@ public class SliderInputPanel extends JPanel {
 	private final class NumberFormatter extends JFormattedTextField.AbstractFormatter {
 		private static final long serialVersionUID = -4448291795913908270L;
 
-		private int	minValue;
-		private int	maxValue;
+		private final int	minValue;
+		private final int	maxValue;
 
-		private int initValue;
+		private final int initValue;
 
-		public NumberFormatter(SliderSettings settings) {
+		public NumberFormatter(final SliderSettings settings) {
 			minValue = settings.minValue;
 			maxValue = settings.maxValue;
 
@@ -34,18 +34,17 @@ public class SliderInputPanel extends JPanel {
 		}
 
 		@Override
-		public Object stringToValue(String text) throws ParseException {
+		public Object stringToValue(final String text) throws ParseException {
 			try {
-				int val = Integer.parseInt(text);
+				final int val = Integer.parseInt(text);
 
-				if(val < minValue)
+				if (val < minValue)
 					throw new ParseException("Value must be greater than " + minValue, 0);
-				else if(val > maxValue)
+				else if (val > maxValue)
 					throw new ParseException("Value must be smaller than " + maxValue, 0);
-				else
-					return val;
-			} catch(NumberFormatException nfex) {
-				ParseException pex = new ParseException("Value must be a valid integer", 0);
+				else return val;
+			} catch (final NumberFormatException nfex) {
+				final ParseException pex = new ParseException("Value must be a valid integer", 0);
 
 				pex.initCause(nfex);
 
@@ -54,8 +53,8 @@ public class SliderInputPanel extends JPanel {
 		}
 
 		@Override
-		public String valueToString(Object value) throws ParseException {
-			if(value == null) return Integer.toString(initValue);
+		public String valueToString(final Object value) throws ParseException {
+			if (value == null) return Integer.toString(initValue);
 
 			return Integer.toString((Integer) value);
 		}
@@ -91,7 +90,7 @@ public class SliderInputPanel extends JPanel {
 		 * @param max
 		 *                The maximum value of the slider
 		 */
-		public SliderSettings(int min, int max) {
+		public SliderSettings(final int min, final int max) {
 			this(min, max, (min + max) / 2);
 		}
 
@@ -105,7 +104,7 @@ public class SliderInputPanel extends JPanel {
 		 * @param init
 		 *                Th initial slider value
 		 */
-		public SliderSettings(int min, int max, int init) {
+		public SliderSettings(final int min, final int max, final int init) {
 			minValue = min;
 			maxValue = max;
 
@@ -113,9 +112,9 @@ public class SliderInputPanel extends JPanel {
 		}
 	}
 
-	private static final long	serialVersionUID	= 2956394160569961404L;
-	private JSlider			slider;
-	private JFormattedTextField	field;
+	private static final long		serialVersionUID	= 2956394160569961404L;
+	private final JSlider			slider;
+	private final JFormattedTextField	field;
 
 	/**
 	 * Create a new slider input panel
@@ -131,11 +130,11 @@ public class SliderInputPanel extends JPanel {
 	 * @param action
 	 *                The action to execute for a given value
 	 */
-	public SliderInputPanel(String lab, SliderSettings settings, int majorTick, int minorTick,
-			Consumer<Integer> action) {
+	public SliderInputPanel(final String lab, final SliderSettings settings, final int majorTick,
+			final int minorTick, final Consumer<Integer> action) {
 		setLayout(new HLayout(3));
 
-		JLabel label = new JLabel(lab);
+		final JLabel label = new JLabel(lab);
 
 		slider = new JSlider(settings.minValue, settings.maxValue, settings.initValue);
 		field = new JFormattedTextField(new NumberFormatter(settings));
@@ -146,10 +145,10 @@ public class SliderInputPanel extends JPanel {
 		slider.setPaintLabels(true);
 
 		slider.addChangeListener((event) -> {
-			if(slider.getValueIsAdjusting()) {
+			if (slider.getValueIsAdjusting()) {
 				// Do nothing
 			} else {
-				int val = slider.getValue();
+				final int val = slider.getValue();
 
 				field.setValue(val);
 
@@ -160,9 +159,9 @@ public class SliderInputPanel extends JPanel {
 		field.setFocusLostBehavior(JFormattedTextField.COMMIT_OR_REVERT);
 		field.setColumns(15);
 		field.addPropertyChangeListener("value", (event) -> {
-			Object value = field.getValue();
+			final Object value = field.getValue();
 
-			if(value == null) {
+			if (value == null) {
 				// Do nothing
 			} else {
 				slider.setValue((Integer) value);
@@ -180,7 +179,7 @@ public class SliderInputPanel extends JPanel {
 	 * @param value
 	 *                The value to reset the fields to
 	 */
-	public void resetValues(int value) {
+	public void resetValues(final int value) {
 		slider.setValue(value);
 
 		field.setValue(value);

@@ -1,21 +1,21 @@
 package bjc.utils.esodata;
 
-import bjc.utils.funcdata.FunctionalMap;
-import bjc.utils.funcdata.IMap;
-
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.SetMultimap;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.SetMultimap;
+
+import bjc.utils.funcdata.FunctionalMap;
+import bjc.utils.funcdata.IMap;
+
 /**
  * Represents a mapping from a set of strings to a mapping of all unambiguous
  * prefixes of their respective strings.
- * 
+ *
  * This works the same as Ruby's Abbrev.
- * 
+ *
  * @author EVE
  *
  */
@@ -23,7 +23,7 @@ public class AbbrevMap {
 	/*
 	 * All of the words we have abbreviations for.
 	 */
-	private Set<String> wrds;
+	private final Set<String> wrds;
 
 	/*
 	 * Maps abbreviations to their strings.
@@ -42,11 +42,11 @@ public class AbbrevMap {
 
 	/**
 	 * Create a new abbreviation map.
-	 * 
+	 *
 	 * @param words
 	 *                The initial set of words to put in the map.
 	 */
-	public AbbrevMap(String... words) {
+	public AbbrevMap(final String... words) {
 		wrds = new HashSet<>(Arrays.asList(words));
 
 		recalculate();
@@ -62,7 +62,7 @@ public class AbbrevMap {
 
 		seen = new HashSet<>();
 
-		for (String word : wrds) {
+		for (final String word : wrds) {
 			/*
 			 * A word always abbreviates to itself.
 			 */
@@ -74,14 +74,14 @@ public class AbbrevMap {
 
 	/**
 	 * Adds words to the abbreviation map.
-	 * 
+	 *
 	 * @param words
 	 *                The words to add to the abbreviation map.
 	 */
-	public void addWords(String... words) {
+	public void addWords(final String... words) {
 		wrds.addAll(Arrays.asList(words));
 
-		for (String word : words) {
+		for (final String word : words) {
 			/*
 			 * A word always abbreviates to itself.
 			 */
@@ -94,18 +94,17 @@ public class AbbrevMap {
 	/*
 	 * Actually add abbreviations of a word.
 	 */
-	private void intAddWord(String word) {
+	private void intAddWord(final String word) {
 		/*
 		 * Skip blank words.
 		 */
-		if (word.equals(""))
-			return;
+		if (word.equals("")) return;
 
 		/*
 		 * Handle each possible abbreviation.
 		 */
 		for (int i = word.length(); i > 0; i--) {
-			String subword = word.substring(0, i);
+			final String subword = word.substring(0, i);
 
 			if (seen.contains(subword)) {
 				/*
@@ -113,7 +112,7 @@ public class AbbrevMap {
 				 * whole word.
 				 */
 				if (abbrevMap.containsKey(subword) && !wrds.contains(subword)) {
-					String oldword = abbrevMap.remove(subword);
+					final String oldword = abbrevMap.remove(subword);
 
 					ambMap.put(subword, oldword);
 					ambMap.put(subword, word);
@@ -130,17 +129,17 @@ public class AbbrevMap {
 
 	/**
 	 * Removes words from the abbreviation map.
-	 * 
+	 *
 	 * NOTE: There may be inconsistent behavior. Use
 	 * {@link AbbrevMap#recalculate()} to fix it if it occurs.
-	 * 
+	 *
 	 * @param words
 	 *                The words to remove.
 	 */
-	public void removeWords(String... words) {
+	public void removeWords(final String... words) {
 		wrds.removeAll(Arrays.asList(words));
 
-		for (String word : words) {
+		for (final String word : words) {
 			intRemoveWord(word);
 		}
 	}
@@ -148,30 +147,29 @@ public class AbbrevMap {
 	/*
 	 * Actually remove a word.
 	 */
-	private void intRemoveWord(String word) {
+	private void intRemoveWord(final String word) {
 		/*
 		 * Skip blank words.
 		 */
-		if (word.equals(""))
-			return;
+		if (word.equals("")) return;
 
 		/*
 		 * Handle each possible abbreviation.
 		 */
 		for (int i = word.length(); i > 0; i--) {
-			String subword = word.substring(0, i);
+			final String subword = word.substring(0, i);
 
-			if (abbrevMap.containsKey(subword))
+			if (abbrevMap.containsKey(subword)) {
 				abbrevMap.remove(subword);
-			else {
+			} else {
 				ambMap.remove(subword, word);
 
-				Set<String> possWords = ambMap.get(subword);
+				final Set<String> possWords = ambMap.get(subword);
 
 				if (possWords.size() == 0) {
 					seen.remove(subword);
 				} else if (possWords.size() == 1) {
-					String newWord = possWords.iterator().next();
+					final String newWord = possWords.iterator().next();
 
 					abbrevMap.put(subword, newWord);
 					ambMap.remove(subword, newWord);
@@ -183,17 +181,16 @@ public class AbbrevMap {
 	/**
 	 * Convert an abbreviation into all the strings it could abbreviate
 	 * into.
-	 * 
+	 *
 	 * @param abbrev
 	 *                The abbreviation to convert.
-	 * 
+	 *
 	 * @return All the expansions for the provided abbreviation.
 	 */
-	public String[] deabbrev(String abbrev) {
+	public String[] deabbrev(final String abbrev) {
 		if (abbrevMap.containsKey(abbrev))
 			return new String[] { abbrevMap.get(abbrev) };
-		else
-			return ambMap.get(abbrev).toArray(new String[0]);
+		else return ambMap.get(abbrev).toArray(new String[0]);
 	}
 
 	@Override
@@ -201,34 +198,29 @@ public class AbbrevMap {
 		final int prime = 31;
 
 		int result = 1;
-		result = prime * result + ((wrds == null) ? 0 : wrds.hashCode());
+		result = prime * result + (wrds == null ? 0 : wrds.hashCode());
 
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof AbbrevMap))
-			return false;
+	public boolean equals(final Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (!(obj instanceof AbbrevMap)) return false;
 
-		AbbrevMap other = (AbbrevMap) obj;
+		final AbbrevMap other = (AbbrevMap) obj;
 
 		if (wrds == null) {
-			if (other.wrds != null)
-				return false;
-		} else if (!wrds.equals(other.wrds))
-			return false;
+			if (other.wrds != null) return false;
+		} else if (!wrds.equals(other.wrds)) return false;
 
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		String fmt = "AbbrevMap [wrds=%s, abbrevMap=%s, seen=%s, ambMap=%s]";
+		final String fmt = "AbbrevMap [wrds=%s, abbrevMap=%s, seen=%s, ambMap=%s]";
 
 		return String.format(fmt, wrds, abbrevMap, seen, ambMap);
 	}

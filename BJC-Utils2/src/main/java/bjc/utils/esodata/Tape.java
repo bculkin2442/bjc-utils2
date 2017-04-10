@@ -9,7 +9,7 @@ package bjc.utils.esodata;
  *
  * @param <T>
  *                The element type of the tape.
- * 
+ *
  * @author bjculkin
  */
 public interface Tape<T> {
@@ -45,8 +45,9 @@ public interface Tape<T> {
 
 	/**
 	 * Insert an element after the current item.
-	 * 
-	 * @param itm  The item to insert.
+	 *
+	 * @param itm
+	 *                The item to insert.
 	 */
 	void insertAfter(T itm);
 

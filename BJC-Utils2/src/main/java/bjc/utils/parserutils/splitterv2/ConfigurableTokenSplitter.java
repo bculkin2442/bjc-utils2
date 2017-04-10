@@ -1,32 +1,32 @@
 package bjc.utils.parserutils.splitterv2;
 
-import bjc.utils.funcdata.IList;
+import static bjc.utils.PropertyDB.applyFormat;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import static bjc.utils.PropertyDB.applyFormat;
+import bjc.utils.funcdata.IList;
 
 /**
  * Split a string into pieces around a regular expression, and offer an easy way
  * to configure the regular expression.
- * 
+ *
  * @author EVE
  *
  */
 public class ConfigurableTokenSplitter extends SimpleTokenSplitter {
-	private Set<String>	simpleDelimiters;
-	private Set<String>	multipleDelimiters;
-	private Set<String>	rRawDelimiters;
+	private final Set<String>	simpleDelimiters;
+	private final Set<String>	multipleDelimiters;
+	private final Set<String>	rRawDelimiters;
 
 	/**
 	 * Create a new token splitter with blank configuration.
-	 * 
+	 *
 	 * @param keepDelims
 	 *                Whether or not to keep delimiters.
 	 */
-	public ConfigurableTokenSplitter(boolean keepDelims) {
+	public ConfigurableTokenSplitter(final boolean keepDelims) {
 		super(null, keepDelims);
 
 		/*
@@ -39,44 +39,44 @@ public class ConfigurableTokenSplitter extends SimpleTokenSplitter {
 
 	/**
 	 * Add a set of simple delimiters to this splitter.
-	 * 
+	 *
 	 * Simple delimiters match one occurrence of themselves as literals.
-	 * 
+	 *
 	 * @param simpleDelims
 	 *                The simple delimiters to add.
 	 */
-	public void addSimpleDelimiters(String... simpleDelims) {
-		for(String simpleDelim : simpleDelims) {
+	public void addSimpleDelimiters(final String... simpleDelims) {
+		for (final String simpleDelim : simpleDelims) {
 			simpleDelimiters.add(simpleDelim);
 		}
 	}
 
 	/**
 	 * Add a set of multiple delimiters to this splitter.
-	 * 
+	 *
 	 * Multiple delimiters match one or more occurrences of themselves as
 	 * literals.
-	 * 
+	 *
 	 * @param multiDelims
 	 *                The multiple delimiters to add.
 	 */
-	public void addMultiDelimiters(String... multiDelims) {
-		for(String multiDelim : multiDelims) {
+	public void addMultiDelimiters(final String... multiDelims) {
+		for (final String multiDelim : multiDelims) {
 			multipleDelimiters.add(multiDelim);
 		}
 	}
 
 	/**
 	 * Add a set of raw delimiters to this splitter.
-	 * 
+	 *
 	 * Raw delimiters match one occurrence of themselves as regular
 	 * expressions.
-	 * 
+	 *
 	 * @param rRawDelims
 	 *                The raw delimiters to add.
 	 */
-	public void addRawDelimiters(String... rRawDelims) {
-		for(String rRawDelim : rRawDelims) {
+	public void addRawDelimiters(final String... rRawDelims) {
+		for (final String rRawDelim : rRawDelims) {
 			rRawDelimiters.add(rRawDelim);
 		}
 	}
@@ -86,17 +86,17 @@ public class ConfigurableTokenSplitter extends SimpleTokenSplitter {
 	 * use when splitting.
 	 */
 	public void compile() {
-		StringBuilder rPattern = new StringBuilder();
+		final StringBuilder rPattern = new StringBuilder();
 
-		for(String rRawDelimiter : rRawDelimiters) {
+		for (final String rRawDelimiter : rRawDelimiters) {
 			rPattern.append(applyFormat("rawDelim", rRawDelimiter));
 		}
 
-		for(String multipleDelimiter : multipleDelimiters) {
+		for (final String multipleDelimiter : multipleDelimiters) {
 			rPattern.append(applyFormat("multipleDelim", multipleDelimiter));
 		}
 
-		for(String simpleDelimiter : simpleDelimiters) {
+		for (final String simpleDelimiter : simpleDelimiters) {
 			rPattern.append(applyFormat("simpleDelim", simpleDelimiter));
 		}
 
@@ -106,17 +106,15 @@ public class ConfigurableTokenSplitter extends SimpleTokenSplitter {
 	}
 
 	@Override
-	public IList<String> split(String input) {
-		if(spliter == null) {
-			throw new IllegalStateException("Must compile splitter before use");
-		}
+	public IList<String> split(final String input) {
+		if (spliter == null) throw new IllegalStateException("Must compile splitter before use");
 
 		return super.split(input);
 	}
 
 	@Override
 	public String toString() {
-		String fmt = "ConfigurableTokenSplitter [simpleDelimiters=%s, multipleDelimiters=%s,"
+		final String fmt = "ConfigurableTokenSplitter [simpleDelimiters=%s, multipleDelimiters=%s,"
 				+ " rRawDelimiters=%s, spliter=%s]";
 
 		return String.format(fmt, simpleDelimiters, multipleDelimiters, rRawDelimiters, spliter);

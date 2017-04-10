@@ -33,8 +33,8 @@ public class FileUtils {
 	 *                 for this with all the buttons and knobs from
 	 *                 walkFileTree
 	 */
-	public static void traverseDirectory(Path root, BiPredicate<Path, BasicFileAttributes> predicate,
-			BiPredicate<Path, BasicFileAttributes> action) throws IOException {
+	public static void traverseDirectory(final Path root, final BiPredicate<Path, BasicFileAttributes> predicate,
+			final BiPredicate<Path, BasicFileAttributes> action) throws IOException {
 		Files.walkFileTree(root, new FunctionalFileVisitor(predicate, action));
 	}
 }

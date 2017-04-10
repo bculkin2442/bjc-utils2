@@ -7,14 +7,14 @@ import java.util.LinkedList;
 /**
  * A block reader that supports pushing blocks onto the input queue so that they
  * are provided before blocks read from an input source.
- * 
+ *
  * @author bjculkin
  *
  */
 public class PushbackBlockReader implements BlockReader {
-	private BlockReader source;
+	private final BlockReader source;
 
-	private Deque<Block> waiting;
+	private final Deque<Block> waiting;
 
 	private Block curBlock;
 
@@ -22,11 +22,11 @@ public class PushbackBlockReader implements BlockReader {
 
 	/**
 	 * Create a new pushback block reader.
-	 * 
+	 *
 	 * @param src
 	 *                The block reader to use when no blocks are queued.
 	 */
-	public PushbackBlockReader(BlockReader src) {
+	public PushbackBlockReader(final BlockReader src) {
 		source = src;
 
 		waiting = new LinkedList<>();
@@ -51,10 +51,12 @@ public class PushbackBlockReader implements BlockReader {
 
 			return true;
 		} else {
-			boolean succ = source.nextBlock();
+			final boolean succ = source.nextBlock();
 			curBlock = source.getBlock();
 
-			if (succ) blockNo += 1;
+			if (succ) {
+				blockNo += 1;
+			}
 
 			return succ;
 		}
@@ -72,21 +74,21 @@ public class PushbackBlockReader implements BlockReader {
 
 	/**
 	 * Insert a block at the back of the queue of pending blocks.
-	 * 
+	 *
 	 * @param blk
 	 *                The block to put at the back.
 	 */
-	public void addBlock(Block blk) {
+	public void addBlock(final Block blk) {
 		waiting.add(blk);
 	}
 
 	/**
 	 * Insert a block at the front of the queue of pending blocks.
-	 * 
+	 *
 	 * @param blk
 	 *                The block to put at the front.
 	 */
-	public void pushBlock(Block blk) {
+	public void pushBlock(final Block blk) {
 		waiting.push(blk);
 	}
 

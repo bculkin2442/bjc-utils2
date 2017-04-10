@@ -4,25 +4,25 @@ import java.io.IOException;
 
 /**
  * A block reader that fires an action before a block is actually read.
- * 
+ *
  * @author bjculkin
  *
  */
 public class TriggeredBlockReader implements BlockReader {
-	private BlockReader source;
+	private final BlockReader source;
 
-	private Runnable action;
+	private final Runnable action;
 
 	/**
 	 * Create a new triggered reader with the specified source/action.
-	 * 
+	 *
 	 * @param source
 	 *                The block reader to read blocks from.
-	 * 
+	 *
 	 * @param action
 	 *                The action to execute before reading a block.
 	 */
-	public TriggeredBlockReader(BlockReader source, Runnable action) {
+	public TriggeredBlockReader(final BlockReader source, final Runnable action) {
 		super();
 		this.source = source;
 		this.action = action;

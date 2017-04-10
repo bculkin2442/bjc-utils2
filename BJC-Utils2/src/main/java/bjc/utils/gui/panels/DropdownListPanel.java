@@ -1,9 +1,5 @@
 package bjc.utils.gui.panels;
 
-import bjc.utils.funcdata.IList;
-import bjc.utils.gui.layout.AutosizeLayout;
-import bjc.utils.gui.layout.HLayout;
-
 import java.awt.BorderLayout;
 
 import javax.swing.DefaultListModel;
@@ -12,6 +8,10 @@ import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
+
+import bjc.utils.funcdata.IList;
+import bjc.utils.gui.layout.AutosizeLayout;
+import bjc.utils.gui.layout.HLayout;
 
 /**
  * A panel that allows you to select choices from a dropdown list
@@ -34,27 +34,27 @@ public class DropdownListPanel extends JPanel {
 	 * @param choices
 	 *                The items to choose from
 	 */
-	public <T> DropdownListPanel(String type, DefaultListModel<T> model, IList<T> choices) {
+	public <T> DropdownListPanel(final String type, final DefaultListModel<T> model, final IList<T> choices) {
 		setLayout(new AutosizeLayout());
 
-		JPanel itemInputPanel = new JPanel();
+		final JPanel itemInputPanel = new JPanel();
 		itemInputPanel.setLayout(new BorderLayout());
 
-		JPanel addItemPanel = new JPanel();
+		final JPanel addItemPanel = new JPanel();
 		addItemPanel.setLayout(new HLayout(2));
 
-		JComboBox<T> addItemBox = new JComboBox<>();
+		final JComboBox<T> addItemBox = new JComboBox<>();
 		choices.forEach(addItemBox::addItem);
 
-		JButton addItemButton = new JButton("Add " + type);
+		final JButton addItemButton = new JButton("Add " + type);
 
 		addItemPanel.add(addItemBox);
 		addItemPanel.add(addItemButton);
 
-		JList<T> itemList = new JList<>(model);
+		final JList<T> itemList = new JList<>(model);
 		itemList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		JButton removeItemButton = new JButton("Remove " + type);
+		final JButton removeItemButton = new JButton("Remove " + type);
 
 		addItemButton.addActionListener((ev) -> {
 			model.addElement(addItemBox.getItemAt(addItemBox.getSelectedIndex()));

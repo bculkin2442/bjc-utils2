@@ -16,8 +16,8 @@ import java.util.Map;
  *                The element type of the tapes.
  */
 public class TapeLibrary<T> implements Tape<T> {
-	private Map<String, Tape<T>>	tapes;
-	private Tape<T>			currentTape;
+	private final Map<String, Tape<T>>	tapes;
+	private Tape<T>				currentTape;
 
 	/**
 	 * Create a new empty tape library.
@@ -33,8 +33,7 @@ public class TapeLibrary<T> implements Tape<T> {
 	 */
 	@Override
 	public T item() {
-		if (currentTape == null)
-			return null;
+		if (currentTape == null) return null;
 
 		return currentTape.item();
 	}
@@ -46,9 +45,8 @@ public class TapeLibrary<T> implements Tape<T> {
 	 *                The new value for the tape item.
 	 */
 	@Override
-	public void item(T itm) {
-		if (currentTape == null)
-			return;
+	public void item(final T itm) {
+		if (currentTape == null) return;
 
 		currentTape.item(itm);
 	}
@@ -60,8 +58,7 @@ public class TapeLibrary<T> implements Tape<T> {
 	 */
 	@Override
 	public int size() {
-		if (currentTape == null)
-			return 0;
+		if (currentTape == null) return 0;
 
 		return currentTape.size();
 	}
@@ -73,9 +70,8 @@ public class TapeLibrary<T> implements Tape<T> {
 	 *                The item to add.
 	 */
 	@Override
-	public void insertBefore(T itm) {
-		if (currentTape == null)
-			return;
+	public void insertBefore(final T itm) {
+		if (currentTape == null) return;
 
 		currentTape.insertBefore(itm);
 	}
@@ -84,9 +80,8 @@ public class TapeLibrary<T> implements Tape<T> {
 	 * Insert an element after the current item.
 	 */
 	@Override
-	public void insertAfter(T itm) {
-		if (currentTape == null)
-			return;
+	public void insertAfter(final T itm) {
+		if (currentTape == null) return;
 
 		currentTape.insertAfter(itm);
 	}
@@ -101,8 +96,7 @@ public class TapeLibrary<T> implements Tape<T> {
 	 */
 	@Override
 	public T remove() {
-		if (currentTape == null)
-			return null;
+		if (currentTape == null) return null;
 
 		return currentTape.remove();
 	}
@@ -112,8 +106,7 @@ public class TapeLibrary<T> implements Tape<T> {
 	 */
 	@Override
 	public void first() {
-		if (currentTape == null)
-			return;
+		if (currentTape == null) return;
 
 		currentTape.first();
 	}
@@ -123,8 +116,7 @@ public class TapeLibrary<T> implements Tape<T> {
 	 */
 	@Override
 	public void last() {
-		if (currentTape == null)
-			return;
+		if (currentTape == null) return;
 
 		currentTape.last();
 	}
@@ -153,9 +145,8 @@ public class TapeLibrary<T> implements Tape<T> {
 	 * @return True if the cursor was moved left.
 	 */
 	@Override
-	public boolean left(int amt) {
-		if (currentTape == null)
-			return false;
+	public boolean left(final int amt) {
+		if (currentTape == null) return false;
 
 		return currentTape.left(amt);
 	}
@@ -183,9 +174,8 @@ public class TapeLibrary<T> implements Tape<T> {
 	 * @return Whether the cursor was moved right.
 	 */
 	@Override
-	public boolean right(int amt) {
-		if (currentTape == null)
-			return false;
+	public boolean right(final int amt) {
+		if (currentTape == null) return false;
 
 		return currentTape.right(amt);
 	}
@@ -199,8 +189,7 @@ public class TapeLibrary<T> implements Tape<T> {
 	 * If the current tape is not double-sided, does nothing.
 	 */
 	public void flip() {
-		if (currentTape == null)
-			return;
+		if (currentTape == null) return;
 
 		if (currentTape.isDoubleSided()) {
 			((DoubleTape<T>) currentTape).flip();
@@ -209,8 +198,7 @@ public class TapeLibrary<T> implements Tape<T> {
 
 	@Override
 	public boolean isDoubleSided() {
-		if (currentTape == null)
-			return false;
+		if (currentTape == null) return false;
 
 		return currentTape.isDoubleSided();
 	}
@@ -235,7 +223,7 @@ public class TapeLibrary<T> implements Tape<T> {
 	 *
 	 * @return Whether or not the next tape was loaded.
 	 */
-	public boolean switchTape(String label) {
+	public boolean switchTape(final String label) {
 		if (tapes.containsKey(label)) {
 			currentTape = tapes.get(label);
 			return true;
@@ -252,14 +240,14 @@ public class TapeLibrary<T> implements Tape<T> {
 	 * The specified tape is loaded.
 	 *
 	 * Adding a duplicate tape will overwrite any existing types.
-	 * 
+	 *
 	 * @param label
 	 *                The label of the tape to add.
 	 *
 	 * @param tp
 	 *                The tape to insert and load.
 	 */
-	public void insertTape(String label, Tape<T> tp) {
+	public void insertTape(final String label, final Tape<T> tp) {
 		tapes.put(label, tp);
 
 		currentTape = tp;
@@ -275,7 +263,7 @@ public class TapeLibrary<T> implements Tape<T> {
 	 *
 	 * @return The removed tape.
 	 */
-	public Tape<T> removeTape(String label) {
+	public Tape<T> removeTape(final String label) {
 		return tapes.remove(label);
 	}
 
@@ -305,7 +293,7 @@ public class TapeLibrary<T> implements Tape<T> {
 	 *
 	 * @return Whether or not a tape of that name exists
 	 */
-	public boolean hasTape(String label) {
+	public boolean hasTape(final String label) {
 		return tapes.containsKey(label);
 	}
 
@@ -314,34 +302,27 @@ public class TapeLibrary<T> implements Tape<T> {
 		final int prime = 31;
 
 		int result = 1;
-		result = prime * result + ((currentTape == null) ? 0 : currentTape.hashCode());
-		result = prime * result + ((tapes == null) ? 0 : tapes.hashCode());
+		result = prime * result + (currentTape == null ? 0 : currentTape.hashCode());
+		result = prime * result + (tapes == null ? 0 : tapes.hashCode());
 
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof TapeLibrary<?>))
-			return false;
+	public boolean equals(final Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (!(obj instanceof TapeLibrary<?>)) return false;
 
-		TapeLibrary<?> other = (TapeLibrary<?>) obj;
+		final TapeLibrary<?> other = (TapeLibrary<?>) obj;
 
 		if (currentTape == null) {
-			if (other.currentTape != null)
-				return false;
-		} else if (!currentTape.equals(other.currentTape))
-			return false;
+			if (other.currentTape != null) return false;
+		} else if (!currentTape.equals(other.currentTape)) return false;
 
 		if (tapes == null) {
-			if (other.tapes != null)
-				return false;
-		} else if (!tapes.equals(other.tapes))
-			return false;
+			if (other.tapes != null) return false;
+		} else if (!tapes.equals(other.tapes)) return false;
 
 		return true;
 	}

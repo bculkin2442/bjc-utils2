@@ -1,28 +1,28 @@
 package bjc.utils.data.internals;
 
-import bjc.utils.data.IHolder;
-import bjc.utils.data.Option;
-
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
+import bjc.utils.data.IHolder;
+import bjc.utils.data.Option;
+
 @SuppressWarnings("javadoc")
 public class WrappedOption<ContainedType> implements IHolder<ContainedType> {
-	private IHolder<IHolder<ContainedType>> held;
+	private final IHolder<IHolder<ContainedType>> held;
 
-	public WrappedOption(IHolder<ContainedType> seedValue) {
+	public WrappedOption(final IHolder<ContainedType> seedValue) {
 		held = new Option<>(seedValue);
 	}
 
-	private WrappedOption(IHolder<IHolder<ContainedType>> toHold, boolean dummy) {
+	private WrappedOption(final IHolder<IHolder<ContainedType>> toHold, final boolean dummy) {
 		held = toHold;
 	}
 
 	@Override
-	public <BoundType> IHolder<BoundType> bind(Function<ContainedType, IHolder<BoundType>> binder) {
-		IHolder<IHolder<BoundType>> newHolder = held.map((containedHolder) -> {
+	public <BoundType> IHolder<BoundType> bind(final Function<ContainedType, IHolder<BoundType>> binder) {
+		final IHolder<IHolder<BoundType>> newHolder = held.map((containedHolder) -> {
 			return containedHolder.bind((containedValue) -> {
-				if(containedValue == null) return new Option<>(null);
+				if (containedValue == null) return new Option<>(null);
 
 				return binder.apply(containedValue);
 			});
@@ -32,17 +32,17 @@ public class WrappedOption<ContainedType> implements IHolder<ContainedType> {
 	}
 
 	@Override
-	public <NewType> Function<ContainedType, IHolder<NewType>> lift(Function<ContainedType, NewType> func) {
+	public <NewType> Function<ContainedType, IHolder<NewType>> lift(final Function<ContainedType, NewType> func) {
 		return (val) -> {
 			return new Option<>(func.apply(val));
 		};
 	}
 
 	@Override
-	public <MappedType> IHolder<MappedType> map(Function<ContainedType, MappedType> mapper) {
-		IHolder<IHolder<MappedType>> newHolder = held.map((containedHolder) -> {
+	public <MappedType> IHolder<MappedType> map(final Function<ContainedType, MappedType> mapper) {
+		final IHolder<IHolder<MappedType>> newHolder = held.map((containedHolder) -> {
 			return containedHolder.map((containedValue) -> {
-				if(containedValue == null) return null;
+				if (containedValue == null) return null;
 
 				return mapper.apply(containedValue);
 			});
@@ -52,10 +52,10 @@ public class WrappedOption<ContainedType> implements IHolder<ContainedType> {
 	}
 
 	@Override
-	public IHolder<ContainedType> transform(UnaryOperator<ContainedType> transformer) {
+	public IHolder<ContainedType> transform(final UnaryOperator<ContainedType> transformer) {
 		held.transform((containedHolder) -> {
 			return containedHolder.transform((containedValue) -> {
-				if(containedValue == null) return null;
+				if (containedValue == null) return null;
 
 				return transformer.apply(containedValue);
 			});
@@ -65,10 +65,10 @@ public class WrappedOption<ContainedType> implements IHolder<ContainedType> {
 	}
 
 	@Override
-	public <UnwrappedType> UnwrappedType unwrap(Function<ContainedType, UnwrappedType> unwrapper) {
+	public <UnwrappedType> UnwrappedType unwrap(final Function<ContainedType, UnwrappedType> unwrapper) {
 		return held.unwrap((containedHolder) -> {
 			return containedHolder.unwrap((containedValue) -> {
-				if(containedValue == null) return null;
+				if (containedValue == null) return null;
 
 				return unwrapper.apply(containedValue);
 			});

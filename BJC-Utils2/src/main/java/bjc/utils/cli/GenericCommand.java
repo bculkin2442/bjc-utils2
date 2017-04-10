@@ -10,7 +10,7 @@ public class GenericCommand implements Command {
 	/*
 	 * The behavior for invoking the command.
 	 */
-	private CommandHandler handler;
+	private final CommandHandler handler;
 
 	/*
 	 * The help for the command.
@@ -30,12 +30,12 @@ public class GenericCommand implements Command {
 	 *                null, in which case the description is repeated for
 	 *                the detailed help.
 	 */
-	public GenericCommand(CommandHandler handler, String description, String help) {
-		if(handler == null) throw new NullPointerException("Command handler must not be null");
+	public GenericCommand(final CommandHandler handler, final String description, final String help) {
+		if (handler == null) throw new NullPointerException("Command handler must not be null");
 
 		this.handler = handler;
 
-		if(description == null) {
+		if (description == null) {
 			this.help = new NullHelp();
 		} else {
 			this.help = new GenericHelp(description, help);
@@ -64,15 +64,15 @@ public class GenericCommand implements Command {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
+		final StringBuilder builder = new StringBuilder();
 		builder.append("GenericCommand [");
 
-		if(help != null) {
+		if (help != null) {
 			builder.append("help=");
 			builder.append(help);
 		}

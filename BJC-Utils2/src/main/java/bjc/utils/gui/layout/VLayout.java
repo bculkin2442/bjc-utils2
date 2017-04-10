@@ -19,7 +19,7 @@ public class VLayout extends GridLayout {
 	 * @param rows
 	 *                The number of rows.
 	 */
-	public VLayout(int rows) {
+	public VLayout(final int rows) {
 		super(rows, 1);
 	}
 }

@@ -1,5 +1,11 @@
 package bjc.utils.ioutils;
 
+import java.io.InputStream;
+import java.util.InputMismatchException;
+import java.util.Scanner;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+
 import bjc.utils.data.IHolder;
 import bjc.utils.data.IPair;
 import bjc.utils.data.Identity;
@@ -8,12 +14,6 @@ import bjc.utils.exceptions.UnknownPragmaException;
 import bjc.utils.funcdata.FunctionalMap;
 import bjc.utils.funcdata.FunctionalStringTokenizer;
 import bjc.utils.funcdata.IMap;
-
-import java.io.InputStream;
-import java.util.InputMismatchException;
-import java.util.Scanner;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 /**
  * This class parses a rules based config file, and uses it to drive a provided
@@ -41,7 +41,7 @@ public class RuleBasedConfigReader<E> {
 
 	// Map of pragma names to pragma actions
 	// Pragma actions are functions taking a tokenizer and application state
-	private IMap<String, BiConsumer<FunctionalStringTokenizer, E>> pragmas;
+	private final IMap<String, BiConsumer<FunctionalStringTokenizer, E>> pragmas;
 
 	/**
 	 * Create a new rule-based config reader
@@ -53,8 +53,8 @@ public class RuleBasedConfigReader<E> {
 	 * @param end
 	 *                The action to fire when ending a rule
 	 */
-	public RuleBasedConfigReader(BiConsumer<FunctionalStringTokenizer, IPair<String, E>> start,
-			BiConsumer<FunctionalStringTokenizer, E> continueRule, Consumer<E> end) {
+	public RuleBasedConfigReader(final BiConsumer<FunctionalStringTokenizer, IPair<String, E>> start,
+			final BiConsumer<FunctionalStringTokenizer, E> continueRule, final Consumer<E> end) {
 		this.start = start;
 		this.continueRule = continueRule;
 		this.end = end;
@@ -70,33 +70,33 @@ public class RuleBasedConfigReader<E> {
 	 * @param action
 	 *                The function to execute when this pragma is read
 	 */
-	public void addPragma(String name, BiConsumer<FunctionalStringTokenizer, E> action) {
-		if(name == null)
+	public void addPragma(final String name, final BiConsumer<FunctionalStringTokenizer, E> action) {
+		if (name == null)
 			throw new NullPointerException("Pragma name must not be null");
-		else if(action == null) throw new NullPointerException("Pragma action must not be null");
+		else if (action == null) throw new NullPointerException("Pragma action must not be null");
 
 		pragmas.put(name, action);
 	}
 
-	private void continueRule(E state, boolean isRuleOpen, String line) {
+	private void continueRule(final E state, final boolean isRuleOpen, final String line) {
 		// Make sure our input is correct
-		if(isRuleOpen == false)
+		if (isRuleOpen == false)
 			throw new InputMismatchException("Cannot continue rule with no rule open");
-		else if(continueRule == null)
+		else if (continueRule == null)
 			throw new InputMismatchException("Rule continuation not supported for current grammar");
 
 		// Accept the rule
 		continueRule.accept(new FunctionalStringTokenizer(line.substring(1), " "), state);
 	}
 
-	private boolean endRule(E state, boolean isRuleOpen) {
+	private boolean endRule(final E state, final boolean isRuleOpen) {
 		// Ignore blank line without an open rule
-		if(isRuleOpen == false)
+		if (isRuleOpen == false)
 			// Do nothing
 			return false;
 		else {
 			// Nothing happens on rule end
-			if(end != null) {
+			if (end != null) {
 				// Process the rule ending
 				end.accept(state);
 			}
@@ -115,28 +115,28 @@ public class RuleBasedConfigReader<E> {
 	 *                The initial state of the reader
 	 * @return The final state of the reader
 	 */
-	public E fromStream(InputStream input, E initialState) {
-		if(input == null) throw new NullPointerException("Input stream must not be null");
+	public E fromStream(final InputStream input, final E initialState) {
+		if (input == null) throw new NullPointerException("Input stream must not be null");
 
 		// Application state: We're giving this back later
-		E state = initialState;
+		final E state = initialState;
 
 		// Prepare our input source
-		try(Scanner source = new Scanner(input)) {
+		try (Scanner source = new Scanner(input)) {
 			source.useDelimiter("\n");
 			// This is true when a rule's open
-			IHolder<Boolean> isRuleOpen = new Identity<>(false);
+			final IHolder<Boolean> isRuleOpen = new Identity<>(false);
 
 			// Do something for every line of the file
 			source.forEachRemaining((line) -> {
 				// Skip comment lines
-				if(line.startsWith("#") || line.startsWith("//"))
+				if (line.startsWith("#") || line.startsWith("//"))
 					// It's a comment
 					return;
-				else if(line.equals("")) {
+				else if (line.equals("")) {
 					// End the rule
 					isRuleOpen.replace(endRule(state, isRuleOpen.getValue()));
-				} else if(line.startsWith("\t")) {
+				} else if (line.startsWith("\t")) {
 					// Continue the rule
 					continueRule(state, isRuleOpen.getValue(), line);
 				} else {
@@ -157,7 +157,7 @@ public class RuleBasedConfigReader<E> {
 	 * @param continueRule
 	 *                The action to execute on continuation of a rule
 	 */
-	public void setContinueRule(BiConsumer<FunctionalStringTokenizer, E> continueRule) {
+	public void setContinueRule(final BiConsumer<FunctionalStringTokenizer, E> continueRule) {
 		this.continueRule = continueRule;
 	}
 
@@ -167,7 +167,7 @@ public class RuleBasedConfigReader<E> {
 	 * @param end
 	 *                The action to execute on ending of a rule
 	 */
-	public void setEndRule(Consumer<E> end) {
+	public void setEndRule(final Consumer<E> end) {
 		this.end = end;
 	}
 
@@ -177,23 +177,23 @@ public class RuleBasedConfigReader<E> {
 	 * @param start
 	 *                The action to execute on starting of a rule
 	 */
-	public void setStartRule(BiConsumer<FunctionalStringTokenizer, IPair<String, E>> start) {
-		if(start == null) throw new NullPointerException("Action on rule start must be non-null");
+	public void setStartRule(final BiConsumer<FunctionalStringTokenizer, IPair<String, E>> start) {
+		if (start == null) throw new NullPointerException("Action on rule start must be non-null");
 
 		this.start = start;
 	}
 
-	private boolean startRule(E state, boolean isRuleOpen, String line) {
+	private boolean startRule(final E state, boolean isRuleOpen, final String line) {
 		// Create the line tokenizer
-		FunctionalStringTokenizer tokenizer = new FunctionalStringTokenizer(line, " ");
+		final FunctionalStringTokenizer tokenizer = new FunctionalStringTokenizer(line, " ");
 
 		// Get the initial token
-		String nextToken = tokenizer.nextToken();
+		final String nextToken = tokenizer.nextToken();
 
 		// Handle pragmas
-		if(nextToken.equals("pragma")) {
+		if (nextToken.equals("pragma")) {
 			// Get the pragma name
-			String token = tokenizer.nextToken();
+			final String token = tokenizer.nextToken();
 
 			// Handle pragmas
 			pragmas.getOrDefault(token, (tokenzer, stat) -> {
@@ -201,7 +201,7 @@ public class RuleBasedConfigReader<E> {
 			}).accept(tokenizer, state);
 		} else {
 			// Make sure input is correct
-			if(isRuleOpen == true)
+			if (isRuleOpen == true)
 				throw new InputMismatchException("Nested rules are currently not supported");
 
 			// Start a rule

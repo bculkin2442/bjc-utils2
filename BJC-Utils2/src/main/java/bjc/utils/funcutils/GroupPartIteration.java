@@ -1,10 +1,10 @@
 package bjc.utils.funcutils;
 
-import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.IList;
-
 import java.util.function.Consumer;
 import java.util.function.Function;
+
+import bjc.utils.funcdata.FunctionalList;
+import bjc.utils.funcdata.IList;
 
 /**
  * Implements a single group partitioning pass on a list
@@ -15,18 +15,18 @@ import java.util.function.Function;
  *                The type of element in the list being partitioned
  */
 final class GroupPartIteration<E> implements Consumer<E> {
-	private IList<IList<E>> returnedList;
+	private final IList<IList<E>> returnedList;
 
 	public IList<E>		currentPartition;
-	private IList<E>	rejectedItems;
+	private final IList<E>	rejectedItems;
 
-	private int	numberInCurrentPartition;
-	private int	numberPerPartition;
+	private int		numberInCurrentPartition;
+	private final int	numberPerPartition;
 
-	private Function<E, Integer> elementCounter;
+	private final Function<E, Integer> elementCounter;
 
-	public GroupPartIteration(IList<IList<E>> returned, IList<E> rejects, int nPerPart,
-			Function<E, Integer> eleCount) {
+	public GroupPartIteration(final IList<IList<E>> returned, final IList<E> rejects, final int nPerPart,
+			final Function<E, Integer> eleCount) {
 		this.returnedList = returned;
 		this.rejectedItems = rejects;
 		this.numberPerPartition = nPerPart;
@@ -37,8 +37,8 @@ final class GroupPartIteration<E> implements Consumer<E> {
 	}
 
 	@Override
-	public void accept(E value) {
-		boolean shouldStartPartition = numberInCurrentPartition >= numberPerPartition;
+	public void accept(final E value) {
+		final boolean shouldStartPartition = numberInCurrentPartition >= numberPerPartition;
 
 		if (shouldStartPartition) {
 			returnedList.add(currentPartition);
@@ -46,9 +46,10 @@ final class GroupPartIteration<E> implements Consumer<E> {
 			currentPartition = new FunctionalList<>();
 			numberInCurrentPartition = 0;
 		} else {
-			int currentElementCount = elementCounter.apply(value);
+			final int currentElementCount = elementCounter.apply(value);
 
-			boolean shouldReject = numberInCurrentPartition + currentElementCount >= numberPerPartition;
+			final boolean shouldReject = numberInCurrentPartition
+					+ currentElementCount >= numberPerPartition;
 
 			if (shouldReject) {
 				rejectedItems.add(value);

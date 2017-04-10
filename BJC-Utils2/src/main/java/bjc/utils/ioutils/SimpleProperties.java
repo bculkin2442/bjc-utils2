@@ -10,12 +10,12 @@ import java.util.Set;
 
 /**
  * Simple file based properties.
- * 
+ *
  * @author EVE
  *
  */
 public class SimpleProperties implements Map<String, String> {
-	private Map<String, String> props;
+	private final Map<String, String> props;
 
 	/**
 	 * Create a new set of simple properties.
@@ -26,42 +26,46 @@ public class SimpleProperties implements Map<String, String> {
 
 	/**
 	 * Load properties from the provided input stream.
-	 * 
+	 *
 	 * The format is the name, a space, then the body.
-	 * 
+	 *
 	 * All leading/trailing spaces from the name & body are removed.
-	 * 
+	 *
 	 * @param is
 	 *                The stream to read from.
-	 * 
+	 *
 	 * @param allowDuplicates
 	 *                Whether or not duplicate keys should be allowed.
 	 */
-	public void loadFrom(InputStream is, boolean allowDuplicates) {
+	public void loadFrom(final InputStream is, final boolean allowDuplicates) {
 		try (Scanner scn = new Scanner(is)) {
 			while (scn.hasNextLine()) {
-				String ln = scn.nextLine().trim();
+				final String ln = scn.nextLine().trim();
 
 				/*
 				 * Skip blank lines/comments
 				 */
-				if (ln.equals("")) continue;
-				if (ln.startsWith("#")) continue;
+				if (ln.equals("")) {
+					continue;
+				}
+				if (ln.startsWith("#")) {
+					continue;
+				}
 
-				int sepIdx = ln.indexOf(' ');
+				final int sepIdx = ln.indexOf(' ');
 
 				if (sepIdx == -1) {
-					String fmt = "Properties must be a name, a space, then the body.\n\tOffending line is '%s'";
-					String msg = String.format(fmt, ln);
+					final String fmt = "Properties must be a name, a space, then the body.\n\tOffending line is '%s'";
+					final String msg = String.format(fmt, ln);
 
 					throw new NoSuchElementException(msg);
 				}
 
-				String name = ln.substring(0, sepIdx).trim();
-				String body = ln.substring(sepIdx).trim();
+				final String name = ln.substring(0, sepIdx).trim();
+				final String body = ln.substring(sepIdx).trim();
 
 				if (!allowDuplicates && containsKey(name)) {
-					String msg = String.format("Duplicate key '%s'", name);
+					final String msg = String.format("Duplicate key '%s'", name);
 
 					throw new IllegalStateException(msg);
 				}
@@ -77,7 +81,7 @@ public class SimpleProperties implements Map<String, String> {
 	public void outputProperties() {
 		System.out.println("Read properties:");
 
-		for (Entry<String, String> entry : entrySet()) {
+		for (final Entry<String, String> entry : entrySet()) {
 			System.out.printf("\t'%s'\t'%s'\n", entry.getKey(), entry.getValue());
 		}
 
@@ -96,35 +100,35 @@ public class SimpleProperties implements Map<String, String> {
 
 	@SuppressWarnings("unlikely-arg-type")
 	@Override
-	public boolean containsKey(Object key) {
+	public boolean containsKey(final Object key) {
 		return props.containsKey(key);
 	}
 
 	@SuppressWarnings("unlikely-arg-type")
 	@Override
-	public boolean containsValue(Object value) {
+	public boolean containsValue(final Object value) {
 		return props.containsValue(value);
 	}
 
 	@SuppressWarnings("unlikely-arg-type")
 	@Override
-	public String get(Object key) {
+	public String get(final Object key) {
 		return props.get(key);
 	}
 
 	@Override
-	public String put(String key, String value) {
+	public String put(final String key, final String value) {
 		return props.put(key, value);
 	}
 
 	@SuppressWarnings("unlikely-arg-type")
 	@Override
-	public String remove(Object key) {
+	public String remove(final Object key) {
 		return props.remove(key);
 	}
 
 	@Override
-	public void putAll(Map<? extends String, ? extends String> m) {
+	public void putAll(final Map<? extends String, ? extends String> m) {
 		props.putAll(m);
 	}
 
@@ -149,7 +153,7 @@ public class SimpleProperties implements Map<String, String> {
 	}
 
 	@Override
-	public boolean equals(Object o) {
+	public boolean equals(final Object o) {
 		return props.equals(o);
 	}
 

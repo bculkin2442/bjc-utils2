@@ -19,7 +19,7 @@ public class SimpleTitledBorder extends TitledBorder {
 	 * @param title
 	 *                The title for the border.
 	 */
-	public SimpleTitledBorder(String title) {
+	public SimpleTitledBorder(final String title) {
 		super(new EtchedBorder(), title);
 	}
 }

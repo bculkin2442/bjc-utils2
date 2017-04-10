@@ -1,11 +1,11 @@
 package bjc.utils.gui.panels;
 
-import bjc.utils.data.IHolder;
-import bjc.utils.gui.layout.HLayout;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+
+import bjc.utils.data.IHolder;
+import bjc.utils.gui.layout.HLayout;
 
 /**
  * A panel that outputs a value bound to a {@link IHolder}
@@ -16,10 +16,10 @@ import javax.swing.Timer;
 public class HolderOutputPanel extends JPanel {
 	private static final long serialVersionUID = 166573313903782080L;
 
-	private Timer		updater;
-	private JLabel		value;
-	private int		nDelay;
-	private IHolder<String>	val;
+	private Timer			updater;
+	private final JLabel		value;
+	private final int		nDelay;
+	private final IHolder<String>	val;
 
 	/**
 	 * Create a new display panel, backed by a holder
@@ -31,13 +31,13 @@ public class HolderOutputPanel extends JPanel {
 	 * @param nDelay
 	 *                The delay in ms between value updates
 	 */
-	public HolderOutputPanel(String lab, IHolder<String> valueHolder, int nDelay) {
+	public HolderOutputPanel(final String lab, final IHolder<String> valueHolder, final int nDelay) {
 		this.val = valueHolder;
 		this.nDelay = nDelay;
 
 		setLayout(new HLayout(2));
 
-		JLabel label = new JLabel(lab);
+		final JLabel label = new JLabel(lab);
 		value = new JLabel("(stopped)");
 
 		updater = new Timer(nDelay, (event) -> {

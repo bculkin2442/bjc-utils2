@@ -1,14 +1,14 @@
 package bjc.utils.data;
 
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
+
 import bjc.utils.data.internals.BoundListHolder;
 import bjc.utils.data.internals.WrappedLazy;
 import bjc.utils.data.internals.WrappedOption;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.theory.Functor;
-
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.UnaryOperator;
 
 /**
  * A holder of a single value.
@@ -36,7 +36,7 @@ public interface IHolder<ContainedType> extends Functor<ContainedType> {
 	 * @param action
 	 *                The action to apply to the value
 	 */
-	public default void doWith(Consumer<? super ContainedType> action) {
+	public default void doWith(final Consumer<? super ContainedType> action) {
 		transform(value -> {
 			action.accept(value);
 
@@ -46,15 +46,15 @@ public interface IHolder<ContainedType> extends Functor<ContainedType> {
 
 	@Override
 	default <ArgType, ReturnType> Function<Functor<ArgType>, Functor<ReturnType>> fmap(
-			Function<ArgType, ReturnType> func) {
+			final Function<ArgType, ReturnType> func) {
 		return argumentFunctor -> {
 			if (!(argumentFunctor instanceof IHolder<?>)) {
-				String msg = "This functor only supports mapping over instances of IHolder";
+				final String msg = "This functor only supports mapping over instances of IHolder";
 
 				throw new IllegalArgumentException(msg);
 			}
 
-			IHolder<ArgType> holder = (IHolder<ArgType>) argumentFunctor;
+			final IHolder<ArgType> holder = (IHolder<ArgType>) argumentFunctor;
 
 			return holder.map(func);
 		};
@@ -124,7 +124,7 @@ public interface IHolder<ContainedType> extends Functor<ContainedType> {
 	 *                The value to hold instead
 	 * @return The holder itself
 	 */
-	public default IHolder<ContainedType> replace(ContainedType newValue) {
+	public default IHolder<ContainedType> replace(final ContainedType newValue) {
 		return transform(oldValue -> {
 			return newValue;
 		});

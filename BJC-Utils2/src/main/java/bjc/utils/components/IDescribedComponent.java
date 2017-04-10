@@ -7,7 +7,7 @@ package bjc.utils.components;
  * @author ben
  *
  */
-public interface IDescribedComponent extends Comparable<IDescribedComponent>{
+public interface IDescribedComponent extends Comparable<IDescribedComponent> {
 	/**
 	 * Get the author of this component
 	 *
@@ -50,16 +50,15 @@ public interface IDescribedComponent extends Comparable<IDescribedComponent>{
 	default int getVersion() {
 		return 1;
 	}
-	
-	
+
 	@Override
-	default int compareTo(IDescribedComponent o) {
+	default int compareTo(final IDescribedComponent o) {
 		int res = getName().compareTo(o.getName());
-		
-		if(res == 0) {
+
+		if (res == 0) {
 			res = getVersion() - o.getVersion();
 		}
-		
+
 		return res;
 	}
 }

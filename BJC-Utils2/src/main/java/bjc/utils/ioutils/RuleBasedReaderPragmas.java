@@ -1,10 +1,10 @@
 package bjc.utils.ioutils;
 
+import java.util.function.BiConsumer;
+
 import bjc.utils.exceptions.PragmaFormatException;
 import bjc.utils.funcdata.FunctionalStringTokenizer;
 import bjc.utils.funcutils.ListUtils;
-
-import java.util.function.BiConsumer;
 
 /**
  * Contains factory methods for common pragma types
@@ -25,22 +25,22 @@ public class RuleBasedReaderPragmas {
 	 *                The function to invoke with the parsed integer
 	 * @return A pragma that functions as described above.
 	 */
-	public static <StateType> BiConsumer<FunctionalStringTokenizer, StateType> buildInteger(String name,
-			BiConsumer<Integer, StateType> consumer) {
+	public static <StateType> BiConsumer<FunctionalStringTokenizer, StateType> buildInteger(final String name,
+			final BiConsumer<Integer, StateType> consumer) {
 		return (tokenizer, state) -> {
 			// Check our input is correct
-			if(!tokenizer.hasMoreTokens())
+			if (!tokenizer.hasMoreTokens())
 				throw new PragmaFormatException("Pragma " + name + " requires one integer argument");
 
 			// Read the argument
-			String token = tokenizer.nextToken();
+			final String token = tokenizer.nextToken();
 
 			try {
 				// Run the pragma
 				consumer.accept(Integer.parseInt(token), state);
-			} catch(NumberFormatException nfex) {
+			} catch (final NumberFormatException nfex) {
 				// Tell the user their argument isn't correct
-				PragmaFormatException pfex = new PragmaFormatException(
+				final PragmaFormatException pfex = new PragmaFormatException(
 						"Argument " + token + " to " + name + " pragma isn't a valid integer. "
 								+ "This pragma requires a integer argument");
 
@@ -63,15 +63,15 @@ public class RuleBasedReaderPragmas {
 	 *                The function to invoke with the parsed string
 	 * @return A pragma that functions as described above.
 	 */
-	public static <StateType> BiConsumer<FunctionalStringTokenizer, StateType> buildStringCollapser(String name,
-			BiConsumer<String, StateType> consumer) {
+	public static <StateType> BiConsumer<FunctionalStringTokenizer, StateType> buildStringCollapser(
+			final String name, final BiConsumer<String, StateType> consumer) {
 		return (tokenizer, state) -> {
 			// Check our input
-			if(!tokenizer.hasMoreTokens()) throw new PragmaFormatException(
+			if (!tokenizer.hasMoreTokens()) throw new PragmaFormatException(
 					"Pragma " + name + " requires one or more string arguments");
 
 			// Build our argument
-			String collapsed = ListUtils.collapseTokens(tokenizer.toList());
+			final String collapsed = ListUtils.collapseTokens(tokenizer.toList());
 
 			// Run the pragma
 			consumer.accept(collapsed, state);

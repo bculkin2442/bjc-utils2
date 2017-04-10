@@ -17,10 +17,11 @@ import java.util.function.Function;
  *                The type of the transformed values
  */
 final class TransformedValueMap<OldKey, OldValue, NewValue> implements IMap<OldKey, NewValue> {
-	private IMap<OldKey, OldValue>		backing;
-	private Function<OldValue, NewValue>	transformer;
+	private final IMap<OldKey, OldValue>		backing;
+	private final Function<OldValue, NewValue>	transformer;
 
-	public TransformedValueMap(IMap<OldKey, OldValue> backingMap, Function<OldValue, NewValue> transform) {
+	public TransformedValueMap(final IMap<OldKey, OldValue> backingMap,
+			final Function<OldValue, NewValue> transform) {
 		backing = backingMap;
 		transformer = transform;
 	}
@@ -31,7 +32,7 @@ final class TransformedValueMap<OldKey, OldValue, NewValue> implements IMap<OldK
 	}
 
 	@Override
-	public boolean containsKey(OldKey key) {
+	public boolean containsKey(final OldKey key) {
 		return backing.containsKey(key);
 	}
 
@@ -41,26 +42,26 @@ final class TransformedValueMap<OldKey, OldValue, NewValue> implements IMap<OldK
 	}
 
 	@Override
-	public void forEach(BiConsumer<OldKey, NewValue> action) {
+	public void forEach(final BiConsumer<OldKey, NewValue> action) {
 		backing.forEach((key, value) -> {
 			action.accept(key, transformer.apply(value));
 		});
 	}
 
 	@Override
-	public void forEachKey(Consumer<OldKey> action) {
+	public void forEachKey(final Consumer<OldKey> action) {
 		backing.forEachKey(action);
 	}
 
 	@Override
-	public void forEachValue(Consumer<NewValue> action) {
+	public void forEachValue(final Consumer<NewValue> action) {
 		backing.forEachValue(value -> {
 			action.accept(transformer.apply(value));
 		});
 	}
 
 	@Override
-	public NewValue get(OldKey key) {
+	public NewValue get(final OldKey key) {
 		return transformer.apply(backing.get(key));
 	}
 
@@ -75,17 +76,17 @@ final class TransformedValueMap<OldKey, OldValue, NewValue> implements IMap<OldK
 	}
 
 	@Override
-	public <MappedValue> IMap<OldKey, MappedValue> transform(Function<NewValue, MappedValue> transform) {
+	public <MappedValue> IMap<OldKey, MappedValue> transform(final Function<NewValue, MappedValue> transform) {
 		return new TransformedValueMap<>(this, transform);
 	}
 
 	@Override
-	public NewValue put(OldKey key, NewValue value) {
+	public NewValue put(final OldKey key, final NewValue value) {
 		throw new UnsupportedOperationException("Can't add items to transformed map");
 	}
 
 	@Override
-	public NewValue remove(OldKey key) {
+	public NewValue remove(final OldKey key) {
 		return transformer.apply(backing.remove(key));
 	}
 

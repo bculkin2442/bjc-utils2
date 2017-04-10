@@ -1,5 +1,11 @@
 package bjc.utils.graph;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
 import bjc.utils.data.IHolder;
 import bjc.utils.data.Identity;
 import bjc.utils.funcdata.FunctionalList;
@@ -7,12 +13,6 @@ import bjc.utils.funcdata.FunctionalMap;
 import bjc.utils.funcdata.IList;
 import bjc.utils.funcdata.IMap;
 import bjc.utils.funcutils.FuncUtils;
-
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.util.InputMismatchException;
-import java.util.Scanner;
 
 /**
  * An adjacency map representing a graph
@@ -30,24 +30,24 @@ public class AdjacencyMap<T> {
 	 *                The stream of text to read in
 	 * @return An adjacency map defined by the text
 	 */
-	public static AdjacencyMap<Integer> fromStream(InputStream stream) {
-		if(stream == null) throw new NullPointerException("Input source must not be null");
+	public static AdjacencyMap<Integer> fromStream(final InputStream stream) {
+		if (stream == null) throw new NullPointerException("Input source must not be null");
 
 		// Create the adjacency map
 		AdjacencyMap<Integer> adjacency;
 
-		try(Scanner input = new Scanner(stream)) {
+		try (Scanner input = new Scanner(stream)) {
 			input.useDelimiter("\n");
 
 			int vertexCount;
 
-			String possible = input.next();
+			final String possible = input.next();
 
 			try {
 				// First, read in number of vertices
 				vertexCount = Integer.parseInt(possible);
-			} catch(NumberFormatException nfex) {
-				InputMismatchException imex = new InputMismatchException(
+			} catch (final NumberFormatException nfex) {
+				final InputMismatchException imex = new InputMismatchException(
 						"The first line must contain the number of vertices. " + possible
 								+ " is not a valid number");
 
@@ -56,16 +56,16 @@ public class AdjacencyMap<T> {
 				throw imex;
 			}
 
-			if(vertexCount <= 0)
+			if (vertexCount <= 0)
 				throw new InputMismatchException("The number of vertices must be greater than 0");
 
-			IList<Integer> vertices = new FunctionalList<>();
+			final IList<Integer> vertices = new FunctionalList<>();
 
 			FuncUtils.doTimes(vertexCount, (vertexNo) -> vertices.add(vertexNo));
 
 			adjacency = new AdjacencyMap<>(vertices);
 
-			IHolder<Integer> row = new Identity<>(0);
+			final IHolder<Integer> row = new Identity<>(0);
 
 			input.forEachRemaining((strang) -> {
 				readRow(adjacency, vertexCount, row, strang);
@@ -75,22 +75,22 @@ public class AdjacencyMap<T> {
 		return adjacency;
 	}
 
-	private static void readRow(AdjacencyMap<Integer> adjacency, int vertexCount, IHolder<Integer> row,
-			String strang) {
-		String[] parts = strang.split(" ");
+	private static void readRow(final AdjacencyMap<Integer> adjacency, final int vertexCount,
+			final IHolder<Integer> row, final String strang) {
+		final String[] parts = strang.split(" ");
 
-		if(parts.length != vertexCount)
+		if (parts.length != vertexCount)
 			throw new InputMismatchException("Must specify a weight for all " + vertexCount + " vertices");
 
 		int column = 0;
 
-		for(String part : parts) {
+		for (final String part : parts) {
 			int weight;
 
 			try {
 				weight = Integer.parseInt(part);
-			} catch(NumberFormatException nfex) {
-				InputMismatchException imex = new InputMismatchException(
+			} catch (final NumberFormatException nfex) {
+				final InputMismatchException imex = new InputMismatchException(
 						"" + part + " is not a valid weight.");
 
 				imex.initCause(nfex);
@@ -109,7 +109,7 @@ public class AdjacencyMap<T> {
 	/**
 	 * The backing storage of the map
 	 */
-	private IMap<T, IMap<T, Integer>> adjacency = new FunctionalMap<>();
+	private final IMap<T, IMap<T, Integer>> adjacency = new FunctionalMap<>();
 
 	/**
 	 * Create a new map from a set of vertices
@@ -117,11 +117,11 @@ public class AdjacencyMap<T> {
 	 * @param vertices
 	 *                The set of vertices to create a map from
 	 */
-	public AdjacencyMap(IList<T> vertices) {
-		if(vertices == null) throw new NullPointerException("Vertices must not be null");
+	public AdjacencyMap(final IList<T> vertices) {
+		if (vertices == null) throw new NullPointerException("Vertices must not be null");
 
 		vertices.forEach(vertex -> {
-			IMap<T, Integer> row = new FunctionalMap<>();
+			final IMap<T, Integer> row = new FunctionalMap<>();
 
 			vertices.forEach(target -> {
 				row.put(target, 0);
@@ -137,13 +137,13 @@ public class AdjacencyMap<T> {
 	 * @return Whether or not the graph is directed
 	 */
 	public boolean isDirected() {
-		IHolder<Boolean> result = new Identity<>(true);
+		final IHolder<Boolean> result = new Identity<>(true);
 
 		adjacency.forEach((sourceKey, sourceValue) -> {
 			sourceValue.forEach((targetKey, targetValue) -> {
-				int inverseValue = adjacency.get(targetKey).get(sourceKey);
+				final int inverseValue = adjacency.get(targetKey).get(sourceKey);
 
-				if(targetValue != inverseValue) {
+				if (targetValue != inverseValue) {
 					result.replace(false);
 				}
 			});
@@ -162,14 +162,14 @@ public class AdjacencyMap<T> {
 	 * @param weight
 	 *                The weight of the edge
 	 */
-	public void setWeight(T source, T target, int weight) {
-		if(source == null)
+	public void setWeight(final T source, final T target, final int weight) {
+		if (source == null)
 			throw new NullPointerException("Source vertex must not be null");
-		else if(target == null) throw new NullPointerException("Target vertex must not be null");
+		else if (target == null) throw new NullPointerException("Target vertex must not be null");
 
-		if(!adjacency.containsKey(source))
+		if (!adjacency.containsKey(source))
 			throw new IllegalArgumentException("Source vertex " + source + " isn't present in map");
-		else if(!adjacency.containsKey(target))
+		else if (!adjacency.containsKey(target))
 			throw new IllegalArgumentException("Target vertex " + target + " isn't present in map");
 
 		adjacency.get(source).put(target, weight);
@@ -181,7 +181,7 @@ public class AdjacencyMap<T> {
 	 * @return The new representation of this graph
 	 */
 	public Graph<T> toGraph() {
-		Graph<T> ret = new Graph<>();
+		final Graph<T> ret = new Graph<>();
 
 		adjacency.forEach((sourceKey, sourceValue) -> {
 			sourceValue.forEach((targetKey, targetValue) -> {
@@ -198,10 +198,10 @@ public class AdjacencyMap<T> {
 	 * @param sink
 	 *                The stream to convert to
 	 */
-	public void toStream(OutputStream sink) {
-		if(sink == null) throw new NullPointerException("Output source must not be null");
+	public void toStream(final OutputStream sink) {
+		if (sink == null) throw new NullPointerException("Output source must not be null");
 
-		PrintStream outputPrinter = new PrintStream(sink);
+		final PrintStream outputPrinter = new PrintStream(sink);
 
 		adjacency.forEach((sourceKey, sourceValue) -> {
 			sourceValue.forEach((targetKey, targetValue) -> {

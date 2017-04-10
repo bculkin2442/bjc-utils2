@@ -42,7 +42,7 @@ public class DoubleTape<T> implements Tape<T> {
 	 *                Whether or not to auto-extend the tape to the right w/
 	 *                nulls.
 	 */
-	public DoubleTape(boolean autoExtnd) {
+	public DoubleTape(final boolean autoExtnd) {
 		front = new SingleTape<>(autoExtnd);
 		back = new SingleTape<>(autoExtnd);
 	}
@@ -64,7 +64,7 @@ public class DoubleTape<T> implements Tape<T> {
 	 *                The new value for the tape item.
 	 */
 	@Override
-	public void item(T itm) {
+	public void item(final T itm) {
 		front.item(itm);
 	}
 
@@ -85,7 +85,7 @@ public class DoubleTape<T> implements Tape<T> {
 	 *                The item to add.
 	 */
 	@Override
-	public void insertBefore(T itm) {
+	public void insertBefore(final T itm) {
 		front.insertBefore(itm);
 		back.insertAfter(null);
 	}
@@ -94,7 +94,7 @@ public class DoubleTape<T> implements Tape<T> {
 	 * Insert an element after the current item.
 	 */
 	@Override
-	public void insertAfter(T itm) {
+	public void insertAfter(final T itm) {
 		front.insertAfter(itm);
 		back.insertBefore(itm);
 	}
@@ -156,8 +156,8 @@ public class DoubleTape<T> implements Tape<T> {
 	 * @return True if the cursor was moved left.
 	 */
 	@Override
-	public boolean left(int amt) {
-		boolean succ = front.left(amt);
+	public boolean left(final int amt) {
+		final boolean succ = front.left(amt);
 
 		if (succ) {
 			back.right(amt);
@@ -189,8 +189,8 @@ public class DoubleTape<T> implements Tape<T> {
 	 * @return Whether the cursor was moved right.
 	 */
 	@Override
-	public boolean right(int amt) {
-		boolean succ = front.right(amt);
+	public boolean right(final int amt) {
+		final boolean succ = front.right(amt);
 
 		if (succ) {
 			back.left(amt);
@@ -206,7 +206,7 @@ public class DoubleTape<T> implements Tape<T> {
 	 * active.
 	 */
 	public void flip() {
-		Tape<T> tmp = front;
+		final Tape<T> tmp = front;
 
 		front = back;
 
@@ -222,33 +222,26 @@ public class DoubleTape<T> implements Tape<T> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((back == null) ? 0 : back.hashCode());
-		result = prime * result + ((front == null) ? 0 : front.hashCode());
+		result = prime * result + (back == null ? 0 : back.hashCode());
+		result = prime * result + (front == null ? 0 : front.hashCode());
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof DoubleTape<?>))
-			return false;
+	public boolean equals(final Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (!(obj instanceof DoubleTape<?>)) return false;
 
-		DoubleTape<?> other = (DoubleTape<?>) obj;
+		final DoubleTape<?> other = (DoubleTape<?>) obj;
 
 		if (back == null) {
-			if (other.back != null)
-				return false;
-		} else if (!back.equals(other.back))
-			return false;
+			if (other.back != null) return false;
+		} else if (!back.equals(other.back)) return false;
 
 		if (front == null) {
-			if (other.front != null)
-				return false;
-		} else if (!front.equals(other.front))
-			return false;
+			if (other.front != null) return false;
+		} else if (!front.equals(other.front)) return false;
 
 		return true;
 	}

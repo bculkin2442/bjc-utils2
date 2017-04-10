@@ -1,17 +1,17 @@
 package bjc.utils.parserutils;
 
-import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.IList;
-import bjc.utils.parserutils.splitterv2.TokenSplitter;
+import static bjc.utils.PropertyDB.applyFormat;
+import static bjc.utils.PropertyDB.getCompiledRegex;
+import static bjc.utils.PropertyDB.getRegex;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static bjc.utils.PropertyDB.getRegex;
-import static bjc.utils.PropertyDB.getCompiledRegex;
-import static bjc.utils.PropertyDB.applyFormat;
+import bjc.utils.funcdata.FunctionalList;
+import bjc.utils.funcdata.IList;
+import bjc.utils.parserutils.splitterv2.TokenSplitter;
 
 /**
  * Utilities useful for operating on PL tokens.
@@ -27,7 +27,7 @@ public class TokenUtils {
 	 */
 	public static class StringTokenSplitter implements TokenSplitter {
 		@Override
-		public IList<String> split(String input) {
+		public IList<String> split(final String input) {
 			return new FunctionalList<>(TokenUtils.removeDQuotedStrings(input));
 		}
 	}
@@ -67,34 +67,33 @@ public class TokenUtils {
 	 * @return An list containing alternating bits of the string and the
 	 *         embedded double-quoted strings that separated them.
 	 */
-	public static List<String> removeDQuotedStrings(String inp) {
-		if(inp == null) {
-			throw new NullPointerException("inp must not be null");
-		}
+	public static List<String> removeDQuotedStrings(final String inp) {
+		if (inp == null) throw new NullPointerException("inp must not be null");
 
 		/*
 		 * What we need for piece-by-piece string building
 		 */
 		StringBuffer work = new StringBuffer();
-		List<String> res = new LinkedList<>();
+		final List<String> res = new LinkedList<>();
 
 		/*
 		 * Matcher for proper strings and single quotes.
 		 */
-		Matcher mt = doubleQuotePatt.matcher(inp);
-		Matcher corr = quotePatt.matcher(inp);
+		final Matcher mt = doubleQuotePatt.matcher(inp);
+		final Matcher corr = quotePatt.matcher(inp);
 
-		if(corr.find() && !corr.find()) {
+		if (corr.find() && !corr.find()) {
 			/*
 			 * There's a unmatched opening quote with no strings.
 			 */
-			String msg = String.format("Unclosed string literal '%s'. Opening quote was at position %d",
-					inp, inp.indexOf("\""));
+			final String msg = String.format(
+					"Unclosed string literal '%s'. Opening quote was at position %d", inp,
+					inp.indexOf("\""));
 
 			throw new IllegalArgumentException(msg);
 		}
 
-		while(mt.find()) {
+		while (mt.find()) {
 			/*
 			 * Remove the string until the quoted string.
 			 */
@@ -117,15 +116,16 @@ public class TokenUtils {
 		 * Grab the remainder of the string.
 		 */
 		mt.appendTail(work);
-		String tail = work.toString();
+		final String tail = work.toString();
 
-		if(tail.contains("\"")) {
+		if (tail.contains("\"")) {
 			/*
 			 * There's a unmatched opening quote with at least one
 			 * string.
 			 */
-			String msg = String.format("Unclosed string literal '%s'. Opening quote was at position %d",
-					inp, inp.lastIndexOf("\""));
+			final String msg = String.format(
+					"Unclosed string literal '%s'. Opening quote was at position %d", inp,
+					inp.lastIndexOf("\""));
 
 			throw new IllegalArgumentException(msg);
 		}
@@ -133,7 +133,7 @@ public class TokenUtils {
 		/*
 		 * Only add an empty tail if the string was empty.
 		 */
-		if(!tail.equals("") || res.isEmpty()) {
+		if (!tail.equals("") || res.isEmpty()) {
 			res.add(tail);
 		}
 
@@ -149,28 +149,26 @@ public class TokenUtils {
 	 * @return The string with escape sequences replaced by their equivalent
 	 *         characters.
 	 */
-	public static String descapeString(String inp) {
-		if(inp == null) {
-			throw new NullPointerException("inp must not be null");
-		}
+	public static String descapeString(final String inp) {
+		if (inp == null) throw new NullPointerException("inp must not be null");
 
-		StringBuffer work = new StringBuffer();
+		final StringBuffer work = new StringBuffer();
 
-		Matcher possibleEscapeFinder = possibleEscapePatt.matcher(inp);
-		Matcher escapeFinder = escapePatt.matcher(inp);
+		final Matcher possibleEscapeFinder = possibleEscapePatt.matcher(inp);
+		final Matcher escapeFinder = escapePatt.matcher(inp);
 
-		while(possibleEscapeFinder.find()) {
-			if(!escapeFinder.find()) {
-				String msg = String.format("Illegal escape sequence '%s' at position %d",
+		while (possibleEscapeFinder.find()) {
+			if (!escapeFinder.find()) {
+				final String msg = String.format("Illegal escape sequence '%s' at position %d",
 						possibleEscapeFinder.group(), possibleEscapeFinder.start());
 
 				throw new IllegalArgumentException(msg);
 			}
 
-			String escapeSeq = escapeFinder.group();
+			final String escapeSeq = escapeFinder.group();
 
 			String escapeRep = "";
-			switch(escapeSeq) {
+			switch (escapeSeq) {
 			case "\\b":
 				escapeRep = "\b";
 				break;
@@ -200,7 +198,7 @@ public class TokenUtils {
 				escapeRep = "\\";
 				break;
 			default:
-				if(escapeSeq.startsWith("u")) {
+				if (escapeSeq.startsWith("u")) {
 					escapeRep = handleUnicodeEscape(escapeSeq.substring(1));
 				} else {
 					escapeRep = handleOctalEscape(escapeSeq);
@@ -215,15 +213,15 @@ public class TokenUtils {
 		return work.toString();
 	}
 
-	private static String handleUnicodeEscape(String seq) {
+	private static String handleUnicodeEscape(final String seq) {
 		try {
-			int codepoint = Integer.parseInt(seq, 16);
+			final int codepoint = Integer.parseInt(seq, 16);
 
 			return new String(Character.toChars(codepoint));
-		} catch(IllegalArgumentException iaex) {
-			String msg = String.format("'%s' is not a valid Unicode escape sequence'", seq);
+		} catch (final IllegalArgumentException iaex) {
+			final String msg = String.format("'%s' is not a valid Unicode escape sequence'", seq);
 
-			IllegalArgumentException reiaex = new IllegalArgumentException(msg);
+			final IllegalArgumentException reiaex = new IllegalArgumentException(msg);
 
 			reiaex.initCause(iaex);
 
@@ -231,21 +229,22 @@ public class TokenUtils {
 		}
 	}
 
-	private static String handleOctalEscape(String seq) {
+	private static String handleOctalEscape(final String seq) {
 		try {
-			int codepoint = Integer.parseInt(seq, 8);
+			final int codepoint = Integer.parseInt(seq, 8);
 
-			if(codepoint > 255) {
-				String msg = String.format("'%d' is outside the range of octal escapes', codepoint");
+			if (codepoint > 255) {
+				final String msg = String
+						.format("'%d' is outside the range of octal escapes', codepoint");
 
 				throw new IllegalArgumentException(msg);
 			}
 
 			return new String(Character.toChars(codepoint));
-		} catch(IllegalArgumentException iaex) {
-			String msg = String.format("'%s' is not a valid octal escape sequence'", seq);
+		} catch (final IllegalArgumentException iaex) {
+			final String msg = String.format("'%s' is not a valid octal escape sequence'", seq);
 
-			IllegalArgumentException reiaex = new IllegalArgumentException(msg);
+			final IllegalArgumentException reiaex = new IllegalArgumentException(msg);
 
 			reiaex.initCause(iaex);
 
@@ -256,27 +255,27 @@ public class TokenUtils {
 	/**
 	 * Check if a given string would be successfully converted to a double
 	 * by {@link Double#parseDouble(String)}.
-	 * 
+	 *
 	 * @param inp
 	 *                The string to check.
 	 * @return Whether the string is a valid double or not.
 	 */
-	public static boolean isDouble(String inp) {
+	public static boolean isDouble(final String inp) {
 		return DoubleMatcher.doubleLiteral.matcher(inp).matches();
 	}
 
 	/**
 	 * Check if a given string would be successfully converted to a integer
 	 * by {@link Integer#parseInt(String)}.
-	 * 
+	 *
 	 * NOTE: This only checks syntax. Using values out of the range of
 	 * integers will still cause errors.
-	 * 
+	 *
 	 * @param inp
 	 *                The input to check.
 	 * @return Whether the string is a valid double or not.
 	 */
-	public static boolean isInt(String inp) {
+	public static boolean isInt(final String inp) {
 		return intLitPattern.matcher(inp).matches();
 	}
 }

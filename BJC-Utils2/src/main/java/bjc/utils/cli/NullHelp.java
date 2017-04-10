@@ -16,6 +16,5 @@ public class NullHelp implements CommandHelp {
 	public String getSummary() {
 		return "No summary provided";
 	}
-	
-	
+
 }

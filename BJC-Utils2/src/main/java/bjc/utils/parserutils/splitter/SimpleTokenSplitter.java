@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 /**
  * Simple implementation of {@link TokenSplitter}
- * 
+ *
  * @author EVE
  */
 @Deprecated
@@ -15,7 +15,7 @@ public class SimpleTokenSplitter implements TokenSplitter {
 	 * This string is a format template for the delimiter matching regex
 	 *
 	 * It does two things:
-	 * 
+	 *
 	 * <ol> <li> Match to the left of the provided delimiter by positive
 	 * lookahead </li> <li> Match to the right of the provided delimiter by
 	 * positive lookbehind </li> </ol>
@@ -52,9 +52,9 @@ public class SimpleTokenSplitter implements TokenSplitter {
 	/*
 	 * These represent info for debugging.
 	 */
-	private Set<String>	delimSet;
-	private Set<String>	multidelimSet;
-	private Set<String>	exclusionSet;
+	private final Set<String>	delimSet;
+	private final Set<String>	multidelimSet;
+	private final Set<String>	exclusionSet;
 
 	/**
 	 * Create a new token splitter.
@@ -66,14 +66,14 @@ public class SimpleTokenSplitter implements TokenSplitter {
 	}
 
 	@Override
-	public String[] split(String inp) {
-		if(compPatt == null) throw new IllegalStateException("Token splitter has not been compiled yet");
+	public String[] split(final String inp) {
+		if (compPatt == null) throw new IllegalStateException("Token splitter has not been compiled yet");
 
 		/*
 		 * Don't split something that we should exclude from being
 		 * split.
 		 */
-		if(exclusionPatt.matcher(inp).matches()) return new String[] { inp };
+		if (exclusionPatt.matcher(inp).matches()) return new String[] { inp };
 
 		return compPatt.split(inp);
 	}
@@ -88,14 +88,14 @@ public class SimpleTokenSplitter implements TokenSplitter {
 	 * @param delims
 	 *                The delimiters to match on.
 	 */
-	public void addDelimiter(String... delims) {
-		for(String delim : delims) {
-			if(delim == null) throw new NullPointerException("Delim must not be null");
+	public void addDelimiter(final String... delims) {
+		for (final String delim : delims) {
+			if (delim == null) throw new NullPointerException("Delim must not be null");
 
-			String quoteDelim = Pattern.quote(delim);
-			String delimPat = String.format(WITH_DELIM, quoteDelim);
+			final String quoteDelim = Pattern.quote(delim);
+			final String delimPat = String.format(WITH_DELIM, quoteDelim);
 
-			if(currPatt == null) {
+			if (currPatt == null) {
 				currPatt = new StringBuilder();
 				currExclusionPatt = new StringBuilder();
 
@@ -119,13 +119,13 @@ public class SimpleTokenSplitter implements TokenSplitter {
 	 * @param delims
 	 *                The delimiter to split on.
 	 */
-	public void addMultiDelimiter(String... delims) {
-		for(String delim : delims) {
-			if(delim == null) throw new NullPointerException("Delim must not be null");
+	public void addMultiDelimiter(final String... delims) {
+		for (final String delim : delims) {
+			if (delim == null) throw new NullPointerException("Delim must not be null");
 
-			String delimPat = String.format(WITH_MULTI_DELIM, "(?:" + delim + ")");
+			final String delimPat = String.format(WITH_MULTI_DELIM, "(?:" + delim + ")");
 
-			if(currPatt == null) {
+			if (currPatt == null) {
 				currPatt = new StringBuilder();
 				currExclusionPatt = new StringBuilder();
 
@@ -147,11 +147,11 @@ public class SimpleTokenSplitter implements TokenSplitter {
 	 * @param delims
 	 *                The regex to not splitting matching strings.
 	 */
-	public void addNonMatcher(String... delims) {
-		for(String delim : delims) {
-			if(delim == null) throw new NullPointerException("Delim must not be null");
+	public void addNonMatcher(final String... delims) {
+		for (final String delim : delims) {
+			if (delim == null) throw new NullPointerException("Delim must not be null");
 
-			if(currPatt == null) {
+			if (currPatt == null) {
 				currPatt = new StringBuilder();
 				currExclusionPatt = new StringBuilder();
 
@@ -170,8 +170,12 @@ public class SimpleTokenSplitter implements TokenSplitter {
 	 * Makes this splitter ready to use.
 	 */
 	public void compile() {
-		if(currPatt == null) currPatt = new StringBuilder();
-		if(currExclusionPatt == null) currExclusionPatt = new StringBuilder();
+		if (currPatt == null) {
+			currPatt = new StringBuilder();
+		}
+		if (currExclusionPatt == null) {
+			currExclusionPatt = new StringBuilder();
+		}
 
 		compPatt = Pattern.compile(currPatt.toString());
 		exclusionPatt = Pattern.compile(currExclusionPatt.toString());
@@ -179,52 +183,52 @@ public class SimpleTokenSplitter implements TokenSplitter {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
+		final StringBuilder builder = new StringBuilder();
 
 		builder.append("SimpleTokenSplitter [");
 
-		if(currPatt != null) {
+		if (currPatt != null) {
 			builder.append("currPatt=");
 			builder.append(currPatt);
 			builder.append("\n\t, ");
 		}
 
-		if(currExclusionPatt != null) {
+		if (currExclusionPatt != null) {
 			builder.append("currExclusionPatt=");
 			builder.append(currExclusionPatt);
 			builder.append("\n\t, ");
 		}
 
-		if(compPatt != null) {
+		if (compPatt != null) {
 			builder.append("compPatt=");
 			builder.append(compPatt);
 			builder.append("\n\t, ");
 		}
 
-		if(exclusionPatt != null) {
+		if (exclusionPatt != null) {
 			builder.append("exclusionPatt=");
 			builder.append(exclusionPatt);
 			builder.append("\n\t, ");
 		}
 
-		if(delimSet != null) {
+		if (delimSet != null) {
 			builder.append("delimSet=");
 			builder.append(delimSet);
 			builder.append("\n\t, ");
 		}
 
-		if(multidelimSet != null) {
+		if (multidelimSet != null) {
 			builder.append("multidelimSet=");
 			builder.append(multidelimSet);
 			builder.append("\n\t, ");
 		}
 
-		if(exclusionSet != null) {
+		if (exclusionSet != null) {
 			builder.append("exclusionSet=");
 			builder.append(exclusionSet);
 		}
