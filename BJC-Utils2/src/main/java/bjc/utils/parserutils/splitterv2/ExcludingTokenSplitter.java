@@ -35,10 +35,10 @@ public class ExcludingTokenSplitter implements TokenSplitter {
 	}
 
 	/**
-	 * Exclude a literal string from splitting.
+	 * Exclude literal strings from splitting.
 	 * 
-	 * @param exclusion
-	 *                The string to exclude from splitting.
+	 * @param exclusions
+	 *                The strings to exclude from splitting.
 	 */
 	public final void addLiteralExclusions(String... exclusions) {
 		for (String exclusion : exclusions) {
@@ -47,10 +47,11 @@ public class ExcludingTokenSplitter implements TokenSplitter {
 	}
 
 	/**
-	 * Exclude all of the strings matching a predicate from splitting.
+	 * Exclude all of the strings matching any of the predicates from
+	 * splitting.
 	 * 
-	 * @param exclusion
-	 *                The predicate to use for exclusions.
+	 * @param exclusions
+	 *                The predicates to use for exclusions.
 	 */
 	@SafeVarargs
 	public final void addPredicateExclusion(Predicate<String>... exclusions) {
@@ -61,11 +62,12 @@ public class ExcludingTokenSplitter implements TokenSplitter {
 
 	@Override
 	public IList<String> split(String input) {
-		if (literalExclusions.contains(input))
+		if (literalExclusions.contains(input)) {
 			return new FunctionalList<>(input);
-		else if (predExclusions.anyMatch(pred -> pred.test(input)))
+		} else if (predExclusions.anyMatch(pred -> pred.test(input))) {
 			return new FunctionalList<>(input);
-
-		return spliter.split(input);
+		} else {
+			return spliter.split(input);
+		}
 	}
 }

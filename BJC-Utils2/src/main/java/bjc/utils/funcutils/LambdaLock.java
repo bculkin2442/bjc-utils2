@@ -76,7 +76,6 @@ public class LambdaLock {
 	 * @param action
 	 *                The action to call.
 	 * 
-	 * @return The result of the action.
 	 */
 	public void read(Runnable action) {
 		readLock.lock();

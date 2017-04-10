@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 /**
- * Test for {@link SequenceDelimiter} as well as {@link SimpleTokenSplitter}
+ * Test for {@link SequenceDelimiter} as well as {@link ConfigurableTokenSplitter}
  * 
  * @author EVE
  *
