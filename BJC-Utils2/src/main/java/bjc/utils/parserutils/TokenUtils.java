@@ -22,6 +22,9 @@ import bjc.utils.parserutils.splitter.TokenSplitter;
  */
 public class TokenUtils {
 	/**
+	 * Simple implementation of TokenSplitter for removing double-quoted
+	 * strings.
+	 * 
 	 * @author EVE
 	 *
 	 */

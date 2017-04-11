@@ -2,7 +2,6 @@ package bjc.utils.parserutils.splitter;
 
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IList;
-import bjc.utils.functypes.ID;
 
 /**
  * A token splitter that chains several other splitters together.
@@ -46,6 +45,6 @@ public class ChainTokenSplitter implements TokenSplitter {
 
 		return spliters.reduceAux(initList, (splitter, strangs) -> {
 			return strangs.flatMap(splitter::split);
-		}, ID.id());
+		});
 	}
 }

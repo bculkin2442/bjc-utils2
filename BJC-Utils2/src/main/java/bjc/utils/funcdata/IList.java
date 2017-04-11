@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collector;
 
 import bjc.utils.data.IPair;
+import bjc.utils.functypes.ID;
 
 /**
  * A wrapper over another list that provides functional operations over it.
@@ -314,6 +315,26 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 	<StateType, ReducedType> ReducedType reduceAux(StateType initial,
 			BiFunction<ContainedType, StateType, StateType> accumulator,
 			Function<StateType, ReducedType> transformer);
+
+	/**
+	 * Reduce this list to a single value, using a accumulative approach.
+	 *
+	 * @param <StateType>
+	 *                The in-between type of the values.
+	 *
+	 * @param initial
+	 *                The initial value of the accumulative state.
+	 * 
+	 * @param accumulator
+	 *                The function to use to combine a list element with the
+	 *                accumulative state.
+	 * 
+	 * @return A single value condensed from this list.
+	 */
+	default <StateType> StateType reduceAux(StateType initial,
+			BiFunction<ContainedType, StateType, StateType> accumulator) {
+		return reduceAux(initial, accumulator, ID.id());
+	}
 
 	/**
 	 * Remove all elements that match a given predicate
