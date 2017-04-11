@@ -21,7 +21,7 @@ import bjc.utils.parserutils.delims.RegexCloser;
 import bjc.utils.parserutils.delims.RegexOpener;
 import bjc.utils.parserutils.delims.SequenceDelimiter;
 import bjc.utils.parserutils.delims.StringDelimiter;
-import bjc.utils.parserutils.splitterv2.ConfigurableTokenSplitter;
+import bjc.utils.parserutils.splitter.ConfigurableTokenSplitter;
 
 /**
  * Test for {@link SequenceDelimiter} as well as

@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IList;
-import bjc.utils.parserutils.splitterv2.TokenSplitter;
+import bjc.utils.parserutils.splitter.TokenSplitter;
 
 /**
  * Utilities useful for operating on PL tokens.

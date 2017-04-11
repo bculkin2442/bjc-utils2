@@ -1,4 +1,4 @@
-package bjc.utils.parserutils.splitterv2;
+package bjc.utils.parserutils.splitter;
 
 import static bjc.utils.PropertyDB.applyFormat;
 

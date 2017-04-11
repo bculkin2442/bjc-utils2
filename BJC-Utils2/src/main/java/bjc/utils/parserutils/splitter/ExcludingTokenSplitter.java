@@ -1,4 +1,4 @@
-package bjc.utils.parserutils.splitterv2;
+package bjc.utils.parserutils.splitter;
 
 import java.util.HashSet;
 import java.util.Set;

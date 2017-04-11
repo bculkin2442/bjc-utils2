@@ -1,27 +1,21 @@
 package bjc.utils.parserutils.splitter;
 
+import bjc.utils.funcdata.IList;
+
 /**
- * Split a string and keep given delimiters.
+ * Split a string into a list of pieces.
  *
- * @author Ben Culkin
+ * @author EVE
+ *
  */
-@Deprecated
 public interface TokenSplitter {
 	/**
-	 * Split a provided string using configured delimiters, and keeping the
-	 * delimiters.
+	 * Split a string into a list of pieces.
 	 *
-	 * <p>
-	 * The splitter must be compiled first.
-	 * </p>
-	 *
-	 * @param inp
+	 * @param input
 	 *                The string to split.
 	 *
-	 * @return The split string, including delimiters.
-	 *
-	 * @throws IllegalStateException
-	 *                 If the splitter isn't compiled.
+	 * @return The pieces of the string.
 	 */
-	String[] split(String inp);
+	public IList<String> split(String input);
 }
