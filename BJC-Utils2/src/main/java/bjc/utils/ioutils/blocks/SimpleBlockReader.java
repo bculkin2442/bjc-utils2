@@ -7,6 +7,7 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
+import bjc.utils.funcutils.StringUtils;
 /**
  * Simple implementation of {@link BlockReader}
  *
@@ -20,7 +21,6 @@ public class SimpleBlockReader implements BlockReader {
 	/*
 	 * I/O source for blocks.
 	 */
-	private final LineNumberReader	lnReader;
 	private final Scanner		blockReader;
 
 	/*
@@ -28,6 +28,7 @@ public class SimpleBlockReader implements BlockReader {
 	 */
 	private Block	currBlock;
 	private int	blockNo;
+	private int 	lineNo;
 
 	/**
 	 * Create a new block reader.
@@ -40,14 +41,14 @@ public class SimpleBlockReader implements BlockReader {
 	 *                The source to read blocks from.
 	 */
 	public SimpleBlockReader(final String blockDelim, final Reader source) {
-		lnReader = new LineNumberReader(source);
-
-		blockReader = new Scanner(lnReader);
+		blockReader = new Scanner(source);
 
 		final String pattern = String.format("(?:%s)|\\Z", blockDelim);
 		final Pattern pt = Pattern.compile(pattern, Pattern.MULTILINE);
 
 		blockReader.useDelimiter(pt);
+
+		lineNo = 0;
 	}
 
 	@Override
@@ -63,9 +64,11 @@ public class SimpleBlockReader implements BlockReader {
 	@Override
 	public boolean nextBlock() {
 		try {
-			final int blockStartLine = lnReader.getLineNumber();
+			final int blockStartLine = lineNo;
 			final String blockContents = blockReader.next();
-			final int blockEndLine = lnReader.getLineNumber();
+			final int blockEndLine = lineNo + StringUtils.countMatches(blockContents, "\\R");
+
+			lineNo = blockEndLine;
 			blockNo += 1;
 
 			currBlock = new Block(blockNo, blockContents, blockStartLine, blockEndLine);

@@ -1,6 +1,8 @@
 package bjc.utils.funcutils;
 
 import java.util.Deque;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.ibm.icu.text.BreakIterator;
 
@@ -180,5 +182,15 @@ public class StringUtils {
 		}
 
 		return count;
+	}
+
+	public static int countMatches(final String value, final String pattern) {
+		Matcher mat = Pattern.compile(pattern).matcher(value);
+		
+		int num = 0;
+		while(mat.find())
+			num += 1;
+
+		return num;
 	}
 }
