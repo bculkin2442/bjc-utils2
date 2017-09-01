@@ -79,13 +79,22 @@ public class RegexStringEditor {
 	 */
 	public static String reduceOccurances(final String input, final Pattern rPatt,
 			final UnaryOperator<String> betweenAction, final UnaryOperator<String> onAction) {
+		/*
+		 * Get all of the occurances.
+		 */
 		final IList<String> occurances = listOccurances(input, rPatt);
 
+		/*
+		 * Execute the correct action on every occurance.
+		 */
 		final Toggle<UnaryOperator<String>> actions = new ValueToggle<>(onAction, betweenAction);
 		final BiFunction<String, StringBuilder, StringBuilder> reducer = (strang, state) -> {
 			return state.append(actions.get().apply(strang));
 		};
 
+		/*
+		 * Convert the list back to a string.
+		 */
 		return occurances.reduceAux(new StringBuilder(), reducer, StringBuilder::toString);
 	}
 
@@ -108,9 +117,15 @@ public class RegexStringEditor {
 	 */
 	public static IList<String> mapOccurances(final String input, final Pattern rPatt,
 			final UnaryOperator<String> betweenAction, final UnaryOperator<String> onAction) {
+		/*
+		 * Get all of the occurances.
+		 */
 		final IList<String> occurances = listOccurances(input, rPatt);
-		final Toggle<UnaryOperator<String>> actions = new ValueToggle<>(onAction, betweenAction);
 
+		/*
+		 * Execute the correct action on every occurance.
+		 */
+		final Toggle<UnaryOperator<String>> actions = new ValueToggle<>(onAction, betweenAction);
 		return occurances.map(strang -> actions.get().apply(strang));
 	}
 
@@ -129,23 +144,36 @@ public class RegexStringEditor {
 	public static IList<String> listOccurances(final String input, final Pattern rPatt) {
 		final IList<String> res = new FunctionalList<>();
 
+		/*
+		 * Create the matcher and work buffer.
+		 */
 		final Matcher matcher = rPatt.matcher(input);
-
 		StringBuffer work = new StringBuffer();
 
+		/*
+		 * For every match.
+		 */
 		while (matcher.find()) {
 			final String match = matcher.group();
 
+			/*
+			 * Append the text until the match to the buffer.
+			 */
 			matcher.appendReplacement(work, "");
 
 			res.add(work.toString());
 			res.add(match);
 
+			/*
+			 * Clear the buffer.
+			 */
 			work = new StringBuffer();
 		}
 
+		/*
+		 * Add the text after the last match to the buffer.
+		 */
 		matcher.appendTail(work);
-
 		res.add(work.toString());
 
 		return res;
@@ -168,9 +196,11 @@ public class RegexStringEditor {
 	public static String ifMatches(final String input, final Pattern patt, final UnaryOperator<String> action) {
 		final Matcher matcher = patt.matcher(input);
 
-		if (matcher.matches())
+		if (matcher.matches()) {
 			return action.apply(input);
-		else return input;
+		} else {
+			return input;
+		}
 	}
 
 	/**
@@ -191,8 +221,10 @@ public class RegexStringEditor {
 	public static String ifNotMatches(final String input, final Pattern patt, final UnaryOperator<String> action) {
 		final Matcher matcher = patt.matcher(input);
 
-		if (matcher.matches())
+		if (matcher.matches()) {
 			return input;
-		else return action.apply(input);
+		} else {
+			return action.apply(input);
+		}
 	}
 }

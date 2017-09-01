@@ -54,6 +54,9 @@ public class SimpleProperties implements Map<String, String> {
 
 				final int sepIdx = ln.indexOf(' ');
 
+				/*
+				 * Complain about improperly formatted lines.
+				 */
 				if (sepIdx == -1) {
 					final String fmt = "Properties must be a name, a space, then the body.\n\tOffending line is '%s'";
 					final String msg = String.format(fmt, ln);
@@ -64,6 +67,9 @@ public class SimpleProperties implements Map<String, String> {
 				final String name = ln.substring(0, sepIdx).trim();
 				final String body = ln.substring(sepIdx).trim();
 
+				/*
+				 * Complain about duplicates, if that is wanted.
+				 */
 				if (!allowDuplicates && containsKey(name)) {
 					final String msg = String.format("Duplicate key '%s'", name);
 

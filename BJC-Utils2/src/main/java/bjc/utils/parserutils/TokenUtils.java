@@ -276,7 +276,7 @@ public class TokenUtils {
 	 *
 	 * @param inp
 	 *                The input to check.
-	 * @return Whether the string is a valid double or not.
+	 * @return Whether the string is a valid integer or not.
 	 */
 	public static boolean isInt(final String inp) {
 		return intLitPattern.matcher(inp).matches();
