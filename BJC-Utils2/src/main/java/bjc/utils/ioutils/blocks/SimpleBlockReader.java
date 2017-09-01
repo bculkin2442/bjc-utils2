@@ -48,7 +48,7 @@ public class SimpleBlockReader implements BlockReader {
 
 		blockReader.useDelimiter(pt);
 
-		lineNo = 0;
+		lineNo = 1;
 	}
 
 	@Override
@@ -89,8 +89,6 @@ public class SimpleBlockReader implements BlockReader {
 	@Override
 	public void close() throws IOException {
 		blockReader.close();
-
-		lnReader.close();
 	}
 
 	/**
