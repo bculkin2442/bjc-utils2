@@ -21,14 +21,18 @@ public class SimpleBlockReader implements BlockReader {
 	/*
 	 * I/O source for blocks.
 	 */
-	private final Scanner		blockReader;
+	private final Scanner blockReader;
 
 	/*
 	 * The current block.
 	 */
-	private Block	currBlock;
-	private int	blockNo;
-	private int 	lineNo;
+	private Block currBlock;
+
+	/*
+	 * Info about the current block.
+	 */
+	private int blockNo;
+	private int lineNo;
 
 	/**
 	 * Create a new block reader.
@@ -64,6 +68,9 @@ public class SimpleBlockReader implements BlockReader {
 	@Override
 	public boolean nextBlock() {
 		try {
+			/*
+			 * Read in a new block, and keep the line numbers sane.
+			 */
 			final int blockStartLine = lineNo;
 			final String blockContents = blockReader.next();
 			final int blockEndLine = lineNo + StringUtils.countMatches(blockContents, "\\R");

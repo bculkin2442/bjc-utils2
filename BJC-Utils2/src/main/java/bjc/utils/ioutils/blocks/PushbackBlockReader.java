@@ -14,6 +14,9 @@ import java.util.LinkedList;
 public class PushbackBlockReader implements BlockReader {
 	private final BlockReader source;
 
+	/*
+	 * The queue of pushed-back blocks.
+	 */
 	private final Deque<Block> waiting;
 
 	private Block curBlock;
@@ -44,6 +47,9 @@ public class PushbackBlockReader implements BlockReader {
 
 	@Override
 	public boolean nextBlock() {
+		/*
+		 * Drain pushed-back blocks first.
+		 */
 		if (!waiting.isEmpty()) {
 			curBlock = waiting.pop();
 

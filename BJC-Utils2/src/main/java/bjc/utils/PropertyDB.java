@@ -20,6 +20,9 @@ public class PropertyDB {
 
 	private static SimpleProperties formats;
 
+	/*
+	 * Whether or not to log during the loading.
+	 */
 	private static final boolean LOGLOAD = false;
 
 	/*
@@ -38,22 +41,32 @@ public class PropertyDB {
 	 * being loaded will block, to prevent reads from partial states.
 	 */
 	public static void reloadProperties() {
+		/*
+		 * Do the load with the write lock taken.
+		 */
 		loadLock.write(() -> {
 			if (LOGLOAD) {
 				System.out.println("Reading regex properties:");
 			}
+
+			/*
+			 * Load regexes.
+			 */
 			regexes = new SimpleProperties();
 			regexes.loadFrom(PropertyDB.class.getResourceAsStream("/regexes.sprop"), false);
 			if (LOGLOAD) {
 				regexes.outputProperties();
 				System.out.println();
 			}
-
 			compiledRegexes = new HashMap<>();
 
 			if (LOGLOAD) {
 				System.out.println("Reading format properties:");
 			}
+
+			/*
+			 * Load formats.
+			 */
 			formats = new SimpleProperties();
 			formats.loadFrom(PropertyDB.class.getResourceAsStream("/formats.sprop"), false);
 			if (LOGLOAD) {
@@ -100,6 +113,9 @@ public class PropertyDB {
 				throw new NoSuchElementException(msg);
 			}
 
+			/*
+			 * Get the regex, and cache a compiled version.
+			 */
 			return compiledRegexes.computeIfAbsent(key, strang -> {
 				return Pattern.compile(regexes.get(strang));
 			});

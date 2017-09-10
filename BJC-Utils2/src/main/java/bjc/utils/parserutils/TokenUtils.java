@@ -155,13 +155,19 @@ public class TokenUtils {
 	public static String descapeString(final String inp) {
 		if (inp == null) throw new NullPointerException("inp must not be null");
 
+		/*
+		 * Prepare the buffer and escape finder.
+		 */
 		final StringBuffer work = new StringBuffer();
-
 		final Matcher possibleEscapeFinder = possibleEscapePatt.matcher(inp);
 		final Matcher escapeFinder = escapePatt.matcher(inp);
 
 		while (possibleEscapeFinder.find()) {
 			if (!escapeFinder.find()) {
+				/*
+				 * Found a possible escape that isn't actually an
+				 * escape.
+				 */
 				final String msg = String.format("Illegal escape sequence '%s' at position %d",
 						possibleEscapeFinder.group(), possibleEscapeFinder.start());
 
@@ -170,6 +176,9 @@ public class TokenUtils {
 
 			final String escapeSeq = escapeFinder.group();
 
+			/*
+			 * Convert the escape to a string.
+			 */
 			String escapeRep = "";
 			switch (escapeSeq) {
 			case "\\b":
@@ -216,6 +225,9 @@ public class TokenUtils {
 		return work.toString();
 	}
 
+	/*
+	 * Handle a unicode codepoint.
+	 */
 	private static String handleUnicodeEscape(final String seq) {
 		try {
 			final int codepoint = Integer.parseInt(seq, 16);
@@ -232,6 +244,9 @@ public class TokenUtils {
 		}
 	}
 
+	/*
+	 * Handle a octal codepoint.
+	 */
 	private static String handleOctalEscape(final String seq) {
 		try {
 			final int codepoint = Integer.parseInt(seq, 8);

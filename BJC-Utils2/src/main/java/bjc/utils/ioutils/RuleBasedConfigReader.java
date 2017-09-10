@@ -26,21 +26,27 @@ import bjc.utils.funcdata.IMap;
  *
  */
 public class RuleBasedConfigReader<E> {
-	// Function to execute when starting a rule
-	// Takes the tokenizer, and a pair of the read token and application
-	// state
+	/* Function to execute when starting a rule.
+	 * Takes the tokenizer, and a pair of the read token and application state
+	 */
 	private BiConsumer<FunctionalStringTokenizer, IPair<String, E>> start;
 
-	// Function to use when continuing a rule
-	// Takes a tokenizer and application state
+	/*
+	 * Function to use when continuing a rule
+	 * Takes a tokenizer and application state
+	 */
 	private BiConsumer<FunctionalStringTokenizer, E> continueRule;
 
-	// Function to use when ending a rule
-	// Takes an application state
+	/*
+	 * Function to use when ending a rule
+	 * Takes an application state
+	 */
 	private Consumer<E> end;
 
-	// Map of pragma names to pragma actions
-	// Pragma actions are functions taking a tokenizer and application state
+	/*
+	 * Map of pragma names to pragma actions
+	 * Pragma actions are functions taking a tokenizer and application state
+	 */
 	private final IMap<String, BiConsumer<FunctionalStringTokenizer, E>> pragmas;
 
 	/**
@@ -71,8 +77,7 @@ public class RuleBasedConfigReader<E> {
 	 *                The function to execute when this pragma is read
 	 */
 	public void addPragma(final String name, final BiConsumer<FunctionalStringTokenizer, E> action) {
-		if (name == null)
-			throw new NullPointerException("Pragma name must not be null");
+		if (name == null)        throw new NullPointerException("Pragma name must not be null");
 		else if (action == null) throw new NullPointerException("Pragma action must not be null");
 
 		pragmas.put(name, action);
@@ -85,23 +90,35 @@ public class RuleBasedConfigReader<E> {
 		else if (continueRule == null)
 			throw new InputMismatchException("Rule continuation not supported for current grammar");
 
-		// Accept the rule
+		/*
+		 * Accept the rule
+		 */
 		continueRule.accept(new FunctionalStringTokenizer(line.substring(1), " "), state);
 	}
 
 	private boolean endRule(final E state, final boolean isRuleOpen) {
-		// Ignore blank line without an open rule
+		/*
+		 * Ignore blank line without an open rule
+		 */
 		if (isRuleOpen == false)
-			// Do nothing
+			/*
+			 * Do nothing
+			 */
 			return false;
 		else {
-			// Nothing happens on rule end
+			/*
+			 * Nothing happens on rule end
+			 */
 			if (end != null) {
-				// Process the rule ending
+				/*
+				 * Process the rule ending
+				 */
 				end.accept(state);
 			}
 
-			// Return a closed rule
+			/*
+			 * Return a closed rule
+			 */
 			return false;
 		}
 	}
@@ -118,37 +135,56 @@ public class RuleBasedConfigReader<E> {
 	public E fromStream(final InputStream input, final E initialState) {
 		if (input == null) throw new NullPointerException("Input stream must not be null");
 
-		// Application state: We're giving this back later
+		/*
+		 * Application state: We're giving this back later
+		 */
 		final E state = initialState;
 
-		// Prepare our input source
+		/*
+		 * Prepare our input source
+		 */
 		try (Scanner source = new Scanner(input)) {
 			source.useDelimiter("\n");
-			// This is true when a rule's open
+			/*
+			 * This is true when a rule's open
+			 */
 			final IHolder<Boolean> isRuleOpen = new Identity<>(false);
 
-			// Do something for every line of the file
+			/*
+			 * Do something for every line of the file
+			 */
 			source.forEachRemaining((line) -> {
-				// Skip comment lines
+				/*
+				 * Skip comment lines
+				 */
 				if (line.startsWith("#") || line.startsWith("//"))
-					// It's a comment
+					/*
+					 * It's a comment
+					 */
 					return;
 				else if (line.equals("")) {
-					// End the rule
+					/*
+					 * End the rule
+					 */
 					isRuleOpen.replace(endRule(state, isRuleOpen.getValue()));
 				} else if (line.startsWith("\t")) {
-					// Continue the rule
+					/*
+					 * Continue the rule
+					 */
 					continueRule(state, isRuleOpen.getValue(), line);
 				} else {
-					// Open a rule
+					/*
+					 * Open a rule
+					 */
 					isRuleOpen.replace(startRule(state, isRuleOpen.getValue(), line));
 				}
 			});
 		}
 
-		// Return the state that the user has created
+		/*
+		 * Return the state that the user has created
+		 */
 		return state;
-
 	}
 
 	/**
@@ -184,27 +220,41 @@ public class RuleBasedConfigReader<E> {
 	}
 
 	private boolean startRule(final E state, boolean isRuleOpen, final String line) {
-		// Create the line tokenizer
+		/*
+		 * Create the line tokenizer
+		 */
 		final FunctionalStringTokenizer tokenizer = new FunctionalStringTokenizer(line, " ");
 
-		// Get the initial token
+		/*
+		 * Get the initial token
+		 */
 		final String nextToken = tokenizer.nextToken();
 
-		// Handle pragmas
+		/*
+		 * Handle pragmas
+		 */
 		if (nextToken.equals("pragma")) {
-			// Get the pragma name
+			/*
+			 * Get the pragma name
+			 */
 			final String token = tokenizer.nextToken();
 
-			// Handle pragmas
+			/*
+			 * Handle pragmas
+			 */
 			pragmas.getOrDefault(token, (tokenzer, stat) -> {
 				throw new UnknownPragmaException("Unknown pragma " + token);
 			}).accept(tokenizer, state);
 		} else {
-			// Make sure input is correct
+			/*
+			 * Make sure input is correct
+			 */
 			if (isRuleOpen == true)
 				throw new InputMismatchException("Nested rules are currently not supported");
 
-			// Start a rule
+			/*
+			 * Start a rule
+			 */
 			start.accept(tokenizer, new Pair<>(nextToken, state));
 
 			isRuleOpen = true;

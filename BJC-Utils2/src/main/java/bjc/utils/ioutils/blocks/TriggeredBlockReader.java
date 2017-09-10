@@ -11,6 +11,9 @@ import java.io.IOException;
 public class TriggeredBlockReader implements BlockReader {
 	private final BlockReader source;
 
+	/*
+	 * The action to fire.
+	 */
 	private final Runnable action;
 
 	/**

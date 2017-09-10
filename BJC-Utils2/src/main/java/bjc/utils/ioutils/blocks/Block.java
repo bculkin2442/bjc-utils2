@@ -81,7 +81,8 @@ public class Block {
 
 	@Override
 	public String toString() {
-		return String.format("Block #%d (from lines %d to %d), length: %d characters", blockNo, startLine,
-				endLine, contents.length());
+		String fmt = "Block #%d (from lines %d to %d), length: %d characters";
+
+		return String.format(fmt, blockNo, startLine, endLine, contents.length());
 	}
 }

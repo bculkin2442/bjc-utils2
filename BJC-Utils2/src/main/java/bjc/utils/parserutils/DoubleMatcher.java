@@ -36,9 +36,11 @@ class DoubleMatcher {
 	 * Floating point components.
 	 */
 	private static final String	rFPLeader	= getRegex("fpLeader");
-	private static final String	rFPNum		= applyFormat("fpNumber", rSimpleIntDec, rSimpleDec,
-			rHexString);
+	private static final String	rFPNum		= applyFormat("fpNumber", rSimpleIntDec, rSimpleDec, rHexString);
 
+	/*
+	 * Full double.
+	 */
 	private static final String	rDouble		= applyFormat("fpDouble", rFPLeader, rFPNum);
 	public static final Pattern	doubleLiteral	= Pattern.compile("\\A" + rDouble + "\\Z");
 }

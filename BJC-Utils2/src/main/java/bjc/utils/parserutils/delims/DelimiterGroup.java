@@ -34,12 +34,20 @@ public class DelimiterGroup<T> {
 	 *
 	 */
 	public class OpenGroup {
+		/*
+		 * The contents of this group.
+		 */
 		private final Deque<ITree<T>> contents;
 
+		/*
+		 * The contents of the current subgroup.
+		 */
 		private IList<ITree<T>> currentGroup;
 
+		/*
+		 * The token that opened the group, and any opening parameters.
+		 */
 		private final T opener;
-
 		private final T[] params;
 
 		/**
@@ -80,14 +88,23 @@ public class DelimiterGroup<T> {
 		 *                The characteristics for building the tree.
 		 */
 		public void markSubgroup(final T marker, final SequenceCharacteristics<T> chars) {
+			/*
+			 * Add all of the contents to the subgroup.
+			 */
 			final ITree<T> subgroupContents = new Tree<>(chars.contents);
 			for (final ITree<T> itm : currentGroup) {
 				subgroupContents.addChild(itm);
 			}
 
+			/*
+			 * Handle subordinate sub-groups.
+			 */
 			while (!contents.isEmpty()) {
 				final ITree<T> possibleSubordinate = contents.peek();
 
+				/*
+				 * Subordinate lower priority subgroups.
+				 */
 				if (possibleSubordinate.getHead().equals(chars.subgroup)) {
 					final T otherMarker = possibleSubordinate.getChild(1).getHead();
 
@@ -103,7 +120,6 @@ public class DelimiterGroup<T> {
 
 			final Tree<T> subgroup = new Tree<>(chars.subgroup, subgroupContents, new Tree<>(marker));
 
-			//System.out.println("\tTRACE: generated subgroup\n" + subgroup + "\n\n");
 			contents.push(subgroup);
 
 			currentGroup = new FunctionalList<>();
@@ -121,12 +137,19 @@ public class DelimiterGroup<T> {
 		 * @return This group as a tree.
 		 */
 		public ITree<T> toTree(final T closer, final SequenceCharacteristics<T> chars) {
+			/*
+			 * Mark any implied subgroups.
+			 */
 			if (impliedSubgroups.containsKey(closer)) {
 				markSubgroup(impliedSubgroups.get(closer), chars);
 			}
 
 			final ITree<T> res = new Tree<>(chars.contents);
 
+			/*
+			 * Add either the contents of the current group,
+			 * or subgroups if they're their.
+			 */
 			if (contents.isEmpty()) {
 				currentGroup.forEach(res::addChild);
 			} else {
@@ -440,8 +463,7 @@ public class DelimiterGroup<T> {
 	 *                The group opened by the marker.
 	 */
 	public void addOpener(final T opener, final T group) {
-		if (opener == null)
-			throw new NullPointerException("Opener must not be null");
+		if (opener == null)     throw new NullPointerException("Opener must not be null");
 		else if (group == null) throw new NullPointerException("Group to open must not be null");
 
 		openDelimiters.put(opener, group);
@@ -457,8 +479,7 @@ public class DelimiterGroup<T> {
 	 *                The group opened by the marker.
 	 */
 	public void addNestedOpener(final T opener, final T group) {
-		if (opener == null)
-			throw new NullPointerException("Opener must not be null");
+		if (opener == null)     throw new NullPointerException("Opener must not be null");
 		else if (group == null) throw new NullPointerException("Group to open must not be null");
 
 		nestedOpenDelimiters.put(opener, group);
@@ -474,14 +495,10 @@ public class DelimiterGroup<T> {
 	 *                The subgroup to imply.
 	 */
 	public void implySubgroup(final T closer, final T subgroup) {
-		if (closer == null)
-			throw new NullPointerException("Closer must not be null");
-		else if (subgroup == null)
-			throw new NullPointerException("Subgroup must not be null");
-		else if (!closingDelimiters.contains(closer))
-			throw new IllegalArgumentException(String.format("No closing delimiter '%s' defined", closer));
-		else if (!subgroups.containsKey(subgroup))
-			throw new IllegalArgumentException(String.format("No subgroup '%s' defined", subgroup));
+		if      (closer == null)                      throw new NullPointerException("Closer must not be null");
+		else if (subgroup == null)                    throw new NullPointerException("Subgroup must not be null");
+		else if (!closingDelimiters.contains(closer)) throw new IllegalArgumentException(String.format("No closing delimiter '%s' defined", closer));
+		else if (!subgroups.containsKey(subgroup))    throw new IllegalArgumentException(String.format("No subgroup '%s' defined", subgroup));
 
 		impliedSubgroups.put(closer, subgroup);
 	}

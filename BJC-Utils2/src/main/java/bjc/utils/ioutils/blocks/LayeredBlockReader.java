@@ -14,9 +14,15 @@ import java.io.IOException;
  *
  */
 public class LayeredBlockReader implements BlockReader {
-	private final BlockReader	first;
-	private final BlockReader	second;
+	/*
+	 * The readers to drain from.
+	 */
+	private final BlockReader first;
+	private final BlockReader second;
 
+	/*
+	 * The current block number.
+	 */
 	private int blockNo;
 
 	/**
@@ -42,13 +48,16 @@ public class LayeredBlockReader implements BlockReader {
 	public Block getBlock() {
 		final Block firstBlock = first.getBlock();
 
+		/*
+		 * Only drain a block from the second reader if none are
+		 * available in the first reader.
+		 */
 		return firstBlock == null ? second.getBlock() : firstBlock;
 	}
 
 	@Override
 	public boolean nextBlock() {
 		final boolean gotFirst = first.nextBlock();
-
 		final boolean succ = gotFirst ? gotFirst : second.nextBlock();
 
 		if (succ) {

@@ -32,6 +32,9 @@ public class SequenceDelimiter<T> {
 	 */
 	private final Map<T, DelimiterGroup<T>> groups;
 
+	/*
+	 * The initial group to start with.
+	 */
 	private DelimiterGroup<T> initialGroup;
 
 	/**
@@ -49,14 +52,14 @@ public class SequenceDelimiter<T> {
 	 * following grammar while obeying the defined grouping rules.
 	 *
 	 * <pre>
-	 *         <tree>     -> (<data> | <subgroup> | <group>)*
-	 *         <subgroup> -> <tree> <marker>
-	 *         <group>    -> <open> <tree> <close>
+	 *         <tree>     → (<data> | <subgroup> | <group>)*
+	 *         <subgroup> → <tree> <marker>
+	 *         <group>    → <open> <tree> <close>
 	 *
-	 *         <data>     -> STRING
-	 *         <open>     -> STRING
-	 *         <close>    -> STRING
-	 *         <marker>   -> STRING
+	 *         <data>     → STRING
+	 *         <open>     → STRING
+	 *         <close>    → STRING
+	 *         <marker>   → STRING
 	 * </pre>
 	 *
 	 * @param chars
@@ -92,9 +95,8 @@ public class SequenceDelimiter<T> {
 	 */
 	public ITree<T> delimitSequence(final SequenceCharacteristics<T> chars,
 			@SuppressWarnings("unchecked") final T... seq) throws DelimiterException {
-		if (initialGroup == null)
-			throw new NullPointerException("Initial group must be specified.");
-		else if (chars == null) throw new NullPointerException("Sequence characteristics must not be null");
+		if (initialGroup == null) throw new NullPointerException("Initial group must be specified.");
+		else if (chars == null)   throw new NullPointerException("Sequence characteristics must not be null");
 
 		/*
 		 * The stack of opened and not yet closed groups.
@@ -123,9 +125,15 @@ public class SequenceDelimiter<T> {
 		 */
 		final IMap<T, T> whoForbid = new PushdownMap<>();
 
+		/*
+		 * Process each member of the sequence.
+		 */
 		for (int i = 0; i < seq.length; i++) {
 			final T tok = seq[i];
 
+			/*
+			 * Check if this token could open a group.
+			 */
 			final IPair<T, T[]> possibleOpenPar = groupStack.top().doesOpen(tok);
 			T possibleOpen = possibleOpenPar.getLeft();
 
@@ -156,8 +164,6 @@ public class SequenceDelimiter<T> {
 				 * exclusions from all enclosing groups.
 				 */
 				if (isForbidden(groupStack, forbiddenDelimiters, possibleOpen)) {
-					final StringBuilder msgBuilder = new StringBuilder();
-
 					T forbiddenBy;
 
 					if (whoForbid.containsKey(tok)) {
@@ -168,15 +174,9 @@ public class SequenceDelimiter<T> {
 
 					final String ctxList = StringUtils.toEnglishList(groupStack.toArray(), "then");
 
-					msgBuilder.append("Group '");
-					msgBuilder.append(group);
-					msgBuilder.append("' can't be opened in this context.");
-					msgBuilder.append(" (forbidden by '");
-					msgBuilder.append(forbiddenBy);
-					msgBuilder.append("')\nContext stack: ");
-					msgBuilder.append(ctxList);
+					final String fmt = "Group '%s' can't be opened in this context. (forbidden by '%s')\nContext Stack: %s";
 
-					throw new DelimiterException(msgBuilder.toString());
+					throw new DelimiterException(String.format(fmt, group, forbiddenBy, ctxList));
 				}
 
 				/*
@@ -244,8 +244,14 @@ public class SequenceDelimiter<T> {
 					forbiddenDelimiters.drop();
 				}
 			} else if (!groupStack.empty() && groupStack.top().marksSubgroup(tok)) {
+				/*
+				 * Mark a subgroup.
+				 */
 				groupStack.top().markSubgroup(tok, chars);
 			} else {
+				/*
+				 * Add an item to the group.
+				 */
 				groupStack.top().addItem(new Tree<>(tok));
 			}
 		}
@@ -270,16 +276,24 @@ public class SequenceDelimiter<T> {
 			msgBuilder.append(" to close it\nOpen groups: ");
 			msgBuilder.append(ctxList);
 
-			throw new DelimiterException(msgBuilder.toString());
+			final String fmt = "Unclosed group '%s'. Expected one of %s to close it.\nOpen groups: %n";
+
+			throw new DelimiterException(String.format(fmt, group.getName(), closingDelims, ctxList));
 		}
 
 		return groupStack.pop().toTree(chars.root, chars);
 	}
 
+	/*
+	 * Check if a group is forbidden to open in a context.
+	 */
 	private boolean isForbidden(final Stack<DelimiterGroup<T>.OpenGroup> groupStack,
 			final Stack<Multiset<T>> forbiddenDelimiters, final T groupName) {
 		boolean localForbid;
 
+		/*
+		 * Check if a delimiter is locally forbidden.
+		 */
 		if (groupStack.empty()) {
 			localForbid = false;
 		} else {

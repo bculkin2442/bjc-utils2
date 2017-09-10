@@ -28,21 +28,32 @@ public class RuleBasedReaderPragmas {
 	public static <StateType> BiConsumer<FunctionalStringTokenizer, StateType> buildInteger(final String name,
 			final BiConsumer<Integer, StateType> consumer) {
 		return (tokenizer, state) -> {
-			// Check our input is correct
-			if (!tokenizer.hasMoreTokens())
-				throw new PragmaFormatException("Pragma " + name + " requires one integer argument");
+			/*
+			 * Check our input is correct
+			 */
+			if (!tokenizer.hasMoreTokens()) {
+				String fmt = "Pragma %s requires one integer argument";
 
-			// Read the argument
+				throw new PragmaFormatException(String.format(fmt, name));
+			}
+
+			/*
+			 * Read the argument
+			 */
 			final String token = tokenizer.nextToken();
 
 			try {
-				// Run the pragma
+				/*
+				 * Run the pragma
+				 */
 				consumer.accept(Integer.parseInt(token), state);
 			} catch (final NumberFormatException nfex) {
-				// Tell the user their argument isn't correct
-				final PragmaFormatException pfex = new PragmaFormatException(
-						"Argument " + token + " to " + name + " pragma isn't a valid integer. "
-								+ "This pragma requires a integer argument");
+				/*
+				 * Tell the user their argument isn't correct
+				 */
+				String fmt = "Argument %s to %s pragma isn't a valid integer, and this pragma requires an integer argument.";
+
+				final PragmaFormatException pfex = new PragmaFormatException(String.format(fmt, token, name));
 
 				pfex.initCause(nfex);
 
@@ -66,14 +77,23 @@ public class RuleBasedReaderPragmas {
 	public static <StateType> BiConsumer<FunctionalStringTokenizer, StateType> buildStringCollapser(
 			final String name, final BiConsumer<String, StateType> consumer) {
 		return (tokenizer, state) -> {
-			// Check our input
-			if (!tokenizer.hasMoreTokens()) throw new PragmaFormatException(
-					"Pragma " + name + " requires one or more string arguments");
+			/*
+			 * Check our input
+			 */
+			if (!tokenizer.hasMoreTokens()) {
+				String fmt = "Pragma %s requires one or more string arguments.";
 
-			// Build our argument
+				throw new PragmaFormatException(String.format(fmt, name));
+			}
+
+			/*
+			 * Build our argument
+			 */
 			final String collapsed = ListUtils.collapseTokens(tokenizer.toList());
 
-			// Run the pragma
+			/*
+			 * Run the pragma
+			 */
 			consumer.accept(collapsed, state);
 		};
 	}

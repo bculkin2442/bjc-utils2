@@ -95,13 +95,19 @@ public class ListUtils {
 		E element = null;
 
 		for (final int index = 0; itr.hasNext(); element = itr.next()) {
-			// n - m
+			/*
+			 * n - m
+			 */
 			final int winningChance = number - selected.getSize();
 
-			// N - t
+			/*
+			 * N - t
+			 */
 			final int totalChance = total - (index - 1);
 
-			// Probability of selecting the t+1'th element
+			/*
+			 * Probability of selecting the t+1'th element
+			 */
 			if (NumberUtils.isProbable(winningChance, totalChance, rng)) {
 				selected.add(element);
 			}
@@ -185,17 +191,20 @@ public class ListUtils {
 				&& !rejected.isEmpty(); numberOfIterations++) {
 			input.forEach(it);
 
-			if (rejected.isEmpty()) // Nothing was rejected, so
-				// we're
-				// done
+			if (rejected.isEmpty()) {
+				/*
+				 * Nothing was rejected, so we're done
+				 */
 				return returned;
+			}
 		}
 
-		throw new IllegalArgumentException("Heuristic (more than " + MAX_NTRIESPART
-				+ " iterations of partitioning) detected unpartitionable list " + input.toString()
-				+ "\nThe following elements were not partitioned: " + rejected.toString()
-				+ "\nCurrent group in formation: " + it.currentPartition.toString()
-				+ "\nPreviously formed groups: " + returned.toString());
+
+		final String fmt = "Heuristic (more than %d iterations of partitioning) detected an unpartitionable list. (%s)\nThe following elements were not partitioned: %s\nCurrent group in formation: %s\nPreviously formed groups: %s\n";
+
+		final String msg = String.format(fmt, MAX_NTRIESPART, input.toString(), rejected.toString(), it.currentPartition.toString(), returned.toString());
+
+		throw new IllegalArgumentException(msg);
 	}
 
 	/**
@@ -250,7 +259,9 @@ public class ListUtils {
 		}
 
 		if (count % size != 0) {
-			// We need to pad
+			/*
+			 * We need to pad
+			 */
 			int needed = count % size;
 			int threshold = 0;
 
@@ -269,9 +280,13 @@ public class ListUtils {
 				}
 			}
 
-			if (threshold > MAX_NTRIESPART)
-				throw new IllegalArgumentException("Heuristic (more than " + MAX_NTRIESPART
-						+ " iterations of attempting to pad) detected unpaddable list ");
+			if (threshold > MAX_NTRIESPART) {
+				final String fmt = "Heuristic (more than %d iterations of attempting to pad) detected an unpaddable list. (%s)\nPartially padded list: %S";
+
+				final String msg = String.format(fmt, MAX_NTRIESPART, list.toString(), returned.toString());
+
+				throw new IllegalArgumentException(msg);
+			}
 		}
 
 		return returned;

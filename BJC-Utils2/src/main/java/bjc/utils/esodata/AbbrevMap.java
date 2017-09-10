@@ -130,8 +130,8 @@ public class AbbrevMap {
 	/**
 	 * Removes words from the abbreviation map.
 	 *
-	 * NOTE: There may be inconsistent behavior. Use
-	 * {@link AbbrevMap#recalculate()} to fix it if it occurs.
+	 * NOTE: There may be inconsistent behavior after removing a word from
+	 * the map. Use {@link AbbrevMap#recalculate()} to fix it if it occurs.
 	 *
 	 * @param words
 	 *                The words to remove.

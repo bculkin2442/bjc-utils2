@@ -34,6 +34,20 @@ public interface BlockReader extends AutoCloseable, Iterator<Block> {
 	boolean nextBlock();
 
 	/**
+	 * Retrieve the number of blocks that have been read so far.
+	 *
+	 * @return The number of blocks read so far.
+	 */
+	int getBlockCount();
+
+	@Override
+	void close() throws IOException;
+
+	/*
+	 * Methods with default impls.
+	 */
+
+	/**
 	 * Execute an action for each remaining block.
 	 *
 	 * @param action
@@ -44,16 +58,6 @@ public interface BlockReader extends AutoCloseable, Iterator<Block> {
 			action.accept(next());
 		}
 	}
-
-	/**
-	 * Retrieve the number of blocks that have been read so far.
-	 *
-	 * @return The number of blocks read so far.
-	 */
-	int getBlockCount();
-
-	@Override
-	void close() throws IOException;
 
 	@Override
 	default boolean hasNext() {

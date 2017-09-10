@@ -8,7 +8,7 @@ import bjc.utils.data.IPair;
 import bjc.utils.data.Pair;
 
 /**
- * A predicated opener for use with {@link RegexOpener}
+ * A predicated opener for use with {@link RegexCloser}
  *
  * @author bjculkin
  *

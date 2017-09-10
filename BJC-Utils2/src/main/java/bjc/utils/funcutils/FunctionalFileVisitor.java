@@ -7,6 +7,9 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.function.BiPredicate;
 
+/*
+ * Functional implementation of a file visitor.
+ */
 final class FunctionalFileVisitor extends SimpleFileVisitor<Path> {
 	private final BiPredicate<Path, BasicFileAttributes>	predicate;
 	private final BiPredicate<Path, BasicFileAttributes>	action;
