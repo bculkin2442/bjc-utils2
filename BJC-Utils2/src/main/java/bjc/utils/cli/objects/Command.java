@@ -1,6 +1,28 @@
 package bjc.utils.cli.objects;
 
 public class Command {
+	/**
+	 * Command status values.
+	 */
+	public static enum CommandStatus {
+		/**
+		 * The command succeded.
+		 */
+		SUCCESS,
+		/**
+		 * The command failed non-fatally.
+		 */
+		FAIL,
+		/**
+		 * The command failed fatally.
+		 */
+		ERROR,
+		/**
+		 * The command was the last one.
+		 */
+		FINISH,
+	}
+
 	public final int lineNo;
 
 	public final String fullCommand;
