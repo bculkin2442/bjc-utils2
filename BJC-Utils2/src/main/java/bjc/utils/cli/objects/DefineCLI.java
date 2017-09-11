@@ -7,6 +7,9 @@ import java.util.function.UnaryOperator;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
+import static bjc.utils.cli.objects.Command.CommandStatus;
+import static bjc.utils.cli.objects.Command.CommandStatus.*;
+
 public class DefineCLI {
 	private final Logger LOGGER = Logger.getLogger(DefineCLI.class.getName());
 
@@ -34,10 +37,10 @@ public class DefineCLI {
 		}
 	}
 
-	private DefineState state;
+	private DefineState stat;
 
 	public DefineCLI() {
-		state = new DefineState();
+		stat = new DefineState();
 	}
 
 	public static void main(String[] args) {
@@ -75,10 +78,56 @@ public class DefineCLI {
 
 	public void handleCommand(Command com, boolean interactive) {
 		switch(com.nameCommand) {
-		case "":
+		case "def-string":
 		default:
 			LOGGER.severe(com.error("Unknown command %s\n", com.nameCommand));
 			break;
 		}
+	}
+
+	private CommandStatus defString(Command com) {
+		String remn = com.remnCommand;
+
+		int idx = remn.indexOf(' ');
+		if(idx == -1) {
+			LOGGER.warning(com.warn("Binding empty string to name '%s'\n", remn));
+			idx = remn.length();
+		}
+		String name = remn.substring(0, idx);
+		String strang = remn.substring(idx);
+
+		if(stat.strings.containsKey(name)) {
+			LOGGER.warning(com.warn("Shadowing string '%s'\n", name));
+		}
+
+		stat.strings.put(name, strang);
+
+		return SUCCESS;
+	}
+
+	private CommandStatus defFormat(Command com) {
+		String remn = com.remnCommand;
+
+		int idx = remn.indexOf(' ');
+		if(idx == -1) {
+			LOGGER.warning(com.warn("Binding empty format to name '%s'\n", remn));
+			idx = remn.length();
+		}
+		String name = remn.substring(0, idx);
+		String fmt = remn.substring(idx);
+
+		if(stat.formats.containsKey(name)) {
+			LOGGER.warning(com.warn("Shadowing format '%s'\n", name));
+		}
+
+		stat.formats.put(name, fmt);
+
+		return SUCCESS;
+	}
+
+	private CommandStatus bindFormat(Command com) {
+		String[] parts = com.remnCommand.split(" ");
+
+		return SUCCESS;
 	}
 }
