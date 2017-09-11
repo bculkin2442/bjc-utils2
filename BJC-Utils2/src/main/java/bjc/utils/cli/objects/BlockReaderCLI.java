@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.function.Predicate;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -15,6 +16,8 @@ import bjc.utils.ioutils.Prompter;
 import bjc.utils.ioutils.blocks.*;
 
 public class BlockReaderCLI {
+	private final Logger LOGGER = Logger.getLogger(BlockReaderCLI.class.getName());
+
 	public static class BlockReaderState {
 		public final Map<String, BlockReader> readers;
 		public final Map<String, Reader>      sources;
@@ -110,7 +113,7 @@ public class BlockReaderCLI {
 						stat.readers.size(), com.lineNo);
 			break;
 		default:
-			System.err.print(com.error("Unknown command '%s'\n", com.nameCommand));
+			LOGGER.severe(com.error("Unknown command '%s'\n", com.nameCommand));
 			break;
 		}
 	}
@@ -123,7 +126,7 @@ public class BlockReaderCLI {
 		 */
 		int idx = remn.indexOf(' ');
 		if(idx == -1) {
-			System.err.print(com.error("No name argument for def-filtered.\n"));
+			LOGGER.severe(com.error("No name argument for def-filtered.\n"));
 		}
 		String blockName = remn.substring(0, idx).trim();
 		remn             = remn.substring(idx).trim();
@@ -132,7 +135,7 @@ public class BlockReaderCLI {
 		 * Check there isn't a reader already bound to this name.
 		 */
 		if(stat.readers.containsKey(blockName)) {
-			System.err.print(com.warn("Shadowing existing reader named %s\n", blockName));
+			LOGGER.warning(com.warn("Shadowing existing reader named %s\n", blockName));
 		}
 
 		/*
@@ -140,7 +143,7 @@ public class BlockReaderCLI {
 		 */
 		idx = remn.indexOf(' ');
 		if(idx == -1) {
-			System.err.print("No reader-name argument for def-filtered.\n");	
+			LOGGER.severe(com.error("No reader-name argument for def-filtered.\n"));	
 		}
 		String readerName = remn.substring(0, idx).trim();
 		remn              = remn.substring(idx).trim();
@@ -149,7 +152,7 @@ public class BlockReaderCLI {
 		 * Check there is a reader bound to that name.
 		 */
 		if(!stat.readers.containsKey(readerName)) {
-			System.err.print(com.error("No source named %s\n", readerName));
+			LOGGER.severe(com.error("No source named %s\n", readerName));
 			return;
 		}
 
@@ -157,7 +160,7 @@ public class BlockReaderCLI {
 		 * Get the pattern.
 		 */
 		if(remn.equals("")) {
-			System.err.print("No filter argument for def-filtered\n");
+			LOGGER.severe(com.error("No filter argument for def-filtered\n"));
 		}
 
 		String filter = remn;
@@ -175,7 +178,7 @@ public class BlockReaderCLI {
 
 			stat.readers.put(blockName, reader);
 		} catch (PatternSyntaxException psex) {
-			System.err.print(com.error("Invalid regular expression '%s' for filter. (%s)\n", filter, psex.getMessage()));
+			LOGGER.severe(com.error("Invalid regular expression '%s' for filter. (%s)\n", filter, psex.getMessage()));
 		}
 	}
 
@@ -183,18 +186,18 @@ public class BlockReaderCLI {
 		String[] parts = com.remnCommand.split(" ");
 
 		if(parts.length != 2) {
-			System.err.print(com.error("Incorrect number of arguments to def-pushback. Requires a block name and a reader name\n"));
+			LOGGER.severe(com.error("Incorrect number of arguments to def-pushback. Requires a block name and a reader name\n"));
 			return;
 		}
 
 		String blockName = parts[0];
 		if(stat.readers.containsKey(blockName)) {
-			System.err.print(com.warn("Shadowing existing reader %s\n", blockName));
+			LOGGER.warning(com.warn("Shadowing existing reader %s\n", blockName));
 		}
 
 		String readerName = parts[1];
 		if(!stat.readers.containsKey(readerName)) {
-			System.err.print(com.error("No reader named %s\n", readerName));
+			LOGGER.severe(com.error("No reader named %s\n", readerName));
 			return;
 		}
 
@@ -206,7 +209,7 @@ public class BlockReaderCLI {
 		String[] parts = com.remnCommand.split(" ");
 
 		if(parts.length != 3) {
-			System.err.print(com.error("Incorrect number of arguments to def-toggled. Requires a block name and two reader names\n"));
+			LOGGER.severe(com.error("Incorrect number of arguments to def-toggled. Requires a block name and two reader names\n"));
 			return;
 		}
 
@@ -215,19 +218,19 @@ public class BlockReaderCLI {
 		 */
 		String blockName = parts[0];
 		if(stat.readers.containsKey(blockName)) {
-			System.err.print(com.warn("Shadowing existing reader named %s\n", blockName));
+			LOGGER.warning(com.warn("Shadowing existing reader named %s\n", blockName));
 		}
 
 		/*
 		 * Make sure the component readers exist.
 		 */
 		if(!stat.readers.containsKey(parts[1])) {
-			System.err.print(com.error("No reader named %s\n", parts[1]));
+			LOGGER.severe(com.error("No reader named %s\n", parts[1]));
 			return;
 		}
 
 		if(!stat.readers.containsKey(parts[2])) {
-			System.err.print(com.error("No reader named %s\n", parts[2]));
+			LOGGER.severe(com.error("No reader named %s\n", parts[2]));
 			return;
 		}
 
@@ -239,7 +242,7 @@ public class BlockReaderCLI {
 		String[] parts = com.remnCommand.split(" ");
 
 		if(parts.length != 3) {
-			System.err.print(com.error("Incorrect number of arguments to def-layered. Requires a block name and two reader names\n"));
+			LOGGER.severe(com.error("Incorrect number of arguments to def-layered. Requires a block name and two reader names\n"));
 			return;
 		}
 
@@ -248,19 +251,19 @@ public class BlockReaderCLI {
 		 */
 		String blockName = parts[0];
 		if(stat.readers.containsKey(blockName)) {
-			System.err.print(com.warn("Shadowing existing reader named %s\n", blockName));
+			LOGGER.warning(com.warn("Shadowing existing reader named %s\n", blockName));
 		}
 
 		/*
 		 * Make sure the component readers exist.
 		 */
 		if(!stat.readers.containsKey(parts[1])) {
-			System.err.print(com.error("No reader named %s\n", parts[1]));
+			LOGGER.severe(com.error("No reader named %s\n", parts[1]));
 			return;
 		}
 
 		if(!stat.readers.containsKey(parts[2])) {
-			System.err.print(com.error("No reader named %s\n", parts[2]));
+			LOGGER.severe(com.error("No reader named %s\n", parts[2]));
 			return;
 		}
 
@@ -272,7 +275,7 @@ public class BlockReaderCLI {
 		String[] parts = com.remnCommand.split(" ");
 
 		if(parts.length < 2) {
-			System.err.print(com.error("Not enough arguments to def-serial. Requires at least a block name and at least one reader name\n"));
+			LOGGER.severe(com.error("Not enough arguments to def-serial. Requires at least a block name and at least one reader name\n"));
 			return;
 		}
 
@@ -284,7 +287,7 @@ public class BlockReaderCLI {
 		 * Check there isn't a reader already bound to this name.
 		 */
 		if(stat.readers.containsKey(blockName)) {
-			System.err.print(com.warn("Shadowing existing reader named %s\n", blockName));
+			LOGGER.warning(com.warn("Shadowing existing reader named %s\n", blockName));
 		}
 
 		/*
@@ -298,7 +301,7 @@ public class BlockReaderCLI {
 			 * Check there is a reader bound to that name.
 			 */
 			if(!stat.readers.containsKey(readerName)) {
-				System.err.print(com.error("No reader named %s\n", readerName));
+				LOGGER.severe(com.error("No reader named %s\n", readerName));
 				return;
 			}
 
@@ -318,7 +321,7 @@ public class BlockReaderCLI {
 		 */
 		int idx = remn.indexOf(' ');
 		if(idx == -1) {
-			System.err.print(com.error("No name argument for def-simple.\n"));
+			LOGGER.severe(com.error("No name argument for def-simple.\n"));
 		}
 		String blockName = remn.substring(0, idx).trim();
 		remn             = remn.substring(idx).trim();
@@ -327,7 +330,7 @@ public class BlockReaderCLI {
 		 * Check there isn't a reader already bound to this name.
 		 */
 		if(stat.readers.containsKey(blockName)) {
-			System.err.print(com.warn("Shadowing existing reader named %s\n", blockName));
+			LOGGER.warning(com.warn("Shadowing existing reader named %s\n", blockName));
 		}
 
 		/*
@@ -335,7 +338,7 @@ public class BlockReaderCLI {
 		 */
 		idx = remn.indexOf(' ');
 		if(idx == -1) {
-			System.err.print("No source-name argument for def-simple.\n");	
+			LOGGER.severe(com.error("No source-name argument for def-simple.\n"));	
 		}
 		String sourceName = remn.substring(0, idx).trim();
 		remn              = remn.substring(idx).trim();
@@ -344,7 +347,7 @@ public class BlockReaderCLI {
 		 * Check there is a source bound to that name.
 		 */
 		if(!stat.sources.containsKey(sourceName)) {
-			System.err.print(com.error("No source named %s\n", sourceName));
+			LOGGER.severe(com.error("No source named %s\n", sourceName));
 			return;
 		}
 
@@ -352,7 +355,7 @@ public class BlockReaderCLI {
 		 * Get the pattern.
 		 */
 		if(remn.equals("")) {
-			System.err.print("No delimiter argument for def-simple\n");
+			LOGGER.severe(com.error("No delimiter argument for def-simple\n"));
 		}
 
 		String delim = remn;
@@ -362,7 +365,7 @@ public class BlockReaderCLI {
 
 			stat.readers.put(blockName, reader);
 		} catch (PatternSyntaxException psex) {
-			System.err.print(com.error("Invalid regular expression '%s' for delimiter. (%s)\n", delim, psex.getMessage()));
+			LOGGER.severe(com.error("Invalid regular expression '%s' for delimiter. (%s)\n", delim, psex.getMessage()));
 		}
 	}
 }
