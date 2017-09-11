@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import bjc.utils.date.BooleanToggle;
 
-public class ToggledBlockReader {
+public class ToggledBlockReader implements BlockReader {
 	private BlockReader leftSource;
 	private BlockReader rightSource;
 
