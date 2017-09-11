@@ -2,7 +2,7 @@ package bjc.utils.ioutils.blocks;
 
 import java.io.IOException;
 
-import bjc.utils.date.BooleanToggle;
+import bjc.utils.data.BooleanToggle;
 
 public class ToggledBlockReader implements BlockReader {
 	private BlockReader leftSource;
@@ -26,14 +26,14 @@ public class ToggledBlockReader implements BlockReader {
 
 	@Override
 	public boolean hasNextBlock() {
-		if(leftToggle.peek()) return left.hasNextBlock();
-		else                  return right.hasNextBlock();
+		if(leftToggle.peek()) return leftSource.hasNextBlock();
+		else                  return rightSource.hasNextBlock();
 	}
 
 	@Override
 	public Block getBlock() {
-		if(leftToggle.peek()) return left.getBlock();
-		else                  return right.getBlock();
+		if(leftToggle.peek()) return leftSource.getBlock();
+		else                  return rightSource.getBlock();
 	}
 
 	@Override
@@ -53,5 +53,11 @@ public class ToggledBlockReader implements BlockReader {
 	@Override
 	public int getBlockCount() {
 		return blockNo;
+	}
+	
+	@Override
+	public void close() throws IOException {
+		leftSource.close();
+		rightSource.close();
 	}
 }

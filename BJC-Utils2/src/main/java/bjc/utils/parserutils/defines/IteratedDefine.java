@@ -1,5 +1,7 @@
 package bjc.utils.parserutils.defines;
 
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.function.UnaryOperator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

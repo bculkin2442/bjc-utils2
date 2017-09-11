@@ -2,26 +2,34 @@ package bjc.utils.ioutils.blocks;
 
 import java.io.IOException;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 public class BoundBlockReader implements BlockReader {
+	@FunctionalInterface
+	public interface Closer {
+		public void close() throws IOException;
+	}
+
 	private BooleanSupplier checker;
 	private Supplier<Block> getter;
+	private Closer          closer;
 
 	private Block current;
 
 	private int blockNo;
 
-	public BoundBlockReader(BooleanSupplier blockChecker, Supplier<Block> blockGetter) {
+	public BoundBlockReader(BooleanSupplier blockChecker, Supplier<Block> blockGetter, Closer blockCloser) {
 		checker = blockChecker;
 		getter  = blockGetter;
+		closer  = blockCloser;
 
-		blockNo += 1;
+		blockNo = 0;
 	}
 
 	@Override
 	public boolean hasNextBlock() {
-		return blockChecker.getAsBoolean();
+		return checker.getAsBoolean();
 	}
 
 	@Override
@@ -44,5 +52,10 @@ public class BoundBlockReader implements BlockReader {
 	@Override
 	public int getBlockCount() {
 		return blockNo;
+	}
+
+	@Override
+	public void close() throws IOException {
+		closer.close();
 	}
 }
