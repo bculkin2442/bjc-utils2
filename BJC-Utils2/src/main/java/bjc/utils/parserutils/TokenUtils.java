@@ -18,7 +18,6 @@ import bjc.utils.parserutils.splitter.TokenSplitter;
  *
  * @author EVE
  *
- *         TODO add support for user defined escapes.
  */
 public class TokenUtils {
 	/**
