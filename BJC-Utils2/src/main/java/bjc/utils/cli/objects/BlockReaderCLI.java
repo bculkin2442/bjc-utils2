@@ -72,7 +72,7 @@ public class BlockReaderCLI {
 			Command com = Command.fromString(ln, lno, ioSource);
 			if(com == null) continue;
 
-			handleCommand(com, true);
+			handleCommand(com, interactive);
 		}
 
 		input.close();
@@ -101,6 +101,8 @@ public class BlockReaderCLI {
 		case "def-toggled":
 			defToggled(com);
 			break;
+		case "}":
+		case "end":
 		case "exit":
 		case "quit":
 			if(interactive)
