@@ -15,15 +15,17 @@ import bjc.utils.ioutils.Prompter;
 import bjc.utils.ioutils.blocks.*;
 
 public class BlockReaderCLI {
-	/*
-	 * All of the block readers.
-	 */
-	private Map<String, BlockReader> readers;
+	public static class BlockReaderState {
+		public final Map<String, BlockReader> readers;
+		public final Map<String, Reader>      sources;
 
-	/*
-	 * All of the I/O sources.
-	 */
-	private Map<String, Reader> sources;
+		public BlockReaderState(Map<String, BlockReader> readers, Map<String, Reader> sources) {
+			this.readers = readers;
+			this.sources = sources;
+		}
+	}
+
+	private BlockReaderState stat;
 
 	/**
 	 * Create a new CLI for configuring BlockReaders.
@@ -32,9 +34,7 @@ public class BlockReaderCLI {
 	 * 	The container of initial I/O sources.
 	 */
 	public BlockReaderCLI(Map<String, Reader> srcs) {
-		readers = new HashMap();
-
-		sources = srcs;
+		stat = new BlockReaderState(new HashMap<>(), srcs);
 	}
 
 	public static void main(String[] args) {
@@ -107,7 +107,7 @@ public class BlockReaderCLI {
 		case "quit":
 			if(interactive)
 				System.out.printf("Exiting reader-conf, %d readers configured in %d commands\n",
-						readers.size(), com.lineNo);
+						stat.readers.size(), com.lineNo);
 			break;
 		default:
 			System.err.print(com.error("Unknown command '%s'\n", com.nameCommand));
@@ -131,7 +131,7 @@ public class BlockReaderCLI {
 		/*
 		 * Check there isn't a reader already bound to this name.
 		 */
-		if(readers.containsKey(blockName)) {
+		if(stat.readers.containsKey(blockName)) {
 			System.err.print(com.warn("Shadowing existing reader named %s\n", blockName));
 		}
 
@@ -148,7 +148,7 @@ public class BlockReaderCLI {
 		/*
 		 * Check there is a reader bound to that name.
 		 */
-		if(!readers.containsKey(readerName)) {
+		if(!stat.readers.containsKey(readerName)) {
 			System.err.print(com.error("No source named %s\n", readerName));
 			return;
 		}
@@ -171,9 +171,9 @@ public class BlockReaderCLI {
 				return mat.matches();
 			};
 
-			BlockReader reader = new FilteredBlockReader(readers.get(readerName), pred);
+			BlockReader reader = new FilteredBlockReader(stat.readers.get(readerName), pred);
 
-			readers.put(blockName, reader);
+			stat.readers.put(blockName, reader);
 		} catch (PatternSyntaxException psex) {
 			System.err.print(com.error("Invalid regular expression '%s' for filter. (%s)\n", filter, psex.getMessage()));
 		}
@@ -188,18 +188,18 @@ public class BlockReaderCLI {
 		}
 
 		String blockName = parts[0];
-		if(readers.containsKey(blockName)) {
+		if(stat.readers.containsKey(blockName)) {
 			System.err.print(com.warn("Shadowing existing reader %s\n", blockName));
 		}
 
 		String readerName = parts[1];
-		if(!readers.containsKey(readerName)) {
+		if(!stat.readers.containsKey(readerName)) {
 			System.err.print(com.error("No reader named %s\n", readerName));
 			return;
 		}
 
-		BlockReader reader = new PushbackBlockReader(readers.get(readerName));
-		readers.put(blockName, reader);
+		BlockReader reader = new PushbackBlockReader(stat.readers.get(readerName));
+		stat.readers.put(blockName, reader);
 	}
 
 	private void defToggled(Command com) {
@@ -214,25 +214,25 @@ public class BlockReaderCLI {
 		 * Get the block name.
 		 */
 		String blockName = parts[0];
-		if(readers.containsKey(blockName)) {
+		if(stat.readers.containsKey(blockName)) {
 			System.err.print(com.warn("Shadowing existing reader named %s\n", blockName));
 		}
 
 		/*
 		 * Make sure the component readers exist.
 		 */
-		if(!readers.containsKey(parts[1])) {
+		if(!stat.readers.containsKey(parts[1])) {
 			System.err.print(com.error("No reader named %s\n", parts[1]));
 			return;
 		}
 
-		if(!readers.containsKey(parts[2])) {
+		if(!stat.readers.containsKey(parts[2])) {
 			System.err.print(com.error("No reader named %s\n", parts[2]));
 			return;
 		}
 
-		BlockReader reader = new Toggled(readers.get(parts[1]), readers.get(parts[2]));
-		readers.put(blockName, reader);
+		BlockReader reader = new ToggledBlockReader(stat.readers.get(parts[1]), stat.readers.get(parts[2]));
+		stat.readers.put(blockName, reader);
 	}
 
 	private void defLayered(Command com) {
@@ -247,25 +247,25 @@ public class BlockReaderCLI {
 		 * Get the block name.
 		 */
 		String blockName = parts[0];
-		if(readers.containsKey(blockName)) {
+		if(stat.readers.containsKey(blockName)) {
 			System.err.print(com.warn("Shadowing existing reader named %s\n", blockName));
 		}
 
 		/*
 		 * Make sure the component readers exist.
 		 */
-		if(!readers.containsKey(parts[1])) {
+		if(!stat.readers.containsKey(parts[1])) {
 			System.err.print(com.error("No reader named %s\n", parts[1]));
 			return;
 		}
 
-		if(!readers.containsKey(parts[2])) {
+		if(!stat.readers.containsKey(parts[2])) {
 			System.err.print(com.error("No reader named %s\n", parts[2]));
 			return;
 		}
 
-		BlockReader reader = new LayeredBlockReader(readers.get(parts[1]), readers.get(parts[2]));
-		readers.put(blockName, reader);
+		BlockReader reader = new LayeredBlockReader(stat.readers.get(parts[1]), stat.readers.get(parts[2]));
+		stat.readers.put(blockName, reader);
 	}
 
 	private void defSerial(Command com) {
@@ -283,7 +283,7 @@ public class BlockReaderCLI {
 		/*
 		 * Check there isn't a reader already bound to this name.
 		 */
-		if(readers.containsKey(blockName)) {
+		if(stat.readers.containsKey(blockName)) {
 			System.err.print(com.warn("Shadowing existing reader named %s\n", blockName));
 		}
 
@@ -295,19 +295,19 @@ public class BlockReaderCLI {
 			String readerName = parts[i];
 
 			/*
-			 * Check there is a source bound to that name.
+			 * Check there is a reader bound to that name.
 			 */
-			if(!readers.containsKey(readerName)) {
+			if(!stat.readers.containsKey(readerName)) {
 				System.err.print(com.error("No reader named %s\n", readerName));
 				return;
 			}
 
-			readerArr[i] = readers.get(readerName);
+			readerArr[i] = stat.readers.get(readerName);
 		}
 
 		BlockReader reader = new SerialBlockReader(readerArr);
 
-		readers.put(blockName, reader);
+		stat.readers.put(blockName, reader);
 	}
 
 	private void defSimple(Command com) {
@@ -326,7 +326,7 @@ public class BlockReaderCLI {
 		/*
 		 * Check there isn't a reader already bound to this name.
 		 */
-		if(readers.containsKey(blockName)) {
+		if(stat.readers.containsKey(blockName)) {
 			System.err.print(com.warn("Shadowing existing reader named %s\n", blockName));
 		}
 
@@ -343,7 +343,7 @@ public class BlockReaderCLI {
 		/*
 		 * Check there is a source bound to that name.
 		 */
-		if(!sources.containsKey(sourceName)) {
+		if(!stat.sources.containsKey(sourceName)) {
 			System.err.print(com.error("No source named %s\n", sourceName));
 			return;
 		}
@@ -358,9 +358,9 @@ public class BlockReaderCLI {
 		String delim = remn;
 
 		try {
-			BlockReader reader = new SimpleBlockReader(delim, sources.get(sourceName));
+			BlockReader reader = new SimpleBlockReader(delim, stat.sources.get(sourceName));
 
-			readers.put(blockName, reader);
+			stat.readers.put(blockName, reader);
 		} catch (PatternSyntaxException psex) {
 			System.err.print(com.error("Invalid regular expression '%s' for delimiter. (%s)\n", delim, psex.getMessage()));
 		}
