@@ -34,6 +34,22 @@ fpExponent [eE][+-]?
 ## NOTE: The incomplete parts are finished by where it is inserted.
 fpLeader [\x00-\x20]*[+-]?(?:NaN|Infinity|
 
+######################################
+# CL format string regular expressions
+######################################
+
+## Matches a format string prefix parameter
+## A prefix parameter is one of
+## * A signed decimal number
+## * A single character preceded by a single quote
+## * The letter V (or v)
+## * The character #
+clFormatPrefix (?:[-+]?\d+|'\S|[Vv]|#)
+
+## Match a format string modifier
+## A modifier is either : or @, or both in either order
+clFormatModifier (?:@|:|@:|:@)
+
 ##############################################
 # Miscellaneous validation regular expressions
 ##############################################

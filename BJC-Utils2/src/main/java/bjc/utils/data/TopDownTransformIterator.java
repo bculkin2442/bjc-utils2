@@ -13,7 +13,6 @@ import java.util.function.Function;
 /*
  * FIXME something is broken in here. fix it.
  */
-@SuppressWarnings("javadoc")
 public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<ContainedType>> {
 	private final Function<ContainedType, TopDownTransformResult>							picker;
 	private final BiFunction<ITree<ContainedType>, Consumer<Iterator<ITree<ContainedType>>>, ITree<ContainedType>>	transform;

@@ -12,7 +12,6 @@ import bjc.utils.data.LazyPair;
 /*
  * A lazy pair, with only one side bound
  */
-@SuppressWarnings("javadoc")
 public class HalfBoundLazyPair<OldType, NewLeft, NewRight> implements IPair<NewLeft, NewRight> {
 	private final Supplier<OldType> oldSupplier;
 
