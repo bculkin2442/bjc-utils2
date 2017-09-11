@@ -45,4 +45,31 @@ public class FuncUtils {
 			cons.accept(i);
 		}
 	}
+
+	/**
+	 * Return an operator that executes until it converges.
+	 *
+	 * @param op
+	 * 	The operator to execute.
+	 * @param maxTries
+	 * 	The maximum amount of times to apply the function in an
+	 * 	attempt to cause it to converge.
+	 */
+	public static <T> UnaryOperator<T> converge(final UnaryOperator<T> op, final int maxTries) {
+		return (val) -> {
+			T newVal = op.apply(val);
+			T oldVal;
+
+			int tries = 0;
+
+			do {
+				oldVal = newVal;
+				newVal = op.apply(newVal);
+
+				tries += 1;
+			} while(!newVal.equals(oldVal) && tries < maxTries);
+
+			return newVal;
+		};
+	}
 }
