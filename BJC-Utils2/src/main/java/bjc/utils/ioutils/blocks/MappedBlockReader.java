@@ -29,7 +29,7 @@ public class MappedBlockReader implements BlockReader {
 	@Override	
 	public boolean nextBlock() {
 		if(hasNextBlock()) {
-			current = trans.apply(reader.next());
+			current = transform.apply(reader.next());
 
 			return true;
 		}
@@ -40,5 +40,10 @@ public class MappedBlockReader implements BlockReader {
 	@Override
 	public int getBlockCount() {
 		return reader.getBlockCount();
+	}
+
+	@Override
+	public void close() throws IOException {
+		reader.close();
 	}
 }

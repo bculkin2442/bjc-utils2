@@ -46,7 +46,7 @@ public class BlockReaderCLI {
 
 		BlockReaderCLI reader = new BlockReaderCLI(sources);
 
-		reader.run(new Scanner(System.in), "console");
+		reader.run(new Scanner(System.in), "console", true);
 	}
 
 	/**
@@ -56,11 +56,15 @@ public class BlockReaderCLI {
 	 * 	The place to read input from.
 	 * @param ioSource
 	 * 	The name of the place to read input from.
+	 * @param interactive
+	 *	Whether or not the source is interactive
 	 */
-	public void run(Scanner input, String ioSource) {
+	public void run(Scanner input, String ioSource, boolean interactive) {
 		int lno = 0;
 		while(input.hasNextLine()) {
-			System.out.printf("reader-conf(%d)>", lno);
+			if(interactive)
+				System.out.printf("reader-conf(%d)>", lno);
+
 			String ln = input.nextLine();
 
 			lno += 1;
@@ -68,7 +72,7 @@ public class BlockReaderCLI {
 			Command com = Command.fromString(ln, lno, ioSource);
 			if(com == null) continue;
 
-			handleCommand(com);
+			handleCommand(com, true);
 		}
 
 		input.close();
@@ -77,7 +81,7 @@ public class BlockReaderCLI {
 	/*
 	 * Handle a command.
 	 */
-	public void handleCommand(Command com) {
+	public void handleCommand(Command com, boolean interactive) {
 		switch(com.nameCommand) {
 		case "def-filtered":
 			defFiltered(com);
@@ -96,8 +100,9 @@ public class BlockReaderCLI {
 			break;
 		case "exit":
 		case "quit":
-			System.out.printf("Exiting reader-conf, %d readers configured in %d commands\n",
-					readers.size(), com.lineNo);
+			if(interactive)
+				System.out.printf("Exiting reader-conf, %d readers configured in %d commands\n",
+						readers.size(), com.lineNo);
 			break;
 		default:
 			System.err.print(com.error("Unknown command '%s'\n", com.nameCommand));
