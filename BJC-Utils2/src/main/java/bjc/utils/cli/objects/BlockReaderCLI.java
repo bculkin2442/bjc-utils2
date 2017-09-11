@@ -98,6 +98,9 @@ public class BlockReaderCLI {
 		case "def-serial":
 			defSerial(com);
 			break;
+		case "def-toggled":
+			defToggled(com);
+			break;
 		case "exit":
 		case "quit":
 			if(interactive)
@@ -194,6 +197,39 @@ public class BlockReaderCLI {
 		}
 
 		BlockReader reader = new PushbackBlockReader(readers.get(readerName));
+		readers.put(blockName, reader);
+	}
+
+	private void defToggled(Command com) {
+		String[] parts = com.remnCommand.split(" ");
+
+		if(parts.length != 3) {
+			System.err.print(com.error("Incorrect number of arguments to def-toggled. Requires a block name and two reader names\n"));
+			return;
+		}
+
+		/*
+		 * Get the block name.
+		 */
+		String blockName = parts[0];
+		if(readers.containsKey(blockName)) {
+			System.err.print(com.warn("Shadowing existing reader named %s\n", blockName));
+		}
+
+		/*
+		 * Make sure the component readers exist.
+		 */
+		if(!readers.containsKey(parts[1])) {
+			System.err.print(com.error("No reader named %s\n", parts[1]));
+			return;
+		}
+
+		if(!readers.containsKey(parts[2])) {
+			System.err.print(com.error("No reader named %s\n", parts[2]));
+			return;
+		}
+
+		BlockReader reader = new Toggled(readers.get(parts[1]), readers.get(parts[2]));
 		readers.put(blockName, reader);
 	}
 
