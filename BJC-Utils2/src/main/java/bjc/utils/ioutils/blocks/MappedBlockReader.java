@@ -11,9 +11,13 @@ public class MappedBlockReader implements BlockReader {
 
 	private UnaryOperator<Block> transform;
 
+	private int blockNo;
+
 	public MappedBlockReader(BlockReader source, UnaryOperator<Block> trans) {
 		reader    = source;
 		transform = trans;
+
+		blockNo = 0;
 	}
 
 	@Override
@@ -29,7 +33,8 @@ public class MappedBlockReader implements BlockReader {
 	@Override	
 	public boolean nextBlock() {
 		if(hasNextBlock()) {
-			current = transform.apply(reader.next());
+			current  = transform.apply(reader.next());
+			blockNo += 1;
 
 			return true;
 		}
@@ -39,7 +44,7 @@ public class MappedBlockReader implements BlockReader {
 
 	@Override
 	public int getBlockCount() {
-		return reader.getBlockCount();
+		return blockNo;
 	}
 
 	@Override

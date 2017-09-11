@@ -11,6 +11,8 @@ import java.io.IOException;
 public class TriggeredBlockReader implements BlockReader {
 	private final BlockReader source;
 
+	private int blockNo;
+
 	/*
 	 * The action to fire.
 	 */
@@ -26,9 +28,10 @@ public class TriggeredBlockReader implements BlockReader {
 	 *                The action to execute before reading a block.
 	 */
 	public TriggeredBlockReader(final BlockReader source, final Runnable action) {
-		super();
 		this.source = source;
 		this.action = action;
+
+		blockNo = 0;
 	}
 
 	@Override
@@ -45,12 +48,14 @@ public class TriggeredBlockReader implements BlockReader {
 
 	@Override
 	public boolean nextBlock() {
+		blockNo += 1;
+
 		return source.nextBlock();
 	}
 
 	@Override
 	public int getBlockCount() {
-		return source.getBlockCount();
+		return blockNo;
 	}
 
 	@Override

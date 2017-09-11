@@ -22,7 +22,7 @@ public class FilteredBlockReader implements BlockReader {
 	/*
 	 * Number of blocks that passed the predicate.
 	 */
-	private int passed;
+	private int blockNo;
 
 	/*
 	 * The predicate blocks must pass.
@@ -43,7 +43,7 @@ public class FilteredBlockReader implements BlockReader {
 		pred       = predic;
 		failAction = failAct;
 
-		passed = 0;
+		blockNo = 0;
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public class FilteredBlockReader implements BlockReader {
 			pending = source.next();
 
 			if(pred.test(pending)) {
-				passed += 1;
+				blockNo += 1;
 				return true;
 			} else {
 				failAction.accept(pending);
@@ -87,7 +87,7 @@ public class FilteredBlockReader implements BlockReader {
 
 	@Override
 	public int getBlockCount() {
-		return passed;
+		return blockNo;
 	}
 
 	@Override
