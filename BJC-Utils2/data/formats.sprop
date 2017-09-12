@@ -1,5 +1,29 @@
 # File storage for format strings
 
+#################################################
+# Generic format strings for regular expressions.
+#################################################
+
+## Format a regular expression for matching a delimiter separated list.
+## Takes two parameters
+## 1) The expression for each term
+## 2) The expression for the delimiter
+delimSeparatedList (?:%1$s(?:%2$s%1$s)*)
+
+######################################
+# CL format string regular expressions
+######################################
+
+## Format a regular expression for matching a potential CL format directive
+## Has two parts
+## 1) The optional set of prefix parameters
+## 2) The optional modifier
+## Captures three things
+## 1) The prefix parameters
+## 2) The modifiers
+## 3) The directive name
+clFormatDirective ~(?<params>%1$s)?(?<modifiers>%2$s?)(?<name>\S)
+
 ####################################################
 # Format strings for handling double-quoted strings.
 ####################################################
