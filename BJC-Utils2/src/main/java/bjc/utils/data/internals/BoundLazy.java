@@ -12,7 +12,6 @@ import bjc.utils.funcdata.IList;
 /*
  * Implements a lazy holder that has been bound
  */
-@SuppressWarnings("javadoc")
 public class BoundLazy<OldType, BoundContainedType> implements IHolder<BoundContainedType> {
 	/*
 	 * The old value

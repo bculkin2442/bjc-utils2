@@ -10,7 +10,6 @@ import bjc.utils.funcdata.IList;
 /*
  * Holds a list, converted into a holder
  */
-@SuppressWarnings("javadoc")
 public class BoundListHolder<ContainedType> implements IHolder<ContainedType> {
 	private final IList<IHolder<ContainedType>> heldHolders;
 

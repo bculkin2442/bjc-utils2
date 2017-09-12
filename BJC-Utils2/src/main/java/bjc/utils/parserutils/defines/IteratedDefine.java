@@ -21,13 +21,13 @@ public class IteratedDefine implements UnaryOperator<String> {
 	 * @param circular
 	 * 	Whether or not to loop through the list of replacers, or just
 	 * 	repeat the last one.
-	 * @param repls
+	 * @param replacers
 	 * 	The set of replacers to use.
 	 */
 	public IteratedDefine(Pattern pattern, boolean circular, String... replacers) {
 		patt = pattern;
 
-		repls = new CircularIterator(Arrays.asList(replacers), circular);
+		repls = new CircularIterator<>(Arrays.asList(replacers), circular);
 	}
 
 	@Override

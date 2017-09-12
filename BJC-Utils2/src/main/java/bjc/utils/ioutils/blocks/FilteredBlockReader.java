@@ -34,11 +34,11 @@ public class FilteredBlockReader implements BlockReader {
 	 */
 	private Consumer<Block> failAction;
 
-	public FilteredBlockReader(BlockReader src, Predicate predic) {
+	public FilteredBlockReader(BlockReader src, Predicate<Block> predic) {
 		this(src, predic, null);
 	}
 
-	public FilteredBlockReader(BlockReader src, Predicate predic, Consumer<Block> failAct) {
+	public FilteredBlockReader(BlockReader src, Predicate<Block> predic, Consumer<Block> failAct) {
 		source     = src;
 		pred       = predic;
 		failAction = failAct;
