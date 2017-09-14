@@ -78,6 +78,11 @@ public class DoubleTape<T> implements Tape<T> {
 		return front.size();
 	}
 
+	@Override
+	public int position() {
+		return front.position();
+	}
+
 	/**
 	 * Insert an element before the current item.
 	 *

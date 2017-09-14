@@ -26,6 +26,19 @@ public class SingleTape<T> implements Tape<T> {
 	protected boolean autoExtend;
 
 	/**
+	 * Create a new tape with the specified contents that doesn't
+	 * autoextend.
+	 */
+	public SingleTape(T... vals) {
+		autoExtend = false;
+
+		backing = new ArrayList(vals.length);
+
+		for(T val : vals) {
+			backing.add(val);
+		}
+	}
+	/**
 	 * Create a new empty tape that doesn't autoextend.
 	 */
 	public SingleTape() {
@@ -75,6 +88,11 @@ public class SingleTape<T> implements Tape<T> {
 	@Override
 	public int size() {
 		return backing.size();
+	}
+
+	@Override
+	public int position() {
+		return pos;
 	}
 
 	/**

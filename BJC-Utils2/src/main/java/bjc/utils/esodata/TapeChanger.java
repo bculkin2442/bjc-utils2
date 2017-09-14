@@ -83,6 +83,13 @@ public class TapeChanger<T> implements Tape<T> {
 		return currentTape.size();
 	}
 
+	@Override
+	public int position() {
+		if (currentTape == null) return 0;
+
+		return currentTape.position();
+	}
+
 	/**
 	 * Insert an element before the current item.
 	 *

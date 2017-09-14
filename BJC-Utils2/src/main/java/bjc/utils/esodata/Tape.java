@@ -36,6 +36,13 @@ public interface Tape<T> {
 	int size();
 
 	/**
+	 * Get the position of the current item.
+	 *
+	 * @return The position of the current item.
+	 */
+	int position();
+
+	/**
 	 * Insert an element before the current item.
 	 *
 	 * @param itm
