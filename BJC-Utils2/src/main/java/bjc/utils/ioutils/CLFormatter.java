@@ -40,6 +40,11 @@ public class CLFormatter {
 		extraDirectives = new HashMap<>();
 	}
 
+	private void checkItem(Object itm, char directive) {
+		if(itm == null)
+			throw new IllegalArgumentException(String.format("No argument provided for %c directive", directive));
+	}
+
 	public String formatString(String format, Object... params) {
 		StringBuffer sb = new StringBuffer();
 		Matcher dirMatcher = pFormatDirective.matcher(format);
@@ -65,9 +70,43 @@ public class CLFormatter {
 				colonMod = dirMods.contains(":");
 			}
 
+			Object item = tParams.item();
 			switch(dirName) {
+			case "A":
+				checkItem(item, 'A');
+				handleAestheticDirective(sb, item, atMod, colonMod, arrParams);
+				tParams.right();
+				break;
+			case "B":
+				checkItem(item, 'B');
+				handleNumberDirective(sb, atMod, colonMod, arrParams, -1, item, 2);
+				tParams.right();
+				break;
 			case "C":
-				handleCDirective(sb, tParams.item(), atMod, colonMod);
+				checkItem(item, 'C');
+				handleCDirective(sb, item, atMod, colonMod);
+				tParams.right();
+				break;
+			case "D":
+				checkItem(item, 'D');
+				handleNumberDirective(sb, atMod, colonMod, arrParams, -1, item, 10);
+				tParams.right();
+				break;
+			case "O":
+				checkItem(item, 'O');
+				handleNumberDirective(sb, atMod, colonMod, arrParams, -1, item, 8);
+				tParams.right();
+				break;
+			case "R":
+				if(item == null)
+					throw new IllegalArgumentException("No argument provided for C directive");
+
+				handleRadixDirective(sb, atMod, colonMod, arrParams, item);
+				tParams.right();
+				break;
+			case "X":
+				checkItem(item, 'X');
+				handleNumberDirective(sb, atMod, colonMod, arrParams, -1, item, 16);
 				tParams.right();
 				break;
 			case "&":
@@ -82,10 +121,15 @@ public class CLFormatter {
 			case "~":
 				handleLiteralDirective(sb, arrParams, "~", '~');
 				break;
-			case "R":
-				handleRadixDirective(sb, atMod, colonMod, arrParams, tParams.item());
-				tParams.right();
-				break;
+			case "F":
+			case "E":
+			case "G":
+			case "$":
+				/* @TODO implement floating point directives. */
+				throw new IllegalArgumentException("Floating-point directives aren't implemented yet.");
+			case "S":
+			case "W":
+				throw new IllegalArgumentException("S and W aren't implemented. Use A instead");
 			default:
 				String msg = String.format("Unknown format directive '%s'", dirName);
 				throw new UnknownFormatConversionException(msg);
@@ -141,6 +185,41 @@ public class CLFormatter {
 		}
 	}
 
+	private void handleNumberDirective(StringBuffer buff, boolean atMod, boolean colonMod, CLParameters params, int argidx, long val, int radix) {
+		/*
+		 * Initialize the two padding related parameters, and
+		 * then fill them in from the directive parameters if
+		 * they are present.
+		 */
+		int  mincol  = 0;
+		char padchar = ' ';
+		if(params.length() > (argidx + 2)) {
+			mincol = params.getIntDefault(argidx + 1, "minimum column count", 'R', 0);
+		}
+		if(params.length() > (argidx + 3)) {
+			padchar = params.getCharDefault(argidx + 2, "padding character", 'R', ' ');
+		}
+
+		if(colonMod) {
+			/*
+			 * We're doing commas, so check if the two
+			 * comma-related parameters were supplied.
+			 */
+			int  commaInterval = 0;
+			char commaChar     = ',';
+			if(params.length() > (argidx + 3)) {
+				commaChar = params.getCharDefault((argidx + 3), "comma character", 'R', ' ');
+			}
+			if(params.length() > (argidx + 4)) {
+				commaInterval = params.getIntDefault((argidx + 4), "comma interval", 'R', 0);
+			}
+
+			NumberUtils.toCommaString(val, mincol, padchar, commaInterval, commaChar, atMod, radix);
+		} else {
+			NumberUtils.toNormalString(val, mincol, padchar, atMod, radix);
+		}
+	}
+
 	private void handleRadixDirective(StringBuffer buff, boolean atMod, boolean colonMod, CLParameters params, Object arg) {
 		if(!(arg instanceof Number)) {
 			throw new IllegalFormatConversionException('R', arg.getClass());
@@ -165,37 +244,51 @@ public class CLFormatter {
 
 			int radix = params.getInt(0, "radix", 'R');
 
-			/*
-			 * Initialize the two padding related parameters, and
-			 * then fill them in from the directive parameters if
-			 * they are present.
-			 */
-			int  mincol  = 0;
-			char padchar = ' ';
-			if(params.length() > 2) {
-				mincol = params.getIntDefault(1, "minimum column count", 'R', 0);
-			}
-			if(params.length() > 3) {
-				padchar = params.getCharDefault(2, "padding character", 'R', ' ');
+			handleNumberDirective(buff, atMod, colonMod, params, 0, val, radix);
+		}
+	}
+
+	private void handleAestheticDirective(StringBuffer buff, Object item, boolean atMod, boolean colonMod, CLParameters arrParams) {
+		int mincol = 0, colinc = 1, minpad = 0;
+		char padchar = ' ';
+
+		if(params.length() > 1) {
+			mincol = params.getIntDefault(0, "minimum column count", 'A', 0);
+		}
+
+		if(params.length() < 4) {
+			throw new IllegalArgumentException("Must provide either zero, one or four arguments to A directive");
+		}
+
+		colinc  = params.getIntDefault(1, "padding increment", 'A', 1);
+		minpad  = params.getIntDefault(2, "minimum amount of padding", 'A', 0);
+		padchar = params.getCharDefault(3, "padding character", 'A', ' ');
+
+		StringBuilder work = new StringBuilder();
+
+		if(atMod) {
+			for(int i = 0; i < minpad; i++) {
+				work.append(padchar);
 			}
 
-			if(colonMod) {
-				/*
-				 * We're doing commas, so check if the two
-				 * comma-related parameters were supplied.
-				 */
-				int  commaInterval = 0;
-				char commaChar     = ',';
-				if(params.length() > 3) {
-					commaChar = params.getCharDefault(3, "comma character", 'R', ' ');
+			for(int i = work.length(); i < mincol; i++) {
+				for(int k = 0; k < colinc; k++) {
+					work.append(padchar);
 				}
-				if(params.length() > 4) {
-					commaInterval = params.getIntDefault(4, "comma interval", 'R', 0);
-				}
+			}
+		}
 
-				NumberUtils.toCommaString(val, mincol, padchar, commaInterval, commaChar, atMod, radix);
-			} else {
-				NumberUtils.toNormalString(val, mincol, padchar, atMod, radix);
+		work.append(item.toString());
+
+		if(!atMod) {
+			for(int i = 0; i < minpad; i++) {
+				work.append(padchar);
+			}
+
+			for(int i = work.length(); i < mincol; i++) {
+				for(int k = 0; k < colinc; k++) {
+					work.append(padchar);
+				}
 			}
 		}
 	}
