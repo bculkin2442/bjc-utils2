@@ -50,6 +50,11 @@ clFormatPrefix (?:[-+]?\d+|'\S|[Vv]|#)
 ## A modifier is either : or @, or both in either order
 clFormatModifier (?:@|:|@:|:@)
 
+## Matches a directive name.
+## A directive name is either
+## 1) A single, non-whitespace, non-/ character
+## 2) A name enclosed in /'s
+clFormatName (?:(?<name>[\S&&[^/]])|(?:/(?<funcname>[\S&&[^/]]+)/))
 ##############################################
 # Miscellaneous validation regular expressions
 ##############################################
