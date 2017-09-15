@@ -31,7 +31,9 @@ public class CLFormatter {
 
 	private static final String prefixList = applyFormat("delimSeparatedList", prefixParam, ",");
 
-	private static final String  formatDirective  = applyFormat("clFormatDirective", prefixList, formatMod);
+	private static final String directiveName = getRegex("clFormatName");
+	
+	private static final String  formatDirective  = applyFormat("clFormatDirective", prefixList, formatMod, directiveName);
 	private static final Pattern pFormatDirective = Pattern.compile(formatDirective);
 
 	private Map<String, Directive> extraDirectives;
@@ -58,6 +60,7 @@ public class CLFormatter {
 			dirMatcher.appendReplacement(sb, "");
 
 			String dirName   = dirMatcher.group("name");
+			String dirFunc   = dirMatcher.group("funcname");
 			String dirMods   = dirMatcher.group("modifiers");
 			String dirParams = dirMatcher.group("params");
 
@@ -71,6 +74,13 @@ public class CLFormatter {
 			}
 
 			Object item = tParams.item();
+			if(dirName == null && dirFunc != null) {
+				/*
+				 * @TODO implement user-called functions.
+				 */
+				continue;
+			}
+			
 			switch(dirName) {
 			case "A":
 				checkItem(item, 'A');
