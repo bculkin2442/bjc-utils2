@@ -293,6 +293,11 @@ public class TokenUtils {
 	 * @return Whether the string is a valid integer or not.
 	 */
 	public static boolean isInt(final String inp) {
-		return intLitPattern.matcher(inp).matches();
+		try {
+			Integer.parseInt(inp);
+			return true;
+		} catch (NumberFormatException nfex) {
+			return false;
+		}
 	}
 }
