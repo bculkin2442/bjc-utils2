@@ -1,0 +1,4 @@
+@TODO 10/08/17 Ben Culkin :ModuleSplitting
+	Split BJC-Utils into multiple maven modules. That'll cut down on
+	compilation times and also the amount of dependencies pulled in for
+	certain things.
