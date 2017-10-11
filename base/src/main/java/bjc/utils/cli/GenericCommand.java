@@ -4,17 +4,12 @@ package bjc.utils.cli;
  * Generic command implementation.
  *
  * @author ben
- *
  */
 public class GenericCommand implements Command {
-	/*
-	 * The behavior for invoking the command.
-	 */
+	/* The behavior for invoking the command. */
 	private final CommandHandler handler;
 
-	/*
-	 * The help for the command.
-	 */
+	/* The help for the command. */
 	private CommandHelp help;
 
 	/**
@@ -22,9 +17,11 @@ public class GenericCommand implements Command {
 	 *
 	 * @param handler
 	 *                The handler to use for the command.
+	 *
 	 * @param description
 	 *                The description of the command. May be null, in which
 	 *                case a default is provided.
+	 *
 	 * @param help
 	 *                The detailed help message for the command. May be
 	 *                null, in which case the description is repeated for
@@ -69,16 +66,6 @@ public class GenericCommand implements Command {
 	 */
 	@Override
 	public String toString() {
-		final StringBuilder builder = new StringBuilder();
-		builder.append("GenericCommand [");
-
-		if (help != null) {
-			builder.append("help=");
-			builder.append(help);
-		}
-
-		builder.append("]");
-
-		return builder.toString();
+		return String.format("GenericCommand [help=%s]", help);
 	}
 }

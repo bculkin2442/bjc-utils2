@@ -7,6 +7,7 @@ package bjc.utils.data;
  *
  */
 public class BooleanToggle implements Toggle<Boolean> {
+	/* The contained value. */
 	private boolean val;
 
 	/**
@@ -20,7 +21,7 @@ public class BooleanToggle implements Toggle<Boolean> {
 	 * Create a flip-flop with the specified initial value.
 	 *
 	 * @param initial
-	 *                The initial value of the flip-flop.
+	 * 	The initial value of the flip-flop.
 	 */
 	public BooleanToggle(final boolean initial) {
 		val = initial;

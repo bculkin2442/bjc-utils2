@@ -27,17 +27,13 @@ import bjc.utils.data.Pair;
  * @author ben
  *
  * @param <E>
- *                The type in this list
+ * 	The type in this list
  */
 public class FunctionalList<E> implements Cloneable, IList<E> {
-	/*
-	 * The list used as a backing store
-	 */
+	/* The list used as a backing store */
 	private final List<E> wrapped;
 
-	/**
-	 * Create a new empty functional list.
-	 */
+	/** Create a new empty functional list. */
 	public FunctionalList() {
 		wrapped = new ArrayList<>();
 	}
@@ -48,7 +44,7 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 	 * Takes O(n) time, where n is the number of items specified
 	 *
 	 * @param items
-	 *                The items to put into this functional list.
+	 * 	The items to put into this functional list.
 	 */
 	@SafeVarargs
 	public FunctionalList(final E... items) {
@@ -63,7 +59,7 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 	 * Create a new functional list with the specified size.
 	 *
 	 * @param size
-	 *                The size of the backing list .
+	 * 	The size of the backing list .
 	 */
 	private FunctionalList(final int size) {
 		wrapped = new ArrayList<>(size);
@@ -75,7 +71,7 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 	 * Takes O(1) time, since it doesn't copy the list.
 	 *
 	 * @param backing
-	 *                The list to use as a backing list.
+	 * 	The list to use as a backing list.
 	 */
 	public FunctionalList(final List<E> backing) {
 		if (backing == null) throw new NullPointerException("Backing list must be non-null");
@@ -94,11 +90,11 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 
 		for (final E item : wrapped) {
 			if (!predicate.test(item))
-				// We've found a non-matching item
+				/* We've found a non-matching item. */
 				return false;
 		}
 
-		// All of the items matched
+		/* All of the items matched. */
 		return true;
 	}
 
@@ -108,20 +104,21 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 
 		for (final E item : wrapped) {
 			if (predicate.test(item))
-				// We've found a matching item
+				/* We've found a matching item. */
 				return true;
 		}
 
-		// We didn't find a matching item
+		/* We didn't find a matching item. */
 		return false;
 	}
 
 	/**
-	 * Clone this list into a new one, and clone the backing list as well
+	 * Clone this list into a new one, and clone the backing list as well.
 	 *
-	 * Takes O(n) time, where n is the number of elements in the list
+	 * Takes O(n) time, where n is the number of elements in the list.
 	 *
-	 * @return A list
+	 * @return 
+	 * 	A copy of the list.
 	 */
 	@Override
 	public IList<E> clone() {
@@ -136,18 +133,20 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 
 	@Override
 	public <T, F> IList<F> combineWith(final IList<T> rightList, final BiFunction<E, T, F> itemCombiner) {
-		if (rightList == null)
+		if (rightList == null) {
 			throw new NullPointerException("Target combine list must not be null");
-		else if (itemCombiner == null) throw new NullPointerException("Combiner must not be null");
+		} else if (itemCombiner == null) {
+			throw new NullPointerException("Combiner must not be null");
+		}
 
 		final IList<F> returned = new FunctionalList<>();
 
-		// Get the iterator for the other list
+		/* Get the iterator for the other list. */
 		final Iterator<T> rightIterator = rightList.toIterable().iterator();
 
 		for (final Iterator<E> leftIterator = wrapped.iterator(); leftIterator.hasNext()
 				&& rightIterator.hasNext();) {
-			// Add the transformed items to the result list
+			/* Add the transformed items to the result list. */
 			final E leftVal = leftIterator.next();
 			final T rightVal = rightIterator.next();
 
@@ -159,7 +158,7 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 
 	@Override
 	public boolean contains(final E item) {
-		// Check if any items in the list match the provided item
+		/* Check if any items in the list match the provided item. */
 		return this.anyMatch(item::equals);
 	}
 
@@ -182,7 +181,7 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 
 			if (expandedElement == null) throw new NullPointerException("Expander returned null list");
 
-			// Add each element to the returned list
+			/* Add each element to the returned list. */
 			expandedElement.forEach(returned::add);
 		});
 
@@ -200,15 +199,14 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 	public void forEachIndexed(final BiConsumer<Integer, E> indexedAction) {
 		if (indexedAction == null) throw new NullPointerException("Action must not be null");
 
-		// This is held b/c ref'd variables must be final/effectively
-		// final
+		/* This is held b/c ref'd variables must be final/effectively final. */
 		final IHolder<Integer> currentIndex = new Identity<>(0);
 
 		wrapped.forEach((element) -> {
-			// Call the action with the index and the value
+			/* Call the action with the index and the value. */
 			indexedAction.accept(currentIndex.unwrap(index -> index), element);
 
-			// Increment the value
+			/* Increment the value. */
 			currentIndex.transform((index) -> index + 1);
 		});
 	}
@@ -221,7 +219,8 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 	/**
 	 * Get the internal backing list.
 	 *
-	 * @return The backing list this list is based off of.
+	 * @return
+	 * 	The backing list this list is based off of.
 	 */
 	public List<E> getInternal() {
 		return wrapped;
@@ -235,8 +234,7 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 
 		wrapped.forEach((element) -> {
 			if (predicate.test(element)) {
-				// The item matches, so add it to the returned
-				// list
+				/* The item matches, so add it to the returned list. */
 				returned.add(element);
 			}
 		});
@@ -254,9 +252,7 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 		return wrapped.isEmpty();
 	}
 
-	/*
-	 * Check if a partition has room for another item
-	 */
+	/* Check if a partition has room for another item. */
 	private Boolean isPartitionFull(final int numberPerPartition, final IHolder<IList<E>> currentPartition) {
 		return currentPartition.unwrap((partition) -> partition.getSize() >= numberPerPartition);
 	}
@@ -291,18 +287,18 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 
 		final IList<IList<E>> returned = new FunctionalList<>();
 
-		// The current partition being filled
+		/* The current partition being filled. */
 		final IHolder<IList<E>> currentPartition = new Identity<>(new FunctionalList<>());
 
 		this.forEach(element -> {
 			if (isPartitionFull(numberPerPartition, currentPartition)) {
-				// Add the partition to the list
+				/* Add the partition to the list. */
 				returned.add(currentPartition.unwrap(partition -> partition));
 
-				// Start a new partition
+				/* Start a new partition. */
 				currentPartition.transform(partition -> new FunctionalList<>());
 			} else {
-				// Add the element to the current partition
+				/* Add the element to the current partition. */
 				currentPartition.unwrap(partition -> partition.add(element));
 			}
 		});
@@ -327,19 +323,21 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 	@Override
 	public <T, F> F reduceAux(final T initialValue, final BiFunction<E, T, T> stateAccumulator,
 			final Function<T, F> resultTransformer) {
-		if (stateAccumulator == null)
+		if (stateAccumulator == null) {
 			throw new NullPointerException("Accumulator must not be null");
-		else if (resultTransformer == null) throw new NullPointerException("Transformer must not be null");
+		} else if (resultTransformer == null) {
+			throw new NullPointerException("Transformer must not be null");
+		}
 
-		// The current collapsed list
+		/* The current collapsed list. */
 		final IHolder<T> currentState = new Identity<>(initialValue);
 
 		wrapped.forEach(element -> {
-			// Accumulate a new value into the state
+			/* Accumulate a new value into the state. */
 			currentState.transform(state -> stateAccumulator.apply(element, state));
 		});
 
-		// Convert the state to its final value
+		/* Convert the state to its final value. */
 		return currentState.unwrap(resultTransformer);
 	}
 
@@ -362,19 +360,20 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 
 	@Override
 	public E search(final E searchKey, final Comparator<E> comparator) {
-		// Search our internal list
+		/* Search our internal list. */
 		final int foundIndex = Collections.binarySearch(wrapped, searchKey, comparator);
 
-		if (foundIndex >= 0) // We found a matching element
+		if (foundIndex >= 0) {
+			/* We found a matching element. */
 			return wrapped.get(foundIndex);
+		}
 
-		// We didn't find an element
+		/* We didn't find an element. */
 		return null;
 	}
 
 	@Override
 	public void sort(final Comparator<E> comparator) {
-		// sb.deleteCharAt(sb.length() - 2);
 		Collections.sort(wrapped, comparator);
 	}
 

@@ -14,37 +14,28 @@ import bjc.utils.funcdata.IMap;
  * Represents a mapping from a set of strings to a mapping of all unambiguous
  * prefixes of their respective strings.
  *
- * This works the same as Ruby's Abbrev.
+ * This works the same as Ruby's Abbrev module.
  *
  * @author EVE
- *
  */
 public class AbbrevMap {
-	/*
-	 * All of the words we have abbreviations for.
-	 */
+	/* All of the words we have abbreviations for. */
 	private final Set<String> wrds;
 
-	/*
-	 * Maps abbreviations to their strings.
-	 */
+	/* Maps abbreviations to their strings. */
 	private IMap<String, String> abbrevMap;
 
-	/*
-	 * Counts how many times we've seen a substring.
-	 */
+	/* Counts how many times we've seen a substring. */
 	private Set<String> seen;
 
-	/*
-	 * Maps ambiguous abbreviations to the strings they could be.
-	 */
+	/* Maps ambiguous abbreviations to the strings they could be. */
 	private SetMultimap<String, String> ambMap;
 
 	/**
 	 * Create a new abbreviation map.
 	 *
 	 * @param words
-	 *                The initial set of words to put in the map.
+	 * 	The initial set of words to put in the map.
 	 */
 	public AbbrevMap(final String... words) {
 		wrds = new HashSet<>(Arrays.asList(words));
@@ -54,6 +45,9 @@ public class AbbrevMap {
 
 	/**
 	 * Recalculate all the abbreviations in this map.
+	 *
+	 * This may be needed after certain operations to ensure that all of the
+	 * results are correct.
 	 */
 	public void recalculate() {
 		abbrevMap = new FunctionalMap<>();
@@ -63,11 +57,6 @@ public class AbbrevMap {
 		seen = new HashSet<>();
 
 		for (final String word : wrds) {
-			/*
-			 * A word always abbreviates to itself.
-			 */
-			abbrevMap.put(word, word);
-
 			intAddWord(word);
 		}
 	}
@@ -76,33 +65,25 @@ public class AbbrevMap {
 	 * Adds words to the abbreviation map.
 	 *
 	 * @param words
-	 *                The words to add to the abbreviation map.
+	 * 	The words to add to the abbreviation map.
 	 */
 	public void addWords(final String... words) {
 		wrds.addAll(Arrays.asList(words));
 
 		for (final String word : words) {
-			/*
-			 * A word always abbreviates to itself.
-			 */
-			abbrevMap.put(word, word);
-
 			intAddWord(word);
 		}
 	}
 
-	/*
-	 * Actually add abbreviations of a word.
-	 */
+	/* Actually add abbreviations of a word. */
 	private void intAddWord(final String word) {
-		/*
-		 * Skip blank words.
-		 */
+		/* A word always abbreviates to itself. */
+		abbrevMap.put(word, word);
+
+		/* Skip blank words. */
 		if (word.equals("")) return;
 
-		/*
-		 * Handle each possible abbreviation.
-		 */
+		/* Handle each possible abbreviation. */
 		for (int i = word.length(); i > 0; i--) {
 			final String subword = word.substring(0, i);
 
@@ -134,7 +115,7 @@ public class AbbrevMap {
 	 * the map. Use {@link AbbrevMap#recalculate()} to fix it if it occurs.
 	 *
 	 * @param words
-	 *                The words to remove.
+	 * 	The words to remove.
 	 */
 	public void removeWords(final String... words) {
 		wrds.removeAll(Arrays.asList(words));
@@ -144,18 +125,12 @@ public class AbbrevMap {
 		}
 	}
 
-	/*
-	 * Actually remove a word.
-	 */
+	/* Actually remove a word. */
 	private void intRemoveWord(final String word) {
-		/*
-		 * Skip blank words.
-		 */
+		/* Skip blank words. */
 		if (word.equals("")) return;
 
-		/*
-		 * Handle each possible abbreviation.
-		 */
+		/* Handle each possible abbreviation. */
 		for (int i = word.length(); i > 0; i--) {
 			final String subword = word.substring(0, i);
 
@@ -169,6 +144,10 @@ public class AbbrevMap {
 				if (possWords.size() == 0) {
 					seen.remove(subword);
 				} else if (possWords.size() == 1) {
+					/*
+					 * An abbreviation went from ambiguous
+					 * to non-ambiguous.
+					 */
 					final String newWord = possWords.iterator().next();
 
 					abbrevMap.put(subword, newWord);
@@ -183,14 +162,17 @@ public class AbbrevMap {
 	 * into.
 	 *
 	 * @param abbrev
-	 *                The abbreviation to convert.
+	 * 	The abbreviation to convert.
 	 *
-	 * @return All the expansions for the provided abbreviation.
+	 * @return
+	 * 	All the expansions for the provided abbreviation.
 	 */
 	public String[] deabbrev(final String abbrev) {
-		if (abbrevMap.containsKey(abbrev))
+		if (abbrevMap.containsKey(abbrev)) {
 			return new String[] { abbrevMap.get(abbrev) };
-		else return ambMap.get(abbrev).toArray(new String[0]);
+		} else {
+			return ambMap.get(abbrev).toArray(new String[0]);
+		}
 	}
 
 	@Override

@@ -3,23 +3,26 @@ package bjc.utils.esodata;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
-/*
+/**
  * Implements a spaghetti stack, which is a stack that is branched off of a
  * parent stack.
  *
- * @param T The datatype stored in the stack.
+ * @param <T>
+ * 	The datatype stored in the stack.
+ *
  * @author Ben Culkin
  */
 class SpaghettiStack<T> extends Stack<T> {
+	/* Our backing stack. */
 	private final Stack<T> backing;
-
+	/* The stack we branched off of. */
 	private final Stack<T> parent;
 
 	/**
 	 * Create a new empty spaghetti stack, off of the specified parent.
 	 *
 	 * @param par
-	 *                The parent stack
+	 * 	The parent stack
 	 */
 	public SpaghettiStack(final Stack<T> par) {
 		backing = new SimpleStack<>();

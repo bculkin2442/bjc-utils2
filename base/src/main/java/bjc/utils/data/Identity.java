@@ -4,33 +4,27 @@ import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 /**
- * @author ben
- *
- * @param <ContainedType>
- */
-/**
- * Simple implementation of IHolder that has no hidden behavior
+ * Simple implementation of IHolder that has no hidden behavior.
  *
  * @author ben
  *
  * @param <ContainedType>
- *                The type contained in the holder
+ * 	The type contained in the holder.
  */
 public class Identity<ContainedType> implements IHolder<ContainedType> {
+	/* The held value. */
 	private ContainedType heldValue;
 
-	/**
-	 * Create a holder holding null
-	 */
+	/** Create a holder holding null */
 	public Identity() {
 		heldValue = null;
 	}
 
 	/**
-	 * Create a holder holding the specified value
+	 * Create a holder holding the specified value.
 	 *
 	 * @param value
-	 *                The value to hold
+	 * 	The value to hold.
 	 */
 	public Identity(final ContainedType value) {
 		heldValue = value;
@@ -99,9 +93,10 @@ public class Identity<ContainedType> implements IHolder<ContainedType> {
 	 * Create a new identity container.
 	 *
 	 * @param val
-	 *                The contained value.
+	 * 	The contained value.
 	 *
-	 * @return A new identity container.
+	 * @return
+	 * 	A new identity container.
 	 */
 	public static <ContainedType> Identity<ContainedType> id(final ContainedType val) {
 		return new Identity<>(val);
@@ -110,7 +105,8 @@ public class Identity<ContainedType> implements IHolder<ContainedType> {
 	/**
 	 * Create a new empty identity container.
 	 *
-	 * @return A new empty identity container.
+	 * @return
+	 * 	A new empty identity container.
 	 */
 	public static <ContainedType> Identity<ContainedType> id() {
 		return new Identity<>();

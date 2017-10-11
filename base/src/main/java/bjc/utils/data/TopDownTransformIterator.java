@@ -11,7 +11,9 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /*
- * FIXME something is broken in here. fix it.
+ * @TODO 10/11/17 Ben Culkin :TopDownStep
+ * 	Figure out what is broken with this, and fix it so that step-wise
+ * 	iteration works correctly.
  */
 public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<ContainedType>> {
 	private final Function<ContainedType, TopDownTransformResult>							picker;

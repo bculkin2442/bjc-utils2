@@ -8,56 +8,63 @@ import bjc.utils.data.internals.BoundLazyPair;
 import bjc.utils.data.internals.HalfBoundLazyPair;
 
 /**
- * A lazy implementation of a pair
+ * A lazy implementation of a pair.
  *
  * @author ben
  *
  * @param <LeftType>
- *                The type on the left side of the pair
- * @param <RightType>
- *                The type on the right side of the pair
+ * 	The type on the left side of the pair.
  *
+ * @param <RightType>
+ * 	The type on the right side of the pair.
  */
 public class LazyPair<LeftType, RightType> implements IPair<LeftType, RightType> {
-	private LeftType	leftValue;
-	private RightType	rightValue;
-
-	private Supplier<LeftType>	leftSupplier;
-	private Supplier<RightType>	rightSupplier;
-
+	/* The supplier for the left value. */
+	private Supplier<LeftType>  leftSupplier;
+	/* The left value. */
+	private LeftType leftValue;
+	/* Whether the left value has been created. */
 	private boolean	leftMaterialized;
+
+	/* The supplier for the right value. */
+	private Supplier<RightType> rightSupplier;
+	/* The right value. */
+	private RightType rightValue;
+	/* Whether the right value has been created. */
 	private boolean	rightMaterialized;
 
 	/**
-	 * Create a new lazy pair, using the set values
+	 * Create a new lazy pair, using the set values.
 	 *
 	 * @param leftVal
-	 *                The value for the left side of the pair
+	 * 	The value for the left side of the pair.
+	 *
 	 * @param rightVal
-	 *                The value for the right side of the pair
+	 * 	The value for the right side of the pair.
 	 */
 	public LazyPair(final LeftType leftVal, final RightType rightVal) {
-		leftValue = leftVal;
+		leftValue  = leftVal;
 		rightValue = rightVal;
 
-		leftMaterialized = true;
+		leftMaterialized  = true;
 		rightMaterialized = true;
 	}
 
 	/**
-	 * Create a new lazy pair from the given value sources
+	 * Create a new lazy pair from the given value sources.
 	 *
 	 * @param leftSupp
-	 *                The source for a value on the left side of the pair
+	 * 	The source for a value on the left side of the pair.
+	 *
 	 * @param rightSupp
-	 *                The source for a value on the right side of the pair
+	 * 	The source for a value on the right side of the pair.
 	 */
 	public LazyPair(final Supplier<LeftType> leftSupp, final Supplier<RightType> rightSupp) {
-		// Use single suppliers to catch double-instantiation bugs
-		leftSupplier = new SingleSupplier<>(leftSupp);
+		/* Use single suppliers to catch double-instantiation bugs. */
+		leftSupplier  = new SingleSupplier<>(leftSupp);
 		rightSupplier = new SingleSupplier<>(rightSupp);
 
-		leftMaterialized = false;
+		leftMaterialized  = false;
 		rightMaterialized = false;
 	}
 
@@ -98,7 +105,7 @@ public class LazyPair<LeftType, RightType> implements IPair<LeftType, RightType>
 			final BiFunction<RightType, OtherRight, CombinedRight> rightCombiner) {
 		return otherPair.bind((otherLeft, otherRight) -> {
 			return bind((leftVal, rightVal) -> {
-				final CombinedLeft left = leftCombiner.apply(leftVal, otherLeft);
+				final CombinedLeft left   = leftCombiner.apply(leftVal, otherLeft);
 				final CombinedRight right = rightCombiner.apply(rightVal, otherRight);
 
 				return new LazyPair<>(left, right);

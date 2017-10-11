@@ -7,16 +7,15 @@ import java.util.LinkedList;
  * Simple implementation of a stack.
  *
  * @param <T>
- *                The datatype stored in the stack.
+ * 	The datatype stored in the stack.
+ *
  * @author Ben Culkin
  */
 public class SimpleStack<T> extends Stack<T> {
+	/* Our backing stack. */
 	private final Deque<T> backing;
 
-	/**
-	 * Create a new empty stack.
-	 *
-	 */
+	/** Create a new empty stack. */
 	public SimpleStack() {
 		backing = new LinkedList<>();
 	}

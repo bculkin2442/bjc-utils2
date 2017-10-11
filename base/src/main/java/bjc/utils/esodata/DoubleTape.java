@@ -20,16 +20,17 @@ package bjc.utils.esodata;
  * Flip refers to the entire tape for 'obvious' reasons.
  *
  * @param <T>
- *                The element type of the tape.
+ * 	The element type of the tape.
+ *
  * @author bjculkin
  */
 public class DoubleTape<T> implements Tape<T> {
+	/* The front-side of the tape. */
 	private Tape<T>	front;
+	/* The back-side of the tape. */
 	private Tape<T>	back;
 
-	/**
-	 * Create a new empty double-sided tape that doesn't autoextend.
-	 */
+	/** Create a new empty double-sided tape that doesn't autoextend. */
 	public DoubleTape() {
 		this(false);
 	}
@@ -39,40 +40,23 @@ public class DoubleTape<T> implements Tape<T> {
 	 * auto-extension policy.
 	 *
 	 * @param autoExtnd
-	 *                Whether or not to auto-extend the tape to the right w/
-	 *                nulls.
+	 * 	Whether or not to auto-extend the tape to the right w/ nulls.
 	 */
 	public DoubleTape(final boolean autoExtnd) {
 		front = new SingleTape<>(autoExtnd);
 		back = new SingleTape<>(autoExtnd);
 	}
 
-	/**
-	 * Get the item the tape is currently on.
-	 *
-	 * @return The item the tape is on.
-	 */
 	@Override
 	public T item() {
 		return front.item();
 	}
 
-	/**
-	 * Set the item the tape is currently on.
-	 *
-	 * @param itm
-	 *                The new value for the tape item.
-	 */
 	@Override
 	public void item(final T itm) {
 		front.item(itm);
 	}
 
-	/**
-	 * Get the current number of elements in the tape.
-	 *
-	 * @return The current number of elements in the tape.
-	 */
 	@Override
 	public int size() {
 		return front.size();
@@ -83,35 +67,18 @@ public class DoubleTape<T> implements Tape<T> {
 		return front.position();
 	}
 
-	/**
-	 * Insert an element before the current item.
-	 *
-	 * @param itm
-	 *                The item to add.
-	 */
 	@Override
 	public void insertBefore(final T itm) {
 		front.insertBefore(itm);
 		back.insertAfter(null);
 	}
 
-	/**
-	 * Insert an element after the current item.
-	 */
 	@Override
 	public void insertAfter(final T itm) {
 		front.insertAfter(itm);
 		back.insertBefore(itm);
 	}
 
-	/**
-	 * Remove the current element.
-	 *
-	 * Also moves the cursor back one step if possible to maintain relative
-	 * position, and removes the corresponding item from the non-active side
-	 *
-	 * @return The removed item from the active side.
-	 */
 	@Override
 	public T remove() {
 		back.remove();
@@ -119,47 +86,23 @@ public class DoubleTape<T> implements Tape<T> {
 		return front.remove();
 	}
 
-	/**
-	 * Move the cursor to the left-most position.
-	 */
 	@Override
 	public void first() {
 		front.first();
 		back.last();
 	}
 
-	/**
-	 * Move the cursor the right-most position.
-	 */
 	@Override
 	public void last() {
 		front.last();
 		back.first();
 	}
 
-	/**
-	 * Move the cursor one space left.
-	 *
-	 * The cursor can't go past zero.
-	 *
-	 * @return True if the cursor was moved left.
-	 */
 	@Override
 	public boolean left() {
 		return left(1);
 	}
 
-	/**
-	 * Move the cursor the specified amount left.
-	 *
-	 * The cursor can't go past zero. Attempts to move the cursor by amounts
-	 * that would exceed zero don't move the cursor at all.
-	 *
-	 * @param amt
-	 *                The amount to attempt to move the cursor left.
-	 *
-	 * @return True if the cursor was moved left.
-	 */
 	@Override
 	public boolean left(final int amt) {
 		final boolean succ = front.left(amt);
@@ -171,28 +114,11 @@ public class DoubleTape<T> implements Tape<T> {
 		return succ;
 	}
 
-	/**
-	 * Move the cursor one space right.
-	 *
-	 * Moving the cursor right will auto-extend the tape if that is enabled.
-	 *
-	 * @return Whether the cursor was moved right.
-	 */
 	@Override
 	public boolean right() {
 		return right(1);
 	}
 
-	/**
-	 * Move the cursor the specified amount right.
-	 *
-	 * Moving the cursor right will auto-extend the tape if that is enabled.
-	 *
-	 * @param amt
-	 *                The amount to move the cursor right by.
-	 *
-	 * @return Whether the cursor was moved right.
-	 */
 	@Override
 	public boolean right(final int amt) {
 		final boolean succ = front.right(amt);

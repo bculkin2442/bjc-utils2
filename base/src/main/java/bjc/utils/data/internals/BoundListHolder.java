@@ -7,12 +7,21 @@ import bjc.utils.data.IHolder;
 import bjc.utils.data.ListHolder;
 import bjc.utils.funcdata.IList;
 
-/*
- * Holds a list, converted into a holder
+/**
+ * Holds a list, converted into a holder.
+ *
+ * @author Ben Culkin
  */
 public class BoundListHolder<ContainedType> implements IHolder<ContainedType> {
+	/* The list of contained holders. */
 	private final IList<IHolder<ContainedType>> heldHolders;
 
+	/**
+	 * Create a new list of holders.
+	 *
+	 * @param toHold
+	 * 	The list of holders to, well, hold.
+	 */
 	public BoundListHolder(final IList<IHolder<ContainedType>> toHold) {
 		heldHolders = toHold;
 	}
@@ -63,6 +72,10 @@ public class BoundListHolder<ContainedType> implements IHolder<ContainedType> {
 	public <UnwrappedType> UnwrappedType unwrap(final Function<ContainedType, UnwrappedType> unwrapper) {
 		if (unwrapper == null) throw new NullPointerException("Unwrapper must not be null");
 
+		/*
+		 * @NOTE
+		 * 	Is there another way we could want to do this?
+		 */
 		return heldHolders.randItem().unwrap(unwrapper);
 	}
 }

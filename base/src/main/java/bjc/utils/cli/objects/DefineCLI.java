@@ -10,6 +10,16 @@ import java.util.regex.Pattern;
 import static bjc.utils.cli.objects.Command.CommandStatus;
 import static bjc.utils.cli.objects.Command.CommandStatus.*;
 
+/*
+ * @TODO 10/09/17 :DefineCLIFinish
+ * 	This got left off about halfway through due to getting distracted
+ * 	implementing CL-style format strings. It needs to be finished.
+ */
+/**
+ * Command-line interface for building defines.
+ *
+ * @author Ben Culkin
+ */
 public class DefineCLI {
 	private final Logger LOGGER = Logger.getLogger(DefineCLI.class.getName());
 

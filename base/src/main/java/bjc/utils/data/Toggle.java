@@ -6,21 +6,23 @@ package bjc.utils.data;
  * @author EVE
  *
  * @param <E>
- *                The value stored in the toggle.
+ * 	The value stored in the toggle.
  */
 public interface Toggle<E> {
 	/**
 	 * Retrieve the currently-aligned value of this toggle, and swap the
-	 * alignment.
+	 * value to the new one.
 	 *
-	 * @return The previously-aligned value.
+	 * @return
+	 * 	The previously-aligned value.
 	 */
 	E get();
 
 	/**
 	 * Retrieve the currently-aligned value without altering the alignment.
 	 *
-	 * @return The currently-aligned value.
+	 * @return 
+	 * 	The currently-aligned value.
 	 */
 	E peek();
 
@@ -28,8 +30,7 @@ public interface Toggle<E> {
 	 * Change the alignment of the toggle.
 	 *
 	 * @param isLeft
-	 *                Whether the toggle should be left-aligned or not.
+	 * 	Whether the toggle should be left-aligned or not.
 	 */
 	void set(boolean isLeft);
-
 }

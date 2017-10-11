@@ -6,13 +6,30 @@ import java.util.function.UnaryOperator;
 import bjc.utils.data.IHolder;
 import bjc.utils.data.Option;
 
+/**
+ * A wrapped optional value.
+ *
+ * @author Ben Culkin.
+ */
 public class WrappedOption<ContainedType> implements IHolder<ContainedType> {
+	/* The held value. */
 	private final IHolder<IHolder<ContainedType>> held;
 
+	/**
+	 * Create a new wrapped option.
+	 *
+	 * @param seedValue
+	 * 	The value to wrap.
+	 */
 	public WrappedOption(final IHolder<ContainedType> seedValue) {
 		held = new Option<>(seedValue);
 	}
 
+	/*
+	 * The dummy parameter is to ensure the compiler can pick the right
+	 * method, because without this method erases to the same type as the
+	 * public one.
+	 */
 	private WrappedOption(final IHolder<IHolder<ContainedType>> toHold, final boolean dummy) {
 		held = toHold;
 	}

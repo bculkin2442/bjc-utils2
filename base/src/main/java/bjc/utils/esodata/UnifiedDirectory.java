@@ -11,18 +11,18 @@ import bjc.utils.funcdata.IMap;
  * @author EVE
  *
  * @param <K>
- *                The key type of the directory.
+ * 	The key type of the directory.
+ *
  * @param <V>
- *                The value type of the directory.
+ * 	The value type of the directory.
  */
 public class UnifiedDirectory<K, V> implements Directory<K, V> {
+	/* Our directory children. */
 	private final IMap<K, Directory<K, V>> children;
-
+	/* Our data children. */
 	private final IMap<K, V> data;
 
-	/**
-	 * Create a new directory.
-	 */
+	/** Create a new directory. */
 	public UnifiedDirectory() {
 		children = new FunctionalMap<>();
 		data = new FunctionalMap<>();

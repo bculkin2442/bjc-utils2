@@ -14,25 +14,25 @@ import bjc.utils.data.IPair;
  * @author ben
  *
  * @param <KeyType>
- *                The type of the map's keys
+ * 	The type of the map's keys.
+ *
  * @param <ValueType>
- *                The type of the map's values
+ * 	The type of the map's values.
  */
 public class FunctionalMap<KeyType, ValueType> implements IMap<KeyType, ValueType> {
+	/* Our backing store. */
 	private Map<KeyType, ValueType> wrappedMap;
 
-	/**
-	 * Create a new blank functional map
-	 */
+	/** Create a new blank functional map */
 	public FunctionalMap() {
 		wrappedMap = new HashMap<>();
 	}
 
 	/**
-	 * Create a new functional map with the specified entries
+	 * Create a new functional map with the specified entries.
 	 *
 	 * @param entries
-	 *                The entries to put into the map
+	 * 	The entries to put into the map.
 	 */
 	@SafeVarargs
 	public FunctionalMap(final IPair<KeyType, ValueType>... entries) {
@@ -46,10 +46,10 @@ public class FunctionalMap<KeyType, ValueType> implements IMap<KeyType, ValueTyp
 	}
 
 	/**
-	 * Create a new functional map wrapping the specified map
+	 * Create a new functional map wrapping the specified map.
 	 *
 	 * @param wrap
-	 *                The map to wrap
+	 * 	The map to wrap.
 	 */
 	public FunctionalMap(final Map<KeyType, ValueType> wrap) {
 		if (wrap == null) throw new NullPointerException("Map to wrap must not be null");

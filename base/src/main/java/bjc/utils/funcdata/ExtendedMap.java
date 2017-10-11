@@ -6,11 +6,33 @@ import java.util.function.Function;
 
 import bjc.utils.funcutils.ListUtils;
 
+/**
+ * An extended version of a map, that stores values into a map, but can look
+ * into a different one for others.
+ *
+ * @author Ben Culkin
+ *
+ * @param <KeyType>
+ * 	The type of the keys of the map.
+ *
+ * @param <ValueType>
+ * 	The type of the values of the map.
+ */
 class ExtendedMap<KeyType, ValueType> implements IMap<KeyType, ValueType> {
+	/* The map we delegate lookups to. */
 	private final IMap<KeyType, ValueType> delegate;
-
+	/* The map we store things in. */
 	private final IMap<KeyType, ValueType> store;
 
+	/**
+	 * Create a new extended map.
+	 *
+	 * @param delegate
+	 * 	The map to lookup things in.
+	 * 
+	 * @param store
+	 * 	The map to store things in.
+	 */
 	public ExtendedMap(final IMap<KeyType, ValueType> delegate, final IMap<KeyType, ValueType> store) {
 		this.delegate = delegate;
 		this.store = store;

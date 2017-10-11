@@ -8,21 +8,21 @@ import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IList;
 
 /**
- * A holder that represents a set of non-deterministic computations
+ * A holder that represents a set of non-deterministic computations.
  *
  * @author ben
  *
  * @param <ContainedType>
- *                The type of contained value
+ * 	The type of contained value.
  */
 public class ListHolder<ContainedType> implements IHolder<ContainedType> {
 	private IList<ContainedType> heldValues;
 
 	/**
-	 * Create a new list holder
+	 * Create a new list holder.
 	 *
 	 * @param values
-	 *                The possible values for the computation
+	 * 	The possible values for the computation.
 	 */
 	@SafeVarargs
 	public ListHolder(final ContainedType... values) {
@@ -35,6 +35,7 @@ public class ListHolder<ContainedType> implements IHolder<ContainedType> {
 		}
 	}
 
+	/* Create a new holder with values. */
 	private ListHolder(final IList<ContainedType> toHold) {
 		heldValues = toHold;
 	}

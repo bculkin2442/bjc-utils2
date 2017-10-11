@@ -4,12 +4,9 @@ package bjc.utils.cli;
  * A class for a command that delegates to another command.
  *
  * @author ben
- *
  */
 class DelegatingCommand implements Command {
-	/*
-	 * The command to delegate to.
-	 */
+	/* The command to delegate to. */
 	private final Command delegate;
 
 	/**
@@ -49,16 +46,6 @@ class DelegatingCommand implements Command {
 	 */
 	@Override
 	public String toString() {
-		final StringBuilder builder = new StringBuilder();
-		builder.append("DelegatingCommand [");
-
-		if (delegate != null) {
-			builder.append("delegate=");
-			builder.append(delegate);
-		}
-
-		builder.append("]");
-
-		return builder.toString();
+		return String.format("DelegatingCommand [delegate=%s]", delegate);
 	}
 }

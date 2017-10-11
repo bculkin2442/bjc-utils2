@@ -8,103 +8,91 @@ import bjc.utils.funcdata.FunctionalMap;
 import bjc.utils.funcdata.IMap;
 
 /**
- * A general command mode, with a customizable set of commands
+ * A general command mode, with a customizable set of commands.
  *
  * There is a small set of commands which is handled by default. The first is
  * 'list', which lists all the commands the user can input. The second is
- * 'alias', which allows the user to bind a new name to a command
+ * 'alias', which allows the user to bind a new name to a command.
  *
  * @author ben
- *
  */
 public class GenericCommandMode implements CommandMode {
-	/*
-	 * Contains the commands this mode handles
-	 */
-	private final IMap<String, Command>	commandHandlers;
-	private final IMap<String, Command>	defaultHandlers;
+	/* Contains the commands this mode handles. */
+	private final IMap<String, Command> commandHandlers;
+	/* Commands to execute in every mode. */
+	private final IMap<String, Command> defaultHandlers;
 
-	/*
-	 * Contains help topics without an associated command
-	 */
+	/* Contains help topics without an associated command */
 	private final IMap<String, CommandHelp> helpTopics;
 
-	/*
-	 * The action to execute upon encountering an unknown command
-	 */
+	/* The action to execute upon encountering an unknown command */
 	private BiConsumer<String, String[]> unknownCommandHandler;
 
-	/*
-	 * The functions to use for input/output
-	 */
-	private final Consumer<String>	errorOutput;
-	private final Consumer<String>	normalOutput;
+	/* The functions to use for input/output */
+	private final Consumer<String> errorOutput;
+	private final Consumer<String> normalOutput;
 
-	/*
-	 * The name of this command mode, or null if it is unnamed
-	 */
+	/* The name of this command mode, or null if it is unnamed */
 	private String modeName;
 
-	/*
-	 * The custom prompt to use, or null if none is specified
-	 */
+	/* The custom prompt to use, or null if none is specified */
 	private String customPrompt;
 
 	/**
 	 * Create a new generic command mode
 	 *
 	 * @param normalOutput
-	 *                The function to use for normal output
+	 * 	The function to use for normal output.
+	 *
 	 * @param errorOutput
-	 *                The function to use for error output
+	 * 	The function to use for error output.
 	 */
 	public GenericCommandMode(final Consumer<String> normalOutput, final Consumer<String> errorOutput) {
-		if (normalOutput == null)
-			throw new NullPointerException("Normal output source must be non-null");
+		if (normalOutput == null)     throw new NullPointerException("Normal output source must be non-null");
 		else if (errorOutput == null) throw new NullPointerException("Error output source must be non-null");
 
 		this.normalOutput = normalOutput;
-		this.errorOutput = errorOutput;
+		this.errorOutput  = errorOutput;
 
-		/*
-		 * Initialize handler maps so that they sort in alphabetical
-		 */
-		/*
-		 * order
-		 */
+		/* Initialize maps so that they sort in alphabetical order. */
 		commandHandlers = new FunctionalMap<>(new TreeMap<>());
 		defaultHandlers = new FunctionalMap<>(new TreeMap<>());
-		helpTopics = new FunctionalMap<>(new TreeMap<>());
+		helpTopics      = new FunctionalMap<>(new TreeMap<>());
 
+		/* Setup default commands. */
 		setupDefaultCommands();
 	}
 
 	/**
-	 * Add an alias to an existing command
+	 * Add an alias to an existing command.
 	 *
 	 * @param commandName
-	 *                The name of the command to add an alias for
+	 * 	The name of the command to add an alias for.
+	 *
 	 * @param aliasName
-	 *                The new alias for the command
+	 * 	The new alias for the command.
 	 *
 	 * @throws IllegalArgumentException
-	 *                 if the specified command doesn't have a bound
-	 *                 handler, or if the alias name already has a bound
-	 *                 value
+	 * 	If the specified command doesn't have a bound handler, or if the
+	 * 	alias name already has a bound value.
 	 */
 	public void addCommandAlias(final String commandName, final String aliasName) {
-		if (commandName == null)
+		if (commandName == null) {
 			throw new NullPointerException("Command name must not be null");
-		else if (aliasName == null)
-			throw new NullPointerException("Alias name must not be null");
-		else if (!commandHandlers.containsKey(commandName) && !defaultHandlers.containsKey(commandName))
-			throw new IllegalArgumentException("Cannot alias non-existant command '" + commandName + "'");
-		else if (commandHandlers.containsKey(aliasName) || defaultHandlers.containsKey(aliasName))
-			throw new IllegalArgumentException(
-					"Cannot bind alias '" + aliasName + "' to a command with a bound handler");
-		else {
+		} else if (aliasName == null) {
+			String msg = "Alias name must not be null";
+			throw new NullPointerException(msg);
+		} else if (!commandHandlers.containsKey(commandName) && !defaultHandlers.containsKey(commandName)) {
+			String msg = String.format("Cannot alias non-existant command '%s'", commandName);
+			throw new IllegalArgumentException(msg);
+		} else if (commandHandlers.containsKey(aliasName) || defaultHandlers.containsKey(aliasName)) {
+			String msg = String.format("Cannot bind alias '%s' to an already bound command.", aliasName);
+			throw new IllegalArgumentException(msg);
+		} else {
+			/* The command that will be aliased. */
 			Command aliasedCommand;
 
+			/* Get the alias. */
 			if (defaultHandlers.containsKey(commandName)) {
 				aliasedCommand = defaultHandlers.get(commandName).aliased();
 			} else {
@@ -116,45 +104,49 @@ public class GenericCommandMode implements CommandMode {
 	}
 
 	/**
-	 * Add a command to this command mode
+	 * Add a command to this command mode.
 	 *
 	 * @param command
-	 *                The name of the command to add
+	 *                The name of the command to add.
+	 *
 	 * @param handler
-	 *                The handler to use for the specified command
+	 *                The handler to use for the specified command.
 	 *
 	 * @throws IllegalArgumentException
-	 *                 if the specified command already has a handler
-	 *                 registered
+	 * 	If the specified command already has a handler registered.
 	 */
 	public void addCommandHandler(final String command, final Command handler) {
-		if (command == null)
+		if (command == null) {
 			throw new NullPointerException("Command must not be null");
-		else if (handler == null)
+		} else if (handler == null) {
 			throw new NullPointerException("Handler must not be null");
-		else if (canHandle(command))
-			throw new IllegalArgumentException("Command " + command + " already has a handler registered");
-		else {
+		} else if (canHandle(command)) {
+			String msg = String.format("Command '%s' already has a registered handler");
+			throw new IllegalArgumentException(msg);
+		} else {
 			commandHandlers.put(command, handler);
 		}
 	}
 
 	/**
-	 * Add a help topic to this command mode that isn't tied to a command
+	 * Add a help topic to this command mode that isn't tied to a command.
 	 *
 	 * @param topicName
-	 *                The name of the topic
+	 *                The name of the topic.
+	 *
 	 * @param topic
-	 *                The contents of the topic
+	 *                The contents of the topic.
 	 */
 	public void addHelpTopic(final String topicName, final CommandHelp topic) {
 		helpTopics.put(topicName, topic);
 	}
 
+	/* Default command builders */
 	/*
-	 * Default command builders
+	 * @TODO 10/09/17 Ben Culkin :CommandExtraction
+	 * 	These command messages should be extracted into some kind of
+	 * 	file-based abstraction.
 	 */
-
 	private GenericCommand buildAliasCommand() {
 		final String aliasShortHelp = "alias\tAlias one command to another";
 		final String aliasLongHelp = "Gives a command another name it can be invoked by."
@@ -200,14 +192,10 @@ public class GenericCommandMode implements CommandMode {
 
 		return new GenericCommand((args) -> {
 			if (args == null || args.length == 0) {
-				/*
-				 * Invoke general help
-				 */
+				/* Invoke general help */
 				doHelpSummary();
 			} else {
-				/*
-				 * Invoke help for a command
-				 */
+				/* Invoke help for a command */
 				doHelpCommand(args[0]);
 			}
 
@@ -232,22 +220,23 @@ public class GenericCommandMode implements CommandMode {
 		return commandHandlers.containsKey(command) || defaultHandlers.containsKey(command);
 	}
 
-	/*
-	 * Implement default commands
-	 */
-
+	/* Implement default commands */
 	private void doAliasCommands(final String[] args) {
 		if (args.length != 2) {
-			errorOutput.accept("ERROR: Alias requires two arguments."
-					+ " The command name, and the alias for that command");
+			String msg = String.format("ERROR: Alias requires two arguments. The command name, and the alias for that command. ");
+			errorOutput.accept(msg);
 		} else {
 			final String commandName = args[0];
 			final String aliasName = args[1];
 
 			if (!canHandle(commandName)) {
-				errorOutput.accept("ERROR: '" + commandName + "' is not a valid command.");
+				String msg = String.format("ERROR: '%s' is not a valid command.", commandName);
+
+				errorOutput.accept(msg);
 			} else if (canHandle(aliasName)) {
-				errorOutput.accept("ERROR: Cannot overwrite command '" + aliasName + "'");
+				String msg = String.format("ERROR: Cannot overwrite command '%s'", aliasName);
+
+				errorOutput.accept(msg);
 			} else {
 				addCommandAlias(commandName, aliasName);
 			}
@@ -266,8 +255,9 @@ public class GenericCommandMode implements CommandMode {
 		} else if (helpTopics.containsKey(commandName)) {
 			normalOutput.accept("\n" + helpTopics.get(commandName).getDescription());
 		} else {
-			errorOutput.accept(
-					"ERROR: I'm sorry, but there is no help available for '" + commandName + "'");
+			String msg = String.format("ERROR: No help available for '%s'", commandName);
+
+			errorOutput.accept(msg);
 		}
 	}
 
@@ -277,7 +267,10 @@ public class GenericCommandMode implements CommandMode {
 		if (commandHandlers.size() > 0) {
 			commandHandlers.forEachValue(command -> {
 				if (!command.isAlias()) {
-					normalOutput.accept("\t" + command.getHelp().getSummary() + "\n");
+					String comLine = command.getHelp().getSummary();
+					String msg     = String.format("\t%s\n", comLine);
+
+					normalOutput.accept(msg);
 				}
 			});
 		} else {
@@ -286,9 +279,17 @@ public class GenericCommandMode implements CommandMode {
 
 		normalOutput.accept("\nHelp topics available in all command modes are as follows\n");
 		if (defaultHandlers.size() > 0) {
+			/*
+			 * @NOTE
+			 * 	This block here should be abstracted out into a
+			 * 	method.
+			 */
 			defaultHandlers.forEachValue(command -> {
 				if (!command.isAlias()) {
-					normalOutput.accept("\t" + command.getHelp().getSummary() + "\n");
+					String comLine = command.getHelp().getSummary();
+					String msg     = String.format("\t%s\n", comLine);
+
+					normalOutput.accept(msg);
 				}
 			});
 		} else {
@@ -298,7 +299,9 @@ public class GenericCommandMode implements CommandMode {
 		normalOutput.accept("\nHelp topics not associated with a command are as follows\n");
 		if (helpTopics.size() > 0) {
 			helpTopics.forEachValue(topic -> {
-				normalOutput.accept("\t" + topic.getSummary() + "\n");
+				String msg = String.format("\t%s\n", topic.getSummary());
+
+				normalOutput.accept(msg);
 			});
 		} else {
 			normalOutput.accept("\tNone available\n");
@@ -309,12 +312,16 @@ public class GenericCommandMode implements CommandMode {
 		normalOutput.accept("The available commands for this mode are as follows:\n");
 
 		commandHandlers.keyList().forEach(commandName -> {
-			normalOutput.accept("\t" + commandName);
+			String msg = String.format("\t%s", commandName);
+
+			normalOutput.accept(msg);
 		});
 
 		normalOutput.accept("\nThe following commands are available in all modes:\n");
 		defaultHandlers.keyList().forEach(commandName -> {
-			normalOutput.accept("\t" + commandName);
+			String msg = String.format("\t%s", commandName);
+
+			normalOutput.accept(msg);
 		});
 
 		normalOutput.accept("\n");
@@ -349,13 +356,22 @@ public class GenericCommandMode implements CommandMode {
 			return commandHandlers.get(command).getHandler().handle(args);
 		else {
 			if (args != null) {
-				errorOutput.accept("ERROR: Unrecognized command " + command + String.join(" ", args));
+				String argString = String.join(", ", args);
+				String msg       = String.format("ERROR: Unrecognized command %s (arguments %s)",
+						                  command, argString);
+
+				errorOutput.accept(msg);
 			} else {
-				errorOutput.accept("ERROR: Unrecognized command " + command);
+				String msg = String.format("ERROR: Unrecognized command %s", command);
+
+				errorOutput.accept(msg);
 			}
 
-			if (unknownCommandHandler == null)
-				throw new UnsupportedOperationException("Command " + command + " is invalid.");
+			if (unknownCommandHandler == null) {
+				String msg = String.format("Command %s is invalid", command);
+
+				throw new UnsupportedOperationException(msg);
+			}
 
 			unknownCommandHandler.accept(command, args);
 		}
@@ -367,8 +383,8 @@ public class GenericCommandMode implements CommandMode {
 	 * Set the custom prompt for this mode
 	 *
 	 * @param prompt
-	 *                The custom prompt for this mode, or null to disable
-	 *                the custom prompt
+	 * 	The custom prompt for this mode, or null to disable the custom
+	 * 	prompt
 	 */
 	public void setCustomPrompt(final String prompt) {
 		customPrompt = prompt;
@@ -378,8 +394,7 @@ public class GenericCommandMode implements CommandMode {
 	 * Set the name of this mode
 	 *
 	 * @param name
-	 *                The desired name of this mode, or null to use the
-	 *                default name
+	 * 	The desired name of this mode, or null to use the default name
 	 */
 	public void setModeName(final String name) {
 		modeName = name;
@@ -389,8 +404,8 @@ public class GenericCommandMode implements CommandMode {
 	 * Set the handler to use for unknown commands
 	 *
 	 * @param handler
-	 *                The handler to use for unknown commands, or null to
-	 *                throw on unknown commands
+	 * 	The handler to use for unknown commands, or null to throw on
+	 * 	unknown commands
 	 */
 	public void setUnknownCommandHandler(final BiConsumer<String, String[]> handler) {
 		if (handler == null) throw new NullPointerException("Handler must not be null");
@@ -398,25 +413,20 @@ public class GenericCommandMode implements CommandMode {
 		unknownCommandHandler = handler;
 	}
 
+	/* Setup default commands. */
 	private void setupDefaultCommands() {
-		defaultHandlers.put("list", buildListCommand());
+		defaultHandlers.put("list",  buildListCommand());
 		defaultHandlers.put("alias", buildAliasCommand());
-		defaultHandlers.put("help", buildHelpCommand());
+		defaultHandlers.put("help",  buildHelpCommand());
 
+		/* Help unix people :) */
 		addCommandAlias("help", "man");
 
+		/* Add commands handled in a upper layer. */
 		/*
-		 * Add commands handled in a upper layer.
-		 */
-
-		/*
-		 * @TODO figure out a place to put commands that apply across
-		 */
-		/*
-		 * all
-		 */
-		/*
-		 * modes, but only apply to a specific application
+		 * @NOTE
+		 * 	Figure out a place to put commands that apply across all
+		 * 	modes, but only to a specific application.
 		 */
 		defaultHandlers.put("clear", buildClearCommands());
 		defaultHandlers.put("exit", buildExitCommand());
@@ -465,5 +475,4 @@ public class GenericCommandMode implements CommandMode {
 
 		return builder.toString();
 	}
-
 }

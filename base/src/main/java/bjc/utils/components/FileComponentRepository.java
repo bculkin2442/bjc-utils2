@@ -17,85 +17,86 @@ import bjc.utils.funcdata.IMap;
 import bjc.utils.funcutils.FileUtils;
 
 /**
- * A component repository that loads its components from files in a directory
+ * A component repository that loads its components from files in a directory.
  *
  * @author ben
  *
  * @param <ComponentType>
- *                The type of component being read in
+ *                The type of component being read in.
  */
 public class FileComponentRepository<ComponentType extends IDescribedComponent>
 		implements IComponentRepository<ComponentType> {
-	// The logger to use for storing data about this class
+	/* The logger to use for storing data about this class. */
 	private static final Logger CLASS_LOGGER = Logger.getLogger("FileComponentRepository");
 
-	// The internal storage of components
+	/* The internal storage of components. */
 	private IMap<String, ComponentType> components;
 
-	// The path that all the components came from
+	/* The path that all the components came from. */
 	private Path sourceDirectory;
 
 	/**
 	 * Create a new component repository sourcing components from files in a
-	 * directory
+	 * directory.
 	 *
 	 * An exception thrown during the loading of a component will only cause
 	 * the loading of that component to fail, but a warning will be logged.
 	 *
 	 * @param directory
-	 *                The directory to read component files from
+	 * 	The directory to read component files from.
+	 *
 	 * @param componentReader
-	 *                The function to use to convert files to components
+	 * 	The function to use to convert files to components.
 	 */
 	public FileComponentRepository(final File directory,
 			final Function<File, ? extends ComponentType> componentReader) {
-		// Make sure we have valid arguments
-		if (directory == null)
+		/* Make sure we have valid arguments. */
+		if (directory == null) {
 			throw new NullPointerException("Directory must not be null");
-		else if (!directory.isDirectory())
-			throw new IllegalArgumentException("File " + directory + " is not a directory.\n"
-					+ "Components can only be read from a directory");
-		else if (componentReader == null) throw new NullPointerException("Component reader must not be null");
+		} else if (!directory.isDirectory()) {
+			String msg = String.format("File %s is not a directory. Components can only be read from a directory.",
+					directory);
 
-		// Initialize our fields
+			throw new IllegalArgumentException(msg);
+		} else if (componentReader == null) {
+			throw new NullPointerException("Component reader must not be null");
+		}
+
+		/* Initialize our fields. */
 		components = new FunctionalMap<>();
 		sourceDirectory = directory.toPath().toAbsolutePath();
 
-		// Marker for making sure we don't skip the parent
+		/* Marker for making sure we don't skip the parent. */
 		final IHolder<Boolean> isFirstDir = new Identity<>(true);
 
-		// Predicate to use to traverse all the files in a directory,
-		// but
-		// not recurse into sub-directories
+		/*
+		 * Predicate to use to traverse all the files in a directory,
+		 * but not recurse into sub-directories.
+		 */
 		final BiPredicate<Path, BasicFileAttributes> firstLevelTraverser = (pth, attr) -> {
-			if (attr.isDirectory() && !isFirstDir.getValue()) /*
-										 * Skip
-										 * directories,
-										 * they
-										 * probably
-										 * have
-										 * component
-										 * support
-										 * files.
-										 */
+			if (attr.isDirectory() && !isFirstDir.getValue()) {
+				/* 
+				 * Skip directories, they probably have
+				 * component support files.
+				 */
 				return false;
+			}
 
 			/*
 			 * Don't skip the first directory, that's the parent
-			 * directory
+			 * directory.
 			 */
 			isFirstDir.replace(false);
 
 			return true;
 		};
 
-		// Try reading components
+		/* Try reading components. */
 		try {
 			FileUtils.traverseDirectory(sourceDirectory, firstLevelTraverser, (pth, attr) -> {
 				loadComponent(componentReader, pth);
 
-				// Keep loading components, even if this one
-				// failed
+				/* Keep loading components, even if this one failed. */
 				return true;
 			});
 		} catch (final IOException ioex) {
@@ -120,40 +121,48 @@ public class FileComponentRepository<ComponentType extends IDescribedComponent>
 
 	@Override
 	public String getSource() {
-		return "Components read from directory " + sourceDirectory + ".";
+		return String.format("Components read from directory %s.", sourceDirectory);
 	}
 
-	/*
-	 * Load a component from a file
-	 */
+	/* Load a component from a file */
 	private void loadComponent(final Function<File, ? extends ComponentType> componentReader, final Path pth) {
 		try {
-			// Try to load the component
+			/* Try to load the component. */
 			final ComponentType component = componentReader.apply(pth.toFile());
 
-			if (component == null)
+			if (component == null) {
 				throw new NullPointerException("Component reader read null component");
-			else if (!components.containsKey(component.getName())) {
-				// We only care about the latest version of a
-				// component
+			} else if (!components.containsKey(component.getName())) {
+				/*
+				 * We only care about the latest version of a
+				 * component. 
+				 */
 				final ComponentType oldComponent = components.put(component.getName(), component);
 
 				if (oldComponent.getVersion() > component.getVersion()) {
 					components.put(oldComponent.getName(), oldComponent);
 				}
 			} else {
-				CLASS_LOGGER.warning("Found a duplicate component.\n"
-						+ "Multiple versions of the same component are not currently supported.\n"
-						+ "Only the latest version of the component" + component
-						+ " will be registered .");
+				StringBuilder sb = new StringBuilder();
+				sb.append("Found a duplicate component.\n");
+				sb.append("Multiple versions of the same component are not currently supported.\n");
+				sb.append("Only the latest version of the component ");
+				sb.append(component);
+				sb.append(" will be registered.");
+
+				CLASS_LOGGER.warning(sb.toString());
 			}
 		} catch (final Exception ex) {
-			CLASS_LOGGER.log(Level.WARNING, ex, () -> "Error found reading component from file "
-					+ pth.toString() + ". This component will not be loaded");
+			String msg = String.format("Error found reading component from file %s. It will not be loaded.", pth.toString());
+
+			CLASS_LOGGER.log(Level.WARNING, ex, () -> msg);
 		}
 	}
 
 	/*
+	 * @NOTE
+	 * 	Should this be changed to something more readable?
+	 *
 	 * (non-Javadoc)
 	 *
 	 * @see java.lang.Object#toString()

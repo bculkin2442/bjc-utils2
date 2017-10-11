@@ -4,52 +4,64 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
- * Represents a pair where only one side has a value
+ * Represents a pair where only one side has a value.
  *
  * @author ben
+ *
  * @param <LeftType>
- *                The type that could be on the left
+ * 	The type that could be on the left.
+ *
  * @param <RightType>
- *                The type that could be on the right
+ * 	The type that could be on the right.
  *
  */
 public class Either<LeftType, RightType> implements IPair<LeftType, RightType> {
 	/**
-	 * Create a new either with the left value occupied
+	 * Create a new either with the left value occupied.
 	 *
 	 * @param <LeftType>
-	 *                The type of the left value
+	 * 	The type of the left value.
+	 *
 	 * @param <RightType>
-	 *                The type of the empty right value
+	 * 	The type of the empty right value.
+	 *                
 	 * @param left
-	 *                The value to put on the left
-	 * @return An either with the left side occupied
+	 * 	The value to put on the left.
+	 *
+	 * @return 
+	 * 	An either with the left side occupied.
 	 */
 	public static <LeftType, RightType> Either<LeftType, RightType> left(final LeftType left) {
 		return new Either<>(left, null);
 	}
 
 	/**
-	 * Create a new either with the right value occupied
+	 * Create a new either with the right value occupied.
 	 *
 	 * @param <LeftType>
-	 *                The type of the empty left value
+	 * 	The type of the empty left value.
+	 *
 	 * @param <RightType>
-	 *                The type of the right value
+	 * 	The type of the right value.
+	 *
 	 * @param right
-	 *                The value to put on the right
-	 * @return An either with the right side occupied
+	 * 	The value to put on the right.
+	 *
+	 * @return
+	 * 	An either with the right side occupied.
 	 */
 	public static <LeftType, RightType> Either<LeftType, RightType> right(final RightType right) {
 		return new Either<>(null, right);
 	}
 
+	/* The left value of the either. */
 	private LeftType leftVal;
-
+	/* The right value of the either. */
 	private RightType rightVal;
-
+	/* Whether the left value is the one filled out. */
 	private boolean isLeft;
 
+	/* Create a new either with specifed values. */
 	private Either(final LeftType left, final RightType right) {
 		if (left == null) {
 			rightVal = right;
@@ -93,19 +105,27 @@ public class Either<LeftType, RightType> implements IPair<LeftType, RightType> {
 			final IPair<OtherLeft, OtherRight> otherPair,
 			final BiFunction<LeftType, OtherLeft, CombinedLeft> leftCombiner,
 			final BiFunction<RightType, OtherRight, CombinedRight> rightCombiner) {
-		if (otherPair == null)
+		if (otherPair == null) {
 			throw new NullPointerException("Other pair must not be null");
-		else if (leftCombiner == null)
+		} else if (leftCombiner == null) {
 			throw new NullPointerException("Left combiner must not be null");
-		else if (rightCombiner == null) throw new NullPointerException("Right combiner must not be null");
+		} else if (rightCombiner == null) {
+			throw new NullPointerException("Right combiner must not be null");
+		}
 
-		if (isLeft) return otherPair.bind((otherLeft, otherRight) -> {
-			return new Either<>(leftCombiner.apply(leftVal, otherLeft), null);
-		});
+		if (isLeft) {
+			return otherPair.bind((otherLeft, otherRight) -> {
+				CombinedLeft cLeft = leftCombiner.apply(leftVal, otherLeft);
 
-		return otherPair.bind((otherLeft, otherRight) -> {
-			return new Either<>(null, rightCombiner.apply(rightVal, otherRight));
-		});
+				return new Either<>(cLeft, null);
+			});
+		} else {
+			return otherPair.bind((otherLeft, otherRight) -> {
+				CombinedRight cRight = rightCombiner.apply(rightVal, otherRight);
+
+				return new Either<>(null, cRight);
+			});
+		}
 	}
 
 	@Override

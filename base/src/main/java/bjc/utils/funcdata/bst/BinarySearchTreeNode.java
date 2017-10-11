@@ -16,28 +16,26 @@ import java.util.function.Predicate;
  * @author ben
  *
  * @param <T>
- *                The data type stored in the tree.
+ * 	The data type stored in the tree.
  */
 public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
-	/*
-	 * The left child of this node
-	 */
+	/* The left child of this node */
 	private ITreePart<T> left;
 
-	/*
-	 * The right child of this node
-	 */
+	/* The right child of this node */
 	private ITreePart<T> right;
 
 	/**
 	 * Create a new node with the specified data and children.
 	 *
 	 * @param element
-	 *                The data to store in this node.
+	 * 	The data to store in this node.
+	 *
 	 * @param lft
-	 *                The left child of this node.
+	 * 	The left child of this node.
+	 *
 	 * @param rght
-	 *                The right child of this node.
+	 * 	The right child of this node.
 	 */
 	public BinarySearchTreeNode(final T element, final ITreePart<T> lft, final ITreePart<T> rght) {
 		super(element);
@@ -154,7 +152,6 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 		case RIGHT:
 			return right.directedWalk(treeWalker);
 		case FAILURE:
-			return false;
 		default:
 			return false;
 		}
@@ -163,9 +160,11 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 	@Override
 	public boolean forEach(final TreeLinearizationMethod linearizationMethod,
 			final Predicate<T> traversalPredicate) {
-		if (linearizationMethod == null)
+		if (linearizationMethod == null) {
 			throw new NullPointerException("Linearization method must not be null");
-		else if (traversalPredicate == null) throw new NullPointerException("Predicate must not be null");
+		} else if (traversalPredicate == null) {
+			throw new NullPointerException("Predicate must not be null");
+		}
 
 		switch (linearizationMethod) {
 		case PREORDER:
@@ -175,11 +174,13 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 		case POSTORDER:
 			return postorderTraverse(linearizationMethod, traversalPredicate);
 		default:
-			throw new IllegalArgumentException(
-					"Passed an incorrect TreeLinearizationMethod " + linearizationMethod + ". WAT");
+			String msg = String.format("Passed an incorrect TreeLinearizationMethod %s. WAT", linearizationMethod);
+
+			throw new IllegalArgumentException(msg);
 		}
 	}
 
+	/* Do an in-order traversal. */
 	private boolean inorderTraverse(final TreeLinearizationMethod linearizationMethod,
 			final Predicate<T> traversalPredicate) {
 		if (!traverseLeftBranch(linearizationMethod, traversalPredicate)) return false;
@@ -191,6 +192,7 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 		return true;
 	}
 
+	/* Do a post-order traversal. */
 	private boolean postorderTraverse(final TreeLinearizationMethod linearizationMethod,
 			final Predicate<T> traversalPredicate) {
 		if (!traverseLeftBranch(linearizationMethod, traversalPredicate)) return false;
@@ -203,6 +205,7 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 
 	}
 
+	/* Do a pre-order traversal. */
 	private boolean preorderTraverse(final TreeLinearizationMethod linearizationMethod,
 			final Predicate<T> traversalPredicate) {
 		if (!traverseElement(traversalPredicate)) return false;
@@ -214,6 +217,7 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 		return true;
 	}
 
+	/* Traverse an element. */
 	private boolean traverseElement(final Predicate<T> traversalPredicate) {
 		boolean nodeSuccesfullyTraversed;
 
@@ -226,6 +230,7 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 		return nodeSuccesfullyTraversed;
 	}
 
+	/* Traverse the left branch of a tree. */
 	private boolean traverseLeftBranch(final TreeLinearizationMethod linearizationMethod,
 			final Predicate<T> traversalPredicate) {
 		boolean leftSuccesfullyTraversed;
@@ -239,6 +244,7 @@ public class BinarySearchTreeNode<T> extends BinarySearchTreeLeaf<T> {
 		return leftSuccesfullyTraversed;
 	}
 
+	/* Traverse the right branch of a tree. */
 	private boolean traverseRightBranch(final TreeLinearizationMethod linearizationMethod,
 			final Predicate<T> traversalPredicate) {
 		boolean rightSuccesfullyTraversed;

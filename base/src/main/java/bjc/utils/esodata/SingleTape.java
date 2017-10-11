@@ -15,14 +15,21 @@ import java.util.ArrayList;
  * policy.
  *
  * @param <T>
- *                The element type of the tape.
+ * 	The element type of the tape.
  *
  * @author bjculkin
  */
 public class SingleTape<T> implements Tape<T> {
+	/* @NOTE
+	 * 	Does this stuff still need to be protected? We're not trying to
+	 * 	use inheritance to implement tape types any more, so I don't see
+	 * 	any reason to not have it be private.
+	 */
+	/* Our backing store. */
 	protected ArrayList<T>	backing;
+	/* Our position in the list. */
 	protected int		pos;
-
+	/* Whether to auto-extend the list on the left with nulls. */
 	protected boolean autoExtend;
 
 	/**
@@ -38,9 +45,8 @@ public class SingleTape<T> implements Tape<T> {
 			backing.add(val);
 		}
 	}
-	/**
-	 * Create a new empty tape that doesn't autoextend.
-	 */
+
+	/** Create a new empty tape that doesn't autoextend. */
 	public SingleTape() {
 		this(false);
 	}
@@ -50,8 +56,7 @@ public class SingleTape<T> implements Tape<T> {
 	 * policy.
 	 *
 	 * @param autoExtnd
-	 *                Whether or not to auto-extend the tape to the right w/
-	 *                nulls.
+	 * 	Whether or not to auto-extend the tape to the right w/ nulls.
 	 */
 	public SingleTape(final boolean autoExtnd) {
 		autoExtend = autoExtnd;
@@ -59,32 +64,16 @@ public class SingleTape<T> implements Tape<T> {
 		backing = new ArrayList<>();
 	}
 
-	/**
-	 * Get the item the tape is currently on.
-	 *
-	 * @return The item the tape is on.
-	 */
 	@Override
 	public T item() {
 		return backing.get(pos);
 	}
 
-	/**
-	 * Set the item the tape is currently on.
-	 *
-	 * @param itm
-	 *                The new value for the tape item.
-	 */
 	@Override
 	public void item(final T itm) {
 		backing.set(pos, itm);
 	}
 
-	/**
-	 * Get the current number of elements in the tape.
-	 *
-	 * @return The current number of elements in the tape.
-	 */
 	@Override
 	public int size() {
 		return backing.size();
@@ -95,20 +84,11 @@ public class SingleTape<T> implements Tape<T> {
 		return pos;
 	}
 
-	/**
-	 * Insert an element before the current item.
-	 *
-	 * @param itm
-	 *                The item to add.
-	 */
 	@Override
 	public void insertBefore(final T itm) {
 		backing.add(pos, itm);
 	}
 
-	/**
-	 * Insert an element after the current item.
-	 */
 	@Override
 	public void insertAfter(final T itm) {
 		if (pos == backing.size() - 1) {
@@ -118,14 +98,6 @@ public class SingleTape<T> implements Tape<T> {
 		}
 	}
 
-	/**
-	 * Remove the current element.
-	 *
-	 * Also moves the cursor back one step if possible to maintain relative
-	 * position.
-	 *
-	 * @return The removed item.
-	 */
 	@Override
 	public T remove() {
 		final T res = backing.remove(pos);
@@ -135,45 +107,21 @@ public class SingleTape<T> implements Tape<T> {
 		return res;
 	}
 
-	/**
-	 * Move the cursor to the left-most position.
-	 */
 	@Override
 	public void first() {
 		pos = 0;
 	}
 
-	/**
-	 * Move the cursor the right-most position.
-	 */
 	@Override
 	public void last() {
 		pos = backing.size() - 1;
 	}
 
-	/**
-	 * Move the cursor one space left.
-	 *
-	 * The cursor can't go past zero.
-	 *
-	 * @return True if the cursor was moved left.
-	 */
 	@Override
 	public boolean left() {
 		return left(1);
 	}
 
-	/**
-	 * Move the cursor the specified amount left.
-	 *
-	 * The cursor can't go past zero. Attempts to move the cursor by amounts
-	 * that would exceed zero don't move the cursor at all.
-	 *
-	 * @param amt
-	 *                The amount to attempt to move the cursor left.
-	 *
-	 * @return True if the cursor was moved left.
-	 */
 	@Override
 	public boolean left(final int amt) {
 		if (pos - amt < 0) return false;
@@ -182,28 +130,11 @@ public class SingleTape<T> implements Tape<T> {
 		return true;
 	}
 
-	/**
-	 * Move the cursor one space right.
-	 *
-	 * Moving the cursor right will auto-extend the tape if that is enabled.
-	 *
-	 * @return Whether the cursor was moved right.
-	 */
 	@Override
 	public boolean right() {
 		return right(1);
 	}
 
-	/**
-	 * Move the cursor the specified amount right.
-	 *
-	 * Moving the cursor right will auto-extend the tape if that is enabled.
-	 *
-	 * @param amt
-	 *                The amount to move the cursor right by.
-	 *
-	 * @return Whether the cursor was moved right.
-	 */
 	@Override
 	public boolean right(final int amt) {
 		if (pos + amt >= backing.size() - 1) {

@@ -10,28 +10,33 @@ import java.util.function.Supplier;
  * @author ben
  *
  * @param <T>
- *                The supplied type
+ * 	The supplied type
  */
 public class SingleSupplier<T> implements Supplier<T> {
+	/* The next supplier ID. */
 	private static long nextID = 0;
-
+	/* The supplier to yield from. */
 	private final Supplier<T> source;
-
+	/* Whether this value has been retrieved yet. */
 	private boolean gotten;
-
+	/* The ID of this supplier. */
 	private final long id;
 
 	/*
-	 * This is bad practice, but I want to know where the single
-	 * instantiation was, in case of duplicate initiations.
+	 * The place where the supplier was instantiated.
+	 *
+	 * @NOTE
+	 * 	This is both slow to create, and generally bad practice to keep
+	 * 	exceptions around without throwing them. However, it is very
+	 * 	useful to find where the first instantiation was.
 	 */
 	private Exception instSite;
 
 	/**
-	 * Create a new single supplier from an existing value
+	 * Create a new single supplier from an existing value.
 	 *
 	 * @param supp
-	 *                The supplier to give a single value from
+	 * 	The supplier to give a single value from.
 	 */
 	public SingleSupplier(final Supplier<T> supp) {
 		source = supp;

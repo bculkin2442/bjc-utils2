@@ -8,18 +8,14 @@ import java.util.Iterator;
  * @author EVE
  *
  * @param <E>
- *                The type of the iterable.
+ * 	The type of the iterable.
  */
 public class CircularIterator<E> implements Iterator<E> {
-	/*
-	 * The iterable, and our current iterator into it.
-	 */
+	/* The iterable, and our current iterator into it. */
 	private Iterable<E>	source;
 	private Iterator<E>	curr;
 
-	/*
-	 * Our current element.
-	 */
+	/* Our current element. */
 	private E curElm;
 
 	/*
@@ -32,11 +28,11 @@ public class CircularIterator<E> implements Iterator<E> {
 	 * Create a new circular iterator.
 	 *
 	 * @param src
-	 *                The iterable to iterate from.
+	 * 	The iterable to iterate from.
 	 *
 	 * @param circ
-	 *                Should we actually do circular iteration, or just
-	 *                repeat the terminal element?
+	 * 	Should we actually do circular iteration, or just
+	 * 	repeat the terminal element?
 	 */
 	public CircularIterator(final Iterable<E> src, final boolean circ) {
 		source = src;
@@ -49,7 +45,7 @@ public class CircularIterator<E> implements Iterator<E> {
 	 * Create a new circular iterator that does actual circular iteration.
 	 *
 	 * @param src
-	 *                The iterable to iterate from.
+	 * 	The iterable to iterate from.
 	 */
 	public CircularIterator(final Iterable<E> src) {
 		this(src, true);
@@ -57,7 +53,7 @@ public class CircularIterator<E> implements Iterator<E> {
 
 	@Override
 	public boolean hasNext() {
-		// We always have something
+		/* We always have something. */
 		return true;
 	}
 

@@ -1,68 +1,68 @@
 package bjc.utils.components;
 
 /**
- * Internal state of component description parser
+ * Internal state of component description parser.
  *
  * @author ben
- *
  */
 public class ComponentDescriptionState {
-	// Tentative name of this component
+	/* Tentative name of this component. */
 	private String name;
 
-	// Tentative description of this componet
+	/* Tentative description of this component. */
 	private String description;
 
-	// Tentative author of this component
+	/* Tentative author of this component. */
 	private String author;
 
-	// Tentative version of this component
+	/* Tentative version of this component. */
 	private int version;
 
 	/**
-	 * Set the author of this component
+	 * Set the author of this component.
 	 *
 	 * @param author
-	 *                The author of this component
+	 * 	The author of this component.
 	 */
 	public void setAuthor(final String author) {
 		this.author = author;
 	}
 
 	/**
-	 * Set the description of this component
+	 * Set the description of this component.
 	 *
 	 * @param description
-	 *                The description of this component
+	 * 	The description of this component.
 	 */
 	public void setDescription(final String description) {
 		this.description = description;
 	}
 
 	/**
-	 * Set the name of this component
+	 * Set the name of this component.
 	 *
 	 * @param name
-	 *                The name of this component
+	 * 	The name of this component.
 	 */
 	public void setName(final String name) {
 		this.name = name;
 	}
 
 	/**
-	 * Set the version of this component
+	 * Set the version of this component.
 	 *
 	 * @param version
-	 *                The version of this component
+	 * 	The version of this component.
 	 */
 	public void setVersion(final int version) {
 		this.version = version;
 	}
 
 	/**
-	 * Convert this state into the description it represents
+	 * Convert this state into the description it represents.
 	 *
-	 * @return The description represented by this state
+	 * @return
+	 * 	The description represented by this state.
 	 */
 	public ComponentDescription toDescription() {
 		return new ComponentDescription(name, author, description, version);
@@ -71,7 +71,7 @@ public class ComponentDescriptionState {
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = 1;
+		int result      = 1;
 
 		result = prime * result + (author == null ? 0 : author.hashCode());
 		result = prime * result + (description == null ? 0 : description.hashCode());
@@ -140,5 +140,4 @@ public class ComponentDescriptionState {
 
 		return builder.toString();
 	}
-
 }

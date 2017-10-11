@@ -6,7 +6,7 @@ package bjc.utils.funcdata.bst;
  * @author ben
  *
  * @param <T>
- *                The type of element stored in the walked tree
+ * 	The type of element stored in the walked tree
  */
 @FunctionalInterface
 public interface DirectedWalkFunction<T> {
@@ -14,12 +14,9 @@ public interface DirectedWalkFunction<T> {
 	 * Represents the results used to direct a walk in a binary tree.
 	 *
 	 * @author ben
-	 *
 	 */
 	public enum DirectedWalkResult {
-		/**
-		 * Specifies that the function has failed.
-		 */
+		/** Specifies that the function has failed. */
 		FAILURE,
 		/**
 		 * Specifies that the function wants to move left in the tree
@@ -31,10 +28,7 @@ public interface DirectedWalkFunction<T> {
 		 * next.
 		 */
 		RIGHT,
-		/**
-		 * Specifies that the function has succesfully completed
-		 *
-		 */
+		/** Specifies that the function has succesfully completed */
 		SUCCESS
 	}
 
@@ -42,8 +36,10 @@ public interface DirectedWalkFunction<T> {
 	 * Perform a directed walk on a node of a tree.
 	 *
 	 * @param element
-	 *                The data stored in the node currently being visited
-	 * @return The way the function wants the walk to go next.
+	 * 	The data stored in the node currently being visited.
+	 *
+	 * @return
+	 * 	The way the function wants the walk to go next.
 	 */
 	public DirectedWalkResult walk(T element);
 }

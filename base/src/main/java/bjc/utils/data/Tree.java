@@ -16,22 +16,35 @@ import bjc.utils.functypes.ListFlattener;
  * @author ben
  *
  * @param <ContainedType>
+ * 	The type contained in the tree.
  */
 public class Tree<ContainedType> implements ITree<ContainedType> {
+	/* The data/label for this node. */
 	private ContainedType data;
 
-	private IList<ITree<ContainedType>>	children;
-	private boolean				hasChildren;
-	private int				childCount	= 0;
+	/* The children of this node. */
+	private IList<ITree<ContainedType>> children;
 
-	private int		ID;
-	private static int	nextID	= 0;
+	/* Whether this node has children. */
+	/* @NOTE
+	 * 	Why have both this boolean and childCount? Why not just do a
+	 * 		childCount == 0
+	 *	whenever you'd check hasChildren?
+	 */
+	private boolean hasChildren;
+	/* The number of children this node has. */
+	private int     childCount = 0;
+
+	/* The ID of this node. */
+	private int        ID;
+	/* The next ID to assign to a node. */
+	private static int nextID = 0;
 
 	/**
 	 * Create a new leaf node in a tree.
 	 *
 	 * @param leaf
-	 *                The data to store as a leaf node.
+	 * 	The data to store as a leaf node.
 	 */
 	public Tree(final ContainedType leaf) {
 		data = leaf;
@@ -45,10 +58,10 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	 * Create a new tree node with the specified children.
 	 *
 	 * @param leaf
-	 *                The data to hold in this node.
+	 * 	The data to hold in this node.
 	 *
 	 * @param childrn
-	 *                A list of children for this node.
+	 * 	A list of children for this node.
 	 */
 	public Tree(final ContainedType leaf, final IList<ITree<ContainedType>> childrn) {
 		this(leaf);
@@ -64,10 +77,10 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	 * Create a new tree node with the specified children.
 	 *
 	 * @param leaf
-	 *                The data to hold in this node.
+	 * 	The data to hold in this node.
 	 *
 	 * @param childrn
-	 *                A list of children for this node.
+	 * 	A list of children for this node.
 	 */
 	@SafeVarargs
 	public Tree(final ContainedType leaf, final ITree<ContainedType>... childrn) {
@@ -126,15 +139,15 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 	@Override
 	public int revFind(final Predicate<ITree<ContainedType>> childPred) {
-		if (childCount == 0)
+		if (childCount == 0) {
 			return -1;
-		else {
+		} else {
 			for (int i = childCount - 1; i >= 0; i--) {
 				if (childPred.test(getChild(i))) return i;
 			}
-		}
 
-		return -1;
+			return -1;
+		}
 	}
 
 	@Override
@@ -188,13 +201,21 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 			final IList<ITree<ContainedType>> mappedChildren = children
 					.map(child -> child.flatMapTree(mapper));
 
-			mappedChildren.forEach(child -> flatMappedData.addChild(child));
+			mappedChildren.forEach(flatMappedData::addChild);
 
 			return flatMappedData;
 		}
 
 		return mapper.apply(data);
 	}
+
+	/*
+	 * Do a collapse of this tree.
+	 *
+	 * @NOTE
+	 * 	Why is this protected? I can't see any good reason someone'd
+	 * 	want to override it.
+	 */
 
 	protected <NewType> NewType internalCollapse(final Function<ContainedType, NewType> leafTransform,
 			final Function<ContainedType, ListFlattener<NewType>> nodeCollapser) {
@@ -236,7 +257,9 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 						builder.append(">\t");
 					}
 
-					builder.append("Unknown node\n");
+					builder.append("Unknown node of type ");
+					builder.append(child.getClass().getName());
+					builder.append("\n");
 				}
 			});
 		}
@@ -250,7 +273,8 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 				return child.rebuildTree(leafTransformer, operatorTransformer);
 			});
 
-			return new Tree<>(operatorTransformer.apply(data), mappedChildren);
+			final MappedType mapData = operatorTransformer.apply(data);
+			return new Tree<>(mapData, mappedChildren);
 		}
 
 		return new Tree<>(leafTransformer.apply(data));
@@ -318,7 +342,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 			return result;
 		default:
-			final String msg = String.format("Recieved unknown transform result %s", transformResult);
+			final String msg = String.format("Recieved unknown transform result type %s", transformResult);
 
 			throw new IllegalArgumentException(msg);
 		}
@@ -362,6 +386,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 		internalToString(builder, 1, true);
 
+		/* Delete a trailing nl. */
 		builder.deleteCharAt(builder.length() - 1);
 
 		return builder.toString();

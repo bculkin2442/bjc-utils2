@@ -10,16 +10,39 @@ import bjc.utils.data.Identity;
 import bjc.utils.data.LazyPair;
 
 /*
- * A lazy pair, with only one side bound
+ * @NOTE
+ * 	I am not convinced that this code works correctly. Tests should be
+ * 	written to make sure things only ever get instantiated once.
+ *
+ * 	Namely, my main concern is to whether the places that bind the pair
+ * 	without setting pairBound are doing the right thing.
+ */
+/**
+ * A lazy pair, with only one side bound.
+ *
+ * @author Ben Culkin
  */
 public class HalfBoundLazyPair<OldType, NewLeft, NewRight> implements IPair<NewLeft, NewRight> {
+	/* The supplier of the old value. */
 	private final Supplier<OldType> oldSupplier;
 
+	/* The function to transform the old value into a new pair. */
 	private final Function<OldType, IPair<NewLeft, NewRight>> binder;
 
+	/* The new bound pair. */
 	private IPair<NewLeft, NewRight>	boundPair;
+	/* Has the pair been bound yet or not? */
 	private boolean				pairBound;
 
+	/**
+	 * Create a new half-bound lazy pair.
+	 *
+	 * @param oldSupp
+	 * 	The supplier of the old value.
+	 *
+	 * @param bindr
+	 * 	The function to use to create the pair from the old value.
+	 */
 	public HalfBoundLazyPair(final Supplier<OldType> oldSupp,
 			final Function<OldType, IPair<NewLeft, NewRight>> bindr) {
 		oldSupplier = oldSupp;
@@ -34,6 +57,7 @@ public class HalfBoundLazyPair<OldType, NewLeft, NewRight> implements IPair<NewL
 
 		final Supplier<NewLeft> leftSupp = () -> {
 			if (!newPairMade.getValue()) {
+				/* Bind the pair if it hasn't been bound yet. */
 				newPair.replace(binder.apply(oldSupplier.get()));
 				newPairMade.replace(true);
 			}
@@ -43,6 +67,7 @@ public class HalfBoundLazyPair<OldType, NewLeft, NewRight> implements IPair<NewL
 
 		final Supplier<NewRight> rightSupp = () -> {
 			if (!newPairMade.getValue()) {
+				/* Bind the pair if it hasn't been bound yet. */
 				newPair.replace(binder.apply(oldSupplier.get()));
 				newPairMade.replace(true);
 			}
@@ -92,8 +117,10 @@ public class HalfBoundLazyPair<OldType, NewLeft, NewRight> implements IPair<NewL
 			final BiFunction<NewRight, OtherRight, CombinedRight> rightCombiner) {
 		return otherPair.bind((otherLeft, otherRight) -> {
 			return bind((leftVal, rightVal) -> {
-				return new LazyPair<>(leftCombiner.apply(leftVal, otherLeft),
-						rightCombiner.apply(rightVal, otherRight));
+				CombinedLeft  cLeft  = leftCombiner.apply(leftVal, otherLeft);
+				CombinedRight cRight = rightCombiner.apply(rightVal, otherRight);
+
+				return new LazyPair<>(cLeft, cRight);
 			});
 		});
 	}

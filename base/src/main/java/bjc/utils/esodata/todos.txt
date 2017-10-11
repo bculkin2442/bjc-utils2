@@ -1,0 +1,6 @@
+@TODO 10/11/17 Ben Culkin :TapeRefactor
+	Refactor double-sidedness into its own interface.
+
+@TODO 10/11/17 Ben Culkin :CursorHands
+	Add cursored list/tree data structures with the ability to pick/put the
+	current node.

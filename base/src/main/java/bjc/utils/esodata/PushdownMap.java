@@ -12,23 +12,26 @@ import bjc.utils.funcdata.IMap;
  * A variant of a map where inserting a duplicate key shadows the existing value
  * instead of replacing it.
  *
+ * This could be useful for things like variable scopes.
+ *
  * @author EVE
  *
  * @param <KeyType>
- *                The key of the map.
+ * 	The key of the map.
+ *
  * @param <ValueType>
- *                The values in the map.
+ * 	The values in the map.
  */
 public class PushdownMap<KeyType, ValueType> implements IMap<KeyType, ValueType> {
+	/* Our backing storage. */
 	private final IMap<KeyType, Stack<ValueType>> backing;
 
-	/**
-	 * Create a new empty stack-based map.
-	 */
+	/** Create a new empty stack-based map. */
 	public PushdownMap() {
 		backing = new FunctionalMap<>();
 	}
 
+	/** Create a new empty stack-based map using the specified backing. */
 	private PushdownMap(final IMap<KeyType, Stack<ValueType>> back) {
 		backing = back;
 	}
@@ -80,6 +83,12 @@ public class PushdownMap<KeyType, ValueType> implements IMap<KeyType, ValueType>
 
 	@Override
 	public <V2> IMap<KeyType, V2> transform(final Function<ValueType, V2> transformer) {
+		/*
+		 * @NOTE
+		 * 	Can and should we support this?
+		 * 	More to the point, maybe this should be a map sub-type
+		 * 	that does what it needs to?
+		 */
 		throw new UnsupportedOperationException("Cannot transform pushdown maps.");
 	}
 
@@ -106,14 +115,16 @@ public class PushdownMap<KeyType, ValueType> implements IMap<KeyType, ValueType>
 	public ValueType remove(final KeyType key) {
 		final Stack<ValueType> stk = backing.get(key);
 
-		if (stk.size() > 1)
+		if (stk.size() > 1) {
 			return stk.pop();
-		else return backing.remove(key).top();
+		} else {
+			return backing.remove(key).top();
+		}
 	}
 
 	@Override
 	public IList<ValueType> valueList() {
-		return backing.valueList().map(stk -> stk.top());
+		return backing.valueList().map(Stack::top);
 	}
 
 	@Override

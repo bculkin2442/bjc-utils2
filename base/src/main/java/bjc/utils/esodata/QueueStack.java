@@ -5,18 +5,19 @@ import java.util.LinkedList;
 
 /**
  * A FIFO implementation of a stack.
+ * 
+ * Basically, a stack that actually acts like a queue.
  *
  * @param <T>
- *                The datatype stored in the stack.
+ * 	The datatype stored in the stack.
+ *
  * @author Ben Culkin
  */
 public class QueueStack<T> extends Stack<T> {
+	/* Our backing queue. */
 	private final Deque<T> backing;
 
-	/**
-	 * Create a new empty stack queue.
-	 *
-	 */
+	/** Create a new empty stack queue. */
 	public QueueStack() {
 		backing = new LinkedList<>();
 	}

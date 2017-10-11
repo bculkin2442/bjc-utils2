@@ -6,15 +6,33 @@ import java.util.function.UnaryOperator;
 import bjc.utils.data.IHolder;
 import bjc.utils.data.Lazy;
 
+/**
+ * A wrapped lazy value.
+ *
+ * @author Ben Culkin
+ */
 public class WrappedLazy<ContainedType> implements IHolder<ContainedType> {
+	/* Held value. */
 	private final IHolder<IHolder<ContainedType>> held;
 
+	/**
+	 * Create a new wrapped lazy value.
+	 *
+	 * @param wrappedHolder
+	 * 	The holder to make lazy.
+	 */
 	public WrappedLazy(final IHolder<ContainedType> wrappedHolder) {
 		held = new Lazy<>(wrappedHolder);
 	}
 
-	// This has an extra parameter, because otherwise it erases to the same
-	// as the public one
+	/* 
+	 * This has an extra parameter, because otherwise it erases to the same
+	 * as the public one.
+	 *
+	 * This is a case where reified generics would be useful, because then
+	 * the compiler could know which one we meant without the dummy
+	 * parameter.
+	 */
 	private WrappedLazy(final IHolder<IHolder<ContainedType>> wrappedHolder, final boolean dummy) {
 		held = wrappedHolder;
 	}

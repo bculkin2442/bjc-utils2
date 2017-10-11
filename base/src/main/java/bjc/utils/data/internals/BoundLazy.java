@@ -9,37 +9,35 @@ import bjc.utils.data.Lazy;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IList;
 
-/*
- * Implements a lazy holder that has been bound
+/**
+ * Implements a lazy holder that has been bound.
+ *
+ * @author Ben Culkin
  */
 public class BoundLazy<OldType, BoundContainedType> implements IHolder<BoundContainedType> {
-	/*
-	 * The old value
-	 */
+	/* The old value. */
 	private final Supplier<IHolder<OldType>> oldSupplier;
 
-	/*
-	 * The function to use to transform the old value into a new value
-	 */
+	/* The function to use to transform the old value into a new value. */
 	private final Function<OldType, IHolder<BoundContainedType>> binder;
 
-	/*
-	 * The bound value being held
-	 */
+	/* The bound value being held. */
 	private IHolder<BoundContainedType> boundHolder;
 
-	/*
-	 * Whether the bound value has been actualized or not
-	 */
+	/* Whether the bound value has been actualized or not. */
 	private boolean holderBound;
 
-	/*
-	 * Transformations currently pending on the bound value
-	 */
+	/* Transformations currently pending on the bound value. */
 	private final IList<UnaryOperator<BoundContainedType>> actions = new FunctionalList<>();
 
-	/*
-	 * Create a new bound lazy value
+	/**
+	 * Create a new bound lazy value. 
+	 *
+	 * @param supp
+	 * 	The supplier of the old value.
+	 *
+	 * @param binder
+	 * 	The function to use to bind the old value to the new one.
 	 */
 	public BoundLazy(final Supplier<IHolder<OldType>> supp,
 			final Function<OldType, IHolder<BoundContainedType>> binder) {
@@ -51,28 +49,20 @@ public class BoundLazy<OldType, BoundContainedType> implements IHolder<BoundCont
 	public <BoundType> IHolder<BoundType> bind(final Function<BoundContainedType, IHolder<BoundType>> bindr) {
 		if (bindr == null) throw new NullPointerException("Binder must not be null");
 
-		/*
-		 * Prepare a list of pending actions
-		 */
+		/* Prepare a list of pending actions. */
 		final IList<UnaryOperator<BoundContainedType>> pendingActions = new FunctionalList<>();
 		actions.forEach(pendingActions::add);
 
-		/*
-		 * Create the new supplier of a value
-		 */
+		/* Create the new supplier of a value. */
 		final Supplier<IHolder<BoundContainedType>> typeSupplier = () -> {
 			IHolder<BoundContainedType> oldHolder = boundHolder;
 
-			/*
-			 * Bind the value if it hasn't been bound before
-			 */
+			/* Bind the value if it hasn't been bound before. */
 			if (!holderBound) {
 				oldHolder = oldSupplier.get().unwrap(binder);
 			}
 
-			/*
-			 * Apply all the pending actions
-			 */
+			/* Apply all the pending actions. */
 			return pendingActions.reduceAux(oldHolder, (action, state) -> {
 				return state.transform(action);
 			}, (value) -> value);
@@ -95,19 +85,20 @@ public class BoundLazy<OldType, BoundContainedType> implements IHolder<BoundCont
 	public <MappedType> IHolder<MappedType> map(final Function<BoundContainedType, MappedType> mapper) {
 		if (mapper == null) throw new NullPointerException("Mapper must not be null");
 
-		// Prepare a list of pending actions
+		/* Prepare a list of pending actions. */
 		final IList<UnaryOperator<BoundContainedType>> pendingActions = new FunctionalList<>();
 		actions.forEach(pendingActions::add);
 
-		// Prepare the new supplier
+		/* Prepare the new supplier. */
 		final Supplier<MappedType> typeSupplier = () -> {
 			IHolder<BoundContainedType> oldHolder = boundHolder;
 
-			// Bound the value if it hasn't been bound
+			/* Bound the value if it hasn't been bound. */
 			if (!holderBound) {
 				oldHolder = oldSupplier.get().unwrap(binder);
 			}
 
+			/* Apply pending actions. */
 			return pendingActions.reduceAux(oldHolder.getValue(), (action, state) -> {
 				return action.apply(state);
 			}, (value) -> mapper.apply(value));

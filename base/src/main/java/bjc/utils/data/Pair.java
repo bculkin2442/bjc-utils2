@@ -9,34 +9,33 @@ import java.util.function.Function;
  * @author ben
  *
  * @param <LeftType>
- *                The type of the left value
+ * 	The type of the left value.
+ *
  * @param <RightType>
- *                The type of the right value
+ * 	The type of the right value.
  */
 public class Pair<LeftType, RightType> implements IPair<LeftType, RightType> {
-	// The left value
+	/* The left value. */
 	private LeftType leftValue;
-
-	// The right value
+	/* The right value. */
 	private RightType rightValue;
 
-	/**
-	 * Create a new pair with both sides set to null
-	 */
+	/** Create a new pair with both sides set to null. */
 	public Pair() {
 
 	}
 
 	/**
-	 * Create a new pair with both sides set to the specified values
+	 * Create a new pair with both sides set to the specified values.
 	 *
 	 * @param left
-	 *                The value of the left side
+	 * 	The value of the left side.
+	 *
 	 * @param right
-	 *                The value of the right side
+	 * 	The value of the right side.
 	 */
 	public Pair(final LeftType left, final RightType right) {
-		leftValue = left;
+		leftValue  = left;
 		rightValue = right;
 	}
 
@@ -70,7 +69,7 @@ public class Pair<LeftType, RightType> implements IPair<LeftType, RightType> {
 			final BiFunction<LeftType, OtherLeft, CombinedLeft> leftCombiner,
 			final BiFunction<RightType, OtherRight, CombinedRight> rightCombiner) {
 		return otherPair.bind((otherLeft, otherRight) -> {
-			final CombinedLeft left = leftCombiner.apply(leftValue, otherLeft);
+			final CombinedLeft left   = leftCombiner.apply(leftValue, otherLeft);
 			final CombinedRight right = rightCombiner.apply(rightValue, otherRight);
 
 			return new Pair<>(left, right);

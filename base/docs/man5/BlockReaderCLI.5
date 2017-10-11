@@ -1,3 +1,5 @@
+\# Load custom macros
+.so custom.tmac
 .TH BlockReaderCLI 5 "2017-09-10" "" ""
 .SH NAME
 BlockReaderCLI \- configure \fBBlockReaders\fP from a script
@@ -5,4 +7,51 @@ BlockReaderCLI \- configure \fBBlockReaders\fP from a script
 A small language for configuring \fBBlockReaders\fP from a script. This is a
 command based language, where each command comes on its own line for
 configuration. Certain commands may start a sub-mode.
-.SH 
+.SH COMMANDS
+The following is a description of the syntax and usage for each command. The
+following meta-syntatic variables are given the following meanings whenever they
+are encountered.
+.SS VARIABLES
+.TP
+.B <block-name>
+The name to bind the block reader this command creates to
+.TP
+.B <reader-name>
+The name of an existing block reader.
+.SS DESCRIPTIONS
+.TP
+.BI "def\-filtered" " <block-name> <reader-name> <filter>"
+Define a block reader that only accepts blocks that pass the specified filter.
+.Arguments
+.TP
+.I <filter>
+A regular expression that the blocks must match.
+.EArguments
+.TP
+.BI "def\-layered" " <block-name> <reader-name1> <reader-name2>"
+Define a block reader that merges two readers, but prioritizes blocks from one
+over the other.
+.TP
+.BI "def\-pushback" " <block-name> <reader-name>"
+Define a block reader that supports ``unreading'' blocks.
+.TP
+.BI "def\-simple" " <block-name> <source-name> <pattern>"
+Define a block reader that reads blocks delimited by a pattern from an input
+source.
+.Arguments
+.TP
+.I <source-name>
+The name of the input source to read blocks from.
+.TP
+.I <pattern>
+The pattern to use as a delimiter between blocks.
+.EArguments
+.TP
+.BI "def\-serial" " <block-name> <reader-name>..."
+Defines a block reader that concatenates two block readers.
+.TP
+.BI "def\-toggled" " <block-name> <reader-name1> <reader-name2>"
+Defines a block reader that swaps reading blocks between two block readers.
+.TP
+.BI "}, end, exit, quit"
+All of these exit the configuration CLI.

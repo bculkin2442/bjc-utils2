@@ -10,26 +10,29 @@ import bjc.utils.funcdata.IList;
 
 /**
  * A holder that holds a means to create a value, but doesn't actually compute
- * the value until it's needed
+ * the value until it's needed.
  *
  * @author ben
  *
  * @param <ContainedType>
+ * 	The type of the value being held.
  */
 public class Lazy<ContainedType> implements IHolder<ContainedType> {
+	/* The supplier of the type. */
 	private Supplier<ContainedType> valueSupplier;
-
-	private IList<UnaryOperator<ContainedType>> actions = new FunctionalList<>();
-
+	/* The actual type value. */
+	private ContainedType heldValue;
+	/* Whether the value has been created. */
 	private boolean valueMaterialized;
 
-	private ContainedType heldValue;
+	/* The list of pending actions on the value. */
+	private IList<UnaryOperator<ContainedType>> actions = new FunctionalList<>();
 
 	/**
-	 * Create a new lazy value from the specified seed value
+	 * Create a new lazy value from the specified seed value.
 	 *
 	 * @param value
-	 *                The seed value to use
+	 * 	The seed value to use.
 	 */
 	public Lazy(final ContainedType value) {
 		heldValue = value;
@@ -38,10 +41,10 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 	}
 
 	/**
-	 * Create a new lazy value from the specified value source
+	 * Create a new lazy value from the specified value source.
 	 *
 	 * @param supp
-	 *                The source of a value to use
+	 * 	The source of a value to use.
 	 */
 	public Lazy(final Supplier<ContainedType> supp) {
 		valueSupplier = new SingleSupplier<>(supp);
@@ -49,6 +52,7 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 		valueMaterialized = false;
 	}
 
+	/* Create a new value from a supplier and a list of actions. */
 	private Lazy(final Supplier<ContainedType> supp, final IList<UnaryOperator<ContainedType>> pendingActions) {
 		valueSupplier = supp;
 
@@ -171,9 +175,10 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 	 * Create a new lazy container with an already present value.
 	 *
 	 * @param val
-	 *                The value for the lazy container.
+	 * 	The value for the lazy container.
 	 *
-	 * @return A new lazy container holding that value.
+	 * @return
+	 * 	A new lazy container holding that value.
 	 */
 	public static <ContainedType> Lazy<ContainedType> lazy(final ContainedType val) {
 		return new Lazy<>(val);
@@ -183,10 +188,11 @@ public class Lazy<ContainedType> implements IHolder<ContainedType> {
 	 * Create a new lazy container with a suspended value.
 	 *
 	 * @param supp
-	 *                The suspended value for the lazy container.
+	 * 	The suspended value for the lazy container.
 	 *
-	 * @return A new lazy container that will un-suspend the value when
-	 *         necessary.
+	 * @return
+	 * 	A new lazy container that will un-suspend the value when
+	 * 	necessary.
 	 */
 	public static <ContainedType> Lazy<ContainedType> lazy(final Supplier<ContainedType> supp) {
 		return new Lazy<>(supp);

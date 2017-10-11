@@ -18,19 +18,46 @@ import bjc.utils.ioutils.blocks.*;
 import static bjc.utils.cli.objects.Command.CommandStatus;
 import static bjc.utils.cli.objects.Command.CommandStatus.*;
 
+/**
+ * Command-line interface for configuring block readers.
+ *
+ * @author Ben Culkin
+ */
 public class BlockReaderCLI {
+	/* Logger. */
 	private final Logger LOGGER = Logger.getLogger(BlockReaderCLI.class.getName());
 
+	/**
+	 * The state of the block reader.
+	 *
+	 * @author Ben Culkin
+	 */
 	public static class BlockReaderState {
+		/**
+		 * All of the configured block readers.
+		 */
 		public final Map<String, BlockReader> readers;
+		/**
+		 * All of the configured I/O sources.
+		 */
 		public final Map<String, Reader>      sources;
 
+		/**
+		 * Create a new set of state for the block reader.
+		 *
+		 * @param readers
+		 * 	The set of configured block readers.
+		 *
+		 * @param sources
+		 * 	The set of configured I/O sources.
+		 */
 		public BlockReaderState(Map<String, BlockReader> readers, Map<String, Reader> sources) {
 			this.readers = readers;
 			this.sources = sources;
 		}
 	}
 
+	/* Our state. */
 	private BlockReaderState stat;
 
 	/**
@@ -43,16 +70,33 @@ public class BlockReaderCLI {
 		stat = new BlockReaderState(new HashMap<>(), srcs);
 	}
 
+	/**
+	 * Create a new CLI for configuring BlockReaders.
+	 *
+	 * @param state
+	 * 	The state object to use.
+	 */
+	public BlockReaderCLI(BlockReaderState state) {
+		stat = state;
+	}
+
+	/* :CLIArgsParsing */
+	/**
+	 * Run the command line interface
+	 *
+	 * @param args
+	 * 	Ignored CLI args.
+	 */
 	public static void main(String[] args) {
-		/*
-		 * Create/configure I/O sources.
-		 */
+		/* Create/configure I/O sources. */
 		Map<String, Reader> sources = new HashMap<>();
+		BlockReaderCLI reader       = new BlockReaderCLI(sources);
+
 		sources.put("stdio", new InputStreamReader(System.in));
 
-		BlockReaderCLI reader = new BlockReaderCLI(sources);
-
-		reader.run(new Scanner(System.in), "console", true);
+		Scanner input = new Scanner(System.in);
+		reader.run(input, "console", true);
+		input.close();
 	}
 
 	/**
@@ -60,61 +104,79 @@ public class BlockReaderCLI {
 	 *
 	 * @param input
 	 * 	The place to read input from.
+	 *
 	 * @param ioSource
 	 * 	The name of the place to read input from.
+	 *
 	 * @param interactive
 	 *	Whether or not the source is interactive
 	 */
 	public void run(Scanner input, String ioSource, boolean interactive) {
 		int lno = 0;
+
+		/* Print a prompt. */
+		if(interactive) {
+			System.out.printf("reader-conf(%d)>", lno);
+		}
 		while(input.hasNextLine()) {
-			if(interactive)
-				System.out.printf("reader-conf(%d)>", lno);
-
+			/* Read a line. */
 			String ln = input.nextLine();
-
 			lno += 1;
 
+			/* Parse the command. */
 			Command com = Command.fromString(ln, lno, ioSource);
+			/* Ignore blank commands. */
 			if(com == null) continue;
 
+			/* Handle a command. */
 			CommandStatus stat = handleCommand(com, interactive);
+			/* Exit if we finished or encountered a fatal error. */
 			if(stat == FINISH || stat == ERROR) {
 				return;
 			}
-		}
 
-		input.close();
+			/* Print a prompt. */
+			if(interactive) {
+				System.out.printf("reader-conf(%d)>", lno);
+			}
+
+		}
 	}
 
-	/*
+	/**
 	 * Handle a command.
+	 *
+	 * @param com
+	 * 	The command to handle
+	 *
+	 * @param interactive
+	 * 	Whether the current input source is interactive or not.
 	 */
 	public CommandStatus handleCommand(Command com, boolean interactive) {
 		switch(com.nameCommand) {
-		case "def-filtered":
-			return defFiltered(com);
-		case "def-layered":
-			return defLayered(com);
-		case "def-pushback":
-			return defPushback(com);
-		case "def-simple":
-			return defSimple(com);
-		case "def-serial":
-			return defSerial(com);
-		case "def-toggled":
-			return defToggled(com);
-		case "}":
-		case "end":
-		case "exit":
-		case "quit":
-			if(interactive)
-				System.out.printf("Exiting reader-conf, %d readers configured in %d commands\n",
-						stat.readers.size(), com.lineNo);
-			return FINISH;
-		default:
-			LOGGER.severe(com.error("Unknown command '%s'\n", com.nameCommand));
-			return FAIL;
+			case "def-filtered":
+				return defFiltered(com);
+			case "def-layered":
+				return defLayered(com);
+			case "def-pushback":
+				return defPushback(com);
+			case "def-simple":
+				return defSimple(com);
+			case "def-serial":
+				return defSerial(com);
+			case "def-toggled":
+				return defToggled(com);
+			case "}":
+			case "end":
+			case "exit":
+			case "quit":
+				if(interactive)
+					System.out.printf("Exiting reader-conf, %d readers configured in %d commands\n",
+							stat.readers.size(), com.lineNo);
+				return FINISH;
+			default:
+				LOGGER.severe(com.error("Unknown command '%s'\n", com.nameCommand));
+				return FAIL;
 		}
 	}
 

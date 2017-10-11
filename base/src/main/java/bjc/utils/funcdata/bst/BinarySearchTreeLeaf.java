@@ -11,24 +11,20 @@ import java.util.function.Predicate;
  * @author ben
  *
  * @param <T>
- *                The data stored in the tree.
+ * 	The data stored in the tree.
  */
 public class BinarySearchTreeLeaf<T> implements ITreePart<T> {
-	/**
-	 * The data held in this tree leaf
-	 */
+	/** The data held in this tree leaf */
 	protected T data;
 
-	/**
-	 * Whether this node is soft-deleted or not
-	 */
+	/** Whether this node is soft-deleted or not */
 	protected boolean isDeleted;
 
 	/**
 	 * Create a new leaf holding the specified data.
 	 *
 	 * @param element
-	 *                The data for the leaf to hold.
+	 * 	The data for the leaf to hold.
 	 */
 	public BinarySearchTreeLeaf(final T element) {
 		data = element;
@@ -70,7 +66,7 @@ public class BinarySearchTreeLeaf<T> implements ITreePart<T> {
 		switch (treeWalker.walk(data)) {
 		case SUCCESS:
 			return true;
-		// We don't have any children to care about
+		/* We don't have any children to care about. */
 		case FAILURE:
 		case LEFT:
 		case RIGHT:

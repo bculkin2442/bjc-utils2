@@ -1,50 +1,47 @@
 package bjc.utils.components;
 
 /**
- * Generic implementation of a description for a component
+ * Generic implementation of a description for a component.
  *
  * @author ben
- *
  */
 public class ComponentDescription implements IDescribedComponent {
+	/* Check arguments are good. */
 	private static void sanityCheckArgs(final String name, final String author, final String description,
 			final int version) {
-		if (name == null)
+		if (name == null) {
 			throw new NullPointerException("Component name can't be null");
-		else if (version <= 0) throw new IllegalArgumentException("Component version must be greater than 0");
+		} else if (version <= 0) {
+			throw new IllegalArgumentException("Component version must be greater than 0");
+		}
 	}
 
-	/**
-	 * The author of the component
-	 */
-	private final String	author;
-	/**
-	 * The description of the component
-	 */
-	private final String	description;
-	/**
-	 * The name of the component
-	 */
-	private final String	name;
-
-	/**
-	 * The version of the component
-	 */
+	/** The author of the component */
+	private final String author;
+	/** The description of the component */
+	private final String description;
+	/** The name of the component */
+	private final String name;
+	/** The version of the component */
 	private final int version;
 
 	/**
-	 * Create a new component description
+	 * Create a new component description.
 	 *
 	 * @param name
-	 *                The name of the component
+	 * 	The name of the component.
+	 *
 	 * @param author
-	 *                The author of the component
+	 * 	The author of the component.
+	 *
 	 * @param description
-	 *                The description of the component
+	 * 	The description of the component.
+	 *
 	 * @param version
-	 *                The version of the component
+	 * 	The version of the component.
+	 *
 	 * @throws IllegalArgumentException
-	 *                 thrown if version is less than 1
+	 * 	Thrown if version is less than 1.
 	 */
 	public ComponentDescription(final String name, final String author, final String description,
 			final int version) {
@@ -58,14 +55,18 @@ public class ComponentDescription implements IDescribedComponent {
 
 	@Override
 	public String getAuthor() {
-		if (author == null) return IDescribedComponent.super.getAuthor();
+		if (author == null) {
+			return IDescribedComponent.super.getAuthor();
+		}
 
 		return author;
 	}
 
 	@Override
 	public String getDescription() {
-		if (description == null) return IDescribedComponent.super.getDescription();
+		if (description == null) {
+			return IDescribedComponent.super.getDescription();
+		}
 
 		return description;
 	}
@@ -82,7 +83,7 @@ public class ComponentDescription implements IDescribedComponent {
 
 	@Override
 	public String toString() {
-		return name + " component v" + version + ", written by " + author;
+		return String.format("%s component v%d, written by %s", name, version, author);
 	}
 
 	/*

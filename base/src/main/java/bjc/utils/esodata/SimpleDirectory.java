@@ -11,21 +11,21 @@ import bjc.utils.funcdata.IMap;
  * @author EVE
  *
  * @param <K>
- *                The key type of the directory.
+ * 	The key type of the directory.
+ *
  * @param <V>
- *                The value type of the directory.
+ * 	The value type of the directory.
  */
 public class SimpleDirectory<K, V> implements Directory<K, V> {
+	/* Our sub-directories. */
 	private final IMap<K, Directory<K, V>> children;
-
+	/* Our data. */
 	private final IMap<K, V> data;
 
-	/**
-	 * Create a new directory.
-	 */
+	/** Create a new directory. */
 	public SimpleDirectory() {
 		children = new FunctionalMap<>();
-		data = new FunctionalMap<>();
+		data     = new FunctionalMap<>();
 	}
 
 	@Override
