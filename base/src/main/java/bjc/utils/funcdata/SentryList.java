@@ -8,12 +8,10 @@ import java.util.List;
  * @author bjculkin
  *
  * @param <T>
- *                The type of item in the list.
+ * 	The type of item in the list.
  */
 public class SentryList<T> extends FunctionalList<T> {
-	/**
-	 * Create a new sentry list.
-	 */
+	/** Create a new sentry list. */
 	public SentryList() {
 		super();
 	}
@@ -22,7 +20,7 @@ public class SentryList<T> extends FunctionalList<T> {
 	 * Create a new sentry list backed by an existing list.
 	 *
 	 * @param backing
-	 *                The backing list.
+	 * 	The backing list.
 	 */
 	public SentryList(final List<T> backing) {
 		super(backing);

@@ -10,7 +10,7 @@ import bjc.utils.funcdata.IList;
  * @author bjculkin
  *
  * @param <S>
- *                The type of value in the list.
+ * 	The type of value in the list.
  */
 public interface ListFlattener<S> extends Function<IList<S>, S> {
 

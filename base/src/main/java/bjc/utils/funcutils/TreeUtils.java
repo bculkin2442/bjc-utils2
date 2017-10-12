@@ -28,11 +28,10 @@ public class TreeUtils {
 		return paths;
 	}
 
+	/* Find a path in a tree. */
 	private static <T> void findPath(ITree<T> subtree, LinkedList<T> path, Predicate<T> leafMarker, IList<IList<T>> paths) {
 		if(subtree.getChildrenCount() == 0 && leafMarker.test(subtree.getHead())) {
-			/*
-			 * We're at a matching leaf node. Add it.
-			 */
+			/* We're at a matching leaf node. Add it. */
 			IList<T> finalPath = new FunctionalList<>();
 
 			for(T ePath : path) {
@@ -43,9 +42,7 @@ public class TreeUtils {
 
 			paths.add(finalPath);
 		} else {
-			/*
-			 * Check the children of this node.
-			 */
+			/* Check the children of this node. */
 			path.add(subtree.getHead());
 
 			subtree.doForChildren((child) -> findPath(child, path, leafMarker, paths));

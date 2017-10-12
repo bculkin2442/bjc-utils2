@@ -10,15 +10,14 @@ import java.util.function.Supplier;
  * properly.
  *
  * @author EVE
- *
  */
 public class LambdaLock {
-	private final Lock	readLock;
-	private final Lock	writeLock;
+	/* The read lock. */
+	private final Lock readLock;
+	/* The write lock. */
+	private final Lock writeLock;
 
-	/**
-	 * Create a new lambda-enabled lock around a new lock.
-	 */
+	/** Create a new lambda-enabled lock around a new lock. */
 	public LambdaLock() {
 		this(new ReentrantReadWriteLock());
 	}
@@ -27,7 +26,7 @@ public class LambdaLock {
 	 * Create a new lambda-enabled lock.
 	 *
 	 * @param lck
-	 *                The lock to wrap.
+	 * 	The lock to wrap.
 	 */
 	public LambdaLock(final ReadWriteLock lck) {
 		readLock = lck.readLock();
@@ -38,9 +37,10 @@ public class LambdaLock {
 	 * Execute an action with the read lock taken.
 	 *
 	 * @param supp
-	 *                The action to call.
+	 * 	The action to call.
 	 *
-	 * @return The result of the action.
+	 * @return
+	 * 	The result of the action.
 	 */
 	public <T> T read(final Supplier<T> supp) {
 		readLock.lock();
@@ -56,9 +56,10 @@ public class LambdaLock {
 	 * Execute an action with the write lock taken.
 	 *
 	 * @param supp
-	 *                The action to call.
+	 * 	The action to call.
 	 *
-	 * @return The result of the action.
+	 * @return 
+	 * 	The result of the action.
 	 */
 	public <T> T write(final Supplier<T> supp) {
 		writeLock.lock();
@@ -74,8 +75,7 @@ public class LambdaLock {
 	 * Execute an action with the read lock taken.
 	 *
 	 * @param action
-	 *                The action to call.
-	 *
+	 * 	The action to call.
 	 */
 	public void read(final Runnable action) {
 		readLock.lock();
@@ -91,7 +91,7 @@ public class LambdaLock {
 	 * Execute an action with the write lock taken.
 	 *
 	 * @param action
-	 *                The action to call.
+	 * 	The action to call.
 	 */
 	public void write(final Runnable action) {
 		writeLock.lock();

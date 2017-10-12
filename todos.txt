@@ -2,3 +2,7 @@
 	Split BJC-Utils into multiple maven modules. That'll cut down on
 	compilation times and also the amount of dependencies pulled in for
 	certain things.
+
+@TODO 10/11/17 Ben Culkin :Documentation
+	Write a doclet for producing groff output so javadocs can be read as
+	manpages.

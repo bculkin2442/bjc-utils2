@@ -9,12 +9,10 @@ import bjc.utils.funcdata.IList;
  * @author ben
  *
  * @param <E>
- *                The type of grammar elements to use.
+ * 	The type of grammar elements to use.
  */
 public class RandomGrammar<E> extends WeightedGrammar<E> {
-	/**
-	 * Create a new random grammar.
-	 */
+	/** Create a new random grammar. */
 	public RandomGrammar() {
 		rules = new FunctionalMap<>();
 	}
@@ -23,9 +21,10 @@ public class RandomGrammar<E> extends WeightedGrammar<E> {
 	 * Add cases to a specified rule.
 	 *
 	 * @param rule
-	 *                The name of the rule to add cases to.
+	 * 	The name of the rule to add cases to.
+	 *
 	 * @param cases
-	 *                The cases to add for this rule.
+	 * 	The cases to add for this rule.
 	 */
 	@SafeVarargs
 	public final void addCases(final E rule, final IList<E>... cases) {
@@ -38,9 +37,10 @@ public class RandomGrammar<E> extends WeightedGrammar<E> {
 	 * Create a rule with the specified name and cases.
 	 *
 	 * @param rule
-	 *                The name of the rule to add.
+	 * 	The name of the rule to add.
+	 *
 	 * @param cases
-	 *                The cases to add for this rule.
+	 * 	The cases to add for this rule.
 	 */
 	@SafeVarargs
 	public final void makeRule(final E rule, final IList<E>... cases) {
@@ -55,9 +55,10 @@ public class RandomGrammar<E> extends WeightedGrammar<E> {
 	 * Create a rule with the specified name and cases.
 	 *
 	 * @param rule
-	 *                The name of the rule to add.
+	 * 	The name of the rule to add.
+	 *
 	 * @param cases
-	 *                The cases to add for this rule.
+	 * 	The cases to add for this rule.
 	 */
 	public void makeRule(final E rule, final IList<IList<E>> cases) {
 		if (cases == null) throw new NullPointerException("Cases must not be null");

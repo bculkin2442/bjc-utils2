@@ -1,38 +1,38 @@
 package bjc.utils.graph;
 
 /**
- * An edge in a weighted graph
+ * An edge in a weighted graph.
  *
  * @author ben
  *
  * @param <T>
- *                The type of the nodes in the graph
+ * 	The type of the nodes in the graph.
  */
 public class Edge<T> {
-	/*
-	 * The distance from initial to terminal node
-	 */
+	/* The distance from initial to terminal node.  */
 	private final int distance;
 
-	/*
-	 * The initial and terminal nodes of this edge
-	 */
+	/* The initial and terminal nodes of this edge. */
 	private final T source, target;
 
 	/**
-	 * Create a new edge with set parameters
+	 * Create a new edge with set parameters.
 	 *
 	 * @param initial
-	 *                The initial node of the edge
+	 * 	The initial node of the edge.
+	 *
 	 * @param terminal
-	 *                The terminal node of the edge
+	 * 	The terminal node of the edge.
+	 *
 	 * @param distance
-	 *                The distance between initial and terminal edge
+	 * 	The distance between initial and terminal edge.
 	 */
 	public Edge(final T initial, final T terminal, final int distance) {
-		if (initial == null)
+		if (initial == null) {
 			throw new NullPointerException("Initial node must not be null");
-		else if (terminal == null) throw new NullPointerException("Terminal node must not be null");
+		} else if (terminal == null) {
+			throw new NullPointerException("Terminal node must not be null");
+		}
 
 		this.source = initial;
 		this.target = terminal;
@@ -65,28 +65,31 @@ public class Edge<T> {
 	}
 
 	/**
-	 * Get the distance in this edge
+	 * Get the distance in this edge.
 	 *
-	 * @return The distance between the initial and terminal nodes of this
-	 *         edge
+	 * @return 
+	 * 	The distance between the initial and terminal nodes of this
+	 * 	edge.
 	 */
 	public int getDistance() {
 		return distance;
 	}
 
 	/**
-	 * Get the initial node of an edge
+	 * Get the initial node of an edge.
 	 *
-	 * @return The initial node of this edge
+	 * @return
+	 * 	The initial node of this edge.
 	 */
 	public T getSource() {
 		return source;
 	}
 
 	/**
-	 * Get the target node of an edge
+	 * Get the target node of an edge.
 	 *
-	 * @return The target node of this edge
+	 * @return
+	 * 	The target node of this edge.
 	 */
 	public T getTarget() {
 		return target;
@@ -107,6 +110,9 @@ public class Edge<T> {
 
 	@Override
 	public String toString() {
-		return " first vertex " + source + " to vertex " + target + " with distance: " + distance;
+		String msg = String.format("source vertex %s to target vertex %s with distance: %s",
+				source, target, distance);
+
+		return msg;
 	}
 }

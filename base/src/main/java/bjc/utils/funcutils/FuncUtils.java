@@ -6,26 +6,29 @@ import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 /**
- * Utility things for functions
+ * Utility things for functions.
  *
  * @author ben
- *
  */
 public class FuncUtils {
 	/**
 	 * Convert a binary function into a unary function that returns a
-	 * function
+	 * function.
 	 *
 	 * @param <A>
-	 *                The initial type of the function
+	 * 	The initial type of the function.
+	 *
 	 * @param <B>
-	 *                The intermediate type of the function
+	 * 	The intermediate type of the function.
+	 *
 	 * @param <C>
-	 *                The terminal type of the function
+	 * 	The terminal type of the function.
+	 *
 	 * @param func
-	 *                The function to transform
-	 * @return The function transformed into a unary function returning a
-	 *         function
+	 * 	The function to transform.
+	 *
+	 * @return
+	 * 	The function transformed into a unary function returning a function.
 	 */
 	public static <A, B, C> Function<A, Function<B, C>> curry2(final BiFunction<A, B, C> func) {
 		return arg1 -> arg2 -> {
@@ -34,12 +37,13 @@ public class FuncUtils {
 	}
 
 	/**
-	 * Do the specified action the specified number of times
+	 * Do the specified action the specified number of times.
 	 *
 	 * @param nTimes
-	 *                The number of times to do the action
+	 * 	The number of times to do the action.
+	 *
 	 * @param cons
-	 *                The action to perform
+	 * 	The action to perform.
 	 */
 	public static void doTimes(final int nTimes, final Consumer<Integer> cons) {
 		for (int i = 0; i < nTimes; i++) {
@@ -52,9 +56,10 @@ public class FuncUtils {
 	 *
 	 * @param op
 	 * 	The operator to execute.
+	 *
 	 * @param maxTries
-	 * 	The maximum amount of times to apply the function in an
-	 * 	attempt to cause it to converge.
+	 * 	The maximum amount of times to apply the function in an attempt
+	 * 	to cause it to converge.
 	 */
 	public static <T> UnaryOperator<T> converge(final UnaryOperator<T> op, final int maxTries) {
 		return (val) -> {
