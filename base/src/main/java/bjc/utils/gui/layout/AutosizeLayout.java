@@ -7,15 +7,12 @@ import java.awt.GridLayout;
  * resized.
  *
  * @author ben
- *
  */
 public class AutosizeLayout extends GridLayout {
-	// Version id for serialization
+	/* Version id for serialization. */
 	private static final long serialVersionUID = -2495693595953396924L;
 
-	/**
-	 * Create a new auto-size layout.
-	 */
+	/** Create a new auto-size layout. */
 	public AutosizeLayout() {
 		super(1, 1);
 	}

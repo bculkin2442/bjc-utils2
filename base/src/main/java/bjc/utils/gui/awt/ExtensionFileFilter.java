@@ -13,19 +13,16 @@ import bjc.utils.funcdata.IList;
  * Built for AWT
  *
  * @author ben
- *
  */
 public class ExtensionFileFilter implements FilenameFilter {
-	/**
-	 * The list of extensions to filter
-	 */
+	/* The list of extensions to filter */
 	private final IList<String> extensions;
 
 	/**
 	 * Create a new filter only showing files with the specified extensions.
 	 *
 	 * @param exts
-	 *                The extensions to show in this filter.
+	 * 	The extensions to show in this filter.
 	 */
 	public ExtensionFileFilter(final List<String> exts) {
 		if (exts == null) throw new NullPointerException("Extensions must not be null");
@@ -37,7 +34,7 @@ public class ExtensionFileFilter implements FilenameFilter {
 	 * Create a new filter only showing files with the specified extensions.
 	 *
 	 * @param exts
-	 *                The extensions to show in this filter.
+	 * 	The extensions to show in this filter.
 	 */
 	public ExtensionFileFilter(final String... exts) {
 		extensions = new FunctionalList<>(exts);
