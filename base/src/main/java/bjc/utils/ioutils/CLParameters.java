@@ -27,36 +27,42 @@ public class CLParameters {
 	 * Mostly, this just fills in V and # parameters.
 	 *
 	 * @param params
-	 * 	The parameters of the directive.
+	 *                The parameters of the directive.
 	 * @param dirParams
-	 * 	The parameters of the format string.
+	 *                The parameters of the format string.
 	 *
 	 * @return A set of CL parameters.
 	 */
 	public static CLParameters fromDirective(String[] params, Tape<Object> dirParams) {
 		List<String> parameters = new ArrayList<>();
 
-		for(String param : params) {
-			if(param.equalsIgnoreCase("V")) {
+		for (String param : params) {
+			if (param.equalsIgnoreCase("V")) {
 				Object par = dirParams.item();
 				boolean succ = dirParams.right();
 
-				if(par == null) {
-					throw new IllegalArgumentException("Expected a format parameter for V inline parameter");
+				if (!succ) {
+					throw new IllegalStateException("Couldn't advance tape for parameter");
 				}
 
-				if(par instanceof Number) {
-					int val = ((Number)par).intValue();
-					
+				if (par == null) {
+					throw new IllegalArgumentException(
+							"Expected a format parameter for V inline parameter");
+				}
+
+				if (par instanceof Number) {
+					int val = ((Number) par).intValue();
+
 					parameters.add(Integer.toString(val));
-				} else if(par instanceof Character) {
-					char ch = ((Character)par);
+				} else if (par instanceof Character) {
+					char ch = ((Character) par);
 
 					parameters.add(Character.toString(ch));
 				} else {
-					throw new IllegalArgumentException("Incorrect type of parameter for V inline parameter");
+					throw new IllegalArgumentException(
+							"Incorrect type of parameter for V inline parameter");
 				}
-			} else if(param.equals("#")) {
+			} else if (param.equals("#")) {
 				parameters.add(Integer.toString(dirParams.position()));
 			} else {
 				parameters.add(param);
@@ -67,7 +73,7 @@ public class CLParameters {
 	}
 
 	public char getCharDefault(int idx, String paramName, char directive, char def) {
-		if(!params[idx].equals("")) {
+		if (!params[idx].equals("")) {
 			return getChar(idx, paramName, directive);
 		}
 
@@ -77,15 +83,16 @@ public class CLParameters {
 	public char getChar(int idx, String paramName, char directive) {
 		String param = params[idx];
 
-		if(!param.startsWith("'")) {
-			throw new IllegalArgumentException(String.format("Invalid %s %s to %c directive", paramName, param, directive));
+		if (!param.startsWith("'")) {
+			throw new IllegalArgumentException(
+					String.format("Invalid %s %s to %c directive", paramName, param, directive));
 		}
 
 		return param.charAt(1);
 	}
 
 	public int getIntDefault(int idx, String paramName, char directive, int def) {
-		if(!params[idx].equals("")) {
+		if (!params[idx].equals("")) {
 
 		}
 

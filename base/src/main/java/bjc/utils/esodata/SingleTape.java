@@ -36,10 +36,11 @@ public class SingleTape<T> implements Tape<T> {
 	 * Create a new tape with the specified contents that doesn't
 	 * autoextend.
 	 */
+	@SafeVarargs
 	public SingleTape(T... vals) {
 		autoExtend = false;
 
-		backing = new ArrayList(vals.length);
+		backing = new ArrayList<>(vals.length);
 
 		for(T val : vals) {
 			backing.add(val);

@@ -56,7 +56,7 @@ public class TokenUtils {
 
 	private static Pattern quotePatt = getCompiledRegex("unescapedQuote");
 
-	private static Pattern intLitPattern = getCompiledRegex("intLiteral");
+	//private static Pattern intLitPattern = getCompiledRegex("intLiteral");
 
 	/**
 	 * Remove double quoted strings from a string.

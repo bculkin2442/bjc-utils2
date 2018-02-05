@@ -10,8 +10,6 @@ import java.util.regex.PatternSyntaxException;
 
 import static java.util.Map.Entry;
 
-import static bjc.utils.PropertyDB.applyFormat;
-import static bjc.utils.PropertyDB.getCompiledRegex;
 import static bjc.utils.PropertyDB.getRegex;
 
 public class StringDescaper {
@@ -30,10 +28,11 @@ public class StringDescaper {
 	private String  rEscapeString;
 	private Pattern escapePatt;
 
-	private static String  rDoubleQuoteString = applyFormat("doubleQuotes", getRegex("nonStringEscape"), rPossibleEscapeString);
-	private static Pattern doubleQuotePatt    = Pattern.compile(rDoubleQuoteString);
+	// These should be used for something, but I don't recall what
+	//private static String  rDoubleQuoteString = applyFormat("doubleQuotes", getRegex("nonStringEscape"), rPossibleEscapeString);
+	//private static Pattern doubleQuotePatt    = Pattern.compile(rDoubleQuoteString);
 
-	private static Pattern quotePatt = getCompiledRegex("unescapedQuote");
+	//private static Pattern quotePatt = getCompiledRegex("unescapedQuote");
 
 	private Map<String, String> literalEscapes;
 	private Map<Pattern, UnaryOperator<String>> specialEscapes;
@@ -55,10 +54,6 @@ public class StringDescaper {
 	}
 
 	public void addSpecialEscape(String escape, UnaryOperator<String> val) {
-		if(specialEscapes.containsKey(escape)) {
-			LOGGER.warning(String.format("Shadowing special escape '%s'\n", escape));
-		}
-
 		/*
 		 * Make sure this special escape is a valid regex.
 		 */
@@ -73,6 +68,10 @@ public class StringDescaper {
 			iaex.initCause(psex);
 
 			throw psex;
+		}
+		
+		if(specialEscapes.containsKey(patt)) {
+			LOGGER.warning(String.format("Shadowing special escape '%s'\n", escape));
 		}
 
 		specialEscapes.put(patt, val);

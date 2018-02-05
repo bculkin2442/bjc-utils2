@@ -1,7 +1,6 @@
 package bjc.utils.ioutils.blocks;
 
 import java.io.IOException;
-import java.io.LineNumberReader;
 import java.io.Reader;
 import java.util.NoSuchElementException;
 import java.util.Scanner;

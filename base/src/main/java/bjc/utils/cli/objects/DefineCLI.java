@@ -35,9 +35,8 @@ public class DefineCLI {
 			this(new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>());
 		}
 
-		public DefineState(Map<String, UnaryOperator<String>> defines,
-				Map<String, String> strings, Map<String, String> formats,
-				Map<String, Pattern> patterns) {
+		public DefineState(Map<String, UnaryOperator<String>> defines, Map<String, String> strings,
+				Map<String, String> formats, Map<String, Pattern> patterns) {
 			this.defines = defines;
 
 			this.strings = strings;
@@ -55,22 +54,26 @@ public class DefineCLI {
 
 	public static void main(String[] args) {
 		DefineCLI defin = new DefineCLI();
+
+		try (Scanner scn = new Scanner(System.in)) {
+			defin.run(scn, "console", true);
+		}
 	}
 
 	/**
 	 * Run the CLI on an input source.
 	 *
 	 * @param input
-	 * 	The place to read input from.
+	 *                The place to read input from.
 	 * @param ioSource
-	 * 	The name of the place to read input from.
+	 *                The name of the place to read input from.
 	 * @param interactive
-	 *	Whether or not the source is interactive
+	 *                Whether or not the source is interactive
 	 */
 	public void run(Scanner input, String ioSource, boolean interactive) {
 		int lno = 0;
-		while(input.hasNextLine()) {
-			if(interactive)
+		while (input.hasNextLine()) {
+			if (interactive)
 				System.out.printf("define-conf(%d)>", lno);
 
 			String ln = input.nextLine();
@@ -78,7 +81,8 @@ public class DefineCLI {
 			lno += 1;
 
 			Command com = Command.fromString(ln, lno, ioSource);
-			if(com == null) continue;
+			if (com == null)
+				continue;
 
 			handleCommand(com, interactive);
 		}
@@ -87,7 +91,7 @@ public class DefineCLI {
 	}
 
 	public void handleCommand(Command com, boolean interactive) {
-		switch(com.nameCommand) {
+		switch (com.nameCommand) {
 		case "def-string":
 		default:
 			LOGGER.severe(com.error("Unknown command %s\n", com.nameCommand));
@@ -99,14 +103,14 @@ public class DefineCLI {
 		String remn = com.remnCommand;
 
 		int idx = remn.indexOf(' ');
-		if(idx == -1) {
+		if (idx == -1) {
 			LOGGER.warning(com.warn("Binding empty string to name '%s'\n", remn));
 			idx = remn.length();
 		}
 		String name = remn.substring(0, idx);
 		String strang = remn.substring(idx);
 
-		if(stat.strings.containsKey(name)) {
+		if (stat.strings.containsKey(name)) {
 			LOGGER.warning(com.warn("Shadowing string '%s'\n", name));
 		}
 
@@ -119,14 +123,14 @@ public class DefineCLI {
 		String remn = com.remnCommand;
 
 		int idx = remn.indexOf(' ');
-		if(idx == -1) {
+		if (idx == -1) {
 			LOGGER.warning(com.warn("Binding empty format to name '%s'\n", remn));
 			idx = remn.length();
 		}
 		String name = remn.substring(0, idx);
 		String fmt = remn.substring(idx);
 
-		if(stat.formats.containsKey(name)) {
+		if (stat.formats.containsKey(name)) {
 			LOGGER.warning(com.warn("Shadowing format '%s'\n", name));
 		}
 

@@ -260,7 +260,7 @@ public class Graph<T> {
 		if (!backing.containsKey(target)) {
 			String msg = String.format("vertex %s does not exist", target);
 
-			throw new NoSuchElementException();
+			throw new NoSuchElementException(msg);
 		}
 
 		backing.get(source).remove(target);

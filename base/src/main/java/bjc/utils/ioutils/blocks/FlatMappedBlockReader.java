@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
-import java.util.function.UnaryOperator;
 
 /**
  * A block reader that supports applying a flatmap operation to blocks.

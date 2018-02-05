@@ -100,7 +100,7 @@ public class AdjacencyMap<T> {
 			} catch (final NumberFormatException nfex) {
 				String msg = String.format("%d is not a valid weight.", part);
 
-				final InputMismatchException imex = new InputMismatchException();
+				final InputMismatchException imex = new InputMismatchException(msg);
 				imex.initCause(nfex);
 
 				throw imex;
