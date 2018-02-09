@@ -1,4 +1,4 @@
-package bjc.utils.ioutils;
+package bjc.utils.ioutils.format;
 
 import java.util.HashMap;
 import java.util.IllegalFormatConversionException;
@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import bjc.utils.esodata.Tape;
+import bjc.utils.ioutils.NumberUtils;
 import bjc.utils.esodata.SingleTape;
 
 import static bjc.utils.PropertyDB.applyFormat;
@@ -17,49 +18,6 @@ import static bjc.utils.PropertyDB.applyFormat;
 import static bjc.utils.PropertyDB.getRegex;
 
 public class CLFormatter {
-	public static class CLModifiers {
-		public final boolean atMod;
-		public final boolean colonMod;
-
-		public CLModifiers(boolean at, boolean colon) {
-			atMod = at;
-			colonMod = colon;
-		}
-
-		public static CLModifiers fromString(String modString) {
-			boolean atMod = false;
-			boolean colonMod = false;
-			if (modString != null) {
-				atMod = modString.contains("@");
-				colonMod = modString.contains(":");
-			}
-
-			return new CLModifiers(atMod, colonMod);
-		}
-	}
-
-	public static class EscapeException extends RuntimeException {
-		private static final long serialVersionUID = -4552821131068559005L;
-
-		public final boolean endIteration;
-
-		public EscapeException() {
-			endIteration = false;
-		}
-
-		public EscapeException(boolean end) {
-			endIteration = end;
-		}
-	}
-
-	@FunctionalInterface
-	public interface Directive {
-		/*
-		 * @TODO fill in parameters
-		 */
-		public void format();
-	}
-
 	private static final String prefixParam = getRegex("clFormatPrefix");
 	private static final Pattern pPrefixParam = Pattern.compile(prefixParam);
 
@@ -73,16 +31,22 @@ public class CLFormatter {
 			directiveName);
 	private static final Pattern pFormatDirective = Pattern.compile(formatDirective);
 
+	private static Map<String, Directive> builtinDirectives;
 	private Map<String, Directive> extraDirectives;
+
+	static {
+		builtinDirectives = new HashMap<>();
+
+		builtinDirectives.put("A", new AestheticDirective());
+	}
 
 	public CLFormatter() {
 		extraDirectives = new HashMap<>();
 	}
 
-	private static void checkItem(Object itm, char directive) {
+	public static void checkItem(Object itm, char directive) {
 		if (itm == null)
-			throw new IllegalArgumentException(
-					String.format("No argument provided for %c directive", directive));
+			throw new IllegalArgumentException(String.format("No argument provided for %c directive", directive));
 	}
 
 	public String formatString(String format, Object... params) {
@@ -117,12 +81,11 @@ public class CLFormatter {
 				continue;
 			}
 
+			if (builtinDirectives.containsKey(dirName)) {
+				builtinDirectives.get(dirName).format(sb, item, mods, arrParams, tParams, dirMatcher);
+			}
+			
 			switch (dirName) {
-			case "A":
-				checkItem(item, 'A');
-				handleAestheticDirective(sb, item, mods, arrParams);
-				tParams.right();
-				break;
 			case "B":
 				checkItem(item, 'B');
 				if (!(item instanceof Number)) {
@@ -189,8 +152,7 @@ public class CLFormatter {
 			case "]":
 				throw new IllegalArgumentException("Found conditional-end outside of conditional.");
 			case ";":
-				throw new IllegalArgumentException(
-						"Found conditional-seperator outside of conditional.");
+				throw new IllegalArgumentException("Found conditional-seperator outside of conditional.");
 			case "T":
 			case "<":
 			case ">":
@@ -266,8 +228,8 @@ public class CLFormatter {
 		}
 	}
 
-	private void handleNumberDirective(StringBuffer buff, CLModifiers mods, CLParameters params, int argidx,
-			long val, int radix) {
+	private void handleNumberDirective(StringBuffer buff, CLModifiers mods, CLParameters params, int argidx, long val,
+			int radix) {
 		/*
 		 * Initialize the two padding related parameters, and then fill them in from the
 		 * directive parameters if they are present.
@@ -321,58 +283,11 @@ public class CLFormatter {
 			}
 		} else {
 			if (params.length() < 1)
-				throw new IllegalArgumentException(
-						"R directive requires at least one parameter, the radix");
+				throw new IllegalArgumentException("R directive requires at least one parameter, the radix");
 
 			int radix = params.getInt(0, "radix", 'R');
 
 			handleNumberDirective(buff, mods, params, 0, val, radix);
-		}
-	}
-
-	private void handleAestheticDirective(StringBuffer buff, Object item, CLModifiers mods, CLParameters params) {
-		int mincol = 0, colinc = 1, minpad = 0;
-		char padchar = ' ';
-
-		if (params.length() > 1) {
-			mincol = params.getIntDefault(0, "minimum column count", 'A', 0);
-		}
-
-		if (params.length() < 4) {
-			throw new IllegalArgumentException(
-					"Must provide either zero, one or four arguments to A directive");
-		}
-
-		colinc = params.getIntDefault(1, "padding increment", 'A', 1);
-		minpad = params.getIntDefault(2, "minimum amount of padding", 'A', 0);
-		padchar = params.getCharDefault(3, "padding character", 'A', ' ');
-
-		StringBuilder work = new StringBuilder();
-
-		if (mods.atMod) {
-			for (int i = 0; i < minpad; i++) {
-				work.append(padchar);
-			}
-
-			for (int i = work.length(); i < mincol; i++) {
-				for (int k = 0; k < colinc; k++) {
-					work.append(padchar);
-				}
-			}
-		}
-
-		work.append(item.toString());
-
-		if (!mods.atMod) {
-			for (int i = 0; i < minpad; i++) {
-				work.append(padchar);
-			}
-
-			for (int i = work.length(); i < mincol; i++) {
-				for (int k = 0; k < colinc; k++) {
-					work.append(padchar);
-				}
-			}
 		}
 	}
 
