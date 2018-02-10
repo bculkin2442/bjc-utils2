@@ -4,11 +4,11 @@ import java.util.regex.Matcher;
 
 import bjc.utils.esodata.Tape;
 
-public class AestheticDirective implements Directive {
+class AestheticDirective implements Directive {
 
 	@Override
 	public void format(StringBuffer sb, Object item, CLModifiers mods, CLParameters params, Tape<Object> tParams,
-			Matcher dirMatcher) {
+			Matcher dirMatcher, CLFormatter fmt) {
 		CLFormatter.checkItem(item, 'A');
 		
 		int mincol = 0, colinc = 1, minpad = 0;

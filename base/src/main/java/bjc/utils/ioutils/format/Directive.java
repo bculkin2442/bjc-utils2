@@ -10,5 +10,5 @@ public interface Directive {
 	 * @TODO fill in parameters
 	 */
 	public void format(StringBuffer sb, Object item, CLModifiers mods,
-			CLParameters arrParams, Tape<Object> tParams, Matcher dirMatcher);
+			CLParameters arrParams, Tape<Object> tParams, Matcher dirMatcher, CLFormatter fmt);
 }

@@ -1,4 +1,4 @@
-package bjc.utils.ioutils;
+package bjc.utils.math;
 
 import java.util.Map;
 import java.util.function.BiFunction;
