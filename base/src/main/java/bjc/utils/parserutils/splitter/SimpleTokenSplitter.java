@@ -34,10 +34,11 @@ public class SimpleTokenSplitter implements TokenSplitter {
 
 	@Override
 	public IList<String> split(final String input) {
-		if(keepDelim)
+		if(keepDelim) {
 			return RegexStringEditor.mapOccurances(input, spliter, ID.id(), ID.id());
-		else
-			return RegexStringEditor.mapOccurances(input, spliter, ID.id(), strang -> "");
+		}
+
+		return RegexStringEditor.mapOccurances(input, spliter, ID.id(), strang -> "");
 	}
 
 	@Override

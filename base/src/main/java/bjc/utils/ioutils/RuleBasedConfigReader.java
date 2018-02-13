@@ -101,27 +101,27 @@ public class RuleBasedConfigReader<E> {
 		/*
 		 * Ignore blank line without an open rule
 		 */
-		if(isRuleOpen == false)
+		if(isRuleOpen == false) {
 			/*
 			 * Do nothing
 			 */
 			return false;
-		else {
-			/*
-			 * Nothing happens on rule end
-			 */
-			if(end != null) {
-				/*
-				 * Process the rule ending
-				 */
-				end.accept(state);
-			}
-
-			/*
-			 * Return a closed rule
-			 */
-			return false;
 		}
+
+		/*
+		 * Nothing happens on rule end
+		 */
+		if(end != null) {
+			/*
+			 * Process the rule ending
+			 */
+			end.accept(state);
+		}
+
+		/*
+		 * Return a closed rule
+		 */
+		return false;
 	}
 
 	/**

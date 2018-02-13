@@ -10,6 +10,8 @@ import bjc.utils.data.Lazy;
  * A wrapped lazy value.
  *
  * @author Ben Culkin
+ * @param <ContainedType>
+ *        The type of the wrapped value.
  */
 public class WrappedLazy<ContainedType> implements IHolder<ContainedType> {
 	/* Held value. */
@@ -33,7 +35,8 @@ public class WrappedLazy<ContainedType> implements IHolder<ContainedType> {
 	 * the compiler could know which one we meant without the dummy
 	 * parameter.
 	 */
-	private WrappedLazy(final IHolder<IHolder<ContainedType>> wrappedHolder, final boolean dummy) {
+	private WrappedLazy(final IHolder<IHolder<ContainedType>> wrappedHolder,
+			@SuppressWarnings("unused") final boolean dummy) {
 		held = wrappedHolder;
 	}
 

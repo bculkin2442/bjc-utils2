@@ -140,13 +140,13 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	public int revFind(final Predicate<ITree<ContainedType>> childPred) {
 		if(childCount == 0) {
 			return -1;
-		} else {
-			for(int i = childCount - 1; i >= 0; i--) {
-				if(childPred.test(getChild(i))) return i;
-			}
-
-			return -1;
 		}
+
+		for(int i = childCount - 1; i >= 0; i--) {
+			if(childPred.test(getChild(i))) return i;
+		}
+
+		return -1;
 	}
 
 	@Override
@@ -234,8 +234,10 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	}
 
 	protected void internalToString(final StringBuilder builder, final int indentLevel, final boolean initial) {
-		for(int i = 0; i < indentLevel; i++) {
-			builder.append(">\t");
+		if(!initial) {
+			for(int i = 0; i < indentLevel; i++) {
+				builder.append(">\t");
+			}
 		}
 
 		builder.append("Node #");

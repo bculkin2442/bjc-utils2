@@ -16,6 +16,7 @@ import org.junit.rules.ExpectedException;
 /*
  * Tests for TokenUtils
  */
+@SuppressWarnings("javadoc")
 public class TokenUtilsTest {
 	@Rule
 	public ExpectedException exp = ExpectedException.none();
@@ -50,6 +51,7 @@ public class TokenUtilsTest {
 	 * Check handling of strings with a single embedded string.
 	 */
 	@Test
+	@SuppressWarnings("static-method")
 	public void testRemoveDQuoted_SingleString() {
 		final List<String> onSingleMatchString = removeDQuotedStrings("hello\"there\"");
 
@@ -60,6 +62,7 @@ public class TokenUtilsTest {
 	 * Check handling of strings with multiple quoted strings in a row.
 	 */
 	@Test
+	@SuppressWarnings("static-method")
 	public void testRemoveDQuoted_MultipleSerialString() {
 		final List<String> onMultipleSerialMatchString = removeDQuotedStrings("\"hello\"\"there\"");
 
@@ -70,6 +73,7 @@ public class TokenUtilsTest {
 	 * Check handling of strings with multiple interleaved strings.
 	 */
 	@Test
+	@SuppressWarnings("static-method")
 	public void testRemoveDQuoted_MultipleInterleavedString() {
 		final List<String> onMultipleInterleaveMatchString = removeDQuotedStrings("one\"two\"three\"four\"");
 
@@ -80,6 +84,7 @@ public class TokenUtilsTest {
 	 * Check handling of strings without embedded strings.
 	 */
 	@Test
+	@SuppressWarnings("static-method")
 	public void testRemoveDQuote_NoString() {
 		final List<String> onNonmatchingString = removeDQuotedStrings("hello");
 
@@ -90,6 +95,7 @@ public class TokenUtilsTest {
 	 * Check handling of empty strings.
 	 */
 	@Test
+	@SuppressWarnings("static-method")
 	public void testRemoveDQuote_EmptyString() {
 		final List<String> onEmptyString = removeDQuotedStrings("");
 
@@ -103,6 +109,7 @@ public class TokenUtilsTest {
 	 * Check handling of empty strings.
 	 */
 	@Test
+	@SuppressWarnings("static-method")
 	public void testDescapeString_EmptyString() {
 		final String onEmptyString = descapeString("");
 
@@ -113,6 +120,7 @@ public class TokenUtilsTest {
 	 * Check handling of strings without escapes
 	 */
 	@Test
+	@SuppressWarnings("static-method")
 	public void testDescapeString_NonescapeString() {
 		final String onNonescapeString = descapeString("hello there");
 
@@ -123,6 +131,7 @@ public class TokenUtilsTest {
 	 * Check handling of strings with single escapes.
 	 */
 	@Test
+	@SuppressWarnings("static-method")
 	public void testDescapeString_SingleEscapeString() {
 		final String onSingleEscapeString = descapeString("hello\\tthere");
 
@@ -133,6 +142,7 @@ public class TokenUtilsTest {
 	 * Check handling of strings with multiple escapes.
 	 */
 	@Test
+	@SuppressWarnings("static-method")
 	public void testDescapeString_MultipleEscapeString() {
 		final String onMultipleEscapeString = descapeString("hello\\tthere\\tworld");
 

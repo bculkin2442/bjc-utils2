@@ -10,6 +10,7 @@ import bjc.utils.data.Option;
  * A wrapped optional value.
  *
  * @author Ben Culkin.
+ * @param <ContainedType> The wrapped type.
  */
 public class WrappedOption<ContainedType> implements IHolder<ContainedType> {
 	/* The held value. */
@@ -30,7 +31,8 @@ public class WrappedOption<ContainedType> implements IHolder<ContainedType> {
 	 * method, because without this method erases to the same type as the
 	 * public one.
 	 */
-	private WrappedOption(final IHolder<IHolder<ContainedType>> toHold, final boolean dummy) {
+	private WrappedOption(final IHolder<IHolder<ContainedType>> toHold,
+			@SuppressWarnings("unused") final boolean dummy) {
 		held = toHold;
 	}
 

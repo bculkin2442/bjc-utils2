@@ -198,9 +198,9 @@ public class RegexStringEditor {
 
 		if(matcher.matches()) {
 			return action.apply(input);
-		} else {
-			return input;
 		}
+
+		return input;
 	}
 
 	/**
@@ -223,8 +223,8 @@ public class RegexStringEditor {
 
 		if(matcher.matches()) {
 			return input;
-		} else {
-			return action.apply(input);
 		}
+
+		return action.apply(input);
 	}
 }

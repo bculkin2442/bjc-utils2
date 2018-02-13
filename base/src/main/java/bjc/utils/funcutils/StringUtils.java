@@ -161,9 +161,9 @@ public class StringUtils {
 	public static String toEnglishList(final Object[] objects, final boolean and) {
 		if(and) {
 			return toEnglishList(objects, "and");
-		} else {
-			return toEnglishList(objects, "or");
 		}
+
+		return toEnglishList(objects, "or");
 	}
 
 	/**
@@ -194,6 +194,7 @@ public class StringUtils {
 	 *
 	 * @param pattern
 	 *        The pattern to count occurances of.
+	 * @return The number of times the pattern matches.
 	 */
 	public static int countMatches(final String value, final String pattern) {
 		Matcher mat = Pattern.compile(pattern).matcher(value);

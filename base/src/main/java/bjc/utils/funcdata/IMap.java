@@ -80,7 +80,7 @@ public interface IMap<KeyType, ValueType> {
 	default ValueType getOrDefault(final KeyType key, final ValueType defaultValue) {
 		try {
 			return get(key);
-		} catch(@SuppressWarnings("unused") final IllegalArgumentException iaex) {
+		} catch(final IllegalArgumentException iaex) {
 			/*
 			 * We don't care about this, because it indicates a key
 			 * is missing.

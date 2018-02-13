@@ -101,13 +101,13 @@ public class PushdownMap<KeyType, ValueType> implements IMap<KeyType, ValueType>
 			stk.push(val);
 
 			return vl;
-		} else {
-			final Stack<ValueType> stk = new SimpleStack<>();
-
-			stk.push(val);
-
-			return null;
 		}
+
+		final Stack<ValueType> stk = new SimpleStack<>();
+
+		stk.push(val);
+
+		return null;
 	}
 
 	@Override
@@ -116,9 +116,9 @@ public class PushdownMap<KeyType, ValueType> implements IMap<KeyType, ValueType>
 
 		if(stk.size() > 1) {
 			return stk.pop();
-		} else {
-			return backing.remove(key).top();
 		}
+
+		return backing.remove(key).top();
 	}
 
 	@Override

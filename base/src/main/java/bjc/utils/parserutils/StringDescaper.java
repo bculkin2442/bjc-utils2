@@ -12,6 +12,12 @@ import static java.util.Map.Entry;
 
 import static bjc.utils.PropertyDB.getRegex;
 
+/**
+ * Customizable string descaping.
+ * 
+ * @author EVE
+ *
+ */
 public class StringDescaper {
 	private Logger LOGGER = Logger.getLogger(StringDescaper.class.getName());
 
@@ -37,6 +43,9 @@ public class StringDescaper {
 	private Map<String, String>			literalEscapes;
 	private Map<Pattern, UnaryOperator<String>>	specialEscapes;
 
+	/**
+	 * Create a new string descaper.
+	 */
 	public StringDescaper() {
 		literalEscapes = new HashMap<>();
 		specialEscapes = new HashMap<>();
@@ -45,6 +54,14 @@ public class StringDescaper {
 		escapePatt = Pattern.compile(rEscapeString);
 	}
 
+	/**
+	 * Add a new literal string escape.
+	 * 
+	 * @param escape
+	 *        The escape to add.
+	 * @param val
+	 *        The value for the escape.
+	 */
 	public void addLiteralEscape(String escape, String val) {
 		if(literalEscapes.containsKey(escape)) {
 			LOGGER.warning(String.format("Shadowing literal escape '%s'\n", escape));
@@ -53,6 +70,14 @@ public class StringDescaper {
 		literalEscapes.put(escape, val);
 	}
 
+	/**
+	 * Create a new custom escape.
+	 * 
+	 * @param escape
+	 *        The escape to add.
+	 * @param val
+	 *        The implementation of the escape.
+	 */
 	public void addSpecialEscape(String escape, UnaryOperator<String> val) {
 		/*
 		 * Make sure this special escape is a valid regex.
@@ -77,6 +102,9 @@ public class StringDescaper {
 		specialEscapes.put(patt, val);
 	}
 
+	/**
+	 * Compile the escapes.
+	 */
 	public void compileEscapes() {
 		StringBuilder work = new StringBuilder();
 

@@ -12,6 +12,7 @@ import java.util.function.Function;
 
 /*
  * @TODO 10/11/17 Ben Culkin :TopDownStep
+ * 
  * 	Figure out what is broken with this, and fix it so that step-wise
  * 	iteration works correctly.
  */

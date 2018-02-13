@@ -39,18 +39,18 @@ public class ValueToggle<E> implements Toggle<E> {
 	public E get() {
 		if(alignment.get()) {
 			return lft;
-		} else {
-			return rght;
 		}
+
+		return rght;
 	}
 
 	@Override
 	public E peek() {
 		if(alignment.peek()) {
 			return lft;
-		} else {
-			return rght;
 		}
+
+		return rght;
 	}
 
 	@Override

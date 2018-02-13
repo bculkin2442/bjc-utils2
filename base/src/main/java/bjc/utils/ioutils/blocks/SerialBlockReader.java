@@ -55,10 +55,11 @@ public class SerialBlockReader implements BlockReader {
 
 	@Override
 	public Block getBlock() {
-		if(readerQueue.isEmpty())
+		if(readerQueue.isEmpty()) {
 			return null;
-		else
-			return readerQueue.peek().getBlock();
+		}
+
+		return readerQueue.peek().getBlock();
 	}
 
 	@Override

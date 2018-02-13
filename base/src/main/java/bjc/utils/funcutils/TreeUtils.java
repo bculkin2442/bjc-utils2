@@ -13,9 +13,15 @@ import bjc.utils.funcdata.IList;
  * @author Benjamin Culkin
  */
 public class TreeUtils {
-	/*
+	/**
 	 * Convert a tree into a list of outline nodes that match a certain
 	 * path.
+	 * 
+	 * @param tre
+	 *        The tree to outline.
+	 * @param leafMarker
+	 *        The path to mark nodes with.
+	 * @return The list of marked paths.
 	 */
 	public static <T> IList<IList<T>> outlineTree(ITree<T> tre, Predicate<T> leafMarker) {
 		IList<IList<T>> paths = new FunctionalList<>();

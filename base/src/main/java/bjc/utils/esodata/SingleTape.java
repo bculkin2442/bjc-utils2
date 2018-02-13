@@ -35,6 +35,9 @@ public class SingleTape<T> implements Tape<T> {
 	/**
 	 * Create a new tape with the specified contents that doesn't
 	 * autoextend.
+	 * 
+	 * @param vals
+	 *        The values to put on the tape.
 	 */
 	@SafeVarargs
 	public SingleTape(T... vals) {
