@@ -30,7 +30,8 @@ final class TokenTransformer<TokenType> implements Consumer<TokenType> {
 		@Override
 		public ConstructorState<TokenType> apply(final ConstructorState<TokenType> pair) {
 			/*
-			 * Replace the current AST with the result of handling an operator
+			 * Replace the current AST with the result of handling
+			 * an operator
 			 */
 			return new ConstructorState<>(pair.bindLeft(queuedASTs -> {
 				return handleOperator(queuedASTs);
@@ -46,13 +47,14 @@ final class TokenTransformer<TokenType> implements Consumer<TokenType> {
 			/*
 			 * Handle special operators
 			 */
-			if (isSpecialOperator.test(element)) {
+			if(isSpecialOperator.test(element)) {
 				newAST = handleSpecialOperator.apply(element).apply(queuedASTs);
 			} else {
 				/*
-				 * Error if we don't have enough for a binary operator
+				 * Error if we don't have enough for a binary
+				 * operator
 				 */
-				if (queuedASTs.size() < 2) {
+				if(queuedASTs.size() < 2) {
 					final String msg = String.format(
 							"Attempted to parse binary operator without enough operands\n\tProblem operator is: %s\n\tPossible operand is: %s",
 							element.toString(), queuedASTs.peek().toString());
@@ -108,7 +110,7 @@ final class TokenTransformer<TokenType> implements Consumer<TokenType> {
 		/*
 		 * Handle operators
 		 */
-		if (operatorPredicate.test(element)) {
+		if(operatorPredicate.test(element)) {
 			initialState.transform(new OperatorHandler(element));
 		} else {
 			final ITree<TokenType> newAST = new Tree<>(element);
@@ -118,7 +120,9 @@ final class TokenTransformer<TokenType> implements Consumer<TokenType> {
 			 */
 			initialState.transform(pair -> {
 				/*
-				 * Transform the pair, ignoring the current AST in favor of the one consisting of the current element
+				 * Transform the pair, ignoring the current AST
+				 * in favor of the one consisting of the current
+				 * element
 				 */
 				return new ConstructorState<>(pair.bindLeft(queue -> {
 					queue.push(newAST);

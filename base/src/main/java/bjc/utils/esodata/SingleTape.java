@@ -15,20 +15,20 @@ import java.util.ArrayList;
  * policy.
  *
  * @param <T>
- * 	The element type of the tape.
+ *        The element type of the tape.
  *
  * @author bjculkin
  */
 public class SingleTape<T> implements Tape<T> {
-	/* @NOTE
-	 * 	Does this stuff still need to be protected? We're not trying to
-	 * 	use inheritance to implement tape types any more, so I don't see
-	 * 	any reason to not have it be private.
+	/*
+	 * @NOTE Does this stuff still need to be protected? We're not trying to
+	 * use inheritance to implement tape types any more, so I don't see any
+	 * reason to not have it be private.
 	 */
 	/* Our backing store. */
-	protected ArrayList<T>	backing;
+	protected ArrayList<T> backing;
 	/* Our position in the list. */
-	protected int		pos;
+	protected int pos;
 	/* Whether to auto-extend the list on the left with nulls. */
 	protected boolean autoExtend;
 
@@ -57,7 +57,7 @@ public class SingleTape<T> implements Tape<T> {
 	 * policy.
 	 *
 	 * @param autoExtnd
-	 * 	Whether or not to auto-extend the tape to the right w/ nulls.
+	 *        Whether or not to auto-extend the tape to the right w/ nulls.
 	 */
 	public SingleTape(final boolean autoExtnd) {
 		autoExtend = autoExtnd;
@@ -92,7 +92,7 @@ public class SingleTape<T> implements Tape<T> {
 
 	@Override
 	public void insertAfter(final T itm) {
-		if (pos == backing.size() - 1) {
+		if(pos == backing.size() - 1) {
 			backing.add(itm);
 		} else {
 			backing.add(pos + 1, itm);
@@ -102,7 +102,7 @@ public class SingleTape<T> implements Tape<T> {
 	@Override
 	public T remove() {
 		final T res = backing.remove(pos);
-		if (pos != 0) {
+		if(pos != 0) {
 			pos -= 1;
 		}
 		return res;
@@ -125,7 +125,7 @@ public class SingleTape<T> implements Tape<T> {
 
 	@Override
 	public boolean left(final int amt) {
-		if (pos - amt < 0) return false;
+		if(pos - amt < 0) return false;
 
 		pos -= amt;
 		return true;
@@ -138,12 +138,13 @@ public class SingleTape<T> implements Tape<T> {
 
 	@Override
 	public boolean right(final int amt) {
-		if (pos + amt >= backing.size() - 1) {
-			if (autoExtend) {
-				while (pos + amt >= backing.size() - 1) {
+		if(pos + amt >= backing.size() - 1) {
+			if(autoExtend) {
+				while(pos + amt >= backing.size() - 1) {
 					backing.add(null);
 				}
-			} else return false;
+			} else
+				return false;
 		}
 
 		pos += amt;
@@ -167,15 +168,15 @@ public class SingleTape<T> implements Tape<T> {
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (!(obj instanceof SingleTape<?>)) return false;
+		if(this == obj) return true;
+		if(obj == null) return false;
+		if(!(obj instanceof SingleTape<?>)) return false;
 
 		final SingleTape<?> other = (SingleTape<?>) obj;
 
-		if (backing == null) {
-			if (other.backing != null) return false;
-		} else if (!backing.equals(other.backing)) return false;
+		if(backing == null) {
+			if(other.backing != null) return false;
+		} else if(!backing.equals(other.backing)) return false;
 
 		return true;
 	}

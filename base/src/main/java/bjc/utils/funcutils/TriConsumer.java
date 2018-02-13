@@ -6,13 +6,13 @@ package bjc.utils.funcutils;
  * @author EVE
  *
  * @param <A>
- * 	Type of the first argument.
+ *        Type of the first argument.
  *
  * @param <B>
- * 	Type of the second argument.
+ *        Type of the second argument.
  *
  * @param <C>
- * 	Type of the third argument.
+ *        Type of the third argument.
  */
 @FunctionalInterface
 public interface TriConsumer<A, B, C> {
@@ -20,13 +20,13 @@ public interface TriConsumer<A, B, C> {
 	 * Perform the action.
 	 *
 	 * @param a
-	 * 	The first parameter.
+	 *        The first parameter.
 	 *
 	 * @param b
-	 * 	The second parameter.
+	 *        The second parameter.
 	 *
 	 * @param c
-	 * 	The third parameter.
+	 *        The third parameter.
 	 */
 	public void accept(A a, B b, C c);
 }

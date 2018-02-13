@@ -7,8 +7,8 @@ import java.util.regex.Matcher;
 class GotoDirective implements Directive {
 
 	@Override
-	public void format(StringBuffer sb, Object item, CLModifiers mods, CLParameters params, Tape<Object> formatParams,
-			Matcher dirMatcher, CLFormatter fmt) {
+	public void format(StringBuffer sb, Object item, CLModifiers mods, CLParameters params,
+			Tape<Object> formatParams, Matcher dirMatcher, CLFormatter fmt) {
 		if(mods.colonMod) {
 			int num = 1;
 			if(params.length() > 1) {

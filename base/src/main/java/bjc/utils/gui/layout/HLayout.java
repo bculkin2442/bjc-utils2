@@ -16,7 +16,7 @@ public class HLayout extends GridLayout {
 	 * Create a new horizontal layout with the specified number of columns.
 	 *
 	 * @param columns
-	 * 	The number of columns in this layout.
+	 *        The number of columns in this layout.
 	 */
 	public HLayout(final int columns) {
 		super(1, columns);

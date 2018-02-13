@@ -34,13 +34,14 @@ public class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight> implements IPai
 	 * Create a new bound lazy pair.
 	 *
 	 * @param leftSupp
-	 * 	The supplier for the left value.
+	 *        The supplier for the left value.
 	 *
 	 * @param rightSupp
-	 * 	The supplier for the right value.
+	 *        The supplier for the right value.
 	 *
 	 * @param bindr
-	 * 	The function to use to bind the left and right into a new pair.
+	 *        The function to use to bind the left and right into a new
+	 *        pair.
 	 */
 	public BoundLazyPair(final Supplier<OldLeft> leftSupp, final Supplier<OldRight> rightSupp,
 			final BiFunction<OldLeft, OldRight, IPair<NewLeft, NewRight>> bindr) {
@@ -52,13 +53,13 @@ public class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight> implements IPai
 	@Override
 	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind(
 			final BiFunction<NewLeft, NewRight, IPair<BoundLeft, BoundRight>> bindr) {
-		if (bindr == null) throw new NullPointerException("Binder must not be null");
+		if(bindr == null) throw new NullPointerException("Binder must not be null");
 
 		final IHolder<IPair<NewLeft, NewRight>> newPair = new Identity<>(boundPair);
-		final IHolder<Boolean> newPairMade              = new Identity<>(pairBound);
+		final IHolder<Boolean> newPairMade = new Identity<>(pairBound);
 
 		final Supplier<NewLeft> leftSupp = () -> {
-			if (!newPairMade.getValue()) {
+			if(!newPairMade.getValue()) {
 				/*
 				 * If the pair hasn't been bound before, bind
 				 * it.
@@ -72,7 +73,7 @@ public class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight> implements IPai
 		};
 
 		final Supplier<NewRight> rightSupp = () -> {
-			if (!newPairMade.getValue()) {
+			if(!newPairMade.getValue()) {
 				/*
 				 * If the pair hasn't been bound before, bind
 				 * it.
@@ -91,12 +92,12 @@ public class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight> implements IPai
 	@Override
 	public <BoundLeft> IPair<BoundLeft, NewRight> bindLeft(
 			final Function<NewLeft, IPair<BoundLeft, NewRight>> leftBinder) {
-		if (leftBinder == null) throw new NullPointerException("Left binder must not be null");
+		if(leftBinder == null) throw new NullPointerException("Left binder must not be null");
 
 		final Supplier<NewLeft> leftSupp = () -> {
 			IPair<NewLeft, NewRight> newPair = boundPair;
 
-			if (!pairBound) {
+			if(!pairBound) {
 				/*
 				 * If the pair hasn't been bound before, bind
 				 * it.
@@ -113,12 +114,12 @@ public class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight> implements IPai
 	@Override
 	public <BoundRight> IPair<NewLeft, BoundRight> bindRight(
 			final Function<NewRight, IPair<NewLeft, BoundRight>> rightBinder) {
-		if (rightBinder == null) throw new NullPointerException("Right binder must not be null");
+		if(rightBinder == null) throw new NullPointerException("Right binder must not be null");
 
 		final Supplier<NewRight> rightSupp = () -> {
 			IPair<NewLeft, NewRight> newPair = boundPair;
 
-			if (!pairBound) {
+			if(!pairBound) {
 				/*
 				 * If the pair hasn't been bound before, bind
 				 * it.
@@ -137,17 +138,17 @@ public class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight> implements IPai
 			final IPair<OtherLeft, OtherRight> otherPair,
 			final BiFunction<NewLeft, OtherLeft, CombinedLeft> leftCombiner,
 			final BiFunction<NewRight, OtherRight, CombinedRight> rightCombiner) {
-		if (otherPair == null) {
+		if(otherPair == null) {
 			throw new NullPointerException("Other pair must not be null");
-		} else if (leftCombiner == null) {
+		} else if(leftCombiner == null) {
 			throw new NullPointerException("Left combiner must not be null");
-		} else if (rightCombiner == null) {
+		} else if(rightCombiner == null) {
 			throw new NullPointerException("Right combiner must not be null");
 		}
 
 		return otherPair.bind((otherLeft, otherRight) -> {
 			return bind((leftVal, rightVal) -> {
-				CombinedLeft  cLeft  = leftCombiner.apply(leftVal, otherLeft);
+				CombinedLeft cLeft = leftCombiner.apply(leftVal, otherLeft);
 				CombinedRight cRight = rightCombiner.apply(rightVal, otherRight);
 
 				return new LazyPair<>(cLeft, cRight);
@@ -157,10 +158,10 @@ public class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight> implements IPai
 
 	@Override
 	public <NewLeftType> IPair<NewLeftType, NewRight> mapLeft(final Function<NewLeft, NewLeftType> mapper) {
-		if (mapper == null) throw new NullPointerException("Mapper must not be null");
+		if(mapper == null) throw new NullPointerException("Mapper must not be null");
 
 		final Supplier<NewLeftType> leftSupp = () -> {
-			if (!pairBound) {
+			if(!pairBound) {
 				final NewLeft leftVal = binder.apply(leftSupplier.get(), rightSupplier.get()).getLeft();
 
 				return mapper.apply(leftVal);
@@ -170,7 +171,7 @@ public class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight> implements IPai
 		};
 
 		final Supplier<NewRight> rightSupp = () -> {
-			if (!pairBound) return binder.apply(leftSupplier.get(), rightSupplier.get()).getRight();
+			if(!pairBound) return binder.apply(leftSupplier.get(), rightSupplier.get()).getRight();
 
 			return boundPair.getRight();
 		};
@@ -180,16 +181,16 @@ public class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight> implements IPai
 
 	@Override
 	public <NewRightType> IPair<NewLeft, NewRightType> mapRight(final Function<NewRight, NewRightType> mapper) {
-		if (mapper == null) throw new NullPointerException("Mapper must not be null");
+		if(mapper == null) throw new NullPointerException("Mapper must not be null");
 
 		final Supplier<NewLeft> leftSupp = () -> {
-			if (!pairBound) return binder.apply(leftSupplier.get(), rightSupplier.get()).getLeft();
+			if(!pairBound) return binder.apply(leftSupplier.get(), rightSupplier.get()).getLeft();
 
 			return boundPair.getLeft();
 		};
 
 		final Supplier<NewRightType> rightSupp = () -> {
-			if (!pairBound) {
+			if(!pairBound) {
 				final NewRight rightVal = binder.apply(leftSupplier.get(), rightSupplier.get())
 						.getRight();
 
@@ -204,9 +205,9 @@ public class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight> implements IPai
 
 	@Override
 	public <MergedType> MergedType merge(final BiFunction<NewLeft, NewRight, MergedType> merger) {
-		if (merger == null) throw new NullPointerException("Merger must not be null");
+		if(merger == null) throw new NullPointerException("Merger must not be null");
 
-		if (!pairBound) {
+		if(!pairBound) {
 			/*
 			 * If the pair isn't bound yet, bind it.
 			 */
@@ -220,7 +221,7 @@ public class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight> implements IPai
 
 	@Override
 	public String toString() {
-		if (pairBound) return boundPair.toString();
+		if(pairBound) return boundPair.toString();
 
 		return "(un-materialized)";
 	}

@@ -7,8 +7,8 @@ import java.util.regex.Matcher;
 class EscapeDirective implements Directive {
 
 	@Override
-	public void format(StringBuffer sb, Object item, CLModifiers mods, CLParameters params, Tape<Object> formatParams,
-			Matcher dirMatcher, CLFormatter fmt) {
+	public void format(StringBuffer sb, Object item, CLModifiers mods, CLParameters params,
+			Tape<Object> formatParams, Matcher dirMatcher, CLFormatter fmt) {
 		boolean shouldExit;
 
 		switch(params.length()) {

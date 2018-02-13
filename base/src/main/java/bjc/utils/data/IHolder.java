@@ -16,20 +16,19 @@ import bjc.utils.funcdata.theory.Functor;
  * @author ben
  *
  * @param <ContainedType>
- * 	The type of value held.
+ *        The type of value held.
  */
 public interface IHolder<ContainedType> extends Functor<ContainedType> {
 	/**
 	 * Bind a function across the value in this container.
 	 *
 	 * @param <BoundType>
-	 * 	The type of value in this container.
+	 *        The type of value in this container.
 	 *
 	 * @param binder
-	 * 	The function to bind to the value.
+	 *        The function to bind to the value.
 	 *
-	 * @return 
-	 * 	A holder from binding the value.
+	 * @return A holder from binding the value.
 	 */
 	public <BoundType> IHolder<BoundType> bind(Function<ContainedType, IHolder<BoundType>> binder);
 
@@ -37,7 +36,7 @@ public interface IHolder<ContainedType> extends Functor<ContainedType> {
 	 * Apply an action to the value.
 	 *
 	 * @param action
-	 * 	The action to apply to the value.
+	 *        The action to apply to the value.
 	 */
 	public default void doWith(final Consumer<? super ContainedType> action) {
 		transform(value -> {
@@ -51,7 +50,7 @@ public interface IHolder<ContainedType> extends Functor<ContainedType> {
 	default <ArgType, ReturnType> Function<Functor<ArgType>, Functor<ReturnType>> fmap(
 			final Function<ArgType, ReturnType> func) {
 		return argumentFunctor -> {
-			if (!(argumentFunctor instanceof IHolder<?>)) {
+			if(!(argumentFunctor instanceof IHolder<?>)) {
 				final String msg = "This functor only supports mapping over instances of IHolder";
 
 				throw new IllegalArgumentException(msg);
@@ -72,21 +71,19 @@ public interface IHolder<ContainedType> extends Functor<ContainedType> {
 	 * Lifts a function to bind over this holder.
 	 *
 	 * @param <NewType>
-	 * 	The type of the functions return.
+	 *        The type of the functions return.
 	 *
 	 * @param func
-	 * 	The function to lift over the holder.
+	 *        The function to lift over the holder.
 	 *
-	 * @return
-	 * 	The function lifted over the holder.
+	 * @return The function lifted over the holder.
 	 */
 	public <NewType> Function<ContainedType, IHolder<NewType>> lift(Function<ContainedType, NewType> func);
 
 	/**
 	 * Make this holder lazy.
 	 *
-	 * @return 
-	 * 	A lazy version of this holder.
+	 * @return A lazy version of this holder.
 	 */
 	public default IHolder<ContainedType> makeLazy() {
 		return new WrappedLazy<>(this);
@@ -95,8 +92,7 @@ public interface IHolder<ContainedType> extends Functor<ContainedType> {
 	/**
 	 * Make this holder a list.
 	 *
-	 * @return 
-	 * 	A list version of this holder.
+	 * @return A list version of this holder.
 	 */
 	public default IHolder<ContainedType> makeList() {
 		return new BoundListHolder<>(new FunctionalList<>(this));
@@ -105,8 +101,7 @@ public interface IHolder<ContainedType> extends Functor<ContainedType> {
 	/**
 	 * Make this holder optional.
 	 *
-	 * @return
-	 * 	An optional version of this holder.
+	 * @return An optional version of this holder.
 	 */
 	public default IHolder<ContainedType> makeOptional() {
 		return new WrappedOption<>(this);
@@ -119,13 +114,12 @@ public interface IHolder<ContainedType> extends Functor<ContainedType> {
 	 * Does not change the internal state of this holder.
 	 *
 	 * @param <MappedType>
-	 * 	The type of the mapped value.
+	 *        The type of the mapped value.
 	 *
 	 * @param mapper
-	 * 	The function to do mapping with.
+	 *        The function to do mapping with.
 	 *
-	 * @return
-	 * 	A holder with the mapped value
+	 * @return A holder with the mapped value
 	 */
 	public <MappedType> IHolder<MappedType> map(Function<ContainedType, MappedType> mapper);
 
@@ -133,10 +127,9 @@ public interface IHolder<ContainedType> extends Functor<ContainedType> {
 	 * Replace the held value with a new one.
 	 *
 	 * @param newValue
-	 * 	The value to hold instead.
+	 *        The value to hold instead.
 	 *
-	 * @return
-	 * 	The holder itself.
+	 * @return The holder itself.
 	 */
 	public default IHolder<ContainedType> replace(final ContainedType newValue) {
 		return transform(oldValue -> {
@@ -148,10 +141,9 @@ public interface IHolder<ContainedType> extends Functor<ContainedType> {
 	 * Transform the value held in this holder.
 	 *
 	 * @param transformer
-	 * 	The function to transform the value with.
+	 *        The function to transform the value with.
 	 *
-	 * @return 
-	 * 	The holder itself, for easy chaining.
+	 * @return The holder itself, for easy chaining.
 	 */
 	public IHolder<ContainedType> transform(UnaryOperator<ContainedType> transformer);
 
@@ -160,13 +152,12 @@ public interface IHolder<ContainedType> extends Functor<ContainedType> {
 	 * held.
 	 *
 	 * @param <UnwrappedType>
-	 * 	The type of the unwrapped value.
+	 *        The type of the unwrapped value.
 	 *
 	 * @param unwrapper
-	 * 	The function to use to unwrap the value.
+	 *        The function to use to unwrap the value.
 	 *
-	 * @return
-	 * 	The unwrapped held value.
+	 * @return The unwrapped held value.
 	 */
 	public <UnwrappedType> UnwrappedType unwrap(Function<ContainedType, UnwrappedType> unwrapper);
 }

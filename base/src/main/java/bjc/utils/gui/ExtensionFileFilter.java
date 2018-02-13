@@ -26,7 +26,7 @@ public class ExtensionFileFilter extends FileFilter {
 	 * Create a new filter only showing files with the specified extensions.
 	 *
 	 * @param exts
-	 *                The extensions to show in this filter.
+	 *        The extensions to show in this filter.
 	 */
 	public ExtensionFileFilter(final List<String> exts) {
 		extensions = new FunctionalList<>(exts);
@@ -36,7 +36,7 @@ public class ExtensionFileFilter extends FileFilter {
 	 * Create a new filter only showing files with the specified extensions.
 	 *
 	 * @param exts
-	 *                The extensions to show in this filter.
+	 *        The extensions to show in this filter.
 	 */
 	public ExtensionFileFilter(final String... exts) {
 		extensions = new FunctionalList<>(exts);
@@ -44,7 +44,7 @@ public class ExtensionFileFilter extends FileFilter {
 
 	@Override
 	public boolean accept(final File pathname) {
-		if (pathname == null) throw new NullPointerException("Pathname must not be null");
+		if(pathname == null) throw new NullPointerException("Pathname must not be null");
 
 		return extensions.anyMatch(pathname.getName()::endsWith);
 	}

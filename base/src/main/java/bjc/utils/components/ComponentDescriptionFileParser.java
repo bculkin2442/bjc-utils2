@@ -38,19 +38,19 @@ public class ComponentDescriptionFileParser {
 	 * Parse a component description from a stream.
 	 *
 	 * @param inputSource
-	 * 	The stream to parse from.
+	 *        The stream to parse from.
 	 *
 	 * @return The description parsed from the stream.
 	 */
 	public static ComponentDescription fromStream(final InputStream inputSource) {
-		if (inputSource == null) {
+		if(inputSource == null) {
 			throw new NullPointerException("Input source must not be null");
 		}
 
 		ComponentDescriptionState state = new ComponentDescriptionState();
 		/*
 		 * This is valid, because the thing that is returned is the same
-		 * reference we passed in. 
+		 * reference we passed in.
 		 */
 		reader.fromStream(inputSource, state);
 

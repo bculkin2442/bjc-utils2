@@ -6,13 +6,13 @@ package bjc.utils.data;
  * @author EVE
  *
  * @param <E>
- * 	The type of value to toggle between.
+ *        The type of value to toggle between.
  */
 public class ValueToggle<E> implements Toggle<E> {
 	/* Our left value. */
-	private final E	lft;
+	private final E lft;
 	/* Our right value. */
-	private final E	rght;
+	private final E rght;
 	/* Our alignment. */
 	private final BooleanToggle alignment;
 
@@ -22,10 +22,10 @@ public class ValueToggle<E> implements Toggle<E> {
 	 * All toggles start right-aligned.
 	 *
 	 * @param left
-	 * 	The value when the toggle is left-aligned.
+	 *        The value when the toggle is left-aligned.
 	 *
 	 * @param right
-	 * 	The value when the toggle is right-aligned.
+	 *        The value when the toggle is right-aligned.
 	 */
 	public ValueToggle(final E left, final E right) {
 		lft = left;
@@ -37,7 +37,7 @@ public class ValueToggle<E> implements Toggle<E> {
 
 	@Override
 	public E get() {
-		if (alignment.get()) {
+		if(alignment.get()) {
 			return lft;
 		} else {
 			return rght;
@@ -46,7 +46,7 @@ public class ValueToggle<E> implements Toggle<E> {
 
 	@Override
 	public E peek() {
-		if (alignment.peek()) {
+		if(alignment.peek()) {
 			return lft;
 		} else {
 			return rght;

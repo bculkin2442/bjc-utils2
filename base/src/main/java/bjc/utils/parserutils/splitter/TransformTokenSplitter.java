@@ -20,10 +20,10 @@ public class TransformTokenSplitter implements TokenSplitter {
 	 * Create a new transforming splitter.
 	 * 
 	 * @param source
-	 *                The splitter to use as a source.
+	 *        The splitter to use as a source.
 	 * 
 	 * @param transform
-	 *                The transform to apply to tokens.
+	 *        The transform to apply to tokens.
 	 */
 	public TransformTokenSplitter(TokenSplitter source, UnaryOperator<String> transform) {
 		this.source = source;

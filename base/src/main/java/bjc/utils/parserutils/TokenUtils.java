@@ -64,13 +64,13 @@ public class TokenUtils {
 	 * Splits a string around instances of java-style double-quoted strings.
 	 *
 	 * @param inp
-	 *                The string to split.
+	 *        The string to split.
 	 *
 	 * @return An list containing alternating bits of the string and the
 	 *         embedded double-quoted strings that separated them.
 	 */
 	public static List<String> removeDQuotedStrings(final String inp) {
-		if (inp == null) throw new NullPointerException("inp must not be null");
+		if(inp == null) throw new NullPointerException("inp must not be null");
 
 		/*
 		 * What we need for piece-by-piece string building
@@ -84,7 +84,7 @@ public class TokenUtils {
 		final Matcher mt = doubleQuotePatt.matcher(inp);
 		final Matcher corr = quotePatt.matcher(inp);
 
-		if (corr.find() && !corr.find()) {
+		if(corr.find() && !corr.find()) {
 			/*
 			 * There's a unmatched opening quote with no strings.
 			 */
@@ -95,7 +95,7 @@ public class TokenUtils {
 			throw new IllegalArgumentException(msg);
 		}
 
-		while (mt.find()) {
+		while(mt.find()) {
 			/*
 			 * Remove the string until the quoted string.
 			 */
@@ -120,7 +120,7 @@ public class TokenUtils {
 		mt.appendTail(work);
 		final String tail = work.toString();
 
-		if (tail.contains("\"")) {
+		if(tail.contains("\"")) {
 			/*
 			 * There's a unmatched opening quote with at least one
 			 * string.
@@ -135,7 +135,7 @@ public class TokenUtils {
 		/*
 		 * Only add an empty tail if the string was empty.
 		 */
-		if (!tail.equals("") || res.isEmpty()) {
+		if(!tail.equals("") || res.isEmpty()) {
 			res.add(tail);
 		}
 
@@ -146,13 +146,13 @@ public class TokenUtils {
 	 * Replace escape characters with their actual equivalents.
 	 *
 	 * @param inp
-	 *                The string to replace escape sequences in.
+	 *        The string to replace escape sequences in.
 	 *
 	 * @return The string with escape sequences replaced by their equivalent
 	 *         characters.
 	 */
 	public static String descapeString(final String inp) {
-		if (inp == null) throw new NullPointerException("inp must not be null");
+		if(inp == null) throw new NullPointerException("inp must not be null");
 
 		/*
 		 * Prepare the buffer and escape finder.
@@ -161,11 +161,11 @@ public class TokenUtils {
 		final Matcher possibleEscapeFinder = possibleEscapePatt.matcher(inp);
 		final Matcher escapeFinder = escapePatt.matcher(inp);
 
-		while (possibleEscapeFinder.find()) {
-			if (!escapeFinder.find()) {
+		while(possibleEscapeFinder.find()) {
+			if(!escapeFinder.find()) {
 				/*
-				 * Found a possible escape that isn't actually an
-				 * escape.
+				 * Found a possible escape that isn't actually
+				 * an escape.
 				 */
 				final String msg = String.format("Illegal escape sequence '%s' at position %d",
 						possibleEscapeFinder.group(), possibleEscapeFinder.start());
@@ -179,7 +179,7 @@ public class TokenUtils {
 			 * Convert the escape to a string.
 			 */
 			String escapeRep = "";
-			switch (escapeSeq) {
+			switch(escapeSeq) {
 			case "\\b":
 				escapeRep = "\b";
 				break;
@@ -209,7 +209,7 @@ public class TokenUtils {
 				escapeRep = "\\";
 				break;
 			default:
-				if (escapeSeq.startsWith("u")) {
+				if(escapeSeq.startsWith("u")) {
 					escapeRep = handleUnicodeEscape(escapeSeq.substring(1));
 				} else {
 					escapeRep = handleOctalEscape(escapeSeq);
@@ -232,7 +232,7 @@ public class TokenUtils {
 			final int codepoint = Integer.parseInt(seq, 16);
 
 			return new String(Character.toChars(codepoint));
-		} catch (final IllegalArgumentException iaex) {
+		} catch(final IllegalArgumentException iaex) {
 			final String msg = String.format("'%s' is not a valid Unicode escape sequence'", seq);
 
 			final IllegalArgumentException reiaex = new IllegalArgumentException(msg);
@@ -250,7 +250,7 @@ public class TokenUtils {
 		try {
 			final int codepoint = Integer.parseInt(seq, 8);
 
-			if (codepoint > 255) {
+			if(codepoint > 255) {
 				final String msg = String
 						.format("'%d' is outside the range of octal escapes', codepoint");
 
@@ -258,7 +258,7 @@ public class TokenUtils {
 			}
 
 			return new String(Character.toChars(codepoint));
-		} catch (final IllegalArgumentException iaex) {
+		} catch(final IllegalArgumentException iaex) {
 			final String msg = String.format("'%s' is not a valid octal escape sequence'", seq);
 
 			final IllegalArgumentException reiaex = new IllegalArgumentException(msg);
@@ -274,7 +274,7 @@ public class TokenUtils {
 	 * by {@link Double#parseDouble(String)}.
 	 *
 	 * @param inp
-	 *                The string to check.
+	 *        The string to check.
 	 * @return Whether the string is a valid double or not.
 	 */
 	public static boolean isDouble(final String inp) {
@@ -289,14 +289,14 @@ public class TokenUtils {
 	 * integers will still cause errors.
 	 *
 	 * @param inp
-	 *                The input to check.
+	 *        The input to check.
 	 * @return Whether the string is a valid integer or not.
 	 */
 	public static boolean isInt(final String inp) {
 		try {
 			Integer.parseInt(inp);
 			return true;
-		} catch (NumberFormatException nfex) {
+		} catch(NumberFormatException nfex) {
 			return false;
 		}
 	}

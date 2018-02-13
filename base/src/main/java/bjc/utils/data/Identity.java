@@ -9,7 +9,7 @@ import java.util.function.UnaryOperator;
  * @author ben
  *
  * @param <ContainedType>
- * 	The type contained in the holder.
+ *        The type contained in the holder.
  */
 public class Identity<ContainedType> implements IHolder<ContainedType> {
 	/* The held value. */
@@ -24,7 +24,7 @@ public class Identity<ContainedType> implements IHolder<ContainedType> {
 	 * Create a holder holding the specified value.
 	 *
 	 * @param value
-	 * 	The value to hold.
+	 *        The value to hold.
 	 */
 	public Identity(final ContainedType value) {
 		heldValue = value;
@@ -47,15 +47,15 @@ public class Identity<ContainedType> implements IHolder<ContainedType> {
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (!(obj instanceof Identity)) return false;
+		if(this == obj) return true;
+		if(obj == null) return false;
+		if(!(obj instanceof Identity)) return false;
 
 		final Identity<?> other = (Identity<?>) obj;
 
-		if (heldValue == null) {
-			if (other.heldValue != null) return false;
-		} else if (!heldValue.equals(other.heldValue)) return false;
+		if(heldValue == null) {
+			if(other.heldValue != null) return false;
+		} else if(!heldValue.equals(other.heldValue)) return false;
 
 		return true;
 	}
@@ -93,10 +93,9 @@ public class Identity<ContainedType> implements IHolder<ContainedType> {
 	 * Create a new identity container.
 	 *
 	 * @param val
-	 * 	The contained value.
+	 *        The contained value.
 	 *
-	 * @return
-	 * 	A new identity container.
+	 * @return A new identity container.
 	 */
 	public static <ContainedType> Identity<ContainedType> id(final ContainedType val) {
 		return new Identity<>(val);
@@ -105,8 +104,7 @@ public class Identity<ContainedType> implements IHolder<ContainedType> {
 	/**
 	 * Create a new empty identity container.
 	 *
-	 * @return
-	 * 	A new empty identity container.
+	 * @return A new empty identity container.
 	 */
 	public static <ContainedType> Identity<ContainedType> id() {
 		return new Identity<>();

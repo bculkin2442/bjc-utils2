@@ -7,6 +7,7 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 import bjc.utils.funcutils.StringUtils;
+
 /**
  * Simple implementation of {@link BlockReader}
  *
@@ -30,18 +31,18 @@ public class SimpleBlockReader implements BlockReader {
 	/*
 	 * Info about the current block.
 	 */
-	private int blockNo;
-	private int lineNo;
+	private int	blockNo;
+	private int	lineNo;
 
 	/**
 	 * Create a new block reader.
 	 *
 	 * @param blockDelim
-	 *                The pattern that separates blocks. Note that the end
-	 *                of file is always considered to end a block.
+	 *        The pattern that separates blocks. Note that the end of file
+	 *        is always considered to end a block.
 	 *
 	 * @param source
-	 *                The source to read blocks from.
+	 *        The source to read blocks from.
 	 */
 	public SimpleBlockReader(final String blockDelim, final Reader source) {
 		blockReader = new Scanner(source);
@@ -80,7 +81,7 @@ public class SimpleBlockReader implements BlockReader {
 			currBlock = new Block(blockNo, blockContents, blockStartLine, blockEndLine);
 
 			return true;
-		} catch (final NoSuchElementException nseex) {
+		} catch(final NoSuchElementException nseex) {
 			currBlock = null;
 
 			return false;
@@ -101,7 +102,7 @@ public class SimpleBlockReader implements BlockReader {
 	 * Set the delimiter used to separate blocks.
 	 *
 	 * @param delim
-	 *                The delimiter used to separate blocks.
+	 *        The delimiter used to separate blocks.
 	 */
 	public void setDelimiter(final String delim) {
 		blockReader.useDelimiter(delim);

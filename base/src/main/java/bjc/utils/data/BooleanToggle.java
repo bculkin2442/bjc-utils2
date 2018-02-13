@@ -21,7 +21,7 @@ public class BooleanToggle implements Toggle<Boolean> {
 	 * Create a flip-flop with the specified initial value.
 	 *
 	 * @param initial
-	 * 	The initial value of the flip-flop.
+	 *        The initial value of the flip-flop.
 	 */
 	public BooleanToggle(final boolean initial) {
 		val = initial;
@@ -59,13 +59,13 @@ public class BooleanToggle implements Toggle<Boolean> {
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (!(obj instanceof BooleanToggle)) return false;
+		if(this == obj) return true;
+		if(obj == null) return false;
+		if(!(obj instanceof BooleanToggle)) return false;
 
 		final BooleanToggle other = (BooleanToggle) obj;
 
-		if (val != other.val) return false;
+		if(val != other.val) return false;
 
 		return true;
 	}

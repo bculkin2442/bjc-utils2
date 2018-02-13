@@ -20,10 +20,10 @@ public class FilteredTokenSplitter implements TokenSplitter {
 	 * Create a new filtered token splitter.
 	 * 
 	 * @param source
-	 *                The splitter to get tokens from.
+	 *        The splitter to get tokens from.
 	 * 
 	 * @param filter
-	 *                The filter to pass tokens through.
+	 *        The filter to pass tokens through.
 	 */
 	public FilteredTokenSplitter(TokenSplitter source, Predicate<String> filter) {
 		this.source = source;

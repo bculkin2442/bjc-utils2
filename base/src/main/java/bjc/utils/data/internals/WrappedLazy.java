@@ -19,13 +19,13 @@ public class WrappedLazy<ContainedType> implements IHolder<ContainedType> {
 	 * Create a new wrapped lazy value.
 	 *
 	 * @param wrappedHolder
-	 * 	The holder to make lazy.
+	 *        The holder to make lazy.
 	 */
 	public WrappedLazy(final IHolder<ContainedType> wrappedHolder) {
 		held = new Lazy<>(wrappedHolder);
 	}
 
-	/* 
+	/*
 	 * This has an extra parameter, because otherwise it erases to the same
 	 * as the public one.
 	 *

@@ -18,15 +18,15 @@ public class StringDescaper {
 	/*
 	 * Patterns and pattern parts.
 	 */
-	private static String  rPossibleEscapeString = getRegex("possibleStringEscape");
-	private static Pattern possibleEscapePatt    = Pattern.compile(rPossibleEscapeString);
+	private static String	rPossibleEscapeString	= getRegex("possibleStringEscape");
+	private static Pattern	possibleEscapePatt	= Pattern.compile(rPossibleEscapeString);
 
-	private static String rShortEscape     = getRegex("shortFormStringEscape");
-	private static String rOctalEscape     = getRegex("octalStringEscape");
-	private static String rUnicodeEscape   = getRegex("unicodeStringEscape");
+	private static String	rShortEscape	= getRegex("shortFormStringEscape");
+	private static String	rOctalEscape	= getRegex("octalStringEscape");
+	private static String	rUnicodeEscape	= getRegex("unicodeStringEscape");
 
-	private String  rEscapeString;
-	private Pattern escapePatt;
+	private String	rEscapeString;
+	private Pattern	escapePatt;
 
 	// These should be used for something, but I don't recall what
 	//private static String  rDoubleQuoteString = applyFormat("doubleQuotes", getRegex("nonStringEscape"), rPossibleEscapeString);
@@ -34,15 +34,15 @@ public class StringDescaper {
 
 	//private static Pattern quotePatt = getCompiledRegex("unescapedQuote");
 
-	private Map<String, String> literalEscapes;
-	private Map<Pattern, UnaryOperator<String>> specialEscapes;
-	
+	private Map<String, String>			literalEscapes;
+	private Map<Pattern, UnaryOperator<String>>	specialEscapes;
+
 	public StringDescaper() {
 		literalEscapes = new HashMap<>();
 		specialEscapes = new HashMap<>();
 
 		rEscapeString = String.format("\\\\(%1$s|%2$s|%3$s)");
-		escapePatt    = Pattern.compile(rEscapeString);
+		escapePatt = Pattern.compile(rEscapeString);
 	}
 
 	public void addLiteralEscape(String escape, String val) {
@@ -61,7 +61,7 @@ public class StringDescaper {
 		Pattern patt = null;
 		try {
 			patt = Pattern.compile(escape);
-		} catch (PatternSyntaxException psex) {
+		} catch(PatternSyntaxException psex) {
 			String msg = String.format("Invalid special escape '%s'", escape);
 
 			IllegalArgumentException iaex = new IllegalArgumentException(msg);
@@ -69,7 +69,7 @@ public class StringDescaper {
 
 			throw psex;
 		}
-		
+
 		if(specialEscapes.containsKey(patt)) {
 			LOGGER.warning(String.format("Shadowing special escape '%s'\n", escape));
 		}
@@ -93,24 +93,25 @@ public class StringDescaper {
 		}
 
 		/*
-		 * Convert user-defined escapes to a regex for matching.
-		 * We don't need a bar before %4 because the string has it.
+		 * Convert user-defined escapes to a regex for matching. We
+		 * don't need a bar before %4 because the string has it.
 		 */
-		rEscapeString = String.format("\\(%1$s|%2$s|%3$s%4$s)", rShortEscape, rOctalEscape, rUnicodeEscape, work.toString());
-		escapePatt    = Pattern.compile(rEscapeString);
+		rEscapeString = String.format("\\(%1$s|%2$s|%3$s%4$s)", rShortEscape, rOctalEscape, rUnicodeEscape,
+				work.toString());
+		escapePatt = Pattern.compile(rEscapeString);
 	}
 
 	/**
 	 * Replace escape characters with their actual equivalents.
 	 *
 	 * @param inp
-	 *                The string to replace escape sequences in.
+	 *        The string to replace escape sequences in.
 	 *
 	 * @return The string with escape sequences replaced by their equivalent
 	 *         characters.
 	 */
 	public String descapeString(final String inp) {
-		if (inp == null) {
+		if(inp == null) {
 			throw new NullPointerException("Input to descapeString must not be null");
 		}
 
@@ -121,13 +122,14 @@ public class StringDescaper {
 		final Matcher possibleEscapeFinder = possibleEscapePatt.matcher(inp);
 		final Matcher escapeFinder = escapePatt.matcher(inp);
 
-		while (possibleEscapeFinder.find()) {
-			if (!escapeFinder.find()) {
+		while(possibleEscapeFinder.find()) {
+			if(!escapeFinder.find()) {
 				/*
-				 * Found a possible escape that isn't actually an
-				 * escape.
+				 * Found a possible escape that isn't actually
+				 * an escape.
 				 */
-				final String msg = String.format("Illegal escape sequence '%s' at position %d of string '%s'",
+				final String msg = String.format(
+						"Illegal escape sequence '%s' at position %d of string '%s'",
 						possibleEscapeFinder.group(), possibleEscapeFinder.start(), inp);
 				throw new IllegalArgumentException(msg);
 			}
@@ -138,7 +140,7 @@ public class StringDescaper {
 			 * Convert the escape to a string.
 			 */
 			String escapeRep = "";
-			switch (escapeSeq) {
+			switch(escapeSeq) {
 			case "\\b":
 				escapeRep = "\b";
 				break;
@@ -168,7 +170,7 @@ public class StringDescaper {
 				escapeRep = "\\";
 				break;
 			default:
-				if (escapeSeq.startsWith("u")) {
+				if(escapeSeq.startsWith("u")) {
 					escapeRep = handleUnicodeEscape(escapeSeq.substring(1));
 				} else if(escapeSeq.startsWith("O")) {
 					escapeRep = handleOctalEscape(escapeSeq.substring(1));
@@ -203,7 +205,7 @@ public class StringDescaper {
 			final int codepoint = Integer.parseInt(seq, 16);
 
 			return new String(Character.toChars(codepoint));
-		} catch (final IllegalArgumentException iaex) {
+		} catch(final IllegalArgumentException iaex) {
 			final String msg = String.format("'%s' is not a valid Unicode escape sequence'", seq);
 
 			final IllegalArgumentException reiaex = new IllegalArgumentException(msg);
@@ -221,14 +223,15 @@ public class StringDescaper {
 		try {
 			final int codepoint = Integer.parseInt(seq, 8);
 
-			if (codepoint > 255) {
-				final String msg = String.format("'%d' is outside the range of octal escapes', codepoint");
+			if(codepoint > 255) {
+				final String msg = String
+						.format("'%d' is outside the range of octal escapes', codepoint");
 
 				throw new IllegalArgumentException(msg);
 			}
 
 			return new String(Character.toChars(codepoint));
-		} catch (final IllegalArgumentException iaex) {
+		} catch(final IllegalArgumentException iaex) {
 			final String msg = String.format("'%s' is not a valid octal escape sequence'", seq);
 
 			final IllegalArgumentException reiaex = new IllegalArgumentException(msg);

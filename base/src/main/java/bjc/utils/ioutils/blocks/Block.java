@@ -31,13 +31,13 @@ public class Block {
 	 * Create a new block.
 	 *
 	 * @param blockNo
-	 *                The number of this block.
+	 *        The number of this block.
 	 * @param contents
-	 *                The contents of this block.
+	 *        The contents of this block.
 	 * @param startLine
-	 *                The line this block started on.
+	 *        The line this block started on.
 	 * @param endLine
-	 *                The line this block ended.
+	 *        The line this block ended.
 	 */
 	public Block(final int blockNo, final String contents, final int startLine, final int endLine) {
 		this.contents = contents;
@@ -61,20 +61,20 @@ public class Block {
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (!(obj instanceof Block)) return false;
+		if(this == obj) return true;
+		if(obj == null) return false;
+		if(!(obj instanceof Block)) return false;
 
 		final Block other = (Block) obj;
 
-		if (blockNo != other.blockNo) return false;
+		if(blockNo != other.blockNo) return false;
 
-		if (contents == null) {
-			if (other.contents != null) return false;
-		} else if (!contents.equals(other.contents)) return false;
+		if(contents == null) {
+			if(other.contents != null) return false;
+		} else if(!contents.equals(other.contents)) return false;
 
-		if (endLine != other.endLine) return false;
-		if (startLine != other.startLine) return false;
+		if(endLine != other.endLine) return false;
+		if(startLine != other.startLine) return false;
 
 		return true;
 	}

@@ -17,10 +17,10 @@ import bjc.utils.funcdata.IMap;
  * @author EVE
  *
  * @param <KeyType>
- * 	The key of the map.
+ *        The key of the map.
  *
  * @param <ValueType>
- * 	The values in the map.
+ *        The values in the map.
  */
 public class PushdownMap<KeyType, ValueType> implements IMap<KeyType, ValueType> {
 	/* Our backing storage. */
@@ -84,17 +84,16 @@ public class PushdownMap<KeyType, ValueType> implements IMap<KeyType, ValueType>
 	@Override
 	public <V2> IMap<KeyType, V2> transform(final Function<ValueType, V2> transformer) {
 		/*
-		 * @NOTE
-		 * 	Can and should we support this?
-		 * 	More to the point, maybe this should be a map sub-type
-		 * 	that does what it needs to?
+		 * @NOTE Can and should we support this? More to the point,
+		 * maybe this should be a map sub-type that does what it needs
+		 * to?
 		 */
 		throw new UnsupportedOperationException("Cannot transform pushdown maps.");
 	}
 
 	@Override
 	public ValueType put(final KeyType key, final ValueType val) {
-		if (backing.containsKey(key)) {
+		if(backing.containsKey(key)) {
 			final Stack<ValueType> stk = backing.get(key);
 
 			final ValueType vl = stk.top();
@@ -115,7 +114,7 @@ public class PushdownMap<KeyType, ValueType> implements IMap<KeyType, ValueType>
 	public ValueType remove(final KeyType key) {
 		final Stack<ValueType> stk = backing.get(key);
 
-		if (stk.size() > 1) {
+		if(stk.size() > 1) {
 			return stk.pop();
 		} else {
 			return backing.remove(key).top();
@@ -139,15 +138,15 @@ public class PushdownMap<KeyType, ValueType> implements IMap<KeyType, ValueType>
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (!(obj instanceof PushdownMap<?, ?>)) return false;
+		if(this == obj) return true;
+		if(obj == null) return false;
+		if(!(obj instanceof PushdownMap<?, ?>)) return false;
 
 		final PushdownMap<?, ?> other = (PushdownMap<?, ?>) obj;
 
-		if (backing == null) {
-			if (other.backing != null) return false;
-		} else if (!backing.equals(other.backing)) return false;
+		if(backing == null) {
+			if(other.backing != null) return false;
+		} else if(!backing.equals(other.backing)) return false;
 
 		return true;
 	}

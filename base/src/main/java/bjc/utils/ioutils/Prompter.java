@@ -19,10 +19,10 @@ public final class Prompter implements Runnable {
 	 * Create a new prompter using the specified prompt.
 	 *
 	 * @param prompt
-	 *                The prompt to present.
+	 *        The prompt to present.
 	 *
 	 * @param output
-	 *                The stream to print the prompt on.
+	 *        The stream to print the prompt on.
 	 */
 	public Prompter(final String prompt, final PrintStream output) {
 		promt = prompt;
@@ -34,7 +34,7 @@ public final class Prompter implements Runnable {
 	 * Set the prompt this prompter uses.
 	 *
 	 * @param prompt
-	 *                The prompt this prompter uses.
+	 *        The prompt this prompter uses.
 	 */
 	public void setPrompt(final String prompt) {
 		promt = prompt;

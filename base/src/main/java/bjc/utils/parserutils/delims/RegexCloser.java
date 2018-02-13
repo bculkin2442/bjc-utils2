@@ -15,7 +15,7 @@ public class RegexCloser implements BiPredicate<String, String[]> {
 	 * Create a new regex closer.
 	 *
 	 * @param closer
-	 *                The format string to use for closing.
+	 *        The format string to use for closing.
 	 */
 	public RegexCloser(final String closer) {
 		rep = closer;

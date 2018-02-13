@@ -14,10 +14,10 @@ import bjc.utils.data.IPair;
  * @author ben
  *
  * @param <KeyType>
- * 	The type of the map's keys.
+ *        The type of the map's keys.
  *
  * @param <ValueType>
- * 	The type of the map's values.
+ *        The type of the map's values.
  */
 public class FunctionalMap<KeyType, ValueType> implements IMap<KeyType, ValueType> {
 	/* Our backing store. */
@@ -32,13 +32,13 @@ public class FunctionalMap<KeyType, ValueType> implements IMap<KeyType, ValueTyp
 	 * Create a new functional map with the specified entries.
 	 *
 	 * @param entries
-	 * 	The entries to put into the map.
+	 *        The entries to put into the map.
 	 */
 	@SafeVarargs
 	public FunctionalMap(final IPair<KeyType, ValueType>... entries) {
 		this();
 
-		for (final IPair<KeyType, ValueType> entry : entries) {
+		for(final IPair<KeyType, ValueType> entry : entries) {
 			entry.doWith((key, val) -> {
 				wrappedMap.put(key, val);
 			});
@@ -49,10 +49,10 @@ public class FunctionalMap<KeyType, ValueType> implements IMap<KeyType, ValueTyp
 	 * Create a new functional map wrapping the specified map.
 	 *
 	 * @param wrap
-	 * 	The map to wrap.
+	 *        The map to wrap.
 	 */
 	public FunctionalMap(final Map<KeyType, ValueType> wrap) {
-		if (wrap == null) throw new NullPointerException("Map to wrap must not be null");
+		if(wrap == null) throw new NullPointerException("Map to wrap must not be null");
 
 		wrappedMap = wrap;
 	}
@@ -89,9 +89,9 @@ public class FunctionalMap<KeyType, ValueType> implements IMap<KeyType, ValueTyp
 
 	@Override
 	public ValueType get(final KeyType key) {
-		if (key == null) throw new NullPointerException("Key must not be null");
+		if(key == null) throw new NullPointerException("Key must not be null");
 
-		if (!wrappedMap.containsKey(key)) {
+		if(!wrappedMap.containsKey(key)) {
 			final String msg = String.format("Key %s is not present in the map", key);
 
 			throw new IllegalArgumentException(msg);
@@ -118,14 +118,14 @@ public class FunctionalMap<KeyType, ValueType> implements IMap<KeyType, ValueTyp
 
 	@Override
 	public <MappedValue> IMap<KeyType, MappedValue> transform(final Function<ValueType, MappedValue> transformer) {
-		if (transformer == null) throw new NullPointerException("Transformer must not be null");
+		if(transformer == null) throw new NullPointerException("Transformer must not be null");
 
 		return new TransformedValueMap<>(this, transformer);
 	}
 
 	@Override
 	public ValueType put(final KeyType key, final ValueType val) {
-		if (key == null) throw new NullPointerException("Key must not be null");
+		if(key == null) throw new NullPointerException("Key must not be null");
 
 		return wrappedMap.put(key, val);
 	}
@@ -161,15 +161,15 @@ public class FunctionalMap<KeyType, ValueType> implements IMap<KeyType, ValueTyp
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (!(obj instanceof FunctionalMap)) return false;
+		if(this == obj) return true;
+		if(obj == null) return false;
+		if(!(obj instanceof FunctionalMap)) return false;
 
 		final FunctionalMap<?, ?> other = (FunctionalMap<?, ?>) obj;
 
-		if (wrappedMap == null) {
-			if (other.wrappedMap != null) return false;
-		} else if (!wrappedMap.equals(other.wrappedMap)) return false;
+		if(wrappedMap == null) {
+			if(other.wrappedMap != null) return false;
+		} else if(!wrappedMap.equals(other.wrappedMap)) return false;
 		return true;
 	}
 }

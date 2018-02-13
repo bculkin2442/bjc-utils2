@@ -13,8 +13,7 @@ public interface IDescribedComponent extends Comparable<IDescribedComponent> {
 	 *
 	 * Providing this is optional, with "Anonymous" as the default author.
 	 *
-	 * @return 
-	 * 	The author of the component.
+	 * @return The author of the component.
 	 */
 	default String getAuthor() {
 		return "Anonymous";
@@ -26,8 +25,7 @@ public interface IDescribedComponent extends Comparable<IDescribedComponent> {
 	 * Providing this is optional, with the default being a note that no
 	 * description was provided.
 	 *
-	 * @return 
-	 * 	The description of the component
+	 * @return The description of the component
 	 */
 	default String getDescription() {
 		return "No description provided.";
@@ -38,8 +36,7 @@ public interface IDescribedComponent extends Comparable<IDescribedComponent> {
 	 *
 	 * This is the only thing required of all components.
 	 *
-	 * @return 
-	 * 	The name of the component.
+	 * @return The name of the component.
 	 */
 	String getName();
 
@@ -48,8 +45,7 @@ public interface IDescribedComponent extends Comparable<IDescribedComponent> {
 	 *
 	 * Providing this is optional, with "1" as the default version.
 	 *
-	 * @return 
-	 * 	The version of this component.
+	 * @return The version of this component.
 	 */
 	default int getVersion() {
 		return 1;
@@ -59,7 +55,7 @@ public interface IDescribedComponent extends Comparable<IDescribedComponent> {
 	default int compareTo(final IDescribedComponent o) {
 		int res = getName().compareTo(o.getName());
 
-		if (res == 0) {
+		if(res == 0) {
 			res = getVersion() - o.getVersion();
 		}
 

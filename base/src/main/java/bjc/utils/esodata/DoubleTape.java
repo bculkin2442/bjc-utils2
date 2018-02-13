@@ -20,15 +20,15 @@ package bjc.utils.esodata;
  * Flip refers to the entire tape for 'obvious' reasons.
  *
  * @param <T>
- * 	The element type of the tape.
+ *        The element type of the tape.
  *
  * @author bjculkin
  */
 public class DoubleTape<T> implements Tape<T> {
 	/* The front-side of the tape. */
-	private Tape<T>	front;
+	private Tape<T> front;
 	/* The back-side of the tape. */
-	private Tape<T>	back;
+	private Tape<T> back;
 
 	/** Create a new empty double-sided tape that doesn't autoextend. */
 	public DoubleTape() {
@@ -40,7 +40,7 @@ public class DoubleTape<T> implements Tape<T> {
 	 * auto-extension policy.
 	 *
 	 * @param autoExtnd
-	 * 	Whether or not to auto-extend the tape to the right w/ nulls.
+	 *        Whether or not to auto-extend the tape to the right w/ nulls.
 	 */
 	public DoubleTape(final boolean autoExtnd) {
 		front = new SingleTape<>(autoExtnd);
@@ -107,7 +107,7 @@ public class DoubleTape<T> implements Tape<T> {
 	public boolean left(final int amt) {
 		final boolean succ = front.left(amt);
 
-		if (succ) {
+		if(succ) {
 			back.right(amt);
 		}
 
@@ -123,7 +123,7 @@ public class DoubleTape<T> implements Tape<T> {
 	public boolean right(final int amt) {
 		final boolean succ = front.right(amt);
 
-		if (succ) {
+		if(succ) {
 			back.left(amt);
 		}
 
@@ -160,19 +160,19 @@ public class DoubleTape<T> implements Tape<T> {
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (!(obj instanceof DoubleTape<?>)) return false;
+		if(this == obj) return true;
+		if(obj == null) return false;
+		if(!(obj instanceof DoubleTape<?>)) return false;
 
 		final DoubleTape<?> other = (DoubleTape<?>) obj;
 
-		if (back == null) {
-			if (other.back != null) return false;
-		} else if (!back.equals(other.back)) return false;
+		if(back == null) {
+			if(other.back != null) return false;
+		} else if(!back.equals(other.back)) return false;
 
-		if (front == null) {
-			if (other.front != null) return false;
-		} else if (!front.equals(other.front)) return false;
+		if(front == null) {
+			if(other.front != null) return false;
+		} else if(!front.equals(other.front)) return false;
 
 		return true;
 	}

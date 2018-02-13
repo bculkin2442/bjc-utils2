@@ -25,11 +25,11 @@ public class HolderOutputPanel extends JPanel {
 	 * Create a new display panel, backed by a holder
 	 *
 	 * @param lab
-	 *                The label to attach to this field
+	 *        The label to attach to this field
 	 * @param valueHolder
-	 *                The holder to get the value from
+	 *        The holder to get the value from
 	 * @param nDelay
-	 *                The delay in ms between value updates
+	 *        The delay in ms between value updates
 	 */
 	public HolderOutputPanel(final String lab, final IHolder<String> valueHolder, final int nDelay) {
 		this.val = valueHolder;

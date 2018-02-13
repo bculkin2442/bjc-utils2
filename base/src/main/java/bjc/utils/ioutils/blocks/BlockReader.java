@@ -51,10 +51,10 @@ public interface BlockReader extends AutoCloseable, Iterator<Block> {
 	 * Execute an action for each remaining block.
 	 *
 	 * @param action
-	 *                The action to execute for each block
+	 *        The action to execute for each block
 	 */
 	default void forEachBlock(final Consumer<Block> action) {
-		while (hasNext()) {
+		while(hasNext()) {
 			action.accept(next());
 		}
 	}

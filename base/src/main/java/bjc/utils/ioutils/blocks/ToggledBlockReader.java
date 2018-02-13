@@ -5,8 +5,8 @@ import java.io.IOException;
 import bjc.utils.data.BooleanToggle;
 
 public class ToggledBlockReader implements BlockReader {
-	private BlockReader leftSource;
-	private BlockReader rightSource;
+	private BlockReader	leftSource;
+	private BlockReader	rightSource;
 
 	/*
 	 * We choose the left source when this is true.
@@ -16,7 +16,7 @@ public class ToggledBlockReader implements BlockReader {
 	private int blockNo;
 
 	public ToggledBlockReader(BlockReader left, BlockReader right) {
-		leftSource  = left;
+		leftSource = left;
 		rightSource = right;
 
 		blockNo = 0;
@@ -26,14 +26,18 @@ public class ToggledBlockReader implements BlockReader {
 
 	@Override
 	public boolean hasNextBlock() {
-		if(leftToggle.peek()) return leftSource.hasNextBlock();
-		else                  return rightSource.hasNextBlock();
+		if(leftToggle.peek())
+			return leftSource.hasNextBlock();
+		else
+			return rightSource.hasNextBlock();
 	}
 
 	@Override
 	public Block getBlock() {
-		if(leftToggle.peek()) return leftSource.getBlock();
-		else                  return rightSource.getBlock();
+		if(leftToggle.peek())
+			return leftSource.getBlock();
+		else
+			return rightSource.getBlock();
 	}
 
 	@Override
@@ -54,7 +58,7 @@ public class ToggledBlockReader implements BlockReader {
 	public int getBlockCount() {
 		return blockNo;
 	}
-	
+
 	@Override
 	public void close() throws IOException {
 		leftSource.close();

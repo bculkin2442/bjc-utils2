@@ -6,7 +6,7 @@ package bjc.utils.parserutils.delims;
  * @author EVE
  *
  * @param <T>
- *                The type of item in the tree.
+ *        The type of item in the tree.
  */
 public class SequenceCharacteristics<T> {
 	/**
@@ -29,11 +29,11 @@ public class SequenceCharacteristics<T> {
 	 * Create a new set of parameters for building a tree.
 	 *
 	 * @param root
-	 *                The root marker.
+	 *        The root marker.
 	 * @param contents
-	 *                The group/subgroup contents marker.
+	 *        The group/subgroup contents marker.
 	 * @param subgroup
-	 *                The subgroup marker.
+	 *        The subgroup marker.
 	 */
 	public SequenceCharacteristics(final T root, final T contents, final T subgroup) {
 		this.root = root;
@@ -55,23 +55,23 @@ public class SequenceCharacteristics<T> {
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (!(obj instanceof SequenceCharacteristics)) return false;
+		if(this == obj) return true;
+		if(obj == null) return false;
+		if(!(obj instanceof SequenceCharacteristics)) return false;
 
 		final SequenceCharacteristics<?> other = (SequenceCharacteristics<?>) obj;
 
-		if (contents == null) {
-			if (other.contents != null) return false;
-		} else if (!contents.equals(other.contents)) return false;
+		if(contents == null) {
+			if(other.contents != null) return false;
+		} else if(!contents.equals(other.contents)) return false;
 
-		if (root == null) {
-			if (other.root != null) return false;
-		} else if (!root.equals(other.root)) return false;
+		if(root == null) {
+			if(other.root != null) return false;
+		} else if(!root.equals(other.root)) return false;
 
-		if (subgroup == null) {
-			if (other.subgroup != null) return false;
-		} else if (!subgroup.equals(other.subgroup)) return false;
+		if(subgroup == null) {
+			if(other.subgroup != null) return false;
+		} else if(!subgroup.equals(other.subgroup)) return false;
 
 		return true;
 	}

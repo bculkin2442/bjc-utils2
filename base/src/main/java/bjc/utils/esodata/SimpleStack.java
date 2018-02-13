@@ -7,7 +7,7 @@ import java.util.LinkedList;
  * Simple implementation of a stack.
  *
  * @param <T>
- * 	The datatype stored in the stack.
+ *        The datatype stored in the stack.
  *
  * @author Ben Culkin
  */
@@ -27,14 +27,14 @@ public class SimpleStack<T> extends Stack<T> {
 
 	@Override
 	public T pop() {
-		if (backing.isEmpty()) throw new StackUnderflowException();
+		if(backing.isEmpty()) throw new StackUnderflowException();
 
 		return backing.pop();
 	}
 
 	@Override
 	public T top() {
-		if (backing.isEmpty()) throw new StackUnderflowException();
+		if(backing.isEmpty()) throw new StackUnderflowException();
 
 		return backing.peek();
 	}
@@ -67,15 +67,15 @@ public class SimpleStack<T> extends Stack<T> {
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (!(obj instanceof SimpleStack<?>)) return false;
+		if(this == obj) return true;
+		if(obj == null) return false;
+		if(!(obj instanceof SimpleStack<?>)) return false;
 
 		final SimpleStack<?> other = (SimpleStack<?>) obj;
 
-		if (backing == null) {
-			if (other.backing != null) return false;
-		} else if (!backing.equals(other.backing)) return false;
+		if(backing == null) {
+			if(other.backing != null) return false;
+		} else if(!backing.equals(other.backing)) return false;
 
 		return true;
 	}

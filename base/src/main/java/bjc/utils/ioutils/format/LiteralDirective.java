@@ -6,14 +6,13 @@ import java.util.regex.Matcher;
 
 class LiteralDirective implements Directive {
 
-	private char directive;
-	private String lit;
+	private char	directive;
+	private String	lit;
 
 	public LiteralDirective(String lit, char directive) {
 		this.directive = directive;
 		this.lit = lit;
 	}
-
 
 	@Override
 	public void format(StringBuffer buff, Object item, CLModifiers mods, CLParameters params, Tape<Object> tParams,

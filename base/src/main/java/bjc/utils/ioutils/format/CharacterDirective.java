@@ -11,7 +11,7 @@ class CharacterDirective implements Directive {
 	public void format(StringBuffer buff, Object parm, CLModifiers mods, CLParameters arrParams,
 			Tape<Object> tParams, Matcher dirMatcher, CLFormatter fmt) {
 		CLFormatter.checkItem(parm, 'C');
-		
+
 		if(!(parm instanceof Character)) {
 			throw new IllegalFormatConversionException('C', parm.getClass());
 		}
@@ -27,7 +27,7 @@ class CharacterDirective implements Directive {
 		} else {
 			buff.append(ch);
 		}
-		
+
 		tParams.right();
 	}
 

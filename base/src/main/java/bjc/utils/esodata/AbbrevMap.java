@@ -168,7 +168,9 @@ public class AbbrevMap {
 	 */
 	public String[] deabbrev(final String abbrev) {
 		if(abbrevMap.containsKey(abbrev)) {
-			return new String[] { abbrevMap.get(abbrev) };
+			return new String[] {
+					abbrevMap.get(abbrev)
+			};
 		}
 
 		return ambMap.get(abbrev).toArray(new String[0]);

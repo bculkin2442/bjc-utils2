@@ -8,7 +8,7 @@ import java.util.Iterator;
  * @author EVE
  *
  * @param <T>
- * 	The type of the item.
+ *        The type of the item.
  */
 public class SingleIterator<T> implements Iterator<T> {
 	/* The item being held. */
@@ -20,7 +20,7 @@ public class SingleIterator<T> implements Iterator<T> {
 	 * Create a iterator that yields a single item.
 	 *
 	 * @param item
-	 * 	The item to yield.
+	 *        The item to yield.
 	 */
 	public SingleIterator(final T item) {
 		itm = item;

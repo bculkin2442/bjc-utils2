@@ -17,19 +17,18 @@ public class StringUtils {
 	 * expression.
 	 *
 	 * @param input
-	 * 	The string to check.
+	 *        The string to check.
 	 *
 	 * @param rRegex
-	 * 	The regex to see if the string only contains matches of.
+	 *        The regex to see if the string only contains matches of.
 	 *
-	 * @return 
-	 * 	Whether or not the string consists only of multiple matches of
-	 * 	the provided regex.
+	 * @return Whether or not the string consists only of multiple matches
+	 *         of the provided regex.
 	 */
 	public static boolean containsOnly(final String input, final String rRegex) {
-		if (input == null)
+		if(input == null)
 			throw new NullPointerException("Input must not be null");
-		else if (rRegex == null) throw new NullPointerException("Regex must not be null");
+		else if(rRegex == null) throw new NullPointerException("Regex must not be null");
 
 		/*
 		 * This regular expression is fairly simple.
@@ -46,13 +45,13 @@ public class StringUtils {
 	 * Indent the string being built in a StringBuilder n levels.
 	 *
 	 * @param builder
-	 * 	The builder to indent in.
+	 *        The builder to indent in.
 	 *
 	 * @param levels
-	 * 	The number of levels to indent.
+	 *        The number of levels to indent.
 	 */
 	public static void indentNLevels(final StringBuilder builder, final int levels) {
-		for (int i = 0; i < levels; i++) {
+		for(int i = 0; i < levels; i++) {
 			builder.append("\t");
 		}
 	}
@@ -62,14 +61,13 @@ public class StringUtils {
 	 * empty.
 	 *
 	 * @param <ContainedType>
-	 * 	The type in the deque.
+	 *        The type in the deque.
 	 *
 	 * @param queue
-	 * 	The deque to print.
+	 *        The deque to print.
 	 *
-	 * @return
-	 * 	A string version of the deque, with allowance for an empty
-	 * 	deque.
+	 * @return A string version of the deque, with allowance for an empty
+	 *         deque.
 	 */
 	public static <ContainedType> String printDeque(final Deque<ContainedType> queue) {
 		return queue.isEmpty() ? "(none)" : queue.toString();
@@ -79,26 +77,26 @@ public class StringUtils {
 	 * Converts a sequence to an English list.
 	 *
 	 * @param objects
-	 * 	The sequence to convert to an English list.
+	 *        The sequence to convert to an English list.
 	 *
 	 * @param join
-	 * 	The string to use for separating the last element from the rest.
+	 *        The string to use for separating the last element from the
+	 *        rest.
 	 *
 	 * @param comma
-	 * 	The string to use as a comma
+	 *        The string to use as a comma
 	 *
-	 * @return 
-	 * 	The sequence as an English list.
+	 * @return The sequence as an English list.
 	 */
 	public static String toEnglishList(final Object[] objects, final String join, final String comma) {
-		if (objects == null) throw new NullPointerException("Sequence must not be null");
+		if(objects == null) throw new NullPointerException("Sequence must not be null");
 
 		final StringBuilder sb = new StringBuilder();
 
 		final String joiner = join;
 		final String coma = comma;
 
-		switch (objects.length) {
+		switch(objects.length) {
 		case 0:
 			/* Empty list. */
 			break;
@@ -114,7 +112,7 @@ public class StringUtils {
 			break;
 		default:
 			/* Three or more items. */
-			for (int i = 0; i < objects.length - 1; i++) {
+			for(int i = 0; i < objects.length - 1; i++) {
 				sb.append(objects[i].toString());
 				sb.append(coma + " ");
 			}
@@ -137,13 +135,13 @@ public class StringUtils {
 	 * Converts a sequence to an English list.
 	 *
 	 * @param objects
-	 * 	The sequence to convert to an English list.
+	 *        The sequence to convert to an English list.
 	 *
 	 * @param join
-	 * 	The string to use for separating the last element from the rest.
+	 *        The string to use for separating the last element from the
+	 *        rest.
 	 *
-	 * @return
-	 * 	The sequence as an English list.
+	 * @return The sequence as an English list.
 	 */
 	public static String toEnglishList(final Object[] objects, final String join) {
 		return toEnglishList(objects, join, ",");
@@ -153,16 +151,15 @@ public class StringUtils {
 	 * Converts a sequence to an English list.
 	 *
 	 * @param objects
-	 * 	The sequence to convert to an English list.
+	 *        The sequence to convert to an English list.
 	 *
 	 * @param and
-	 * 	Whether to use 'and' or 'or'.
+	 *        Whether to use 'and' or 'or'.
 	 *
-	 * @return
-	 * 	The sequence as an English list.
+	 * @return The sequence as an English list.
 	 */
 	public static String toEnglishList(final Object[] objects, final boolean and) {
-		if (and) {
+		if(and) {
 			return toEnglishList(objects, "and");
 		} else {
 			return toEnglishList(objects, "or");
@@ -173,17 +170,16 @@ public class StringUtils {
 	 * Count the number of graphemes in a string.
 	 *
 	 * @param value
-	 * 	The string to check.
+	 *        The string to check.
 	 *
-	 * @return 
-	 * 	The number of graphemes in the string.
+	 * @return The number of graphemes in the string.
 	 */
 	public static int graphemeCount(final String value) {
 		final BreakIterator it = BreakIterator.getCharacterInstance();
 		it.setText(value);
 
 		int count = 0;
-		while (it.next() != BreakIterator.DONE) {
+		while(it.next() != BreakIterator.DONE) {
 			count++;
 		}
 
@@ -194,14 +190,14 @@ public class StringUtils {
 	 * Count the number of times a pattern matches in a given string.
 	 *
 	 * @param value
-	 * 	The string to count occurances in.
+	 *        The string to count occurances in.
 	 *
 	 * @param pattern
-	 * 	The pattern to count occurances of.
+	 *        The pattern to count occurances of.
 	 */
 	public static int countMatches(final String value, final String pattern) {
 		Matcher mat = Pattern.compile(pattern).matcher(value);
-		
+
 		int num = 0;
 		while(mat.find())
 			num += 1;

@@ -18,11 +18,11 @@ public class RuleBasedReaderPragmas {
 	 * Creates a pragma that takes a single integer argument
 	 *
 	 * @param <StateType>
-	 *                The type of state that goes along with this pragma
+	 *        The type of state that goes along with this pragma
 	 * @param name
-	 *                The name of this pragma, for error message purpose
+	 *        The name of this pragma, for error message purpose
 	 * @param consumer
-	 *                The function to invoke with the parsed integer
+	 *        The function to invoke with the parsed integer
 	 * @return A pragma that functions as described above.
 	 */
 	public static <StateType> BiConsumer<FunctionalStringTokenizer, StateType> buildInteger(final String name,
@@ -31,7 +31,7 @@ public class RuleBasedReaderPragmas {
 			/*
 			 * Check our input is correct
 			 */
-			if (!tokenizer.hasMoreTokens()) {
+			if(!tokenizer.hasMoreTokens()) {
 				String fmt = "Pragma %s requires one integer argument";
 
 				throw new PragmaFormatException(String.format(fmt, name));
@@ -47,13 +47,14 @@ public class RuleBasedReaderPragmas {
 				 * Run the pragma
 				 */
 				consumer.accept(Integer.parseInt(token), state);
-			} catch (final NumberFormatException nfex) {
+			} catch(final NumberFormatException nfex) {
 				/*
 				 * Tell the user their argument isn't correct
 				 */
 				String fmt = "Argument %s to %s pragma isn't a valid integer, and this pragma requires an integer argument.";
 
-				final PragmaFormatException pfex = new PragmaFormatException(String.format(fmt, token, name));
+				final PragmaFormatException pfex = new PragmaFormatException(
+						String.format(fmt, token, name));
 
 				pfex.initCause(nfex);
 
@@ -67,11 +68,11 @@ public class RuleBasedReaderPragmas {
 	 * them all into a single string
 	 *
 	 * @param <StateType>
-	 *                The type of state that goes along with this pragma
+	 *        The type of state that goes along with this pragma
 	 * @param name
-	 *                The name of this pragma, for error message purpose
+	 *        The name of this pragma, for error message purpose
 	 * @param consumer
-	 *                The function to invoke with the parsed string
+	 *        The function to invoke with the parsed string
 	 * @return A pragma that functions as described above.
 	 */
 	public static <StateType> BiConsumer<FunctionalStringTokenizer, StateType> buildStringCollapser(
@@ -80,7 +81,7 @@ public class RuleBasedReaderPragmas {
 			/*
 			 * Check our input
 			 */
-			if (!tokenizer.hasMoreTokens()) {
+			if(!tokenizer.hasMoreTokens()) {
 				String fmt = "Pragma %s requires one or more string arguments.";
 
 				throw new PragmaFormatException(String.format(fmt, name));

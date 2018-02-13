@@ -22,7 +22,7 @@ import bjc.utils.funcutils.FileUtils;
  * @author ben
  *
  * @param <ComponentType>
- *                The type of component being read in.
+ *        The type of component being read in.
  */
 public class FileComponentRepository<ComponentType extends IDescribedComponent>
 		implements IComponentRepository<ComponentType> {
@@ -43,22 +43,23 @@ public class FileComponentRepository<ComponentType extends IDescribedComponent>
 	 * the loading of that component to fail, but a warning will be logged.
 	 *
 	 * @param directory
-	 * 	The directory to read component files from.
+	 *        The directory to read component files from.
 	 *
 	 * @param componentReader
-	 * 	The function to use to convert files to components.
+	 *        The function to use to convert files to components.
 	 */
 	public FileComponentRepository(final File directory,
 			final Function<File, ? extends ComponentType> componentReader) {
 		/* Make sure we have valid arguments. */
-		if (directory == null) {
+		if(directory == null) {
 			throw new NullPointerException("Directory must not be null");
-		} else if (!directory.isDirectory()) {
-			String msg = String.format("File %s is not a directory. Components can only be read from a directory.",
+		} else if(!directory.isDirectory()) {
+			String msg = String.format(
+					"File %s is not a directory. Components can only be read from a directory.",
 					directory);
 
 			throw new IllegalArgumentException(msg);
-		} else if (componentReader == null) {
+		} else if(componentReader == null) {
 			throw new NullPointerException("Component reader must not be null");
 		}
 
@@ -74,8 +75,8 @@ public class FileComponentRepository<ComponentType extends IDescribedComponent>
 		 * but not recurse into sub-directories.
 		 */
 		final BiPredicate<Path, BasicFileAttributes> firstLevelTraverser = (pth, attr) -> {
-			if (attr.isDirectory() && !isFirstDir.getValue()) {
-				/* 
+			if(attr.isDirectory() && !isFirstDir.getValue()) {
+				/*
 				 * Skip directories, they probably have
 				 * component support files.
 				 */
@@ -96,10 +97,13 @@ public class FileComponentRepository<ComponentType extends IDescribedComponent>
 			FileUtils.traverseDirectory(sourceDirectory, firstLevelTraverser, (pth, attr) -> {
 				loadComponent(componentReader, pth);
 
-				/* Keep loading components, even if this one failed. */
+				/*
+				 * Keep loading components, even if this one
+				 * failed.
+				 */
 				return true;
 			});
-		} catch (final IOException ioex) {
+		} catch(final IOException ioex) {
 			CLASS_LOGGER.log(Level.WARNING, ioex, () -> "Error found reading component from file.");
 		}
 	}
@@ -130,16 +134,16 @@ public class FileComponentRepository<ComponentType extends IDescribedComponent>
 			/* Try to load the component. */
 			final ComponentType component = componentReader.apply(pth.toFile());
 
-			if (component == null) {
+			if(component == null) {
 				throw new NullPointerException("Component reader read null component");
-			} else if (!components.containsKey(component.getName())) {
+			} else if(!components.containsKey(component.getName())) {
 				/*
 				 * We only care about the latest version of a
-				 * component. 
+				 * component.
 				 */
 				final ComponentType oldComponent = components.put(component.getName(), component);
 
-				if (oldComponent.getVersion() > component.getVersion()) {
+				if(oldComponent.getVersion() > component.getVersion()) {
 					components.put(oldComponent.getName(), oldComponent);
 				}
 			} else {
@@ -152,16 +156,16 @@ public class FileComponentRepository<ComponentType extends IDescribedComponent>
 
 				CLASS_LOGGER.warning(sb.toString());
 			}
-		} catch (final Exception ex) {
-			String msg = String.format("Error found reading component from file %s. It will not be loaded.", pth.toString());
+		} catch(final Exception ex) {
+			String msg = String.format("Error found reading component from file %s. It will not be loaded.",
+					pth.toString());
 
 			CLASS_LOGGER.log(Level.WARNING, ex, () -> msg);
 		}
 	}
 
 	/*
-	 * @NOTE
-	 * 	Should this be changed to something more readable?
+	 * @NOTE Should this be changed to something more readable?
 	 *
 	 * (non-Javadoc)
 	 *
@@ -172,13 +176,13 @@ public class FileComponentRepository<ComponentType extends IDescribedComponent>
 		final StringBuilder builder = new StringBuilder();
 		builder.append("FileComponentRepository [");
 
-		if (components != null) {
+		if(components != null) {
 			builder.append("components=");
 			builder.append(components);
 			builder.append(", ");
 		}
 
-		if (sourceDirectory != null) {
+		if(sourceDirectory != null) {
 			builder.append("sourceDirectory=");
 			builder.append(sourceDirectory);
 		}

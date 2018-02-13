@@ -29,7 +29,8 @@ public class TreeUtils {
 	}
 
 	/* Find a path in a tree. */
-	private static <T> void findPath(ITree<T> subtree, LinkedList<T> path, Predicate<T> leafMarker, IList<IList<T>> paths) {
+	private static <T> void findPath(ITree<T> subtree, LinkedList<T> path, Predicate<T> leafMarker,
+			IList<IList<T>> paths) {
 		if(subtree.getChildrenCount() == 0 && leafMarker.test(subtree.getHead())) {
 			/* We're at a matching leaf node. Add it. */
 			IList<T> finalPath = new FunctionalList<>();

@@ -32,23 +32,23 @@ public class SimpleProperties implements Map<String, String> {
 	 * All leading/trailing spaces from the name & body are removed.
 	 *
 	 * @param is
-	 *                The stream to read from.
+	 *        The stream to read from.
 	 *
 	 * @param allowDuplicates
-	 *                Whether or not duplicate keys should be allowed.
+	 *        Whether or not duplicate keys should be allowed.
 	 */
 	public void loadFrom(final InputStream is, final boolean allowDuplicates) {
-		try (Scanner scn = new Scanner(is)) {
-			while (scn.hasNextLine()) {
+		try(Scanner scn = new Scanner(is)) {
+			while(scn.hasNextLine()) {
 				final String ln = scn.nextLine().trim();
 
 				/*
 				 * Skip blank lines/comments
 				 */
-				if (ln.equals("")) {
+				if(ln.equals("")) {
 					continue;
 				}
-				if (ln.startsWith("#")) {
+				if(ln.startsWith("#")) {
 					continue;
 				}
 
@@ -57,7 +57,7 @@ public class SimpleProperties implements Map<String, String> {
 				/*
 				 * Complain about improperly formatted lines.
 				 */
-				if (sepIdx == -1) {
+				if(sepIdx == -1) {
 					final String fmt = "Properties must be a name, a space, then the body.\n\tOffending line is '%s'";
 					final String msg = String.format(fmt, ln);
 
@@ -70,7 +70,7 @@ public class SimpleProperties implements Map<String, String> {
 				/*
 				 * Complain about duplicates, if that is wanted.
 				 */
-				if (!allowDuplicates && containsKey(name)) {
+				if(!allowDuplicates && containsKey(name)) {
 					final String msg = String.format("Duplicate key '%s'", name);
 
 					throw new IllegalStateException(msg);
@@ -87,7 +87,7 @@ public class SimpleProperties implements Map<String, String> {
 	public void outputProperties() {
 		System.out.println("Read properties:");
 
-		for (final Entry<String, String> entry : entrySet()) {
+		for(final Entry<String, String> entry : entrySet()) {
 			System.out.printf("\t'%s'\t'%s'\n", entry.getKey(), entry.getValue());
 		}
 

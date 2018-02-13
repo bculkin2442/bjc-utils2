@@ -23,7 +23,7 @@ public class TreeConstructor {
 	 * Alias interface for special operator types.
 	 *
 	 * @param <TokenType>
-	 *                The token type of the tree.
+	 *        The token type of the tree.
 	 */
 	public interface QueueFlattener<TokenType> extends Function<Deque<ITree<TokenType>>, ITree<TokenType>> {
 
@@ -48,12 +48,11 @@ public class TreeConstructor {
 	 * Only binary operators are accepted.
 	 *
 	 * @param <TokenType>
-	 *                The elements of the parse tree
+	 *        The elements of the parse tree
 	 * @param tokens
-	 *                The list of tokens to build a tree from
+	 *        The list of tokens to build a tree from
 	 * @param isOperator
-	 *                The predicate to use to determine if something is a
-	 *                operator
+	 *        The predicate to use to determine if something is a operator
 	 * @return A AST from the expression
 	 */
 	public static <TokenType> ITree<TokenType> constructTree(final IList<TokenType> tokens,
@@ -71,21 +70,20 @@ public class TreeConstructor {
 	 * parameters to handle non-binary operators.
 	 *
 	 * @param <TokenType>
-	 *                The elements of the parse tree.
+	 *        The elements of the parse tree.
 	 *
 	 * @param tokens
-	 *                The list of tokens to build a tree from.
+	 *        The list of tokens to build a tree from.
 	 *
 	 * @param isOperator
-	 *                The predicate to use to determine if something is a
-	 *                operator.
+	 *        The predicate to use to determine if something is a operator.
 	 *
 	 * @param isSpecialOperator
-	 *                The predicate to use to determine if an operator needs
-	 *                special handling.
+	 *        The predicate to use to determine if an operator needs special
+	 *        handling.
 	 *
 	 * @param handleSpecialOperator
-	 *                The function to use to handle special case operators.
+	 *        The function to use to handle special case operators.
 	 *
 	 * @return A AST from the expression
 	 *
@@ -96,11 +94,11 @@ public class TreeConstructor {
 		/*
 		 * Make sure our parameters are valid
 		 */
-		if (tokens == null)
+		if(tokens == null)
 			throw new NullPointerException("Tokens must not be null");
-		else if (isOperator == null)
+		else if(isOperator == null)
 			throw new NullPointerException("Operator predicate must not be null");
-		else if (isSpecialOperator == null)
+		else if(isSpecialOperator == null)
 			throw new NullPointerException("Special operator determiner must not be null");
 
 		/*

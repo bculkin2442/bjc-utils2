@@ -12,7 +12,7 @@ class RadixDirective extends GeneralNumberDirective {
 	public void format(StringBuffer buff, Object arg, CLModifiers mods, CLParameters params, Tape<Object> tParams,
 			Matcher dirMatcher, CLFormatter fmt) {
 		CLFormatter.checkItem(arg, 'R');
-		
+
 		if(!(arg instanceof Number)) {
 			throw new IllegalFormatConversionException('R', arg.getClass());
 		}
@@ -38,7 +38,7 @@ class RadixDirective extends GeneralNumberDirective {
 
 			handleNumberDirective(buff, mods, params, 0, val, radix);
 		}
-		
+
 		tParams.right();
 	}
 }

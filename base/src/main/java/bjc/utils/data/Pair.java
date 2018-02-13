@@ -9,10 +9,10 @@ import java.util.function.Function;
  * @author ben
  *
  * @param <LeftType>
- * 	The type of the left value.
+ *        The type of the left value.
  *
  * @param <RightType>
- * 	The type of the right value.
+ *        The type of the right value.
  */
 public class Pair<LeftType, RightType> implements IPair<LeftType, RightType> {
 	/* The left value. */
@@ -29,20 +29,20 @@ public class Pair<LeftType, RightType> implements IPair<LeftType, RightType> {
 	 * Create a new pair with both sides set to the specified values.
 	 *
 	 * @param left
-	 * 	The value of the left side.
+	 *        The value of the left side.
 	 *
 	 * @param right
-	 * 	The value of the right side.
+	 *        The value of the right side.
 	 */
 	public Pair(final LeftType left, final RightType right) {
-		leftValue  = left;
+		leftValue = left;
 		rightValue = right;
 	}
 
 	@Override
 	public <BoundLeft, BoundRight> IPair<BoundLeft, BoundRight> bind(
 			final BiFunction<LeftType, RightType, IPair<BoundLeft, BoundRight>> binder) {
-		if (binder == null) throw new NullPointerException("Binder must not be null.");
+		if(binder == null) throw new NullPointerException("Binder must not be null.");
 
 		return binder.apply(leftValue, rightValue);
 	}
@@ -50,7 +50,7 @@ public class Pair<LeftType, RightType> implements IPair<LeftType, RightType> {
 	@Override
 	public <BoundLeft> IPair<BoundLeft, RightType> bindLeft(
 			final Function<LeftType, IPair<BoundLeft, RightType>> leftBinder) {
-		if (leftBinder == null) throw new NullPointerException("Binder must not be null");
+		if(leftBinder == null) throw new NullPointerException("Binder must not be null");
 
 		return leftBinder.apply(leftValue);
 	}
@@ -58,7 +58,7 @@ public class Pair<LeftType, RightType> implements IPair<LeftType, RightType> {
 	@Override
 	public <BoundRight> IPair<LeftType, BoundRight> bindRight(
 			final Function<RightType, IPair<LeftType, BoundRight>> rightBinder) {
-		if (rightBinder == null) throw new NullPointerException("Binder must not be null");
+		if(rightBinder == null) throw new NullPointerException("Binder must not be null");
 
 		return rightBinder.apply(rightValue);
 	}
@@ -69,7 +69,7 @@ public class Pair<LeftType, RightType> implements IPair<LeftType, RightType> {
 			final BiFunction<LeftType, OtherLeft, CombinedLeft> leftCombiner,
 			final BiFunction<RightType, OtherRight, CombinedRight> rightCombiner) {
 		return otherPair.bind((otherLeft, otherRight) -> {
-			final CombinedLeft left   = leftCombiner.apply(leftValue, otherLeft);
+			final CombinedLeft left = leftCombiner.apply(leftValue, otherLeft);
 			final CombinedRight right = rightCombiner.apply(rightValue, otherRight);
 
 			return new Pair<>(left, right);
@@ -78,21 +78,21 @@ public class Pair<LeftType, RightType> implements IPair<LeftType, RightType> {
 
 	@Override
 	public <NewLeft> IPair<NewLeft, RightType> mapLeft(final Function<LeftType, NewLeft> mapper) {
-		if (mapper == null) throw new NullPointerException("Mapper must not be null");
+		if(mapper == null) throw new NullPointerException("Mapper must not be null");
 
 		return new Pair<>(mapper.apply(leftValue), rightValue);
 	}
 
 	@Override
 	public <NewRight> IPair<LeftType, NewRight> mapRight(final Function<RightType, NewRight> mapper) {
-		if (mapper == null) throw new NullPointerException("Mapper must not be null");
+		if(mapper == null) throw new NullPointerException("Mapper must not be null");
 
 		return new Pair<>(leftValue, mapper.apply(rightValue));
 	}
 
 	@Override
 	public <MergedType> MergedType merge(final BiFunction<LeftType, RightType, MergedType> merger) {
-		if (merger == null) throw new NullPointerException("Merger must not be null");
+		if(merger == null) throw new NullPointerException("Merger must not be null");
 
 		return merger.apply(leftValue, rightValue);
 	}
@@ -115,19 +115,19 @@ public class Pair<LeftType, RightType> implements IPair<LeftType, RightType> {
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (!(obj instanceof Pair<?, ?>)) return false;
+		if(this == obj) return true;
+		if(obj == null) return false;
+		if(!(obj instanceof Pair<?, ?>)) return false;
 
 		final Pair<?, ?> other = (Pair<?, ?>) obj;
 
-		if (leftValue == null) {
-			if (other.leftValue != null) return false;
-		} else if (!leftValue.equals(other.leftValue)) return false;
+		if(leftValue == null) {
+			if(other.leftValue != null) return false;
+		} else if(!leftValue.equals(other.leftValue)) return false;
 
-		if (rightValue == null) {
-			if (other.rightValue != null) return false;
-		} else if (!rightValue.equals(other.rightValue)) return false;
+		if(rightValue == null) {
+			if(other.rightValue != null) return false;
+		} else if(!rightValue.equals(other.rightValue)) return false;
 
 		return true;
 	}

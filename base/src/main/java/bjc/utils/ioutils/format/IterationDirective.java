@@ -51,11 +51,11 @@ class IterationDirective implements Directive {
 		}
 
 		int maxItr = Integer.MAX_VALUE;
-		
+
 		if(arrParams.length() > 0) {
 			maxItr = arrParams.getInt(0, "maximum iterations", '{');
 		}
-		
+
 		if(mods.atMod && mods.colonMod) {
 
 		} else if(mods.atMod) {

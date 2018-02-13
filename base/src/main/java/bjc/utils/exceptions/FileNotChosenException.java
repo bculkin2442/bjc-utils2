@@ -20,7 +20,7 @@ public class FileNotChosenException extends IOException {
 	 * Create a new exception with the given cause.
 	 *
 	 * @param cause
-	 * 	The cause of why the exception was thrown.
+	 *        The cause of why the exception was thrown.
 	 */
 	public FileNotChosenException(final String cause) {
 		super(cause);

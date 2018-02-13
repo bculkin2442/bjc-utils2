@@ -19,7 +19,7 @@ public class WrappedOption<ContainedType> implements IHolder<ContainedType> {
 	 * Create a new wrapped option.
 	 *
 	 * @param seedValue
-	 * 	The value to wrap.
+	 *        The value to wrap.
 	 */
 	public WrappedOption(final IHolder<ContainedType> seedValue) {
 		held = new Option<>(seedValue);
@@ -38,7 +38,7 @@ public class WrappedOption<ContainedType> implements IHolder<ContainedType> {
 	public <BoundType> IHolder<BoundType> bind(final Function<ContainedType, IHolder<BoundType>> binder) {
 		final IHolder<IHolder<BoundType>> newHolder = held.map((containedHolder) -> {
 			return containedHolder.bind((containedValue) -> {
-				if (containedValue == null) return new Option<>(null);
+				if(containedValue == null) return new Option<>(null);
 
 				return binder.apply(containedValue);
 			});
@@ -58,7 +58,7 @@ public class WrappedOption<ContainedType> implements IHolder<ContainedType> {
 	public <MappedType> IHolder<MappedType> map(final Function<ContainedType, MappedType> mapper) {
 		final IHolder<IHolder<MappedType>> newHolder = held.map((containedHolder) -> {
 			return containedHolder.map((containedValue) -> {
-				if (containedValue == null) return null;
+				if(containedValue == null) return null;
 
 				return mapper.apply(containedValue);
 			});
@@ -71,7 +71,7 @@ public class WrappedOption<ContainedType> implements IHolder<ContainedType> {
 	public IHolder<ContainedType> transform(final UnaryOperator<ContainedType> transformer) {
 		held.transform((containedHolder) -> {
 			return containedHolder.transform((containedValue) -> {
-				if (containedValue == null) return null;
+				if(containedValue == null) return null;
 
 				return transformer.apply(containedValue);
 			});
@@ -84,7 +84,7 @@ public class WrappedOption<ContainedType> implements IHolder<ContainedType> {
 	public <UnwrappedType> UnwrappedType unwrap(final Function<ContainedType, UnwrappedType> unwrapper) {
 		return held.unwrap((containedHolder) -> {
 			return containedHolder.unwrap((containedValue) -> {
-				if (containedValue == null) return null;
+				if(containedValue == null) return null;
 
 				return unwrapper.apply(containedValue);
 			});

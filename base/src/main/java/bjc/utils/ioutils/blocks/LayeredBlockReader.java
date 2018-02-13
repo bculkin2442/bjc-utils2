@@ -17,8 +17,8 @@ public class LayeredBlockReader implements BlockReader {
 	/*
 	 * The readers to drain from.
 	 */
-	private final BlockReader first;
-	private final BlockReader second;
+	private final BlockReader	first;
+	private final BlockReader	second;
 
 	/*
 	 * The current block number.
@@ -29,10 +29,10 @@ public class LayeredBlockReader implements BlockReader {
 	 * Create a new layered block reader.
 	 *
 	 * @param primary
-	 *                The first source to read blocks from.
+	 *        The first source to read blocks from.
 	 *
 	 * @param secondary
-	 *                The second source to read blocks from.
+	 *        The second source to read blocks from.
 	 */
 	public LayeredBlockReader(final BlockReader primary, final BlockReader secondary) {
 		first = primary;
@@ -60,7 +60,7 @@ public class LayeredBlockReader implements BlockReader {
 		final boolean gotFirst = first.nextBlock();
 		final boolean succ = gotFirst ? gotFirst : second.nextBlock();
 
-		if (succ) {
+		if(succ) {
 			blockNo += 1;
 		}
 

@@ -11,10 +11,10 @@ import bjc.utils.funcdata.IMap;
  * @author EVE
  *
  * @param <K>
- * 	The key type of the directory.
+ *        The key type of the directory.
  *
  * @param <V>
- * 	The value type of the directory.
+ *        The value type of the directory.
  */
 public class UnifiedDirectory<K, V> implements Directory<K, V> {
 	/* Our directory children. */
@@ -40,7 +40,7 @@ public class UnifiedDirectory<K, V> implements Directory<K, V> {
 
 	@Override
 	public Directory<K, V> putSubdirectory(final K key, final Directory<K, V> val) {
-		if (data.containsKey(key)) {
+		if(data.containsKey(key)) {
 			final String msg = String.format("Key %s is already used for data", key);
 
 			throw new IllegalArgumentException(msg);
@@ -61,7 +61,7 @@ public class UnifiedDirectory<K, V> implements Directory<K, V> {
 
 	@Override
 	public V putKey(final K key, final V val) {
-		if (children.containsKey(key)) {
+		if(children.containsKey(key)) {
 			final String msg = String.format("Key %s is already used for sub-directories.", key);
 
 			throw new IllegalArgumentException(msg);
@@ -81,19 +81,19 @@ public class UnifiedDirectory<K, V> implements Directory<K, V> {
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (!(obj instanceof UnifiedDirectory<?, ?>)) return false;
+		if(this == obj) return true;
+		if(obj == null) return false;
+		if(!(obj instanceof UnifiedDirectory<?, ?>)) return false;
 
 		final UnifiedDirectory<?, ?> other = (UnifiedDirectory<?, ?>) obj;
 
-		if (children == null) {
-			if (other.children != null) return false;
-		} else if (!children.equals(other.children)) return false;
+		if(children == null) {
+			if(other.children != null) return false;
+		} else if(!children.equals(other.children)) return false;
 
-		if (data == null) {
-			if (other.data != null) return false;
-		} else if (!data.equals(other.data)) return false;
+		if(data == null) {
+			if(other.data != null) return false;
+		} else if(!data.equals(other.data)) return false;
 
 		return true;
 	}

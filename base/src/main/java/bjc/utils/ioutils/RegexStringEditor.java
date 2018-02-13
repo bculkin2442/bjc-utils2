@@ -25,13 +25,13 @@ public class RegexStringEditor {
 	 * the action to the string matched by the pattern.
 	 *
 	 * @param input
-	 *                The input string to process.
+	 *        The input string to process.
 	 *
 	 * @param patt
-	 *                The pattern to match the string against.
+	 *        The pattern to match the string against.
 	 *
 	 * @param action
-	 *                The action to transform matches with.
+	 *        The action to transform matches with.
 	 *
 	 * @return The string, with matches replaced with the action.
 	 */
@@ -44,13 +44,13 @@ public class RegexStringEditor {
 	 * applying the action to the strings between the patterns.
 	 *
 	 * @param input
-	 *                The input string to process.
+	 *        The input string to process.
 	 *
 	 * @param patt
-	 *                The pattern to match the string against.
+	 *        The pattern to match the string against.
 	 *
 	 * @param action
-	 *                The action to transform matches with.
+	 *        The action to transform matches with.
 	 *
 	 * @return The string, with strings between the matches replaced with
 	 *         the action.
@@ -64,16 +64,16 @@ public class RegexStringEditor {
 	 * Execute actions between and on matches of a regular expression.
 	 *
 	 * @param input
-	 *                The input string.
+	 *        The input string.
 	 *
 	 * @param rPatt
-	 *                The pattern to match against the string.
+	 *        The pattern to match against the string.
 	 *
 	 * @param betweenAction
-	 *                The function to execute between matches of the string.
+	 *        The function to execute between matches of the string.
 	 *
 	 * @param onAction
-	 *                The function to execute on matches of the string.
+	 *        The function to execute on matches of the string.
 	 *
 	 * @return The string, with both actions applied.
 	 */
@@ -102,16 +102,16 @@ public class RegexStringEditor {
 	 * Execute actions between and on matches of a regular expression.
 	 *
 	 * @param input
-	 *                The input string.
+	 *        The input string.
 	 *
 	 * @param rPatt
-	 *                The pattern to match against the string.
+	 *        The pattern to match against the string.
 	 *
 	 * @param betweenAction
-	 *                The function to execute between matches of the string.
+	 *        The function to execute between matches of the string.
 	 *
 	 * @param onAction
-	 *                The function to execute on matches of the string.
+	 *        The function to execute on matches of the string.
 	 *
 	 * @return The string, with both actions applied.
 	 */
@@ -133,10 +133,10 @@ public class RegexStringEditor {
 	 * Separate a string into match/non-match segments.
 	 *
 	 * @param input
-	 *                The string to separate.
+	 *        The string to separate.
 	 *
 	 * @param rPatt
-	 *                The pattern to use for separation.
+	 *        The pattern to use for separation.
 	 *
 	 * @return The string, as a list of match/non-match segments,
 	 *         starting/ending with a non-match segment.
@@ -153,7 +153,7 @@ public class RegexStringEditor {
 		/*
 		 * For every match.
 		 */
-		while (matcher.find()) {
+		while(matcher.find()) {
 			final String match = matcher.group();
 
 			/*
@@ -183,20 +183,20 @@ public class RegexStringEditor {
 	 * Apply an operation to a string if it matches a regular expression.
 	 *
 	 * @param input
-	 *                The input string.
+	 *        The input string.
 	 *
 	 * @param patt
-	 *                The pattern to match against it.
+	 *        The pattern to match against it.
 	 *
 	 * @param action
-	 *                The action to execute if it matches.
+	 *        The action to execute if it matches.
 	 *
 	 * @return The string, modified by the action if the pattern matched.
 	 */
 	public static String ifMatches(final String input, final Pattern patt, final UnaryOperator<String> action) {
 		final Matcher matcher = patt.matcher(input);
 
-		if (matcher.matches()) {
+		if(matcher.matches()) {
 			return action.apply(input);
 		} else {
 			return input;
@@ -207,13 +207,13 @@ public class RegexStringEditor {
 	 * Apply an operation to a string if it matches a regular expression.
 	 *
 	 * @param input
-	 *                The input string.
+	 *        The input string.
 	 *
 	 * @param patt
-	 *                The pattern to match against it.
+	 *        The pattern to match against it.
 	 *
 	 * @param action
-	 *                The action to execute if it doesn't match.
+	 *        The action to execute if it doesn't match.
 	 *
 	 * @return The string, modified by the action if the pattern didn't
 	 *         match.
@@ -221,7 +221,7 @@ public class RegexStringEditor {
 	public static String ifNotMatches(final String input, final Pattern patt, final UnaryOperator<String> action) {
 		final Matcher matcher = patt.matcher(input);
 
-		if (matcher.matches()) {
+		if(matcher.matches()) {
 			return input;
 		} else {
 			return action.apply(input);

@@ -8,7 +8,7 @@ package bjc.utils.esodata;
  * unbounded to the right, but in practice bounded by available memory.
  *
  * @param <T>
- * 	The element type of the tape.
+ *        The element type of the tape.
  *
  * @author bjculkin
  */
@@ -16,8 +16,7 @@ public interface Tape<T> {
 	/**
 	 * Get the item the tape is currently on.
 	 *
-	 * @return
-	 * 	The item the tape is on.
+	 * @return The item the tape is on.
 	 */
 	T item();
 
@@ -25,23 +24,21 @@ public interface Tape<T> {
 	 * Set the item the tape is currently on.
 	 *
 	 * @param itm
-	 * 	The new value for the tape item.
+	 *        The new value for the tape item.
 	 */
 	void item(T itm);
 
 	/**
 	 * Get the current number of elements in the tape.
 	 *
-	 * @return
-	 * 	The current number of elements in the tape.
+	 * @return The current number of elements in the tape.
 	 */
 	int size();
 
 	/**
 	 * Get the position of the current item.
 	 *
-	 * @return
-	 * 	The position of the current item.
+	 * @return The position of the current item.
 	 */
 	int position();
 
@@ -49,7 +46,7 @@ public interface Tape<T> {
 	 * Insert an element before the current item.
 	 *
 	 * @param itm
-	 * 	The item to add.
+	 *        The item to add.
 	 */
 	void insertBefore(T itm);
 
@@ -57,7 +54,7 @@ public interface Tape<T> {
 	 * Insert an element after the current item.
 	 *
 	 * @param itm
-	 * 	The item to insert.
+	 *        The item to insert.
 	 */
 	void insertAfter(T itm);
 
@@ -67,8 +64,7 @@ public interface Tape<T> {
 	 * Also moves the cursor back one step if possible to maintain relative
 	 * position.
 	 *
-	 * @return
-	 * 	The removed item.
+	 * @return The removed item.
 	 */
 	T remove();
 
@@ -83,8 +79,7 @@ public interface Tape<T> {
 	 *
 	 * The cursor can't go past zero.
 	 *
-	 * @return
-	 * 	True if the cursor was moved left.
+	 * @return True if the cursor was moved left.
 	 */
 	boolean left();
 
@@ -95,18 +90,16 @@ public interface Tape<T> {
 	 * that would exceed zero don't move the cursor at all.
 	 *
 	 * @param amt
-	 * 	The amount to attempt to move the cursor left.
+	 *        The amount to attempt to move the cursor left.
 	 *
-	 * @return
-	 * 	True if the cursor was moved left.
+	 * @return True if the cursor was moved left.
 	 */
 	boolean left(int amt);
 
 	/**
 	 * Move the cursor one space right.
 	 *
-	 * @return
-	 * 	Whether the cursor was moved right.
+	 * @return Whether the cursor was moved right.
 	 */
 	boolean right();
 
@@ -114,18 +107,16 @@ public interface Tape<T> {
 	 * Move the cursor the specified amount right.
 	 *
 	 * @param amt
-	 * 	The amount to move the cursor right by.
+	 *        The amount to move the cursor right by.
 	 *
-	 * @return
-	 * 	Whether the cursor was moved right.
+	 * @return Whether the cursor was moved right.
 	 */
 	boolean right(int amt);
 
 	/**
 	 * Is this tape double sided?
 	 *
-	 * @return
-	 * 	Whether or not this tape is double-sided.
+	 * @return Whether or not this tape is double-sided.
 	 */
 	boolean isDoubleSided();
 }

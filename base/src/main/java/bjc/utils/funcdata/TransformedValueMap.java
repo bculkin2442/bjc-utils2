@@ -10,18 +10,18 @@ import java.util.function.Function;
  * @author ben
  *
  * @param <OldKey>
- * 	The type of the map's keys
+ *        The type of the map's keys
  *
  * @param <OldValue>
- * 	The type of the map's values
+ *        The type of the map's values
  *
  * @param <NewValue>
- * 	The type of the transformed values
+ *        The type of the transformed values
  *
  */
 final class TransformedValueMap<OldKey, OldValue, NewValue> implements IMap<OldKey, NewValue> {
 	/* Our backing map. */
-	private final IMap<OldKey, OldValue>       backing;
+	private final IMap<OldKey, OldValue> backing;
 	/* Our transforming function. */
 	private final Function<OldValue, NewValue> transformer;
 
@@ -29,10 +29,10 @@ final class TransformedValueMap<OldKey, OldValue, NewValue> implements IMap<OldK
 	 * Create a new transformed-value loop.
 	 *
 	 * @param backingMap
-	 * 	The map to use as backing.
+	 *        The map to use as backing.
 	 *
 	 * @param transform
-	 * 	The function to use for the transform.
+	 *        The function to use for the transform.
 	 */
 	public TransformedValueMap(final IMap<OldKey, OldValue> backingMap,
 			final Function<OldValue, NewValue> transform) {

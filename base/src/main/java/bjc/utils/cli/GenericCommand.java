@@ -16,23 +16,22 @@ public class GenericCommand implements Command {
 	 * Create a new generic command.
 	 *
 	 * @param handler
-	 *                The handler to use for the command.
+	 *        The handler to use for the command.
 	 *
 	 * @param description
-	 *                The description of the command. May be null, in which
-	 *                case a default is provided.
+	 *        The description of the command. May be null, in which case a
+	 *        default is provided.
 	 *
 	 * @param help
-	 *                The detailed help message for the command. May be
-	 *                null, in which case the description is repeated for
-	 *                the detailed help.
+	 *        The detailed help message for the command. May be null, in
+	 *        which case the description is repeated for the detailed help.
 	 */
 	public GenericCommand(final CommandHandler handler, final String description, final String help) {
-		if (handler == null) throw new NullPointerException("Command handler must not be null");
+		if(handler == null) throw new NullPointerException("Command handler must not be null");
 
 		this.handler = handler;
 
-		if (description == null) {
+		if(description == null) {
 			this.help = new NullHelp();
 		} else {
 			this.help = new GenericHelp(description, help);

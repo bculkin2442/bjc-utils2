@@ -23,7 +23,7 @@ public class ChainTokenSplitter implements TokenSplitter {
 	 * Append a series of splitters to the chain.
 	 *
 	 * @param splitters
-	 *                The splitters to append to the chain.
+	 *        The splitters to append to the chain.
 	 */
 	public void appendSplitters(final TokenSplitter... splitters) {
 		spliters.addAll(splitters);
@@ -33,7 +33,7 @@ public class ChainTokenSplitter implements TokenSplitter {
 	 * Prepend a series of splitters to the chain.
 	 *
 	 * @param splitters
-	 *                The splitters to append to the chain.
+	 *        The splitters to append to the chain.
 	 */
 	public void prependSplitters(final TokenSplitter... splitters) {
 		spliters.prependAll(splitters);

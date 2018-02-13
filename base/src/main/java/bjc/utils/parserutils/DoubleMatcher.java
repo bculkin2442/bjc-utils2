@@ -36,7 +36,8 @@ class DoubleMatcher {
 	 * Floating point components.
 	 */
 	private static final String	rFPLeader	= getRegex("fpLeader");
-	private static final String	rFPNum		= applyFormat("fpNumber", rSimpleIntDec, rSimpleDec, rHexString);
+	private static final String	rFPNum		= applyFormat("fpNumber", rSimpleIntDec, rSimpleDec,
+			rHexString);
 
 	/*
 	 * Full double.

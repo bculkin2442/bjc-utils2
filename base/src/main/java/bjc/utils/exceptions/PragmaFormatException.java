@@ -20,7 +20,7 @@ public class PragmaFormatException extends InputMismatchException {
 	 * Create a new exception with the given message.
 	 *
 	 * @param message
-	 * 	The message to explain why the exception was thrown.
+	 *        The message to explain why the exception was thrown.
 	 */
 	public PragmaFormatException(final String message) {
 		super(message);

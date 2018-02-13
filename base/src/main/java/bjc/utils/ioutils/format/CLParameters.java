@@ -126,7 +126,7 @@ public class CLParameters {
 
 		return param.charAt(1);
 	}
-	
+
 	/**
 	 * Get an optional integer parameter with a default value.
 	 * 
@@ -148,7 +148,7 @@ public class CLParameters {
 
 		return def;
 	}
-	
+
 	/**
 	 * Get a mandatory integer parameter.
 	 * 

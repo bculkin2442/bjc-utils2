@@ -19,13 +19,12 @@ public class SimpleFileDialog {
 	 * Prompt the user to pick a file to open.
 	 *
 	 * @param parent
-	 * 	The parent of the file picker.
+	 *        The parent of the file picker.
 	 *
 	 * @param title
-	 * 	The title of the file picker.
+	 *        The title of the file picker.
 	 *
-	 * @return
-	 * 	The file the user picked.
+	 * @return The file the user picked.
 	 */
 	public static File getOpenFile(final Frame parent, final String title) {
 		return getOpenFile(parent, title, (String[]) null);
@@ -35,34 +34,33 @@ public class SimpleFileDialog {
 	 * Prompt the user to pick a file to open.
 	 *
 	 * @param parent
-	 * 	The parent of the file picker.
+	 *        The parent of the file picker.
 	 *
 	 * @param title
-	 * 	The title of the file picker.
+	 *        The title of the file picker.
 	 *
 	 * @param extensions
-	 * 	The extensions to accept as valid.
+	 *        The extensions to accept as valid.
 	 *
-	 * @return
-	 * 	The file the user picked.
+	 * @return The file the user picked.
 	 */
 	public static File getOpenFile(final Frame parent, final String title, final String... extensions) {
-		if (parent == null) {
+		if(parent == null) {
 			throw new NullPointerException("Parent must not be null");
-		} else if (title == null) {
+		} else if(title == null) {
 			throw new NullPointerException("Title must not be null");
 		}
 
 		final FileDialog chooser = new FileDialog(parent, title, FileDialog.LOAD);
 
-		if (extensions != null) {
+		if(extensions != null) {
 			final FilenameFilter filter = new ExtensionFileFilter(extensions);
 			chooser.setFilenameFilter(filter);
 		}
 
 		chooser.setVisible(true);
 
-		while (chooser.getFile() == null) {
+		while(chooser.getFile() == null) {
 			SimpleDialogs.showError(parent, "File I/O Error", "Please choose a file to open.");
 			chooser.setVisible(true);
 		}
@@ -74,26 +72,24 @@ public class SimpleFileDialog {
 	 * Prompt the user to pick a file to open.
 	 *
 	 * @param parent
-	 * 	The parent of the file picker.
+	 *        The parent of the file picker.
 	 *
 	 * @param title
-	 * 	The title of the file picker.
+	 *        The title of the file picker.
 	 *
 	 * @param extensions
-	 * 	The extensions to accept as valid.
+	 *        The extensions to accept as valid.
 	 *
-	 * @return
-	 * 	The file the user picked.
+	 * @return The file the user picked.
 	 */
 	public static File[] getOpenFiles(final Frame parent, final String title, final String... extensions) {
-		if (parent == null)
+		if(parent == null)
 			throw new NullPointerException("Parent must not be null");
-		else if (title == null)
-			throw new NullPointerException("Title must not be null");
+		else if(title == null) throw new NullPointerException("Title must not be null");
 
 		final FileDialog chooser = new FileDialog(parent, title, FileDialog.LOAD);
 
-		if (extensions != null) {
+		if(extensions != null) {
 			final FilenameFilter filter = new ExtensionFileFilter(extensions);
 			chooser.setFilenameFilter(filter);
 		}
@@ -101,7 +97,7 @@ public class SimpleFileDialog {
 		chooser.setMultipleMode(true);
 		chooser.setVisible(true);
 
-		while (chooser.getFile() == null) {
+		while(chooser.getFile() == null) {
 			SimpleDialogs.showError(parent, "File I/O Error", "Please choose a file to open.");
 			chooser.setVisible(true);
 		}
@@ -113,13 +109,12 @@ public class SimpleFileDialog {
 	 * Prompt the user to pick a file to save
 	 *
 	 * @param parent
-	 * 	The parent of the file picker
+	 *        The parent of the file picker
 	 *
 	 * @param title
-	 * 	The title of the file picker
+	 *        The title of the file picker
 	 *
-	 * @return
-	 * 	The file the user picked
+	 * @return The file the user picked
 	 */
 	public static File getSaveFile(final Frame parent, final String title) {
 		return getSaveFile(parent, title, (String[]) null);
@@ -129,33 +124,31 @@ public class SimpleFileDialog {
 	 * Prompt the user to pick a file to save
 	 *
 	 * @param parent
-	 * 	The parent of the file picker
+	 *        The parent of the file picker
 	 *
 	 * @param title
-	 * 	The title of the file picker
+	 *        The title of the file picker
 	 *
 	 * @param extensions
-	 * 	The extensions to accept as valid
+	 *        The extensions to accept as valid
 	 *
-	 * @return
-	 * 	The file the user picked
+	 * @return The file the user picked
 	 */
 	public static File getSaveFile(final Frame parent, final String title, final String... extensions) {
-		if (parent == null)
+		if(parent == null)
 			throw new NullPointerException("Parent must not be null");
-		else if (title == null)
-			throw new NullPointerException("Title must not be null");
+		else if(title == null) throw new NullPointerException("Title must not be null");
 
 		final FileDialog chooser = new FileDialog(parent, title, FileDialog.SAVE);
 
-		if (extensions != null) {
+		if(extensions != null) {
 			final FilenameFilter filter = new ExtensionFileFilter(extensions);
 			chooser.setFilenameFilter(filter);
 		}
 
 		chooser.setVisible(true);
 
-		while (chooser.getFile() == null) {
+		while(chooser.getFile() == null) {
 			SimpleDialogs.showError(parent, "File I/O Error", "Please choose a file to save to.");
 			chooser.setVisible(true);
 		}

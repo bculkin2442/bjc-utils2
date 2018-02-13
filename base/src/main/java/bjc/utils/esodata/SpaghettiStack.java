@@ -8,7 +8,7 @@ import java.util.stream.Stream;
  * parent stack.
  *
  * @param <T>
- * 	The datatype stored in the stack.
+ *        The datatype stored in the stack.
  *
  * @author Ben Culkin
  */
@@ -22,7 +22,7 @@ class SpaghettiStack<T> extends Stack<T> {
 	 * Create a new empty spaghetti stack, off of the specified parent.
 	 *
 	 * @param par
-	 * 	The parent stack
+	 *        The parent stack
 	 */
 	public SpaghettiStack(final Stack<T> par) {
 		backing = new SimpleStack<>();
@@ -37,14 +37,14 @@ class SpaghettiStack<T> extends Stack<T> {
 
 	@Override
 	public T pop() {
-		if (backing.empty()) return parent.pop();
+		if(backing.empty()) return parent.pop();
 
 		return backing.pop();
 	}
 
 	@Override
 	public T top() {
-		if (backing.empty()) return parent.top();
+		if(backing.empty()) return parent.top();
 
 		return backing.top();
 	}
@@ -78,19 +78,19 @@ class SpaghettiStack<T> extends Stack<T> {
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (!(obj instanceof SpaghettiStack<?>)) return false;
+		if(this == obj) return true;
+		if(obj == null) return false;
+		if(!(obj instanceof SpaghettiStack<?>)) return false;
 
 		final SpaghettiStack<?> other = (SpaghettiStack<?>) obj;
 
-		if (backing == null) {
-			if (other.backing != null) return false;
-		} else if (!backing.equals(other.backing)) return false;
+		if(backing == null) {
+			if(other.backing != null) return false;
+		} else if(!backing.equals(other.backing)) return false;
 
-		if (parent == null) {
-			if (other.parent != null) return false;
-		} else if (!parent.equals(other.parent)) return false;
+		if(parent == null) {
+			if(other.parent != null) return false;
+		} else if(!parent.equals(other.parent)) return false;
 
 		return true;
 	}

@@ -21,7 +21,7 @@ import java.util.function.Consumer;
  * </p>
  *
  * @param <T>
- * 	The datatype stored in the stack.
+ *        The datatype stored in the stack.
  *
  * @author Ben Culkin
  */
@@ -41,15 +41,14 @@ public abstract class Stack<T> {
 	 * Push an element onto the stack.
 	 *
 	 * @param elm
-	 * 	The element to insert.
+	 *        The element to insert.
 	 */
 	public abstract void push(T elm);
 
 	/**
 	 * Pop an element off of the stack.
 	 *
-	 * @return
-	 * 	The element on top of the stack.
+	 * @return The element on top of the stack.
 	 */
 	public abstract T pop();
 
@@ -57,32 +56,28 @@ public abstract class Stack<T> {
 	 * Retrieve the top element of this stack without removing it from the
 	 * stack.
 	 *
-	 * @return
-	 * 	The top element of this stack.
+	 * @return The top element of this stack.
 	 */
 	public abstract T top();
 
 	/**
 	 * Get the number of elements in the stack.
 	 *
-	 * @return
-	 * 	the number of elements in the stack.
+	 * @return the number of elements in the stack.
 	 */
 	public abstract int size();
 
 	/**
 	 * Check if the stack is empty.
 	 *
-	 * @return
-	 * 	Whether or not the stack is empty.
+	 * @return Whether or not the stack is empty.
 	 */
 	public abstract boolean empty();
 
 	/**
 	 * Create a spaghetti stack branching off of this one.
 	 *
-	 * @return
-	 * 	A spaghetti stack with this stack as a parent.
+	 * @return A spaghetti stack with this stack as a parent.
 	 */
 	public Stack<T> spaghettify() {
 		return new SpaghettiStack<>(this);
@@ -96,10 +91,10 @@ public abstract class Stack<T> {
 	 * Drop n items from the stack.
 	 *
 	 * @param n
-	 * 	The number of items to drop.
+	 *        The number of items to drop.
 	 */
 	public void drop(final int n) {
-		for (int i = 0; i < n; i++) {
+		for(int i = 0; i < n; i++) {
 			pop();
 		}
 	}
@@ -113,7 +108,7 @@ public abstract class Stack<T> {
 	 * Delete n items below the current one.
 	 *
 	 * @param n
-	 * 	The number of items below the top to delete.
+	 *        The number of items below the top to delete.
 	 */
 	public void nip(final int n) {
 		final T elm = pop();
@@ -132,20 +127,20 @@ public abstract class Stack<T> {
 	 * Replicate the top n items of the stack m times.
 	 *
 	 * @param n
-	 * 	The number of items to duplicate.
+	 *        The number of items to duplicate.
 	 *
 	 * @param m
-	 * 	The number of times to duplicate items.
+	 *        The number of times to duplicate items.
 	 */
 	public void multidup(final int n, final int m) {
 		final List<T> lst = new ArrayList<>(n);
 
-		for (int i = n; i > 0; i--) {
+		for(int i = n; i > 0; i--) {
 			lst.set(i - 1, pop());
 		}
 
-		for (int i = 0; i < m; i++) {
-			for (final T elm : lst) {
+		for(int i = 0; i < m; i++) {
+			for(final T elm : lst) {
 				push(elm);
 			}
 		}
@@ -155,7 +150,7 @@ public abstract class Stack<T> {
 	 * Duplicate the top n items of the stack.
 	 *
 	 * @param n
-	 * 	The number of items to duplicate.
+	 *        The number of items to duplicate.
 	 */
 	public void dup(final int n) {
 		multidup(n, 2);
@@ -170,27 +165,27 @@ public abstract class Stack<T> {
 	 * Replicate the n elements below the top one m times.
 	 *
 	 * @param n
-	 * 	The number of items to duplicate.
+	 *        The number of items to duplicate.
 	 *
 	 * @param m
-	 * 	The number of times to duplicate items.
+	 *        The number of times to duplicate items.
 	 */
 	public void multiover(final int n, final int m) {
 		final List<T> lst = new ArrayList<>(n);
 
 		final T elm = pop();
 
-		for (int i = n; i > 0; i--) {
+		for(int i = n; i > 0; i--) {
 			lst.set(i - 1, pop());
 		}
 
-		for (final T nelm : lst) {
+		for(final T nelm : lst) {
 			push(nelm);
 		}
 		push(elm);
 
-		for (int i = 1; i < m; i++) {
-			for (final T nelm : lst) {
+		for(int i = 1; i < m; i++) {
+			for(final T nelm : lst) {
 				push(nelm);
 			}
 		}
@@ -200,7 +195,7 @@ public abstract class Stack<T> {
 	 * Duplicate the n elements below the top one.
 	 *
 	 * @param n
-	 * 	The number of items to duplicate.
+	 *        The number of items to duplicate.
 	 */
 	public void over(final int n) {
 		multiover(n, 2);
@@ -275,9 +270,8 @@ public abstract class Stack<T> {
 		push(y);
 	}
 
-	/* 
-	 * :StackCombinators
-	 * 	Add a general rotate/roll operator.
+	/*
+	 * :StackCombinators Add a general rotate/roll operator.
 	 */
 
 	/*
@@ -288,21 +282,21 @@ public abstract class Stack<T> {
 	 * Hides the top n elements on the stack from an action.
 	 *
 	 * @param n
-	 * 	The number of elements to hide.
+	 *        The number of elements to hide.
 	 *
 	 * @param action
-	 * 	The action to hide the elements from
+	 *        The action to hide the elements from
 	 */
 	public void dip(final int n, final Consumer<Stack<T>> action) {
 		final List<T> elms = new ArrayList<>(n);
 
-		for (int i = n; i > 0; i--) {
+		for(int i = n; i > 0; i--) {
 			elms.set(i - 1, pop());
 		}
 
 		action.accept(this);
 
-		for (final T elm : elms) {
+		for(final T elm : elms) {
 			push(elm);
 		}
 	}
@@ -311,26 +305,25 @@ public abstract class Stack<T> {
 	 * Hide the top element of the stack from an action.
 	 *
 	 * @param action
-	 * 	The action to hide the top from
+	 *        The action to hide the top from
 	 */
 	public void dip(final Consumer<Stack<T>> action) {
 		dip(1, action);
 	}
 
 	/**
-	 * Copy the top n elements on the stack, replacing them once an action is
-	 * done.
+	 * Copy the top n elements on the stack, replacing them once an action
+	 * is done.
 	 *
 	 * @param n
-	 * 	The number of elements to copy.
+	 *        The number of elements to copy.
 	 *
 	 * @param action
-	 * 	The action to execute.
+	 *        The action to execute.
 	 */
 	public void keep(final int n, final Consumer<Stack<T>> action) {
 		/*
-		 * @NOTE
-		 * 	Is this correct?
+		 * @NOTE Is this correct?
 		 */
 		dup(n);
 		dip(n, action);
@@ -340,20 +333,20 @@ public abstract class Stack<T> {
 	 * Apply all the actions in a list to the top n elements of the stack.
 	 *
 	 * @param n
-	 * 	The number of elements to give to cons.
+	 *        The number of elements to give to cons.
 	 *
 	 * @param actions
-	 * 	The actions to execute.
+	 *        The actions to execute.
 	 */
 	public void multicleave(final int n, final List<Consumer<Stack<T>>> actions) {
 		final List<T> elms = new ArrayList<>(n);
 
-		for (int i = n; i > 0; i--) {
+		for(int i = n; i > 0; i--) {
 			elms.set(i - 1, pop());
 		}
 
-		for (final Consumer<Stack<T>> action : actions) {
-			for (final T elm : elms) {
+		for(final Consumer<Stack<T>> action : actions) {
+			for(final T elm : elms) {
 				push(elm);
 			}
 
@@ -365,7 +358,7 @@ public abstract class Stack<T> {
 	 * Apply all the actions in a list to the top element of the stack.
 	 *
 	 * @param actions
-	 * 	The actions to execute.
+	 *        The actions to execute.
 	 */
 	public void cleave(final List<Consumer<Stack<T>>> actions) {
 		multicleave(1, actions);
@@ -375,18 +368,18 @@ public abstract class Stack<T> {
 	 * Apply every action in a list of actions to n arguments.
 	 *
 	 * @param n
-	 * 	The number of parameters each action takes.
+	 *        The number of parameters each action takes.
 	 *
 	 * @param actions
-	 * 	The actions to execute.
+	 *        The actions to execute.
 	 */
 	public void multispread(final int n, final List<Consumer<Stack<T>>> actions) {
 		final List<List<T>> nelms = new ArrayList<>(actions.size());
 
-		for (int i = actions.size(); i > 0; i--) {
+		for(int i = actions.size(); i > 0; i--) {
 			final List<T> elms = new ArrayList<>(n);
 
-			for (int j = n; j > 0; j--) {
+			for(int j = n; j > 0; j--) {
 				elms.set(j, pop());
 			}
 
@@ -394,8 +387,8 @@ public abstract class Stack<T> {
 		}
 
 		int i = 0;
-		for (final List<T> elms : nelms) {
-			for (final T elm : elms) {
+		for(final List<T> elms : nelms) {
+			for(final T elm : elms) {
 				push(elm);
 			}
 
@@ -409,7 +402,7 @@ public abstract class Stack<T> {
 	 * the stack.
 	 *
 	 * @param conses
-	 * 	The actions to execute.
+	 *        The actions to execute.
 	 */
 	public void spread(final List<Consumer<Stack<T>>> conses) {
 		multispread(1, conses);
@@ -419,18 +412,18 @@ public abstract class Stack<T> {
 	 * Apply an action to the first m groups of n arguments.
 	 *
 	 * @param n
-	 * 	The number of arguments cons takes.
+	 *        The number of arguments cons takes.
 	 *
 	 * @param m
-	 * 	The number of time to call cons.
+	 *        The number of time to call cons.
 	 *
 	 * @param action
-	 * 	The action to execute.
+	 *        The action to execute.
 	 */
 	public void multiapply(final int n, final int m, final Consumer<Stack<T>> action) {
 		final List<Consumer<Stack<T>>> actions = new ArrayList<>(m);
 
-		for (int i = 0; i < m; i++) {
+		for(int i = 0; i < m; i++) {
 			actions.add(action);
 		}
 
@@ -441,10 +434,10 @@ public abstract class Stack<T> {
 	 * Apply an action n times to the corresponding elements in the stack.
 	 *
 	 * @param n
-	 * 	The number of times to execute cons.
+	 *        The number of times to execute cons.
 	 *
 	 * @param action
-	 * 	The action to execute.
+	 *        The action to execute.
 	 */
 	public void apply(final int n, final Consumer<Stack<T>> action) {
 		multiapply(1, n, action);
@@ -457,8 +450,7 @@ public abstract class Stack<T> {
 	/**
 	 * Get an array representing this stack.
 	 *
-	 * @return
-	 * 	The stack as an array.
+	 * @return The stack as an array.
 	 */
 	public abstract T[] toArray();
 }

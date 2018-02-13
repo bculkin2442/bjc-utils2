@@ -24,18 +24,20 @@ public class CLICommander {
 	 * Create a new CLI interface powered by streams.
 	 *
 	 * @param input
-	 *                The stream to get user input from.
+	 *        The stream to get user input from.
 	 *
 	 * @param output
-	 *                The stream to send normal output to.
+	 *        The stream to send normal output to.
 	 *
 	 * @param error
-	 *                The stream to send error output to.
+	 *        The stream to send error output to.
 	 */
 	public CLICommander(final InputStream input, final OutputStream output, final OutputStream error) {
-		if (input == null)       throw new NullPointerException("Input stream must not be null");
-		else if (output == null) throw new NullPointerException("Output stream must not be null");
-		else if (error == null)  throw new NullPointerException("Error stream must not be null");
+		if(input == null)
+			throw new NullPointerException("Input stream must not be null");
+		else if(output == null)
+			throw new NullPointerException("Output stream must not be null");
+		else if(error == null) throw new NullPointerException("Error stream must not be null");
 
 		this.input = input;
 		this.output = output;
@@ -46,7 +48,7 @@ public class CLICommander {
 	public void runCommands() {
 		/* Setup output streams. */
 		final PrintStream normalOutput = new PrintStream(output);
-		final PrintStream errorOutput  = new PrintStream(error);
+		final PrintStream errorOutput = new PrintStream(error);
 
 		/*
 		 * Set up input streams.
@@ -70,15 +72,15 @@ public class CLICommander {
 		int comno = 1;
 		/*
 		 * Process commands until we're told to stop, by the mode being
-		 * set to null. 
+		 * set to null.
 		 */
-		while (currentMode != null) {
+		while(currentMode != null) {
 			/*
 			 * Print out the command prompt.
 			 *
 			 * Use a custom prompt if one is specified.
 			 */
-			if (currentMode.isCustomPromptEnabled()) {
+			if(currentMode.isCustomPromptEnabled()) {
 				normalOutput.print(currentMode.getCustomPrompt());
 			} else {
 				normalOutput.printf("%s (%d)>> ", currentMode.getName(), comno);
@@ -90,22 +92,21 @@ public class CLICommander {
 			final String currentLine = inputSource.nextLine();
 
 			/* Handle commands we can handle in this mode. */
-			if (currentMode.canHandle(currentLine)) {
+			if(currentMode.canHandle(currentLine)) {
 				final String[] commandTokens = currentLine.split(" ");
-				      String[] commandArgs   = null;
+				String[] commandArgs = null;
 
 				final int argCount = commandTokens.length;
 
 				/* Parse args if they are present. */
-				if (argCount > 1) {
+				if(argCount > 1) {
 					commandArgs = Arrays.copyOfRange(commandTokens, 1, argCount);
 				}
 
 				/* Process command. */
 				currentMode = currentMode.process(commandTokens[0], commandArgs);
 			} else {
-				errorOutput.printf("Error: Unrecognized command '%s' (no. %d)\n",
-					   	    currentLine, comno);
+				errorOutput.printf("Error: Unrecognized command '%s' (no. %d)\n", currentLine, comno);
 			}
 		}
 
@@ -116,10 +117,10 @@ public class CLICommander {
 	 * Set the initial command mode to use.
 	 *
 	 * @param initialMode
-	 *                The initial command mode to use.
+	 *        The initial command mode to use.
 	 */
 	public void setInitialCommandMode(final CommandMode initialMode) {
-		if (initialMode == null) throw new NullPointerException("Initial mode must be non-null");
+		if(initialMode == null) throw new NullPointerException("Initial mode must be non-null");
 
 		this.initialMode = initialMode;
 	}

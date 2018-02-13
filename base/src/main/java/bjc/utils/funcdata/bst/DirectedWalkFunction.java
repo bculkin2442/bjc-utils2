@@ -6,7 +6,7 @@ package bjc.utils.funcdata.bst;
  * @author ben
  *
  * @param <T>
- * 	The type of element stored in the walked tree
+ *        The type of element stored in the walked tree
  */
 @FunctionalInterface
 public interface DirectedWalkFunction<T> {
@@ -36,10 +36,9 @@ public interface DirectedWalkFunction<T> {
 	 * Perform a directed walk on a node of a tree.
 	 *
 	 * @param element
-	 * 	The data stored in the node currently being visited.
+	 *        The data stored in the node currently being visited.
 	 *
-	 * @return
-	 * 	The way the function wants the walk to go next.
+	 * @return The way the function wants the walk to go next.
 	 */
 	public DirectedWalkResult walk(T element);
 }

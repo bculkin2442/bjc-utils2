@@ -5,8 +5,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SimpleDefine implements UnaryOperator<String> {
-	private Pattern patt;
-	private String  repl;
+	private Pattern	patt;
+	private String	repl;
 
 	public SimpleDefine(Pattern pattern, String replace) {
 		patt = pattern;

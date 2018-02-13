@@ -10,11 +10,11 @@ public class Dual {
 	/**
 	 * The real part of the dual number.
 	 */
-	public double real;
+	public double	real;
 	/**
 	 * The dual part of the dual number.
 	 */
-	public double dual;
+	public double	dual;
 
 	/**
 	 * Create a new dual with both parts zero.
@@ -28,7 +28,7 @@ public class Dual {
 	 * Create a new dual number with a zero dual part.
 	 *
 	 * @param real
-	 *                The real part of the number.
+	 *        The real part of the number.
 	 */
 	public Dual(double real) {
 		this.real = real;
@@ -39,9 +39,9 @@ public class Dual {
 	 * Create a new dual number with a specified dual part.
 	 *
 	 * @param real
-	 *                The real part of the number.
+	 *        The real part of the number.
 	 * @param dual
-	 *                The dual part of the number.
+	 *        The dual part of the number.
 	 */
 	public Dual(double real, double dual) {
 		this.real = real;
@@ -67,17 +67,12 @@ public class Dual {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		if(this == obj) return true;
+		if(obj == null) return false;
+		if(getClass() != obj.getClass()) return false;
 		Dual other = (Dual) obj;
-		if (Double.doubleToLongBits(dual) != Double.doubleToLongBits(other.dual))
-			return false;
-		if (Double.doubleToLongBits(real) != Double.doubleToLongBits(other.real))
-			return false;
+		if(Double.doubleToLongBits(dual) != Double.doubleToLongBits(other.dual)) return false;
+		if(Double.doubleToLongBits(real) != Double.doubleToLongBits(other.real)) return false;
 		return true;
 	}
 }

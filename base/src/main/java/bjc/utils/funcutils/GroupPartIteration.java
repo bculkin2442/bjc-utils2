@@ -12,19 +12,19 @@ import bjc.utils.funcdata.IList;
  * @author ben
  *
  * @param <E>
- * 	The type of element in the list being partitioned
+ *        The type of element in the list being partitioned
  */
 final class GroupPartIteration<E> implements Consumer<E> {
 	/* The list we're returning. */
 	private final IList<IList<E>> returnedList;
 
 	/* The current partition of the list. */
-	public IList<E>        currentPartition;
+	public IList<E> currentPartition;
 	/* The items rejected from the current partition. */
 	private final IList<E> rejectedItems;
 
 	/* The number of items in the current partition. */
-	private int       numberInCurrentPartition;
+	private int numberInCurrentPartition;
 	/* The number of items in each partition. */
 	private final int numberPerPartition;
 
@@ -35,17 +35,18 @@ final class GroupPartIteration<E> implements Consumer<E> {
 	 * Create a new group partitioning iteration.
 	 *
 	 * @param returned
-	 * 	The list containing all of the existing partitions.
+	 *        The list containing all of the existing partitions.
 	 *
 	 * @param rejects
-	 * 	The items that have been rejected from a partition for being too
-	 * 	large.
+	 *        The items that have been rejected from a partition for being
+	 *        too large.
 	 *
 	 * @param nPerPart
-	 * 	The combined value of items that should go into each partition.
+	 *        The combined value of items that should go into each
+	 *        partition.
 	 *
 	 * @param eleCount
-	 * 	The function to use to determine the value of an item.
+	 *        The function to use to determine the value of an item.
 	 */
 	public GroupPartIteration(final IList<IList<E>> returned, final IList<E> rejects, final int nPerPart,
 			final Function<E, Integer> eleCount) {
@@ -62,7 +63,7 @@ final class GroupPartIteration<E> implements Consumer<E> {
 	public void accept(final E value) {
 		final boolean shouldStartPartition = numberInCurrentPartition >= numberPerPartition;
 
-		if (shouldStartPartition) {
+		if(shouldStartPartition) {
 			returnedList.add(currentPartition);
 
 			currentPartition = new FunctionalList<>();
@@ -70,10 +71,10 @@ final class GroupPartIteration<E> implements Consumer<E> {
 		} else {
 			final int currentElementCount = elementCounter.apply(value);
 
-			final boolean shouldReject = 
-				(numberInCurrentPartition + currentElementCount) >= numberPerPartition;
+			final boolean shouldReject = (numberInCurrentPartition
+					+ currentElementCount) >= numberPerPartition;
 
-			if (shouldReject) {
+			if(shouldReject) {
 				rejectedItems.add(value);
 			} else {
 				currentPartition.add(value);

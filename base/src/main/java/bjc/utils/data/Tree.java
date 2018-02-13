@@ -16,7 +16,7 @@ import bjc.utils.functypes.ListFlattener;
  * @author ben
  *
  * @param <ContainedType>
- * 	The type contained in the tree.
+ *        The type contained in the tree.
  */
 public class Tree<ContainedType> implements ITree<ContainedType> {
 	/* The data/label for this node. */
@@ -26,17 +26,16 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	private IList<ITree<ContainedType>> children;
 
 	/* Whether this node has children. */
-	/* @NOTE
-	 * 	Why have both this boolean and childCount? Why not just do a
-	 * 		childCount == 0
-	 *	whenever you'd check hasChildren?
+	/*
+	 * @NOTE Why have both this boolean and childCount? Why not just do a
+	 * childCount == 0 whenever you'd check hasChildren?
 	 */
 	private boolean hasChildren;
 	/* The number of children this node has. */
-	private int     childCount = 0;
+	private int childCount = 0;
 
 	/* The ID of this node. */
-	private int        ID;
+	private int ID;
 	/* The next ID to assign to a node. */
 	private static int nextID = 0;
 
@@ -44,7 +43,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	 * Create a new leaf node in a tree.
 	 *
 	 * @param leaf
-	 * 	The data to store as a leaf node.
+	 *        The data to store as a leaf node.
 	 */
 	public Tree(final ContainedType leaf) {
 		data = leaf;
@@ -58,10 +57,10 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	 * Create a new tree node with the specified children.
 	 *
 	 * @param leaf
-	 * 	The data to hold in this node.
+	 *        The data to hold in this node.
 	 *
 	 * @param childrn
-	 * 	A list of children for this node.
+	 *        A list of children for this node.
 	 */
 	public Tree(final ContainedType leaf, final IList<ITree<ContainedType>> childrn) {
 		this(leaf);
@@ -77,10 +76,10 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	 * Create a new tree node with the specified children.
 	 *
 	 * @param leaf
-	 * 	The data to hold in this node.
+	 *        The data to hold in this node.
 	 *
 	 * @param childrn
-	 * 	A list of children for this node.
+	 *        A list of children for this node.
 	 */
 	@SafeVarargs
 	public Tree(final ContainedType leaf, final ITree<ContainedType>... childrn) {
@@ -92,7 +91,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 		children = new FunctionalList<>();
 
-		for (final ITree<ContainedType> child : childrn) {
+		for(final ITree<ContainedType> child : childrn) {
 			children.add(child);
 
 			childCount++;
@@ -101,7 +100,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 	@Override
 	public void addChild(final ITree<ContainedType> child) {
-		if (hasChildren == false) {
+		if(hasChildren == false) {
 			hasChildren = true;
 
 			children = new FunctionalList<>();
@@ -114,7 +113,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 	@Override
 	public void prependChild(final ITree<ContainedType> child) {
-		if (hasChildren == false) {
+		if(hasChildren == false) {
 			hasChildren = true;
 
 			children = new FunctionalList<>();
@@ -127,7 +126,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 	@Override
 	public void doForChildren(final Consumer<ITree<ContainedType>> action) {
-		if (childCount > 0) {
+		if(childCount > 0) {
 			children.forEach(action);
 		}
 	}
@@ -139,11 +138,11 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 	@Override
 	public int revFind(final Predicate<ITree<ContainedType>> childPred) {
-		if (childCount == 0) {
+		if(childCount == 0) {
 			return -1;
 		} else {
-			for (int i = childCount - 1; i >= 0; i--) {
-				if (childPred.test(getChild(i))) return i;
+			for(int i = childCount - 1; i >= 0; i--) {
+				if(childPred.test(getChild(i))) return i;
 			}
 
 			return -1;
@@ -152,10 +151,10 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 	@Override
 	public void traverse(final TreeLinearizationMethod linearizationMethod, final Consumer<ContainedType> action) {
-		if (hasChildren) {
-			switch (linearizationMethod) {
+		if(hasChildren) {
+			switch(linearizationMethod) {
 			case INORDER:
-				if (childCount != 2) {
+				if(childCount != 2) {
 					final String msg = "Can only do in-order traversal for binary trees.";
 
 					throw new IllegalArgumentException(msg);
@@ -195,7 +194,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 	@Override
 	public ITree<ContainedType> flatMapTree(final Function<ContainedType, ITree<ContainedType>> mapper) {
-		if (hasChildren) {
+		if(hasChildren) {
 			final ITree<ContainedType> flatMappedData = mapper.apply(data);
 
 			final IList<ITree<ContainedType>> mappedChildren = children
@@ -212,14 +211,13 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	/*
 	 * Do a collapse of this tree.
 	 *
-	 * @NOTE
-	 * 	Why is this protected? I can't see any good reason someone'd
-	 * 	want to override it.
+	 * @NOTE Why is this protected? I can't see any good reason someone'd
+	 * want to override it.
 	 */
 
 	protected <NewType> NewType internalCollapse(final Function<ContainedType, NewType> leafTransform,
 			final Function<ContainedType, ListFlattener<NewType>> nodeCollapser) {
-		if (hasChildren) {
+		if(hasChildren) {
 			final Function<IList<NewType>, NewType> nodeTransformer = nodeCollapser.apply(data);
 
 			final IList<NewType> collapsedChildren = children.map(child -> {
@@ -236,7 +234,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	}
 
 	protected void internalToString(final StringBuilder builder, final int indentLevel, final boolean initial) {
-		for (int i = 0; i < indentLevel; i++) {
+		for(int i = 0; i < indentLevel; i++) {
 			builder.append(">\t");
 		}
 
@@ -246,14 +244,14 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 		builder.append(data == null ? "(null)" : data.toString());
 		builder.append("\n");
 
-		if (hasChildren) {
+		if(hasChildren) {
 			children.forEach(child -> {
-				if (child instanceof Tree<?>) {
+				if(child instanceof Tree<?>) {
 					final Tree<ContainedType> kid = (Tree<ContainedType>) child;
 
 					kid.internalToString(builder, indentLevel + 1, false);
 				} else {
-					for (int i = 0; i < indentLevel + 1; i++) {
+					for(int i = 0; i < indentLevel + 1; i++) {
 						builder.append(">\t");
 					}
 
@@ -268,7 +266,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	@Override
 	public <MappedType> ITree<MappedType> rebuildTree(final Function<ContainedType, MappedType> leafTransformer,
 			final Function<ContainedType, MappedType> operatorTransformer) {
-		if (hasChildren) {
+		if(hasChildren) {
 			final IList<ITree<MappedType>> mappedChildren = children.map(child -> {
 				return child.rebuildTree(leafTransformer, operatorTransformer);
 			});
@@ -283,7 +281,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	@Override
 	public void selectiveTransform(final Predicate<ContainedType> nodePicker,
 			final UnaryOperator<ContainedType> transformer) {
-		if (hasChildren) {
+		if(hasChildren) {
 			children.forEach(child -> child.selectiveTransform(nodePicker, transformer));
 		} else {
 			data = transformer.apply(data);
@@ -296,11 +294,11 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 			final UnaryOperator<ITree<ContainedType>> transformer) {
 		final TopDownTransformResult transformResult = transformPicker.apply(data);
 
-		switch (transformResult) {
+		switch(transformResult) {
 		case PASSTHROUGH:
 			ITree<ContainedType> result = new Tree<>(data);
 
-			if (hasChildren) {
+			if(hasChildren) {
 				children.forEach(child -> {
 					final ITree<ContainedType> kid = child.topDownTransform(transformPicker,
 							transformer);
@@ -319,7 +317,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 		case PUSHDOWN:
 			result = new Tree<>(data);
 
-			if (hasChildren) {
+			if(hasChildren) {
 				children.forEach(child -> {
 					final ITree<ContainedType> kid = child.topDownTransform(transformPicker,
 							transformer);
@@ -351,7 +349,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	@Override
 	public <TransformedType> TransformedType transformChild(final int childNo,
 			final Function<ITree<ContainedType>, TransformedType> transformer) {
-		if (childNo < 0 || childNo > childCount - 1) {
+		if(childNo < 0 || childNo > childCount - 1) {
 			final String msg = String.format("Child index #%d is invalid", childNo);
 
 			throw new IllegalArgumentException(msg);
@@ -394,21 +392,21 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (!(obj instanceof Tree<?>)) return false;
+		if(this == obj) return true;
+		if(obj == null) return false;
+		if(!(obj instanceof Tree<?>)) return false;
 
 		final Tree<?> other = (Tree<?>) obj;
 
-		if (data == null) {
-			if (other.data != null) return false;
-		} else if (!data.equals(other.data)) return false;
+		if(data == null) {
+			if(other.data != null) return false;
+		} else if(!data.equals(other.data)) return false;
 
-		if (childCount != other.childCount) return false;
+		if(childCount != other.childCount) return false;
 
-		if (children == null) {
-			if (other.children != null) return false;
-		} else if (!children.equals(other.children)) return false;
+		if(children == null) {
+			if(other.children != null) return false;
+		} else if(!children.equals(other.children)) return false;
 
 		return true;
 	}

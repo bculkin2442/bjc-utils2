@@ -9,8 +9,7 @@ public interface CommandHelp {
 	/**
 	 * Get the description of a command.
 	 *
-	 * @return
-	 * 	The description of a command
+	 * @return The description of a command
 	 */
 	String getDescription();
 
@@ -25,8 +24,7 @@ public interface CommandHelp {
 	 * 
 	 * where anything in angle brackets should be filled in.
 	 *
-	 * @return 
-	 * 	The summary line line for a command
+	 * @return The summary line line for a command
 	 */
 	String getSummary();
 }
