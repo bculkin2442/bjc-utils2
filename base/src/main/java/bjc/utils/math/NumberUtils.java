@@ -1,15 +1,28 @@
 package bjc.utils.math;
 
-import java.util.Map;
-import java.util.function.BiFunction;
-import java.util.function.LongPredicate;
-
-import static java.util.Map.Entry;
-
+/**
+ * A variety of functions for doing useful stuff with numbers.
+ * 
+ * @author EVE
+ *
+ */
 public class NumberUtils {
 	/*
-	 * @TODO Use U+305 for large roman numerals, as well as excels 'concise'
+	 * @TODO 2/12/18 Ben Culkin :RomanExpansion
+	 * 
+	 * Use U+305 for large roman numerals, as well as excels 'concise'
 	 * numerals (as implemented by roman()).
+	 */
+
+	/**
+	 * Convert a number into a roman numeral.
+	 * 
+	 * @param number
+	 *        The number to convert.
+	 * @param classic
+	 *        Whether to use classic roman numerals (use IIII instead of IV,
+	 *        and such).
+	 * @return The number as a roman numeral.
 	 */
 	public static String toRoman(long number, boolean classic) {
 		StringBuilder work = new StringBuilder();
@@ -119,40 +132,32 @@ public class NumberUtils {
 		return work.toString();
 	}
 
+	/**
+	 * Convert a number into a cardinal number.
+	 * 
+	 * @param number
+	 *        The number to convert
+	 * @return The number as a cardinal.
+	 */
 	public static String toCardinal(long number) {
 		return toCardinal(number, null);
 	}
 
-	private static String[] cardinals = new String[] { "zero", "one", "two", "three", "four", "five", "six",
-			"seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen",
-			"sixteen", "seventeen", "eighteen", "nineteen", "twenty", };
+	private static String[] cardinals = new String[] {
+			"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven",
+			"twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen",
+			"twenty",
+	};
 
-	public static class CardinalState {
-		public final Map<Long, String>							customNumbers;
-		public final Map<LongPredicate, BiFunction<Long, CardinalState, String>>	customScales;
-
-		public CardinalState(Map<Long, String> customNumbers,
-				Map<LongPredicate, BiFunction<Long, CardinalState, String>> customScales) {
-			this.customNumbers = customNumbers;
-			this.customScales = customScales;
-		}
-
-		public String handleCustom(long number) {
-			if(customNumbers.containsKey(number)) {
-				return customNumbers.get(number);
-			}
-
-			for(Entry<LongPredicate, BiFunction<Long, CardinalState, String>> ent : customScales
-					.entrySet()) {
-				if(ent.getKey().test(number)) {
-					return ent.getValue().apply(number, this);
-				}
-			}
-
-			return null;
-		}
-	}
-
+	/**
+	 * Convert a number into a cardinal number.
+	 * 
+	 * @param number
+	 *        The number to convert to a cardinal.
+	 * @param custom
+	 *        The customizations to use.
+	 * @return The number as a cardinal.
+	 */
 	public static String toCardinal(long number, CardinalState custom) {
 		if(custom != null) {
 			String res = custom.handleCustom(number);
@@ -189,14 +194,14 @@ public class NumberUtils {
 				}
 			}
 
-			long numTens = (long) (number / 10);
+			long numTens = number / 10;
 			long numOnes = number % 10;
 
 			return toCardinal(numTens, custom) + "-" + toCardinal(numOnes, custom);
 		}
 
 		if(number < 1000) {
-			long numHundreds = (long) (number / 100);
+			long numHundreds = number / 100;
 			long rest = number % 100;
 
 			return toCardinal(numHundreds, custom) + " hundred and " + toCardinal(rest, custom);
@@ -204,7 +209,7 @@ public class NumberUtils {
 
 		long MILLION = (long) (Math.pow(10, 6));
 		if(number < MILLION) {
-			long numThousands = (long) (number / 1000);
+			long numThousands = number / 1000;
 			long rest = number % 1000;
 
 			return toCardinal(numThousands, custom) + " thousand, " + toCardinal(rest, custom);
@@ -212,7 +217,7 @@ public class NumberUtils {
 
 		long BILLION = (long) (Math.pow(10, 9));
 		if(number < BILLION) {
-			long numMillions = (long) (number / MILLION);
+			long numMillions = number / MILLION;
 			long rest = number % MILLION;
 
 			return toCardinal(numMillions, custom) + " million, " + toCardinal(rest, custom);
@@ -220,7 +225,7 @@ public class NumberUtils {
 
 		long TRILLION = (long) (Math.pow(10, 12));
 		if(number < TRILLION) {
-			long numBillions = (long) (number / BILLION);
+			long numBillions = number / BILLION;
 			long rest = number % BILLION;
 
 			return toCardinal(numBillions, custom) + " billion, " + toCardinal(rest, custom);
@@ -230,6 +235,13 @@ public class NumberUtils {
 				"Numbers greater than or equal to 1 trillion are not supported yet.");
 	}
 
+	/**
+	 * Convert a number into an ordinal.
+	 * 
+	 * @param number
+	 *        The number to convert to an ordinal.
+	 * @return The number as an ordinal.
+	 */
 	public static String toOrdinal(long number) {
 		if(number < 0) {
 			return "minus " + toOrdinal(number);
@@ -314,7 +326,7 @@ public class NumberUtils {
 		}
 
 		long procNum = number % 100;
-		long tens = (long) (procNum / 10);
+		long tens = procNum / 10;
 		long ones = procNum % 10;
 
 		if(tens == 1) {
@@ -356,6 +368,25 @@ public class NumberUtils {
 		}
 	}
 
+	/**
+	 * Convert a number into a commafied string.
+	 * 
+	 * @param val
+	 *        The number to convert.
+	 * @param mincols
+	 *        The minimum number of columns to use.
+	 * @param padchar
+	 *        The padding char to use.
+	 * @param commaInterval
+	 *        The interval to place commas at.
+	 * @param commaChar
+	 *        The character to use as a comma
+	 * @param signed
+	 *        Whether or not to always display a sign
+	 * @param radix
+	 *        The radix to use
+	 * @return The number as a commafied string.
+	 */
 	public static String toCommaString(long val, int mincols, char padchar, int commaInterval, char commaChar,
 			boolean signed, int radix) {
 		if(radix > radixChars.length) {
@@ -383,7 +414,7 @@ public class NumberUtils {
 
 				int radDigit = (int) (currVal % radix);
 				work.append(radixChars[radDigit]);
-				currVal = (long) (currVal / radix);
+				currVal = currVal / radix;
 
 				if(commaInterval != 0 && valCounter % commaInterval == 0) work.append(commaChar);
 			}
@@ -405,6 +436,21 @@ public class NumberUtils {
 		return work.toString();
 	}
 
+	/**
+	 * Convert a number to a normal commafied string.
+	 * 
+	 * @param val
+	 *        The value to convert.
+	 * @param mincols
+	 *        The minimum number of columns.
+	 * @param padchar
+	 *        The padding char to use.
+	 * @param signed
+	 *        Whether or not to display the sign.
+	 * @param radix
+	 *        The radix to use.
+	 * @return The number as a normal commafied string.
+	 */
 	public static String toNormalString(long val, int mincols, char padchar, boolean signed, int radix) {
 		return toCommaString(val, mincols, padchar, 0, ',', signed, radix);
 	}

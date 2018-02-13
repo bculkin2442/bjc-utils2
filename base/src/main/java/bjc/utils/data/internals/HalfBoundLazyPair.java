@@ -22,6 +22,7 @@ import bjc.utils.data.LazyPair;
  *
  * @author Ben Culkin
  */
+@SuppressWarnings("javadoc")
 public class HalfBoundLazyPair<OldType, NewLeft, NewRight> implements IPair<NewLeft, NewRight> {
 	/* The supplier of the old value. */
 	private final Supplier<OldType> oldSupplier;

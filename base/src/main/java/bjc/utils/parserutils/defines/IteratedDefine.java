@@ -8,6 +8,12 @@ import java.util.regex.Pattern;
 
 import bjc.utils.data.CircularIterator;
 
+/**
+ * A define that has a set of replacements to use.
+ * 
+ * @author EVE
+ *
+ */
 public class IteratedDefine implements UnaryOperator<String> {
 	private Pattern patt;
 
@@ -17,12 +23,12 @@ public class IteratedDefine implements UnaryOperator<String> {
 	 * Create a new iterated define.
 	 *
 	 * @param pattern
-	 * 	The pattern to use for matching.
+	 *        The pattern to use for matching.
 	 * @param circular
-	 * 	Whether or not to loop through the list of replacers, or just
-	 * 	repeat the last one.
+	 *        Whether or not to loop through the list of replacers, or just
+	 *        repeat the last one.
 	 * @param replacers
-	 * 	The set of replacers to use.
+	 *        The set of replacers to use.
 	 */
 	public IteratedDefine(Pattern pattern, boolean circular, String... replacers) {
 		patt = pattern;
@@ -32,7 +38,7 @@ public class IteratedDefine implements UnaryOperator<String> {
 
 	@Override
 	public String apply(String ln) {
-		Matcher mat     = patt.matcher(ln);
+		Matcher mat = patt.matcher(ln);
 		StringBuffer sb = new StringBuffer();
 
 		while(mat.find()) {

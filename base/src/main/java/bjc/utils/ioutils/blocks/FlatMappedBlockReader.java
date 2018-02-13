@@ -22,8 +22,8 @@ public class FlatMappedBlockReader implements BlockReader {
 	/*
 	 * The current block, and any blocks pending from the last source block.
 	 */
-	private Iterator<Block> pending;
-	private Block           current;
+	private Iterator<Block>	pending;
+	private Block		current;
 
 	/*
 	 * The operator to open blocks with.
@@ -35,8 +35,16 @@ public class FlatMappedBlockReader implements BlockReader {
 	 */
 	private int blockNo;
 
+	/**
+	 * Create a new flat-mapping block reader.
+	 * 
+	 * @param source
+	 *        The source to read blocks from
+	 * @param trans
+	 *        The transform to use.
+	 */
 	public FlatMappedBlockReader(BlockReader source, Function<Block, List<Block>> trans) {
-		reader    = source;
+		reader = source;
 		transform = trans;
 
 		blockNo = 0;
@@ -52,7 +60,7 @@ public class FlatMappedBlockReader implements BlockReader {
 		return current;
 	}
 
-	@Override	
+	@Override
 	public boolean nextBlock() {
 		/*
 		 * Attempt to get a new pending list if the one we have isn't
@@ -67,7 +75,7 @@ public class FlatMappedBlockReader implements BlockReader {
 		/*
 		 * Advance the iterator.
 		 */
-		current  = pending.next();
+		current = pending.next();
 		blockNo += 1;
 
 		return true;

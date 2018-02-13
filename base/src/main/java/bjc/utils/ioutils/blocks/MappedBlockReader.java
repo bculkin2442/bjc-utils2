@@ -4,6 +4,12 @@ import java.io.IOException;
 
 import java.util.function.UnaryOperator;
 
+/**
+ * A block reader that applies a transform to each block.
+ * 
+ * @author EVE
+ *
+ */
 public class MappedBlockReader implements BlockReader {
 	private BlockReader reader;
 
@@ -13,8 +19,16 @@ public class MappedBlockReader implements BlockReader {
 
 	private int blockNo;
 
+	/**
+	 * Create a new mapped block reader.
+	 * 
+	 * @param source
+	 *        The source for blocks
+	 * @param trans
+	 *        The transform to apply.
+	 */
 	public MappedBlockReader(BlockReader source, UnaryOperator<Block> trans) {
-		reader    = source;
+		reader = source;
 		transform = trans;
 
 		blockNo = 0;
@@ -30,10 +44,10 @@ public class MappedBlockReader implements BlockReader {
 		return current;
 	}
 
-	@Override	
+	@Override
 	public boolean nextBlock() {
 		if(hasNextBlock()) {
-			current  = transform.apply(reader.next());
+			current = transform.apply(reader.next());
 			blockNo += 1;
 
 			return true;

@@ -5,6 +5,12 @@ import java.io.IOException;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+/**
+ * A block reader that only yields blocks that pass a predicate.
+ * 
+ * @author EVE
+ *
+ */
 public class FilteredBlockReader implements BlockReader {
 	/*
 	 * The source of blocks.
@@ -34,10 +40,29 @@ public class FilteredBlockReader implements BlockReader {
 	 */
 	private Consumer<Block> failAction;
 
+	/**
+	 * Create a new filtered block reader with a given filter.
+	 * 
+	 * @param src
+	 *        The place to read blocks from.
+	 * @param predic
+	 *        The predicate to use to pass blocks.
+	 */
 	public FilteredBlockReader(BlockReader src, Predicate<Block> predic) {
 		this(src, predic, null);
 	}
 
+	/**
+	 * Create a new filtered block reader with a given filter that executes
+	 * a specific action when a block fails.
+	 * 
+	 * @param src
+	 *        The place to read blocks from.
+	 * @param predic
+	 *        The predicate to use to pass blocks.
+	 * @param failAct
+	 *        The action to take when a block fails.
+	 */
 	public FilteredBlockReader(BlockReader src, Predicate<Block> predic, Consumer<Block> failAct) {
 		source = src;
 		pred = predic;
