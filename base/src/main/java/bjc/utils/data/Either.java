@@ -119,13 +119,13 @@ public class Either<LeftType, RightType> implements IPair<LeftType, RightType> {
 
 				return new Either<>(cLeft, null);
 			});
-		} else {
-			return otherPair.bind((otherLeft, otherRight) -> {
-				CombinedRight cRight = rightCombiner.apply(rightVal, otherRight);
-
-				return new Either<>(null, cRight);
-			});
 		}
+
+		return otherPair.bind((otherLeft, otherRight) -> {
+			CombinedRight cRight = rightCombiner.apply(rightVal, otherRight);
+
+			return new Either<>(null, cRight);
+		});
 	}
 
 	@Override

@@ -181,13 +181,13 @@ public class DelimiterGroup<T> {
 		/**
 		 * Check if a group is excluded at the top level of this group.
 		 *
-		 * @param groupName
+		 * @param grupName
 		 *                The group to check.
 		 *
 		 * @return Whether or not the provided group is excluded.
 		 */
-		public boolean excludes(final T groupName) {
-			return topLevelExclusions.contains(groupName);
+		public boolean excludes(final T grupName) {
+			return topLevelExclusions.contains(grupName);
 		}
 
 		/**

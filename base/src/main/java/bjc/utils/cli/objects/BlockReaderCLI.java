@@ -35,20 +35,20 @@ public class BlockReaderCLI {
 		/**
 		 * All of the configured block readers.
 		 */
-		public final Map<String, BlockReader> readers;
+		public final Map<String, BlockReader>	readers;
 		/**
 		 * All of the configured I/O sources.
 		 */
-		public final Map<String, Reader>      sources;
+		public final Map<String, Reader>	sources;
 
 		/**
 		 * Create a new set of state for the block reader.
 		 *
 		 * @param readers
-		 * 	The set of configured block readers.
+		 *        The set of configured block readers.
 		 *
 		 * @param sources
-		 * 	The set of configured I/O sources.
+		 *        The set of configured I/O sources.
 		 */
 		public BlockReaderState(Map<String, BlockReader> readers, Map<String, Reader> sources) {
 			this.readers = readers;
@@ -63,7 +63,7 @@ public class BlockReaderCLI {
 	 * Create a new CLI for configuring BlockReaders.
 	 *
 	 * @param srcs
-	 * 	The container of initial I/O sources.
+	 *        The container of initial I/O sources.
 	 */
 	public BlockReaderCLI(Map<String, Reader> srcs) {
 		stat = new BlockReaderState(new HashMap<>(), srcs);
@@ -73,7 +73,7 @@ public class BlockReaderCLI {
 	 * Create a new CLI for configuring BlockReaders.
 	 *
 	 * @param state
-	 * 	The state object to use.
+	 *        The state object to use.
 	 */
 	public BlockReaderCLI(BlockReaderState state) {
 		stat = state;
@@ -84,12 +84,12 @@ public class BlockReaderCLI {
 	 * Run the command line interface
 	 *
 	 * @param args
-	 * 	Ignored CLI args.
+	 *        Ignored CLI args.
 	 */
 	public static void main(String[] args) {
 		/* Create/configure I/O sources. */
 		Map<String, Reader> sources = new HashMap<>();
-		BlockReaderCLI reader       = new BlockReaderCLI(sources);
+		BlockReaderCLI reader = new BlockReaderCLI(sources);
 
 		sources.put("stdio", new InputStreamReader(System.in));
 
@@ -102,13 +102,13 @@ public class BlockReaderCLI {
 	 * Run the CLI on an input source.
 	 *
 	 * @param input
-	 * 	The place to read input from.
+	 *        The place to read input from.
 	 *
 	 * @param ioSource
-	 * 	The name of the place to read input from.
+	 *        The name of the place to read input from.
 	 *
 	 * @param interactive
-	 *	Whether or not the source is interactive
+	 *        Whether or not the source is interactive
 	 */
 	public void run(Scanner input, String ioSource, boolean interactive) {
 		int lno = 0;
@@ -128,9 +128,9 @@ public class BlockReaderCLI {
 			if(com == null) continue;
 
 			/* Handle a command. */
-			CommandStatus stat = handleCommand(com, interactive);
+			CommandStatus stt = handleCommand(com, interactive);
 			/* Exit if we finished or encountered a fatal error. */
-			if(stat == FINISH || stat == ERROR) {
+			if(stt == FINISH || stt == ERROR) {
 				return;
 			}
 
@@ -146,36 +146,36 @@ public class BlockReaderCLI {
 	 * Handle a command.
 	 *
 	 * @param com
-	 * 	The command to handle
+	 *        The command to handle
 	 *
 	 * @param interactive
-	 * 	Whether the current input source is interactive or not.
+	 *        Whether the current input source is interactive or not.
+	 * @return The status of the executed command.
 	 */
 	public CommandStatus handleCommand(Command com, boolean interactive) {
 		switch(com.nameCommand) {
-			case "def-filtered":
-				return defFiltered(com);
-			case "def-layered":
-				return defLayered(com);
-			case "def-pushback":
-				return defPushback(com);
-			case "def-simple":
-				return defSimple(com);
-			case "def-serial":
-				return defSerial(com);
-			case "def-toggled":
-				return defToggled(com);
-			case "}":
-			case "end":
-			case "exit":
-			case "quit":
-				if(interactive)
-					System.out.printf("Exiting reader-conf, %d readers configured in %d commands\n",
-							stat.readers.size(), com.lineNo);
-				return FINISH;
-			default:
-				LOGGER.severe(com.error("Unknown command '%s'\n", com.nameCommand));
-				return FAIL;
+		case "def-filtered":
+			return defFiltered(com);
+		case "def-layered":
+			return defLayered(com);
+		case "def-pushback":
+			return defPushback(com);
+		case "def-simple":
+			return defSimple(com);
+		case "def-serial":
+			return defSerial(com);
+		case "def-toggled":
+			return defToggled(com);
+		case "}":
+		case "end":
+		case "exit":
+		case "quit":
+			if(interactive) System.out.printf("Exiting reader-conf, %d readers configured in %d commands\n",
+					stat.readers.size(), com.lineNo);
+			return FINISH;
+		default:
+			LOGGER.severe(com.error("Unknown command '%s'\n", com.nameCommand));
+			return FAIL;
 		}
 	}
 
@@ -191,7 +191,7 @@ public class BlockReaderCLI {
 			return FAIL;
 		}
 		String blockName = remn.substring(0, idx).trim();
-		remn             = remn.substring(idx).trim();
+		remn = remn.substring(idx).trim();
 
 		/*
 		 * Check there isn't a reader already bound to this name.
@@ -205,11 +205,11 @@ public class BlockReaderCLI {
 		 */
 		idx = remn.indexOf(' ');
 		if(idx == -1) {
-			LOGGER.severe(com.error("No reader-name argument for def-filtered.\n"));	
+			LOGGER.severe(com.error("No reader-name argument for def-filtered.\n"));
 			return FAIL;
 		}
 		String readerName = remn.substring(0, idx).trim();
-		remn              = remn.substring(idx).trim();
+		remn = remn.substring(idx).trim();
 
 		/*
 		 * Check there is a reader bound to that name.
@@ -238,22 +238,26 @@ public class BlockReaderCLI {
 				return mat.matches();
 			};
 
+			@SuppressWarnings("resource")
 			BlockReader reader = new FilteredBlockReader(stat.readers.get(readerName), pred);
 
 			stat.readers.put(blockName, reader);
-		} catch (PatternSyntaxException psex) {
-			LOGGER.severe(com.error("Invalid regular expression '%s' for filter. (%s)\n", filter, psex.getMessage()));
+		} catch(PatternSyntaxException psex) {
+			LOGGER.severe(com.error("Invalid regular expression '%s' for filter. (%s)\n", filter,
+					psex.getMessage()));
 			return FAIL;
 		}
 
 		return SUCCESS;
 	}
 
+	@SuppressWarnings("resource")
 	private CommandStatus defPushback(Command com) {
 		String[] parts = com.remnCommand.split(" ");
 
 		if(parts.length != 2) {
-			LOGGER.severe(com.error("Incorrect number of arguments to def-pushback. Requires a block name and a reader name\n"));
+			LOGGER.severe(com.error(
+					"Incorrect number of arguments to def-pushback. Requires a block name and a reader name\n"));
 			return FAIL;
 		}
 
@@ -275,11 +279,13 @@ public class BlockReaderCLI {
 		return SUCCESS;
 	}
 
+	@SuppressWarnings("resource")
 	private CommandStatus defToggled(Command com) {
 		String[] parts = com.remnCommand.split(" ");
 
 		if(parts.length != 3) {
-			LOGGER.severe(com.error("Incorrect number of arguments to def-toggled. Requires a block name and two reader names\n"));
+			LOGGER.severe(com.error(
+					"Incorrect number of arguments to def-toggled. Requires a block name and two reader names\n"));
 			return FAIL;
 		}
 
@@ -310,11 +316,13 @@ public class BlockReaderCLI {
 		return SUCCESS;
 	}
 
+	@SuppressWarnings("resource")
 	private CommandStatus defLayered(Command com) {
 		String[] parts = com.remnCommand.split(" ");
 
 		if(parts.length != 3) {
-			LOGGER.severe(com.error("Incorrect number of arguments to def-layered. Requires a block name and two reader names\n"));
+			LOGGER.severe(com.error(
+					"Incorrect number of arguments to def-layered. Requires a block name and two reader names\n"));
 			return FAIL;
 		}
 
@@ -345,11 +353,13 @@ public class BlockReaderCLI {
 		return SUCCESS;
 	}
 
+	@SuppressWarnings("resource")
 	private CommandStatus defSerial(Command com) {
 		String[] parts = com.remnCommand.split(" ");
 
 		if(parts.length < 2) {
-			LOGGER.severe(com.error("Not enough arguments to def-serial. Requires at least a block name and at least one reader name\n"));
+			LOGGER.severe(com.error(
+					"Not enough arguments to def-serial. Requires at least a block name and at least one reader name\n"));
 			return FAIL;
 		}
 
@@ -401,7 +411,7 @@ public class BlockReaderCLI {
 			return FAIL;
 		}
 		String blockName = remn.substring(0, idx).trim();
-		remn             = remn.substring(idx).trim();
+		remn = remn.substring(idx).trim();
 
 		/*
 		 * Check there isn't a reader already bound to this name.
@@ -415,11 +425,11 @@ public class BlockReaderCLI {
 		 */
 		idx = remn.indexOf(' ');
 		if(idx == -1) {
-			LOGGER.severe(com.error("No source-name argument for def-simple.\n"));	
+			LOGGER.severe(com.error("No source-name argument for def-simple.\n"));
 			return FAIL;
 		}
 		String sourceName = remn.substring(0, idx).trim();
-		remn              = remn.substring(idx).trim();
+		remn = remn.substring(idx).trim();
 
 		/*
 		 * Check there is a source bound to that name.
@@ -440,11 +450,13 @@ public class BlockReaderCLI {
 		String delim = remn;
 
 		try {
+			@SuppressWarnings("resource")
 			BlockReader reader = new SimpleBlockReader(delim, stat.sources.get(sourceName));
 
 			stat.readers.put(blockName, reader);
-		} catch (PatternSyntaxException psex) {
-			LOGGER.severe(com.error("Invalid regular expression '%s' for delimiter. (%s)\n", delim, psex.getMessage()));
+		} catch(PatternSyntaxException psex) {
+			LOGGER.severe(com.error("Invalid regular expression '%s' for delimiter. (%s)\n", delim,
+					psex.getMessage()));
 			return FAIL;
 		}
 

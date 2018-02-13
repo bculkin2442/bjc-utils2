@@ -23,11 +23,11 @@ import static bjc.utils.cli.objects.Command.CommandStatus.*;
 public class DefineCLI {
 	private final Logger LOGGER = Logger.getLogger(DefineCLI.class.getName());
 
-	public static class DefineState {
+	static class DefineState {
 		public final Map<String, UnaryOperator<String>> defines;
 
-		public final Map<String, String> strings;
-		public final Map<String, String> formats;
+		public final Map<String, String>	strings;
+		public final Map<String, String>	formats;
 
 		public final Map<String, Pattern> patterns;
 
@@ -48,14 +48,23 @@ public class DefineCLI {
 
 	private DefineState stat;
 
+	/**
+	 * Create a new Define CLI
+	 */
 	public DefineCLI() {
 		stat = new DefineState();
 	}
 
+	/**
+	 * Main method
+	 * 
+	 * @param args
+	 *        CLI args
+	 */
 	public static void main(String[] args) {
 		DefineCLI defin = new DefineCLI();
 
-		try (Scanner scn = new Scanner(System.in)) {
+		try(Scanner scn = new Scanner(System.in)) {
 			defin.run(scn, "console", true);
 		}
 	}
@@ -64,25 +73,23 @@ public class DefineCLI {
 	 * Run the CLI on an input source.
 	 *
 	 * @param input
-	 *                The place to read input from.
+	 *        The place to read input from.
 	 * @param ioSource
-	 *                The name of the place to read input from.
+	 *        The name of the place to read input from.
 	 * @param interactive
-	 *                Whether or not the source is interactive
+	 *        Whether or not the source is interactive
 	 */
 	public void run(Scanner input, String ioSource, boolean interactive) {
 		int lno = 0;
-		while (input.hasNextLine()) {
-			if (interactive)
-				System.out.printf("define-conf(%d)>", lno);
+		while(input.hasNextLine()) {
+			if(interactive) System.out.printf("define-conf(%d)>", lno);
 
 			String ln = input.nextLine();
 
 			lno += 1;
 
 			Command com = Command.fromString(ln, lno, ioSource);
-			if (com == null)
-				continue;
+			if(com == null) continue;
 
 			handleCommand(com, interactive);
 		}
@@ -90,8 +97,16 @@ public class DefineCLI {
 		input.close();
 	}
 
+	/**
+	 * Handle a command
+	 * 
+	 * @param com
+	 *        The command to handle
+	 * @param interactive
+	 *        Whether or not our I/O stream is interactive
+	 */
 	public void handleCommand(Command com, boolean interactive) {
-		switch (com.nameCommand) {
+		switch(com.nameCommand) {
 		case "def-string":
 		default:
 			LOGGER.severe(com.error("Unknown command %s\n", com.nameCommand));
@@ -103,14 +118,14 @@ public class DefineCLI {
 		String remn = com.remnCommand;
 
 		int idx = remn.indexOf(' ');
-		if (idx == -1) {
+		if(idx == -1) {
 			LOGGER.warning(com.warn("Binding empty string to name '%s'\n", remn));
 			idx = remn.length();
 		}
 		String name = remn.substring(0, idx);
 		String strang = remn.substring(idx);
 
-		if (stat.strings.containsKey(name)) {
+		if(stat.strings.containsKey(name)) {
 			LOGGER.warning(com.warn("Shadowing string '%s'\n", name));
 		}
 
@@ -123,14 +138,14 @@ public class DefineCLI {
 		String remn = com.remnCommand;
 
 		int idx = remn.indexOf(' ');
-		if (idx == -1) {
+		if(idx == -1) {
 			LOGGER.warning(com.warn("Binding empty format to name '%s'\n", remn));
 			idx = remn.length();
 		}
 		String name = remn.substring(0, idx);
 		String fmt = remn.substring(idx);
 
-		if (stat.formats.containsKey(name)) {
+		if(stat.formats.containsKey(name)) {
 			LOGGER.warning(com.warn("Shadowing format '%s'\n", name));
 		}
 

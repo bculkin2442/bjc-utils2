@@ -14,6 +14,7 @@ import bjc.utils.data.LazyPair;
  *
  * @author Ben Culkin
  */
+@SuppressWarnings("javadoc")
 public class BoundLazyPair<OldLeft, OldRight, NewLeft, NewRight> implements IPair<NewLeft, NewRight> {
 	/* The supplier of the left value. */
 	private final Supplier<OldLeft> leftSupplier;

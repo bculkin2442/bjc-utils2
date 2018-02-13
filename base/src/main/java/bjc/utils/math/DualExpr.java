@@ -1,4 +1,5 @@
 package bjc.utils.math;
+
 /**
  * Represents an expression using dual numbers.
  *
@@ -68,11 +69,11 @@ public class DualExpr {
 	/**
 	 * The left (or first) part of the expression.
 	 */
-	public DualExpr left;
+	public DualExpr	left;
 	/**
 	 * The right (or second) part of the expression.
 	 */
-	public DualExpr right;
+	public DualExpr	right;
 
 	/**
 	 * The power to use, for power operations.
@@ -83,7 +84,7 @@ public class DualExpr {
 	 * Create a new constant dual number.
 	 *
 	 * @param num
-	 *                The value of the dual number.
+	 *        The value of the dual number.
 	 */
 	public DualExpr(Dual num) {
 		this.type = ExprType.CONSTANT;
@@ -95,9 +96,9 @@ public class DualExpr {
 	 * Create a new unary dual number.
 	 *
 	 * @param type
-	 *                The type of operation to perform.
+	 *        The type of operation to perform.
 	 * @param val
-	 *                The parameter to the value.
+	 *        The parameter to the value.
 	 */
 	public DualExpr(DualExpr.ExprType type, DualExpr val) {
 		this.type = type;
@@ -109,9 +110,11 @@ public class DualExpr {
 	 * Create a new binary dual number.
 	 *
 	 * @param type
-	 *                The type of operation to perform.
-	 * @param val
-	 *                The parameter to the value.
+	 *        The type of operation to perform.
+	 * @param left
+	 *        The left hand side of the expression.
+	 * @param right
+	 *        The right hand side of the expression.
 	 */
 	public DualExpr(DualExpr.ExprType type, DualExpr left, DualExpr right) {
 		this.type = type;
@@ -124,9 +127,9 @@ public class DualExpr {
 	 * Create a new power expression.
 	 *
 	 * @param left
-	 *                The expression to raise.
+	 *        The expression to raise.
 	 * @param power
-	 *                The power to raise it by.
+	 *        The power to raise it by.
 	 */
 	public DualExpr(DualExpr left, int power) {
 		this.type = ExprType.POWER;
@@ -148,7 +151,7 @@ public class DualExpr {
 		Dual lval, rval;
 
 		/* Perform the right operation for each type. */
-		switch (type) {
+		switch(type) {
 		case CONSTANT:
 			return number;
 		case ADDITION:
@@ -176,7 +179,7 @@ public class DualExpr {
 			rval = right.evaluate();
 
 		{
-			if (rval.real == 0) {
+			if(rval.real == 0) {
 				throw new IllegalArgumentException("ERROR: Attempted to divide by zero.");
 			}
 
@@ -206,16 +209,15 @@ public class DualExpr {
 		case LOGARITHM:
 			lval = left.evaluate();
 
-			if (lval.real <= 0) {
-				throw new IllegalArgumentException(
-						"ERROR: Attempted to take non-positive log.");
+			if(lval.real <= 0) {
+				throw new IllegalArgumentException("ERROR: Attempted to take non-positive log.");
 			}
 
 			return new Dual(Math.log(lval.real), lval.dual / lval.real);
 		case POWER:
 			lval = left.evaluate();
 
-			if (lval.real == 0) {
+			if(lval.real == 0) {
 				throw new IllegalArgumentException("ERROR: Raising zero to a power.");
 			}
 
@@ -239,7 +241,7 @@ public class DualExpr {
 
 	@Override
 	public String toString() {
-		switch (type) {
+		switch(type) {
 		case ABSOLUTE:
 			return String.format("abs(%s)", left.toString());
 		case ADDITION:
@@ -271,58 +273,54 @@ public class DualExpr {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		
+
 		result = prime * result + ((left == null) ? 0 : left.hashCode());
 		result = prime * result + ((number == null) ? 0 : number.hashCode());
 		result = prime * result + power;
 		result = prime * result + ((right == null) ? 0 : right.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
-		
+
 		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		
+		if(this == obj) return true;
+		if(obj == null) return false;
+		if(getClass() != obj.getClass()) return false;
+
 		DualExpr other = (DualExpr) obj;
 
-		if (type != other.type) {
+		if(type != other.type) {
 			return false;
 		}
-		
-		if (left == null) {
-			if (other.left != null) {
+
+		if(left == null) {
+			if(other.left != null) {
 				return false;
 			}
-		} else if (!left.equals(other.left)) {
+		} else if(!left.equals(other.left)) {
 			return false;
 		}
-		
-		if (number == null) {
-			if (other.number != null)
-				return false;
-		} else if (!number.equals(other.number)) {
+
+		if(number == null) {
+			if(other.number != null) return false;
+		} else if(!number.equals(other.number)) {
 			return false;
 		}
-		
-		if (power != other.power) {
+
+		if(power != other.power) {
 			return false;
 		}
-		
-		if (right == null) {
-			if (other.right != null) {
+
+		if(right == null) {
+			if(other.right != null) {
 				return false;
 			}
-		} else if (!right.equals(other.right)) {
+		} else if(!right.equals(other.right)) {
 			return false;
 		}
-		
+
 		return true;
 	}
 }

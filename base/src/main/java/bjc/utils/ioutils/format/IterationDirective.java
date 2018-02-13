@@ -2,9 +2,7 @@ package bjc.utils.ioutils.format;
 
 import bjc.utils.esodata.Tape;
 
-import java.util.ArrayList;
 import java.util.IllegalFormatConversionException;
-import java.util.List;
 import java.util.regex.Matcher;
 
 class IterationDirective implements Directive {

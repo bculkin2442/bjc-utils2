@@ -16,8 +16,8 @@ public class FilteredBlockReader implements BlockReader {
 	 *
 	 * Both have already been checked for the predicate.
 	 */
-	private Block current;
-	private Block pending;
+	private Block	current;
+	private Block	pending;
 
 	/*
 	 * Number of blocks that passed the predicate.
@@ -39,8 +39,8 @@ public class FilteredBlockReader implements BlockReader {
 	}
 
 	public FilteredBlockReader(BlockReader src, Predicate<Block> predic, Consumer<Block> failAct) {
-		source     = src;
-		pred       = predic;
+		source = src;
+		pred = predic;
 		failAction = failAct;
 
 		blockNo = 0;
@@ -60,11 +60,11 @@ public class FilteredBlockReader implements BlockReader {
 			if(pred.test(pending)) {
 				blockNo += 1;
 				return true;
-			} else {
-				failAction.accept(pending);
 			}
+
+			failAction.accept(pending);
 		}
-		
+
 		return false;
 	}
 

@@ -7,6 +7,7 @@ package bjc.utils.components;
  */
 public class ComponentDescription implements IDescribedComponent {
 	/* Check arguments are good. */
+	@SuppressWarnings("unused")
 	private static void sanityCheckArgs(final String name, final String author, final String description,
 			final int version) {
 		if (name == null) {

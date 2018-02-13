@@ -12,6 +12,7 @@ import bjc.utils.funcdata.IList;
  *
  * @author Ben Culkin
  */
+@SuppressWarnings("javadoc")
 public class BoundListHolder<ContainedType> implements IHolder<ContainedType> {
 	/* The list of contained holders. */
 	private final IList<IHolder<ContainedType>> heldHolders;

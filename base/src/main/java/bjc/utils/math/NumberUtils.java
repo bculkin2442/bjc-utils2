@@ -27,7 +27,7 @@ public class NumberUtils {
 		}
 
 		if(currNumber >= 1000) {
-			int numM   = (int)(currNumber / 1000);
+			int numM = (int) (currNumber / 1000);
 			currNumber = currNumber % 1000;
 
 			for(int i = 0; i < numM; i++) {
@@ -54,7 +54,7 @@ public class NumberUtils {
 		}
 
 		if(currNumber >= 100) {
-			int numC   = (int)(currNumber / 100);
+			int numC = (int) (currNumber / 100);
 			currNumber = currNumber % 100;
 
 			for(int i = 0; i < numC; i++) {
@@ -81,7 +81,7 @@ public class NumberUtils {
 		}
 
 		if(currNumber >= 10) {
-			int numX   = (int)(currNumber / 10);
+			int numX = (int) (currNumber / 10);
 			currNumber = currNumber % 10;
 
 			for(int i = 0; i < numX; i++) {
@@ -108,7 +108,7 @@ public class NumberUtils {
 		}
 
 		if(currNumber >= 1) {
-			int numI   = (int)(currNumber / 1);
+			int numI = (int) (currNumber / 1);
 			currNumber = currNumber % 1;
 
 			for(int i = 0; i < numI; i++) {
@@ -118,25 +118,23 @@ public class NumberUtils {
 
 		return work.toString();
 	}
-	
+
 	public static String toCardinal(long number) {
 		return toCardinal(number, null);
 	}
 
-	private static String[] cardinals = new String[] {
-		"zero", "one", "two", "three", "four", "five", "six", "seven",
-			"eight", "nine", "ten", "eleven", "twelve", "thirteen",
-			"fourteen", "fifteen", "sixteen", "seventeen", "eighteen",
-			"nineteen", "twenty", 
-	};
+	private static String[] cardinals = new String[] { "zero", "one", "two", "three", "four", "five", "six",
+			"seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen",
+			"sixteen", "seventeen", "eighteen", "nineteen", "twenty", };
 
 	public static class CardinalState {
-		public final Map<Long, String> customNumbers;
-		public final Map<LongPredicate, BiFunction<Long, CardinalState, String>> customScales;
+		public final Map<Long, String>							customNumbers;
+		public final Map<LongPredicate, BiFunction<Long, CardinalState, String>>	customScales;
 
-		public CardinalState(Map<Long, String> customNumbers, Map<LongPredicate, BiFunction<Long, CardinalState, String>> customScales) {
+		public CardinalState(Map<Long, String> customNumbers,
+				Map<LongPredicate, BiFunction<Long, CardinalState, String>> customScales) {
 			this.customNumbers = customNumbers;
-			this.customScales  = customScales;
+			this.customScales = customScales;
 		}
 
 		public String handleCustom(long number) {
@@ -144,7 +142,8 @@ public class NumberUtils {
 				return customNumbers.get(number);
 			}
 
-			for(Entry<LongPredicate, BiFunction<Long, CardinalState, String>> ent : customScales.entrySet()) {
+			for(Entry<LongPredicate, BiFunction<Long, CardinalState, String>> ent : customScales
+					.entrySet()) {
 				if(ent.getKey().test(number)) {
 					return ent.getValue().apply(number, this);
 				}
@@ -163,11 +162,11 @@ public class NumberUtils {
 
 		if(number < 0) return "negative " + toCardinal(number * -1, custom);
 
-		if(number <= 20) return cardinals[(int)number]; 
+		if(number <= 20) return cardinals[(int) number];
 
 		if(number < 100) {
 			if(number % 10 == 0) {
-				switch((int)number) {
+				switch((int) number) {
 				case 30:
 					return "thirty";
 				case 40:
@@ -183,51 +182,52 @@ public class NumberUtils {
 				case 90:
 					return "ninety";
 				default:
-					/* 
+					/*
 					 * Shouldn't happen.
 					 */
-					assert(false);
+					assert (false);
 				}
 			}
 
-			long numTens = (long)(number / 10);
+			long numTens = (long) (number / 10);
 			long numOnes = number % 10;
 
 			return toCardinal(numTens, custom) + "-" + toCardinal(numOnes, custom);
 		}
 
 		if(number < 1000) {
-			long numHundreds  = (long)(number / 100);
-			long rest         = number % 100;
+			long numHundreds = (long) (number / 100);
+			long rest = number % 100;
 
 			return toCardinal(numHundreds, custom) + " hundred and " + toCardinal(rest, custom);
 		}
 
-		long MILLION = (long)(Math.pow(10, 6));
+		long MILLION = (long) (Math.pow(10, 6));
 		if(number < MILLION) {
-			long numThousands = (long)(number / 1000);
-			long rest         = number % 1000;
+			long numThousands = (long) (number / 1000);
+			long rest = number % 1000;
 
 			return toCardinal(numThousands, custom) + " thousand, " + toCardinal(rest, custom);
 		}
 
-		long BILLION = (long)(Math.pow(10, 9));
+		long BILLION = (long) (Math.pow(10, 9));
 		if(number < BILLION) {
-			long numMillions = (long)(number / MILLION);
-			long rest        = number % MILLION;
+			long numMillions = (long) (number / MILLION);
+			long rest = number % MILLION;
 
 			return toCardinal(numMillions, custom) + " million, " + toCardinal(rest, custom);
 		}
 
-		long TRILLION = (long)(Math.pow(10, 12));
+		long TRILLION = (long) (Math.pow(10, 12));
 		if(number < TRILLION) {
-			long numBillions = (long)(number / BILLION);
-			long rest         = number % BILLION;
+			long numBillions = (long) (number / BILLION);
+			long rest = number % BILLION;
 
 			return toCardinal(numBillions, custom) + " billion, " + toCardinal(rest, custom);
 		}
 
-		throw new IllegalArgumentException("Numbers greater than or equal to 1 trillion are not supported yet.");
+		throw new IllegalArgumentException(
+				"Numbers greater than or equal to 1 trillion are not supported yet.");
 	}
 
 	public static String toOrdinal(long number) {
@@ -236,7 +236,7 @@ public class NumberUtils {
 		}
 
 		if(number < 20) {
-			switch((int)number) {
+			switch((int) number) {
 			case 0:
 				return "zeroth";
 			case 1:
@@ -281,13 +281,13 @@ public class NumberUtils {
 				/*
 				 * Shouldn't happen.
 				 */
-				assert(false);
+				assert (false);
 			}
 		}
 
 		if(number < 100) {
 			if(number % 10 == 0) {
-				switch((int)number) {
+				switch((int) number) {
 				case 20:
 					return "twentieth";
 				case 30:
@@ -304,6 +304,8 @@ public class NumberUtils {
 					return "eightieth";
 				case 90:
 					return "ninetieth";
+				default:
+					throw new IllegalArgumentException(String.format("Illegal number %d", number));
 				}
 			}
 
@@ -311,15 +313,15 @@ public class NumberUtils {
 			return toCardinal(number - numPostfix) + "-" + toOrdinal(numPostfix);
 		}
 
-		long procNum = number  % 100;
-		long tens    = (long)(procNum / 10);
-		long ones    = procNum % 10;
+		long procNum = number % 100;
+		long tens = (long) (procNum / 10);
+		long ones = procNum % 10;
 
 		if(tens == 1) {
 			return Long.toString(number) + "th";
-		} 
+		}
 
-		switch((int)ones) {
+		switch((int) ones) {
 		case 1:
 			return Long.toString(number) + "st";
 		case 2:
@@ -330,33 +332,36 @@ public class NumberUtils {
 			return Long.toString(number) + "th";
 		}
 	}
-	
+
 	private static char[] radixChars = new char[62];
 	static {
 		int idx = 0;
 
 		for(char i = 0; i < 10; i++) {
-			radixChars[idx] = (char)('0' + i);
+			radixChars[idx] = (char) ('0' + i);
 
 			idx += 1;
 		}
 
 		for(char i = 0; i < 26; i++) {
-			radixChars[idx] = (char)('A' + i);
+			radixChars[idx] = (char) ('A' + i);
 
 			idx += 1;
 		}
 
 		for(char i = 0; i < 26; i++) {
-			radixChars[idx] = (char)('a' + i);
+			radixChars[idx] = (char) ('a' + i);
 
 			idx += 1;
 		}
 	}
 
-	public static String toCommaString(long val, int mincols, char padchar, int commaInterval, char commaChar, boolean signed, int radix) {
+	public static String toCommaString(long val, int mincols, char padchar, int commaInterval, char commaChar,
+			boolean signed, int radix) {
 		if(radix > radixChars.length) {
-			throw new IllegalArgumentException(String.format("Radix %d is larger than largest supported radix %d", radix, radixChars.length));
+			throw new IllegalArgumentException(
+					String.format("Radix %d is larger than largest supported radix %d", radix,
+							radixChars.length));
 		}
 
 		StringBuilder work = new StringBuilder();
@@ -376,15 +381,16 @@ public class NumberUtils {
 			while(currVal != 0) {
 				valCounter += 1;
 
-				int radDigit = (int)(currVal % radix);
+				int radDigit = (int) (currVal % radix);
 				work.append(radixChars[radDigit]);
-				currVal = (long)(currVal / radix);
+				currVal = (long) (currVal / radix);
 
 				if(commaInterval != 0 && valCounter % commaInterval == 0) work.append(commaChar);
 			}
 		}
 
-		if(isNeg)       work.append("-");
+		if(isNeg)
+			work.append("-");
 		else if(signed) work.append("+");
 
 		work.reverse();

@@ -14,6 +14,7 @@ import bjc.utils.funcdata.IList;
  *
  * @author Ben Culkin
  */
+@SuppressWarnings("javadoc")
 public class BoundLazy<OldType, BoundContainedType> implements IHolder<BoundContainedType> {
 	/* The old value. */
 	private final Supplier<IHolder<OldType>> oldSupplier;

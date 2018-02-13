@@ -19,7 +19,7 @@ public interface CommandMode extends Comparable<CommandMode> {
 	 */
 	default boolean canHandle(final String command) {
 		return false;
-	};
+	}
 
 	/**
 	 * Get the custom prompt for this mode.

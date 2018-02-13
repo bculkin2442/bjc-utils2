@@ -35,7 +35,7 @@ public class AbbrevMap {
 	 * Create a new abbreviation map.
 	 *
 	 * @param words
-	 * 	The initial set of words to put in the map.
+	 *        The initial set of words to put in the map.
 	 */
 	public AbbrevMap(final String... words) {
 		wrds = new HashSet<>(Arrays.asList(words));
@@ -56,7 +56,7 @@ public class AbbrevMap {
 
 		seen = new HashSet<>();
 
-		for (final String word : wrds) {
+		for(final String word : wrds) {
 			intAddWord(word);
 		}
 	}
@@ -65,12 +65,12 @@ public class AbbrevMap {
 	 * Adds words to the abbreviation map.
 	 *
 	 * @param words
-	 * 	The words to add to the abbreviation map.
+	 *        The words to add to the abbreviation map.
 	 */
 	public void addWords(final String... words) {
 		wrds.addAll(Arrays.asList(words));
 
-		for (final String word : words) {
+		for(final String word : words) {
 			intAddWord(word);
 		}
 	}
@@ -81,23 +81,23 @@ public class AbbrevMap {
 		abbrevMap.put(word, word);
 
 		/* Skip blank words. */
-		if (word.equals("")) return;
+		if(word.equals("")) return;
 
 		/* Handle each possible abbreviation. */
-		for (int i = word.length(); i > 0; i--) {
+		for(int i = word.length(); i > 0; i--) {
 			final String subword = word.substring(0, i);
 
-			if (seen.contains(subword)) {
+			if(seen.contains(subword)) {
 				/*
 				 * Remove a mapping if its ambiguous and not a
 				 * whole word.
 				 */
-				if (abbrevMap.containsKey(subword) && !wrds.contains(subword)) {
+				if(abbrevMap.containsKey(subword) && !wrds.contains(subword)) {
 					final String oldword = abbrevMap.remove(subword);
 
 					ambMap.put(subword, oldword);
 					ambMap.put(subword, word);
-				} else if (!wrds.contains(subword)) {
+				} else if(!wrds.contains(subword)) {
 					ambMap.put(subword, word);
 				}
 			} else {
@@ -115,12 +115,12 @@ public class AbbrevMap {
 	 * the map. Use {@link AbbrevMap#recalculate()} to fix it if it occurs.
 	 *
 	 * @param words
-	 * 	The words to remove.
+	 *        The words to remove.
 	 */
 	public void removeWords(final String... words) {
 		wrds.removeAll(Arrays.asList(words));
 
-		for (final String word : words) {
+		for(final String word : words) {
 			intRemoveWord(word);
 		}
 	}
@@ -128,22 +128,22 @@ public class AbbrevMap {
 	/* Actually remove a word. */
 	private void intRemoveWord(final String word) {
 		/* Skip blank words. */
-		if (word.equals("")) return;
+		if(word.equals("")) return;
 
 		/* Handle each possible abbreviation. */
-		for (int i = word.length(); i > 0; i--) {
+		for(int i = word.length(); i > 0; i--) {
 			final String subword = word.substring(0, i);
 
-			if (abbrevMap.containsKey(subword)) {
+			if(abbrevMap.containsKey(subword)) {
 				abbrevMap.remove(subword);
 			} else {
 				ambMap.remove(subword, word);
 
 				final Set<String> possWords = ambMap.get(subword);
 
-				if (possWords.size() == 0) {
+				if(possWords.size() == 0) {
 					seen.remove(subword);
-				} else if (possWords.size() == 1) {
+				} else if(possWords.size() == 1) {
 					/*
 					 * An abbreviation went from ambiguous
 					 * to non-ambiguous.
@@ -162,17 +162,16 @@ public class AbbrevMap {
 	 * into.
 	 *
 	 * @param abbrev
-	 * 	The abbreviation to convert.
+	 *        The abbreviation to convert.
 	 *
-	 * @return
-	 * 	All the expansions for the provided abbreviation.
+	 * @return All the expansions for the provided abbreviation.
 	 */
 	public String[] deabbrev(final String abbrev) {
-		if (abbrevMap.containsKey(abbrev)) {
+		if(abbrevMap.containsKey(abbrev)) {
 			return new String[] { abbrevMap.get(abbrev) };
-		} else {
-			return ambMap.get(abbrev).toArray(new String[0]);
 		}
+
+		return ambMap.get(abbrev).toArray(new String[0]);
 	}
 
 	@Override
@@ -187,15 +186,15 @@ public class AbbrevMap {
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (!(obj instanceof AbbrevMap)) return false;
+		if(this == obj) return true;
+		if(obj == null) return false;
+		if(!(obj instanceof AbbrevMap)) return false;
 
 		final AbbrevMap other = (AbbrevMap) obj;
 
-		if (wrds == null) {
-			if (other.wrds != null) return false;
-		} else if (!wrds.equals(other.wrds)) return false;
+		if(wrds == null) {
+			if(other.wrds != null) return false;
+		} else if(!wrds.equals(other.wrds)) return false;
 
 		return true;
 	}
