@@ -9,6 +9,7 @@ import java.util.function.BiPredicate;
  *
  */
 public class RegexCloser implements BiPredicate<String, String[]> {
+	/* Closing string. */
 	private final String rep;
 
 	/**

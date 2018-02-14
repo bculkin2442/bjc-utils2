@@ -144,11 +144,12 @@ public class DelimiterGroup<T> {
 				markSubgroup(impliedSubgroups.get(closer), chars);
 			}
 
+			/* The resulting tree. */
 			final ITree<T> res = new Tree<>(chars.contents);
 
 			/*
-			 * Add either the contents of the current group, or
-			 * subgroups if they're their.
+			 * Add either the contents of the current group,
+			 * or subgroups if they're there.
 			 */
 			if(contents.isEmpty()) {
 				currentGroup.forEach(res::addChild);
@@ -260,12 +261,14 @@ public class DelimiterGroup<T> {
 		 *         open one.
 		 */
 		public IPair<T, T[]> doesOpen(final T marker) {
-			if(openDelimiters.containsKey(marker)) return new Pair<>(openDelimiters.get(marker), null);
+			if (openDelimiters.containsKey(marker))
+				return new Pair<>(openDelimiters.get(marker), null);
 
 			for(final Function<T, IPair<T, T[]>> pred : predOpeners) {
 				final IPair<T, T[]> par = pred.apply(marker);
 
-				if(par.getLeft() != null) return par;
+				if (par.getLeft() != null) 
+					return par;
 			}
 
 			return new Pair<>(null, null);
@@ -286,29 +289,19 @@ public class DelimiterGroup<T> {
 	 */
 	public final T groupName;
 
-	/*
-	 * The delimiters that open groups at the top level of this group.
-	 */
+	/* The delimiters that open groups at the top level of this group. */
 	private final Map<T, T> openDelimiters;
 
-	/*
-	 * The delimiters that open groups inside of this group.
-	 */
+	/* The delimiters that open groups inside of this group. */
 	private final Map<T, T> nestedOpenDelimiters;
 
-	/*
-	 * The delimiters that close this group.
-	 */
+	/* The delimiters that close this group. */
 	private final Set<T> closingDelimiters;
 
-	/*
-	 * The groups that can't occur in the top level of this group.
-	 */
+	/* The groups that can't occur in the top level of this group. */
 	private final Set<T> topLevelExclusions;
 
-	/*
-	 * The groups that can't occur anywhere inside this group.
-	 */
+	/* The groups that can't occur anywhere inside this group. */
 	private final Set<T> groupExclusions;
 
 	/*
@@ -317,24 +310,16 @@ public class DelimiterGroup<T> {
 	 */
 	private final Map<T, Integer> subgroups;
 
-	/*
-	 * Subgroups implied by a particular closing delimiter
-	 */
+	/* Subgroups implied by a particular closing delimiter */
 	private final Map<T, T> impliedSubgroups;
 
-	/*
-	 * Allows more complex openings
-	 */
+	/* Allows more complex openings */
 	private final List<Function<T, IPair<T, T[]>>> predOpeners;
 
-	/*
-	 * Allow more complex closings
-	 */
+	/* Allow more complex closings */
 	private final List<BiPredicate<T, T[]>> predClosers;
 
-	/*
-	 * Whether or not this group starts a new nesting set.
-	 */
+	/* Whether or not this group starts a new nesting set. */
 	private boolean forgetful;
 
 	/**
@@ -344,19 +329,20 @@ public class DelimiterGroup<T> {
 	 *        The name of the delimiter group
 	 */
 	public DelimiterGroup(final T name) {
-		if(name == null) throw new NullPointerException("Group name must not be null");
+		if (name == null)
+			throw new NullPointerException("Group name must not be null");
 
 		groupName = name;
 
-		openDelimiters = new HashMap<>();
+		openDelimiters       = new HashMap<>();
 		nestedOpenDelimiters = new HashMap<>();
 
 		closingDelimiters = new HashSet<>();
 
 		topLevelExclusions = new HashSet<>();
-		groupExclusions = new HashSet<>();
+		groupExclusions    = new HashSet<>();
 
-		subgroups = new HashMap<>();
+		subgroups        = new HashMap<>();
 		impliedSubgroups = new HashMap<>();
 
 		predOpeners = new LinkedList<>();
@@ -373,17 +359,17 @@ public class DelimiterGroup<T> {
 	public final void addClosing(final T... closers) {
 		final List<T> closerList = Arrays.asList(closers);
 
-		for(final T closer : closerList) {
-			if(closer == null)
+		for (final T closer : closerList) {
+			if (closer == null) {
 				throw new NullPointerException("Closing delimiter must not be null");
-			else if(closer.equals(""))
+			} else if (closer.equals("")) {
 				/*
 				 * We can do this because equals works on
 				 * arbitrary objects, not just those of the same
 				 * type.
 				 */
 				throw new IllegalArgumentException("Empty string is not a valid exclusion");
-			else {
+			} else {
 				closingDelimiters.add(closer);
 			}
 		}
@@ -398,17 +384,17 @@ public class DelimiterGroup<T> {
 	 */
 	@SafeVarargs
 	public final void addTopLevelForbid(final T... exclusions) {
-		for(final T exclusion : exclusions) {
-			if(exclusion == null)
+		for (final T exclusion : exclusions) {
+			if (exclusion == null) {
 				throw new NullPointerException("Exclusion must not be null");
-			else if(exclusion.equals(""))
+			} else if (exclusion.equals("")) {
 				/*
 				 * We can do this because equals works on
 				 * arbitrary objects, not just those of the same
 				 * type.
 				 */
 				throw new IllegalArgumentException("Empty string is not a valid exclusion");
-			else {
+			} else {
 				topLevelExclusions.add(exclusion);
 			}
 		}
@@ -422,17 +408,17 @@ public class DelimiterGroup<T> {
 	 */
 	@SafeVarargs
 	public final void addGroupForbid(final T... exclusions) {
-		for(final T exclusion : exclusions) {
-			if(exclusion == null)
+		for (final T exclusion : exclusions) {
+			if (exclusion == null) {
 				throw new NullPointerException("Exclusion must not be null");
-			else if(exclusion.equals(""))
+			} else if (exclusion.equals("")) {
 				/*
 				 * We can do this because equals works on
 				 * arbitrary objects, not just those of the same
 				 * type.
 				 */
 				throw new IllegalArgumentException("Empty string is not a valid exclusion");
-			else {
+			} else {
 				groupExclusions.add(exclusion);
 			}
 		}
@@ -448,7 +434,8 @@ public class DelimiterGroup<T> {
 	 *        The priority of this sub-group.
 	 */
 	public void addSubgroup(final T subgroup, final int priority) {
-		if(subgroup == null) throw new NullPointerException("Subgroup marker must not be null");
+		if (subgroup == null)
+			throw new NullPointerException("Subgroup marker must not be null");
 
 		subgroups.put(subgroup, priority);
 	}
@@ -463,9 +450,10 @@ public class DelimiterGroup<T> {
 	 *        The group opened by the marker.
 	 */
 	public void addOpener(final T opener, final T group) {
-		if(opener == null)
+		if (opener == null)
 			throw new NullPointerException("Opener must not be null");
-		else if(group == null) throw new NullPointerException("Group to open must not be null");
+		else if (group == null)
+			throw new NullPointerException("Group to open must not be null");
 
 		openDelimiters.put(opener, group);
 	}
@@ -480,9 +468,11 @@ public class DelimiterGroup<T> {
 	 *        The group opened by the marker.
 	 */
 	public void addNestedOpener(final T opener, final T group) {
-		if(opener == null)
+		if (opener == null) {
 			throw new NullPointerException("Opener must not be null");
-		else if(group == null) throw new NullPointerException("Group to open must not be null");
+		} else if (group == null) {
+			throw new NullPointerException("Group to open must not be null");
+		}
 
 		nestedOpenDelimiters.put(opener, group);
 	}
@@ -497,14 +487,15 @@ public class DelimiterGroup<T> {
 	 *        The subgroup to imply.
 	 */
 	public void implySubgroup(final T closer, final T subgroup) {
-		if(closer == null)
+		if (closer == null) {
 			throw new NullPointerException("Closer must not be null");
-		else if(subgroup == null)
+		} else if (subgroup == null) {
 			throw new NullPointerException("Subgroup must not be null");
-		else if(!closingDelimiters.contains(closer))
+		} else if (!closingDelimiters.contains(closer)) {
 			throw new IllegalArgumentException(String.format("No closing delimiter '%s' defined", closer));
-		else if(!subgroups.containsKey(subgroup))
+		} else if (!subgroups.containsKey(subgroup)) {
 			throw new IllegalArgumentException(String.format("No subgroup '%s' defined", subgroup));
+		}
 
 		impliedSubgroups.put(closer, subgroup);
 	}

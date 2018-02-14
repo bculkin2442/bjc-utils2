@@ -181,7 +181,8 @@ public class ShuntingYard<TokenType> {
 		 */
 		if(operator == null)
 			throw new NullPointerException("Operator must not be null");
-		else if(precedence == null) throw new NullPointerException("Precedence must not be null");
+		else if (precedence == null)
+			throw new NullPointerException("Precedence must not be null");
 
 		/*
 		 * Add the operator to the ones we handle
@@ -189,6 +190,7 @@ public class ShuntingYard<TokenType> {
 		operators.put(operator, precedence);
 	}
 
+	/* Check if one operator is higher precedence than another. */
 	private boolean isHigherPrec(final String left, final String right) {
 		/*
 		 * Check if the right operator exists
@@ -229,7 +231,8 @@ public class ShuntingYard<TokenType> {
 		 */
 		if(input == null)
 			throw new NullPointerException("Input must not be null");
-		else if(transformer == null) throw new NullPointerException("Transformer must not be null");
+		else if (transformer == null)
+			throw new NullPointerException("Transformer must not be null");
 
 		/*
 		 * Here's what we're handing back

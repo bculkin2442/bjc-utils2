@@ -14,8 +14,9 @@ import bjc.utils.data.Pair;
  *
  */
 public class RegexOpener implements Function<String, IPair<String, String[]>> {
+	/* The name of the group. */
 	private final String name;
-
+	/* The pattern that marks an opening group. */
 	private final Pattern patt;
 
 	/**

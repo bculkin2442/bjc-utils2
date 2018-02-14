@@ -27,19 +27,13 @@ import bjc.utils.funcutils.StringUtils;
  *        The type of items in the sequence.
  */
 public class SequenceDelimiter<T> {
-	/*
-	 * Mapping from group names to actual groups.
-	 */
+	/* Mapping from group names to actual groups. */
 	private final Map<T, DelimiterGroup<T>> groups;
 
-	/*
-	 * The initial group to start with.
-	 */
+	/* The initial group to start with. */
 	private DelimiterGroup<T> initialGroup;
 
-	/**
-	 * Create a new sequence delimiter.
-	 */
+	/** Create a new sequence delimiter. */
 	public SequenceDelimiter() {
 		groups = new HashMap<>();
 	}
@@ -93,46 +87,36 @@ public class SequenceDelimiter<T> {
 	 */
 	public ITree<T> delimitSequence(final SequenceCharacteristics<T> chars,
 			@SuppressWarnings("unchecked") final T... seq) throws DelimiterException {
-		if(initialGroup == null)
+		if (initialGroup == null) {
 			throw new NullPointerException("Initial group must be specified.");
-		else if(chars == null) throw new NullPointerException("Sequence characteristics must not be null");
+		} else if (chars == null) {
+			throw new NullPointerException("Sequence characteristics must not be null");
+		}
 
-		/*
-		 * The stack of opened and not yet closed groups.
-		 */
+		/* The stack of opened and not yet closed groups. */
 		final Stack<DelimiterGroup<T>.OpenGroup> groupStack = new SimpleStack<>();
 
-		/*
-		 * Open initial group.
-		 */
+		/* Open initial group. */
 		groupStack.push(initialGroup.open(chars.root, null));
 
-		/*
-		 * Groups that aren't allowed to be opened at the moment.
-		 */
+		/* Groups that aren't allowed to be opened at the moment. */
 		final Stack<Multiset<T>> forbiddenDelimiters = new SimpleStack<>();
 		forbiddenDelimiters.push(HashMultiset.create());
 
-		/*
-		 * Groups that are allowed to be opened at the moment.
-		 */
+		/* Groups that are allowed to be opened at the moment. */
 		final Stack<Multimap<T, T>> allowedDelimiters = new SimpleStack<>();
 		allowedDelimiters.push(HashMultimap.create());
 
-		/*
-		 * Map of who forbid what for debugging purposes.
-		 */
+		/* Map of who forbid what for debugging purposes. */
 		final IMap<T, T> whoForbid = new PushdownMap<>();
 
-		/*
+		/* 
 		 * Process each member of the sequence.
 		 */
-		for(int i = 0; i < seq.length; i++) {
+		for (int i = 0; i < seq.length; i++) {
 			final T tok = seq[i];
 
-			/*
-			 * Check if this token could open a group.
-			 */
+			/* Check if this token could open a group. */
 			final IPair<T, T[]> possibleOpenPar = groupStack.top().doesOpen(tok);
 			T possibleOpen = possibleOpenPar.getLeft();
 
@@ -178,9 +162,7 @@ public class SequenceDelimiter<T> {
 					throw new DelimiterException(String.format(fmt, group, forbiddenBy, ctxList));
 				}
 
-				/*
-				 * Add an open group.
-				 */
+				/* Add an open group. */
 				final DelimiterGroup<T>.OpenGroup open = group.open(tok, possibleOpenPar.getRight());
 				groupStack.push(open);
 
@@ -192,17 +174,13 @@ public class SequenceDelimiter<T> {
 					forbiddenDelimiters.push(HashMultiset.create());
 				}
 
-				/*
-				 * Add the nested opens from this group.
-				 */
+				/* Add the nested opens from this group. */
 				final Multimap<T, T> currentAllowed = allowedDelimiters.top();
 				for(final Entry<T, T> opener : open.getNestingOpeners().entrySet()) {
 					currentAllowed.put(opener.getKey(), opener.getValue());
 				}
 
-				/*
-				 * Add the nested exclusions from this group
-				 */
+				/* Add the nested exclusions from this group */
 				final Multiset<T> currentForbidden = forbiddenDelimiters.top();
 				for(final T exclusion : open.getNestingExclusions()) {
 					currentForbidden.add(exclusion);
@@ -217,9 +195,7 @@ public class SequenceDelimiter<T> {
 
 				groupStack.top().addItem(closed.toTree(tok, chars));
 
-				/*
-				 * Remove nested exclusions from this group.
-				 */
+				/* Remove nested exclusions from this group. */
 				final Multiset<T> currentForbidden = forbiddenDelimiters.top();
 				for(final T excludedGroup : closed.getNestingExclusions()) {
 					currentForbidden.remove(excludedGroup);
@@ -227,9 +203,7 @@ public class SequenceDelimiter<T> {
 					whoForbid.remove(excludedGroup);
 				}
 
-				/*
-				 * Remove the nested opens from this group.
-				 */
+				/* Remove the nested opens from this group. */
 				final Multimap<T, T> currentAllowed = allowedDelimiters.top();
 				for(final Entry<T, T> closer : closed.getNestingOpeners().entrySet()) {
 					currentAllowed.remove(closer.getKey(), closer.getValue());
@@ -248,9 +222,7 @@ public class SequenceDelimiter<T> {
 				 */
 				groupStack.top().markSubgroup(tok, chars);
 			} else {
-				/*
-				 * Add an item to the group.
-				 */
+				/* Add an item to the group. */
 				groupStack.top().addItem(new Tree<>(tok));
 			}
 		}
@@ -261,19 +233,10 @@ public class SequenceDelimiter<T> {
 		if(groupStack.size() > 1) {
 			final DelimiterGroup<T>.OpenGroup group = groupStack.top();
 
-			final StringBuilder msgBuilder = new StringBuilder();
-
-			final String closingDelims = StringUtils.toEnglishList(group.getNestingExclusions().toArray(),
-					false);
+			final String closingDelims = StringUtils.toEnglishList(
+					group.getNestingExclusions().toArray(), false);
 
 			final String ctxList = StringUtils.toEnglishList(groupStack.toArray(), "then");
-
-			msgBuilder.append("Unclosed group '");
-			msgBuilder.append(group.getName());
-			msgBuilder.append("'. Expected one of ");
-			msgBuilder.append(closingDelims);
-			msgBuilder.append(" to close it\nOpen groups: ");
-			msgBuilder.append(ctxList);
 
 			final String fmt = "Unclosed group '%s'. Expected one of %s to close it.\nOpen groups: %n";
 
@@ -283,9 +246,7 @@ public class SequenceDelimiter<T> {
 		return groupStack.pop().toTree(chars.root, chars);
 	}
 
-	/*
-	 * Check if a group is forbidden to open in a context.
-	 */
+	/* Check if a group is forbidden to open in a context. */
 	private boolean isForbidden(final Stack<DelimiterGroup<T>.OpenGroup> groupStack,
 			final Stack<Multiset<T>> forbiddenDelimiters, final T groupName) {
 		boolean localForbid;
@@ -309,7 +270,9 @@ public class SequenceDelimiter<T> {
 	 *        The delimiter group.
 	 */
 	public void addGroup(final DelimiterGroup<T> group) {
-		if(group == null) throw new NullPointerException("Group must not be null");
+		if (group == null) {
+			throw new NullPointerException("Group must not be null");
+		}
 
 		groups.put(group.groupName, group);
 	}

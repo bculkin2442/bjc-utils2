@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 import bjc.utils.funcutils.StringUtils;
 
 /**
- * Simple implementation of {@link BlockReader}
+ * Simple implementation of {@link BlockReader}.
  *
  * NOTE: The EOF marker is always treated as a delimiter. You are expected to
  * handle blocks that may be shorter than you expect.
@@ -71,8 +71,9 @@ public class SimpleBlockReader implements BlockReader {
 			/*
 			 * Read in a new block, and keep the line numbers sane.
 			 */
-			final int blockStartLine = lineNo;
 			final String blockContents = blockReader.next();
+
+			final int blockStartLine = lineNo;
 			final int blockEndLine = lineNo + StringUtils.countMatches(blockContents, "\\R");
 
 			lineNo = blockEndLine;

@@ -4,9 +4,6 @@ package bjc.utils.parserutils.delims;
  * The superclass for exceptions thrown during sequence delimitation.
  */
 public class DelimiterException extends RuntimeException {
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = 2079514406049040888L;
 
 	/**

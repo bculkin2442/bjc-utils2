@@ -16,9 +16,9 @@ import bjc.utils.funcdata.IList;
  *
  */
 public class ConfigurableTokenSplitter extends SimpleTokenSplitter {
-	private final Set<String>	simpleDelimiters;
-	private final Set<String>	multipleDelimiters;
-	private final Set<String>	rRawDelimiters;
+	private final Set<String> simpleDelimiters;
+	private final Set<String> multipleDelimiters;
+	private final Set<String> rRawDelimiters;
 
 	/**
 	 * Create a new token splitter with blank configuration.
@@ -29,12 +29,10 @@ public class ConfigurableTokenSplitter extends SimpleTokenSplitter {
 	public ConfigurableTokenSplitter(final boolean keepDelims) {
 		super(null, keepDelims);
 
-		/*
-		 * Use linked hash-sets to keep items in insertion order.
-		 */
-		simpleDelimiters = new LinkedHashSet<>();
+		/* Use linked hash-sets to keep items in insertion order. */
+		simpleDelimiters   = new LinkedHashSet<>();
 		multipleDelimiters = new LinkedHashSet<>();
-		rRawDelimiters = new LinkedHashSet<>();
+		rRawDelimiters     = new LinkedHashSet<>();
 	}
 
 	/**

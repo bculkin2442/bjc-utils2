@@ -7,9 +7,6 @@ package bjc.utils.parserutils;
  *
  */
 public class ParserException extends Exception {
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = 631298568113373233L;
 
 	/**

@@ -5,10 +5,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * A simple match-and-replace operation on strings.
- * 
- * @author EVE
+ * A simple implementation of a find/replace operator on a string.
  *
+ * @author Ben Culkin
  */
 public class SimpleDefine implements UnaryOperator<String> {
 	private Pattern	patt;
@@ -16,11 +15,11 @@ public class SimpleDefine implements UnaryOperator<String> {
 
 	/**
 	 * Create a new simple define.
-	 * 
+	 *
 	 * @param pattern
-	 *        The pattern to look for.
+	 * 	The pattern to match against.
 	 * @param replace
-	 *        The thing to replace it with.
+	 * 	The text to use as a replacement.
 	 */
 	public SimpleDefine(Pattern pattern, String replace) {
 		patt = pattern;

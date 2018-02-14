@@ -9,10 +9,9 @@ import java.util.regex.Pattern;
 import bjc.utils.data.CircularIterator;
 
 /**
- * A define that has a set of replacements to use.
- * 
- * @author EVE
+ * An iterated find/replace, using a circular assortment of replacements.
  *
+ * @author Ben Culkin
  */
 public class IteratedDefine implements UnaryOperator<String> {
 	private Pattern patt;
@@ -28,7 +27,7 @@ public class IteratedDefine implements UnaryOperator<String> {
 	 *        Whether or not to loop through the list of replacers, or just
 	 *        repeat the last one.
 	 * @param replacers
-	 *        The set of replacers to use.
+	 * 	The set of replacement strings to use.
 	 */
 	public IteratedDefine(Pattern pattern, boolean circular, String... replacers) {
 		patt = pattern;

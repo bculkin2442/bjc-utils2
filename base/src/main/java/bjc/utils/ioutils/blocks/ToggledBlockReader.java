@@ -14,9 +14,7 @@ public class ToggledBlockReader implements BlockReader {
 	private BlockReader	leftSource;
 	private BlockReader	rightSource;
 
-	/*
-	 * We choose the left source when this is true.
-	 */
+	/* We choose the left source when this is true. */
 	private BooleanToggle leftToggle;
 
 	private int blockNo;
