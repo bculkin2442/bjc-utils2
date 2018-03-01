@@ -12,8 +12,8 @@ import bjc.utils.ioutils.blocks.TriggeredBlockReader;
  *
  */
 public final class Prompter implements Runnable {
-	private String			promt;
-	private final PrintStream	printer;
+	private String promt;
+	private final PrintStream printer;
 
 	/**
 	 * Create a new prompter using the specified prompt.

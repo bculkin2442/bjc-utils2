@@ -11,8 +11,8 @@ import bjc.utils.data.BooleanToggle;
  *
  */
 public class ToggledBlockReader implements BlockReader {
-	private BlockReader	leftSource;
-	private BlockReader	rightSource;
+	private BlockReader leftSource;
+	private BlockReader rightSource;
 
 	/* We choose the left source when this is true. */
 	private BooleanToggle leftToggle;

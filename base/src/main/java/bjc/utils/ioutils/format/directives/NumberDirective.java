@@ -15,8 +15,8 @@ public class NumberDirective extends GeneralNumberDirective {
 		this.radix = radix;
 	}
 
-	private int	argidx;
-	private int	radix;
+	private int argidx;
+	private int radix;
 
 	@Override
 	public void format(StringBuffer sb, Object item, CLModifiers mods, CLParameters params, Tape<Object> tParams,

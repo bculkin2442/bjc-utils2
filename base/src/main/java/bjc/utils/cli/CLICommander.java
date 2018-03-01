@@ -13,9 +13,9 @@ import java.util.Scanner;
  */
 public class CLICommander {
 	/* The streams used for input and normal/error output. */
-	private final InputStream	input;
-	private final OutputStream	output;
-	private final OutputStream	error;
+	private final InputStream input;
+	private final OutputStream output;
+	private final OutputStream error;
 
 	/* The command mode to start execution in. */
 	private CommandMode initialMode;

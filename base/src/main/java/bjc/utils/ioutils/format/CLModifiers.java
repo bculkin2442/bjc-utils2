@@ -10,11 +10,11 @@ public class CLModifiers {
 	/**
 	 * Whether the at mod is on.
 	 */
-	public final boolean	atMod;
+	public final boolean atMod;
 	/**
 	 * Whether the colon mod is on.
 	 */
-	public final boolean	colonMod;
+	public final boolean colonMod;
 
 	/**
 	 * Create a new set of CL modifiers.

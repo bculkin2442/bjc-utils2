@@ -10,7 +10,8 @@ import bjc.utils.data.Option;
  * A wrapped optional value.
  *
  * @author Ben Culkin.
- * @param <ContainedType> The wrapped type.
+ * @param <ContainedType>
+ *        The wrapped type.
  */
 public class WrappedOption<ContainedType> implements IHolder<ContainedType> {
 	/* The held value. */

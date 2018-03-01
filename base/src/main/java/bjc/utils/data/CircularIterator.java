@@ -12,8 +12,8 @@ import java.util.Iterator;
  */
 public class CircularIterator<E> implements Iterator<E> {
 	/* The iterable, and our current iterator into it. */
-	private Iterable<E>	source;
-	private Iterator<E>	curr;
+	private Iterable<E> source;
+	private Iterator<E> curr;
 
 	/* Our current element. */
 	private E curElm;

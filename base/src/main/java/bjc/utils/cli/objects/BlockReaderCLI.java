@@ -35,11 +35,11 @@ public class BlockReaderCLI {
 		/**
 		 * All of the configured block readers.
 		 */
-		public final Map<String, BlockReader>	readers;
+		public final Map<String, BlockReader> readers;
 		/**
 		 * All of the configured I/O sources.
 		 */
-		public final Map<String, Reader>	sources;
+		public final Map<String, Reader> sources;
 
 		/**
 		 * Create a new set of state for the block reader.

@@ -29,8 +29,8 @@ public class GenericCommandMode implements CommandMode {
 	private BiConsumer<String, String[]> unknownCommandHandler;
 
 	/* The functions to use for input/output */
-	private final Consumer<String>	errorOutput;
-	private final Consumer<String>	normalOutput;
+	private final Consumer<String> errorOutput;
+	private final Consumer<String> normalOutput;
 
 	/* The name of this command mode, or null if it is unnamed */
 	private String modeName;

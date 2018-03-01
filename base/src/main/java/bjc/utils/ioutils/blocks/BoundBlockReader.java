@@ -29,9 +29,9 @@ public class BoundBlockReader implements BlockReader {
 		public void close() throws IOException;
 	}
 
-	private BooleanSupplier	checker;
-	private Supplier<Block>	getter;
-	private Closer		closer;
+	private BooleanSupplier checker;
+	private Supplier<Block> getter;
+	private Closer closer;
 
 	private Block current;
 

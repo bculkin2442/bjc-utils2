@@ -26,8 +26,8 @@ public class DefineCLI {
 	static class DefineState {
 		public final Map<String, UnaryOperator<String>> defines;
 
-		public final Map<String, String>	strings;
-		public final Map<String, String>	formats;
+		public final Map<String, String> strings;
+		public final Map<String, String> formats;
 
 		public final Map<String, Pattern> patterns;
 

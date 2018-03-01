@@ -27,7 +27,7 @@ public class IteratedDefine implements UnaryOperator<String> {
 	 *        Whether or not to loop through the list of replacers, or just
 	 *        repeat the last one.
 	 * @param replacers
-	 * 	The set of replacement strings to use.
+	 *        The set of replacement strings to use.
 	 */
 	public IteratedDefine(Pattern pattern, boolean circular, String... replacers) {
 		patt = pattern;

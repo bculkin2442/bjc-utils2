@@ -31,8 +31,8 @@ public class SimpleBlockReader implements BlockReader {
 	/*
 	 * Info about the current block.
 	 */
-	private int	blockNo;
-	private int	lineNo;
+	private int blockNo;
+	private int lineNo;
 
 	/**
 	 * Create a new block reader.

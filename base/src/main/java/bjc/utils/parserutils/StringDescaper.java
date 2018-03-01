@@ -23,19 +23,19 @@ public class StringDescaper {
 	/*
 	 * Patterns and pattern parts.
 	 */
-	private static String	rPossibleEscapeString	= getRegex("possibleStringEscape");
-	private static Pattern	possibleEscapePatt	= Pattern.compile(rPossibleEscapeString);
+	private static String rPossibleEscapeString = getRegex("possibleStringEscape");
+	private static Pattern possibleEscapePatt = Pattern.compile(rPossibleEscapeString);
 
-	private static String	rShortEscape	= getRegex("shortFormStringEscape");
-	private static String	rOctalEscape	= getRegex("octalStringEscape");
-	private static String	rUnicodeEscape	= getRegex("unicodeStringEscape");
+	private static String rShortEscape = getRegex("shortFormStringEscape");
+	private static String rOctalEscape = getRegex("octalStringEscape");
+	private static String rUnicodeEscape = getRegex("unicodeStringEscape");
 
-	private String	rEscapeString;
-	private Pattern	escapePatt;
+	private String rEscapeString;
+	private Pattern escapePatt;
 
-	private Map<String, String>                 literalEscapes;
+	private Map<String, String> literalEscapes;
 	private Map<Pattern, UnaryOperator<String>> specialEscapes;
-	
+
 	/**
 	 * Create a new customizable string escape remover.
 	 */
@@ -45,18 +45,17 @@ public class StringDescaper {
 		specialEscapes = new HashMap<>();
 
 		/* Set up the hard-coded escapes. */
-		rEscapeString = String.format("\\\\(%1$s|%2$s|%3$s)",
-				rShortEscape, rOctalEscape, rUnicodeEscape);
-		escapePatt    = Pattern.compile(rEscapeString);
+		rEscapeString = String.format("\\\\(%1$s|%2$s|%3$s)", rShortEscape, rOctalEscape, rUnicodeEscape);
+		escapePatt = Pattern.compile(rEscapeString);
 	}
 
 	/**
 	 * Add a new literal escape.
 	 *
 	 * @param escape
-	 * 	The custom escape to add.
+	 *        The custom escape to add.
 	 * @param val
-	 * 	The value for the escape.
+	 *        The value for the escape.
 	 */
 	public void addLiteralEscape(String escape, String val) {
 		if(literalEscapes.containsKey(escape)) {
@@ -142,13 +141,13 @@ public class StringDescaper {
 		/*
 		 * Prepare the buffer and escape finder.
 		 */
-		final StringBuffer work            = new StringBuffer();
+		final StringBuffer work = new StringBuffer();
 		final Matcher possibleEscapeFinder = possibleEscapePatt.matcher(inp);
-		final Matcher escapeFinder         = escapePatt.matcher(inp);
+		final Matcher escapeFinder = escapePatt.matcher(inp);
 
 		/* Go through each escape. */
-		while (possibleEscapeFinder.find()) {
-			if (!escapeFinder.find()) {
+		while(possibleEscapeFinder.find()) {
+			if(!escapeFinder.find()) {
 				/*
 				 * Found a possible escape that isn't actually
 				 * an escape.
@@ -195,7 +194,7 @@ public class StringDescaper {
 				escapeRep = "\\";
 				break;
 			default:
-				if (escapeSeq.startsWith("u")) {
+				if(escapeSeq.startsWith("u")) {
 					/* Handle a unicode escape. */
 					escapeRep = handleUnicodeEscape(escapeSeq.substring(1));
 				} else if(escapeSeq.startsWith("O")) {

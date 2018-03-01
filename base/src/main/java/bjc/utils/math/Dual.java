@@ -10,11 +10,11 @@ public class Dual {
 	/**
 	 * The real part of the dual number.
 	 */
-	public double	real;
+	public double real;
 	/**
 	 * The dual part of the dual number.
 	 */
-	public double	dual;
+	public double dual;
 
 	/**
 	 * Create a new dual with both parts zero.

@@ -25,22 +25,22 @@ import java.util.function.Function;
  *        The type of the nodes in the tree.
  */
 public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<ContainedType>> {
-	private final Function<ContainedType, TopDownTransformResult>							picker;
-	private final BiFunction<ITree<ContainedType>, Consumer<Iterator<ITree<ContainedType>>>, ITree<ContainedType>>	transform;
+	private final Function<ContainedType, TopDownTransformResult> picker;
+	private final BiFunction<ITree<ContainedType>, Consumer<Iterator<ITree<ContainedType>>>, ITree<ContainedType>> transform;
 
-	private ITree<ContainedType>	preParent;
-	private ITree<ContainedType>	postParent;
+	private ITree<ContainedType> preParent;
+	private ITree<ContainedType> postParent;
 
-	private final Deque<ITree<ContainedType>>	preChildren;
-	private final Deque<ITree<ContainedType>>	postChildren;
+	private final Deque<ITree<ContainedType>> preChildren;
+	private final Deque<ITree<ContainedType>> postChildren;
 
 	private TopDownTransformIterator<ContainedType> curChild;
 
-	private boolean	done;
-	private boolean	initial;
+	private boolean done;
+	private boolean initial;
 
-	private final Deque<Iterator<ITree<ContainedType>>>	toYield;
-	private Iterator<ITree<ContainedType>>			curYield;
+	private final Deque<Iterator<ITree<ContainedType>>> toYield;
+	private Iterator<ITree<ContainedType>> curYield;
 
 	/**
 	 * Create a new tree iterator.

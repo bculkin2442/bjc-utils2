@@ -90,8 +90,8 @@ final class TokenTransformer<TokenType> implements Consumer<TokenType> {
 
 	private final Predicate<TokenType> operatorPredicate;
 
-	private final Predicate<TokenType>				isSpecialOperator;
-	private final Function<TokenType, QueueFlattener<TokenType>>	handleSpecialOperator;
+	private final Predicate<TokenType> isSpecialOperator;
+	private final Function<TokenType, QueueFlattener<TokenType>> handleSpecialOperator;
 
 	/*
 	 * Create a new transformer

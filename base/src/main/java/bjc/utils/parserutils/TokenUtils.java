@@ -41,9 +41,9 @@ public class TokenUtils {
 
 	private static Pattern possibleEscapePatt = Pattern.compile(rPossibleEscapeString);
 
-	private static String	rShortEscape	= getRegex("shortFormStringEscape");
-	private static String	rOctalEscape	= getRegex("octalStringEscape");
-	private static String	rUnicodeEscape	= getRegex("unicodeStringEscape");
+	private static String rShortEscape = getRegex("shortFormStringEscape");
+	private static String rOctalEscape = getRegex("octalStringEscape");
+	private static String rUnicodeEscape = getRegex("unicodeStringEscape");
 
 	private static String rEscapeString = applyFormat("stringEscape", rShortEscape, rOctalEscape, rUnicodeEscape);
 

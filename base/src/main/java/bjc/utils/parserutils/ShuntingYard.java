@@ -61,9 +61,9 @@ public class ShuntingYard<TokenType> {
 	 * Function that shunts tokens.
 	 */
 	private final class TokenShunter implements Consumer<String> {
-		private final IList<TokenType>			output;
-		private final Deque<String>			stack;
-		private final Function<String, TokenType>	transformer;
+		private final IList<TokenType> output;
+		private final Deque<String> stack;
+		private final Function<String, TokenType> transformer;
 
 		public TokenShunter(final IList<TokenType> outpt, final Deque<String> stack,
 				final Function<String, TokenType> transformer) {
@@ -181,8 +181,7 @@ public class ShuntingYard<TokenType> {
 		 */
 		if(operator == null)
 			throw new NullPointerException("Operator must not be null");
-		else if (precedence == null)
-			throw new NullPointerException("Precedence must not be null");
+		else if(precedence == null) throw new NullPointerException("Precedence must not be null");
 
 		/*
 		 * Add the operator to the ones we handle
@@ -231,8 +230,7 @@ public class ShuntingYard<TokenType> {
 		 */
 		if(input == null)
 			throw new NullPointerException("Input must not be null");
-		else if (transformer == null)
-			throw new NullPointerException("Transformer must not be null");
+		else if(transformer == null) throw new NullPointerException("Transformer must not be null");
 
 		/*
 		 * Here's what we're handing back

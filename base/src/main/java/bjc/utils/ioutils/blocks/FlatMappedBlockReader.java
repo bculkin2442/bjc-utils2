@@ -22,8 +22,8 @@ public class FlatMappedBlockReader implements BlockReader {
 	/*
 	 * The current block, and any blocks pending from the last source block.
 	 */
-	private Iterator<Block>	pending;
-	private Block		current;
+	private Iterator<Block> pending;
+	private Block current;
 
 	/*
 	 * The operator to open blocks with.

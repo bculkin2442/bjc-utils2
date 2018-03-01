@@ -38,15 +38,15 @@ public class Command {
 	/**
 	 * The full text of this command.
 	 */
-	public final String	fullCommand;
+	public final String fullCommand;
 	/**
 	 * The text of this command without its name.
 	 */
-	public final String	remnCommand;
+	public final String remnCommand;
 	/**
 	 * The name of this command.
 	 */
-	public final String	nameCommand;
+	public final String nameCommand;
 
 	/**
 	 * The name of the I/O source this command was read from.

@@ -15,8 +15,8 @@ import bjc.utils.ioutils.SimpleProperties;
  *
  */
 public class PropertyDB {
-	private static SimpleProperties		regexes;
-	private static Map<String, Pattern>	compiledRegexes;
+	private static SimpleProperties regexes;
+	private static Map<String, Pattern> compiledRegexes;
 
 	private static SimpleProperties formats;
 

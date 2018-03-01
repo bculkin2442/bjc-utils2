@@ -17,8 +17,8 @@ public class LayeredBlockReader implements BlockReader {
 	/*
 	 * The readers to drain from.
 	 */
-	private final BlockReader	first;
-	private final BlockReader	second;
+	private final BlockReader first;
+	private final BlockReader second;
 
 	/*
 	 * The current block number.

@@ -87,9 +87,9 @@ public class SequenceDelimiter<T> {
 	 */
 	public ITree<T> delimitSequence(final SequenceCharacteristics<T> chars,
 			@SuppressWarnings("unchecked") final T... seq) throws DelimiterException {
-		if (initialGroup == null) {
+		if(initialGroup == null) {
 			throw new NullPointerException("Initial group must be specified.");
-		} else if (chars == null) {
+		} else if(chars == null) {
 			throw new NullPointerException("Sequence characteristics must not be null");
 		}
 
@@ -110,10 +110,10 @@ public class SequenceDelimiter<T> {
 		/* Map of who forbid what for debugging purposes. */
 		final IMap<T, T> whoForbid = new PushdownMap<>();
 
-		/* 
+		/*
 		 * Process each member of the sequence.
 		 */
-		for (int i = 0; i < seq.length; i++) {
+		for(int i = 0; i < seq.length; i++) {
 			final T tok = seq[i];
 
 			/* Check if this token could open a group. */
@@ -233,8 +233,8 @@ public class SequenceDelimiter<T> {
 		if(groupStack.size() > 1) {
 			final DelimiterGroup<T>.OpenGroup group = groupStack.top();
 
-			final String closingDelims = StringUtils.toEnglishList(
-					group.getNestingExclusions().toArray(), false);
+			final String closingDelims = StringUtils.toEnglishList(group.getNestingExclusions().toArray(),
+					false);
 
 			final String ctxList = StringUtils.toEnglishList(groupStack.toArray(), "then");
 
@@ -270,7 +270,7 @@ public class SequenceDelimiter<T> {
 	 *        The delimiter group.
 	 */
 	public void addGroup(final DelimiterGroup<T> group) {
-		if (group == null) {
+		if(group == null) {
 			throw new NullPointerException("Group must not be null");
 		}
 

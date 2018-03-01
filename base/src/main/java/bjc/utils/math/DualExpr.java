@@ -69,11 +69,11 @@ public class DualExpr {
 	/**
 	 * The left (or first) part of the expression.
 	 */
-	public DualExpr	left;
+	public DualExpr left;
 	/**
 	 * The right (or second) part of the expression.
 	 */
-	public DualExpr	right;
+	public DualExpr right;
 
 	/**
 	 * The power to use, for power operations.

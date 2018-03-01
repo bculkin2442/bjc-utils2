@@ -22,8 +22,8 @@ public class FilteredBlockReader implements BlockReader {
 	 *
 	 * Both have already been checked for the predicate.
 	 */
-	private Block	current;
-	private Block	pending;
+	private Block current;
+	private Block pending;
 
 	/*
 	 * Number of blocks that passed the predicate.

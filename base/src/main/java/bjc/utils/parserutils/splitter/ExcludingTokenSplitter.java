@@ -14,7 +14,7 @@ import bjc.utils.funcdata.IList;
  *
  */
 public class ExcludingTokenSplitter implements TokenSplitter {
-	private final Set<String>              literalExclusions;
+	private final Set<String> literalExclusions;
 	private final IList<Predicate<String>> predExclusions;
 
 	private final TokenSplitter spliter;

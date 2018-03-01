@@ -61,12 +61,12 @@ public class IterationDirective implements Directive {
 		}
 
 		int numItr = 0;
-		
+
 		if(mods.atMod && mods.colonMod) {
 			do {
 				if(numItr > maxItr) break;
 				numItr += 1;
-				
+
 				if(!(iter instanceof Iterable<?>)) {
 					throw new IllegalFormatConversionException('{', iter.getClass());
 				}
@@ -76,14 +76,14 @@ public class IterationDirective implements Directive {
 				Tape<Object> nParams = new SingleTape<>(nitr);
 
 				fmt.doFormatString(frmt, sb, nParams);
-				
+
 				iter = tParams.right();
 			} while(tParams.position() < tParams.size());
 		} else if(mods.atMod) {
 			while(tParams.position() < tParams.size()) {
 				if(numItr > maxItr) break;
 				numItr += 1;
-				
+
 				fmt.doFormatString(frmt, sb, tParams);
 			}
 		} else if(mods.colonMod) {
@@ -97,7 +97,7 @@ public class IterationDirective implements Directive {
 			for(Object obj : itr) {
 				if(numItr > maxItr) break;
 				numItr += 1;
-				
+
 				if(!(obj instanceof Iterable<?>)) {
 					throw new IllegalFormatConversionException('{', obj.getClass());
 				}
@@ -121,7 +121,7 @@ public class IterationDirective implements Directive {
 			while(nParams.position() < nParams.size()) {
 				if(numItr > maxItr) break;
 				numItr += 1;
-				
+
 				fmt.doFormatString(frmt, sb, nParams);
 			}
 		}

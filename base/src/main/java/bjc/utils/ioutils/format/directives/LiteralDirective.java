@@ -9,8 +9,8 @@ import java.util.regex.Matcher;
 
 public class LiteralDirective implements Directive {
 
-	private char	directive;
-	private String	lit;
+	private char directive;
+	private String lit;
 
 	public LiteralDirective(String lit, char directive) {
 		this.directive = directive;

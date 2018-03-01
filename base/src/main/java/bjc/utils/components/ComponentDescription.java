@@ -18,13 +18,13 @@ public class ComponentDescription implements IDescribedComponent {
 	}
 
 	/** The author of the component */
-	private final String	author;
+	private final String author;
 	/** The description of the component */
-	private final String	description;
+	private final String description;
 	/** The name of the component */
-	private final String	name;
+	private final String name;
 	/** The version of the component */
-	private final int	version;
+	private final int version;
 
 	/**
 	 * Create a new component description.

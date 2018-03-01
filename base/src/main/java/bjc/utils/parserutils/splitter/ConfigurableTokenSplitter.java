@@ -30,9 +30,9 @@ public class ConfigurableTokenSplitter extends SimpleTokenSplitter {
 		super(null, keepDelims);
 
 		/* Use linked hash-sets to keep items in insertion order. */
-		simpleDelimiters   = new LinkedHashSet<>();
+		simpleDelimiters = new LinkedHashSet<>();
 		multipleDelimiters = new LinkedHashSet<>();
-		rRawDelimiters     = new LinkedHashSet<>();
+		rRawDelimiters = new LinkedHashSet<>();
 	}
 
 	/**

@@ -21,8 +21,8 @@ public class SliderInputPanel extends JPanel {
 	private final class NumberFormatter extends JFormattedTextField.AbstractFormatter {
 		private static final long serialVersionUID = -4448291795913908270L;
 
-		private final int	minValue;
-		private final int	maxValue;
+		private final int minValue;
+		private final int maxValue;
 
 		private final int initValue;
 
@@ -71,11 +71,11 @@ public class SliderInputPanel extends JPanel {
 		/**
 		 * The minimum value of the slider
 		 */
-		public final int	minValue;
+		public final int minValue;
 		/**
 		 * The maximum value of the slider
 		 */
-		public final int	maxValue;
+		public final int maxValue;
 
 		/**
 		 * The initial value of the slider
@@ -113,9 +113,9 @@ public class SliderInputPanel extends JPanel {
 		}
 	}
 
-	private static final long		serialVersionUID	= 2956394160569961404L;
-	private final JSlider			slider;
-	private final JFormattedTextField	field;
+	private static final long serialVersionUID = 2956394160569961404L;
+	private final JSlider slider;
+	private final JFormattedTextField field;
 
 	/**
 	 * Create a new slider input panel

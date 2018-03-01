@@ -16,10 +16,10 @@ import bjc.utils.gui.layout.HLayout;
 public class HolderOutputPanel extends JPanel {
 	private static final long serialVersionUID = 166573313903782080L;
 
-	private Timer			updater;
-	private final JLabel		value;
-	private final int		nDelay;
-	private final IHolder<String>	val;
+	private Timer updater;
+	private final JLabel value;
+	private final int nDelay;
+	private final IHolder<String> val;
 
 	/**
 	 * Create a new display panel, backed by a holder

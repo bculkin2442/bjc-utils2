@@ -7,8 +7,8 @@ package bjc.utils.cli;
  */
 public class GenericHelp implements CommandHelp {
 	/* The strings for this help topic. */
-	private final String	summary;
-	private final String	description;
+	private final String summary;
+	private final String description;
 
 	/**
 	 * Create a new help topic.

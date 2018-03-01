@@ -428,7 +428,7 @@ public class NumberUtils {
 
 		/* @TODO Should we have some way to specify how to pad? */
 		StringBuilder pad = new StringBuilder();
-		
+
 		if(work.length() < mincols) {
 			for(int i = work.length(); i < mincols; i++) {
 				pad.append(padchar);
