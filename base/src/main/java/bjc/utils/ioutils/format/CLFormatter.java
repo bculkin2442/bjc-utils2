@@ -136,7 +136,12 @@ public class CLFormatter {
 			String dirMods = dirMatcher.group("modifiers");
 			String dirParams = dirMatcher.group("params");
 
-			CLParameters arrParams = CLParameters.fromDirective(dirParams.split("(?<!'),"), tParams);
+			if(dirMods == null) dirMods = "";
+			if(dirParams == null) dirParams = "";
+
+			String[] splitPars = dirParams.split("(?<!'),");
+			CLParameters arrParams = CLParameters.fromDirective(splitPars, tParams);
+
 			CLModifiers mods = CLModifiers.fromString(dirMods);
 
 			Object item = tParams.item();

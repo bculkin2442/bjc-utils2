@@ -14,7 +14,7 @@ public class FreshlineDirective implements Directive {
 			Matcher dirMatcher, CLFormatter fmt) {
 		int nTimes = 1;
 
-		if(params.length() > 1) {
+		if(params.length() >= 1) {
 			nTimes = params.getInt(0, "occurance count", '&');
 		}
 

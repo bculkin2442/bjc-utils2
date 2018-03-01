@@ -17,7 +17,7 @@ public class AestheticDirective implements Directive {
 		int mincol = 0, colinc = 1, minpad = 0;
 		char padchar = ' ';
 
-		if(params.length() > 1) {
+		if(params.length() >= 1) {
 			mincol = params.getIntDefault(0, "minimum column count", 'A', 0);
 		}
 

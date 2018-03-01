@@ -14,14 +14,14 @@ public class GotoDirective implements Directive {
 			Tape<Object> formatParams, Matcher dirMatcher, CLFormatter fmt) {
 		if(mods.colonMod) {
 			int num = 1;
-			if(params.length() > 1) {
+			if(params.length() >= 1) {
 				num = params.getIntDefault(0, "number of arguments backward", '*', 1);
 			}
 
 			formatParams.left(num);
 		} else if(mods.atMod) {
 			int num = 0;
-			if(params.length() > 1) {
+			if(params.length() >= 1) {
 				num = params.getIntDefault(0, "argument index", '*', 0);
 			}
 
@@ -29,7 +29,7 @@ public class GotoDirective implements Directive {
 			formatParams.right(num);
 		} else {
 			int num = 1;
-			if(params.length() > 1) {
+			if(params.length() >= 1) {
 				num = params.getIntDefault(0, "number of arguments forward", '*', 1);
 			}
 

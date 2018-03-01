@@ -95,7 +95,7 @@ public class ConditionalDirective implements Directive {
 			}
 		} else {
 			int res;
-			if(arrParams.length() > 1) {
+			if(arrParams.length() >= 1) {
 				res = arrParams.getInt(0, "conditional choice", '[');
 			} else {
 				if(par == null) {
