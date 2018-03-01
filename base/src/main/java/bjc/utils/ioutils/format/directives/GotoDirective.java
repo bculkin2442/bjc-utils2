@@ -1,10 +1,13 @@
-package bjc.utils.ioutils.format;
+package bjc.utils.ioutils.format.directives;
 
 import bjc.utils.esodata.Tape;
+import bjc.utils.ioutils.format.CLFormatter;
+import bjc.utils.ioutils.format.CLModifiers;
+import bjc.utils.ioutils.format.CLParameters;
 
 import java.util.regex.Matcher;
 
-class GotoDirective implements Directive {
+public class GotoDirective implements Directive {
 
 	@Override
 	public void format(StringBuffer sb, Object item, CLModifiers mods, CLParameters params,

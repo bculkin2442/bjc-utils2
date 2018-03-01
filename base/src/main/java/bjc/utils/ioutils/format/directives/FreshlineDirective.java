@@ -1,10 +1,13 @@
-package bjc.utils.ioutils.format;
+package bjc.utils.ioutils.format.directives;
 
 import bjc.utils.esodata.Tape;
+import bjc.utils.ioutils.format.CLFormatter;
+import bjc.utils.ioutils.format.CLModifiers;
+import bjc.utils.ioutils.format.CLParameters;
 
 import java.util.regex.Matcher;
 
-class FreshlineDirective implements Directive {
+public class FreshlineDirective implements Directive {
 
 	@Override
 	public void format(StringBuffer buff, Object item, CLModifiers mods, CLParameters params, Tape<Object> tParams,

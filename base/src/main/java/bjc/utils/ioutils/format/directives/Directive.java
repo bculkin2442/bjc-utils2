@@ -1,8 +1,11 @@
-package bjc.utils.ioutils.format;
+package bjc.utils.ioutils.format.directives;
 
 import java.util.regex.Matcher;
 
 import bjc.utils.esodata.Tape;
+import bjc.utils.ioutils.format.CLFormatter;
+import bjc.utils.ioutils.format.CLModifiers;
+import bjc.utils.ioutils.format.CLParameters;
 
 /**
  * A CL format directive.

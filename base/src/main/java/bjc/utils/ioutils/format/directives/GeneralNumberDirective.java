@@ -1,8 +1,10 @@
-package bjc.utils.ioutils.format;
+package bjc.utils.ioutils.format.directives;
 
+import bjc.utils.ioutils.format.CLModifiers;
+import bjc.utils.ioutils.format.CLParameters;
 import bjc.utils.math.NumberUtils;
 
-abstract class GeneralNumberDirective implements Directive {
+public abstract class GeneralNumberDirective implements Directive {
 	protected static void handleNumberDirective(StringBuffer buff, CLModifiers mods, CLParameters params,
 			int argidx, long val, int radix) {
 		/*

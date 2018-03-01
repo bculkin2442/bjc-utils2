@@ -205,4 +205,23 @@ public class StringUtils {
 
 		return num;
 	}
+
+	/**
+	 * Get a substring until a specified string.
+	 * 
+	 * @param strang
+	 *        The string to substring.
+	 * @param vx
+	 *        The place to substring until.
+	 * @return The specified substring.
+	 */
+	public static String substringTo(String strang, String vx) {
+		int idx = strang.indexOf(vx);
+
+		if(idx == -1) {
+			return strang;
+		}
+
+		return strang.substring(0, strang.indexOf(vx));
+	}
 }

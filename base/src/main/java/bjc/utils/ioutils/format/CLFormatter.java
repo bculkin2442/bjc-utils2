@@ -2,6 +2,17 @@ package bjc.utils.ioutils.format;
 
 import bjc.utils.esodata.SingleTape;
 import bjc.utils.esodata.Tape;
+import bjc.utils.ioutils.format.directives.AestheticDirective;
+import bjc.utils.ioutils.format.directives.CharacterDirective;
+import bjc.utils.ioutils.format.directives.ConditionalDirective;
+import bjc.utils.ioutils.format.directives.Directive;
+import bjc.utils.ioutils.format.directives.EscapeDirective;
+import bjc.utils.ioutils.format.directives.FreshlineDirective;
+import bjc.utils.ioutils.format.directives.GotoDirective;
+import bjc.utils.ioutils.format.directives.IterationDirective;
+import bjc.utils.ioutils.format.directives.LiteralDirective;
+import bjc.utils.ioutils.format.directives.NumberDirective;
+import bjc.utils.ioutils.format.directives.RadixDirective;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,9 +38,9 @@ public class CLFormatter {
 
 	private static final String directiveName = getRegex("clFormatName");
 
-	private static final String	formatDirective		= applyFormat("clFormatDirective", prefixList,
-			formatMod, directiveName);
-	private static final Pattern	pFormatDirective	= Pattern.compile(formatDirective);
+	private static final String formatDirective = applyFormat("clFormatDirective", prefixList, formatMod,
+			directiveName);
+	private static final Pattern pFormatDirective = Pattern.compile(formatDirective);
 
 	private static Map<String, Directive> builtinDirectives;
 
@@ -59,6 +70,7 @@ public class CLFormatter {
 
 		builtinDirectives.put("^", new EscapeDirective());
 		builtinDirectives.put("[", new ConditionalDirective());
+		builtinDirectives.put("{", new IterationDirective());
 	}
 
 	/**
@@ -68,7 +80,15 @@ public class CLFormatter {
 		extraDirectives = new HashMap<>();
 	}
 
-	static void checkItem(Object itm, char directive) {
+	/**
+	 * Check that an item is valid for a directive.
+	 * 
+	 * @param itm
+	 *        The item to check.
+	 * @param directive
+	 *        The directive to check for.
+	 */
+	public static void checkItem(Object itm, char directive) {
 		if(itm == null) throw new IllegalArgumentException(
 				String.format("No argument provided for %c directive", directive));
 	}
@@ -92,7 +112,20 @@ public class CLFormatter {
 		return sb.toString();
 	}
 
-	void doFormatString(String format, StringBuffer sb, Tape<Object> tParams) {
+	/**
+	 * Fill in a partially started format string.
+	 * 
+	 * Used mostly for directives that require formatting again with a
+	 * different string.
+	 * 
+	 * @param format
+	 *        The format to use.
+	 * @param sb
+	 *        The buffer to file output into.
+	 * @param tParams
+	 *        The parameters to use.
+	 */
+	public void doFormatString(String format, StringBuffer sb, Tape<Object> tParams) {
 		Matcher dirMatcher = pFormatDirective.matcher(format);
 
 		while(dirMatcher.find()) {
@@ -136,6 +169,8 @@ public class CLFormatter {
 			case ";":
 				throw new IllegalArgumentException(
 						"Found conditional-seperator outside of conditional.");
+			case "}":
+				throw new IllegalArgumentException("Found iteration-end outside of iteration");
 			case "T":
 			case "<":
 			case ">":
@@ -159,6 +194,17 @@ public class CLFormatter {
 				 * punting.
 				 */
 				throw new IllegalArgumentException("S and W aren't implemented. Use A instead");
+			case "?":
+			case "(":
+			case "P":
+				throw new IllegalArgumentException("These directives aren't implemented yet");
+			case ")":
+				throw new IllegalArgumentException("Case-conversion end outside of case conversion");
+			case "\n":
+				/*
+				 * Ignored newline.
+				 */
+				break;
 			default:
 				String msg = String.format("Unknown format directive '%s'", dirName);
 				throw new UnknownFormatConversionException(msg);

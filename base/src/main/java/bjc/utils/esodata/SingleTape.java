@@ -56,6 +56,20 @@ public class SingleTape<T> implements Tape<T> {
 	}
 
 	/**
+	 * Create a new tape with values taken from an iterable.
+	 * 
+	 * @param itr
+	 *        The iterable to get values from.
+	 */
+	public SingleTape(Iterable<T> itr) {
+		this(false);
+
+		for(T itm : itr) {
+			backing.add(itm);
+		}
+	}
+
+	/**
 	 * Create a new empty tape that follows the specified auto-extension
 	 * policy.
 	 *

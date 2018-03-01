@@ -1,12 +1,15 @@
-package bjc.utils.ioutils.format;
+package bjc.utils.ioutils.format.directives;
 
 import bjc.utils.esodata.Tape;
+import bjc.utils.ioutils.format.CLFormatter;
+import bjc.utils.ioutils.format.CLModifiers;
+import bjc.utils.ioutils.format.CLParameters;
 import bjc.utils.math.NumberUtils;
 
 import java.util.IllegalFormatConversionException;
 import java.util.regex.Matcher;
 
-class RadixDirective extends GeneralNumberDirective {
+public class RadixDirective extends GeneralNumberDirective {
 
 	@Override
 	public void format(StringBuffer buff, Object arg, CLModifiers mods, CLParameters params, Tape<Object> tParams,

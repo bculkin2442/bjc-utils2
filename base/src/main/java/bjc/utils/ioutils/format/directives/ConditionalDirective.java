@@ -1,13 +1,16 @@
-package bjc.utils.ioutils.format;
+package bjc.utils.ioutils.format.directives;
 
 import bjc.utils.esodata.Tape;
+import bjc.utils.ioutils.format.CLFormatter;
+import bjc.utils.ioutils.format.CLModifiers;
+import bjc.utils.ioutils.format.CLParameters;
 
 import java.util.ArrayList;
 import java.util.IllegalFormatConversionException;
 import java.util.List;
 import java.util.regex.Matcher;
 
-class ConditionalDirective implements Directive {
+public class ConditionalDirective implements Directive {
 
 	@Override
 	public void format(StringBuffer sb, Object item, CLModifiers mods, CLParameters arrParams,

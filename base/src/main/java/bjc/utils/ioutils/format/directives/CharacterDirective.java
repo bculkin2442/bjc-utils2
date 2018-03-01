@@ -1,11 +1,14 @@
-package bjc.utils.ioutils.format;
+package bjc.utils.ioutils.format.directives;
 
 import bjc.utils.esodata.Tape;
+import bjc.utils.ioutils.format.CLFormatter;
+import bjc.utils.ioutils.format.CLModifiers;
+import bjc.utils.ioutils.format.CLParameters;
 
 import java.util.IllegalFormatConversionException;
 import java.util.regex.Matcher;
 
-class CharacterDirective implements Directive {
+public class CharacterDirective implements Directive {
 
 	@Override
 	public void format(StringBuffer buff, Object parm, CLModifiers mods, CLParameters arrParams,
