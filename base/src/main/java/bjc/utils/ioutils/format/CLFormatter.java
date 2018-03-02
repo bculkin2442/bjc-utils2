@@ -111,6 +111,25 @@ public class CLFormatter {
 
 		return sb.toString();
 	}
+	
+	/**
+	 * Format a string in the style of CL's FORMAT.
+	 * 
+	 * @param format
+	 *        The format string to use.
+	 * @param params
+	 *        The parameters for the string.
+	 * @return The formatted string.
+	 */
+	public String formatString(String format, Iterable<Object> params) {
+		StringBuffer sb = new StringBuffer();
+		/* Put the parameters where we can easily handle them. */
+		Tape<Object> tParams = new SingleTape<>(params);
+
+		doFormatString(format, sb, tParams);
+
+		return sb.toString();
+	}
 
 	/**
 	 * Fill in a partially started format string.

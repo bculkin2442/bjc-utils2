@@ -1,8 +1,13 @@
 package bjc.utils.funcutils;
 
+import java.util.ArrayList;
 import java.util.Deque;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import bjc.utils.data.BooleanToggle;
+import bjc.utils.parserutils.TokenUtils;
 
 import com.ibm.icu.text.BreakIterator;
 
@@ -223,5 +228,30 @@ public class StringUtils {
 		}
 
 		return strang.substring(0, strang.indexOf(vx));
+	}
+
+	/**
+	 * Split a line into a series of space-separated arguments, including
+	 * string literals.
+	 * 
+	 * @param com
+	 *        The command to split from
+	 * @return The split arguments.
+	 */
+	public static List<String> processArguments(String com) {
+		List<String> strings = new ArrayList<>();
+	
+		BooleanToggle togg = new BooleanToggle();
+	
+		for(String strang : TokenUtils.removeDQuotedStrings(com)) {
+			if(togg.get()) {
+				strings.add(TokenUtils.descapeString(strang));
+			} else {
+				for(String strung : strang.split("\\s+")) {
+					strings.add(strung);
+				}
+			}
+		}
+		return strings;
 	}
 }
