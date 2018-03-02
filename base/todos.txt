@@ -1,2 +1,8 @@
 @TODO 10/09/17 Ben Culkin :CLIArgsParsing
 	Add some sort of library for handling command-line arguments
+
+@TODO 3/2/18 Benjamin Culkin :Examples
+	Add more examples for some of the more complex functionality
+
+@TODO 3/2/18 Benjamin Culkin :Testing
+	Add tests for some of the various features
