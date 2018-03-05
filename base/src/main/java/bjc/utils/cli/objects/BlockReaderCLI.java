@@ -208,7 +208,6 @@ public class BlockReaderCLI {
 				return mat.matches();
 			};
 
-			@SuppressWarnings("resource")
 			BlockReader reader = new FilteredBlockReader(stat.readers.get(readerName), pred);
 
 			stat.readers.put(blockName, reader);
@@ -221,7 +220,6 @@ public class BlockReaderCLI {
 		return SUCCESS;
 	}
 
-	@SuppressWarnings("resource")
 	private CommandStatus defPushback(Command com) {
 		String[] parts = com.remnCommand.split(" ");
 
@@ -249,7 +247,6 @@ public class BlockReaderCLI {
 		return SUCCESS;
 	}
 
-	@SuppressWarnings("resource")
 	private CommandStatus defToggled(Command com) {
 		String[] parts = com.remnCommand.split(" ");
 
@@ -286,7 +283,6 @@ public class BlockReaderCLI {
 		return SUCCESS;
 	}
 
-	@SuppressWarnings("resource")
 	private CommandStatus defLayered(Command com) {
 		String[] parts = com.remnCommand.split(" ");
 
@@ -323,7 +319,6 @@ public class BlockReaderCLI {
 		return SUCCESS;
 	}
 
-	@SuppressWarnings("resource")
 	private CommandStatus defSerial(Command com) {
 		String[] parts = com.remnCommand.split(" ");
 
@@ -420,7 +415,6 @@ public class BlockReaderCLI {
 		String delim = remn;
 
 		try {
-			@SuppressWarnings("resource")
 			BlockReader reader = new SimpleBlockReader(delim, stat.sources.get(sourceName));
 
 			stat.readers.put(blockName, reader);

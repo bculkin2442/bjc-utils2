@@ -8,21 +8,27 @@ import bjc.utils.ioutils.format.CLParameters;
 import java.util.IllegalFormatConversionException;
 import java.util.regex.Matcher;
 
+/**
+ * Implements the C directive.
+ * 
+ * @author student
+ *
+ */
 public class CharacterDirective implements Directive {
 
 	@Override
-	public void format(StringBuffer buff, Object parm, CLModifiers mods, CLParameters arrParams,
-			Tape<Object> tParams, Matcher dirMatcher, CLFormatter fmt) {
+	public void format(StringBuffer buff, Object parm, CLModifiers mods, CLParameters arrParams, Tape<Object> tParams,
+			Matcher dirMatcher, CLFormatter fmt) {
 		CLFormatter.checkItem(parm, 'C');
 
-		if(!(parm instanceof Character)) {
+		if (!(parm instanceof Character)) {
 			throw new IllegalFormatConversionException('C', parm.getClass());
 		}
 
 		char ch = (Character) parm;
 		int codepoint = ch;
 
-		if(mods.colonMod) {
+		if (mods.colonMod) {
 			/*
 			 * Colon mod means print Unicode character name.
 			 */

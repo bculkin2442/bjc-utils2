@@ -9,6 +9,12 @@ import bjc.utils.math.NumberUtils;
 import java.util.IllegalFormatConversionException;
 import java.util.regex.Matcher;
 
+/**
+ * Generalized radix directive.
+ * 
+ * @author student
+ *
+ */
 public class RadixDirective extends GeneralNumberDirective {
 
 	@Override
@@ -16,7 +22,7 @@ public class RadixDirective extends GeneralNumberDirective {
 			Matcher dirMatcher, CLFormatter fmt) {
 		CLFormatter.checkItem(arg, 'R');
 
-		if(!(arg instanceof Number)) {
+		if (!(arg instanceof Number)) {
 			throw new IllegalFormatConversionException('R', arg.getClass());
 		}
 
@@ -25,17 +31,17 @@ public class RadixDirective extends GeneralNumberDirective {
 		 */
 		long val = ((Number) arg).longValue();
 
-		if(params.length() == 0) {
-			if(mods.atMod) {
+		if (params.length() == 0) {
+			if (mods.atMod) {
 				buff.append(NumberUtils.toRoman(val, mods.colonMod));
-			} else if(mods.colonMod) {
+			} else if (mods.colonMod) {
 				buff.append(NumberUtils.toOrdinal(val));
 			} else {
 				buff.append(NumberUtils.toCardinal(val));
 			}
 		} else {
-			if(params.length() < 1) throw new IllegalArgumentException(
-					"R directive requires at least one parameter, the radix");
+			if (params.length() < 1)
+				throw new IllegalArgumentException("R directive requires at least one parameter, the radix");
 
 			int radix = params.getInt(0, "radix", 'R');
 

@@ -8,6 +8,11 @@ import bjc.utils.ioutils.format.EscapeException;
 
 import java.util.regex.Matcher;
 
+/**
+ * Implementation for the ^ directive.
+ * @author student
+ *
+ */
 public class EscapeDirective implements Directive {
 
 	@Override

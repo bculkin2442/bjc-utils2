@@ -7,6 +7,11 @@ import bjc.utils.ioutils.format.CLParameters;
 
 import java.util.regex.Matcher;
 
+/**
+ * Implement the & directive.
+ * @author student
+ *
+ */
 public class FreshlineDirective implements Directive {
 
 	@Override
