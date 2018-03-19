@@ -1,10 +1,12 @@
 package bjc.utils.data;
 
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
+import bjc.utils.funcdata.IList;
 import bjc.utils.funcdata.bst.TreeLinearizationMethod;
 import bjc.utils.functypes.ListFlattener;
 
@@ -57,7 +59,7 @@ public interface ITree<ContainedType> {
 	 * @return The final transformed state.
 	 */
 	<NewType, ReturnedType> ReturnedType collapse(Function<ContainedType, NewType> leafTransform,
-			Function<ContainedType, ListFlattener<NewType>> nodeCollapser,
+			BiFunction<ContainedType, IList<NewType>, NewType> nodeCollapser,
 			Function<NewType, ReturnedType> resultTransformer);
 
 	/**

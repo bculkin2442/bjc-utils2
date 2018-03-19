@@ -1,5 +1,6 @@
 package bjc.utils.data;
 
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -187,7 +188,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 	@Override
 	public <NewType, ReturnedType> ReturnedType collapse(final Function<ContainedType, NewType> leafTransform,
-			final Function<ContainedType, ListFlattener<NewType>> nodeCollapser,
+			final BiFunction<ContainedType, IList<NewType>, NewType> nodeCollapser,
 			final Function<NewType, ReturnedType> resultTransformer) {
 		return resultTransformer.apply(internalCollapse(leafTransform, nodeCollapser));
 	}
@@ -216,10 +217,8 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	 */
 
 	protected <NewType> NewType internalCollapse(final Function<ContainedType, NewType> leafTransform,
-			final Function<ContainedType, ListFlattener<NewType>> nodeCollapser) {
+			final BiFunction<ContainedType, IList<NewType>, NewType> nodeCollapser) {
 		if(hasChildren) {
-			final Function<IList<NewType>, NewType> nodeTransformer = nodeCollapser.apply(data);
-
 			final IList<NewType> collapsedChildren = children.map(child -> {
 				final NewType collapsed = child.collapse(leafTransform, nodeCollapser,
 						subTreeVal -> subTreeVal);
@@ -227,7 +226,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 				return collapsed;
 			});
 
-			return nodeTransformer.apply(collapsedChildren);
+			return nodeCollapser.apply(data, collapsedChildren);
 		}
 
 		return leafTransform.apply(data);
