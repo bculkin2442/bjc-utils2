@@ -117,4 +117,36 @@ public class ConfigurableTokenSplitter extends SimpleTokenSplitter {
 
 		return String.format(fmt, simpleDelimiters, multipleDelimiters, rRawDelimiters, spliter);
 	}
+	
+	public static class Builder {
+		private ConfigurableTokenSplitter cts;
+		
+		public Builder(boolean keepDelims) {
+			cts = new ConfigurableTokenSplitter(keepDelims);
+		}
+		
+		public Builder simple(String...strings) {
+			cts.addSimpleDelimiters(strings);
+			
+			return this;
+		}
+		
+		public Builder multiple(String...strings) {
+			cts.addMultiDelimiters(strings);
+			
+			return this;
+		}
+		
+		public Builder raw(String...strings) {
+			cts.addRawDelimiters(strings);
+			
+			return this;
+		}
+		
+		public ConfigurableTokenSplitter build() {
+			cts.compile();
+			
+			return cts;
+		}
+	}
 }
