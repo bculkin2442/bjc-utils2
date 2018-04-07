@@ -66,10 +66,12 @@ public class Command {
 	 *        The name of where the I/O came from.
 	 */
 	public Command(String ln, int lno, String ioSrc) {
+		/* :StringHandling */
 		int idx = ln.indexOf(' ');
 
 		if(idx == -1) idx = ln.length();
 
+		/* Grab command parts. */
 		fullCommand = ln;
 		nameCommand = ln.substring(0, idx).trim();
 		remnCommand = ln.substring(idx).trim();

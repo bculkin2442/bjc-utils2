@@ -87,6 +87,7 @@ public class BlockReaderCLI {
 		if(interactive) {
 			System.out.printf("reader-conf(%d)>", lno);
 		}
+
 		while(input.hasNextLine()) {
 			/* Read a line. */
 			String ln = input.nextLine();
@@ -123,6 +124,7 @@ public class BlockReaderCLI {
 	 * @return The status of the executed command.
 	 */
 	public CommandStatus handleCommand(Command com, boolean interactive) {
+		/* Handle each command. */
 		switch(com.nameCommand) {
 		case "def-filtered":
 			return defFiltered(com);
@@ -155,6 +157,11 @@ public class BlockReaderCLI {
 		/*
 		 * Get the block name.
 		 */
+		/*
+		 * @TODO 02/17/18 Ben Culkin :StringHandling
+		 * 	This slicing up strings by indexed characters should be abstracted into some
+		 * 	sort of class.
+		 */
 		int idx = remn.indexOf(' ');
 		if(idx == -1) {
 			LOGGER.severe(com.error("No name argument for def-filtered.\n"));
@@ -173,6 +180,7 @@ public class BlockReaderCLI {
 		/*
 		 * Get the reader name.
 		 */
+		/* :StringHandling */
 		idx = remn.indexOf(' ');
 		if(idx == -1) {
 			LOGGER.severe(com.error("No reader-name argument for def-filtered.\n"));
@@ -370,6 +378,7 @@ public class BlockReaderCLI {
 		/*
 		 * Get the block name.
 		 */
+		/* :StringHandling */
 		int idx = remn.indexOf(' ');
 		if(idx == -1) {
 			LOGGER.severe(com.error("No name argument for def-simple.\n"));
@@ -388,6 +397,7 @@ public class BlockReaderCLI {
 		/*
 		 * Get the source name.
 		 */
+		/* :StringHandling */
 		idx = remn.indexOf(' ');
 		if(idx == -1) {
 			LOGGER.severe(com.error("No source-name argument for def-simple.\n"));
@@ -414,6 +424,7 @@ public class BlockReaderCLI {
 
 		String delim = remn;
 
+		/* Get the delimiter, and create the reader. */
 		try {
 			BlockReader reader = new SimpleBlockReader(delim, stat.sources.get(sourceName));
 

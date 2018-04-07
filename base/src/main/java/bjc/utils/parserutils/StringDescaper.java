@@ -13,11 +13,13 @@ import static java.util.Map.Entry;
 import static bjc.utils.PropertyDB.getRegex;
 
 /**
+<<<<<<< Updated upstream
  * Customizable string escapes.
  *
  * @author Benjamin Culkin
  */
 public class StringDescaper {
+	/* The logger. */
 	private Logger LOGGER = Logger.getLogger(StringDescaper.class.getName());
 
 	/*

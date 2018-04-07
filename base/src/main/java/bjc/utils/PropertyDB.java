@@ -15,9 +15,11 @@ import bjc.utils.ioutils.SimpleProperties;
  *
  */
 public class PropertyDB {
-	private static SimpleProperties regexes;
-	private static Map<String, Pattern> compiledRegexes;
+	/* Regex storage. */
+	private static SimpleProperties		regexes;
+	private static Map<String, Pattern>	compiledRegexes;
 
+	/* Format string storage. */
 	private static SimpleProperties formats;
 
 	/*
@@ -31,6 +33,7 @@ public class PropertyDB {
 	private static LambdaLock loadLock = new LambdaLock();
 
 	static {
+		/* Reload properties on class load. */
 		reloadProperties();
 	}
 
@@ -41,17 +44,13 @@ public class PropertyDB {
 	 * being loaded will block, to prevent reads from partial states.
 	 */
 	public static void reloadProperties() {
-		/*
-		 * Do the load with the write lock taken.
-		 */
+		/* * Do the load with the write lock taken. */
 		loadLock.write(() -> {
 			if(LOGLOAD) {
 				System.out.println("Reading regex properties:");
 			}
 
-			/*
-			 * Load regexes.
-			 */
+			/* * Load regexes. */
 			regexes = new SimpleProperties();
 			regexes.loadFrom(PropertyDB.class.getResourceAsStream("/regexes.sprop"), false);
 			if(LOGLOAD) {
@@ -64,9 +63,7 @@ public class PropertyDB {
 				System.out.println("Reading format properties:");
 			}
 
-			/*
-			 * Load formats.
-			 */
+			/* * Load formats. */
 			formats = new SimpleProperties();
 			formats.loadFrom(PropertyDB.class.getResourceAsStream("/formats.sprop"), false);
 			if(LOGLOAD) {
@@ -113,9 +110,7 @@ public class PropertyDB {
 				throw new NoSuchElementException(msg);
 			}
 
-			/*
-			 * Get the regex, and cache a compiled version.
-			 */
+			/* * Get the regex, and cache a compiled version. */
 			return compiledRegexes.computeIfAbsent(key, strang -> {
 				return Pattern.compile(regexes.get(strang));
 			});

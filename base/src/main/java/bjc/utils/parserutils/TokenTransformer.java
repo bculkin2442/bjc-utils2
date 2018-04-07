@@ -21,8 +21,10 @@ final class TokenTransformer<TokenType> implements Consumer<TokenType> {
 	 * Handle operators
 	 */
 	private final class OperatorHandler implements UnaryOperator<ConstructorState<TokenType>> {
+		/* The handled element. */
 		private final TokenType element;
 
+		/* Create a new operator handler. */
 		public OperatorHandler(final TokenType element) {
 			this.element = element;
 		}
@@ -33,9 +35,8 @@ final class TokenTransformer<TokenType> implements Consumer<TokenType> {
 			 * Replace the current AST with the result of handling
 			 * an operator
 			 */
-			return new ConstructorState<>(pair.bindLeft(queuedASTs -> {
-				return handleOperator(queuedASTs);
-			}));
+			return new ConstructorState<>(pair.bindLeft(
+						queuedASTs -> handleOperator(queuedASTs)));
 		}
 
 		private ConstructorState<TokenType> handleOperator(final Deque<ITree<TokenType>> queuedASTs) {
@@ -66,7 +67,7 @@ final class TokenTransformer<TokenType> implements Consumer<TokenType> {
 				 * Grab the two operands
 				 */
 				final ITree<TokenType> right = queuedASTs.pop();
-				final ITree<TokenType> left = queuedASTs.pop();
+				final ITree<TokenType> left  = queuedASTs.pop();
 
 				/*
 				 * Create a new AST
@@ -86,15 +87,31 @@ final class TokenTransformer<TokenType> implements Consumer<TokenType> {
 		}
 	}
 
+	/* The initial state of the transformer. */
 	private final IHolder<ConstructorState<TokenType>> initialState;
 
+	/* The predicate tot use to detect operators. */
 	private final Predicate<TokenType> operatorPredicate;
 
-	private final Predicate<TokenType> isSpecialOperator;
-	private final Function<TokenType, QueueFlattener<TokenType>> handleSpecialOperator;
+	/* The predicate for detecting special operators. */
+	private final Predicate<TokenType>				isSpecialOperator;
+	/* The function for handling special operators. */
+	private final Function<TokenType, QueueFlattener<TokenType>>	handleSpecialOperator;
 
-	/*
+	/**
 	 * Create a new transformer
+	 *
+	 * @param initialState
+	 * 	The initial state of the transformer.
+	 *
+	 * @param operatorPredicate
+	 * 	The predicate to use to identify operators.
+	 *
+	 * @param isSpecialOperator
+	 * 	The predicate used to identify special operators.
+	 *
+	 * @param handleSpecialOperator
+	 * 	The function used for handling special operators.
 	 */
 	public TokenTransformer(final IHolder<ConstructorState<TokenType>> initialState,
 			final Predicate<TokenType> operatorPredicate, final Predicate<TokenType> isSpecialOperator,

@@ -37,25 +37,30 @@ public class TokenUtils {
 	/*
 	 * Patterns and pattern parts.
 	 */
-	private static String rPossibleEscapeString = getRegex("possibleStringEscape");
 
-	private static Pattern possibleEscapePatt = Pattern.compile(rPossibleEscapeString);
+	/* Possible string escapes. */
+	private static String  rPossibleEscapeString = getRegex("possibleStringEscape");
+	private static Pattern possibleEscapePatt    = Pattern.compile(rPossibleEscapeString);
 
-	private static String rShortEscape = getRegex("shortFormStringEscape");
-	private static String rOctalEscape = getRegex("octalStringEscape");
-	private static String rUnicodeEscape = getRegex("unicodeStringEscape");
+	/* Non-single char escapes. */
+	private static String	rShortEscape	= getRegex("shortFormStringEscape");
+	private static String	rOctalEscape	= getRegex("octalStringEscape");
+	private static String	rUnicodeEscape	= getRegex("unicodeStringEscape");
 
-	private static String rEscapeString = applyFormat("stringEscape", rShortEscape, rOctalEscape, rUnicodeEscape);
+	/* All string escapes. */
+	private static String  rEscapeString = applyFormat("stringEscape",
+			rShortEscape, rOctalEscape, rUnicodeEscape);
 
 	private static Pattern escapePatt = Pattern.compile(rEscapeString);
 
-	private static String rDoubleQuoteString = applyFormat("doubleQuotes", getRegex("nonStringEscape"),
-			rPossibleEscapeString);
+	private static String rDoubleQuoteString = applyFormat("doubleQuotes",
+			getRegex("nonStringEscape"), rPossibleEscapeString);
 
 	private static Pattern doubleQuotePatt = Pattern.compile(rDoubleQuoteString);
 
 	private static Pattern quotePatt = getCompiledRegex("unescapedQuote");
 
+	/* This may do something. */
 	//private static Pattern intLitPattern = getCompiledRegex("intLiteral");
 
 	/**
@@ -64,24 +69,30 @@ public class TokenUtils {
 	 * Splits a string around instances of java-style double-quoted strings.
 	 *
 	 * @param inp
+<<<<<<< Updated upstream
 	 *        The string to split.
+=======
+	 * 	The string to split.
+>>>>>>> Stashed changes
 	 *
-	 * @return An list containing alternating bits of the string and the
-	 *         embedded double-quoted strings that separated them.
+	 * @return 
+	 * 	An list containing alternating bits of the string and the embedded double-quoted
+	 * 	strings that separated them.
 	 */
 	public static List<String> removeDQuotedStrings(final String inp) {
-		if(inp == null) throw new NullPointerException("inp must not be null");
+		/* Validate input. */
+		if (inp == null) throw new NullPointerException("inp must not be null");
 
 		/*
 		 * What we need for piece-by-piece string building
 		 */
-		StringBuffer work = new StringBuffer();
+		StringBuffer work      = new StringBuffer();
 		final List<String> res = new LinkedList<>();
 
 		/*
 		 * Matcher for proper strings and single quotes.
 		 */
-		final Matcher mt = doubleQuotePatt.matcher(inp);
+		final Matcher mt   = doubleQuotePatt.matcher(inp);
 		final Matcher corr = quotePatt.matcher(inp);
 
 		if(corr.find() && !corr.find()) {
@@ -95,7 +106,8 @@ public class TokenUtils {
 			throw new IllegalArgumentException(msg);
 		}
 
-		while(mt.find()) {
+		/* Go through every found string. */
+		while (mt.find()) {
 			/*
 			 * Remove the string until the quoted string.
 			 */
@@ -145,6 +157,9 @@ public class TokenUtils {
 	/**
 	 * Replace escape characters with their actual equivalents.
 	 *
+	 * Use {@link StringDescaper} for customizable escapes. This only handles the ones that are
+	 * built into Java strings.
+	 *
 	 * @param inp
 	 *        The string to replace escape sequences in.
 	 *
@@ -152,17 +167,19 @@ public class TokenUtils {
 	 *         characters.
 	 */
 	public static String descapeString(final String inp) {
-		if(inp == null) throw new NullPointerException("inp must not be null");
+		/* Validate input. */
+		if (inp == null) throw new NullPointerException("inp must not be null");
 
 		/*
 		 * Prepare the buffer and escape finder.
 		 */
-		final StringBuffer work = new StringBuffer();
+		final StringBuffer work            = new StringBuffer();
 		final Matcher possibleEscapeFinder = possibleEscapePatt.matcher(inp);
-		final Matcher escapeFinder = escapePatt.matcher(inp);
+		final Matcher escapeFinder         = escapePatt.matcher(inp);
 
-		while(possibleEscapeFinder.find()) {
-			if(!escapeFinder.find()) {
+		/* Go through all possible escapes. */
+		while (possibleEscapeFinder.find()) {
+			if (!escapeFinder.find()) {
 				/*
 				 * Found a possible escape that isn't actually
 				 * an escape.
@@ -209,13 +226,19 @@ public class TokenUtils {
 				escapeRep = "\\";
 				break;
 			default:
+<<<<<<< Updated upstream
 				if(escapeSeq.startsWith("u")) {
+=======
+				/* Handle a non-short form escape. */
+				if (escapeSeq.startsWith("u")) {
+>>>>>>> Stashed changes
 					escapeRep = handleUnicodeEscape(escapeSeq.substring(1));
 				} else {
 					escapeRep = handleOctalEscape(escapeSeq);
 				}
 			}
 
+			/* Replace the escape with its representation. */
 			escapeFinder.appendReplacement(work, escapeRep);
 		}
 

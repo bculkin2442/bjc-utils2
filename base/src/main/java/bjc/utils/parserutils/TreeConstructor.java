@@ -13,7 +13,7 @@ import bjc.utils.data.Pair;
 import bjc.utils.funcdata.IList;
 
 /**
- * Creates a parse tree from a postfix expression
+ * Creates a parse tree from a postfix expression.
  *
  * @author ben
  *
@@ -23,15 +23,13 @@ public class TreeConstructor {
 	 * Alias interface for special operator types.
 	 *
 	 * @param <TokenType>
-	 *        The token type of the tree.
+	 * 	The token type of the tree.
 	 */
 	public interface QueueFlattener<TokenType> extends Function<Deque<ITree<TokenType>>, ITree<TokenType>> {
 
 	}
 
-	/*
-	 * Alias for constructor state.
-	 */
+	/* Alias for constructor state. */
 	static final class ConstructorState<TokenType> extends Pair<Deque<ITree<TokenType>>, ITree<TokenType>> {
 		public ConstructorState(final Deque<ITree<TokenType>> left, final ITree<TokenType> right) {
 			super(left, right);
@@ -43,23 +41,25 @@ public class TreeConstructor {
 	}
 
 	/**
-	 * Construct a tree from a list of tokens in postfix notation
+	 * Construct a tree from a list of tokens in postfix notation.
 	 *
 	 * Only binary operators are accepted.
 	 *
 	 * @param <TokenType>
-	 *        The elements of the parse tree
+	 * 	The elements of the parse tree.
+	 *
 	 * @param tokens
-	 *        The list of tokens to build a tree from
+	 * 	The list of tokens to build a tree from.
+	 *
 	 * @param isOperator
-	 *        The predicate to use to determine if something is a operator
-	 * @return A AST from the expression
+	 * 	The predicate to use to determine if something is a
+	 * 	operator.
+	 *
+	 * @return A AST from the expression.
 	 */
 	public static <TokenType> ITree<TokenType> constructTree(final IList<TokenType> tokens,
 			final Predicate<TokenType> isOperator) {
-		/*
-		 * Construct a tree with no special operators
-		 */
+		/* Construct a tree with no special operators */
 		return constructTree(tokens, isOperator, op -> false, null);
 	}
 
@@ -85,7 +85,7 @@ public class TreeConstructor {
 	 * @param handleSpecialOperator
 	 *        The function to use to handle special case operators.
 	 *
-	 * @return A AST from the expression
+	 * @return A AST from the expression.
 	 *
 	 */
 	public static <TokenType> ITree<TokenType> constructTree(final IList<TokenType> tokens,
@@ -101,23 +101,19 @@ public class TreeConstructor {
 		else if(isSpecialOperator == null)
 			throw new NullPointerException("Special operator determiner must not be null");
 
-		/*
-		 * Here is the state for the tree construction
-		 */
-		final IHolder<ConstructorState<TokenType>> initialState = new Identity<>(
-				new ConstructorState<>(new LinkedList<>(), null));
+		final ConstructorState<TokenType> cstate = new ConstructorState<>(
+				new LinkedList<>(), null);
 
-		/*
-		 * Transform each of the tokens
-		 */
-		tokens.forEach(new TokenTransformer<>(initialState, isOperator, isSpecialOperator,
-				handleSpecialOperator));
+		/* Here is the state for the tree construction */
+		final IHolder<ConstructorState<TokenType>> initialState = new Identity<>(cstate);
 
-		/*
-		 * Grab the tree from the state
-		 */
-		return initialState.unwrap(pair -> {
-			return pair.getRight();
-		});
+		/* Transform each of the tokens */
+		final TokenTransformer trans = new TokenTransformer<>(initialState,
+				isOperator, isSpecialOperator, handleSpecialOperator);
+
+		tokens.forEach(trans);
+
+		/* Grab the tree from the state */
+		return initialState.unwrap(pair -> pair.getRight());
 	}
 }
