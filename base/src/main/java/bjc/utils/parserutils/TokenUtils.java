@@ -226,12 +226,8 @@ public class TokenUtils {
 				escapeRep = "\\";
 				break;
 			default:
-<<<<<<< Updated upstream
-				if(escapeSeq.startsWith("u")) {
-=======
 				/* Handle a non-short form escape. */
 				if (escapeSeq.startsWith("u")) {
->>>>>>> Stashed changes
 					escapeRep = handleUnicodeEscape(escapeSeq.substring(1));
 				} else {
 					escapeRep = handleOctalEscape(escapeSeq);

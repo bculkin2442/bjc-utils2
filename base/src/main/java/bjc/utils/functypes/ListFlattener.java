@@ -13,5 +13,7 @@ import bjc.utils.funcdata.IList;
  *        The type of value in the list.
  */
 public interface ListFlattener<S> extends Function<IList<S>, S> {
-
+	/*
+	 * Alias
+	 */
 }

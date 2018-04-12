@@ -26,7 +26,9 @@ public class TreeConstructor {
 	 * 	The token type of the tree.
 	 */
 	public interface QueueFlattener<TokenType> extends Function<Deque<ITree<TokenType>>, ITree<TokenType>> {
-
+		/*
+		 * Alias
+		 */
 	}
 
 	/* Alias for constructor state. */

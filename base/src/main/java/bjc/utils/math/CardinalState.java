@@ -25,7 +25,9 @@ public class CardinalState {
 	 */
 	@FunctionalInterface
 	public interface Cardinalizer extends BiFunction<Long, CardinalState, String> {
-
+		/*
+		 * Alias
+		 */
 	}
 
 	/**

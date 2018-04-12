@@ -33,7 +33,9 @@ public interface Bifunctor<LeftType, RightType> {
 	 */
 	public interface BifunctorMap<OldLeft, OldRight, NewLeft, NewRight>
 			extends Function<Bifunctor<OldLeft, OldRight>, Bifunctor<NewLeft, NewRight>> {
-
+		/*
+		 * Alias
+		 */
 	}
 
 	/**
@@ -52,7 +54,9 @@ public interface Bifunctor<LeftType, RightType> {
 	 */
 	public interface LeftBifunctorMap<OldLeft, OldRight, NewLeft>
 			extends BifunctorMap<OldLeft, OldRight, NewLeft, OldRight> {
-
+		/*
+		 * Alias
+		 */
 	}
 
 	/**
@@ -71,7 +75,9 @@ public interface Bifunctor<LeftType, RightType> {
 	 */
 	public interface RightBifunctorMap<OldLeft, OldRight, NewRight>
 			extends BifunctorMap<OldLeft, OldRight, OldLeft, NewRight> {
-
+		/*
+		 * Alias
+		 */
 	}
 
 	/**
