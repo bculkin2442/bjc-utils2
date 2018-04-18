@@ -110,7 +110,7 @@ public class TreeConstructor {
 		final IHolder<ConstructorState<TokenType>> initialState = new Identity<>(cstate);
 
 		/* Transform each of the tokens */
-		final TokenTransformer trans = new TokenTransformer<>(initialState,
+		final TokenTransformer<TokenType> trans = new TokenTransformer<>(initialState,
 				isOperator, isSpecialOperator, handleSpecialOperator);
 
 		tokens.forEach(trans);
