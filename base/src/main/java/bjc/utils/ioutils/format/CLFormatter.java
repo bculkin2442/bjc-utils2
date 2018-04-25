@@ -14,14 +14,14 @@ import bjc.utils.ioutils.format.directives.LiteralDirective;
 import bjc.utils.ioutils.format.directives.NumberDirective;
 import bjc.utils.ioutils.format.directives.RadixDirective;
 
+import static bjc.utils.misc.PropertyDB.applyFormat;
+import static bjc.utils.misc.PropertyDB.getRegex;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UnknownFormatConversionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static bjc.utils.PropertyDB.applyFormat;
-import static bjc.utils.PropertyDB.getRegex;
 
 /**
  * An implementation of CL's FORMAT.

@@ -1,8 +1,8 @@
 package bjc.utils.parserutils;
 
-import static bjc.utils.PropertyDB.applyFormat;
-import static bjc.utils.PropertyDB.getCompiledRegex;
-import static bjc.utils.PropertyDB.getRegex;
+import static bjc.utils.misc.PropertyDB.applyFormat;
+import static bjc.utils.misc.PropertyDB.getCompiledRegex;
+import static bjc.utils.misc.PropertyDB.getRegex;
 
 import java.util.LinkedList;
 import java.util.List;

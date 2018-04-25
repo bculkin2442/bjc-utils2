@@ -1,6 +1,6 @@
 package bjc.utils.parserutils.splitter;
 
-import static bjc.utils.PropertyDB.applyFormat;
+import static bjc.utils.misc.PropertyDB.applyFormat;
 
 import java.util.LinkedHashSet;
 import java.util.Set;

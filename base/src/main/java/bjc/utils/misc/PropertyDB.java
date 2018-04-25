@@ -1,4 +1,4 @@
-package bjc.utils;
+package bjc.utils.misc;
 
 import java.util.HashMap;
 import java.util.Map;

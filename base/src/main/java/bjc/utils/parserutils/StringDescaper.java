@@ -8,9 +8,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import static bjc.utils.misc.PropertyDB.getRegex;
 import static java.util.Map.Entry;
-
-import static bjc.utils.PropertyDB.getRegex;
 
 /**
 <<<<<<< Updated upstream

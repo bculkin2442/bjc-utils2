@@ -1,7 +1,7 @@
 package bjc.utils.parserutils;
 
-import static bjc.utils.PropertyDB.applyFormat;
-import static bjc.utils.PropertyDB.getRegex;
+import static bjc.utils.misc.PropertyDB.applyFormat;
+import static bjc.utils.misc.PropertyDB.getRegex;
 
 import java.util.regex.Pattern;
 
