@@ -175,9 +175,17 @@ public class RuleBasedConfigReader<E> {
 					isRuleOpen.replace(endRule(state, isRuleOpen.getValue()));
 				} else if(line.startsWith("\t")) {
 					/*
+					 * Skip comment lines.
+					 */
+					if(line.startsWith("#") || line.startsWith("//"))
+						/*
+						 * It's a comment. */
+						return;
+
+					/*
 					 * Continue the rule
 					 */
-					continueRule(state, isRuleOpen.getValue(), line);
+					continueRule(state, isRuleOpen.getValue(), line.substring(1));
 				} else {
 					/*
 					 * Open a rule
