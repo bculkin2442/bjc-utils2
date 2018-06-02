@@ -2,6 +2,7 @@ package bjc.utils.funcutils;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -9,8 +10,8 @@ import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IList;
 
 /**
- * Utilities for manipulating FunctionalLists that don't belong in the class
- * itself.
+ * Utilities for manipulating FunctionalLists and regular Collections lists that
+ * don't belong in the class itself.
  *
  * @author ben
  */
@@ -296,5 +297,18 @@ public class ListUtils {
 		}
 
 		return returned;
+	}
+
+	public static long[] toPrimitive(List<Long> list) {
+		long[] res = new long[list.size()];
+
+		int idx = 0;
+		for(long val : list) {
+			res[idx] = val;
+
+			idx += 1;
+		}
+
+		return res;
 	}
 }
