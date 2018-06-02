@@ -144,8 +144,10 @@ public class GenericCommandMode implements CommandMode {
 
 	/* Default command builders */
 	/*
-	 * @TODO 10/09/17 Ben Culkin :CommandExtraction These command messages
-	 * should be extracted into some kind of file-based abstraction.
+	 * @TODO 10/09/17 Ben Culkin :CommandExtraction
+	 *
+	 * These command messages should be extracted into some kind of
+	 * file-based abstraction.
 	 */
 	private GenericCommand buildAliasCommand() {
 		final String aliasShortHelp = "alias\tAlias one command to another";

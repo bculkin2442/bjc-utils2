@@ -45,9 +45,11 @@ public class GeneratingIterator<E> implements Iterator<E> {
 	}
 
 	/*
-	 * @NOTE As this currently is, it only works correctly assuming that
-	 * next() is only called when hasNext() is true. Should we safeguard
-	 * against people who are not doing the right thing?
+	 * @NOTE
+	 *
+	 * As this currently is, it only works correctly assuming that next() is
+	 * only called when hasNext() is true. Should we safeguard against
+	 * people who are not doing the right thing?
 	 */
 	@Override
 	public E next() {

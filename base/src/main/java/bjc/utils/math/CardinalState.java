@@ -9,6 +9,8 @@ import java.util.function.LongPredicate;
  * @TODO 2/12/18 Ben Culkin :AdditionalCardinals
  * 
  * Add some built-in implementations for various things.
+ *
+ * By this, I mean for various unit scales, like custom and metric weights
  */
 /**
  * Customizations for number cardinalization.

@@ -16,6 +16,7 @@ import java.util.function.Function;
  * 	Figure out what is broken with this, and fix it so that step-wise
  * 	iteration works correctly.
  */
+
 /**
  * An iterative top-down transform of a tree.
  * 

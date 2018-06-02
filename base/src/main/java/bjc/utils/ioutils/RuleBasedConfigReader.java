@@ -27,25 +27,30 @@ import bjc.utils.funcdata.IMap;
  */
 public class RuleBasedConfigReader<E> {
 	/*
-	 * Function to execute when starting a rule. Takes the tokenizer, and a
-	 * pair of the read token and application state
+	 * Function to execute when starting a rule.
+	 *
+	 * Takes the tokenizer, and a pair of the read token and application state
 	 */
 	private BiConsumer<FunctionalStringTokenizer, IPair<String, E>> start;
 
 	/*
-	 * Function to use when continuing a rule Takes a tokenizer and
-	 * application state
+	 * Function to use when continuing a rule.
+	 *
+	 * Takes a tokenizer and application state
 	 */
 	private BiConsumer<FunctionalStringTokenizer, E> continueRule;
 
 	/*
-	 * Function to use when ending a rule Takes an application state
+	 * Function to use when ending a rule.
+	 *
+	 * Takes an application state
 	 */
 	private Consumer<E> end;
 
 	/*
-	 * Map of pragma names to pragma actions Pragma actions are functions
-	 * taking a tokenizer and application state
+	 * Map of pragma names to pragma actions.
+	 *
+	 * Pragma actions are functions taking a tokenizer and application state
 	 */
 	private final IMap<String, BiConsumer<FunctionalStringTokenizer, E>> pragmas;
 

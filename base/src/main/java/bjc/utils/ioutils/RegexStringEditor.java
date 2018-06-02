@@ -204,7 +204,7 @@ public class RegexStringEditor {
 	}
 
 	/**
-	 * Apply an operation to a string if it matches a regular expression.
+	 * Apply an operation to a string if it doesn't match a regular expression.
 	 *
 	 * @param input
 	 *        The input string.

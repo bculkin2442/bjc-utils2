@@ -3,8 +3,8 @@ package bjc.utils.math;
 /**
  * Represents a 'dual' number.
  *
- * Think imaginary numbers, where instead of i, we add a value d such that d^2 =
- * 0.
+ * Think imaginary numbers, where instead of i, we add a value d such that 
+ * d^2 = 0.
  */
 public class Dual {
 	/**

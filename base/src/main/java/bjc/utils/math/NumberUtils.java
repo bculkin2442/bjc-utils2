@@ -426,7 +426,14 @@ public class NumberUtils {
 
 		work.reverse();
 
-		/* @TODO Should we have some way to specify how to pad? */
+		/*
+		 * @TODO
+		 *
+		 * Should we have some way to specify how to pad?
+		 *
+		 * By this, I mean specify padding direction (left, right,
+		 * balanced...)
+		 */
 		StringBuilder pad = new StringBuilder();
 
 		if(work.length() < mincols) {

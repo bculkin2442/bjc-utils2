@@ -1,5 +1,10 @@
 package bjc.utils.math;
 
+/*
+ * @TODO Ben Culkin 6/2/18 :DualOptimize
+ *
+ * Write an optimize() method that optimizes dual expressions.
+ */
 /**
  * Represents an expression using dual numbers.
  *
