@@ -232,4 +232,22 @@ public interface ITree<ContainedType> {
 	 *         predicate, or -1 if one doesn't exist.
 	 */
 	int revFind(Predicate<ITree<ContainedType>> childPred);
+
+	/**
+	 * Check if this tree contains any nodes that satisfy the predicate.
+	 *
+	 * @param pred
+	 * 	The predicate to look for.
+	 * 
+	 * @return Whether or not any items satisfied the predicate.
+	 */
+	default boolean containsMatching(Predicate<ContainedType> pred) {
+		Toggle<Boolean> tog = new OneWayToggle<>(false, true);
+
+		traverse(TreeLinearizationMethod.POSTORDER, (val) -> {
+			if(pred.test(val)) tog.get();
+		});
+
+		return tog.get();
+	}
 }
