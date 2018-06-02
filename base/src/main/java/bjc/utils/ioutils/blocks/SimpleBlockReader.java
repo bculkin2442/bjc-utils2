@@ -55,6 +55,28 @@ public class SimpleBlockReader implements BlockReader {
 		lineNo = 1;
 	}
 
+	/**
+	 * Create a new block reader.
+	 *
+	 * @param blockDelim
+	 *        The pattern that separates blocks. Note that the end of file
+	 *        is always considered to end a block.
+	 *
+	 * @param source
+	 *        The source to read blocks from.
+	 *        NOTE: This does modify the provided scanner.
+	 */
+	public SimpleBlockReader(final String blockDelim, final Scanner source) {
+		blockReader = source;
+
+		final String pattern = String.format("(?:%s)|\\Z", blockDelim);
+		final Pattern pt = Pattern.compile(pattern, Pattern.MULTILINE);
+
+		blockReader.useDelimiter(pt);
+
+		lineNo = 1;
+	}
+
 	@Override
 	public boolean hasNextBlock() {
 		return blockReader.hasNext();

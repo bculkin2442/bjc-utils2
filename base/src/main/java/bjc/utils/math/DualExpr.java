@@ -308,6 +308,14 @@ public class DualExpr {
 			return false;
 		}
 
+		if(right == null) {
+			if(other.right != null) {
+				return false;
+			}
+		} else if(!right.equals(other.right)) {
+			return false;
+		}
+
 		if(number == null) {
 			if(other.number != null) return false;
 		} else if(!number.equals(other.number)) {
@@ -315,14 +323,6 @@ public class DualExpr {
 		}
 
 		if(power != other.power) {
-			return false;
-		}
-
-		if(right == null) {
-			if(other.right != null) {
-				return false;
-			}
-		} else if(!right.equals(other.right)) {
 			return false;
 		}
 
