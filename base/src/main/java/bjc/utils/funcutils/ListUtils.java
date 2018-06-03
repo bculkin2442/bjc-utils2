@@ -3,6 +3,7 @@ package bjc.utils.funcutils;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.LinkedList;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -310,5 +311,123 @@ public class ListUtils {
 		}
 
 		return res;
+	}
+
+	/**
+	 * Generate all of the permuations of a list.
+	 *
+	 * This is a version of Algorith P (Plain Changes) from Knuth (vol 4A,
+	 * pg 322)
+	 *
+	 * @param list
+	 * 	The list to generate permutations from.
+	 * @return The list of permutations of the list.
+	 */
+	public static <T> List<List<T>> permuteList(List<T> list) {
+		List<List<T>> permutes = new LinkedList<>();
+
+		/*
+		 * Special-case small usages.
+		 */
+		if(list.size() == 0) {
+			return permutes;
+		}
+
+		if(list.size() == 1) {
+			permutes.add(list);
+
+			return permutes;
+		}
+
+		if(list.size() == 2) {
+			T elm1 = list.get(0);
+			T elm2 = list.get(1);
+
+			List<T> currPerm = new ArrayList<>(2);
+
+			currPerm.add(elm1);
+			currPerm.add(elm2);
+
+			permutes.add(currPerm);
+
+			currPerm = new ArrayList<>(2);
+
+			currPerm.add(elm2);
+			currPerm.add(elm1);
+
+			permutes.add(currPerm);
+
+			return permutes;
+		}
+
+		int[] auxC = new int[list.size()];
+		int[] auxO = new int[list.size()];
+
+		for(int i = 0; i < list.size(); i++) {
+			auxC[i] = 0;
+			auxO[i] = 1;
+		}
+
+		List<T> currentPermute = new ArrayList<>(list.size());
+		for(T elm : list) {
+			currentPermute.add(elm);
+		}
+		permutes.add(currentPermute);
+
+		int j = list.size() - 1;
+		int s = 0;
+
+		while(true) {
+			int q = auxC[j] + auxO[j];
+
+			if(q < 0) {
+				auxO[j] = -auxO[j];
+				j -= 1;
+
+				continue;
+			}
+
+			if(q == j) {
+				if(j == 0) break;
+
+				s += 1;
+
+				auxO[j] = -auxO[j];
+				j -= 1;
+
+				continue;
+			}
+
+			int idx1 = j - auxC[j] + s;
+			int idx2 = j - q - s;
+
+			swapList(list, idx1, idx2);
+
+			auxC[j] = q;
+
+			currentPermute = new ArrayList<>(list.size());
+			for(T elm : list) {
+				currentPermute.add(elm);
+			}
+			permutes.add(currentPermute);
+
+			j = list.size() - 1;
+			s = 0;
+		}
+
+		return permutes;
+	}
+
+	private static <T> List<List<T>> powerList(List<T> list) {
+		List<List<T>> results = new LinkedList<>();
+
+		return results;
+	}
+
+	private static <T> void swapList(List<T> list, int a, int b) {
+		T tmp = list.get(a);
+
+		list.set(a, list.get(b));
+		list.set(b, tmp);
 	}
 }
