@@ -105,7 +105,9 @@ public class SimpleBlockReader implements BlockReader {
 
 			return true;
 		} catch(final NoSuchElementException nseex) {
-			currBlock = null;
+			// Don't null out the current block, let it be the last
+			// one
+			//currBlock = null;
 
 			return false;
 		}
