@@ -1,5 +1,7 @@
 package bjc.utils.components;
 
+import bjc.utils.funcdata.IMap;
+
 public class MemoryComponentRepository<ComponentType extends IDescribedComponent> implements IComponentRepository<ComponentType> {
 	private final IMap<String, ComponentType> repo;
 
@@ -20,10 +22,10 @@ public class MemoryComponentRepository<ComponentType extends IDescribedComponent
 	}
 
 	public ComponentType getByName(String name) {
-		return repo.get();
+		return repo.get(name);
 	}
 
 	public String getSource() {
-
+		return source;
 	}
 }
