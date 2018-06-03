@@ -76,14 +76,14 @@ public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<C
 			final TreeTransform<ContainedType> transfrm, final ITree<ContainedType> tree) {
 		preParent = tree;
 
-		preChildren = new LinkedList<>();
+		preChildren  = new LinkedList<>();
 		postChildren = new LinkedList<>();
-		toYield = new LinkedList<>();
+		toYield      = new LinkedList<>();
 
-		picker = pickr;
+		picker    = pickr;
 		transform = transfrm;
 
-		done = false;
+		done    = false;
 		initial = true;
 	}
 
@@ -154,6 +154,7 @@ public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<C
 		 */
 		if (currYield != null) {
 			ITree<ContainedType> yeld = flushYields(null);
+
 			if (yeld != null)
 				return yeld;
 		}
@@ -230,7 +231,7 @@ public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<C
 				curChild = new TopDownTransformIterator<>(picker, transform, preChildren.pop());
 
 				final ITree<ContainedType> res = curChild.next();
-				System.out.println("\t\tTRACE: adding node " + res + " to children");
+				//System.out.println("\t\tTRACE: adding node " + res + " to children");
 				postChildren.add(res);
 
 				return flushYields(res);
@@ -241,7 +242,7 @@ public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<C
 			if (postParent == null) {
 				res = new Tree<>(preParent.getHead());
 
-				System.out.println("\t\tTRACE: adding nodes " + postChildren + " to " + res);
+				//System.out.println("\t\tTRACE: adding nodes " + postChildren + " to " + res);
 
 				for (final ITree<ContainedType> child : postChildren) {
 					res.addChild(child);
@@ -252,7 +253,7 @@ public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<C
 			} else {
 				res = postParent;
 
-				System.out.println("\t\tTRACE: adding nodes " + postChildren + " to " + res);
+				//System.out.println("\t\tTRACE: adding nodes " + postChildren + " to " + res);
 				for (final ITree<ContainedType> child : postChildren) {
 					res.addChild(child);
 				}
@@ -263,7 +264,7 @@ public class TopDownTransformIterator<ContainedType> implements Iterator<ITree<C
 		}
 
 		final ITree<ContainedType> res = curChild.next();
-		System.out.println("\t\tTRACE: adding node " + res + " to children");
+		//System.out.println("\t\tTRACE: adding node " + res + " to children");
 		postChildren.add(res);
 
 		return flushYields(res);
