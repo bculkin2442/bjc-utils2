@@ -102,6 +102,14 @@ public class Pair<LeftType, RightType> implements IPair<LeftType, RightType> {
 		return String.format("Pair [leftValue='%s', rightValue='%s']", leftValue, rightValue);
 	}
 
+	public LeftType getLeft() {
+		return leftValue;
+	}
+
+	public RightType getRight() {
+		return rightValue;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
