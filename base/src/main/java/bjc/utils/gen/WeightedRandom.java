@@ -28,6 +28,8 @@ public class WeightedRandom<E> {
 	/* The total chance for all values. */
 	private int totalChance;
 
+	private final static Random BASE = new Random();
+
 	/**
 	 * Create a new weighted random generator with the specified source of
 	 * randomness.
@@ -35,7 +37,7 @@ public class WeightedRandom<E> {
 	 * @param src
 	 *        The source of randomness to use.
 	 */
-	public WeightedRandom(final Random src) {
+	public WeightedRandom(Random src) {
 		probabilities = new FunctionalList<>();
 		results       = new FunctionalList<>();
 
@@ -44,6 +46,12 @@ public class WeightedRandom<E> {
 		source = src;
 	}
 
+	/**
+	 * Create a new weighted random generator.
+	 */
+	public WeightedRandom() {
+		this(BASE);
+	}
 	/**
 	 * Add a probability for a specific result to be given.
 	 *
@@ -71,7 +79,6 @@ public class WeightedRandom<E> {
 
 	public E generateValue(Random rn) {
 		int target = rn.nextInt(totalChance);
-
 		int i = 0;
 
 		for(int prob : probabilities) {
@@ -100,5 +107,44 @@ public class WeightedRandom<E> {
 	 */
 	public IList<IPair<Integer, E>> getValues() {
 		return probabilities.pairWith(results);
+	}
+
+	public E getDescent(int factor) {
+		return getDescent(factor, source);
+	}
+
+	public E getDescent(int factor, Random rn) {
+		for(E res : results) {
+			if(rn.nextInt(factor) == 0) continue;
+
+			return res;
+		}
+
+		return results.getByIndex(results.getSize() - 1);
+	}
+
+	public E getBinomial(int target, int bound, int trials) {
+		return getBinomial(target, bound, trials, source);
+	}
+
+	public E getBinomial(int target, int bound, int trials, Random rn) {
+		int numSuc = 0;
+
+		for(int i = 0; i < trials; i++) {
+			/* 
+			 * Adjust for zero, because it's easy to think of this
+			 * as rolling a bound-sided dice and marking a success
+			 * for every roll less than or equal to target.
+			 */
+			int num = rn.nextInt(bound) + 1;
+
+			if(num <= target) {
+				//System.err.printf("\t\tTRACE: mark binomial success (%d <= 1d%d, %d)\n", target, bound, num);
+				numSuc += 1;
+			}
+		}
+
+		//System.err.printf("\tTRACE: got %d success for binomial trials (%d <= 1d%d, %d times)\n", numSuc, target, bound, trials);
+		return results.getByIndex(Math.min(numSuc, results.getSize() - 1));
 	}
 }

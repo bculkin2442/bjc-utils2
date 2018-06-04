@@ -27,6 +27,8 @@ public class Block {
 	 */
 	public final int blockNo;
 
+	public int lineOffset;
+
 	/**
 	 * Create a new block.
 	 *
@@ -81,8 +83,16 @@ public class Block {
 
 	@Override
 	public String toString() {
-		String fmt = "Block #%d (from lines %d to %d), length: %d characters";
+		if(lineOffset != -1) {
+			String fmt = "Block #%d (from lines %d (%d) to %d (%d)), length: %d characters";
 
-		return String.format(fmt, blockNo, startLine, endLine, contents.length());
+			return String.format(fmt, blockNo, startLine + lineOffset,
+					startLine, endLine + lineOffset,
+					endLine + lineOffset, contents.length());
+		} else {
+			String fmt = "Block #%d (from lines %d to %d), length: %d characters";
+
+			return String.format(fmt, blockNo, startLine, endLine, contents.length());
+		}
 	}
 }
