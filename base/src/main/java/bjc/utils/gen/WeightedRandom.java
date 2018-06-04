@@ -82,7 +82,7 @@ public class WeightedRandom<E> {
 		int i = 0;
 
 		for(int prob : probabilities) {
-			if(target <= prob) return results.getByIndex(i);
+			if(target < prob) return results.getByIndex(i);
 
 			target -= prob;
 			i      += 1;
