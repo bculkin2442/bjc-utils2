@@ -112,11 +112,4 @@ public interface Tape<T> {
 	 * @return Whether the cursor was moved right.
 	 */
 	boolean right(int amt);
-
-	/**
-	 * Is this tape double sided?
-	 *
-	 * @return Whether or not this tape is double-sided.
-	 */
-	boolean isDoubleSided();
 }

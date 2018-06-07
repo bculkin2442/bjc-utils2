@@ -20,11 +20,6 @@ import java.util.ArrayList;
  * @author bjculkin
  */
 public class SingleTape<T> implements Tape<T> {
-	/*
-	 * @NOTE Does this stuff still need to be protected? We're not trying to
-	 * use inheritance to implement tape types any more, so I don't see any
-	 * reason to not have it be private.
-	 */
 	/* Our backing store. */
 	protected ArrayList<T> backing;
 	/* Our position in the list. */
@@ -166,11 +161,6 @@ public class SingleTape<T> implements Tape<T> {
 
 		pos += amt;
 		return true;
-	}
-
-	@Override
-	public boolean isDoubleSided() {
-		return false;
 	}
 
 	@Override

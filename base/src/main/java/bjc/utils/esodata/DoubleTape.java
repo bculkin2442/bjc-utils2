@@ -24,7 +24,9 @@ package bjc.utils.esodata;
  *
  * @author bjculkin
  */
-public class DoubleTape<T> implements Tape<T> {
+public class DoubleTape<T> implements Tape<T>, DoubleSided {
+	private boolean frontActive;
+
 	/* The front-side of the tape. */
 	private Tape<T> front;
 	/* The back-side of the tape. */
@@ -45,6 +47,8 @@ public class DoubleTape<T> implements Tape<T> {
 	public DoubleTape(final boolean autoExtnd) {
 		front = new SingleTape<>(autoExtnd);
 		back = new SingleTape<>(autoExtnd);
+
+		frontActive = true;
 	}
 
 	@Override
@@ -130,23 +134,20 @@ public class DoubleTape<T> implements Tape<T> {
 		return succ;
 	}
 
-	/**
-	 * Flips the tape.
-	 *
-	 * The active side becomes inactive, and the inactive side becomes
-	 * active.
-	 */
+	@Override
 	public void flip() {
 		final Tape<T> tmp = front;
 
 		front = back;
 
 		back = tmp;
+
+		frontActive = !frontActive;
 	}
 
 	@Override
-	public boolean isDoubleSided() {
-		return true;
+	public boolean currentSide() {
+		return frontActive;
 	}
 
 	@Override
