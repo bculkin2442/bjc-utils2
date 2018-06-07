@@ -169,6 +169,33 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 	}
 
 	@Override
+	public E last() {
+		if(wrapped.size() < 1) throw new NoSuchElementException("Attempted to get last element of empty list");
+
+		return wrapped.get(wrapped.size() - 1);
+	}
+
+	@Override
+	public E popFirst() {
+		if(wrapped.size() < 1) throw new NoSuchElementException("Attempted to pop first element of empty list");
+
+		E head = first();
+		wrapped.remove(0);
+
+		return head;
+	}
+
+	@Override
+	public E popLast() {
+		if(wrapped.size() < 1) throw new NoSuchElementException("Attempted to pop last element of empty list");
+
+		E tail = last();
+		wrapped.remove(wrapped.size() - 1);
+
+		return tail;
+	}
+
+	@Override
 	public <T> IList<T> flatMap(final Function<E, IList<T>> expander) {
 		if(expander == null) throw new NullPointerException("Expander must not be null");
 

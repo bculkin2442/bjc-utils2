@@ -160,6 +160,16 @@ public interface IList<ContainedType> extends Iterable<ContainedType> {
 	ContainedType first();
 
 	/**
+	 * Get the last element in the list.
+	 *
+	 * @return The last element in this list.
+	 */
+	ContainedType last();
+
+	ContainedType popFirst();
+	ContainedType popLast();
+
+	/**
 	 * Apply a function to each member of the list, then flatten the
 	 * results.
 	 *
