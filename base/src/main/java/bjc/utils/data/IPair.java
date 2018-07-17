@@ -223,4 +223,8 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 	 * @return The pair, merged into a single value.
 	 */
 	public <MergedType> MergedType merge(BiFunction<LeftType, RightType, MergedType> merger);
+
+	public static <T1, T2> IPair<T1, T2> pair(T1 left, T2 right) {
+		return new Pair<>(left, right);
+	}
 }
