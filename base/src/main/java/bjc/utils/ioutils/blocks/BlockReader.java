@@ -11,7 +11,7 @@ import java.util.function.Consumer;
  * @author bjculkin
  *
  */
-public interface BlockReader extends AutoCloseable, Iterator<Block> {
+public interface BlockReader extends AutoCloseable, Iterator<Block>, Iterable<Block> {
 	/**
 	 * Check if this reader has an available block.
 	 *
@@ -57,6 +57,11 @@ public interface BlockReader extends AutoCloseable, Iterator<Block> {
 		while(hasNext()) {
 			action.accept(next());
 		}
+	}
+
+	@Override
+	default Iterator<Block> iterator() {
+		return this;
 	}
 
 	@Override
