@@ -112,4 +112,6 @@ public interface Tape<T> {
 	 * @return Whether the cursor was moved right.
 	 */
 	boolean right(int amt);
+
+	boolean seekTo(int pos);
 }

@@ -134,6 +134,10 @@ public class DoubleTape<T> implements Tape<T>, DoubleSided {
 		return succ;
 	}
 
+	public boolean seekTo(int tgtPos) {
+		return front.seekTo(tgtPos);
+	}
+
 	@Override
 	public void flip() {
 		final Tape<T> tmp = front;

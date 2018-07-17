@@ -163,6 +163,22 @@ public class SingleTape<T> implements Tape<T> {
 		return true;
 	}
 
+	public boolean seekTo(int tgtPos) {
+		if(tgtPos < 0)
+			return false;
+
+		if(tgtPos >= backing.size() - 1)
+			if(autoExtend)
+				while(tgtPos >= backing.size() - 1)
+					backing.add(null);
+			else
+				return false;
+
+		pos = tgtPos;
+
+		return true;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
