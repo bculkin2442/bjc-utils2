@@ -254,4 +254,89 @@ public class StringUtils {
 		}
 		return strings;
 	}
+
+	public static boolean levelContains(String haystack, String... needles) {
+		int nestLevel = 0;
+		int i         = 0;
+
+		while(i < haystack.length()) {
+			if(nestLevel == 0) {
+				for(String needle : needles) {
+					if(haystack.regionMatches(i, needle, 0, needle.length())) {
+						return true;
+					}
+				}
+			}
+
+			switch(haystack.charAt(i)) {
+				case '(':
+				case '[':
+				case '{':
+				case '<':
+					nestLevel += 1;
+					break;
+				case ')':
+				case ']':
+				case '}':
+				case '>':
+					nestLevel = Math.max(0, nestLevel - 1);
+					break;
+			}
+
+			i += 1;
+		}
+
+		return false;
+	}
+
+	public static List<String> levelSplit(String phrase, String... splits) {
+		return levelSplit(phrase, false, splits);
+	}
+
+	public static List<String> levelSplit(String phrase, boolean keepDelims, String... splits) {
+		String work = phrase;
+
+		List<String> strangs = new ArrayList<>();
+
+		int nestLevel = 0;
+		int i         = 0;
+
+		while(i < work.length()) {
+			if(nestLevel == 0) {
+				for(String split : splits) {
+					if(work.regionMatches(i, split, 0, split.length())) {
+						strangs.add(work.substring(0, i));
+
+						if(keepDelims) strangs.add(split);
+
+						work = work.substring(i + split.length());
+						i = 0;
+
+						continue;
+					}
+				}
+			}
+
+			switch(work.charAt(i)) {
+				case '(':
+				case '[':
+				case '{':
+				case '<':
+					nestLevel += 1;
+					break;
+				case ')':
+				case ']':
+				case '}':
+				case '>':
+					nestLevel = Math.max(0, nestLevel - 1);
+					break;
+			}
+
+			i += 1;
+		}
+
+		strangs.add(work);
+
+		return strangs;
+	}
 }
