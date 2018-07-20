@@ -240,9 +240,9 @@ public class StringUtils {
 	 */
 	public static List<String> processArguments(String com) {
 		List<String> strings = new ArrayList<>();
-	
+
 		BooleanToggle togg = new BooleanToggle();
-	
+
 		for(String strang : TokenUtils.removeDQuotedStrings(com)) {
 			if(togg.get()) {
 				strings.add(TokenUtils.descapeString(strang));
@@ -259,8 +259,13 @@ public class StringUtils {
 		int nestLevel = 0;
 		int i         = 0;
 
+		boolean prevCharWasSlash = false;
+		boolean inString = false;
+
+		char stringEnder = ' ';
+
 		while(i < haystack.length()) {
-			if(nestLevel == 0) {
+			if(inString == false && nestLevel == 0) {
 				for(String needle : needles) {
 					if(haystack.regionMatches(i, needle, 0, needle.length())) {
 						return true;
@@ -268,7 +273,22 @@ public class StringUtils {
 				}
 			}
 
-			switch(haystack.charAt(i)) {
+			if(inString) {
+				if(prevCharWasSlash == true) {
+					prevCharWasSlash = false;
+				} else if (haystack.charAt(i) == stringEnder) {
+					inString = false;
+				}
+			} else {
+				switch(haystack.charAt(i)) {
+				case '\'':
+					inString = true;
+					stringEnder = '\'';
+					break;
+				case '\"':
+					inString = true;
+					stringEnder = '\"';
+					break;
 				case '(':
 				case '[':
 				case '{':
@@ -281,6 +301,7 @@ public class StringUtils {
 				case '>':
 					nestLevel = Math.max(0, nestLevel - 1);
 					break;
+				}
 			}
 
 			i += 1;
@@ -301,8 +322,13 @@ public class StringUtils {
 		int nestLevel = 0;
 		int i         = 0;
 
+		boolean prevCharWasSlash = false;
+		boolean inString = false;
+
+		char stringEnder = ' ';
+
 		while(i < work.length()) {
-			if(nestLevel == 0) {
+			if(inString == false && nestLevel == 0) {
 				for(String split : splits) {
 					if(work.regionMatches(i, split, 0, split.length())) {
 						strangs.add(work.substring(0, i));
@@ -317,7 +343,22 @@ public class StringUtils {
 				}
 			}
 
-			switch(work.charAt(i)) {
+			if(inString) {
+				if(prevCharWasSlash == true) {
+					prevCharWasSlash = false;
+				} else if (work.charAt(i) == stringEnder) {
+					inString = false;
+				}
+			} else {
+				switch(work.charAt(i)) {
+				case '\'':
+					inString = true;
+					stringEnder = '\'';
+					break;
+				case '\"':
+					inString = true;
+					stringEnder = '\"';
+					break;
 				case '(':
 				case '[':
 				case '{':
@@ -330,6 +371,80 @@ public class StringUtils {
 				case '>':
 					nestLevel = Math.max(0, nestLevel - 1);
 					break;
+				}
+			}
+
+			i += 1;
+		}
+
+		strangs.add(work);
+
+		return strangs;
+	}
+
+	public static List<String> levelSplitRX(String phrase, String patt) {
+		return levelSplit(phrase, false, patt);
+	}
+
+	public static List<String> levelSplitRX(String phrase, boolean keepDelims, String patt) {
+		Pattern pat = Pattern.compile(patt);
+
+		String work = phrase;
+		Matcher mat = pat.matcher(work);
+
+		List<String> strangs = new ArrayList<>();
+
+		int nestLevel = 0;
+		int i         = 0;
+
+		boolean prevCharWasSlash = false;
+		boolean inString = false;
+
+		char stringEnder = ' ';
+
+		while(i < work.length()) {
+			if(inString == false && nestLevel == 0) {
+				if(mat.find(i)) {
+					strangs.add(work.substring(0, i));
+					if(keepDelims) strangs.add(mat.group());
+					work = work.substring(mat.end());
+					i = 0;
+
+					mat = pat.matcher(work);
+
+					continue;
+				}
+			}
+
+			if(inString) {
+				if(prevCharWasSlash == true) {
+					prevCharWasSlash = false;
+				} else if (work.charAt(i) == stringEnder) {
+					inString = false;
+				}
+			} else {
+				switch(work.charAt(i)) {
+				case '\'':
+					inString = true;
+					stringEnder = '\'';
+					break;
+				case '\"':
+					inString = true;
+					stringEnder = '\"';
+					break;
+				case '(':
+				case '[':
+				case '{':
+				case '<':
+					nestLevel += 1;
+					break;
+				case ')':
+				case ']':
+				case '}':
+				case '>':
+					nestLevel = Math.max(0, nestLevel - 1);
+					break;
+				}
 			}
 
 			i += 1;
