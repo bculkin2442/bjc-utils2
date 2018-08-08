@@ -84,7 +84,8 @@ public class RuleBasedConfigReader<E> {
 	public void addPragma(final String name, final BiConsumer<FunctionalStringTokenizer, E> action) {
 		if(name == null)
 			throw new NullPointerException("Pragma name must not be null");
-		else if(action == null) throw new NullPointerException("Pragma action must not be null");
+		else if(action == null)
+			throw new NullPointerException("Pragma action must not be null");
 
 		pragmas.put(name, action);
 	}
