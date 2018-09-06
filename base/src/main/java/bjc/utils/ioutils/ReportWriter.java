@@ -57,6 +57,10 @@ public class ReportWriter extends Writer {
 		return lastChar;
 	}
 
+	public Writer getWriter() {
+		return contained;
+	}
+
 	public boolean isLastCharNL() {
 		return lastCharWasNL;
 	}
@@ -144,6 +148,14 @@ public class ReportWriter extends Writer {
 		dedent(1);
 	}
 
+	public void writeBuffer(StringBuffer sb) throws IOException {
+		write(sb.toString());
+
+		// Clear the buffer
+		sb.delete(0, sb.length());
+	}
+
+	@Override
 	public void write(char[] cbuf, int off, int len) throws IOException {
 		String actIndentStr = printTabsAsSpaces ? indentStrSpacedTabs : indentStr;
 
@@ -164,7 +176,7 @@ public class ReportWriter extends Writer {
 		for(int i = 0; i < len; i++) {
 			int idx = i + off;
 
-			char c = cbuf[off];
+			char c = cbuf[idx];
 
 			if(c == '\n' || c == '\r') {
 				// Count lines written
@@ -207,11 +219,23 @@ public class ReportWriter extends Writer {
 		}
 	}
 
+	@Override
 	public void flush() throws IOException {
 		contained.flush();
 	}
 
+	@Override
 	public void close() throws IOException {
 		contained.close();
+	}
+
+	// @NOTE 9/5/18
+	//
+	// There are some cases where I can imagine that you might want our
+	// extra info, but those are (mostly) minor, and this is more convenient
+	// than writing getWriter().toString()
+	@Override
+	public String toString() {
+		return contained.toString();
 	}
 }
