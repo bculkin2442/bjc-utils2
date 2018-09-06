@@ -65,6 +65,8 @@ public class CLFormatter {
 		builtinDirectives.put("^", new EscapeDirective());
 		builtinDirectives.put("[", new ConditionalDirective());
 		builtinDirectives.put("{", new IterationDirective());
+
+		builtinDirectives.put("T", new TabulateDirective());
 	}
 
 	/**
@@ -229,22 +231,11 @@ public class CLFormatter {
 				throw new IllegalArgumentException("Found conditional-end outside of conditional.");
 			case ";":
 				throw new IllegalArgumentException(
-						"Found conditional-seperator outside of conditional.");
+						"Found seperator outside of block.");
 			case "}":
 				throw new IllegalArgumentException("Found iteration-end outside of iteration");
-			case "T":
 			case "<":
 			case ">":
-				/*
-				 * @TODO Figure out how to implement
-				 * tabulation/justification in a reasonable
-				 * manner.
-				 *
-				 * 9/5/18
-				 *
-				 * We did, but the rest of the code needs to be
-				 * converted to use ReportWriter instead
-				 */
 				throw new IllegalArgumentException("Layout-control directives aren't implemented yet.");
 			case "F":
 			case "E":
