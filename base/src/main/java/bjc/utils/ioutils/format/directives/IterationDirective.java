@@ -2,12 +2,12 @@ package bjc.utils.ioutils.format.directives;
 
 import bjc.utils.esodata.SingleTape;
 import bjc.utils.esodata.Tape;
-import bjc.utils.ioutils.format.CLFormatter;
-import bjc.utils.ioutils.format.CLModifiers;
-import bjc.utils.ioutils.format.CLParameters;
+import bjc.utils.ioutils.format.*;
 import bjc.utils.ioutils.ReportWriter;
 
 import java.io.IOException;
+
+import java.util.Iterator;
 
 import java.util.IllegalFormatConversionException;
 import java.util.regex.Matcher;
@@ -72,70 +72,97 @@ public class IterationDirective implements Directive {
 		int numItr = 0;
 
 		if (mods.atMod && mods.colonMod) {
-			do {
-				if (numItr > maxItr)
-					break;
-				numItr += 1;
+			try {
+				do {
+					if (numItr > maxItr) break;
+					numItr += 1;
 
-				if (!(iter instanceof Iterable<?>)) {
-					throw new IllegalFormatConversionException('{', iter.getClass());
-				}
+					if (!(iter instanceof Iterable<?>)) {
+						throw new IllegalFormatConversionException('{', iter.getClass());
+					}
 
-				@SuppressWarnings("unchecked")
-				Iterable<Object> nitr = (Iterable<Object>) iter;
-				Tape<Object> nParams = new SingleTape<>(nitr);
+					@SuppressWarnings("unchecked")
+					Iterable<Object> nitr = (Iterable<Object>) iter;
+					Tape<Object> nParams = new SingleTape<>(nitr);
 
-				fmt.doFormatString(frmt, rw, nParams);
+					try {
+						fmt.doFormatString(frmt, rw, nParams);
+					} catch (EscapeException eex) {
+						if (eex.endIteration) {
+							if (tParams.atEnd()) throw eex;
+						}
+					}
 
-				iter = tParams.right();
-			} while (tParams.position() < tParams.size());
+					iter = tParams.right();
+				} while (tParams.position() < tParams.size());
+			} catch (EscapeException eex) {
+			}
 		} else if (mods.atMod) {
+			try {
 			while (tParams.position() < tParams.size()) {
-				if (numItr > maxItr)
-					break;
+				if (numItr > maxItr) break;
 				numItr += 1;
 
 				fmt.doFormatString(frmt, rw, tParams);
+			}
+			} catch (EscapeException eex) {
+				if (eex.endIteration)
+					throw new UnsupportedOperationException("Colon mod not allowed on escape marker without colon mod on iteration");
 			}
 		} else if (mods.colonMod) {
 			if (!(item instanceof Iterable<?>)) {
 				throw new IllegalFormatConversionException('{', item.getClass());
 			}
 
-			@SuppressWarnings("unchecked")
-			Iterable<Object> itr = (Iterable<Object>) item;
-
-			for (Object obj : itr) {
-				if (numItr > maxItr)
-					break;
-				numItr += 1;
-
-				if (!(obj instanceof Iterable<?>)) {
-					throw new IllegalFormatConversionException('{', obj.getClass());
-				}
-
+			try {
 				@SuppressWarnings("unchecked")
-				Iterable<Object> nitr = (Iterable<Object>) obj;
-				Tape<Object> nParams = new SingleTape<>(nitr);
+				Iterable<Object> itb = (Iterable<Object>) item;
+				Iterator<Object> itr = itb.iterator();
+				while (itr.hasNext()) {
+					Object obj = itr.next();
 
-				fmt.doFormatString(frmt, rw, nParams);
+					if (numItr > maxItr) break;
+					numItr += 1;
+
+					if (!(obj instanceof Iterable<?>)) {
+						throw new IllegalFormatConversionException('{', obj.getClass());
+					}
+
+					@SuppressWarnings("unchecked")
+					Iterable<Object> nitr = (Iterable<Object>) obj;
+					Tape<Object> nParams = new SingleTape<>(nitr);
+
+					try {
+						fmt.doFormatString(frmt, rw, nParams);
+					} catch (EscapeException eex) {
+						if(eex.endIteration && !itr.hasNext()) throw eex;
+					}
+				}
+			}
+			catch (EscapeException eex) {
 			}
 		} else {
 			if (!(item instanceof Iterable<?>)) {
 				throw new IllegalFormatConversionException('{', item.getClass());
 			}
 
-			@SuppressWarnings("unchecked")
-			Iterable<Object> itr = (Iterable<Object>) item;
+			try {
+				@SuppressWarnings("unchecked")
+				Iterable<Object> itr = (Iterable<Object>) item;
 
-			Tape<Object> nParams = new SingleTape<>(itr);
+				Tape<Object> nParams = new SingleTape<>(itr);
 
-			while (nParams.position() < nParams.size()) {
-				if (numItr > maxItr)
-					break;
-				numItr += 1;
+				while (nParams.position() < nParams.size()) {
+					if (numItr > maxItr)
+						break;
+					numItr += 1;
 
-				fmt.doFormatString(frmt, rw, nParams);
+					fmt.doFormatString(frmt, rw, nParams);
+
+				}
+			} catch (EscapeException eex) {
+				if (eex.endIteration)
+					throw new UnsupportedOperationException("Colon mod not allowed on escape marker without colon mod on iteration");
 			}
 		}
 
