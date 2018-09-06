@@ -114,4 +114,8 @@ public interface Tape<T> {
 	boolean right(int amt);
 
 	boolean seekTo(int pos);
+
+	default boolean atEnd() {
+		return position() == size();
+	}
 }
