@@ -327,6 +327,13 @@ public class StringUtils {
 
 		char stringEnder = ' ';
 
+		// Shortcut empty strings
+		if(phrase.equals("")) {
+			strangs.add("");
+
+			return strangs;
+		}
+
 		while(i < work.length()) {
 			if(inString == false && nestLevel == 0) {
 				for(String split : splits) {
@@ -350,6 +357,12 @@ public class StringUtils {
 					inString = false;
 				}
 			} else {
+				/*
+				 * @TODO Ben Culkin 9/4/18
+				 *
+				 * This currently crashes if the string ends
+				 * with one of the delimiters in question.
+				 */
 				switch(work.charAt(i)) {
 				case '\'':
 					inString = true;
