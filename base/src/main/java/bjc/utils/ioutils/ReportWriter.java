@@ -114,6 +114,29 @@ public class ReportWriter extends Writer {
 		}
 	}
 
+	public ReportWriter duplicate(Writer contents) {
+		ReportWriter rw = new ReportWriter(contents);
+
+		rw.indentStrPos        = indentStrPos;
+		rw.indentLevel         = indentLevel;
+		rw.indentStr           = indentStr;
+		rw.indentStrSpacedTabs = indentStrSpacedTabs;
+
+		rw.tabEqv = tabEqv;
+
+		rw.linesWritten = linesWritten;
+		rw.linePos = linePos;
+
+		rw.printTabsAsSpaces = printTabsAsSpaces;
+
+		// @NOTE 9/5/18
+		//
+		// Not sure if the lastChar* properties are things we should
+		// copy.
+
+		return rw;
+	}
+
 	public ReportWriter(Writer write) {
 		this(write, 0, "\t");
 	}
