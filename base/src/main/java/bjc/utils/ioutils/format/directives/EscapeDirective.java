@@ -5,6 +5,7 @@ import bjc.utils.ioutils.format.CLFormatter;
 import bjc.utils.ioutils.format.CLModifiers;
 import bjc.utils.ioutils.format.CLParameters;
 import bjc.utils.ioutils.format.EscapeException;
+import bjc.utils.ioutils.ReportWriter;
 
 import java.util.regex.Matcher;
 
@@ -16,7 +17,7 @@ import java.util.regex.Matcher;
 public class EscapeDirective implements Directive {
 
 	@Override
-	public void format(StringBuffer sb, Object item, CLModifiers mods, CLParameters params,
+	public void format(ReportWriter rw, Object item, CLModifiers mods, CLParameters params,
 			Tape<Object> formatParams, Matcher dirMatcher, CLFormatter fmt) {
 		boolean shouldExit;
 

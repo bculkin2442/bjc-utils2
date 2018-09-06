@@ -2,7 +2,10 @@ package bjc.utils.ioutils.format.directives;
 
 import bjc.utils.ioutils.format.CLModifiers;
 import bjc.utils.ioutils.format.CLParameters;
+import bjc.utils.ioutils.ReportWriter;
 import bjc.utils.math.NumberUtils;
+
+import java.io.IOException;
 
 /**
  * Implementation skeleton for number directives.
@@ -11,8 +14,8 @@ import bjc.utils.math.NumberUtils;
  *
  */
 public abstract class GeneralNumberDirective implements Directive {
-	protected static void handleNumberDirective(StringBuffer buff, CLModifiers mods, CLParameters params, int argidx,
-			long val, int radix) {
+	protected static void handleNumberDirective(ReportWriter rw, CLModifiers mods, CLParameters params, int argidx,
+			long val, int radix) throws IOException {
 		/*
 		 * Initialize the two padding related parameters, and then fill them in from the
 		 * directive parameters if they are present.
@@ -47,6 +50,6 @@ public abstract class GeneralNumberDirective implements Directive {
 			res = NumberUtils.toNormalString(val, mincol, padchar, mods.atMod, radix);
 		}
 
-		buff.append(res);
+		rw.write(res);
 	}
 }

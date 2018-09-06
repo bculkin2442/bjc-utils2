@@ -5,6 +5,9 @@ import bjc.utils.esodata.Tape;
 import bjc.utils.ioutils.format.CLFormatter;
 import bjc.utils.ioutils.format.CLModifiers;
 import bjc.utils.ioutils.format.CLParameters;
+import bjc.utils.ioutils.ReportWriter;
+
+import java.io.IOException;
 
 import java.util.IllegalFormatConversionException;
 import java.util.regex.Matcher;
@@ -18,8 +21,8 @@ import java.util.regex.Matcher;
 public class IterationDirective implements Directive {
 
 	@Override
-	public void format(StringBuffer sb, Object item, CLModifiers mods, CLParameters arrParams, Tape<Object> tParams,
-			Matcher dirMatcher, CLFormatter fmt) {
+	public void format(ReportWriter rw, Object item, CLModifiers mods, CLParameters arrParams, Tape<Object> tParams,
+			Matcher dirMatcher, CLFormatter fmt) throws IOException {
 		CLFormatter.checkItem(item, '{');
 
 		StringBuffer condBody = new StringBuffer();
@@ -82,7 +85,7 @@ public class IterationDirective implements Directive {
 				Iterable<Object> nitr = (Iterable<Object>) iter;
 				Tape<Object> nParams = new SingleTape<>(nitr);
 
-				fmt.doFormatString(frmt, sb, nParams);
+				fmt.doFormatString(frmt, rw, nParams);
 
 				iter = tParams.right();
 			} while (tParams.position() < tParams.size());
@@ -92,7 +95,7 @@ public class IterationDirective implements Directive {
 					break;
 				numItr += 1;
 
-				fmt.doFormatString(frmt, sb, tParams);
+				fmt.doFormatString(frmt, rw, tParams);
 			}
 		} else if (mods.colonMod) {
 			if (!(item instanceof Iterable<?>)) {
@@ -115,7 +118,7 @@ public class IterationDirective implements Directive {
 				Iterable<Object> nitr = (Iterable<Object>) obj;
 				Tape<Object> nParams = new SingleTape<>(nitr);
 
-				fmt.doFormatString(frmt, sb, nParams);
+				fmt.doFormatString(frmt, rw, nParams);
 			}
 		} else {
 			if (!(item instanceof Iterable<?>)) {
@@ -132,11 +135,10 @@ public class IterationDirective implements Directive {
 					break;
 				numItr += 1;
 
-				fmt.doFormatString(frmt, sb, nParams);
+				fmt.doFormatString(frmt, rw, nParams);
 			}
 		}
 
 		tParams.right();
 	}
-
 }

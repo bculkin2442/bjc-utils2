@@ -4,8 +4,10 @@ import bjc.utils.esodata.Tape;
 import bjc.utils.ioutils.format.CLFormatter;
 import bjc.utils.ioutils.format.CLModifiers;
 import bjc.utils.ioutils.format.CLParameters;
+import bjc.utils.ioutils.ReportWriter;
 import bjc.utils.math.NumberUtils;
 
+import java.io.IOException;
 import java.util.IllegalFormatConversionException;
 import java.util.regex.Matcher;
 
@@ -18,8 +20,8 @@ import java.util.regex.Matcher;
 public class RadixDirective extends GeneralNumberDirective {
 
 	@Override
-	public void format(StringBuffer buff, Object arg, CLModifiers mods, CLParameters params, Tape<Object> tParams,
-			Matcher dirMatcher, CLFormatter fmt) {
+	public void format(ReportWriter rw, Object arg, CLModifiers mods, CLParameters params, Tape<Object> tParams,
+			Matcher dirMatcher, CLFormatter fmt) throws IOException {
 		CLFormatter.checkItem(arg, 'R');
 
 		if (!(arg instanceof Number)) {
@@ -33,11 +35,11 @@ public class RadixDirective extends GeneralNumberDirective {
 
 		if (params.length() == 0) {
 			if (mods.atMod) {
-				buff.append(NumberUtils.toRoman(val, mods.colonMod));
+				rw.write(NumberUtils.toRoman(val, mods.colonMod));
 			} else if (mods.colonMod) {
-				buff.append(NumberUtils.toOrdinal(val));
+				rw.write(NumberUtils.toOrdinal(val));
 			} else {
-				buff.append(NumberUtils.toCardinal(val));
+				rw.write(NumberUtils.toCardinal(val));
 			}
 		} else {
 			if (params.length() < 1)
@@ -45,7 +47,7 @@ public class RadixDirective extends GeneralNumberDirective {
 
 			int radix = params.getInt(0, "radix", 'R');
 
-			handleNumberDirective(buff, mods, params, 0, val, radix);
+			handleNumberDirective(rw, mods, params, 0, val, radix);
 		}
 
 		tParams.right();

@@ -4,7 +4,9 @@ import bjc.utils.esodata.Tape;
 import bjc.utils.ioutils.format.CLFormatter;
 import bjc.utils.ioutils.format.CLModifiers;
 import bjc.utils.ioutils.format.CLParameters;
+import bjc.utils.ioutils.ReportWriter;
 
+import java.io.IOException;
 import java.util.regex.Matcher;
 
 /**
@@ -32,8 +34,8 @@ public class LiteralDirective implements Directive {
 	}
 
 	@Override
-	public void format(StringBuffer buff, Object item, CLModifiers mods, CLParameters params, Tape<Object> tParams,
-			Matcher dirMatcher, CLFormatter fmt) {
+	public void format(ReportWriter rw, Object item, CLModifiers mods, CLParameters params, Tape<Object> tParams,
+			Matcher dirMatcher, CLFormatter fmt) throws IOException {
 		int nTimes = 1;
 
 		if (params.length() >= 1) {
@@ -41,7 +43,7 @@ public class LiteralDirective implements Directive {
 		}
 
 		for (int i = 0; i < nTimes; i++) {
-			buff.append(lit);
+			rw.write(lit);
 		}
 
 	}

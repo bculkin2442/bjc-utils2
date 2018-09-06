@@ -2,6 +2,8 @@ package bjc.utils.test.ioutils;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
+
 import bjc.utils.ioutils.format.CLFormatter;
 
 import org.junit.Test;
@@ -18,18 +20,25 @@ public class CLFormatterTest {
 
 	@Test
 	public void testFormatStringLiteral() {
-		assertEquals(fmt.formatString("foo"), "foo");
+		assertEquals("foo", format("foo"));
 	}
 
 	@Test
 	public void testFormatStringD() {
-		assertEquals(fmt.formatString("~D", 5), "5");
-		assertEquals(fmt.formatString("~3D", 5), "  5");
-		assertEquals(fmt.formatString("~3,'0D", 5), "005");
+		assertEquals("5",   format("~D", 5));
+		assertEquals("  5", format("~3D", 5));
+		assertEquals("005", format("~3,'0D", 5));
 	}
 
 	public void testFormatStringR() {
-		assertEquals(fmt.formatString("~R dog~:*~[s are~; is~] here", 3, 3 == 1), "3 dogs are here");
+		assertEquals("3 dogs are here", format("~R dog~:*~[s are~; is~] here", 3, 3 == 1));
 	}
 
+	private String format(String str, Object... params) {
+		try {
+			return fmt.formatString(str, params);
+		} catch (IOException ioex) {
+			return null;
+		}
+	}
 }

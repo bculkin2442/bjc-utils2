@@ -4,7 +4,9 @@ import bjc.utils.esodata.Tape;
 import bjc.utils.ioutils.format.CLFormatter;
 import bjc.utils.ioutils.format.CLModifiers;
 import bjc.utils.ioutils.format.CLParameters;
+import bjc.utils.ioutils.ReportWriter;
 
+import java.io.IOException;
 import java.util.IllegalFormatConversionException;
 import java.util.regex.Matcher;
 
@@ -17,8 +19,8 @@ import java.util.regex.Matcher;
 public class CharacterDirective implements Directive {
 
 	@Override
-	public void format(StringBuffer buff, Object parm, CLModifiers mods, CLParameters arrParams, Tape<Object> tParams,
-			Matcher dirMatcher, CLFormatter fmt) {
+	public void format(ReportWriter rw, Object parm, CLModifiers mods, CLParameters arrParams, Tape<Object> tParams,
+			Matcher dirMatcher, CLFormatter fmt) throws IOException {
 		CLFormatter.checkItem(parm, 'C');
 
 		if (!(parm instanceof Character)) {
@@ -32,9 +34,9 @@ public class CharacterDirective implements Directive {
 			/*
 			 * Colon mod means print Unicode character name.
 			 */
-			buff.append(Character.getName(codepoint));
+			rw.write(Character.getName(codepoint));
 		} else {
-			buff.append(ch);
+			rw.write(ch);
 		}
 
 		tParams.right();

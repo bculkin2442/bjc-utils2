@@ -1,11 +1,13 @@
 package bjc.utils.ioutils.format.directives;
 
+import java.io.IOException;
 import java.util.regex.Matcher;
 
 import bjc.utils.esodata.Tape;
 import bjc.utils.ioutils.format.CLFormatter;
 import bjc.utils.ioutils.format.CLModifiers;
 import bjc.utils.ioutils.format.CLParameters;
+import bjc.utils.ioutils.ReportWriter;
 
 /**
  * A CL format directive.
@@ -33,6 +35,6 @@ public interface Directive {
 	 * @param fmt
 	 *        The formatter itself.
 	 */
-	public void format(StringBuffer sb, Object item, CLModifiers mods, CLParameters arrParams, Tape<Object> tParams,
-			Matcher dirMatcher, CLFormatter fmt);
+	public void format(ReportWriter rw, Object item, CLModifiers mods, CLParameters arrParams, Tape<Object> tParams,
+			Matcher dirMatcher, CLFormatter fmt) throws IOException;
 }

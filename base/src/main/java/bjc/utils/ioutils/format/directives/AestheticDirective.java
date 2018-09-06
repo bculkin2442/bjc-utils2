@@ -1,11 +1,14 @@
 package bjc.utils.ioutils.format.directives;
 
+import java.io.IOException;
+
 import java.util.regex.Matcher;
 
 import bjc.utils.esodata.Tape;
 import bjc.utils.ioutils.format.CLFormatter;
 import bjc.utils.ioutils.format.CLModifiers;
 import bjc.utils.ioutils.format.CLParameters;
+import bjc.utils.ioutils.ReportWriter;
 
 /**
  * Implementation of the A directive.
@@ -16,8 +19,8 @@ import bjc.utils.ioutils.format.CLParameters;
 public class AestheticDirective implements Directive {
 
 	@Override
-	public void format(StringBuffer sb, Object item, CLModifiers mods, CLParameters params, Tape<Object> tParams,
-			Matcher dirMatcher, CLFormatter fmt) {
+	public void format(ReportWriter rw, Object item, CLModifiers mods, CLParameters params, Tape<Object> tParams,
+			Matcher dirMatcher, CLFormatter fmt) throws IOException {
 		CLFormatter.checkItem(item, 'A');
 
 		int mincol = 0, colinc = 1, minpad = 0;
@@ -63,7 +66,8 @@ public class AestheticDirective implements Directive {
 			}
 		}
 
+		rw.write(work.toString());
+
 		tParams.right();
 	}
-
 }

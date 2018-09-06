@@ -4,7 +4,9 @@ import bjc.utils.esodata.Tape;
 import bjc.utils.ioutils.format.CLFormatter;
 import bjc.utils.ioutils.format.CLModifiers;
 import bjc.utils.ioutils.format.CLParameters;
+import bjc.utils.ioutils.ReportWriter;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.IllegalFormatConversionException;
 import java.util.List;
@@ -19,8 +21,8 @@ import java.util.regex.Matcher;
 public class ConditionalDirective implements Directive {
 
 	@Override
-	public void format(StringBuffer sb, Object item, CLModifiers mods, CLParameters arrParams,
-			Tape<Object> formatParams, Matcher dirMatcher, CLFormatter fmt) {
+	public void format(ReportWriter rw, Object item, CLModifiers mods, CLParameters arrParams,
+			Tape<Object> formatParams, Matcher dirMatcher, CLFormatter fmt) throws IOException {
 		StringBuffer condBody = new StringBuffer();
 
 		List<String> clauses = new ArrayList<>();
@@ -85,7 +87,7 @@ public class ConditionalDirective implements Directive {
 			else
 				frmt = clauses.get(0);
 
-			fmt.doFormatString(frmt, sb, formatParams);
+			fmt.doFormatString(frmt, rw, formatParams);
 		} else if (mods.atMod) {
 			if (par == null) {
 				throw new IllegalArgumentException("No parameter provided for [ directive.");
@@ -95,7 +97,7 @@ public class ConditionalDirective implements Directive {
 			boolean res = (Boolean) par;
 
 			if (res) {
-				fmt.doFormatString(clauses.get(0), sb, formatParams);
+				fmt.doFormatString(clauses.get(0), rw, formatParams);
 			} else {
 				formatParams.right();
 			}
@@ -116,11 +118,12 @@ public class ConditionalDirective implements Directive {
 
 			if (res < 0 || res > clauses.size()) {
 				if (defClause != null)
-					fmt.doFormatString(defClause, sb, formatParams);
+					fmt.doFormatString(defClause, rw, formatParams);
 			} else {
-				fmt.doFormatString(clauses.get(res), sb, formatParams);
+				fmt.doFormatString(clauses.get(res), rw, formatParams);
 			}
 		}
+
 		return;
 	}
 
