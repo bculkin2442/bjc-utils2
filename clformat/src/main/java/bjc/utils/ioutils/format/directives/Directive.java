@@ -39,15 +39,12 @@ public interface Directive {
 			Matcher dirMatcher, CLFormatter fmt) throws IOException;
 
 	public static boolean isOpening(String str) {
-		return isOpening(str.charAt(0));
-	}
-
-	public static boolean isOpening(char dir) {
-		switch(dir) {
-		case '(':
-		case '<':
-		case '[':
-		case '{':
+		switch(str) {
+		case "(":
+		case "<":
+		case "[":
+		case "{":
+		case "`(":
 			return true;
 		default:
 			return false;
@@ -55,15 +52,12 @@ public interface Directive {
 	}
 
 	public static boolean isClosing(String str) {
-		return isClosing(str.charAt(0));
-	}
-
-	public static boolean isClosing(char dir) {
-		switch(dir) {
-		case ')':
-		case '>':
-		case ']':
-		case '}':
+		switch(str) {
+		case ")":
+		case ">":
+		case "]":
+		case "}":
+		case "`)":
 			return true;
 		default:
 			return false;

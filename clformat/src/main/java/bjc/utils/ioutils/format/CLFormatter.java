@@ -84,7 +84,9 @@ public class CLFormatter {
 		builtinDirectives.put("^", new EscapeDirective());
 		builtinDirectives.put("[", new ConditionalDirective());
 		builtinDirectives.put("{", new IterationDirective());
+
 		builtinDirectives.put("(", new CaseDirective());
+		builtinDirectives.put("`(", new InflectDirective());
 
 		builtinDirectives.put("T", new TabulateDirective());
 	}
@@ -258,6 +260,10 @@ public class CLFormatter {
 								"Found seperator outside of block.");
 					case "}":
 						throw new IllegalArgumentException("Found iteration-end outside of iteration");
+					case ")":
+						throw new IllegalArgumentException("Case-conversion end outside of case conversion");
+					case "`]":
+						throw new IllegalArgumentException("Inflection-end outside of inflection");
 					case "<":
 					case ">":
 						throw new IllegalArgumentException("Layout-control directives aren't implemented yet.");
@@ -276,8 +282,6 @@ public class CLFormatter {
 						throw new IllegalArgumentException("S and W aren't implemented. Use A instead");
 					case "P":
 						throw new IllegalArgumentException("These directives aren't implemented yet");
-					case ")":
-						throw new IllegalArgumentException("Case-conversion end outside of case conversion");
 					case "\n":
 						/*
 						 * Ignored newline.

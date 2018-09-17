@@ -1,5 +1,7 @@
 package bjc.utils.ioutils.format.directives;
 
+import bjc.inflexion.InflectionML;
+
 import bjc.utils.esodata.Tape;
 import bjc.utils.ioutils.format.*;
 import bjc.utils.ioutils.ReportWriter;
@@ -13,7 +15,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CaseDirective implements Directive {
+public class InflectDirective implements Directive {
 	private static final Pattern wordPattern = Pattern.compile("(\\w+)(\\b*)");
 
 	@Override
@@ -31,7 +33,7 @@ public class CaseDirective implements Directive {
 				/* Append everything up to this directive. */
 				dirMatcher.appendReplacement(condBody, "");
 
-				if (dirName.equals("(")) {
+				if (dirName.equals("`[")) {
 					if (nestLevel > 0) {
 						condBody.append(dirMatcher.group());
 					}
@@ -41,7 +43,7 @@ public class CaseDirective implements Directive {
 					nestLevel += 1;
 
 					condBody.append(dirMatcher.group());
-				} else if (dirName.equals(")")) {
+				} else if (dirName.equals("`]")) {
 					nestLevel = Math.max(0, nestLevel - 1);
 
 					/* End the iteration. */
@@ -63,53 +65,7 @@ public class CaseDirective implements Directive {
 
 		String strang = nrw.toString();
 
-		if (mods.colonMod && mods.atMod) {
-			strang = strang.toUpperCase();
-		} else if (mods.colonMod) {
-			Matcher mat = wordPattern.matcher(strang);
-
-			StringBuffer sb = new StringBuffer();
-			while(!mat.find()) {
-				mat.appendReplacement(sb, "");
-
-				String word = mat.group(1);
-				
-				word = word.substring(0, 1).toUpperCase() + word.substring(1);
-
-				sb.append(word);
-				sb.append(mat.group(2));
-			}
-
-			mat.appendTail(sb);
-
-			strang = sb.toString();
-		} else if (mods.atMod) {
-			Matcher mat = wordPattern.matcher(strang);
-
-			StringBuffer sb = new StringBuffer();
-			boolean doCap = true;
-			while(!mat.find()) {
-				mat.appendReplacement(sb, "");
-
-				String word = mat.group(1);
-				
-				if (doCap) {
-					doCap = false;
-
-					word = word.substring(0, 1).toUpperCase() + word.substring(1);
-				}
-
-				sb.append(word);
-				sb.append(mat.group(2));
-			}
-
-			mat.appendTail(sb);
-
-			strang = sb.toString();
-
-		} else {
-			strang = strang.toLowerCase();
-		}
+		strang = InflectionML.inflect(strang);
 
 		rw.write(strang);
 	}
