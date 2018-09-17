@@ -173,6 +173,21 @@ public class CLFormatter {
 	 *        The format string to use.
 	 * @param params
 	 *        The parameters for the string.
+	 */
+	public void formatString(ReportWriter target, String format, Object... params) throws IOException {
+		/* Put the parameters where we can easily handle them. */
+		Tape<Object> tParams = new SingleTape<>(params);
+
+		doFormatString(format, target, tParams, true);
+	}
+
+	/**
+	 * Format a string in the style of CL's FORMAT.
+	 * 
+	 * @param format
+	 *        The format string to use.
+	 * @param params
+	 *        The parameters for the string.
 	 * @return The formatted string.
 	 */
 	public void formatString(Writer target, String format, Iterable<Object> params) throws IOException {

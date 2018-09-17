@@ -10,7 +10,7 @@ import java.io.IOException;
  */
 public class LiteralDirective implements Directive {
 
-	private char directive;
+	private String directive;
 	private String lit;
 
 	/**
@@ -22,7 +22,7 @@ public class LiteralDirective implements Directive {
 	 *            The character for the directive.
 	 */
 	public LiteralDirective(String lit, char directive) {
-		this.directive = directive;
+		this.directive = Character.toString(directive);
 		this.lit = lit;
 	}
 

@@ -63,7 +63,7 @@ public class IterationDirective implements Directive {
 		int maxItr = Integer.MAX_VALUE;
 
 		if (dirParams.arrParams.length() > 0) {
-			maxItr = dirParams.arrParams.getInt(0, "maximum iterations", '{');
+			maxItr = dirParams.arrParams.getInt(0, "maximum iterations", "{");
 		}
 
 		int numItr = 0;

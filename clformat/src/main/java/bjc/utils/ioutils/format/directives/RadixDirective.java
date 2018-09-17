@@ -39,7 +39,7 @@ public class RadixDirective extends GeneralNumberDirective {
 			if (dirParams.arrParams.length() < 1)
 				throw new IllegalArgumentException("R directive requires at least one parameter, the radix");
 
-			int radix = dirParams.arrParams.getInt(0, "radix", 'R');
+			int radix = dirParams.arrParams.getInt(0, "radix", "R");
 
 			handleNumberDirective(dirParams.rw, dirParams.mods, dirParams.arrParams, 0, val, radix);
 		}

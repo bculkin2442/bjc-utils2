@@ -23,10 +23,10 @@ public abstract class GeneralNumberDirective implements Directive {
 		int mincol = 0;
 		char padchar = ' ';
 		if (params.length() >= (argidx + 2)) {
-			mincol = params.getIntDefault(argidx + 1, "minimum column count", 'R', 0);
+			mincol = params.getIntDefault(argidx + 1, "minimum column count", "R", 0);
 		}
 		if (params.length() >= (argidx + 3)) {
-			padchar = params.getCharDefault(argidx + 2, "padding character", 'R', ' ');
+			padchar = params.getCharDefault(argidx + 2, "padding character", "R", ' ');
 		}
 
 		String res;
@@ -39,10 +39,10 @@ public abstract class GeneralNumberDirective implements Directive {
 			int commaInterval = 0;
 			char commaChar = ',';
 			if (params.length() >= (argidx + 4)) {
-				commaChar = params.getCharDefault((argidx + 3), "comma character", 'R', ',');
+				commaChar = params.getCharDefault((argidx + 3), "comma character", "R", ',');
 			}
 			if (params.length() >= (argidx + 5)) {
-				commaInterval = params.getIntDefault((argidx + 4), "comma interval", 'R', 0);
+				commaInterval = params.getIntDefault((argidx + 4), "comma interval", "R", 0);
 			}
 
 			res = NumberUtils.toCommaString(val, mincol, padchar, commaInterval, commaChar, mods.atMod, radix);

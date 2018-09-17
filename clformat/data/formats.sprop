@@ -19,7 +19,7 @@ clFormatDirective ~(?<params>%1$s)?(?<modifiers>%2$s?)(?:%3$s)
 ## * A single character preceded by a single quote
 ## * The letter V (or v)
 ## * The character #
-clFormatPrefix (?:(?:[-+]?\d+|'.|[Vv]|#|%)?)
+clFormatPrefix (?:(?:[-+]?\d+|'.|[Vv]|#|%|".*?(?<!\\)")?)
 
 ## Match a format string modifier
 ## A modifier is any combination of $, :, * and @; duplicates don't matter though

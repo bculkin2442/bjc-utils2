@@ -23,13 +23,13 @@ public class AestheticDirective implements Directive {
 		if (dirParams.arrParams.length() == 0) {
 			// Zero parameters, use all defaults
 		} else if (dirParams.arrParams.length() == 1) {
-			mincol = dirParams.arrParams.getIntDefault(0, "minimum column count", 'A', 0);
+			mincol = dirParams.arrParams.getIntDefault(0, "minimum column count", "A", 0);
 		} else if (dirParams.arrParams.length() < 4) {
 			throw new IllegalArgumentException("Must provide either zero, one or four arguments to A directive");
 		} else {
-			colinc = dirParams.arrParams.getIntDefault(1, "padding increment", 'A', 1);
-			minpad = dirParams.arrParams.getIntDefault(2, "minimum amount of padding", 'A', 0);
-			padchar = dirParams.arrParams.getCharDefault(3, "padding character", 'A', ' ');
+			colinc = dirParams.arrParams.getIntDefault(1, "padding increment", "A", 1);
+			minpad = dirParams.arrParams.getIntDefault(2, "minimum amount of padding", "A", 0);
+			padchar = dirParams.arrParams.getCharDefault(3, "padding character", "A", ' ');
 		}
 
 		StringBuilder work = new StringBuilder();
