@@ -3,23 +3,26 @@ package bjc.utils.ioutils;
 import java.io.IOException;
 import java.io.Writer;
 
+import bjc.utils.esodata.DefaultList;
+
 public class ReportWriter extends Writer {
+	private static class IndentVal {
+		public int indentStrPos;
+
+		public String indentStr;
+		public String indentStrSpacedTabs;
+
+		public IndentVal() {
+		}
+	}
+
 	private Writer contained;
 
-	// @TODO Ben Culkin :IndentStr 9/5/18
-	//
-	// I can think of several ways I might want to extend/change this, but
-	// no good ways to implement them come to mind.
-	//
-	// The main one is for things like bulleted lists, where at each level
-	// you want to use a different indent string.
-
 	// # of character positions indentStr occupies
-	private int    indentStrPos;
 	private int    indentLevel;
-	private String indentStr;
-	// Indent string w/ tabs converted to spaces
-	private String indentStrSpacedTabs;
+
+	private DefaultList<IndentVal> iVals;
+	private IndentVal              defIVal;
 
 	// # of char. positions to the tab
 	private int tabEqv       = 8;
@@ -38,7 +41,11 @@ public class ReportWriter extends Writer {
 	}
 
 	public String getString() {
-		return indentStr;
+		return defIVal.indentStr;
+	}
+
+	public String getString(int lvl) {
+		return iVals.get(lvl).indentStr;
 	}
 
 	public int getTabEqv() {
@@ -73,7 +80,7 @@ public class ReportWriter extends Writer {
 		printTabsAsSpaces = tabsAsSpaces;
 
 		// Recalculate indentStrSpacedTabs
-		setString(indentStr);
+		refreshIndents(-1);
 	}
 
 	public void setLevel(int level) {
@@ -84,48 +91,78 @@ public class ReportWriter extends Writer {
 		tabEqv = eqv;
 
 		// Recalculate position count of indentStr
-		setString(indentStr);
+		refreshIndents(-1);
 	}
 
 	// @NOTE 9/5/18
 	//
 	// Weirdness may occur if the indent string has a
 	// newline in it, since that newline won't be considered
-	// to exist by the indentWriter
+	// to exist by the IndentWriter
 	public void setString(String str) {
-		indentStr = str;
+		defIVal.indentStr = str;
 
-		indentStrPos = 0;
+		refreshIndents(-2);
+	}
+
+	public void setString(int lvl, String str) {
+		iVals.get(lvl).indentStr = str;
+
+		refreshIndents(lvl);
+	}
+
+	// Parameter is the level of indents to refresh.
+	//
+	// Pass a index to refresh that level
+	// Pass -1 to refresh all indexes
+	// Pass -2 to refresh the default index
+	private void refreshIndents(int lvl) {
+		if (lvl == -2) {
+			refreshIndent(defIVal);
+		} else if (lvl == -1) {
+			for (IndentVal ival : iVals) {
+				refreshIndent(ival);
+			}
+		} else {
+			refreshIndent(iVals.get(lvl));
+		}
+	}
+
+	private void refreshIndent(IndentVal vl) {
+		vl.indentStrPos = 0;
+
+		int indentLength = vl.indentStr.length();
+
 		StringBuilder conv = new StringBuilder();
-
-		for(int i = 0; i < str.length(); i++) {
-			char c = str.charAt(i);
+		for(int i = 0; i < indentLength; i++) {
+			char c = vl.indentStr.charAt(i);
 			if(c == '\t') {
 				for(int j = 0; j < tabEqv; j++) {
 					conv.append(' ');
 				}
 
-				indentStrPos += tabEqv;
+				vl.indentStrPos += tabEqv;
 			} else {
 				conv.append(c);
+				vl.indentStrPos += 1;
 			}
-
-			indentStrPos += 1;
 		}
+
+		vl.indentStrSpacedTabs = conv.toString();
 	}
 
 	public ReportWriter duplicate(Writer contents) {
 		ReportWriter rw = new ReportWriter(contents);
 
-		rw.indentStrPos        = indentStrPos;
-		rw.indentLevel         = indentLevel;
-		rw.indentStr           = indentStr;
-		rw.indentStrSpacedTabs = indentStrSpacedTabs;
+		rw.iVals       = iVals;
+		rw.defIVal     = defIVal;
+
+		rw.indentLevel = indentLevel;
 
 		rw.tabEqv = tabEqv;
 
 		rw.linesWritten = linesWritten;
-		rw.linePos = linePos;
+		rw.linePos      = linePos;
 
 		rw.printTabsAsSpaces = printTabsAsSpaces;
 
@@ -148,6 +185,9 @@ public class ReportWriter extends Writer {
 
 		indentLevel = level;
 
+		defIVal = new IndentVal();
+		iVals   = new DefaultList<>(defIVal);
+
 		setString(str);
 	}
 
@@ -162,7 +202,7 @@ public class ReportWriter extends Writer {
 	public void dedent(int lvl) {
 		// @NOTE 9/5/18
 		//
-		// Perhaps there should be an exception if we try to dedent to
+		// Perhaps there should be an exception if we try to dedent too
 		// many times?
 		indentLevel = Math.max(0, indentLevel - lvl);
 	}
@@ -180,8 +220,6 @@ public class ReportWriter extends Writer {
 
 	@Override
 	public void write(char[] cbuf, int off, int len) throws IOException {
-		String actIndentStr = printTabsAsSpaces ? indentStrSpacedTabs : indentStr;
-
 		// Skip empty writes
 		if(len == 0) return;
 
@@ -189,11 +227,7 @@ public class ReportWriter extends Writer {
 		if(lastCharWasNL) {
 			lastCharWasNL = false;
 
-			for(int i = 0; i < indentLevel; i++) {
-				contained.write(actIndentStr);
-			}
-
-			linePos += indentStrPos;
+			printIndents();
 		}
 
 		for(int i = 0; i < len; i++) {
@@ -220,10 +254,7 @@ public class ReportWriter extends Writer {
 				if(lastCharWasNL) {
 					lastCharWasNL = false;
 
-					for(int j = 0; j < indentLevel; j++) {
-						contained.write(actIndentStr);
-						linePos += indentStrPos;
-					}
+					printIndents();
 				}
 
 				if(c == '\t') {
@@ -239,6 +270,17 @@ public class ReportWriter extends Writer {
 			}
 
 			lastChar = c;
+		}
+	}
+
+	private void printIndents() throws IOException {
+		for (int j = 0; j < indentLevel; j++) {
+			IndentVal ival = iVals.get(j);
+
+			if (printTabsAsSpaces) contained.write(ival.indentStrSpacedTabs);
+			else                   contained.write(ival.indentStr);
+
+			linePos += ival.indentStrPos;
 		}
 	}
 
