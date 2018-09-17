@@ -34,7 +34,7 @@ public class NumberDirective extends GeneralNumberDirective {
 	private char directive;
 
 	@Override
-	public void format(FormatParameter dirParams) throws IOException {
+	public void format(FormatParameters dirParams) throws IOException {
 		CLFormatter.checkItem(dirParams.item, directive);
 
 		if (!(dirParams.item instanceof Number)) {

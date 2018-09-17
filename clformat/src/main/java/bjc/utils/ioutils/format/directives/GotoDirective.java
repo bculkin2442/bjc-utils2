@@ -9,7 +9,7 @@ package bjc.utils.ioutils.format.directives;
 public class GotoDirective implements Directive {
 
 	@Override
-	public void format(FormatParameter dirParams) {
+	public void format(FormatParameters dirParams) {
 		if (dirParams.mods.colonMod) {
 			int num = 1;
 			if (dirParams.arrParams.length() >= 1) {

@@ -14,7 +14,7 @@ import java.util.IllegalFormatConversionException;
 public class CharacterDirective implements Directive {
 
 	@Override
-	public void format(FormatParameter dirParams) throws IOException {
+	public void format(FormatParameters dirParams) throws IOException {
 		CLFormatter.checkItem(dirParams.item, 'C');
 
 		if (!(dirParams.item instanceof Character)) {

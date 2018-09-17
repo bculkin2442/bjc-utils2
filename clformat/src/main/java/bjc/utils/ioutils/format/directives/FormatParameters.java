@@ -8,7 +8,7 @@ import bjc.utils.ioutils.format.CLFormatter;
 import bjc.utils.ioutils.format.CLModifiers;
 import bjc.utils.ioutils.format.CLParameters;
 
-public class FormatParameter {
+public class FormatParameters {
 	public ReportWriter	rw;
 	public Object		item;
 	public CLModifiers	mods;
@@ -17,7 +17,7 @@ public class FormatParameter {
 	public Matcher		dirMatcher;
 	public CLFormatter	fmt;
 
-	public FormatParameter(ReportWriter rw, Object item, CLModifiers mods, CLParameters arrParams,
+	public FormatParameters(ReportWriter rw, Object item, CLModifiers mods, CLParameters arrParams,
 			Tape<Object> tParams, Matcher dirMatcher, CLFormatter fmt) {
 		this.rw = rw;
 		this.item = item;

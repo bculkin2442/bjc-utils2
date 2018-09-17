@@ -5,7 +5,7 @@ import java.io.IOException;
 import bjc.utils.ioutils.format.*;
 
 public class TabulateDirective implements Directive {
-	public void format(FormatParameter dirParams) throws IOException {
+	public void format(FormatParameters dirParams) throws IOException {
 		// Unsupported feature.
 		//
 		// I can't really make out what this is supposed to do from the

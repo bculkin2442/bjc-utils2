@@ -16,7 +16,7 @@ public class CaseDirective implements Directive {
 	private static final Pattern wordPattern = Pattern.compile("(\\w+)(\\b*)");
 
 	@Override
-	public void format(FormatParameter dirParams) throws IOException {
+	public void format(FormatParameters dirParams) throws IOException {
 		StringBuffer condBody = new StringBuffer();
 
 		int nestLevel = 1;

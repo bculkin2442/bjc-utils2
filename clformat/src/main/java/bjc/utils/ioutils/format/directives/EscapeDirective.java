@@ -10,7 +10,7 @@ import bjc.utils.ioutils.format.EscapeException;
 public class EscapeDirective implements Directive {
 
 	@Override
-	public void format(FormatParameter dirParams) {
+	public void format(FormatParameters dirParams) {
 		boolean shouldExit;
 
 		if (dirParams.mods.dollarMod) dirParams.tParams.right();

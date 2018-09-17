@@ -19,7 +19,7 @@ import java.util.IllegalFormatConversionException;
 public class IterationDirective implements Directive {
 
 	@Override
-	public void format(FormatParameter dirParams) throws IOException {
+	public void format(FormatParameters dirParams) throws IOException {
 		CLFormatter.checkItem(dirParams.item, '{');
 
 		StringBuffer condBody = new StringBuffer();

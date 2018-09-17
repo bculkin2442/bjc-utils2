@@ -10,7 +10,7 @@ import java.io.IOException;
 public class FreshlineDirective implements Directive {
 
 	@Override
-	public void format(FormatParameter dirParams) throws IOException {
+	public void format(FormatParameters dirParams) throws IOException {
 		int nTimes = 1;
 
 		if(dirParams.arrParams.length() >= 1) {

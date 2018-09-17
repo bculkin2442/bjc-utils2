@@ -13,7 +13,7 @@ import bjc.utils.ioutils.format.CLFormatter;
 public class AestheticDirective implements Directive {
 
 	@Override
-	public void format(FormatParameter dirParams) throws IOException {
+	public void format(FormatParameters dirParams) throws IOException {
 		// System.err.printf("Aesthetic directive with item \"%s\" and params: %s\n", item, tParams);
 		CLFormatter.checkItem(dirParams.item, 'A');
 

@@ -15,7 +15,7 @@ import java.util.IllegalFormatConversionException;
 public class RadixDirective extends GeneralNumberDirective {
 
 	@Override
-	public void format(FormatParameter dirParams) throws IOException {
+	public void format(FormatParameters dirParams) throws IOException {
 		CLFormatter.checkItem(dirParams.item, 'R');
 
 		if (!(dirParams.item instanceof Number)) {

@@ -9,7 +9,7 @@ import java.util.IllegalFormatConversionException;
 import java.io.IOException;
 
 public class RecursiveDirective implements Directive {
-	public void format(FormatParameter dirParams) throws IOException {
+	public void format(FormatParameters dirParams) throws IOException {
 		dirParams.tParams.right();
 
 		CLFormatter.checkItem(dirParams.item, '?');

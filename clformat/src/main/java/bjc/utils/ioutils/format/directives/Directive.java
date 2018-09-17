@@ -16,7 +16,7 @@ public interface Directive {
 	 * @param sb
 	 *        The buffer the string is being output to.
 	 */
-	public void format(FormatParameter dirParams) throws IOException;
+	public void format(FormatParameters dirParams) throws IOException;
 
 	public static boolean isOpening(String str) {
 		switch(str) {

@@ -18,7 +18,7 @@ public class ConditionalDirective implements Directive {
 	private static Logger LOG = Logger.getLogger(ConditionalDirective.class.getName());
 
 	@Override
-	public void format(FormatParameter dirParams) throws IOException {
+	public void format(FormatParameters dirParams) throws IOException {
 		StringBuffer condBody = new StringBuffer();
 
 		List<String> clauses = new ArrayList<>();
