@@ -27,8 +27,18 @@ public class ReportWriter extends Writer {
 
 	// # of char. positions to the tab
 	private int tabEqv       = 8;
+	// @NOTE 9/17/19
+	//
+	// Consider adding support for both the vertical tab, and variable tab
+	// stops.
+	//
+	// For variable tab stops, decide between a set of numbers saying 'This
+	// level tab is counted as X spaces' and a set of numbers saying 'A tab
+	// advances to the next tab stop that has not been passed'
 	private int linesWritten = 0;
 	private int linePos      = 0;
+
+	private int lineSpacing = 1;
 
 	private int pageLine     = 0;
 	private int pageNum      = 0;
@@ -43,6 +53,10 @@ public class ReportWriter extends Writer {
 	// care if that was a restriction that was only enforced by the compiler
 	public int getLevel() {
 		return indentLevel;
+	}
+
+	public int getLineSpacing() {
+		return lineSpacing;
 	}
 
 	public int getPageLine() {
@@ -97,6 +111,10 @@ public class ReportWriter extends Writer {
 		return printTabsAsSpaces;
 	}
 
+	public void setLineSpacing(int spacing) {
+		lineSpacing = spacing;
+	}
+
 	public void setPrintTabsAsSpaces(boolean tabsAsSpaces) {
 		printTabsAsSpaces = tabsAsSpaces;
 
@@ -107,6 +125,17 @@ public class ReportWriter extends Writer {
 	public void setLinesPerPage(int lines) {
 		linesPerPage = lines;
 
+		// @NOTE 9/17/18
+		//
+		// This is somewhat questionable as to what should happen, as
+		// the lines have already been printed.
+		//
+		// Right now, we just call writePage, which resets the line
+		// counts. If writePage gets changed to add additional
+		// functionality, it is questionable as to what we should do in
+		// that case; whether we should continue calling the function,
+		// or just adjust the counts and pretend that nothing
+		// significant happened
 		while (pageLine > linesPerPage) {
 			writePage();
 		}
@@ -193,6 +222,7 @@ public class ReportWriter extends Writer {
 
 		rw.linesWritten = linesWritten;
 		rw.linePos      = linePos;
+		rw.lineSpacing  = lineSpacing;
 
 		rw.printTabsAsSpaces = printTabsAsSpaces;
 
@@ -212,7 +242,7 @@ public class ReportWriter extends Writer {
 		this(write, 0, "\t");
 	}
 
-	public ReportWriter(Writer write, int level, String str) {
+	public ReportWriter(Writer write, int level, String indentStr) {
 		super();
 
 		contained = write;
@@ -222,7 +252,7 @@ public class ReportWriter extends Writer {
 		defIVal = new IndentVal();
 		iVals   = new DefaultList<>(defIVal);
 
-		setString(str);
+		setString(indentStr);
 	}
 
 	public void indent(int lvl) {
@@ -263,20 +293,30 @@ public class ReportWriter extends Writer {
 		pageLine -= linesPerPage;
 	}
 
-	private void writeNL(char c) {
+	private void writeNL(char c) throws IOException {
 		// Count lines written
-		if(c == '\r' || (c == '\n' && lastChar != '\r') || c == '\f') {
-			linesWritten += 1;
-			pageLine     += 1;
-
-			if (pageLine > linesPerPage || c == '\f') {
-				writePage();
-			}
-		}
+		linesWritten += lineSpacing;
+		pageLine     += lineSpacing;
 
 		lastCharWasNL = true;
 
-		contained.write(c);
+		for (int i = 0; i < lineSpacing; i++) {
+			contained.write(c);
+
+			// If we're printing CRLF pairs, make sure that we don't
+			// print incomplete pairs.
+			if (i < lineSpacing - 1) {
+				if (c == '\n' && lastChar == '\r') contained.write('\r');
+			}
+		}
+
+		// @NOTE 9/17/18
+		//
+		// Not sure if this should be here, or before the above loop
+		if (pageLine > linesPerPage || c == '\f') {
+			writePage();
+		}
+
 
 		linePos   = 0;
 		indentPos = 0;
@@ -299,7 +339,7 @@ public class ReportWriter extends Writer {
 
 			char c = cbuf[idx];
 
-			if(c == '\n' || c == '\r') {
+			if(c == '\n' || c == '\r' || (c == '\n' && lastChar != '\r') || c == '\f') {
 				writeNL(c);
 			} else {
 				if(lastCharWasNL) {
