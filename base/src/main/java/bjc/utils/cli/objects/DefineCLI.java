@@ -1,7 +1,6 @@
 package bjc.utils.cli.objects;
 
 import bjc.utils.funcutils.StringUtils;
-import bjc.utils.ioutils.format.CLFormatter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -227,15 +226,15 @@ public class DefineCLI {
 			}
 		}
 
-		CLFormatter fmt = new CLFormatter();
+	//	CLFormatter fmt = new CLFormatter();
 
 		String formatted = "";
-		try {
-			formatted = fmt.formatString(stat.formats.get(formatName), fillIns);
-		} catch (IOException ioex) {
-			LOGGER.severe(com.error("IOException formatting string: %s", ioex.getMessage()));
-			return FAIL;
-		}
+	//	try {
+	//		formatted = fmt.formatString(stat.formats.get(formatName), fillIns);
+	//	} catch (IOException ioex) {
+	//		LOGGER.severe(com.error("IOException formatting string: %s", ioex.getMessage()));
+	//		return FAIL;
+	//	}
 
 		stat.strings.put(bindName, formatted);
 
