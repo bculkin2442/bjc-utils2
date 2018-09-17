@@ -2,9 +2,11 @@ package bjc.utils.ioutils.format;
 
 import bjc.utils.esodata.SingleTape;
 import bjc.utils.esodata.Tape;
-import bjc.utils.ioutils.format.directives.*;
 import bjc.utils.ioutils.ReportWriter;
+import bjc.utils.ioutils.SimpleProperties;
+import bjc.utils.ioutils.format.directives.*;
 
+import java.io.InputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -15,8 +17,6 @@ import java.util.UnknownFormatConversionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static bjc.utils.misc.PropertyDB.applyFormat;
-import static bjc.utils.misc.PropertyDB.getRegex;
 /**
  * An implementation of CL's FORMAT.
  * 
@@ -24,19 +24,37 @@ import static bjc.utils.misc.PropertyDB.getRegex;
  *
  */
 public class CLFormatter {
-	private static final String prefixParam   = getRegex("clFormatPrefix");
-	private static final String formatMod     = getRegex("clFormatModifier");
-	private static final String directiveName = getRegex("clFormatName");
+	private static String prefixParam;
+	private static String formatMod;
+	private static String directiveName;
 
-	private static final String prefixList      = applyFormat("delimSeparatedList", prefixParam, ",");
-	private static final String formatDirective = applyFormat("clFormatDirective", prefixList, formatMod, directiveName);
+	private static String prefixList;
+	private static String formatDirective;
 
-	private static final Pattern pFormatDirective = Pattern.compile(formatDirective);
+	private static Pattern pFormatDirective;
 
 	private static Map<String, Directive> builtinDirectives;
 	private        Map<String, Directive> extraDirectives;
 
 	static {
+		SimpleProperties props = new SimpleProperties();
+
+		try (InputStream is = CLFormatter.class.getResourceAsStream("/formats.sprop")) {
+			props.loadFrom(is, false);
+		} catch (IOException ioex) {
+			// WELP, we failed. Bail
+			throw new RuntimeException("Couldn't load formats for formatter");
+		}
+		
+		prefixParam   = props.get("clFormatPrefix");
+		formatMod     = props.get("clFormatModifier");
+		directiveName = props.get("clFormatName");
+
+		prefixList      = String.format(props.get("delimSeparatedList"), prefixParam, ",");
+		formatDirective = String.format(props.get("clFormatDirective"), prefixList, formatMod, directiveName);
+
+		pFormatDirective = Pattern.compile(formatDirective);
+
 		builtinDirectives = new HashMap<>();
 
 		builtinDirectives.put("A", new AestheticDirective());

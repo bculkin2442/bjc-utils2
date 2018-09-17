@@ -1,0 +1,42 @@
+######################################
+# CL format string regular expressions
+######################################
+
+## Format a regular expression for matching a potential CL format directive
+## Has two parts
+## 1) The optional set of prefix parameters
+## 2) The optional modifier
+## Captures three things
+## 1) The prefix parameters
+## 2) The modifiers
+## 3) The directive name
+## 4) The function name, if the directive was a function call.
+clFormatDirective ~(?<params>%1$s)?(?<modifiers>%2$s?)(?:%3$s)
+
+## Matches a format string prefix parameter
+## A prefix parameter is one of
+## * A signed decimal number
+## * A single character preceded by a single quote
+## * The letter V (or v)
+## * The character #
+clFormatPrefix (?:(?:[-+]?\d+|'.|[Vv]|#|%)?)
+
+## Match a format string modifier
+## A modifier is any combination of $, :, * and @; duplicates don't matter though
+clFormatModifier (?:[@$:*]+)
+
+## Matches a directive name.
+## A directive name is either
+## 1) A single, non-whitespace, non-/ character, optionally preceded by a grave
+## 2) A name enclosed in /'s
+clFormatName (?:(?<name>`?[\S&&[^/]])|(?:/(?<funcname>[\S&&[^/]]+)/))
+
+#################################################
+# Generic format strings for regular expressions.
+#################################################
+
+## Format a regular expression for matching a delimiter separated list.
+## Takes two parameters
+## 1) The expression for each term
+## 2) The expression for the delimiter
+delimSeparatedList (?:%1$s(?:%2$s%1$s)*)
