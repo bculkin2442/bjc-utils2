@@ -266,6 +266,9 @@ public class CLFormatter {
 						throw new IllegalArgumentException("Inflection-end outside of inflection");
 					case "<":
 					case ">":
+						throw new IllegalArgumentException("Inflection marker outside of inflection");
+					case "`<":
+					case "`>":
 						throw new IllegalArgumentException("Layout-control directives aren't implemented yet.");
 					case "F":
 					case "E":
