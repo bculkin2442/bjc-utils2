@@ -3,14 +3,12 @@ package bjc.utils.ioutils.format.directives;
 import bjc.utils.esodata.SingleTape;
 import bjc.utils.esodata.Tape;
 import bjc.utils.ioutils.format.*;
-import bjc.utils.ioutils.ReportWriter;
 
 import java.io.IOException;
 
 import java.util.Iterator;
 
 import java.util.IllegalFormatConversionException;
-import java.util.regex.Matcher;
 
 /**
  * Implements the { directive.
@@ -21,57 +19,56 @@ import java.util.regex.Matcher;
 public class IterationDirective implements Directive {
 
 	@Override
-	public void format(ReportWriter rw, Object item, CLModifiers mods, CLParameters arrParams, Tape<Object> tParams,
-			Matcher dirMatcher, CLFormatter fmt) throws IOException {
-		CLFormatter.checkItem(item, '{');
+	public void format(FormatParameter dirParams) throws IOException {
+		CLFormatter.checkItem(dirParams.item, '{');
 
 		StringBuffer condBody = new StringBuffer();
 
-		while (dirMatcher.find()) {
+		while (dirParams.dirMatcher.find()) {
 			/* Process a list of clauses. */
-			String dirName = dirMatcher.group("name");
+			String dirName = dirParams.dirMatcher.group("name");
 
 			if (dirName != null) {
 				/* Append everything up to this directive. */
-				dirMatcher.appendReplacement(condBody, "");
+				dirParams.dirMatcher.appendReplacement(condBody, "");
 
 				if (dirName.equals("}")) {
 					break;
 				} else {
 					/* Not a special directive. */
-					condBody.append(dirMatcher.group());
+					condBody.append(dirParams.dirMatcher.group());
 				}
 			}
 		}
 
 		String frmt = condBody.toString();
-		Object iter = item;
+		Object iter = dirParams.item;
 
 		// System.err.printf("Iteration format \"%s\" (iter %s)\n", frmt, item);
 		if (frmt.equals("")) {
 			/* Grab an argument. */
-			if (!(item instanceof String)) {
+			if (!(dirParams.item instanceof String)) {
 				throw new IllegalFormatConversionException('{', String.class);
 			}
 
-			frmt = (String) item;
+			frmt = (String) dirParams.item;
 
-			if (!tParams.right()) {
+			if (!dirParams.tParams.right()) {
 				throw new IllegalArgumentException("Not enough parameters to '{' directive");
 			}
 
-			iter = tParams.item();
+			iter = dirParams.tParams.item();
 		}
 
 		int maxItr = Integer.MAX_VALUE;
 
-		if (arrParams.length() > 0) {
-			maxItr = arrParams.getInt(0, "maximum iterations", '{');
+		if (dirParams.arrParams.length() > 0) {
+			maxItr = dirParams.arrParams.getInt(0, "maximum iterations", '{');
 		}
 
 		int numItr = 0;
 
-		if (mods.atMod && mods.colonMod) {
+		if (dirParams.mods.atMod && dirParams.mods.colonMod) {
 			try {
 				do {
 					if (numItr > maxItr) break;
@@ -86,41 +83,41 @@ public class IterationDirective implements Directive {
 					Tape<Object> nParams = new SingleTape<>(nitr);
 
 					try {
-						fmt.doFormatString(frmt, rw, nParams, false);
+						dirParams.fmt.doFormatString(frmt, dirParams.rw, nParams, false);
 					} catch (EscapeException eex) {
 						if (eex.endIteration) {
-							if (tParams.atEnd()) {
+							if (dirParams.tParams.atEnd()) {
 								throw eex;
 							}
 						}
 					}
 
-					tParams.right();
-					iter = tParams.item();
-				} while (tParams.position() < tParams.size());
+					dirParams.tParams.right();
+					iter = dirParams.tParams.item();
+				} while (dirParams.tParams.position() < dirParams.tParams.size());
 			} catch (EscapeException eex) {
 			}
-		} else if (mods.atMod) {
+		} else if (dirParams.mods.atMod) {
 			try {
-				while (!tParams.atEnd()) {
+				while (!dirParams.tParams.atEnd()) {
 					// System.err.printf("Iterating with format \"%s\"\n", frmt);
 					if (numItr > maxItr) break;
 					numItr += 1;
 
-					fmt.doFormatString(frmt, rw, tParams, false);
+					dirParams.fmt.doFormatString(frmt, dirParams.rw, dirParams.tParams, false);
 				}
 			} catch (EscapeException eex) {
 				if (eex.endIteration)
 					throw new UnsupportedOperationException("Colon mod not allowed on escape marker without colon mod on iteration");
 			}
-		} else if (mods.colonMod) {
-			if (!(item instanceof Iterable<?>)) {
-				throw new IllegalFormatConversionException('{', item.getClass());
+		} else if (dirParams.mods.colonMod) {
+			if (!(dirParams.item instanceof Iterable<?>)) {
+				throw new IllegalFormatConversionException('{', dirParams.item.getClass());
 			}
 
 			try {
 				@SuppressWarnings("unchecked")
-				Iterable<Object> itb = (Iterable<Object>) item;
+				Iterable<Object> itb = (Iterable<Object>) dirParams.item;
 				Iterator<Object> itr = itb.iterator();
 				while (itr.hasNext()) {
 					Object obj = itr.next();
@@ -137,7 +134,7 @@ public class IterationDirective implements Directive {
 					Tape<Object> nParams = new SingleTape<>(nitr);
 
 					try {
-						fmt.doFormatString(frmt, rw, nParams, false);
+						dirParams.fmt.doFormatString(frmt, dirParams.rw, nParams, false);
 					} catch (EscapeException eex) {
 						if(eex.endIteration && !itr.hasNext()) throw eex;
 					}
@@ -145,20 +142,20 @@ public class IterationDirective implements Directive {
 			} catch (EscapeException eex) {
 			}
 		} else {
-			if (!(item instanceof Iterable<?>)) {
-				throw new IllegalFormatConversionException('{', item.getClass());
+			if (!(dirParams.item instanceof Iterable<?>)) {
+				throw new IllegalFormatConversionException('{', dirParams.item.getClass());
 			}
 
 			try {
 				@SuppressWarnings("unchecked")
-				Iterable<Object> itr = (Iterable<Object>) item;
+				Iterable<Object> itr = (Iterable<Object>) dirParams.item;
 				Tape<Object> nParams = new SingleTape<>(itr);
 
 				while (!nParams.atEnd()) {
 					if (numItr > maxItr) break;
 					numItr += 1;
 
-					fmt.doFormatString(frmt, rw, nParams, false);
+					dirParams.fmt.doFormatString(frmt, dirParams.rw, nParams, false);
 				}
 			} catch (EscapeException eex) {
 				if (eex.endIteration)
@@ -166,6 +163,6 @@ public class IterationDirective implements Directive {
 			}
 		}
 
-		tParams.right();
+		dirParams.tParams.right();
 	}
 }

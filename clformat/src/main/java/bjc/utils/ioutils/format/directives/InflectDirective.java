@@ -1,8 +1,6 @@
 package bjc.utils.ioutils.format.directives;
 
 import bjc.inflexion.InflectionML;
-
-import bjc.utils.esodata.Tape;
 import bjc.utils.ioutils.format.*;
 import bjc.utils.ioutils.ReportWriter;
 
@@ -12,37 +10,35 @@ import java.util.ArrayList;
 import java.util.IllegalFormatConversionException;
 import java.util.List;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class InflectDirective implements Directive {
 	private static final Pattern wordPattern = Pattern.compile("(\\w+)(\\b*)");
 
 	@Override
-	public void format(ReportWriter rw, Object item, CLModifiers mods, CLParameters params, Tape<Object> tParams,
-			Matcher dirMatcher, CLFormatter fmt) throws IOException {
+	public void format(FormatParameter dirParams) throws IOException {
 		StringBuffer condBody = new StringBuffer();
 
 		int nestLevel = 1;
 
-		while (dirMatcher.find()) {
+		while (dirParams.dirMatcher.find()) {
 			/* Process a list of clauses. */
-			String dirName = dirMatcher.group("name");
+			String dirName = dirParams.dirMatcher.group("name");
 
 			if (dirName != null) {
 				/* Append everything up to this directive. */
-				dirMatcher.appendReplacement(condBody, "");
+				dirParams.dirMatcher.appendReplacement(condBody, "");
 
 				if (dirName.equals("`[")) {
 					if (nestLevel > 0) {
-						condBody.append(dirMatcher.group());
+						condBody.append(dirParams.dirMatcher.group());
 					}
 
 					nestLevel += 1;
 				} else if (Directive.isOpening(dirName)) {
 					nestLevel += 1;
 
-					condBody.append(dirMatcher.group());
+					condBody.append(dirParams.dirMatcher.group());
 				} else if (dirName.equals("`]")) {
 					nestLevel = Math.max(0, nestLevel - 1);
 
@@ -52,21 +48,21 @@ public class InflectDirective implements Directive {
 					nestLevel = Math.max(0, nestLevel - 1);
 				} else {
 					/* Not a special directive. */
-					condBody.append(dirMatcher.group());
+					condBody.append(dirParams.dirMatcher.group());
 				}
 			}
 		}
 
 		String frmt = condBody.toString();
 
-		ReportWriter nrw = rw.duplicate(new StringWriter());
+		ReportWriter nrw = dirParams.rw.duplicate(new StringWriter());
 
-		fmt.doFormatString(frmt, nrw, tParams, false);
+		dirParams.fmt.doFormatString(frmt, nrw, dirParams.tParams, false);
 
 		String strang = nrw.toString();
 
 		strang = InflectionML.inflect(strang);
 
-		rw.write(strang);
+		dirParams.rw.write(strang);
 	}
 }

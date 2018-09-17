@@ -2,13 +2,7 @@ package bjc.utils.ioutils.format.directives;
 
 import java.io.IOException;
 
-import java.util.regex.Matcher;
-
-import bjc.utils.esodata.Tape;
 import bjc.utils.ioutils.format.CLFormatter;
-import bjc.utils.ioutils.format.CLModifiers;
-import bjc.utils.ioutils.format.CLParameters;
-import bjc.utils.ioutils.ReportWriter;
 
 /**
  * Implementation of the A directive.
@@ -19,29 +13,28 @@ import bjc.utils.ioutils.ReportWriter;
 public class AestheticDirective implements Directive {
 
 	@Override
-	public void format(ReportWriter rw, Object item, CLModifiers mods, CLParameters params, Tape<Object> tParams,
-			Matcher dirMatcher, CLFormatter fmt) throws IOException {
+	public void format(FormatParameter dirParams) throws IOException {
 		// System.err.printf("Aesthetic directive with item \"%s\" and params: %s\n", item, tParams);
-		CLFormatter.checkItem(item, 'A');
+		CLFormatter.checkItem(dirParams.item, 'A');
 
 		int mincol = 0, colinc = 1, minpad = 0;
 		char padchar = ' ';
 
-		if (params.length() == 0) {
+		if (dirParams.arrParams.length() == 0) {
 			// Zero parameters, use all defaults
-		} else if (params.length() == 1) {
-			mincol = params.getIntDefault(0, "minimum column count", 'A', 0);
-		} else if (params.length() < 4) {
+		} else if (dirParams.arrParams.length() == 1) {
+			mincol = dirParams.arrParams.getIntDefault(0, "minimum column count", 'A', 0);
+		} else if (dirParams.arrParams.length() < 4) {
 			throw new IllegalArgumentException("Must provide either zero, one or four arguments to A directive");
 		} else {
-			colinc = params.getIntDefault(1, "padding increment", 'A', 1);
-			minpad = params.getIntDefault(2, "minimum amount of padding", 'A', 0);
-			padchar = params.getCharDefault(3, "padding character", 'A', ' ');
+			colinc = dirParams.arrParams.getIntDefault(1, "padding increment", 'A', 1);
+			minpad = dirParams.arrParams.getIntDefault(2, "minimum amount of padding", 'A', 0);
+			padchar = dirParams.arrParams.getCharDefault(3, "padding character", 'A', ' ');
 		}
 
 		StringBuilder work = new StringBuilder();
 
-		if (mods.atMod) {
+		if (dirParams.mods.atMod) {
 			for (int i = 0; i < minpad; i++) {
 				work.append(padchar);
 			}
@@ -53,9 +46,9 @@ public class AestheticDirective implements Directive {
 			}
 		}
 
-		work.append(item.toString());
+		work.append(dirParams.item.toString());
 
-		if (!mods.atMod) {
+		if (!dirParams.mods.atMod) {
 			for (int i = 0; i < minpad; i++) {
 				work.append(padchar);
 			}
@@ -67,8 +60,8 @@ public class AestheticDirective implements Directive {
 			}
 		}
 
-		rw.write(work.toString());
+		dirParams.rw.write(work.toString());
 
-		tParams.right();
+		dirParams.tParams.right();
 	}
 }

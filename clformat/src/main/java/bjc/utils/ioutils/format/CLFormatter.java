@@ -235,8 +235,7 @@ public class CLFormatter {
 				}
 
 				if(extraDirectives.containsKey(dirName)) {
-					extraDirectives.get(dirName).format(rw, item, mods, arrParams, tParams, dirMatcher,
-							this);
+					extraDirectives.get(dirName).format(new FormatParameter(rw, item, mods, arrParams, tParams, dirMatcher, this));
 
 					continue;
 				}
@@ -244,8 +243,7 @@ public class CLFormatter {
 				if(builtinDirectives.containsKey(dirName)) {
 					// System.err.printf("Executing directive %s (%s) (%d to %d) from string %s\n", dirName, dirMatcher.group(), dirMatcher.start(), dirMatcher.end(), format);
 
-					builtinDirectives.get(dirName).format(rw,
-							item, mods, arrParams, tParams, dirMatcher, this);
+					builtinDirectives.get(dirName).format(new FormatParameter(rw, item, mods, arrParams, tParams, dirMatcher, this));
 
 					continue;
 				}

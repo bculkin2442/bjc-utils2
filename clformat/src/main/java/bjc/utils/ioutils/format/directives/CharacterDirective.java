@@ -1,14 +1,9 @@
 package bjc.utils.ioutils.format.directives;
 
-import bjc.utils.esodata.Tape;
 import bjc.utils.ioutils.format.CLFormatter;
-import bjc.utils.ioutils.format.CLModifiers;
-import bjc.utils.ioutils.format.CLParameters;
-import bjc.utils.ioutils.ReportWriter;
 
 import java.io.IOException;
 import java.util.IllegalFormatConversionException;
-import java.util.regex.Matcher;
 
 /**
  * Implements the C directive.
@@ -19,27 +14,26 @@ import java.util.regex.Matcher;
 public class CharacterDirective implements Directive {
 
 	@Override
-	public void format(ReportWriter rw, Object parm, CLModifiers mods, CLParameters arrParams, Tape<Object> tParams,
-			Matcher dirMatcher, CLFormatter fmt) throws IOException {
-		CLFormatter.checkItem(parm, 'C');
+	public void format(FormatParameter dirParams) throws IOException {
+		CLFormatter.checkItem(dirParams.item, 'C');
 
-		if (!(parm instanceof Character)) {
-			throw new IllegalFormatConversionException('C', parm.getClass());
+		if (!(dirParams.item instanceof Character)) {
+			throw new IllegalFormatConversionException('C', dirParams.item.getClass());
 		}
 
-		char ch = (Character) parm;
+		char ch = (Character) dirParams.item;
 		int codepoint = ch;
 
-		if (mods.colonMod) {
+		if (dirParams.mods.colonMod) {
 			/*
 			 * Colon mod means print Unicode character name.
 			 */
-			rw.write(Character.getName(codepoint));
+			dirParams.rw.write(Character.getName(codepoint));
 		} else {
-			rw.write(ch);
+			dirParams.rw.write(ch);
 		}
 
-		tParams.right();
+		dirParams.tParams.right();
 	}
 
 }

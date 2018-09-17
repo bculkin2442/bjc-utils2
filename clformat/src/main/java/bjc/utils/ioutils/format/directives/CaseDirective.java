@@ -1,6 +1,5 @@
 package bjc.utils.ioutils.format.directives;
 
-import bjc.utils.esodata.Tape;
 import bjc.utils.ioutils.format.*;
 import bjc.utils.ioutils.ReportWriter;
 
@@ -17,30 +16,29 @@ public class CaseDirective implements Directive {
 	private static final Pattern wordPattern = Pattern.compile("(\\w+)(\\b*)");
 
 	@Override
-	public void format(ReportWriter rw, Object item, CLModifiers mods, CLParameters params, Tape<Object> tParams,
-			Matcher dirMatcher, CLFormatter fmt) throws IOException {
+	public void format(FormatParameter dirParams) throws IOException {
 		StringBuffer condBody = new StringBuffer();
 
 		int nestLevel = 1;
 
-		while (dirMatcher.find()) {
+		while (dirParams.dirMatcher.find()) {
 			/* Process a list of clauses. */
-			String dirName = dirMatcher.group("name");
+			String dirName = dirParams.dirMatcher.group("name");
 
 			if (dirName != null) {
 				/* Append everything up to this directive. */
-				dirMatcher.appendReplacement(condBody, "");
+				dirParams.dirMatcher.appendReplacement(condBody, "");
 
 				if (dirName.equals("(")) {
 					if (nestLevel > 0) {
-						condBody.append(dirMatcher.group());
+						condBody.append(dirParams.dirMatcher.group());
 					}
 
 					nestLevel += 1;
 				} else if (Directive.isOpening(dirName)) {
 					nestLevel += 1;
 
-					condBody.append(dirMatcher.group());
+					condBody.append(dirParams.dirMatcher.group());
 				} else if (dirName.equals(")")) {
 					nestLevel = Math.max(0, nestLevel - 1);
 
@@ -50,22 +48,22 @@ public class CaseDirective implements Directive {
 					nestLevel = Math.max(0, nestLevel - 1);
 				} else {
 					/* Not a special directive. */
-					condBody.append(dirMatcher.group());
+					condBody.append(dirParams.dirMatcher.group());
 				}
 			}
 		}
 
 		String frmt = condBody.toString();
 
-		ReportWriter nrw = rw.duplicate(new StringWriter());
+		ReportWriter nrw = dirParams.rw.duplicate(new StringWriter());
 
-		fmt.doFormatString(frmt, nrw, tParams, false);
+		dirParams.fmt.doFormatString(frmt, nrw, dirParams.tParams, false);
 
 		String strang = nrw.toString();
 
-		if (mods.colonMod && mods.atMod) {
+		if (dirParams.mods.colonMod && dirParams.mods.atMod) {
 			strang = strang.toUpperCase();
-		} else if (mods.colonMod) {
+		} else if (dirParams.mods.colonMod) {
 			Matcher mat = wordPattern.matcher(strang);
 
 			StringBuffer sb = new StringBuffer();
@@ -83,7 +81,7 @@ public class CaseDirective implements Directive {
 			mat.appendTail(sb);
 
 			strang = sb.toString();
-		} else if (mods.atMod) {
+		} else if (dirParams.mods.atMod) {
 			Matcher mat = wordPattern.matcher(strang);
 
 			StringBuffer sb = new StringBuffer();
@@ -111,6 +109,6 @@ public class CaseDirective implements Directive {
 			strang = strang.toLowerCase();
 		}
 
-		rw.write(strang);
+		dirParams.rw.write(strang);
 	}
 }

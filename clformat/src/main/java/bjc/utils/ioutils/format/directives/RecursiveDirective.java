@@ -3,35 +3,33 @@ package bjc.utils.ioutils.format.directives;
 import bjc.utils.esodata.SingleTape;
 import bjc.utils.esodata.Tape;
 import bjc.utils.ioutils.format.*;
-import bjc.utils.ioutils.ReportWriter;
+
 import java.util.IllegalFormatConversionException;
 
 import java.io.IOException;
-import java.util.regex.Matcher;
 
 public class RecursiveDirective implements Directive {
-	public void format(ReportWriter rw, Object arg, CLModifiers mods, CLParameters params, Tape<Object> tParams,
-			Matcher dirMatcher, CLFormatter fmt) throws IOException {
-		tParams.right();
+	public void format(FormatParameter dirParams) throws IOException {
+		dirParams.tParams.right();
 
-		CLFormatter.checkItem(arg, '?');
+		CLFormatter.checkItem(dirParams.item, '?');
 
-		if (mods.atMod) {
-			if (!(arg instanceof String))
-				throw new IllegalFormatConversionException('?', arg.getClass());
+		if (dirParams.mods.atMod) {
+			if (!(dirParams.item instanceof String))
+				throw new IllegalFormatConversionException('?', dirParams.item.getClass());
 
 			try {
-				fmt.doFormatString((String)arg, rw, tParams, true);
+				dirParams.fmt.doFormatString((String)dirParams.item, dirParams.rw, dirParams.tParams, true);
 			} catch (EscapeException eex) {
 				if (eex.endIteration)
 					throw new UnsupportedOperationException("Colon mod not allowed on escape marker without colon mod on iteration");
 			}
 		} else {
-			if (tParams.atEnd())
+			if (dirParams.tParams.atEnd())
 				throw new IllegalArgumentException("? directive requires two format parameters");
 
-			Object o = tParams.item();
-			tParams.right();
+			Object o = dirParams.tParams.item();
+			dirParams.tParams.right();
 
 			if (!(o instanceof Iterable))
 				throw new IllegalFormatConversionException('?', o.getClass());
@@ -40,7 +38,7 @@ public class RecursiveDirective implements Directive {
 			Tape<Object> newParams = new SingleTape<>(itb);
 
 			try {
-				fmt.doFormatString((String)arg, rw, newParams, true);
+				dirParams.fmt.doFormatString((String)dirParams.item, dirParams.rw, newParams, true);
 			} catch (EscapeException eex) {
 				throw new UnsupportedOperationException("Colon mod not allowed on escape marker without colon mod on iteration");
 			}

@@ -2,13 +2,8 @@ package bjc.utils.ioutils.format.directives;
 
 import java.io.IOException;
 import java.util.IllegalFormatConversionException;
-import java.util.regex.Matcher;
 
-import bjc.utils.esodata.Tape;
 import bjc.utils.ioutils.format.CLFormatter;
-import bjc.utils.ioutils.format.CLModifiers;
-import bjc.utils.ioutils.format.CLParameters;
-import bjc.utils.ioutils.ReportWriter;
 
 /**
  * Implements radix based numbers.
@@ -39,19 +34,18 @@ public class NumberDirective extends GeneralNumberDirective {
 	private char directive;
 
 	@Override
-	public void format(ReportWriter rw, Object item, CLModifiers mods, CLParameters params, Tape<Object> tParams,
-			Matcher dirMatcher, CLFormatter fmt) throws IOException {
-		CLFormatter.checkItem(item, directive);
+	public void format(FormatParameter dirParams) throws IOException {
+		CLFormatter.checkItem(dirParams.item, directive);
 
-		if (!(item instanceof Number)) {
-			throw new IllegalFormatConversionException(directive, item.getClass());
+		if (!(dirParams.item instanceof Number)) {
+			throw new IllegalFormatConversionException(directive, dirParams.item.getClass());
 		}
 
-		long val = ((Number) item).longValue();
+		long val = ((Number) dirParams.item).longValue();
 
-		handleNumberDirective(rw, mods, params, argidx, val, radix);
+		handleNumberDirective(dirParams.rw, dirParams.mods, dirParams.arrParams, argidx, val, radix);
 
-		tParams.right();
+		dirParams.tParams.right();
 	}
 
 }
