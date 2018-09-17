@@ -14,7 +14,7 @@ public class TabulateDirective implements Directive {
 		// Unsupported feature.
 		//
 		// I can't really make out what this is supposed to do from the
-		// documentation, but I suspect that it depends of font glyph
+		// documentation, but I suspect that it depends on font glyph
 		// size, not character positions
 		if (mods.colonMod) {
 			throw new UnsupportedOperationException("Colon mod is not supported for T directive");

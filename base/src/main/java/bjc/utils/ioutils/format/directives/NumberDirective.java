@@ -26,21 +26,25 @@ public class NumberDirective extends GeneralNumberDirective {
 	 * @param radix
 	 *            The radix of the number to use.
 	 */
-	public NumberDirective(int argidx, int radix) {
+	public NumberDirective(int argidx, int radix, char directive) {
 		this.argidx = argidx;
 		this.radix = radix;
+
+		this.directive = directive;
 	}
 
 	private int argidx;
 	private int radix;
 
+	private char directive;
+
 	@Override
 	public void format(ReportWriter rw, Object item, CLModifiers mods, CLParameters params, Tape<Object> tParams,
 			Matcher dirMatcher, CLFormatter fmt) throws IOException {
-		CLFormatter.checkItem(item, 'B');
+		CLFormatter.checkItem(item, directive);
 
 		if (!(item instanceof Number)) {
-			throw new IllegalFormatConversionException('B', item.getClass());
+			throw new IllegalFormatConversionException(directive, item.getClass());
 		}
 
 		long val = ((Number) item).longValue();

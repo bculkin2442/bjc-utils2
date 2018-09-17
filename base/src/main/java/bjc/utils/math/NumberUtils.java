@@ -400,7 +400,7 @@ public class NumberUtils {
 		boolean isNeg = false;
 		long currVal = val;
 		if(currVal < 0) {
-			isNeg = true;
+			isNeg    = true;
 			currVal *= -1;
 		}
 
@@ -416,12 +416,11 @@ public class NumberUtils {
 				work.append(radixChars[radDigit]);
 				currVal = currVal / radix;
 
-				if(commaInterval != 0 && valCounter % commaInterval == 0) work.append(commaChar);
+				if(commaInterval != 0 && valCounter % commaInterval == 0 && currVal != 0) work.append(commaChar);
 			}
 		}
 
-		if(isNeg)
-			work.append("-");
+		if(isNeg)       work.append("-");
 		else if(signed) work.append("+");
 
 		work.reverse();
@@ -437,8 +436,21 @@ public class NumberUtils {
 		StringBuilder pad = new StringBuilder();
 
 		if(work.length() < mincols) {
+			int padCount = 0;
 			for(int i = work.length(); i < mincols; i++) {
-				pad.append(padchar);
+				// @NOTE 9/6/18 :CommaPad
+				//
+				// I have no idea if this is the intended
+				// behavior, or if something is wrong with the
+				// example case in the menu
+				// if (commaInterval != 0 && padCount != 0) {
+				// 	if (Character.isDigit(padchar) && padCount % commaInterval == 0)
+				// 		pad.append(commaChar);
+				// 	else
+						pad.append(padchar);
+				// }
+
+				padCount++;
 			}
 		}
 

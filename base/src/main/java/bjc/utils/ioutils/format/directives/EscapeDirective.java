@@ -21,27 +21,34 @@ public class EscapeDirective implements Directive {
 			Tape<Object> formatParams, Matcher dirMatcher, CLFormatter fmt) {
 		boolean shouldExit;
 
+		if (mods.dollarMod) formatParams.right();
+
 		switch(params.length()) {
 		case 0:
-			shouldExit = formatParams.size() == 0;
+			shouldExit = formatParams.atEnd();
 			break;
 		case 1:
 			int num = params.getInt(0, "condition count", '^');
+
 			shouldExit = num == 0;
 			break;
 		case 2:
-			int left = params.getInt(0, "left-hand condition", '^');
+			int left  = params.getInt(0, "left-hand condition", '^');
 			int right = params.getInt(1, "right-hand condition", '^');
+
 			shouldExit = left == right;
 			break;
 		case 3:
 		default:
-			int low = params.getInt(0, "lower-bound condition", '^');
-			int mid = params.getInt(1, "interval condition", '^');
+			int low  = params.getInt(0, "lower-bound condition", '^');
+			int mid  = params.getInt(1, "interval condition", '^');
 			int high = params.getInt(2, "upper-bound condition", '^');
+
 			shouldExit = (low <= mid) && (mid <= high);
 			break;
 		}
+
+		if (mods.dollarMod) formatParams.left();
 
 		/* At negates it. */
 		if(mods.atMod) shouldExit = !shouldExit;

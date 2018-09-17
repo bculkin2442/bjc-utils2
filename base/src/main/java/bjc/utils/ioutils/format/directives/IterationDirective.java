@@ -36,18 +36,18 @@ public class IterationDirective implements Directive {
 				dirMatcher.appendReplacement(condBody, "");
 
 				if (dirName.equals("}")) {
-					/* End the iteration. */
 					break;
+				} else {
+					/* Not a special directive. */
+					condBody.append(dirMatcher.group());
 				}
-
-				/* Not a special directive. */
-				condBody.append(dirMatcher.group());
 			}
 		}
 
 		String frmt = condBody.toString();
 		Object iter = item;
 
+		// System.err.printf("Iteration format \"%s\" (iter %s)\n", frmt, item);
 		if (frmt.equals("")) {
 			/* Grab an argument. */
 			if (!(item instanceof String)) {
@@ -86,25 +86,29 @@ public class IterationDirective implements Directive {
 					Tape<Object> nParams = new SingleTape<>(nitr);
 
 					try {
-						fmt.doFormatString(frmt, rw, nParams);
+						fmt.doFormatString(frmt, rw, nParams, false);
 					} catch (EscapeException eex) {
 						if (eex.endIteration) {
-							if (tParams.atEnd()) throw eex;
+							if (tParams.atEnd()) {
+								throw eex;
+							}
 						}
 					}
 
-					iter = tParams.right();
+					tParams.right();
+					iter = tParams.item();
 				} while (tParams.position() < tParams.size());
 			} catch (EscapeException eex) {
 			}
 		} else if (mods.atMod) {
 			try {
-			while (tParams.position() < tParams.size()) {
-				if (numItr > maxItr) break;
-				numItr += 1;
+				while (!tParams.atEnd()) {
+					// System.err.printf("Iterating with format \"%s\"\n", frmt);
+					if (numItr > maxItr) break;
+					numItr += 1;
 
-				fmt.doFormatString(frmt, rw, tParams);
-			}
+					fmt.doFormatString(frmt, rw, tParams, false);
+				}
 			} catch (EscapeException eex) {
 				if (eex.endIteration)
 					throw new UnsupportedOperationException("Colon mod not allowed on escape marker without colon mod on iteration");
@@ -133,13 +137,12 @@ public class IterationDirective implements Directive {
 					Tape<Object> nParams = new SingleTape<>(nitr);
 
 					try {
-						fmt.doFormatString(frmt, rw, nParams);
+						fmt.doFormatString(frmt, rw, nParams, false);
 					} catch (EscapeException eex) {
 						if(eex.endIteration && !itr.hasNext()) throw eex;
 					}
 				}
-			}
-			catch (EscapeException eex) {
+			} catch (EscapeException eex) {
 			}
 		} else {
 			if (!(item instanceof Iterable<?>)) {
@@ -149,16 +152,13 @@ public class IterationDirective implements Directive {
 			try {
 				@SuppressWarnings("unchecked")
 				Iterable<Object> itr = (Iterable<Object>) item;
-
 				Tape<Object> nParams = new SingleTape<>(itr);
 
-				while (nParams.position() < nParams.size()) {
-					if (numItr > maxItr)
-						break;
+				while (!nParams.atEnd()) {
+					if (numItr > maxItr) break;
 					numItr += 1;
 
-					fmt.doFormatString(frmt, rw, nParams);
-
+					fmt.doFormatString(frmt, rw, nParams, false);
 				}
 			} catch (EscapeException eex) {
 				if (eex.endIteration)

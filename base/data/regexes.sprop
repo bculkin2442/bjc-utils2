@@ -44,11 +44,11 @@ fpLeader [\x00-\x20]*[+-]?(?:NaN|Infinity|
 ## * A single character preceded by a single quote
 ## * The letter V (or v)
 ## * The character #
-clFormatPrefix (?:[-+]?\d+|'\S|[Vv]|#)
+clFormatPrefix (?:(?:[-+]?\d+|'.|[Vv]|#|%)?)
 
 ## Match a format string modifier
-## A modifier is either : or @, or both in either order
-clFormatModifier (?:@|:|@:|:@)
+## A modifier is any combination of $, :, * and @; duplicates don't matter though
+clFormatModifier (?:[@$:*]+)
 
 ## Matches a directive name.
 ## A directive name is either

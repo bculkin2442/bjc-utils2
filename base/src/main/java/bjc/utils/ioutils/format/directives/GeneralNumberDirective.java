@@ -38,10 +38,10 @@ public abstract class GeneralNumberDirective implements Directive {
 			 */
 			int commaInterval = 0;
 			char commaChar = ',';
-			if (params.length() >= (argidx + 3)) {
-				commaChar = params.getCharDefault((argidx + 3), "comma character", 'R', ' ');
-			}
 			if (params.length() >= (argidx + 4)) {
+				commaChar = params.getCharDefault((argidx + 3), "comma character", 'R', ',');
+			}
+			if (params.length() >= (argidx + 5)) {
 				commaInterval = params.getIntDefault((argidx + 4), "comma interval", 'R', 0);
 			}
 

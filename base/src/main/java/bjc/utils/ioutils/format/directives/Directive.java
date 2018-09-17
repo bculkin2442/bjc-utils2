@@ -37,4 +37,36 @@ public interface Directive {
 	 */
 	public void format(ReportWriter rw, Object item, CLModifiers mods, CLParameters arrParams, Tape<Object> tParams,
 			Matcher dirMatcher, CLFormatter fmt) throws IOException;
+
+	public static boolean isOpening(String str) {
+		return isOpening(str.charAt(0));
+	}
+
+	public static boolean isOpening(char dir) {
+		switch(dir) {
+		case '(':
+		case '<':
+		case '[':
+		case '{':
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	public static boolean isClosing(String str) {
+		return isClosing(str.charAt(0));
+	}
+
+	public static boolean isClosing(char dir) {
+		switch(dir) {
+		case ')':
+		case '>':
+		case ']':
+		case '}':
+			return true;
+		default:
+			return false;
+		}
+	}
 }

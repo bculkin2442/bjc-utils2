@@ -44,10 +44,33 @@ public class CLParameters {
 	 *
 	 * @return A set of CL parameters.
 	 */
-	public static CLParameters fromDirective(String[] params, Tape<Object> dirParams) {
+	public static CLParameters fromDirective(String unsplit, Tape<Object> dirParams) {
+		List<String>  lParams   = new ArrayList<>();
+		StringBuilder currParm = new StringBuilder();
+
+		char prevChar = ' ';
+
+		for (int i = 0; i < unsplit.length(); i++) {
+			char c = unsplit.charAt(i);
+
+			if (c == ',' && prevChar != '\'') {
+				lParams.add(currParm.toString());
+				
+				currParm = new StringBuilder();
+			} else {
+				currParm.append(c);
+			}
+
+			prevChar = c;
+		}
+		lParams.add(currParm.toString());
+
 		List<String> parameters = new ArrayList<>();
 
-		for(String param : params) {
+		if (lParams.size() == 1 && lParams.get(0).equals(""))
+			return new CLParameters(parameters.toArray(new String[0]));
+
+		for(String param : lParams) {
 			if(param.equalsIgnoreCase("V")) {
 				Object par = dirParams.item();
 				boolean succ = dirParams.right();
@@ -73,7 +96,9 @@ public class CLParameters {
 					throw new IllegalArgumentException(
 							"Incorrect type of parameter for V inline parameter");
 				}
-			} else if(param.equals("#")) {
+			} else if (param.equals("#")) {
+				parameters.add(Integer.toString(dirParams.size() - dirParams.position()));
+			} else if (param.equals("%")) {
 				parameters.add(Integer.toString(dirParams.position()));
 			} else {
 				parameters.add(param);
@@ -119,9 +144,14 @@ public class CLParameters {
 	public char getChar(int idx, String paramName, char directive) {
 		String param = params[idx];
 
+		if (param.length() == 1) {
+			// Punt in the case we have a slightly malformed issue
+			return param.charAt(0);
+		}
+
 		if(!param.startsWith("'")) {
 			throw new IllegalArgumentException(
-					String.format("Invalid %s %s to %c directive", paramName, param, directive));
+					String.format("Invalid %s \"%s\" to %c directive", paramName, param, directive));
 		}
 
 		return param.charAt(1);
@@ -166,12 +196,29 @@ public class CLParameters {
 		try {
 			return Integer.parseInt(param);
 		} catch(NumberFormatException nfex) {
-			String msg = String.format("Invalid %s %s to %c directive", paramName, param, directive);
+			String msg = String.format("Invalid %s \"%s\" to %c directive", paramName, param, directive);
 
 			IllegalArgumentException iaex = new IllegalArgumentException(msg);
 			iaex.initCause(nfex);
 
 			throw iaex;
 		}
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder("[");
+
+		for (int i = 0; i < params.length; i++) {
+			if (i != 0) sb.append(", ");
+
+			sb.append("\"");
+			sb.append(params[i]);
+			sb.append("\"");
+		}
+
+		sb.append("]");
+
+		return sb.toString();
 	}
 }

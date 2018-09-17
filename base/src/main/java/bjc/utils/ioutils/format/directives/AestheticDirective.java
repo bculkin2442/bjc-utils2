@@ -21,6 +21,7 @@ public class AestheticDirective implements Directive {
 	@Override
 	public void format(ReportWriter rw, Object item, CLModifiers mods, CLParameters params, Tape<Object> tParams,
 			Matcher dirMatcher, CLFormatter fmt) throws IOException {
+		// System.err.printf("Aesthetic directive with item \"%s\" and params: %s\n", item, tParams);
 		CLFormatter.checkItem(item, 'A');
 
 		int mincol = 0, colinc = 1, minpad = 0;

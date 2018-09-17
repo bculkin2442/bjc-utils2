@@ -15,6 +15,14 @@ public class CLModifiers {
 	 * Whether the colon mod is on.
 	 */
 	public final boolean colonMod;
+	/**
+	 * Whether the dollar mod is on.
+	 */
+	public final boolean dollarMod;
+	/**
+	 * Whether the star mod is on.
+	 */
+	public final boolean starMod;
 
 	/**
 	 * Create a new set of CL modifiers.
@@ -23,10 +31,14 @@ public class CLModifiers {
 	 *        The state of the at mod.
 	 * @param colon
 	 *        The state of the colon mod.
+	 * @param dollar
+	 *        The state of the dollar mod.
 	 */
-	public CLModifiers(boolean at, boolean colon) {
-		atMod = at;
-		colonMod = colon;
+	public CLModifiers(boolean at, boolean colon, boolean dollar, boolean star) {
+		atMod     = at;
+		colonMod  = colon;
+		dollarMod = dollar;
+		starMod   = star;
 	}
 
 	/**
@@ -37,13 +49,18 @@ public class CLModifiers {
 	 * @return A set of modifiers matching the string.
 	 */
 	public static CLModifiers fromString(String modString) {
-		boolean atMod = false;
-		boolean colonMod = false;
+		boolean atMod     = false;
+		boolean colonMod  = false;
+		boolean dollarMod = false;
+		boolean starMod   = false;
+
 		if(modString != null) {
-			atMod = modString.contains("@");
-			colonMod = modString.contains(":");
+			atMod     = modString.contains("@");
+			colonMod  = modString.contains(":");
+			dollarMod = modString.contains("$");
+			starMod   = modString.contains("*");
 		}
 
-		return new CLModifiers(atMod, colonMod);
+		return new CLModifiers(atMod, colonMod, dollarMod, starMod);
 	}
 }

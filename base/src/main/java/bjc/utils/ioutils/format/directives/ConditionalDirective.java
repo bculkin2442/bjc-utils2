@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.IllegalFormatConversionException;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 
 /**
@@ -17,6 +18,7 @@ import java.util.regex.Matcher;
  *
  */
 public class ConditionalDirective implements Directive {
+	private static Logger LOG = Logger.getLogger(ConditionalDirective.class.getName());
 
 	@Override
 	public void format(ReportWriter rw, Object item, CLModifiers mods, CLParameters arrParams,
@@ -24,42 +26,75 @@ public class ConditionalDirective implements Directive {
 		StringBuffer condBody = new StringBuffer();
 
 		List<String> clauses = new ArrayList<>();
-		String defClause = null;
+
+		String defClause  = null;
 		boolean isDefault = false;
+
+		int nestLevel = 1;
 
 		while (dirMatcher.find()) {
 			/* Process a list of clauses. */
 			String dirName = dirMatcher.group("name");
 			String dirMods = dirMatcher.group("modifiers");
 
+			//System.err.printf("Found conditional directive %s with %s mods and level %d\n", dirName, dirMods, nestLevel);
 			if (dirName != null) {
 				/* Append everything up to this directive. */
 				dirMatcher.appendReplacement(condBody, "");
 
-				if (dirName.equals("]")) {
-					/* End the conditional. */
-					String clause = condBody.toString();
-					if (isDefault) {
-						defClause = clause;
-					} else {
-						clauses.add(clause);
+				if (dirName.equals("[")) {
+					if (nestLevel > 0) {
+						condBody.append(dirMatcher.group());
 					}
+					nestLevel += 1;
+				} else if (Directive.isOpening(dirName)) {
+					nestLevel += 1;
 
-					break;
+					condBody.append(dirMatcher.group());
+				} else if (dirName.equals("]")) {
+					nestLevel = Math.max(0, nestLevel - 1);
+
+					if (nestLevel == 0) {
+						/* End the conditional. */
+						String clause = condBody.toString();
+						// System.err.printf("Found clause \"%s]\"\n", clause);
+						condBody      = new StringBuffer();
+
+						if (isDefault) {
+							defClause = clause;
+						}
+						clauses.add(clause);
+
+						break;
+					} else {
+						/* Not a special directive. */
+						condBody.append(dirMatcher.group());
+					}
+				} else if (Directive.isClosing(dirName)) {
+					nestLevel = Math.max(0, nestLevel - 1);
+
+					condBody.append(dirMatcher.group());
 				} else if (dirName.equals(";")) {
-					/* End the clause. */
-					String clause = condBody.toString();
-					if (isDefault) {
-						defClause = clause;
-					} else {
-						clauses.add(clause);
-					}
+					if (nestLevel == 1) {
+						/* End the clause. */
+						String clause = condBody.toString();
+						// System.err.printf("Found clause \"%s;\"\n", clause);
+						condBody      = new StringBuffer();
 
-					/*
-					 * Mark the next clause as the default.
-					 */
-					if (dirMods.contains(":")) {
-						isDefault = true;
+						if (isDefault) {
+							defClause = clause;
+						}
+						clauses.add(clause);
+
+						/*
+						 * Mark the next clause as the default.
+						 */
+						if (dirMods.contains(":")) {
+							isDefault = true;
+						}
+					} else {
+						/* Not a special directive. */
+						condBody.append(dirMatcher.group());
 					}
 				} else {
 					/* Not a special directive. */
@@ -67,18 +102,21 @@ public class ConditionalDirective implements Directive {
 				}
 			}
 		}
+		
+		if (mods.starMod && clauses.size() > 0) defClause = clauses.get(0);
 
-		Object par = formatParams.item();
 		try {
 			if (mods.colonMod) {
 				formatParams.right();
 
-				if (par == null) {
-					throw new IllegalArgumentException("No parameter provided for [ directive.");
-				} else if (!(par instanceof Boolean)) {
-					throw new IllegalFormatConversionException('[', par.getClass());
+				boolean res = false;
+				if (item == null) {
+					//throw new IllegalArgumentException("No parameter provided for [ directive.");
+				} else if (!(item instanceof Boolean)) {
+					throw new IllegalFormatConversionException('[', item.getClass());
+				} else {
+					res = (Boolean) item;
 				}
-				boolean res = (Boolean) par;
 
 				String frmt;
 				if (res)
@@ -86,17 +124,21 @@ public class ConditionalDirective implements Directive {
 				else
 					frmt = clauses.get(0);
 
-				fmt.doFormatString(frmt, rw, formatParams);
+				fmt.doFormatString(frmt, rw, formatParams, false);
 			} else if (mods.atMod) {
-				if (par == null) {
-					throw new IllegalArgumentException("No parameter provided for [ directive.");
-				} else if (!(par instanceof Boolean)) {
-					throw new IllegalFormatConversionException('[', par.getClass());
+				boolean res = false;
+				if (item == null) {
+					// throw new IllegalArgumentException("No parameter provided for [ directive.");
+				} else if (item instanceof Integer) {
+					if ((Integer)item != 0) res = true;
+				} else if (item instanceof Boolean) {
+					res = (Boolean) item;
+				} else {
+					throw new IllegalFormatConversionException('[', item.getClass());
 				}
-				boolean res = (Boolean) par;
 
 				if (res) {
-					fmt.doFormatString(clauses.get(0), rw, formatParams);
+					fmt.doFormatString(clauses.get(0), rw, formatParams, false);
 				} else {
 					formatParams.right();
 				}
@@ -105,21 +147,33 @@ public class ConditionalDirective implements Directive {
 				if (arrParams.length() >= 1) {
 					res = arrParams.getInt(0, "conditional choice", '[');
 				} else {
-					if (par == null) {
+					if (item == null) {
 						throw new IllegalArgumentException("No parameter provided for [ directive.");
-					} else if (!(par instanceof Number)) {
-						throw new IllegalFormatConversionException('[', par.getClass());
+					} else if (!(item instanceof Number)) {
+						throw new IllegalFormatConversionException('[', item.getClass());
 					}
-					res = ((Number) par).intValue();
+					res = ((Number) item).intValue();
 
 					formatParams.right();
 				}
 
-				if (res < 0 || res > clauses.size()) {
-					if (defClause != null)
-						fmt.doFormatString(defClause, rw, formatParams);
+				if (mods.dollarMod) res -= 1;
+
+				// System.err.printf("Attempting selection of clause %d of %d (%s) (default %s)\n",
+				//		res, clauses.size(), clauses, defClause);
+				if (clauses.size() == 0 || res < 0 || res >= clauses.size()) {
+					// System.err.printf("Selecting default clause (res %d, max %d): %s\n", res, clauses.size(), defClause);
+					// int clauseNo = 0;
+					// for (String clause : clauses) {
+						// System.err.printf("... clause %d: %s\n", ++clauseNo, clause); 
+					// }
+
+					if (defClause != null) fmt.doFormatString(defClause, rw, formatParams, false);
 				} else {
-					fmt.doFormatString(clauses.get(res), rw, formatParams);
+					String frmt = clauses.get(res);
+
+					// System.out.printf("Selecting clause %d of %d (params %s): %s\n", res, clauses.size(), formatParams, frmt);
+					fmt.doFormatString(frmt, rw, formatParams, false);
 				}
 			}
 		} catch (EscapeException eex) {

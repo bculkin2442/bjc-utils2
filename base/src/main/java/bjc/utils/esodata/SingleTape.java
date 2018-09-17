@@ -79,6 +79,8 @@ public class SingleTape<T> implements Tape<T> {
 
 	@Override
 	public T item() {
+		if (pos < 0 || pos >= backing.size()) return null;
+
 		return backing.get(pos);
 	}
 
@@ -150,13 +152,12 @@ public class SingleTape<T> implements Tape<T> {
 
 	@Override
 	public boolean right(final int amt) {
-		if(pos + amt >= backing.size() - 1) {
+		if(pos + amt > backing.size()) {
 			if(autoExtend) {
 				while(pos + amt >= backing.size() - 1) {
 					backing.add(null);
 				}
-			} else
-				return false;
+			} else return false;
 		}
 
 		pos += amt;
