@@ -19,7 +19,8 @@ public class ReportWriter extends Writer {
 	private Writer contained;
 
 	// # of character positions indentStr occupies
-	private int    indentLevel;
+	private int indentLevel;
+	private int indentPos = 0;
 
 	private DefaultList<IndentVal> iVals;
 	private IndentVal              defIVal;
@@ -28,6 +29,10 @@ public class ReportWriter extends Writer {
 	private int tabEqv       = 8;
 	private int linesWritten = 0;
 	private int linePos      = 0;
+
+	private int pageLine     = 0;
+	private int pageNum      = 0;
+	private int linesPerPage = 20;
 
 	private boolean printTabsAsSpaces;
 
@@ -38,6 +43,22 @@ public class ReportWriter extends Writer {
 	// care if that was a restriction that was only enforced by the compiler
 	public int getLevel() {
 		return indentLevel;
+	}
+
+	public int getPageLine() {
+		return pageLine;
+	}
+
+	public int getPageNum() {
+		return pageNum;
+	}
+
+	public int getLinesPerPage() {
+		return linesPerPage;
+	}
+
+	public int getIndentPos() {
+		return indentPos;
 	}
 
 	public String getString() {
@@ -81,6 +102,14 @@ public class ReportWriter extends Writer {
 
 		// Recalculate indentStrSpacedTabs
 		refreshIndents(-1);
+	}
+
+	public void setLinesPerPage(int lines) {
+		linesPerPage = lines;
+
+		while (pageLine > linesPerPage) {
+			writePage();
+		}
 	}
 
 	public void setLevel(int level) {
@@ -158,6 +187,7 @@ public class ReportWriter extends Writer {
 		rw.defIVal     = defIVal;
 
 		rw.indentLevel = indentLevel;
+		rw.indentPos   = indentPos;
 
 		rw.tabEqv = tabEqv;
 
@@ -165,6 +195,10 @@ public class ReportWriter extends Writer {
 		rw.linePos      = linePos;
 
 		rw.printTabsAsSpaces = printTabsAsSpaces;
+
+		rw.pageLine     = pageLine;
+		rw.pageNum      = pageNum;
+		rw.linesPerPage = linesPerPage;
 
 		// @NOTE 9/5/18
 		//
@@ -218,6 +252,36 @@ public class ReportWriter extends Writer {
 		sb.delete(0, sb.length());
 	}
 
+	// @NOTE 9/17/18
+	//
+	// Need to make some decision about how to handle doing a new page, and
+	// whether we want to simulate it with simply newlines until we hit the
+	// next page, or just printing the actual form-feed and hoping whatever
+	// reading software handles it properly
+	private void writePage() {
+		pageNum  += 1;
+		pageLine -= linesPerPage;
+	}
+
+	private void writeNL(char c) {
+		// Count lines written
+		if(c == '\r' || (c == '\n' && lastChar != '\r') || c == '\f') {
+			linesWritten += 1;
+			pageLine     += 1;
+
+			if (pageLine > linesPerPage || c == '\f') {
+				writePage();
+			}
+		}
+
+		lastCharWasNL = true;
+
+		contained.write(c);
+
+		linePos   = 0;
+		indentPos = 0;
+	}
+
 	@Override
 	public void write(char[] cbuf, int off, int len) throws IOException {
 		// Skip empty writes
@@ -236,21 +300,8 @@ public class ReportWriter extends Writer {
 			char c = cbuf[idx];
 
 			if(c == '\n' || c == '\r') {
-				// Count lines written
-				if(c == '\r')                     linesWritten++;
-				if(c == '\n' && lastChar != '\r') linesWritten++;
-
-				lastCharWasNL = true;
-
-				contained.write(c);
-
-				linePos = 0;
+				writeNL(c);
 			} else {
-				// @CopyPaste from above.
-				//
-				// No real point in pulling it out to a method
-				// yet, but if :IndentStr happens, it might
-				// warrant it.
 				if(lastCharWasNL) {
 					lastCharWasNL = false;
 
@@ -280,7 +331,8 @@ public class ReportWriter extends Writer {
 			if (printTabsAsSpaces) contained.write(ival.indentStrSpacedTabs);
 			else                   contained.write(ival.indentStr);
 
-			linePos += ival.indentStrPos;
+			linePos   += ival.indentStrPos;
+			indentPos += ival.indentStrPos;
 		}
 	}
 

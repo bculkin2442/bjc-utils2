@@ -69,11 +69,7 @@ public class TokenUtils {
 	 * Splits a string around instances of java-style double-quoted strings.
 	 *
 	 * @param inp
-<<<<<<< Updated upstream
 	 *        The string to split.
-=======
-	 * 	The string to split.
->>>>>>> Stashed changes
 	 *
 	 * @return 
 	 * 	An list containing alternating bits of the string and the embedded double-quoted
