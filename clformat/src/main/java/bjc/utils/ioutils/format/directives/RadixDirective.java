@@ -1,6 +1,7 @@
 package bjc.utils.ioutils.format.directives;
 
 import bjc.utils.ioutils.format.CLFormatter;
+import bjc.utils.ioutils.format.CLParameters;
 import bjc.utils.math.NumberUtils;
 
 import java.io.IOException;
@@ -27,7 +28,8 @@ public class RadixDirective extends GeneralNumberDirective {
 		 */
 		long val = ((Number) dirParams.item).longValue();
 
-		if (dirParams.arrParams.length() == 0) {
+		CLParameters clParameters = dirParams.arrParams;
+		if (clParameters.length() == 0) {
 			if (dirParams.mods.atMod) {
 				dirParams.rw.write(NumberUtils.toRoman(val, dirParams.mods.colonMod));
 			} else if (dirParams.mods.colonMod) {
@@ -36,12 +38,12 @@ public class RadixDirective extends GeneralNumberDirective {
 				dirParams.rw.write(NumberUtils.toCardinal(val));
 			}
 		} else {
-			if (dirParams.arrParams.length() < 1)
+			if (clParameters.length() < 1)
 				throw new IllegalArgumentException("R directive requires at least one parameter, the radix");
 
-			int radix = dirParams.arrParams.getInt(0, "radix", "R");
+			int radix = clParameters.getInt(0, "radix", "R");
 
-			handleNumberDirective(dirParams.rw, dirParams.mods, dirParams.arrParams, 0, val, radix);
+			handleNumberDirective(dirParams.rw, dirParams.mods, clParameters, 0, val, radix);
 		}
 
 		dirParams.tParams.right();
