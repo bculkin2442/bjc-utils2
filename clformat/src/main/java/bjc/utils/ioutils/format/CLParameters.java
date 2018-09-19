@@ -40,7 +40,7 @@ public class CLParameters {
 		this.nameIndices = new HashMap<>();
 	}
 
-	public void setIndexMappings(String... opts) {
+	public void mapIndices(String... opts) {
 		for (int i = 0; i < opts.length; i++) {
 			String opt = opts[i];
 
@@ -48,7 +48,7 @@ public class CLParameters {
 		}
 	}
 
-	public void setIndexMapping(String opt, int idx) {
+	public void mapIndex(String opt, int idx) {
 		nameIndices.put(opt, idx);
 	}
 
