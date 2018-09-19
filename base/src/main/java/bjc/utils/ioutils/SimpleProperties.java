@@ -29,7 +29,7 @@ public class SimpleProperties implements Map<String, String> {
 	 *
 	 * The format is the name, a space, then the body.
 	 *
-	 * All leading/trailing spaces from the name & body are removed.
+	 * All leading/trailing spaces from the name &amp; body are removed.
 	 *
 	 * @param is
 	 *        The stream to read from.
@@ -45,10 +45,7 @@ public class SimpleProperties implements Map<String, String> {
 				/*
 				 * Skip blank lines/comments
 				 */
-				if(ln.equals("")) {
-					continue;
-				}
-				if(ln.startsWith("#")) {
+				if(ln.equals("") || ln.startsWith("#")) {
 					continue;
 				}
 
