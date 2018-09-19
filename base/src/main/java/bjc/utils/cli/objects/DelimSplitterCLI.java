@@ -15,12 +15,8 @@ import bjc.utils.data.ITree;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IList;
 import bjc.utils.funcutils.StringUtils;
-import bjc.utils.parserutils.delims.DelimiterException;
-import bjc.utils.parserutils.delims.DelimiterGroup;
-import bjc.utils.parserutils.delims.RegexCloser;
-import bjc.utils.parserutils.delims.RegexOpener;
-import bjc.utils.parserutils.delims.SequenceDelimiter;
-import bjc.utils.parserutils.delims.StringDelimiter;
+import bjc.utils.ioutils.MirrorDB;
+import bjc.utils.parserutils.delims.*;
 import bjc.utils.parserutils.splitter.ConfigurableTokenSplitter;
 
 /**
@@ -30,12 +26,12 @@ import bjc.utils.parserutils.splitter.ConfigurableTokenSplitter;
  * @author EVE
  *
  */
-public class DelimSplitterTest {
+public class DelimSplitterCLI {
 	private ConfigurableTokenSplitter split;
 
 	private StringDelimiter dlm;
 
-	private Map<String, String> mirrored;
+	private MirrorDB mirrored;
 
 	private Map<String, DelimiterGroup<String>> groups;
 
@@ -44,8 +40,8 @@ public class DelimSplitterTest {
 	/*
 	 * Create a new tester.
 	 */
-	private DelimSplitterTest() {
-		loadMirrorDB();
+	private DelimSplitterCLI() {
+		mirrored = new MirrorDB();
 
 		groups = new HashMap<>();
 
@@ -54,38 +50,6 @@ public class DelimSplitterTest {
 		dlm = new StringDelimiter();
 
 		verbose = true;
-	}
-
-	private void loadMirrorDB() {
-		mirrored = new HashMap<>();
-
-		final InputStream stream = getClass().getResourceAsStream("/BidiMirrorDB.txt");
-
-		try (Scanner scn = new Scanner(stream)) {
-			String ln = "";
-
-			while (scn.hasNextLine()) {
-				ln = scn.nextLine();
-
-				if (ln.equals("")) {
-					continue;
-				}
-				if (ln.startsWith("#")) {
-					continue;
-				}
-
-				final int cp1 = Integer.parseInt(ln.substring(0, 4), 16);
-				final int cp2 = Integer.parseInt(ln.substring(6, 10), 16);
-
-				final char[] cpa1 = Character.toChars(cp1);
-				final char[] cpa2 = Character.toChars(cp2);
-
-				final String cps1 = new String(cpa1);
-				final String cps2 = new String(cpa2);
-
-				mirrored.put(cps1, cps2);
-			}
-		}
 	}
 
 	/*
@@ -160,7 +124,7 @@ public class DelimSplitterTest {
 			break;
 		case "splitter-addmatch":
 			for (final String arg : argArray) {
-				split.addSimpleDelimiters(arg, mirrored.get(arg));
+				split.addSimpleDelimiters(arg, mirrored.mirror(arg));
 			}
 			if (verbose) {
 				System.out.println("Added matched delimiters "
@@ -497,7 +461,7 @@ public class DelimSplitterTest {
 	 *                Unused CLI args.
 	 */
 	public static void main(final String[] args) {
-		final DelimSplitterTest tst = new DelimSplitterTest();
+		final DelimSplitterCLI tst = new DelimSplitterCLI();
 
 		tst.runLoop();
 	}
