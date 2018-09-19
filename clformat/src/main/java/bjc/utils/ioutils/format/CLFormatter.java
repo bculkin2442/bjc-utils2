@@ -46,7 +46,9 @@ public class CLFormatter {
 			throw new RuntimeException("Couldn't load formats for formatter");
 		}
 		
-		prefixParam   = props.get("clFormatPrefix");
+		String seqPrefixParam   = props.get("clFormatPrefixParam");
+
+		prefixParam   = String.format(props.get("clFormatPrefix"), seqPrefixParam);
 		formatMod     = props.get("clFormatModifier");
 		directiveName = props.get("clFormatName");
 

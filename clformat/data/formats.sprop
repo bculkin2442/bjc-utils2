@@ -19,10 +19,25 @@ clFormatDirective ~(?<params>%1$s)?(?<modifiers>%2$s?)(?:%3$s)
 ## * A single character preceded by a single quote
 ## * The letter V (or v)
 ## * The character #
-clFormatPrefix (?:(?:[-+]?\d+|'.|[Vv]|#|%|".*?(?<!\\)")?)
+## * The character %
+## * A double-quoted string
+clFormatPrefixParam (?:(?:[-+]?\d+|'.|[Vv]|#|%|".*?(?<!\\)")?)
+
+## Matches a (possibly named) format string prefix parameter
+## 
+## Parameters are seperated by ','
+## 
+## Named parameters are indicated by a preceeding #, which is followed by a
+## parameter name (any sequence of non-space, non-seperator (',', ':', ';')
+## printing characters), a seperator (: or ;), then the value of the parameter
+clFormatPrefix (?:(?:#[\S&&[^,:;]][:;]%1$s)|%1$s)
 
 ## Match a format string modifier
-## A modifier is any combination of $, :, * and @; duplicates don't matter though
+## A modifier is any combination of the following characters
+##  * '$'	 * ':'
+##  * '*'	 * '@'
+##
+## Duplicates have no effect
 clFormatModifier (?:[@$:*]+)
 
 ## Matches a directive name.

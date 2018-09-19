@@ -1,7 +1,9 @@
 package bjc.utils.ioutils.format;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import bjc.utils.esodata.Tape;
 import bjc.utils.parserutils.TokenUtils;
@@ -14,6 +16,9 @@ import bjc.utils.parserutils.TokenUtils;
 public class CLParameters {
 	private String[] params;
 
+	private Map<String, String>  namedParams;
+	private Map<String, Integer> nameIndices;
+
 	/**
 	 * Create a new set of CL format parameters.
 	 * 
@@ -21,7 +26,30 @@ public class CLParameters {
 	 *        The CL format parameters to use.
 	 */
 	public CLParameters(String[] params) {
+		this(params, new HashMap<>());
+	}
+
+	public CLParameters(Map<String, String> namedParams) {
+		this(new String[0], namedParams);
+	}
+
+	public CLParameters(String[] params, Map<String, String> namedParams) {
 		this.params = params;
+
+		this.namedParams  = namedParams;
+		this.nameIndices = new HashMap<>();
+	}
+
+	public void setIndexMappings(String... opts) {
+		for (int i = 0; i < opts.length; i++) {
+			String opt = opts[i];
+
+			if (!opt.equals("")) nameIndices.put(opt, i);
+		}
+	}
+
+	public void setIndexMapping(String opt, int idx) {
+		nameIndices.put(opt, idx);
 	}
 
 	/**
@@ -80,48 +108,81 @@ public class CLParameters {
 		if (lParams.size() == 1 && lParams.get(0).equals(""))
 			return new CLParameters(parameters.toArray(new String[0]));
 
+		Map<String, String>  namedParams  = new HashMap<>();
+		Map<String, Integer> nameIndices = new HashMap<>();
+
+		int currParamNo = 0;
 		for(String param : lParams) {
-			if(param.equalsIgnoreCase("V")) {
-				Object par = dirParams.item();
-				boolean succ = dirParams.right();
+			if (param.startsWith("#") && !param.equals("#")) {
+				boolean setIndex = false;
 
-				if(!succ) {
-					throw new IllegalStateException("Couldn't advance tape for parameter");
+				int nameIdx = 0;
+				for (int i = 1; i < param.length(); i++) {
+					char ch = param.charAt(i);
+
+					if (ch == ':' || ch == ';') {
+						if (ch == ';') setIndex = true;
+
+						nameIdx = i;
+						break;
+					}
 				}
 
-				if(par == null) {
-					throw new IllegalArgumentException(
-							"Expected a format parameter for V inline parameter");
-				}
+				String paramName = param.substring(0, nameIdx);
+				String paramVal  = param.substring(nameIdx + 1);
 
-				if(par instanceof Number) {
-					int val = ((Number) par).intValue();
+				String actVal = parseParam(paramVal, dirParams);
 
-					parameters.add(Integer.toString(val));
-				} else if(par instanceof Character) {
-					char ch = ((Character) par);
+				namedParams.put(paramName, actVal);
 
-					parameters.add(Character.toString(ch));
-				} else if (par instanceof String) {
-					parameters.add((String)par);
-				} else {
-					throw new IllegalArgumentException(
-							"Incorrect type of parameter for V inline parameter");
-				}
-			} else if (param.equals("#")) {
-				parameters.add(Integer.toString(dirParams.size() - dirParams.position()));
-			} else if (param.equals("%")) {
-				parameters.add(Integer.toString(dirParams.position()));
-			} else if (param.startsWith("\"")) {
-				String dquote = param.substring(1, param.length() - 1);
-
-				parameters.add(TokenUtils.descapeString(dquote));
+				if (setIndex) parameters.add(actVal);
 			} else {
-				parameters.add(param);
+				parameters.add(parseParam(param, dirParams));
 			}
+
+			currParamNo += 1;
 		}
 
-		return new CLParameters(parameters.toArray(new String[0]));
+		return new CLParameters(parameters.toArray(new String[0]), namedParams);
+	}
+
+	private static String parseParam(String param, Tape<Object> dirParams) {
+		if(param.equalsIgnoreCase("V")) {
+			Object par = dirParams.item();
+			boolean succ = dirParams.right();
+
+			if(!succ) {
+				throw new IllegalStateException("Couldn't advance tape for parameter");
+			} else if(par == null) {
+				throw new IllegalArgumentException(
+						"Expected a format parameter for V inline parameter");
+			} 
+
+			if(par instanceof Number) {
+				int val = ((Number) par).intValue();
+
+				return Integer.toString(val);
+			} else if(par instanceof Character) {
+				char ch = ((Character) par);
+
+				return Character.toString(ch);
+			} else if (par instanceof String) {
+				return (String)par;
+			} else {
+				throw new IllegalArgumentException(
+						"Incorrect type of parameter for V inline parameter");
+			}
+		} else if (param.equals("#")) {
+			return (Integer.toString(dirParams.size() - dirParams.position()));
+		} else if (param.equals("%")) {
+			return Integer.toString(dirParams.position());
+		} else if (param.startsWith("\"")) {
+			String dquote = param.substring(1, param.length() - 1);
+
+			return TokenUtils.descapeString(dquote);
+		}
+
+		return param;
 	}
 
 	/**
@@ -305,7 +366,7 @@ public class CLParameters {
 			throw iaex;
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder("[");
