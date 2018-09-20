@@ -14,7 +14,8 @@ public class FreshlineDirective implements Directive {
 		int nTimes = 1;
 
 		if(dirParams.arrParams.length() >= 1) {
-			nTimes = dirParams.arrParams.getInt(0, "occurance count", "&");
+			dirParams.arrParams.mapIndices("count");
+			nTimes = dirParams.arrParams.getInt("count", "occurance count", "&", 1);
 		}
 
 		if(dirParams.rw.isLastCharNL()) nTimes -= 1;

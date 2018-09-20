@@ -21,25 +21,32 @@ public class EscapeDirective implements Directive {
 		case 0:
 			shouldExit = dirParams.tParams.atEnd();
 			break;
-		case 1:
-			int num = params.getInt(0, "condition count", "^");
+		case 1: {
+			params.mapIndices("count");
+			int num = params.getInt("count", "condition count", "^", 0);
 
 			shouldExit = num == 0;
 			break;
-		case 2:
-			int left  = params.getInt(0, "left-hand condition", "^");
-			int right = params.getInt(1, "right-hand condition", "^");
+		}
+		case 2: {
+			params.mapIndices("lhand", "rhand");
+			int left  = params.getInt("lhand", "left-hand condition", "^", 0);
+			int right = params.getInt("rhand", "right-hand condition", "^", 0);
 
 			shouldExit = left == right;
 			break;
+		}
 		case 3:
-		default:
-			int low  = params.getInt(0, "lower-bound condition", "^");
-			int mid  = params.getInt(1, "interval condition", "^");
-			int high = params.getInt(2, "upper-bound condition", "^");
+		default: {
+			params.mapIndices("lower", "ival", "upper");
+
+			int low  = params.getInt("lower", "lower-bound condition", "^", 0);
+			int mid  = params.getInt("ival", "interval condition", "^", 0);
+			int high = params.getInt("upper", "upper-bound condition", "^", 0);
 
 			shouldExit = (low <= mid) && (mid <= high);
 			break;
+		}
 		}
 
 		if (dirParams.mods.dollarMod) dirParams.tParams.left();

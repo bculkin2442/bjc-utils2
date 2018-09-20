@@ -20,11 +20,15 @@ public class TabulateDirective implements Directive {
 			int colrel = 1, colinc = 1;
 
 			if (params.length() > 2) {
-				colinc = params.getIntDefault(1, "column increment", "T", 1);
+				params.mapIndex("colinc", 1);
+
+				colinc = params.getInt("colinc", "column increment", "T", 1);
 			}
 
 			if (params.length() > 1) {
-				colrel = params.getIntDefault(0, "relative column number", "T", 1);
+				params.mapIndices("colrel");
+
+				colrel = params.getInt("colrel", "relative column number", "T", 1);
 			}
 
 			for (int i = 0; i < colrel; i++) {
@@ -42,11 +46,15 @@ public class TabulateDirective implements Directive {
 			int colnum = 1, colinc = 1;
 
 			if (params.length() > 2) {
-				colinc = params.getIntDefault(1, "column increment", "T", 1);
+				params.mapIndex("colinc", 1);
+
+				colinc = params.getInt("colinc", "column increment", "T", 1);
 			}
 
 			if (params.length() > 1) {
-				colnum = params.getIntDefault(0, "column number", "T", 1);
+				params.mapIndices("colnum");
+
+				colnum = params.getInt("colnum", "column number", "T", 1);
 			}
 
 			if (currCol < colnum) {

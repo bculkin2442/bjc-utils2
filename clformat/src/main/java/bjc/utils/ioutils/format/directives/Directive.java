@@ -43,4 +43,11 @@ public interface Directive {
 			return false;
 		}
 	}
+
+	// @TODO 9/19/18 Ben Culkin :ParseContained
+	//
+	// Implement something for parsing contained bodies, abstracting the
+	// stuff that Iteration/Conditional/CaseDirective do.
+	//
+	// The main issue is thinking of a good interface to it. 
 }

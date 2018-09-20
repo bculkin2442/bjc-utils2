@@ -141,7 +141,9 @@ public class ConditionalDirective implements Directive {
 			} else {
 				int res;
 				if (dirParams.arrParams.length() >= 1) {
-					res = dirParams.arrParams.getInt(0, "conditional choice", "[");
+					dirParams.arrParams.mapIndices("choice");
+
+					res = dirParams.arrParams.getInt("choice", "conditional choice", "[", 0);
 				} else {
 					if (dirParams.item == null) {
 						throw new IllegalArgumentException("No parameter provided for [ directive.");

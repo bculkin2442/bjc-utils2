@@ -14,6 +14,11 @@ import bjc.utils.parserutils.TokenUtils;
  * @author Benjamin Culkin
  */
 public class CLParameters {
+	private static String MSG_FMT = "Invalid %s (%s) \"%s\" to %s directive";
+
+	private static String RX_TRUE  = "(?i)y(?:es)?|t(?:rue)?(?i)";
+	private static String RX_FALSE = "(?i)no?|f(?:alse)?(?i)";
+
 	private String[] params;
 
 	private Map<String, String>  namedParams;
@@ -44,14 +49,20 @@ public class CLParameters {
 		for (int i = 0; i < opts.length; i++) {
 			String opt = opts[i];
 
-			if (!opt.equals("")) nameIndices.put(opt, i);
+			if (!opt.equals("")) mapIndex(opt, i); 
 		}
 	}
 
 	public void mapIndex(String opt, int idx) {
+		if (params.length <= idx) System.err.printf("WARN: Mapping invalid index %d (max %d) to \"%s\"\n", idx, params.length, opt);
 		nameIndices.put(opt, idx);
 	}
 
+	public String getRaw(int idx) {
+		if (idx < 0 || idx >= params.length) return "Out of Bounds";
+
+		return params[idx];
+	}
 	/**
 	 * Get the length of the parameter list.
 	 * 
@@ -64,7 +75,8 @@ public class CLParameters {
 	/**
 	 * Creates a set of parameters from an array of parameters.
 	 *
-	 * Mostly, this just fills in V and # parameters.
+	 * This handles things like quoted strings, named parameters and the
+	 * other special parameter features.
 	 *
 	 * @param params
 	 *        The parameters of the directive.
@@ -101,10 +113,13 @@ public class CLParameters {
 
 			prevChar = c;
 		}
+
+		// Add last parameter
 		lParams.add(currParm.toString());
 
 		List<String> parameters = new ArrayList<>();
 
+		// Special case empty blocks, so that we don't confuse people
 		if (lParams.size() == 1 && lParams.get(0).equals(""))
 			return new CLParameters(parameters.toArray(new String[0]));
 
@@ -114,6 +129,7 @@ public class CLParameters {
 		int currParamNo = 0;
 		for(String param : lParams) {
 			if (param.startsWith("#") && !param.equals("#")) {
+				// Named parameter
 				boolean setIndex = false;
 
 				int nameIdx = 0;
@@ -121,6 +137,8 @@ public class CLParameters {
 					char ch = param.charAt(i);
 
 					if (ch == ':' || ch == ';') {
+						// Semicolon says to add as
+						// indexed parameter
 						if (ch == ';') setIndex = true;
 
 						nameIdx = i;
@@ -148,6 +166,7 @@ public class CLParameters {
 
 	private static String parseParam(String param, Tape<Object> dirParams) {
 		if(param.equalsIgnoreCase("V")) {
+			// Read parameter from items
 			Object par = dirParams.item();
 			boolean succ = dirParams.right();
 
@@ -185,186 +204,78 @@ public class CLParameters {
 		return param;
 	}
 
-	/**
-	 * Get an optional character parameter with a default value.
-	 * 
-	 * @param idx
-	 *        The index the parameter is at.
-	 * @param paramName
-	 *        The name of the parameter.
-	 * @param directive
-	 *        The directive this parameter belongs to.
-	 * @param def
-	 *        The default value for the parameter.
-	 * @return The value of the parameter if it exists, or the default
-	 *         otherwise.
-	 */
-	public boolean getBooleanDefault(int idx, String paramName, String directive, boolean def) {
-		if(!params[idx].equals("")) {
-			return getBoolean(idx, paramName, directive);
+	private String resolveKey(String key) {
+		if      (nameIndices.containsKey(key)) return params[nameIndices.get(key)];
+		else if (namedParams.containsKey(key)) return namedParams.get(key);
+
+		return "";
+	}
+
+	public boolean getBoolean(String key, String paramName, String directive, boolean def) {
+		String bol = resolveKey(key);
+
+		if(!bol.equals("")) {
+			if      (bol.matches(RX_TRUE))  return true;
+			else if (bol.matches(RX_FALSE)) return false;
+			else {
+				String msg = String.format(MSG_FMT, paramName, key, bol, directive);
+				throw new IllegalArgumentException(msg);
+			}
 		}
 
 		return def;
 	}
 
-	/**
-	 * Get a mandatory character parameter.
-	 * 
-	 * @param idx
-	 *        The index the parameter is at.
-	 * @param paramName
-	 *        The name of the parameter.
-	 * @param directive
-	 *        The directive this parameter belongs to.
-	 * @return The value for the parameter.
-	 */
-	public boolean getBoolean(int idx, String paramName, String directive) {
-		String bol = params[idx];
+	public String getString(String key, String paramName, String directive, String def) {
+		String vl = resolveKey(key);
 
-		if      (bol.matches("[Yy](?:es)?|[Tt](?:rue)?"))  return true;
-		else if (bol.matches("[Nn]o?|[Ff](?:alse)?"))      return false;
-		else {
-			String msg = String.format("Invalid %s \"%s\" to %s directive", paramName, bol, directive);
-			throw new IllegalArgumentException(msg);
-		}
+		// @NOTE 9/19/17
+		//
+		// This raises the question of what to do if the empty string is a valid
+		// value for a parameter
+		if (!vl.equals("")) return vl;
+
+		return def;
 	}
-	/**
-	 * Get an optional character parameter with a default value.
-	 * 
-	 * @param idx
-	 *        The index the parameter is at.
-	 * @param paramName
-	 *        The name of the parameter.
-	 * @param directive
-	 *        The directive this parameter belongs to.
-	 * @param def
-	 *        The default value for the parameter.
-	 * @return The value of the parameter if it exists, or the default
-	 *         otherwise.
-	 */
-	public String getStringDefault(int idx, String paramName, String directive, String def) {
-		if(!params[idx].equals("")) {
-			return getString(idx, paramName, directive);
+
+	public char getChar(String key, String paramName, String directive, char def) {
+		String param = resolveKey(key);
+
+		if (!param.equals("")) {
+			if (param.length() == 1) {
+				// Punt in the case we have a slightly malformed
+				// character
+				return param.charAt(0);
+			}
+
+			if(!param.startsWith("'")) {
+				throw new IllegalArgumentException(
+						String.format(MSG_FMT, paramName, key, param, directive));
+			}
+
+			return param.charAt(1);
 		}
 
 		return def;
 	}
 
-	/**
-	 * Get a mandatory character parameter.
-	 * 
-	 * @param idx
-	 *        The index the parameter is at.
-	 * @param paramName
-	 *        The name of the parameter.
-	 * @param directive
-	 *        The directive this parameter belongs to.
-	 * @return The value for the parameter.
-	 */
-	public String getString(int idx, String paramName, String directive) {
-		return params[idx];
-	}
+	public int getInt(String key, String paramName, String directive, int def) {
+		String param = resolveKey(key);
 
-	/**
-	 * Get an optional character parameter with a default value.
-	 * 
-	 * @param idx
-	 *        The index the parameter is at.
-	 * @param paramName
-	 *        The name of the parameter.
-	 * @param directive
-	 *        The directive this parameter belongs to.
-	 * @param def
-	 *        The default value for the parameter.
-	 * @return The value of the parameter if it exists, or the default
-	 *         otherwise.
-	 */
-	public char getCharDefault(int idx, String paramName, String directive, char def) {
-		if(!params[idx].equals("")) {
-			return getChar(idx, paramName, directive);
+		if (!param.equals("")) {
+			try {
+				return Integer.parseInt(param);
+			} catch(NumberFormatException nfex) {
+				String msg = String.format(MSG_FMT, paramName, key, param, directive);
+
+				IllegalArgumentException iaex = new IllegalArgumentException(msg);
+				iaex.initCause(nfex);
+
+				throw iaex;
+			}
 		}
 
 		return def;
-	}
-
-	/**
-	 * Get a mandatory character parameter.
-	 * 
-	 * @param idx
-	 *        The index the parameter is at.
-	 * @param paramName
-	 *        The name of the parameter.
-	 * @param directive
-	 *        The directive this parameter belongs to.
-	 * @return The value for the parameter.
-	 */
-	public char getChar(int idx, String paramName, String directive) {
-		String param = params[idx];
-
-		if (param.length() == 1) {
-			// Punt in the case we have a slightly malformed
-			// character
-			return param.charAt(0);
-		}
-
-		if(!param.startsWith("'")) {
-			throw new IllegalArgumentException(
-					String.format("Invalid %s \"%s\" to %s directive", paramName, param, directive));
-		}
-
-		return param.charAt(1);
-	}
-
-	// @TODO
-	//
-	// Add getString and getStringDefault
-
-	/**
-	 * Get an optional integer parameter with a default value.
-	 * 
-	 * @param idx
-	 *        The index the parameter is at.
-	 * @param paramName
-	 *        The name of the parameter.
-	 * @param directive
-	 *        The directive this parameter belongs to.
-	 * @param def
-	 *        The default value for the parameter.
-	 * @return The value of the parameter if it exists, or the default
-	 *         otherwise.
-	 */
-	public int getIntDefault(int idx, String paramName, String directive, int def) {
-		if(!params[idx].equals("")) {
-			return getInt(idx, paramName, directive);
-		}
-
-		return def;
-	}
-
-	/**
-	 * Get a mandatory integer parameter.
-	 * 
-	 * @param idx
-	 *        The index the parameter is at.
-	 * @param paramName
-	 *        The name of the parameter.
-	 * @param directive
-	 *        The directive this parameter belongs to.
-	 * @return The value for the parameter.
-	 */
-	public int getInt(int idx, String paramName, String directive) {
-		String param = params[idx];
-
-		try {
-			return Integer.parseInt(param);
-		} catch(NumberFormatException nfex) {
-			String msg = String.format("Invalid %s \"%s\" to %s directive", paramName, param, directive);
-
-			IllegalArgumentException iaex = new IllegalArgumentException(msg);
-			iaex.initCause(nfex);
-
-			throw iaex;
-		}
 	}
 
 	@Override

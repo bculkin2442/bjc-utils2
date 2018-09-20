@@ -28,8 +28,8 @@ public class RadixDirective extends GeneralNumberDirective {
 		 */
 		long val = ((Number) dirParams.item).longValue();
 
-		CLParameters clParameters = dirParams.arrParams;
-		if (clParameters.length() == 0) {
+		CLParameters params = dirParams.arrParams;
+		if (params.length() == 0) {
 			if (dirParams.mods.atMod) {
 				dirParams.rw.write(NumberUtils.toRoman(val, dirParams.mods.colonMod));
 			} else if (dirParams.mods.colonMod) {
@@ -38,12 +38,14 @@ public class RadixDirective extends GeneralNumberDirective {
 				dirParams.rw.write(NumberUtils.toCardinal(val));
 			}
 		} else {
-			if (clParameters.length() < 1)
+			if (params.length() < 1)
 				throw new IllegalArgumentException("R directive requires at least one parameter, the radix");
 
-			int radix = clParameters.getInt(0, "radix", "R");
+			params.mapIndex("radix", 0);
 
-			handleNumberDirective(dirParams.rw, dirParams.mods, clParameters, 0, val, radix);
+			int radix = params.getInt("radix", "radix", "R", 10);
+
+			handleNumberDirective(dirParams.rw, dirParams.mods, params, 0, val, radix);
 		}
 
 		dirParams.tParams.right();

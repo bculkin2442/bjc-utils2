@@ -31,7 +31,9 @@ public class LiteralDirective implements Directive {
 		int nTimes = 1;
 
 		if (dirParams.arrParams.length() >= 1) {
-			nTimes = dirParams.arrParams.getInt(0, "occurance count", directive);
+			dirParams.arrParams.mapIndices("count");
+
+			nTimes = dirParams.arrParams.getInt("count", "occurance count", directive, 1);
 		}
 
 		for (int i = 0; i < nTimes; i++) {

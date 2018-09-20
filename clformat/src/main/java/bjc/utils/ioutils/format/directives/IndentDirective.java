@@ -20,7 +20,9 @@ public class IndentDirective implements Directive {
 		int nIndents = 1;
 
 		if(dirParams.arrParams.length() >= 1) {
-			nIndents = dirParams.arrParams.getInt(0, "indent count", "I");
+			dirParams.arrParams.mapIndices("count");
+
+			nIndents = dirParams.arrParams.getInt("count", "indent count", "I", 1);
 		}
 
 		boolean dedent = false;

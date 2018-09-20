@@ -16,6 +16,7 @@ import java.io.IOException;
 public abstract class GeneralNumberDirective implements Directive {
 	protected static void handleNumberDirective(ReportWriter rw, CLModifiers mods, CLParameters params, int argidx,
 			long val, int radix) throws IOException {
+
 		/*
 		 * Initialize the two padding related parameters, and then fill them in from the
 		 * directive parameters if they are present.
@@ -23,10 +24,13 @@ public abstract class GeneralNumberDirective implements Directive {
 		int mincol = 0;
 		char padchar = ' ';
 		if (params.length() >= (argidx + 2)) {
-			mincol = params.getIntDefault(argidx + 1, "minimum column count", "R", 0);
+			params.mapIndex("mincol", argidx + 1);
+			mincol = params.getInt("mincol", "minimum column count", "R", 0);
 		}
+
 		if (params.length() >= (argidx + 3)) {
-			padchar = params.getCharDefault(argidx + 2, "padding character", "R", ' ');
+			params.mapIndex("padchar", argidx + 2);
+			padchar = params.getChar("padchar", "padding character", "R", ' ');
 		}
 
 		String res;
@@ -38,11 +42,16 @@ public abstract class GeneralNumberDirective implements Directive {
 			 */
 			int commaInterval = 0;
 			char commaChar = ',';
+
+			// System.err.printf("Comma params (idx %d, len %d): char \"%s\", int \"%s\"\n", argidx, params.length(), params.getRaw(argidx + 3), params.getRaw(argidx + 4));
+
 			if (params.length() >= (argidx + 4)) {
-				commaChar = params.getCharDefault((argidx + 3), "comma character", "R", ',');
+				params.mapIndex("cchar", argidx + 3);
+				commaChar = params.getChar("cchar", "comma character", "R", ',');
 			}
 			if (params.length() >= (argidx + 5)) {
-				commaInterval = params.getIntDefault((argidx + 4), "comma interval", "R", 0);
+				params.mapIndex("cinterval", argidx + 4);
+				commaInterval = params.getInt("cinterval", "comma interval", "R", 0);
 			}
 
 			res = NumberUtils.toCommaString(val, mincol, padchar, commaInterval, commaChar, mods.atMod, radix);
