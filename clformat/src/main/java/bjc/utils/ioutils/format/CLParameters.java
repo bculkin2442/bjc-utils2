@@ -54,8 +54,8 @@ public class CLParameters {
 	}
 
 	public void mapIndex(String opt, int idx) {
-		if (params.length <= idx) System.err.printf("WARN: Mapping invalid index %d (max %d) to \"%s\"\n", idx, params.length, opt);
-		nameIndices.put(opt, idx);
+		if (params.length <= idx) System.err.printf("WARN: Mapping invalid index %d (max %d) to \"%s\"\n", idx, params.length, opt.toUpperCase());
+		nameIndices.put(opt.toUpperCase(), idx);
 	}
 
 	public String getRaw(int idx) {
@@ -151,7 +151,7 @@ public class CLParameters {
 
 				String actVal = parseParam(paramVal, dirParams);
 
-				namedParams.put(paramName, actVal);
+				namedParams.put(paramName.toUpperCase(), actVal);
 
 				if (setIndex) parameters.add(actVal);
 			} else {
@@ -205,8 +205,10 @@ public class CLParameters {
 	}
 
 	private String resolveKey(String key) {
-		if      (nameIndices.containsKey(key)) return params[nameIndices.get(key)];
-		else if (namedParams.containsKey(key)) return namedParams.get(key);
+		String actKey = key.toUpperCase();
+
+		if      (nameIndices.containsKey(actKey)) return params[nameIndices.get(actKey)];
+		else if (namedParams.containsKey(actKey)) return namedParams.get(actKey);
 
 		return "";
 	}
