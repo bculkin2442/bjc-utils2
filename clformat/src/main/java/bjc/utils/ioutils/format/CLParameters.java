@@ -2,9 +2,12 @@ package bjc.utils.ioutils.format;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import bjc.utils.esodata.AbbrevMap;
 import bjc.utils.esodata.Tape;
 import bjc.utils.parserutils.TokenUtils;
 
@@ -20,6 +23,9 @@ public class CLParameters {
 	private static String RX_FALSE = "(?i)no?|f(?:alse)?(?i)";
 
 	private String[] params;
+
+	private Set<String> abbrevWords;
+	private AbbrevMap   nameAbbrevs;
 
 	private Map<String, String>  namedParams;
 	private Map<String, Integer> nameIndices;
@@ -43,6 +49,40 @@ public class CLParameters {
 
 		this.namedParams  = namedParams;
 		this.nameIndices = new HashMap<>();
+
+		abbrevWords = new HashSet<>();
+		nameAbbrevs = new AbbrevMap();
+
+		refreshAbbrevs();
+	}
+
+	private void refreshAbbrevs() {
+		// @NOTE 9/19/18
+		//
+		// This never clears abbrevWords or nameAbbrevs, which I'm fine
+		// with here, as these objects are fairly temporary.
+		//
+		// If it becomes an issue, I'll resolve it
+		for (String key : namedParams.keySet()) {
+			if (abbrevWords.contains(key)) continue;
+
+			abbrevWords.add(key);
+			nameAbbrevs.addWords(key);
+		}
+
+		for (String key : nameIndices.keySet()) {
+			if (abbrevWords.contains(key)) continue;
+
+			abbrevWords.add(key);
+			nameAbbrevs.addWords(key);
+		}
+	}
+
+	private void refreshAbbrev(String key) {
+		if (abbrevWords.contains(key)) return;
+
+		abbrevWords.add(key);
+		nameAbbrevs.addWords(key);
 	}
 
 	public void mapIndices(String... opts) {
@@ -51,14 +91,23 @@ public class CLParameters {
 
 			if (!opt.equals("")) mapIndex(opt, i); 
 		}
+
+		refreshAbbrevs();
 	}
 
 	public void mapIndex(String opt, int idx) {
-		if (params.length <= idx) System.err.printf("WARN: Mapping invalid index %d (max %d) to \"%s\"\n", idx, params.length, opt.toUpperCase());
-		nameIndices.put(opt.toUpperCase(), idx);
+		mapIndex(opt, idx, true);
 	}
 
-	public String getRaw(int idx) {
+	private void mapIndex(String opt, int idx, boolean doRefresh) {
+		if (params.length <= idx) System.err.printf("WARN: Mapping invalid index %d (max %d) to \"%s\"\n", idx, params.length, opt.toUpperCase());
+
+		nameIndices.put(opt.toUpperCase(), idx);
+
+		if (doRefresh) refreshAbbrevs();
+	}
+
+	public String getByIndex(int idx) {
 		if (idx < 0 || idx >= params.length) return "Out of Bounds";
 
 		return params[idx];
@@ -205,7 +254,29 @@ public class CLParameters {
 	}
 
 	private String resolveKey(String key) {
-		String actKey = key.toUpperCase();
+		String ucKey = key.toUpperCase();
+
+		if (!abbrevWords.contains(ucKey)) refreshAbbrev(ucKey);
+
+		String[] keys = nameAbbrevs.deabbrev(ucKey);
+		if (keys.length > 1) {
+			StringBuilder sb = new StringBuilder();
+
+			sb.append("Ambiguous parameter name \"");
+			sb.append(ucKey);
+			sb.append("\". Could've meant: ");
+			for (int i = 0; i < keys.length; i++) {
+				sb.append("\"");
+				sb.append(keys[i]);
+				sb.append("\"");
+				if (i < keys.length - 1) sb.append(", ");
+			}
+			sb.append(".");
+
+			throw new IllegalArgumentException(sb.toString());
+		}
+
+		String actKey = keys[0];
 
 		if      (nameIndices.containsKey(actKey)) return params[nameIndices.get(actKey)];
 		else if (namedParams.containsKey(actKey)) return namedParams.get(actKey);
