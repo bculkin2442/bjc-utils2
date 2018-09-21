@@ -7,6 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+// @NOTE 9/19/18
+//
+// What to do about one-to-many mirrored mappings?
+//
+// Currently, we pick the one with the latest codepoint
 public class MirrorDB {
 	private Map<String, String> mirrored;
 
