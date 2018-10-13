@@ -25,12 +25,12 @@ public class ListUtils {
 	 * spaces.
 	 *
 	 * @param input
-	 *        The list of tokens to collapse.
+	 *                The list of tokens to collapse.
 	 *
 	 * @return The collapsed string of tokens.
 	 */
 	public static String collapseTokens(final IList<String> input) {
-		if(input == null) throw new NullPointerException("Input must not be null");
+		if (input == null) throw new NullPointerException("Input must not be null");
 
 		return collapseTokens(input, "");
 	}
@@ -40,32 +40,32 @@ public class ListUtils {
 	 * separator after each token.
 	 *
 	 * @param input
-	 *        The list of tokens to collapse.
+	 *                The list of tokens to collapse.
 	 *
 	 * @param seperator
-	 *        The separator to use for separating tokens.
+	 *                The separator to use for separating tokens.
 	 *
 	 * @return The collapsed string of tokens.
 	 */
 	public static String collapseTokens(final IList<String> input, final String seperator) {
-		if(input == null) {
+		if (input == null) {
 			throw new NullPointerException("Input must not be null");
-		} else if(seperator == null) {
+		} else if (seperator == null) {
 			throw new NullPointerException("Seperator must not be null");
 		}
 
-		if(input.getSize() < 1) {
+		if (input.getSize() < 1) {
 			return "";
-		} else if(input.getSize() == 1) {
+		} else if (input.getSize() == 1) {
 			return input.first();
 		} else {
 			final StringBuilder state = new StringBuilder();
 
 			int i = 1;
-			for(final String itm : input.toIterable()) {
+			for (final String itm : input.toIterable()) {
 				state.append(itm);
 
-				if(i != input.getSize()) {
+				if (i != input.getSize()) {
 					state.append(seperator);
 				}
 
@@ -80,17 +80,17 @@ public class ListUtils {
 	 * Select a number of random items from the list without replacement.
 	 *
 	 * @param <E>
-	 *        The type of items to select.
+	 *                The type of items to select.
 	 *
 	 * @param list
-	 *        The list to select from.
+	 *                The list to select from.
 	 *
 	 * @param number
-	 *        The number of items to selet.
+	 *                The number of items to selet.
 	 *
 	 * @param rng
-	 *        A function that creates a random number from 0 to the desired
-	 *        number.
+	 *                A function that creates a random number from 0 to the
+	 *                desired number.
 	 *
 	 * @return A new list containing the desired number of items randomly
 	 *         selected from the specified list without replacement.
@@ -104,7 +104,7 @@ public class ListUtils {
 		final Iterator<E> itr = list.toIterable().iterator();
 		E element = null;
 
-		for(final int index = 0; itr.hasNext(); element = itr.next()) {
+		for (final int index = 0; itr.hasNext(); element = itr.next()) {
 			/* n - m */
 			final int winningChance = number - selected.getSize();
 
@@ -112,7 +112,7 @@ public class ListUtils {
 			final int totalChance = total - (index - 1);
 
 			/* Probability of selecting the t+1'th element */
-			if(NumberUtils.isProbable(winningChance, totalChance, rng)) {
+			if (NumberUtils.isProbable(winningChance, totalChance, rng)) {
 				selected.add(element);
 			}
 		}
@@ -124,17 +124,17 @@ public class ListUtils {
 	 * Select a number of random items from the list, with replacement.
 	 *
 	 * @param <E>
-	 *        The type of items to select.
+	 *                The type of items to select.
 	 *
 	 * @param list
-	 *        The list to select from.
+	 *                The list to select from.
 	 *
 	 * @param number
-	 *        The number of items to select.
+	 *                The number of items to select.
 	 *
 	 * @param rng
-	 *        A function that creates a random number from 0 to the desired
-	 *        number.
+	 *                A function that creates a random number from 0 to the
+	 *                desired number.
 	 *
 	 * @return A new list containing the desired number of items randomly
 	 *         selected from the specified list.
@@ -143,7 +143,7 @@ public class ListUtils {
 			final Function<Integer, Integer> rng) {
 		final IList<E> selected = new FunctionalList<>(new ArrayList<>(number));
 
-		for(int i = 0; i < number; i++) {
+		for (int i = 0; i < number; i++) {
 			selected.add(list.randItem(rng));
 		}
 
@@ -155,26 +155,27 @@ public class ListUtils {
 	 * for more than one element in a partition.
 	 *
 	 * @param <E>
-	 *        The type of elements in the list to partition.
+	 *                The type of elements in the list to partition.
 	 *
 	 * @param input
-	 *        The list to partition.
+	 *                The list to partition.
 	 *
 	 * @param counter
-	 *        The function to determine the count for each element for.
+	 *                The function to determine the count for each element
+	 *                for.
 	 *
 	 * @param partitionSize
-	 *        The number of elements to put in each partition.
+	 *                The number of elements to put in each partition.
 	 *
 	 * @return A list partitioned according to the above rules.
 	 */
 	public static <E> IList<IList<E>> groupPartition(final IList<E> input, final Function<E, Integer> counter,
 			final int partitionSize) {
-		if(input == null) {
+		if (input == null) {
 			throw new NullPointerException("Input list must not be null");
-		} else if(counter == null) {
+		} else if (counter == null) {
 			throw new NullPointerException("Counter must not be null");
-		} else if(partitionSize < 1 || partitionSize > input.getSize()) {
+		} else if (partitionSize < 1 || partitionSize > input.getSize()) {
 			final String fmt = "%d is not a valid partition size. Must be between 1 and %d";
 			final String msg = String.format(fmt, partitionSize, input.getSize());
 
@@ -190,11 +191,11 @@ public class ListUtils {
 		final GroupPartIteration<E> it = new GroupPartIteration<>(returned, rejected, partitionSize, counter);
 
 		/* Run up to a certain number of passes. */
-		for(int numberOfIterations = 0; numberOfIterations < MAX_NTRIESPART
+		for (int numberOfIterations = 0; numberOfIterations < MAX_NTRIESPART
 				&& !rejected.isEmpty(); numberOfIterations++) {
 			input.forEach(it);
 
-			if(rejected.isEmpty()) {
+			if (rejected.isEmpty()) {
 				/* Nothing was rejected, so we're done. */
 				return returned;
 			}
@@ -212,10 +213,10 @@ public class ListUtils {
 	 * Merge the contents of a bunch of lists together into a single list.
 	 *
 	 * @param <E>
-	 *        The type of value in this lists.
+	 *                The type of value in this lists.
 	 *
 	 * @param lists
-	 *        The values in the lists to merge.
+	 *                The values in the lists to merge.
 	 *
 	 * @return A list containing all the elements of the lists.
 	 */
@@ -223,8 +224,8 @@ public class ListUtils {
 	public static <E> IList<E> mergeLists(final IList<E>... lists) {
 		final IList<E> returned = new FunctionalList<>();
 
-		for(final IList<E> list : lists) {
-			for(final E itm : list.toIterable()) {
+		for (final IList<E> list : lists) {
+			for (final E itm : list.toIterable()) {
 				returned.add(itm);
 			}
 		}
@@ -236,24 +237,24 @@ public class ListUtils {
 	 * Pad the provided list out to the desired size.
 	 *
 	 * @param <E>
-	 *        The type of elements in the list.
+	 *                The type of elements in the list.
 	 *
 	 * @param list
-	 *        The list to pad out.
+	 *                The list to pad out.
 	 *
 	 * @param counter
-	 *        The function to count elements with.
+	 *                The function to count elements with.
 	 *
 	 * @param size
-	 *        The desired size of the list.
+	 *                The desired size of the list.
 	 *
 	 * @param padder
-	 *        The function to get elements to pad with.
+	 *                The function to get elements to pad with.
 	 *
 	 * @return The list, padded to the desired size.
 	 *
 	 * @throws IllegalArgumentException
-	 *         If the list couldn't be padded to the desired size.
+	 *                 If the list couldn't be padded to the desired size.
 	 */
 	public static <E> IList<E> padList(final IList<E> list, final Function<E, Integer> counter, final int size,
 			final Supplier<E> padder) {
@@ -261,22 +262,22 @@ public class ListUtils {
 
 		final IList<E> returned = new FunctionalList<>();
 
-		for(final E itm : list.toIterable()) {
+		for (final E itm : list.toIterable()) {
 			count += counter.apply(itm);
 
 			returned.add(itm);
 		}
 
-		if(count % size != 0) {
+		if (count % size != 0) {
 			/* We need to pad */
 			int needed = count % size;
 			int threshold = 0;
 
-			while(needed > 0 && threshold <= MAX_NTRIESPART) {
+			while (needed > 0 && threshold <= MAX_NTRIESPART) {
 				final E val = padder.get();
 				final int newCount = counter.apply(val);
 
-				if(newCount <= needed) {
+				if (newCount <= needed) {
 					returned.add(val);
 
 					threshold = 0;
@@ -287,7 +288,7 @@ public class ListUtils {
 				}
 			}
 
-			if(threshold > MAX_NTRIESPART) {
+			if (threshold > MAX_NTRIESPART) {
 				final String fmt = "Heuristic (more than %d iterations of attempting to pad) detected an unpaddable list. (%s)\nPartially padded list: %S";
 
 				final String msg = String.format(fmt, MAX_NTRIESPART, list.toString(),
@@ -300,11 +301,18 @@ public class ListUtils {
 		return returned;
 	}
 
+	/**
+	 * Convert a list of longs into an array of longs.
+	 * 
+	 * @param list
+	 *                The list to convert.
+	 * @return The list as an array.
+	 */
 	public static long[] toPrimitive(List<Long> list) {
 		long[] res = new long[list.size()];
 
 		int idx = 0;
-		for(long val : list) {
+		for (long val : list) {
 			res[idx] = val;
 
 			idx += 1;
@@ -320,7 +328,7 @@ public class ListUtils {
 	 * pg 322)
 	 *
 	 * @param list
-	 * 	The list to generate permutations from.
+	 *                The list to generate permutations from.
 	 * @return The list of permutations of the list.
 	 */
 	public static <T> List<List<T>> permuteList(List<T> list) {
@@ -329,17 +337,17 @@ public class ListUtils {
 		/*
 		 * Special-case small usages.
 		 */
-		if(list.size() == 0) {
+		if (list.size() == 0) {
 			return permutes;
 		}
 
-		if(list.size() == 1) {
+		if (list.size() == 1) {
 			permutes.add(list);
 
 			return permutes;
 		}
 
-		if(list.size() == 2) {
+		if (list.size() == 2) {
 			T elm1 = list.get(0);
 			T elm2 = list.get(1);
 
@@ -363,13 +371,13 @@ public class ListUtils {
 		int[] auxC = new int[list.size()];
 		int[] auxO = new int[list.size()];
 
-		for(int i = 0; i < list.size(); i++) {
+		for (int i = 0; i < list.size(); i++) {
 			auxC[i] = 0;
 			auxO[i] = 1;
 		}
 
 		List<T> currentPermute = new ArrayList<>(list.size());
-		for(T elm : list) {
+		for (T elm : list) {
 			currentPermute.add(elm);
 		}
 		permutes.add(currentPermute);
@@ -377,18 +385,18 @@ public class ListUtils {
 		int j = list.size() - 1;
 		int s = 0;
 
-		while(true) {
+		while (true) {
 			int q = auxC[j] + auxO[j];
 
-			if(q < 0) {
+			if (q < 0) {
 				auxO[j] = -auxO[j];
 				j -= 1;
 
 				continue;
 			}
 
-			if(q == j) {
-				if(j == 0) break;
+			if (q == j) {
+				if (j == 0) break;
 
 				s += 1;
 
@@ -406,7 +414,7 @@ public class ListUtils {
 			auxC[j] = q;
 
 			currentPermute = new ArrayList<>(list.size());
-			for(T elm : list) {
+			for (T elm : list) {
 				currentPermute.add(elm);
 			}
 			permutes.add(currentPermute);
@@ -416,12 +424,6 @@ public class ListUtils {
 		}
 
 		return permutes;
-	}
-
-	private static <T> List<List<T>> powerList(List<T> list) {
-		List<List<T>> results = new LinkedList<>();
-
-		return results;
 	}
 
 	private static <T> void swapList(List<T> list, int a, int b) {

@@ -19,9 +19,7 @@ import org.junit.Test;
 public class ReportWriterTest {
 	@Test
 	public void testWriteString() {
-		ReportWriter rw = new ReportWriter(new StringWriter());
-
-		try {
+		try (ReportWriter rw = new ReportWriter(new StringWriter())) {
 			rw.write("foo");
 
 			assertEquals("foo", rw.toString());

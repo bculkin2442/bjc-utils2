@@ -7,7 +7,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import bjc.utils.data.BooleanToggle;
-import bjc.utils.ioutils.LevelSplitter;
 import bjc.utils.parserutils.TokenUtils;
 
 import com.ibm.icu.text.BreakIterator;
