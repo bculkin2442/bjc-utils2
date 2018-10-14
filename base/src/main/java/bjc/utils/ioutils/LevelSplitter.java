@@ -91,6 +91,20 @@ public class LevelSplitter {
 	 * 
 	 * @param phrase
 	 *                The string to split.
+	 * @param splits
+	 *                The strings to split on.
+	 * @return A list of split strings. If keepDelims is true, it also
+	 *         includes the delimiters in between the split strings.
+	 */
+	public List<String> levelSplit(String phrase, String... splits) {
+		return levelSplit(phrase, false, splits);
+	}
+	
+	/**
+	 * Split a string, respecting groups.
+	 * 
+	 * @param phrase
+	 *                The string to split.
 	 * @param keepDelims
 	 *                Whether or not to include the delimiters in the
 	 *                results.

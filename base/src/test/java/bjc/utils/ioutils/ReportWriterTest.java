@@ -1,4 +1,4 @@
-package bjc.utils.test.ioutils;
+package bjc.utils.ioutils;
 
 import static org.junit.Assert.*;
 
