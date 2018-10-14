@@ -54,7 +54,20 @@ public class FunctionalList<E> implements Cloneable, IList<E> {
 			wrapped.add(item);
 		}
 	}
-
+	
+	/**
+	 * Create a new functional list containing the specified items.
+	 *
+	 * Takes O(n) time, where n is the number of items specified
+	 *
+	 * @param items
+	 *        The items to put into this functional list.
+	 * @return The returned list.
+	 */
+	@SafeVarargs
+	public static <T> IList<T> listOf(final T... items) {
+		return new FunctionalList<>(items);
+	}
 	/**
 	 * Create a new functional list with the specified size.
 	 *
