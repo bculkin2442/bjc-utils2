@@ -542,7 +542,7 @@ public class ReportWriter extends Writer {
 
 			char c = cbuf[idx];
 
-			if (c == '\n' || c == '\r' || (c == '\n' && lastChar != '\r') || c == '\f') {
+			if ((c == '\n' && lastChar != '\r') || c == '\n' || c == '\r' ||  c == '\f') {
 				writeNL(c);
 			} else {
 				if (lastCharWasNL) {

@@ -436,6 +436,7 @@ public class NumberUtils {
 		StringBuilder pad = new StringBuilder();
 
 		if(work.length() < mincols) {
+			@SuppressWarnings("unused")
 			int padCount = 0;
 			for(int i = work.length(); i < mincols; i++) {
 				// @NOTE 9/6/18 :CommaPad
