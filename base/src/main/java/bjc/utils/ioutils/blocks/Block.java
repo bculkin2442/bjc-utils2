@@ -27,19 +27,26 @@ public class Block {
 	 */
 	public final int blockNo;
 
+	/**
+	 * The line offset number for this block.
+	 * 
+	 * Essentially, this is the absolute number of lines that this block is
+	 * into whatever source it came from, where as startLine and endLine are
+	 * relative to the BlockReader this Block is from.
+	 */
 	public int lineOffset;
 
 	/**
 	 * Create a new block.
 	 *
 	 * @param blockNo
-	 *        The number of this block.
+	 *                The number of this block.
 	 * @param contents
-	 *        The contents of this block.
+	 *                The contents of this block.
 	 * @param startLine
-	 *        The line this block started on.
+	 *                The line this block started on.
 	 * @param endLine
-	 *        The line this block ended.
+	 *                The line this block ended.
 	 */
 	public Block(final int blockNo, final String contents, final int startLine, final int endLine) {
 		this.contents = contents;
@@ -49,50 +56,16 @@ public class Block {
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-
-		result = prime * result + blockNo;
-		result = prime * result + (contents == null ? 0 : contents.hashCode());
-		result = prime * result + endLine;
-		result = prime * result + startLine;
-
-		return result;
-	}
-
-	@Override
-	public boolean equals(final Object obj) {
-		if(this == obj) return true;
-		if(obj == null) return false;
-		if(!(obj instanceof Block)) return false;
-
-		final Block other = (Block) obj;
-
-		if(blockNo != other.blockNo) return false;
-
-		if(contents == null) {
-			if(other.contents != null) return false;
-		} else if(!contents.equals(other.contents)) return false;
-
-		if(endLine != other.endLine) return false;
-		if(startLine != other.startLine) return false;
-
-		return true;
-	}
-
-	@Override
 	public String toString() {
-		if(lineOffset != -1) {
+		if (lineOffset != -1) {
 			String fmt = "Block #%d (from lines %d (%d) to %d (%d)), length: %d characters";
 
-			return String.format(fmt, blockNo, startLine + lineOffset,
-					startLine, endLine + lineOffset,
+			return String.format(fmt, blockNo, startLine + lineOffset, startLine, endLine + lineOffset,
 					endLine + lineOffset, contents.length());
-		} else {
-			String fmt = "Block #%d (from lines %d to %d), length: %d characters";
-
-			return String.format(fmt, blockNo, startLine, endLine, contents.length());
 		}
+		
+		String fmt = "Block #%d (from lines %d to %d), length: %d characters";
+
+		return String.format(fmt, blockNo, startLine, endLine, contents.length());
 	}
 }

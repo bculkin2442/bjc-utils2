@@ -1,8 +1,6 @@
 package bjc.utils.ioutils;
 
 import java.io.InputStream;
-import java.io.IOException;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -12,9 +10,19 @@ import java.util.Scanner;
 // What to do about one-to-many mirrored mappings?
 //
 // Currently, we pick the one with the latest codepoint
+
+/**
+ * A database for describing mirrored characters.
+ * 
+ * @author bjculkin
+ *
+ */
 public class MirrorDB {
 	private Map<String, String> mirrored;
 
+	/**
+	 * Create a new database of mirrored characters.
+	 */
 	public MirrorDB() {
 		mirrored = new HashMap<>();
 
@@ -47,10 +55,24 @@ public class MirrorDB {
 		}
 	}
 
+	/**
+	 * Check if a string can be mirrored.
+	 * 
+	 * @param mir
+	 *                The string to check for mirroring.
+	 * @return Whether or not the given string can be mirrored.
+	 */
 	public boolean canMirror(String mir) {
 		return mirrored.containsKey(mir);
 	}
 
+	/**
+	 * Mirror a string.
+	 * 
+	 * @param mir
+	 *                The string to mirror.
+	 * @return The mirrored version of the string.
+	 */
 	public String mirror(String mir) {
 		return mirrored.get(mir);
 	}

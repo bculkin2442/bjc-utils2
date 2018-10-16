@@ -2,6 +2,7 @@ package bjc.utils.ioutils.blocks;
 
 import java.io.IOException;
 import java.util.Deque;
+import java.util.LinkedList;
 
 /**
  * Provides a means of concatenating two block readers.
@@ -21,6 +22,8 @@ public class SerialBlockReader implements BlockReader {
 	 *        The readers to pull from, in the order to pull from them.
 	 */
 	public SerialBlockReader(final BlockReader... readers) {
+		readerQueue = new LinkedList<>();
+		
 		for(final BlockReader reader : readers) {
 			readerQueue.add(reader);
 		}

@@ -12,10 +12,10 @@ import bjc.utils.funcdata.theory.Bifunctor;
  * @author ben
  *
  * @param <LeftType>
- *        The type of the left side of the pair.
+ *                The type of the left side of the pair.
  *
  * @param <RightType>
- *        The type of the right side of the pair.
+ *                The type of the right side of the pair.
  *
  */
 public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightType> {
@@ -23,13 +23,13 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 	 * Bind a function across the values in this pair.
 	 *
 	 * @param <BoundLeft>
-	 *        The type of the bound left.
+	 *                The type of the bound left.
 	 *
 	 * @param <BoundRight>
-	 *        The type of the bound right.
+	 *                The type of the bound right.
 	 *
 	 * @param binder
-	 *        The function to bind with.
+	 *                The function to bind with.
 	 *
 	 * @return The bound pair.
 	 */
@@ -40,10 +40,10 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 	 * Bind a function to the left value in this pair.
 	 *
 	 * @param <BoundLeft>
-	 *        The type of the bound value.
+	 *                The type of the bound value.
 	 *
 	 * @param leftBinder
-	 *        The function to use to bind.
+	 *                The function to use to bind.
 	 *
 	 * @return A pair with the left type bound.
 	 */
@@ -54,10 +54,10 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 	 * Bind a function to the right value in this pair.
 	 *
 	 * @param <BoundRight>
-	 *        The type of the bound value.
+	 *                The type of the bound value.
 	 *
 	 * @param rightBinder
-	 *        The function to use to bind.
+	 *                The function to use to bind.
 	 *
 	 * @return A pair with the right type bound.
 	 */
@@ -68,13 +68,13 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 	 * Pairwise combine two pairs together.
 	 *
 	 * @param <OtherLeft>
-	 *        The left type of the other pair.
+	 *                The left type of the other pair.
 	 *
 	 * @param <OtherRight>
-	 *        The right type of the other pair.
+	 *                The right type of the other pair.
 	 *
 	 * @param otherPair
-	 *        The pair to combine with.
+	 *                The pair to combine with.
 	 *
 	 * @return The pairs, pairwise combined together.
 	 */
@@ -87,25 +87,25 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 	 * Combine the contents of two pairs together.
 	 *
 	 * @param <OtherLeft>
-	 *        The type of the left value of the other pair.
+	 *                The type of the left value of the other pair.
 	 *
 	 * @param <OtherRight>
-	 *        The type of the right value of the other pair.
+	 *                The type of the right value of the other pair.
 	 *
 	 * @param <CombinedLeft>
-	 *        The type of the left value of the combined pair.
+	 *                The type of the left value of the combined pair.
 	 *
 	 * @param <CombinedRight>
-	 *        The type of the right value of the combined pair.
+	 *                The type of the right value of the combined pair.
 	 *
 	 * @param otherPair
-	 *        The other pair to combine with.
+	 *                The other pair to combine with.
 	 *
 	 * @param leftCombiner
-	 *        The function to combine the left values with.
+	 *                The function to combine the left values with.
 	 *
 	 * @param rightCombiner
-	 *        The function to combine the right values with.
+	 *                The function to combine the right values with.
 	 *
 	 * @return A pair with its values combined.
 	 */
@@ -119,7 +119,7 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 	 * pair.
 	 *
 	 * @param consumer
-	 *        The action to perform on the pair.
+	 *                The action to perform on the pair.
 	 */
 	public default void doWith(final BiConsumer<LeftType, RightType> consumer) {
 		merge((leftValue, rightValue) -> {
@@ -133,7 +133,7 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 	default <OldLeft, OldRight, NewLeft> LeftBifunctorMap<OldLeft, OldRight, NewLeft> fmapLeft(
 			final Function<OldLeft, NewLeft> func) {
 		return argumentPair -> {
-			if(!(argumentPair instanceof IPair<?, ?>)) {
+			if (!(argumentPair instanceof IPair<?, ?>)) {
 				final String msg = "This function can only be applied to instances of IPair";
 
 				throw new IllegalArgumentException(msg);
@@ -149,7 +149,7 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 	default <OldLeft, OldRight, NewRight> RightBifunctorMap<OldLeft, OldRight, NewRight> fmapRight(
 			final Function<OldRight, NewRight> func) {
 		return argumentPair -> {
-			if(!(argumentPair instanceof IPair<?, ?>)) {
+			if (!(argumentPair instanceof IPair<?, ?>)) {
 				final String msg = "This function can only be applied to instances of IPair";
 
 				throw new IllegalArgumentException(msg);
@@ -187,10 +187,11 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 	 * Doesn't modify the pair.
 	 *
 	 * @param <NewLeft>
-	 *        The new type of the left part of the pair.
+	 *                The new type of the left part of the pair.
 	 *
 	 * @param mapper
-	 *        The function to use to transform the left part of the pair.
+	 *                The function to use to transform the left part of the
+	 *                pair.
 	 *
 	 * @return The pair, with its left part transformed.
 	 */
@@ -202,10 +203,11 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 	 * Doesn't modify the pair.
 	 *
 	 * @param <NewRight>
-	 *        The new type of the right part of the pair.
+	 *                The new type of the right part of the pair.
 	 *
 	 * @param mapper
-	 *        The function to use to transform the right part of the pair.
+	 *                The function to use to transform the right part of the
+	 *                pair.
 	 *
 	 * @return The pair, with its right part transformed.
 	 */
@@ -215,15 +217,24 @@ public interface IPair<LeftType, RightType> extends Bifunctor<LeftType, RightTyp
 	 * Merge the two values in this pair into a single value.
 	 *
 	 * @param <MergedType>
-	 *        The type of the single value.
+	 *                The type of the single value.
 	 *
 	 * @param merger
-	 *        The function to use for merging.
+	 *                The function to use for merging.
 	 *
 	 * @return The pair, merged into a single value.
 	 */
 	public <MergedType> MergedType merge(BiFunction<LeftType, RightType, MergedType> merger);
 
+	/**
+	 * Static pair constructor.
+	 * 
+	 * @param left
+	 *                The left side of the pair.
+	 * @param right
+	 *                The right side of the pair.
+	 * @return A pair, with the specified left/right side.
+	 */
 	public static <T1, T2> IPair<T1, T2> pair(T1 left, T2 right) {
 		return new Pair<>(left, right);
 	}

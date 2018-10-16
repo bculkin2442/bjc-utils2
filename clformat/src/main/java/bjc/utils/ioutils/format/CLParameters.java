@@ -122,13 +122,13 @@ public class CLParameters {
 	}
 
 	/**
-	 * Creates a set of parameters from an array of parameters.
+	 * Creates a set of parameters from a parameter string.
 	 *
 	 * This handles things like quoted strings, named parameters and the
 	 * other special parameter features.
 	 *
-	 * @param params
-	 *        The parameters of the directive.
+	 * @param unsplit
+	 *        The string to parse parameters from
 	 * @param dirParams
 	 *        The parameters of the format string.
 	 *

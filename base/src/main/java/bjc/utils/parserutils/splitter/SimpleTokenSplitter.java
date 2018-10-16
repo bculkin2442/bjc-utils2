@@ -15,7 +15,7 @@ import bjc.utils.ioutils.RegexStringEditor;
 public class SimpleTokenSplitter implements TokenSplitter {
 	protected Pattern spliter;
 
-	private final boolean keepDelim;
+	protected final boolean keepDelim;
 
 	/**
 	 * Create a new simple token splitter.

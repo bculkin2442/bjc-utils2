@@ -1,5 +1,11 @@
 package bjc.utils.esodata;
 
+/**
+ * Interface for a double-sided object.
+ * 
+ * @author bjculkin
+ *
+ */
 public interface DoubleSided {
 	/**
 	 * Flips the object.
