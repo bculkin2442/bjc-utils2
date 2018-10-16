@@ -278,8 +278,18 @@ public class CLParameters {
 
 		String actKey = keys[0];
 
-		if      (nameIndices.containsKey(actKey)) return params[nameIndices.get(actKey)];
-		else if (namedParams.containsKey(actKey)) return namedParams.get(actKey);
+		if (nameIndices.containsKey(actKey)) {
+			int idx = nameIndices.get(actKey);
+
+			// @NOTE 9/22/18
+			//
+			// Consider whether we should throw an exception here.
+			if (idx < 0 || idx >= params.length) return "";
+
+			return params[nameIndices.get(actKey)];
+		} else if (namedParams.containsKey(actKey)) {
+			return namedParams.get(actKey);
+		}
 
 		return "";
 	}
