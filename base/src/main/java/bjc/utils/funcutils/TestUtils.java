@@ -2,7 +2,6 @@ package bjc.utils.funcutils;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Collection;
 import java.util.Iterator;
 
 /**
@@ -20,6 +19,7 @@ public class TestUtils {
 	 * @param vals
 	 *                The values to expect from the iterator.
 	 */
+	@SafeVarargs
 	public static <T> void assertIteratorEquals(Iterator<T> src, T... vals) {
 		for (T val : vals) {
 			assertEquals(val, src.next());
@@ -36,6 +36,7 @@ public class TestUtils {
 	 * @param vals
 	 *                The values to expect from the iterator.
 	 */
+	@SafeVarargs
 	public static <T> void assertIteratorEquals(Iterator<T> src, boolean hasMore, T... vals) {
 		assertIteratorEquals(src, vals);
 		

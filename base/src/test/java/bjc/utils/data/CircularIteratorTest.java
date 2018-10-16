@@ -1,6 +1,5 @@
 package bjc.utils.data;
 
-import static org.junit.Assert.*;
 import static bjc.utils.funcutils.TestUtils.*;
 
 import java.util.Arrays;
