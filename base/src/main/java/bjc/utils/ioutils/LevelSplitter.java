@@ -213,6 +213,7 @@ public class LevelSplitter {
 
 		int nestLevel = 0;
 		int i = 0;
+		int lastMatch = 0;
 
 		boolean prevCharWasSlash = false;
 		boolean inString = false;
@@ -220,15 +221,17 @@ public class LevelSplitter {
 		char stringEnder = ' ';
 
 		while (i < work.length()) {
+			mat.region(lastMatch, phrase.length());
+
 			if (inString == false && nestLevel == 0) {
-				if (mat.find(i)) {
-					strangs.add(work.substring(0, i));
+				if (mat.lookingAt()) {
+					strangs.add(work.substring(lastMatch, mat.start()));
 					if (keepDelims) strangs.add(mat.group());
-					work = work.substring(mat.end());
-					i = 0;
+					lastMatch = mat.end();
+					//work = work.substring(mat.end());
+					// i = 0;
 
-					mat = pat.matcher(work);
-
+					// mat = pat.matcher(work);
 					continue;
 				}
 			}
