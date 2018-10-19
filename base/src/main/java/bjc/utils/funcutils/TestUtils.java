@@ -1,8 +1,10 @@
 package bjc.utils.funcutils;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Utilities for testing.
@@ -41,5 +43,16 @@ public class TestUtils {
 		assertIteratorEquals(src, vals);
 		
 		assertEquals(hasMore, src.hasNext());
+	}
+	
+	public static <T> void assertListEquals(List<T> src, T... exps) {
+		assertEquals(exps.length, src.size());
+		
+		int i = 0;
+		for (T act : src) {
+			T exp = exps[i++];
+			
+			assertEquals(exp, act);
+		}
 	}
 }
