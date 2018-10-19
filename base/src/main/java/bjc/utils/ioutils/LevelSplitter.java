@@ -1,6 +1,8 @@
 package bjc.utils.ioutils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,9 +45,7 @@ public class LevelSplitter {
 		while (i < haystack.length()) {
 			if (inString == false && nestLevel == 0) {
 				for (String needle : needles) {
-					if (haystack.regionMatches(i, needle, 0, needle.length())) {
-						return true;
-					}
+					if (haystack.regionMatches(i, needle, 0, needle.length())) { return true; }
 				}
 			}
 
@@ -99,7 +99,7 @@ public class LevelSplitter {
 	public List<String> levelSplit(String phrase, String... splits) {
 		return levelSplit(phrase, false, splits);
 	}
-	
+
 	/**
 	 * Split a string, respecting groups.
 	 * 
@@ -199,15 +199,14 @@ public class LevelSplitter {
 	// This doesn't seem like its working
 	@SuppressWarnings("javadoc")
 	public List<String> levelSplitRX(String phrase, String patt) {
-		return levelSplit(phrase, false, patt);
+		return levelSplitRX(phrase, false, patt);
 	}
 
 	@SuppressWarnings("javadoc")
 	public List<String> levelSplitRX(String phrase, boolean keepDelims, String patt) {
 		Pattern pat = Pattern.compile(patt);
 
-		String work = phrase;
-		Matcher mat = pat.matcher(work);
+		Matcher mat = pat.matcher(phrase);
 
 		List<String> strangs = new ArrayList<>();
 
@@ -220,12 +219,15 @@ public class LevelSplitter {
 
 		char stringEnder = ' ';
 
-		while (i < work.length()) {
-			mat.region(lastMatch, phrase.length());
+		while ((lastMatch + i) < phrase.length()) {
+			int ai = lastMatch + i;
+
+			mat.region(lastMatch + i, phrase.length());
 
 			if (inString == false && nestLevel == 0) {
 				if (mat.lookingAt()) {
-					strangs.add(work.substring(lastMatch, mat.start()));
+
+					strangs.add(phrase.substring(lastMatch, mat.start()));
 					if (keepDelims) strangs.add(mat.group());
 					lastMatch = mat.end();
 					//work = work.substring(mat.end());
@@ -239,11 +241,11 @@ public class LevelSplitter {
 			if (inString) {
 				if (prevCharWasSlash == true) {
 					prevCharWasSlash = false;
-				} else if (work.charAt(i) == stringEnder) {
+				} else if (phrase.charAt(ai) == stringEnder) {
 					inString = false;
 				}
 			} else {
-				switch (work.charAt(i)) {
+				switch (phrase.charAt(ai)) {
 				case '\'':
 					inString = true;
 					stringEnder = '\'';
@@ -270,7 +272,7 @@ public class LevelSplitter {
 			i += 1;
 		}
 
-		strangs.add(work);
+		strangs.add(phrase.substring(lastMatch));
 
 		return strangs;
 	}
