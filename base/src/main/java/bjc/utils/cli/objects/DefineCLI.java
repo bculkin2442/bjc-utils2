@@ -112,7 +112,7 @@ public class DefineCLI {
 	 * @return The status of the executed command.
 	 */
 	public CommandStatus handleCommand(Command com, boolean interactive) {
-		switch(com.nameCommand) {
+		switch(com.name) {
 		case "def-string":
 			return defString(com);
 		case "def-format":
@@ -120,13 +120,13 @@ public class DefineCLI {
 		case "bind-format":
 			return bindFormat(com);
 		default:
-			LOGGER.severe(com.error("Unknown command %s\n", com.nameCommand));
+			LOGGER.severe(com.error("Unknown command %s\n", com.name));
 			return FAIL;
 		}
 	}
 
 	private CommandStatus defString(Command com) {
-		List<String> arguments = StringUtils.processArguments(com.remnCommand);
+		List<String> arguments = StringUtils.processArguments(com.remn);
 
 		if(arguments.size() < 1) {
 			LOGGER.severe(com.error(
@@ -154,7 +154,7 @@ public class DefineCLI {
 	}
 
 	private CommandStatus defFormat(Command com) {
-		List<String> arguments = StringUtils.processArguments(com.remnCommand);
+		List<String> arguments = StringUtils.processArguments(com.remn);
 
 		if(arguments.size() < 1) {
 			LOGGER.severe(com.error(
@@ -182,7 +182,7 @@ public class DefineCLI {
 	}
 
 	private CommandStatus bindFormat(Command com) {
-		List<String> strings = StringUtils.processArguments(com.remnCommand);
+		List<String> strings = StringUtils.processArguments(com.remn);
 
 		if(strings.size() < 2) {
 			LOGGER.severe(com.error(

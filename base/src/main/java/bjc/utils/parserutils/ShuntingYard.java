@@ -58,27 +58,6 @@ public class ShuntingYard<TokenType> {
 	}
 
 	/*
-	 * Function that shunts tokens.
-	 */
-	private final class TokenShunter implements Consumer<String> {
-		private final IList<TokenType> output;
-		private final Deque<String> stack;
-		private final Function<String, TokenType> transformer;
-
-		public TokenShunter(final IList<TokenType> outpt, final Deque<String> stack,
-				final Function<String, TokenType> transformer) {
-			this.output = outpt;
-			this.stack = stack;
-			this.transformer = transformer;
-		}
-
-		@Override
-		public void accept(final String token) {
-
-		}
-	}
-
-	/*
 	 * Holds all the shuntable operations.
 	 */
 	private IMap<String, IPrecedent> operators;
