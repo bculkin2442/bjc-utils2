@@ -138,8 +138,7 @@ public class Command {
 	 * @param rDelm
 	 *                The regex to stop substringing at.
 	 * 
-	 * @return The first capturing group (the entire match otherwise), or
-	 *         null if there is no occurrence of the delimiter.
+	 * @return The string, up to the matched pattern.
 	 */
 	public String trimToRX(String rDelm) {
 		return trimToRX(Pattern.compile(rDelm), true);
@@ -155,8 +154,7 @@ public class Command {
 	 * @param delm
 	 *                The regex to stop substringing at.
 	 * 
-	 * @return The first capturing group (the entire match otherwise), or
-	 *         null if there is no occurrence of the delimiter.
+	 * @return The string, up to the matched pattern.
 	 */
 	public String trimToRX(Pattern delm) {
 		return trimToRX(delm, true);
@@ -172,8 +170,7 @@ public class Command {
 	 *                Whether or not to trim the substring and remaining
 	 *                command (Remove leading/trailing spaces).
 	 * 
-	 * @return The first capturing group (the entire match otherwise), or
-	 *         null if there is no occurrence of the delimiter.
+	 * @return The string, up to the matched pattern.
 	 */
 	public String trimToRX(String rDelm, boolean doTrim) {
 		return trimToRX(Pattern.compile(rDelm), doTrim);
@@ -189,22 +186,14 @@ public class Command {
 	 *                Whether or not to trim the substring and remaining
 	 *                command (Remove leading/trailing spaces).
 	 * 
-	 * @return The first capturing group (the entire match otherwise), or
-	 *         null if there is no occurrence of the delimiter.
+	 * @return The string, up to the matched pattern.
 	 */
 	public String trimToRX(Pattern delm, boolean doTrim) {
 		Matcher mat = delm.matcher(remn);
 		if (!mat.find()) return null;
 
-		String tmp;
-
-		if (mat.groupCount() > 0) {
-			tmp = mat.group(1);
-			remn = remn.substring(mat.end());
-		} else {
-			tmp = mat.group();
-			remn = remn.substring(mat.end());
-		}
+		String tmp = remn.substring(0, mat.start());
+		remn = remn.substring(mat.end());
 
 		if (doTrim) {
 			tmp = tmp.trim();

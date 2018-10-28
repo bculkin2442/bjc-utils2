@@ -25,6 +25,15 @@ public class CommandTest {
 		
 		assertEquals("b", com.trimTo(' '));
 		assertEquals("c", com.remn);
+		
+		com = Command.fromString("a b c", 1, "console");
+		
+		assertEquals("a b c", com.full);
+		assertEquals("a", com.name);
+		assertEquals("b c", com.remn);
+		
+		assertEquals("b", com.trimTo(" "));
+		assertEquals("c", com.remn);
 	}
 	
 	/**
