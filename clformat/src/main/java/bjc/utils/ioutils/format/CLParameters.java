@@ -173,9 +173,7 @@ public class CLParameters {
 			return new CLParameters(parameters.toArray(new String[0]));
 
 		Map<String, String>  namedParams  = new HashMap<>();
-		Map<String, Integer> nameIndices = new HashMap<>();
 
-		int currParamNo = 0;
 		for(String param : lParams) {
 			if (param.startsWith("#") && !param.equals("#")) {
 				// Named parameter
@@ -207,7 +205,7 @@ public class CLParameters {
 				parameters.add(parseParam(param, dirParams));
 			}
 
-			currParamNo += 1;
+			//currParamNo += 1;
 		}
 
 		return new CLParameters(parameters.toArray(new String[0]), namedParams);

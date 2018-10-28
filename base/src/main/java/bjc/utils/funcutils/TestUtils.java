@@ -44,6 +44,7 @@ public class TestUtils {
 		assertEquals(hasMore, src.hasNext());
 	}
 	
+	@SafeVarargs
 	public static <T> void assertListEquals(List<T> src, T... exps) {
 		assertEquals(exps.length, src.size());
 		

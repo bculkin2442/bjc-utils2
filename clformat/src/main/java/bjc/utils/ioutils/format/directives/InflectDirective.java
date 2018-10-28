@@ -2,13 +2,16 @@ package bjc.utils.ioutils.format.directives;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.regex.Pattern;
-
 import bjc.inflexion.InflectionML;
 import bjc.utils.ioutils.ReportWriter;
 
+/**
+ * Inflection directive.
+ * @author bjculkin
+ *
+ */
 public class InflectDirective implements Directive {
-	private static final Pattern wordPattern = Pattern.compile("(\\w+)(\\b*)");
+	//private static final Pattern wordPattern = Pattern.compile("(\\w+)(\\b*)");
 
 	@Override
 	public void format(FormatParameters dirParams) throws IOException {

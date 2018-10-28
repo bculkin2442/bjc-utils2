@@ -31,9 +31,10 @@ public class RecursiveDirective implements Directive {
 			Object o = dirParams.tParams.item();
 			dirParams.tParams.right();
 
-			if (!(o instanceof Iterable))
+			if (!(o instanceof Iterable<?>))
 				throw new IllegalFormatConversionException('?', o.getClass());
 
+			@SuppressWarnings("unchecked")
 			Iterable<Object> itb = (Iterable<Object>)o;
 			Tape<Object> newParams = new SingleTape<>(itb);
 

@@ -31,7 +31,7 @@ public class LevelSplitterTest {
 	 */
 	@Test
 	public void testRXSplit() {
-		LevelSplitter splitter = LevelSplitter.def;
+		//LevelSplitter splitter = LevelSplitter.def;
 
 		// Check generic splitting works
 		assertRXSplit("\\s+", pair("", ""), pair("a", "a"), pair("a b", "a", "b"), pair("a  b", "a", "b"),

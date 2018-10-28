@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.IllegalFormatConversionException;
 import java.util.List;
-import java.util.logging.Logger;
-
 import bjc.utils.ioutils.format.EscapeException;
 
 /**
@@ -15,8 +13,6 @@ import bjc.utils.ioutils.format.EscapeException;
  *
  */
 public class ConditionalDirective implements Directive {
-	private static Logger LOG = Logger.getLogger(ConditionalDirective.class.getName());
-
 	@Override
 	public void format(FormatParameters dirParams) throws IOException {
 		StringBuffer condBody = new StringBuffer();

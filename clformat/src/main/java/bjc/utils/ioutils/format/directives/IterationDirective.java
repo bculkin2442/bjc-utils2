@@ -99,6 +99,7 @@ public class IterationDirective implements Directive {
 					iter = dirParams.tParams.item();
 				} while (dirParams.tParams.position() < dirParams.tParams.size());
 			} catch (EscapeException eex) {
+				// Do nothing
 			}
 		} else if (dirParams.mods.atMod) {
 			try {
@@ -143,6 +144,7 @@ public class IterationDirective implements Directive {
 					}
 				}
 			} catch (EscapeException eex) {
+				// Do nothing
 			}
 		} else {
 			if (!(dirParams.item instanceof Iterable<?>)) {
