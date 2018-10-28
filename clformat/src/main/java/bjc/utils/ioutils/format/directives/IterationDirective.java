@@ -1,14 +1,14 @@
 package bjc.utils.ioutils.format.directives;
 
-import bjc.utils.esodata.SingleTape;
-import bjc.utils.esodata.Tape;
-import bjc.utils.ioutils.format.*;
-
 import java.io.IOException;
-
+import java.util.IllegalFormatConversionException;
 import java.util.Iterator;
 
-import java.util.IllegalFormatConversionException;
+import bjc.utils.esodata.SingleTape;
+import bjc.utils.esodata.Tape;
+import bjc.utils.ioutils.format.CLFormatter;
+import bjc.utils.ioutils.format.CLParameters;
+import bjc.utils.ioutils.format.EscapeException;
 
 /**
  * Implements the { directive.

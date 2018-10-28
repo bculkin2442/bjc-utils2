@@ -1,11 +1,11 @@
 package bjc.utils.ioutils.format.directives;
 
+import java.io.IOException;
+import java.util.IllegalFormatConversionException;
+
 import bjc.utils.ioutils.format.CLFormatter;
 import bjc.utils.ioutils.format.CLParameters;
 import bjc.utils.math.NumberUtils;
-
-import java.io.IOException;
-import java.util.IllegalFormatConversionException;
 
 /**
  * Generalized radix directive.

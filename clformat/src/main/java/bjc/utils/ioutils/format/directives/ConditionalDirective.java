@@ -1,12 +1,12 @@
 package bjc.utils.ioutils.format.directives;
 
-import bjc.utils.ioutils.format.*;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.IllegalFormatConversionException;
 import java.util.List;
 import java.util.logging.Logger;
+
+import bjc.utils.ioutils.format.EscapeException;
 
 /**
  * Implements the [ directive.

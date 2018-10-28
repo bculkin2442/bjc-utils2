@@ -1,13 +1,9 @@
 package bjc.utils.ioutils;
 
-import static org.junit.Assert.*;
-
-import java.util.Arrays;
-import java.util.List;
+import static bjc.utils.funcutils.TestUtils.assertListEquals;
+import static bjc.utils.ioutils.LevelSplitterTest.RXPair.pair;
 
 import org.junit.Test;
-import static bjc.utils.funcutils.TestUtils.*;
-import static bjc.utils.ioutils.LevelSplitterTest.RXPair.pair;
 
 /**
  * Test of LevelSplitter.

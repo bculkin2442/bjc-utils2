@@ -3,11 +3,11 @@ package bjc.utils.misc;
 import java.util.Random;
 import java.util.function.Consumer;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 import bjc.utils.exceptions.InvalidDirectionException;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IList;
-
-import org.apache.commons.lang3.text.WordUtils;
 
 /**
  * A set of cardinal directions

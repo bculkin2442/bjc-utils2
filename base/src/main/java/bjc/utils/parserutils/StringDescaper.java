@@ -1,15 +1,15 @@
 package bjc.utils.parserutils;
 
+import static bjc.utils.misc.PropertyDB.getRegex;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.function.UnaryOperator;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-
-import static bjc.utils.misc.PropertyDB.getRegex;
-import static java.util.Map.Entry;
 
 /**
 <<<<<<< Updated upstream

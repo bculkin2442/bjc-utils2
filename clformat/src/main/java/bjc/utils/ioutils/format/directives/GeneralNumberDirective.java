@@ -1,11 +1,11 @@
 package bjc.utils.ioutils.format.directives;
 
+import java.io.IOException;
+
+import bjc.utils.ioutils.ReportWriter;
 import bjc.utils.ioutils.format.CLModifiers;
 import bjc.utils.ioutils.format.CLParameters;
-import bjc.utils.ioutils.ReportWriter;
 import bjc.utils.math.NumberUtils;
-
-import java.io.IOException;
 
 /**
  * Implementation skeleton for number directives.

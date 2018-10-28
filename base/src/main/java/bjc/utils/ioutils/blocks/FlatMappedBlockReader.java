@@ -1,7 +1,6 @@
 package bjc.utils.ioutils.blocks;
 
 import java.io.IOException;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;

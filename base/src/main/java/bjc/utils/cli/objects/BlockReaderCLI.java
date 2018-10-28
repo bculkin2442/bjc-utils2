@@ -1,8 +1,12 @@
 package bjc.utils.cli.objects;
 
+import static bjc.utils.cli.objects.Command.CommandStatus.ERROR;
+import static bjc.utils.cli.objects.Command.CommandStatus.FAIL;
+import static bjc.utils.cli.objects.Command.CommandStatus.FINISH;
+import static bjc.utils.cli.objects.Command.CommandStatus.SUCCESS;
+
 import java.io.InputStreamReader;
 import java.io.Reader;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -12,10 +16,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import bjc.utils.ioutils.blocks.*;
-
-import static bjc.utils.cli.objects.Command.CommandStatus;
-import static bjc.utils.cli.objects.Command.CommandStatus.*;
+import bjc.utils.cli.objects.Command.CommandStatus;
+import bjc.utils.ioutils.blocks.Block;
+import bjc.utils.ioutils.blocks.BlockReader;
+import bjc.utils.ioutils.blocks.FilteredBlockReader;
+import bjc.utils.ioutils.blocks.LayeredBlockReader;
+import bjc.utils.ioutils.blocks.PushbackBlockReader;
+import bjc.utils.ioutils.blocks.SerialBlockReader;
+import bjc.utils.ioutils.blocks.SimpleBlockReader;
+import bjc.utils.ioutils.blocks.ToggledBlockReader;
 
 /**
  * Command-line interface for configuring block readers.

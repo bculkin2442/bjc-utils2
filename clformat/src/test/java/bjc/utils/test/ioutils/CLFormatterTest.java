@@ -1,16 +1,13 @@
 package bjc.utils.test.ioutils;
 
-import static org.junit.Assert.*;
+import static java.util.Arrays.asList;
+import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 
-import java.util.Arrays;
-
-import bjc.utils.ioutils.format.CLFormatter;
-
 import org.junit.Test;
 
-import static java.util.Arrays.asList;
+import bjc.utils.ioutils.format.CLFormatter;
 /**
  * Tests for CL format strings.
  * 

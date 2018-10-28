@@ -1,21 +1,34 @@
 package bjc.utils.ioutils.format;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import bjc.utils.esodata.SingleTape;
 import bjc.utils.esodata.Tape;
 import bjc.utils.ioutils.ReportWriter;
 import bjc.utils.ioutils.SimpleProperties;
-import bjc.utils.ioutils.format.directives.*;
-
-import java.io.InputStream;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UnknownFormatConversionException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import bjc.utils.ioutils.format.directives.AestheticDirective;
+import bjc.utils.ioutils.format.directives.CaseDirective;
+import bjc.utils.ioutils.format.directives.CharacterDirective;
+import bjc.utils.ioutils.format.directives.ConditionalDirective;
+import bjc.utils.ioutils.format.directives.Directive;
+import bjc.utils.ioutils.format.directives.EscapeDirective;
+import bjc.utils.ioutils.format.directives.FormatParameters;
+import bjc.utils.ioutils.format.directives.FreshlineDirective;
+import bjc.utils.ioutils.format.directives.GotoDirective;
+import bjc.utils.ioutils.format.directives.InflectDirective;
+import bjc.utils.ioutils.format.directives.IterationDirective;
+import bjc.utils.ioutils.format.directives.LiteralDirective;
+import bjc.utils.ioutils.format.directives.NumberDirective;
+import bjc.utils.ioutils.format.directives.RadixDirective;
+import bjc.utils.ioutils.format.directives.RecursiveDirective;
+import bjc.utils.ioutils.format.directives.TabulateDirective;
 
 /**
  * An implementation of CL's FORMAT.
@@ -190,7 +203,6 @@ public class CLFormatter {
 	 *        The format string to use.
 	 * @param params
 	 *        The parameters for the string.
-	 * @return The formatted string.
 	 */
 	public void formatString(Writer target, String format, Iterable<Object> params) throws IOException {
 		ReportWriter rw = new ReportWriter(target);
@@ -209,10 +221,12 @@ public class CLFormatter {
 	 * 
 	 * @param format
 	 *        The format to use.
-	 * @param sb
+	 * @param rw
 	 *        The buffer to file output into.
 	 * @param tParams
 	 *        The parameters to use.
+	 * @param isToplevel Whether or not this is a top-level format
+	 * @throws IOException If something goes wrong
 	 */
 	public void doFormatString(String format, ReportWriter rw, Tape<Object> tParams, boolean isToplevel) throws IOException {
 		Matcher dirMatcher = pFormatDirective.matcher(format);

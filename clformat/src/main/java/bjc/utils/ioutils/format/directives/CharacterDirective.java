@@ -1,9 +1,9 @@
 package bjc.utils.ioutils.format.directives;
 
-import bjc.utils.ioutils.format.CLFormatter;
-
 import java.io.IOException;
 import java.util.IllegalFormatConversionException;
+
+import bjc.utils.ioutils.format.CLFormatter;
 
 /**
  * Implements the C directive.

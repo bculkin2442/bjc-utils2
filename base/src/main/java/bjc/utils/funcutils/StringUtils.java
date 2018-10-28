@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.ibm.icu.text.BreakIterator;
+
 import bjc.utils.data.BooleanToggle;
 import bjc.utils.parserutils.TokenUtils;
-
-import com.ibm.icu.text.BreakIterator;
 
 /**
  * Utility methods for operations on strings.

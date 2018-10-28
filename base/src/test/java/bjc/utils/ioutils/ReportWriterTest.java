@@ -1,11 +1,9 @@
 package bjc.utils.ioutils;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.io.StringWriter;
-
-import bjc.utils.ioutils.ReportWriter;
 
 import org.junit.Test;
 

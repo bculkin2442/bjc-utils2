@@ -1,16 +1,11 @@
 package bjc.utils.ioutils.format.directives;
 
-import bjc.utils.ioutils.format.*;
-import bjc.utils.ioutils.ReportWriter;
-
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.IllegalFormatConversionException;
-import java.util.List;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import bjc.utils.ioutils.ReportWriter;
 
 public class CaseDirective implements Directive {
 	private static final Pattern wordPattern = Pattern.compile("(\\w+)(\\b*)");

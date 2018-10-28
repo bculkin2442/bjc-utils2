@@ -1,6 +1,7 @@
 package bjc.utils.cli.objects;
 
-import bjc.utils.funcutils.StringUtils;
+import static bjc.utils.cli.objects.Command.CommandStatus.FAIL;
+import static bjc.utils.cli.objects.Command.CommandStatus.SUCCESS;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,8 +13,8 @@ import java.util.function.UnaryOperator;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
-import static bjc.utils.cli.objects.Command.CommandStatus;
-import static bjc.utils.cli.objects.Command.CommandStatus.*;
+import bjc.utils.cli.objects.Command.CommandStatus;
+import bjc.utils.funcutils.StringUtils;
 
 /*
  * @TODO 10/09/17 :DefineCLIFinish

@@ -2,7 +2,7 @@ package bjc.utils.ioutils.format.directives;
 
 import java.io.IOException;
 
-import bjc.utils.ioutils.format.*;
+import bjc.utils.ioutils.format.CLParameters;
 
 public class TabulateDirective implements Directive {
 	public void format(FormatParameters dirParams) throws IOException {

@@ -1,12 +1,12 @@
 package bjc.utils.ioutils.format.directives;
 
-import bjc.utils.esodata.SingleTape;
-import bjc.utils.esodata.Tape;
-import bjc.utils.ioutils.format.*;
-
+import java.io.IOException;
 import java.util.IllegalFormatConversionException;
 
-import java.io.IOException;
+import bjc.utils.esodata.SingleTape;
+import bjc.utils.esodata.Tape;
+import bjc.utils.ioutils.format.CLFormatter;
+import bjc.utils.ioutils.format.EscapeException;
 
 public class RecursiveDirective implements Directive {
 	public void format(FormatParameters dirParams) throws IOException {

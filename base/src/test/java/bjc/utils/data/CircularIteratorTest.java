@@ -1,6 +1,6 @@
 package bjc.utils.data;
 
-import static bjc.utils.funcutils.TestUtils.*;
+import static bjc.utils.funcutils.TestUtils.assertIteratorEquals;
 
 import java.util.Arrays;
 import java.util.List;
