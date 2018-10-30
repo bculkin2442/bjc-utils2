@@ -25,10 +25,10 @@ public class CircularIteratorTest {
 		CircularIterator<String> itr = new CircularIterator<>(lst);
 
 		// Check we get initial values correctly, and have more remaining
-		assertIteratorEquals(itr, true, "a", "b", "c");
+		assertIteratorEquals(true, itr, "a", "b", "c");
 
 		// Check we repeat correctly, and can still repeat
-		assertIteratorEquals(itr, true, "a", "b", "c");
+		assertIteratorEquals(true, itr, "a", "b", "c");
 	}
 
 	/**
@@ -41,9 +41,9 @@ public class CircularIteratorTest {
 		CircularIterator<String> itr = new CircularIterator<>(lst, false);
 
 		// Check we get initial values correctly, and have more remaining
-		assertIteratorEquals(itr, true, "a", "b", "c");
+		assertIteratorEquals(true, itr, "a", "b", "c");
 
 		// Check we repeat correctly, and can still repeat
-		assertIteratorEquals(itr, true, "c", "c", "c");
+		assertIteratorEquals(true, itr, "c", "c", "c");
 	}
 }
