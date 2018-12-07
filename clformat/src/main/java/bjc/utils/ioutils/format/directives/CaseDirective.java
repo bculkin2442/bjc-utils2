@@ -2,38 +2,47 @@ package bjc.utils.ioutils.format.directives;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import bjc.utils.ioutils.ReportWriter;
+import bjc.utils.ioutils.format.CLPattern;
 
 public class CaseDirective implements Directive {
 	private static final Pattern wordPattern = Pattern.compile("(\\w+)(\\b*)");
 
 	@Override
 	public void format(FormatParameters dirParams) throws IOException {
-		StringBuffer condBody = new StringBuffer();
+		StringBuilder condBody = new StringBuilder();
 
 		int nestLevel = 1;
 
-		while (dirParams.dirMatcher.find()) {
+		Iterator<String> dirIter = dirParams.dirIter;
+		while (dirParams.dirIter.hasNext()) {
+			String direc = dirIter.next();
+			if (!direc.startsWith("~")) {
+				condBody.append(direc);
+				continue;
+			}
+
+			Matcher dirMat = CLPattern.getDirectiveMatcher(direc);
+			dirMat.find();
+
 			/* Process a list of clauses. */
-			String dirName = dirParams.dirMatcher.group("name");
+			String dirName = dirMat.group("name");
 
 			if (dirName != null) {
-				/* Append everything up to this directive. */
-				dirParams.dirMatcher.appendReplacement(condBody, "");
-
 				if (dirName.equals("(")) {
 					if (nestLevel > 0) {
-						condBody.append(dirParams.dirMatcher.group());
+						condBody.append(dirMat.group());
 					}
 
 					nestLevel += 1;
 				} else if (Directive.isOpening(dirName)) {
 					nestLevel += 1;
 
-					condBody.append(dirParams.dirMatcher.group());
+					condBody.append(dirMat.group());
 				} else if (dirName.equals(")")) {
 					nestLevel = Math.max(0, nestLevel - 1);
 
@@ -43,7 +52,7 @@ public class CaseDirective implements Directive {
 					nestLevel = Math.max(0, nestLevel - 1);
 				} else {
 					/* Not a special directive. */
-					condBody.append(dirParams.dirMatcher.group());
+					condBody.append(dirMat.group());
 				}
 			}
 		}

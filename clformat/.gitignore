@@ -1,1 +1,4 @@
 /target/
+**/*.pdf
+pdf/
+pdfs.tgz

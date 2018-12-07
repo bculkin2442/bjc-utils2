@@ -3,7 +3,11 @@ package bjc.utils.ioutils.format.directives;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.IllegalFormatConversionException;
+import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+
+import bjc.utils.ioutils.format.CLPattern;
 import bjc.utils.ioutils.format.EscapeException;
 
 /**
@@ -15,7 +19,7 @@ import bjc.utils.ioutils.format.EscapeException;
 public class ConditionalDirective implements Directive {
 	@Override
 	public void format(FormatParameters dirParams) throws IOException {
-		StringBuffer condBody = new StringBuffer();
+		StringBuilder condBody = new StringBuilder();
 
 		List<String> clauses = new ArrayList<>();
 
@@ -24,33 +28,36 @@ public class ConditionalDirective implements Directive {
 
 		int nestLevel = 1;
 
-		while (dirParams.dirMatcher.find()) {
+		Iterator<String> dirIter = dirParams.dirIter;
+		while (dirIter.hasNext()) {
+			String direc = dirIter.next();
+			if (!direc.startsWith("~")) {
+				condBody.append(direc);
+				continue;
+			}
+
+			Matcher dirMat = CLPattern.getDirectiveMatcher(direc);
 			/* Process a list of clauses. */
-			String dirName = dirParams.dirMatcher.group("name");
-			String dirMods = dirParams.dirMatcher.group("modifiers");
+			String dirName = dirMat.group("name");
+			String dirMods = dirMat.group("modifiers");
 
-			//System.err.printf("Found conditional directive %s with %s mods and level %d\n", dirName, dirMods, nestLevel);
 			if (dirName != null) {
-				/* Append everything up to this directive. */
-				dirParams.dirMatcher.appendReplacement(condBody, "");
-
 				if (dirName.equals("[")) {
 					if (nestLevel > 0) {
-						condBody.append(dirParams.dirMatcher.group());
+						condBody.append(dirMat.group());
 					}
 					nestLevel += 1;
 				} else if (Directive.isOpening(dirName)) {
 					nestLevel += 1;
 
-					condBody.append(dirParams.dirMatcher.group());
+					condBody.append(dirMat.group());
 				} else if (dirName.equals("]")) {
 					nestLevel = Math.max(0, nestLevel - 1);
 
 					if (nestLevel == 0) {
 						/* End the conditional. */
 						String clause = condBody.toString();
-						// System.err.printf("Found clause \"%s]\"\n", clause);
-						condBody      = new StringBuffer();
+						condBody      = new StringBuilder();
 
 						if (isDefault) {
 							defClause = clause;
@@ -60,18 +67,17 @@ public class ConditionalDirective implements Directive {
 						break;
 					} else {
 						/* Not a special directive. */
-						condBody.append(dirParams.dirMatcher.group());
+						condBody.append(dirMat.group());
 					}
 				} else if (Directive.isClosing(dirName)) {
 					nestLevel = Math.max(0, nestLevel - 1);
 
-					condBody.append(dirParams.dirMatcher.group());
+					condBody.append(dirMat.group());
 				} else if (dirName.equals(";")) {
 					if (nestLevel == 1) {
 						/* End the clause. */
 						String clause = condBody.toString();
-						// System.err.printf("Found clause \"%s;\"\n", clause);
-						condBody      = new StringBuffer();
+						condBody      = new StringBuilder();
 
 						if (isDefault) {
 							defClause = clause;
@@ -86,11 +92,11 @@ public class ConditionalDirective implements Directive {
 						}
 					} else {
 						/* Not a special directive. */
-						condBody.append(dirParams.dirMatcher.group());
+						condBody.append(dirMat.group());
 					}
 				} else {
 					/* Not a special directive. */
-					condBody.append(dirParams.dirMatcher.group());
+					condBody.append(dirMat.group());
 				}
 			}
 		}

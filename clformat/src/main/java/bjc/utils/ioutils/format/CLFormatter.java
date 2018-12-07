@@ -13,22 +13,7 @@ import bjc.utils.esodata.SingleTape;
 import bjc.utils.esodata.Tape;
 import bjc.utils.ioutils.ReportWriter;
 import bjc.utils.ioutils.SimpleProperties;
-import bjc.utils.ioutils.format.directives.AestheticDirective;
-import bjc.utils.ioutils.format.directives.CaseDirective;
-import bjc.utils.ioutils.format.directives.CharacterDirective;
-import bjc.utils.ioutils.format.directives.ConditionalDirective;
-import bjc.utils.ioutils.format.directives.Directive;
-import bjc.utils.ioutils.format.directives.EscapeDirective;
-import bjc.utils.ioutils.format.directives.FormatParameters;
-import bjc.utils.ioutils.format.directives.FreshlineDirective;
-import bjc.utils.ioutils.format.directives.GotoDirective;
-import bjc.utils.ioutils.format.directives.InflectDirective;
-import bjc.utils.ioutils.format.directives.IterationDirective;
-import bjc.utils.ioutils.format.directives.LiteralDirective;
-import bjc.utils.ioutils.format.directives.NumberDirective;
-import bjc.utils.ioutils.format.directives.RadixDirective;
-import bjc.utils.ioutils.format.directives.RecursiveDirective;
-import bjc.utils.ioutils.format.directives.TabulateDirective;
+import bjc.utils.ioutils.format.directives.*;
 
 /**
  * An implementation of CL's FORMAT.
@@ -37,39 +22,10 @@ import bjc.utils.ioutils.format.directives.TabulateDirective;
  *
  */
 public class CLFormatter {
-	private static String prefixParam;
-	private static String formatMod;
-	private static String directiveName;
-
-	private static String prefixList;
-	private static String formatDirective;
-
-	private static Pattern pFormatDirective;
-
 	private static Map<String, Directive> builtinDirectives;
 	private        Map<String, Directive> extraDirectives;
 
 	static {
-		SimpleProperties props = new SimpleProperties();
-
-		try (InputStream is = CLFormatter.class.getResourceAsStream("/formats.sprop")) {
-			props.loadFrom(is, false);
-		} catch (IOException ioex) {
-			// WELP, we failed. Bail
-			throw new RuntimeException("Couldn't load formats for formatter");
-		}
-		
-		String seqPrefixParam   = props.get("clFormatPrefixParam");
-
-		prefixParam   = String.format(props.get("clFormatPrefix"), seqPrefixParam);
-		formatMod     = props.get("clFormatModifier");
-		directiveName = props.get("clFormatName");
-
-		prefixList      = String.format(props.get("delimSeparatedList"), prefixParam, ",");
-		formatDirective = String.format(props.get("clFormatDirective"), prefixList, formatMod, directiveName);
-
-		pFormatDirective = Pattern.compile(formatDirective);
-
 		builtinDirectives = new HashMap<>();
 
 		builtinDirectives.put("A", new AestheticDirective());
@@ -229,20 +185,22 @@ public class CLFormatter {
 	 * @throws IOException If something goes wrong
 	 */
 	public void doFormatString(String format, ReportWriter rw, Tape<Object> tParams, boolean isToplevel) throws IOException {
-		Matcher dirMatcher = pFormatDirective.matcher(format);
-
-		// We need this StringBuffer to use appendReplacement and stuff
-		// from Matcher. The fact that for some reason, StringBuffer is
-		// final prevents us from using our own dummy StringBuffer that
-		// auto-flushes to our output stream, so we have to do it
-		// ourselves.
-		StringBuffer sb = new StringBuffer();
+		CLTokenizer cltok = new CLTokenizer(format);
 
 		boolean doTail = true;
 		try {
-			while(dirMatcher.find()) {
-				dirMatcher.appendReplacement(sb, "");
-				rw.writeBuffer(sb);
+			while (cltok.hasNext()) {
+				String direc = cltok.next();
+
+				if (!direc.startsWith("~")) {
+					rw.write(direc);
+					continue;
+				}
+
+				Matcher dirMatcher = CLPattern.getDirectiveMatcher(direc);
+				if (!dirMatcher.find()) {
+					throw new IllegalArgumentException("Unable to match directive found from tokenizer");
+				}
 
 				String dirName   = dirMatcher.group("name");
 				String dirFunc   = dirMatcher.group("funcname");
@@ -266,15 +224,13 @@ public class CLFormatter {
 				}
 
 				if(extraDirectives.containsKey(dirName)) {
-					extraDirectives.get(dirName).format(new FormatParameters(rw, item, mods, arrParams, tParams, dirMatcher, this));
+					extraDirectives.get(dirName).format(new FormatParameters(rw, item, mods, arrParams, tParams, cltok, this));
 
 					continue;
 				}
 
 				if(builtinDirectives.containsKey(dirName)) {
-					// System.err.printf("Executing directive %s (%s) (%d to %d) from string %s\n", dirName, dirMatcher.group(), dirMatcher.start(), dirMatcher.end(), format);
-
-					builtinDirectives.get(dirName).format(new FormatParameters(rw, item, mods, arrParams, tParams, dirMatcher, this));
+					builtinDirectives.get(dirName).format(new FormatParameters(rw, item, mods, arrParams, tParams, cltok, this));
 
 					continue;
 				}
@@ -303,12 +259,18 @@ public class CLFormatter {
 					case "E":
 					case "G":
 					case "$":
-						/* @TODO implement floating point directives. */
+						/* @TODO 
+						 *
+						 * implement floating point directives.
+						 */
 						throw new IllegalArgumentException("Floating-point directives aren't implemented yet.");
 					case "W":
 						/*
-						 * @TODO figure out if we want to implement
-						 * someting for these directives instead of
+						 * @TODO 
+						 *
+						 * figure out if we want to
+						 * implement someting for these
+						 * directives instead of
 						 * punting.
 						 */
 						throw new IllegalArgumentException("S and W aren't implemented. Use A instead");
@@ -329,8 +291,5 @@ public class CLFormatter {
 
 			doTail = false;
 		}
-
-		if (doTail) dirMatcher.appendTail(sb);
-		rw.writeBuffer(sb);
 	}
 }

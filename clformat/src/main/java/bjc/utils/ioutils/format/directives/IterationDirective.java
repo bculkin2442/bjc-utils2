@@ -3,12 +3,11 @@ package bjc.utils.ioutils.format.directives;
 import java.io.IOException;
 import java.util.IllegalFormatConversionException;
 import java.util.Iterator;
+import java.util.regex.Matcher;
 
 import bjc.utils.esodata.SingleTape;
 import bjc.utils.esodata.Tape;
-import bjc.utils.ioutils.format.CLFormatter;
-import bjc.utils.ioutils.format.CLParameters;
-import bjc.utils.ioutils.format.EscapeException;
+import bjc.utils.ioutils.format.*;
 
 /**
  * Implements the { directive.
@@ -22,21 +21,26 @@ public class IterationDirective implements Directive {
 	public void format(FormatParameters dirParams) throws IOException {
 		CLFormatter.checkItem(dirParams.item, '{');
 
-		StringBuffer condBody = new StringBuffer();
+		StringBuilder condBody = new StringBuilder();
 
-		while (dirParams.dirMatcher.find()) {
+		Iterator<String> dirIter = dirParams.dirIter;
+		while (dirIter.hasNext()) {
+			String direc = dirIter.next();
+			if (!direc.startsWith("~")) {
+				condBody.append(direc);
+				continue;
+			}
+
+			Matcher dirMat = CLPattern.getDirectiveMatcher(direc);
 			/* Process a list of clauses. */
-			String dirName = dirParams.dirMatcher.group("name");
+			String dirName = dirMat.group("name");
 
 			if (dirName != null) {
-				/* Append everything up to this directive. */
-				dirParams.dirMatcher.appendReplacement(condBody, "");
-
 				if (dirName.equals("}")) {
 					break;
 				} else {
 					/* Not a special directive. */
-					condBody.append(dirParams.dirMatcher.group());
+					condBody.append(dirMat.group());
 				}
 			}
 		}
