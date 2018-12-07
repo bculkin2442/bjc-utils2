@@ -32,6 +32,7 @@ public class IterationDirective implements Directive {
 			}
 
 			Matcher dirMat = CLPattern.getDirectiveMatcher(direc);
+			dirMat.find();
 			/* Process a list of clauses. */
 			String dirName = dirMat.group("name");
 
