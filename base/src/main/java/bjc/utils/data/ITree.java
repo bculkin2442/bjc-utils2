@@ -28,6 +28,14 @@ public interface ITree<ContainedType> {
 	void addChild(ITree<ContainedType> child);
 
 	/**
+	 * Append a child to this node.
+	 *
+	 * @param child
+	 *        The child to append to this node.
+	 */
+	void addChild(ContainedType child);
+
+	/**
 	 * Prepend a child to this node.
 	 *
 	 * @param child
@@ -110,6 +118,15 @@ public interface ITree<ContainedType> {
 	 * @return The number of direct children this node has.
 	 */
 	int getChildrenCount();
+
+	/**
+	 * Get a count of the number of direct children this node has.
+	 *
+	 * @return The number of direct children this node has.
+	 */
+	default int size() {
+		return getChildrenCount();
+	}
 
 	/**
 	 * Get the data stored in this node.
@@ -237,7 +254,7 @@ public interface ITree<ContainedType> {
 	 * Check if this tree contains any nodes that satisfy the predicate.
 	 *
 	 * @param pred
-	 * 	The predicate to look for.
+	 *		The predicate to look for.
 	 * 
 	 * @return Whether or not any items satisfied the predicate.
 	 */
@@ -250,4 +267,12 @@ public interface ITree<ContainedType> {
 
 		return tog.get();
 	}
+
+	/**
+	 * Set the head of the tree.
+	 *
+	 * @param dat
+	 *		The value to set as the head of the tree.
+	 */
+	void setHead(ContainedType dat);
 }

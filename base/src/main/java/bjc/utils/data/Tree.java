@@ -43,6 +43,13 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 	/**
 	 * Create a new leaf node in a tree.
+	 */
+	public Tree() {
+		this(null);
+	}
+
+	/**
+	 * Create a new leaf node in a tree.
 	 *
 	 * @param leaf
 	 *        The data to store as a leaf node.
@@ -98,6 +105,11 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 			childCount++;
 		}
+	}
+
+	@Override
+	public void addChild(final ContainedType child) {
+		addChild(new Tree(child));
 	}
 
 	@Override
@@ -366,6 +378,11 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 	public <TransformedType> TransformedType transformHead(
 			final Function<ContainedType, TransformedType> transformer) {
 		return transformer.apply(data);
+	}
+
+	@Override
+	public void setHead(ContainedType dat) {
+		this.data = dat;
 	}
 
 	@Override
