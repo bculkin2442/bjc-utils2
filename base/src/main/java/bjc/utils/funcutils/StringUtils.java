@@ -2,13 +2,17 @@ package bjc.utils.funcutils;
 
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.ibm.icu.text.BreakIterator;
 
 import bjc.utils.data.BooleanToggle;
+import bjc.utils.ioutils.LevelSplitter;
 import bjc.utils.parserutils.TokenUtils;
 
 /**
@@ -103,35 +107,35 @@ public class StringUtils {
 		final String coma = comma;
 
 		switch (objects.length) {
-		case 0:
-			/* Empty list. */
-			break;
-		case 1:
-			/* One item. */
-			sb.append(objects[0].toString());
-			break;
-		case 2:
-			/* Two items. */
-			sb.append(objects[0].toString());
-			sb.append(" " + joiner + " ");
-			sb.append(objects[1].toString());
-			break;
-		default:
-			/* Three or more items. */
-			for (int i = 0; i < objects.length - 1; i++) {
-				sb.append(objects[i].toString());
-				sb.append(coma + " ");
-			}
+			case 0:
+				/* Empty list. */
+				break;
+			case 1:
+				/* One item. */
+				sb.append(objects[0].toString());
+				break;
+			case 2:
+				/* Two items. */
+				sb.append(objects[0].toString());
+				sb.append(" " + joiner + " ");
+				sb.append(objects[1].toString());
+				break;
+			default:
+				/* Three or more items. */
+				for (int i = 0; i < objects.length - 1; i++) {
+					sb.append(objects[i].toString());
+					sb.append(coma + " ");
+				}
 
-			/*
-			 * Uncomment this to remove serial commas.
-			 *
-			 * int lc = sb.length() - 1;
-			 *
-			 * sb.delete(lc - coma.length(), lc);
-			 */
-			sb.append(joiner + " ");
-			sb.append(objects[objects.length - 1].toString());
+				/*
+				 * Uncomment this to remove serial commas.
+				 *
+				 * int lc = sb.length() - 1;
+				 *
+				 * sb.delete(lc - coma.length(), lc);
+				 */
+				sb.append(joiner + " ");
+				sb.append(objects[objects.length - 1].toString());
 		}
 
 		return sb.toString();
@@ -271,6 +275,139 @@ public class StringUtils {
 				}
 			}
 		}
+
 		return strings;
+	}
+
+	private static class LineIterator implements Iterator<String> {
+		private Scanner scn;
+
+		public boolean processComments;
+		public String  commentInd;
+
+		public boolean skipBlanks;
+
+		public LineIterator(Scanner scn) {
+			this.scn = scn;
+		}
+
+		@Override
+		public boolean hasNext() {
+			return scn.hasNextLine();
+		}
+
+		@Override
+		public String next() {
+			StringBuilder sb = new StringBuilder();
+
+			String tmp;
+			boolean doLoop = true;
+
+			do {
+				if (!scn.hasNextLine()) break;
+
+				tmp = scn.nextLine().trim();
+
+				// Skip blank lines
+				if (skipBlanks && tmp.equals("")) continue;
+				if (processComments && tmp.startsWith(commentInd)) continue;
+
+				doLoop = tmp.endsWith("\\") && !tmp.endsWith("\\\\");
+
+				if (doLoop || tmp.endsWith("\\\\")) {
+					tmp = tmp.substring(0, tmp.length() - 1);
+				}
+
+				sb.append(tmp);
+			} while (doLoop);
+
+			return sb.toString();
+		}
+	}
+
+	/**
+	 * Read a series of lines from an input source.
+	 *
+	 * @param scn
+	 *		The source to read the lines from.
+	 *
+	 * @return An iterator over the lines from the input source.
+	 */
+	public static Iterator<String> readLines(Scanner scn) {
+		return readLines(scn, false, "", false);
+	}
+
+	/**
+	 * Read a series of lines from an input source.
+	 *
+	 * @param scn
+	 *		The source to read the lines from.
+	 *
+	 * @param processComments
+	 *		Whether or not to skip comment lines.
+	 *
+	 * @param commentInd
+	 *		Indicator for starting comment lines.
+	 *
+	 * @param skipBlanks
+	 * 		Whether or not to skip blank lines.
+	 *
+	 * @return An iterator over the lines from the input source.
+	 */
+	public static Iterator<String> readLines(Scanner scn, boolean processComments, String commentInd, boolean skipBlanks) {
+		LineIterator itr = new LineIterator(scn);
+
+		itr.processComments = processComments;
+		itr.commentInd      = commentInd;
+
+		itr.skipBlanks = skipBlanks;
+
+		return itr;
+	}
+
+	/**
+	 * Check if a string contains any one of a specified number of things,
+	 * respecting groups.
+	 * 
+	 * @param haystack
+	 *                The string to look in.
+	 * @param needles
+	 *                The strings to look for.
+	 * @return Whether or not any of the strings were contained outside of
+	 *         groups.
+	 */
+	public static boolean levelContains(String haystack, String... needles) {
+		return LevelSplitter.def.levelContains(haystack, needles);
+	}
+
+	/**
+	 * Split a string, respecting groups.
+	 * 
+	 * @param phrase
+	 *                The string to split.
+	 * @param splits
+	 *                The strings to split on.
+	 * @return A list of split strings. If keepDelims is true, it also
+	 *         includes the delimiters in between the split strings.
+	 */
+	public static List<String> levelSplit(String phrase, String... splits) {
+		return LevelSplitter.def.levelSplit(phrase, false, splits);
+	}
+
+	/**
+	 * Split a string, respecting groups.
+	 * 
+	 * @param phrase
+	 *                The string to split.
+	 * @param keepDelims
+	 *                Whether or not to include the delimiters in the
+	 *                results.
+	 * @param splits
+	 *                The strings to split on.
+	 * @return A list of split strings. If keepDelims is true, it also
+	 *         includes the delimiters in between the split strings.
+	 */
+	public static List<String> levelSplit(String phrase, boolean keepDelims, String... splits) {
+		return LevelSplitter.def.levelSplit(phrase, keepDelims, splits);
 	}
 }
