@@ -28,8 +28,21 @@ public class QueuedIterator<E> implements Iterator<E> {
 	/**
 	 * Static method for constructing iterators.
 	 * 
+	 * @param vals
+	 * 		The values to iterate over.
+	 *
+	 * @return A queued iterator.
+	 */
+	public static <E> QueuedIterator<E> queued(E... vals) {
+		return new QueuedIterator<>(new ArrayIterator<>(vals));
+	}
+
+	/**
+	 * Static method for constructing iterators.
+	 * 
 	 * @param itrs
-	 *                The iterators to use.
+	 * 		The iterators to use.
+	 *
 	 * @return A queued iterator over the provided iterators.
 	 */
 	@SafeVarargs
@@ -41,7 +54,8 @@ public class QueuedIterator<E> implements Iterator<E> {
 	 * Static method for constructing iterators.
 	 * 
 	 * @param itrs
-	 *                The iterables to use.
+	 * 		The iterables to use.
+	 *
 	 * @return A queued iterator over the provided iterables.
 	 */
 	@SafeVarargs
@@ -87,6 +101,17 @@ public class QueuedIterator<E> implements Iterator<E> {
 	}
 
 	/**
+	 * Create a new queued iterator with a set of initial values.
+	 * 
+	 * @param vals
+	 * 		The set of initial values to use.
+	 */
+	@SafeVarargs
+	public QueuedIterator(E... vals) {
+		this(new ArrayIterator(vals));
+	}
+
+	/**
 	 * Add a new iterator who we will iterate through first.
 	 * 
 	 * @param itr
@@ -109,6 +134,16 @@ public class QueuedIterator<E> implements Iterator<E> {
 	}
 	
 	/**
+	 * Add a new set of values who we will iterate through first.
+	 * 
+	 * @param vals
+	 * 		Values to iterate over first.
+	 */
+	public void before(E... vals) {
+		before(new ArrayIterator<>(vals));
+	}
+
+	/**
 	 * Add a new iterator who we will iterate through next.
 	 * 
 	 * @param itr
@@ -117,6 +152,7 @@ public class QueuedIterator<E> implements Iterator<E> {
 	public void after(Iterator<E> itr) {
 		pending.push(itr);
 	}
+
 	/**
 	 * Add a new iterable who we will iterate through next.
 	 * 
@@ -125,6 +161,16 @@ public class QueuedIterator<E> implements Iterator<E> {
 	 */
 	public void after(Iterable<E> itr) {
 		after(itr.iterator());
+	}
+
+	/**
+	 * Add a new set of values who we will iterate through next.
+	 * 
+	 * @param vals
+	 * 		The values to iterate over next.
+	 */
+	public void after(E... vals) {
+		after(new ArrayIterator<>(vals));
 	}
 	
 	/**
@@ -146,6 +192,17 @@ public class QueuedIterator<E> implements Iterator<E> {
 	public void last(Iterable<E> itr) {
 		last(itr.iterator());
 	}
+
+	/**
+	 * Add a new set of values who we will iterate through last.
+	 * 
+	 * @param itr
+	 *                The iterable to go through last.
+	 */
+	public void last(E... vals) {
+		last(new ArrayIterator<>(vals));
+	}
+
 	@Override
 	public boolean hasNext() {
 		while (cur == null || !cur.hasNext()) {

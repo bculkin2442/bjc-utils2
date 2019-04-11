@@ -21,7 +21,7 @@ public class QueuedIteratorTest {
 	public void test() {
 		assertIteratorEquals(false, queued());
 
-		assertIteratorEquals(false, queued(asList(1, 2, 3)), 1, 2, 3);
+		assertIteratorEquals(false, queued(1, 2, 3), 1, 2, 3);
 		assertIteratorEquals(false, queued(asList(1, 2, 3), asList(3, 2, 1)), 1, 2, 3, 3, 2, 1);
 
 	}
@@ -31,11 +31,11 @@ public class QueuedIteratorTest {
 	 */
 	@Test
 	public void testBefore() {
-		QueuedIterator<Integer> itr = queued(asList(1, 2, 3));
+		QueuedIterator<Integer> itr = queued(1, 2, 3);
 
 		assertIteratorEquals(true, itr, 1, 2);
 
-		itr.before(asList(1, 2, 3));
+		itr.before(1, 2, 3);
 
 		assertIteratorEquals(false, itr, 1, 2, 3, 3);
 	}
@@ -45,11 +45,11 @@ public class QueuedIteratorTest {
 	 */
 	@Test
 	public void testAfter() {
-		QueuedIterator<Integer> itr = queued(asList(1, 2, 3));
+		QueuedIterator<Integer> itr = queued(1, 2, 3);
 
 		assertIteratorEquals(true, itr, 1, 2);
 
-		itr.after(asList(1, 2, 3));
+		itr.after(1, 2, 3);
 
 		assertIteratorEquals(false, itr, 3, 1, 2, 3);
 	}
@@ -59,12 +59,12 @@ public class QueuedIteratorTest {
 	 */
 	@Test
 	public void testLast() {
-		QueuedIterator<Integer> itr = queued(asList(1, 2, 3));
+		QueuedIterator<Integer> itr = queued(1, 2, 3);
 
 		assertIteratorEquals(true, itr, 1, 2);
 
-		itr.after(asList(4));
-		itr.last(asList(1, 2, 3));
+		itr.after(4);
+		itr.last(1, 2, 3);
 
 		assertIteratorEquals(false, itr, 3, 4, 1, 2, 3);
 	}

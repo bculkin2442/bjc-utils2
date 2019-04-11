@@ -1,6 +1,7 @@
 package bjc.utils.funcutils;
 
 import java.util.Iterator;
+import java.util.function.Function;
 
 /**
  * Utility methods for dealing with iterators.
