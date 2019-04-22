@@ -57,7 +57,8 @@ public class CLFormatter {
 		builtinDirectives.put("{", new IterationDirective());
 
 		builtinDirectives.put("(", new CaseDirective());
-		builtinDirectives.put("`(", new InflectDirective());
+
+		builtinDirectives.put("`[", new InflectDirective());
 
 		builtinDirectives.put("T", new TabulateDirective());
 	}

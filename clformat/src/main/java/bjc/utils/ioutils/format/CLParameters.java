@@ -59,6 +59,8 @@ public class CLParameters {
 	private void refreshAbbrevs() {
 		// @NOTE 9/19/18
 		//
+		// @Cleanup @Leak
+		//
 		// This never clears abbrevWords or nameAbbrevs, which I'm fine
 		// with here, as these objects are fairly temporary.
 		//
@@ -276,7 +278,9 @@ public class CLParameters {
 
 		String actKey = keys[0];
 
-		if (nameIndices.containsKey(actKey)) {
+		if (namedParams.containsKey(actKey)) {
+			return namedParams.get(actKey);
+		} else if (nameIndices.containsKey(actKey)) {
 			int idx = nameIndices.get(actKey);
 
 			// @NOTE 9/22/18
@@ -284,10 +288,8 @@ public class CLParameters {
 			// Consider whether we should throw an exception here.
 			if (idx < 0 || idx >= params.length) return "";
 
-			return params[nameIndices.get(actKey)];
-		} else if (namedParams.containsKey(actKey)) {
-			return namedParams.get(actKey);
-		}
+			return params[idx];
+		} 
 
 		return "";
 	}
