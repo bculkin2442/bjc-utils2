@@ -30,7 +30,7 @@ clFormatPrefixParam (?:(?:[-+]?\d+|'.|[Vv]|#|%|".*?(?<!\\)")?)
 ## Named parameters are indicated by a preceeding #, which is followed by a
 ## parameter name (any sequence of non-space, non-seperator (',', ':', ';')
 ## printing characters), a seperator (: or ;), then the value of the parameter
-clFormatPrefix (?:(?:#[\S&&[^,:;]][:;]%1$s)|%1$s)
+clFormatPrefix (?:(?:#[\S&&[^,:;]]+[:;]%1$s)|%1$s)
 
 ## Match a format string modifier
 ## A modifier is any combination of the following characters

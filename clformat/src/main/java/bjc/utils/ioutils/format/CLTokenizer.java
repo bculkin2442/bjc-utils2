@@ -24,7 +24,7 @@ public class CLTokenizer implements Iterator<String> {
 	@Override
 	public String next() {
 		String tk = getNext();
-		System.out.printf("\tToken: %s\n", tk);
+		// System.out.printf("\tToken: %s\n", tk);
 
 		return tk;
 	}
