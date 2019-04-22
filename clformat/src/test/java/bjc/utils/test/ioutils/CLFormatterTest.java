@@ -110,9 +110,21 @@ public class CLFormatterTest {
 	}
 
 	@Test
+	public void testADirective() {
+		assertFormat("foo", "~A", "foo");
+		assertFormat("foobar ", "~7A", "foobar");
+		assertFormat(" foobar", "~7@A", "foobar");
+		assertFormat("   foobar", "~#mincol;8,#colinc;2,#minpad;1,#padchar;' @A", "foobar");
+	}
+
+	@Test
 	public void testRandomCases() {
 		// Random test cases
 		assertEquals("3 dogs are here", format("~D dog~:[s are~; is~] here", 3, 3 == 1));
+	}
+
+	private void assertFormat(String res, String fmt, Object... params) {
+		assertEquals(res, format(fmt, params));
 	}
 
 	private String format(String str, Object... params) {

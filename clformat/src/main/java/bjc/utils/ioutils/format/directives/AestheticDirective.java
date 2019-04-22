@@ -15,27 +15,42 @@ public class AestheticDirective implements Directive {
 
 	@Override
 	public void format(FormatParameters dirParams) throws IOException {
+		// Check that we have an item
 		CLFormatter.checkItem(dirParams.item, 'A');
 
-		int mincol = 0, colinc = 1, minpad = 0;
+		// Parameter values
+		int mincol = 0;
+		int colinc = 1;
+		int minpad = 0;
+
 		char padchar = ' ';
 
 		CLParameters params = dirParams.arrParams;
-		if (params.length() == 0) {
+
+		// We take 0, 1 or 4 parameters
+		switch (params.length()) {
+		case 0:	
 			// Zero parameters, use all defaults
-		} else if (params.length() == 1) {
+			break;
+		case 1:
 			params.mapIndices("mincol");
 
 			mincol = params.getInt("mincol", "minimum column count", "A", 0);
-		} else if (params.length() < 4) {
-			throw new IllegalArgumentException("Must provide either zero, one or four arguments to A directive");
-		} else {
-			params.mapIndices("colinc", "minpad", "padchar");
+			break;
+		case 4:
+			params.mapIndices("mincol", "colinc", "minpad", "padchar");
 
-			colinc  = params.getInt( "colinc",  "padding increment", "A", 1);
-			minpad  = params.getInt( "minpad",  "minimum amount of padding", "A", 0);
+			mincol = params.getInt("mincol", "minimum column count", "A", 0);
+			colinc = params.getInt("colinc", "padding increment", "A", 1);
+			minpad = params.getInt("minpad", "minimum amount of padding", "A", 0);
+
 			padchar = params.getChar("padchar", "padding character", "A", ' ');
+			break;
+		default:
+			throw new IllegalArgumentException("Must provide either zero, one or four arguments to A directive");
 		}
+
+		String tmp = dirParams.item.toString();
 
 		StringBuilder work = new StringBuilder();
 
@@ -44,14 +59,14 @@ public class AestheticDirective implements Directive {
 				work.append(padchar);
 			}
 
-			for (int i = work.length(); i < mincol; i++) {
+			for (int i = work.length() + tmp.length(); i < mincol; i++) {
 				for (int k = 0; k < colinc; k++) {
 					work.append(padchar);
 				}
 			}
 		}
 
-		work.append(dirParams.item.toString());
+		work.append(tmp);
 
 		if (!dirParams.mods.atMod) {
 			for (int i = 0; i < minpad; i++) {
