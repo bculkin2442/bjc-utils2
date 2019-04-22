@@ -139,7 +139,7 @@ roughly analagous to the S directive in many printf-type strings.
 It takes zero, one or four parameters (described by the table below), as well as one argument.
 
 | Sample String | Description |
-|-----------------------------|
+|---------------|-------------|
 | ~a | Print out the next format argument as a string. |
 | ~*mincol:[0]*a | Print out the next format argument, taking at least *mincol* columns | 
 | ~*mincol:[0],colinc:[1],minpad:[0],padchar:[' ]*a | Print out the next format argument, adding at least *minpad* instances of *padchar*, then adding copies of *padchar* in *colinc* sized blocks until the total output size is at least *mincol* columns long. |
