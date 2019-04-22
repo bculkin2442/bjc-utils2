@@ -141,8 +141,8 @@ It takes zero, one or four parameters (described by the table below), as well as
 | Sample String | Description |
 |---------------|-------------|
 | ~a | Print out the next format argument as a string. |
-| ~*mincol:[0]*a | Print out the next format argument, taking at least *mincol* columns | 
-| ~*mincol:[0],colinc:[1],minpad:[0],padchar:[' ]*a | Print out the next format argument, adding at least *minpad* instances of *padchar*, then adding copies of *padchar* in *colinc* sized blocks until the total output size is at least *mincol* columns long. |
+| ~mincol:[0]a | Print out the next format argument, taking at least *mincol* columns | 
+| ~mincol:[0],colinc:[1],minpad:[0],padchar:[' ]a | Print out the next format argument, adding at least *minpad* instances of *padchar*, then adding copies of *padchar* in *colinc* sized blocks until the total output size is at least *mincol* columns long. |
 
 Padding will be inserted after the string, unless the `@` modifier has
 been specified, in which case it will go before the string.
