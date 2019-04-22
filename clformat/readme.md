@@ -21,13 +21,13 @@ number in. They are separated from each other by commas.
 A prefix parameter can be one of the following:
 * A signed decimal number
 * A single character, preceeded by a single quote `'`
-* The letter `V`\\
+* The letter `V`\
     Specifies that the value for this parameter should be read from the
 	parameters to the format string
-* The character `#`\\
+* The character `#`\
     Specifies that the value for this parameter should be the number of
 	parameters to the format string remaining
-* The character `%`\\
+* The character `%`\
     Specifies that the value for this parameter should be the current position
 	in the format string parameter list
 * A double quoted string.
