@@ -118,6 +118,14 @@ public class CLFormatterTest {
 	}
 
 	@Test
+	public void testCasePrinting() {
+		assertFormat("abc", "~(~A~)", "AbC", "aBc", "aBc bCD", "abc Cad dAC");
+		assertFormat("ABC", "~@:(~A~)", "aBc");
+		assertFormat("ABc BCD", "~:(~A ~A~)", "aBc", "bCD");
+		assertFormat("Abc Cad dAC", "~@(~A~)", "abc Cad dAC");
+	}
+
+	@Test
 	public void testRandomCases() {
 		// Random test cases
 		assertEquals("3 dogs are here", format("~D dog~:[s are~; is~] here", 3, 3 == 1));

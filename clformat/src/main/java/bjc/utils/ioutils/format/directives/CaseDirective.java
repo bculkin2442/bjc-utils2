@@ -71,14 +71,13 @@ public class CaseDirective implements Directive {
 			Matcher mat = wordPattern.matcher(strang);
 
 			StringBuffer sb = new StringBuffer();
-			while(!mat.find()) {
+			while(mat.find()) {
 				mat.appendReplacement(sb, "");
 
 				String word = mat.group(1);
-				
-				word = word.substring(0, 1).toUpperCase() + word.substring(1);
+				String ward = word.substring(0, 1).toUpperCase() + word.substring(1);
 
-				sb.append(word);
+				sb.append(ward);
 				sb.append(mat.group(2));
 			}
 
@@ -90,7 +89,7 @@ public class CaseDirective implements Directive {
 
 			StringBuffer sb = new StringBuffer();
 			boolean doCap = true;
-			while(!mat.find()) {
+			while(mat.find()) {
 				mat.appendReplacement(sb, "");
 
 				String word = mat.group(1);

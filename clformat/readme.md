@@ -146,3 +146,11 @@ It takes zero, one or four parameters (described by the table below), as well as
 
 Padding will be inserted after the string, unless the `@` modifier has
 been specified, in which case it will go before the string.
+
+## ( Directive
+The ( directive is used for performing simple case-mappings on a string. It
+encloses a string that contains other directives, terminated by the ~)
+directive.
+
+It takes no parameters, but takes one format argument; its behavior is
+influenced by the modifiers provided to the ( directive, but not much else.
