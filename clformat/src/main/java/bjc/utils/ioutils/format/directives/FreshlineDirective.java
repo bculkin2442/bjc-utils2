@@ -1,6 +1,6 @@
 package bjc.utils.ioutils.format.directives;
 
-import java.io.IOException;
+import java.io.*;
 
 /**
  * Implement the &amp; directive.
@@ -15,7 +15,8 @@ public class FreshlineDirective implements Directive {
 
 		if(dirParams.arrParams.length() >= 1) {
 			dirParams.arrParams.mapIndices("count");
-			nTimes = dirParams.arrParams.getInt("count", "occurance count", "&", 1);
+			nTimes = dirParams.arrParams.getInt(dirParams.tParams, 
+					"count", "occurance count", "&", 1);
 		}
 
 		if(dirParams.rw.isLastCharNL()) nTimes -= 1;

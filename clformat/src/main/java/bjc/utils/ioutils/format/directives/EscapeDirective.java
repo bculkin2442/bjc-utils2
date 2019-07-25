@@ -1,7 +1,7 @@
 package bjc.utils.ioutils.format.directives;
 
-import bjc.utils.ioutils.format.CLParameters;
-import bjc.utils.ioutils.format.EscapeException;
+import bjc.utils.esodata.*;
+import bjc.utils.ioutils.format.*;
 
 /**
  * Implementation for the ^ directive.
@@ -12,6 +12,8 @@ public class EscapeDirective implements Directive {
 
 	@Override
 	public void format(FormatParameters dirParams) {
+		Tape<Object> itemTape = dirParams.tParams;
+
 		boolean shouldExit;
 
 		if (dirParams.mods.dollarMod) dirParams.tParams.right();
@@ -23,15 +25,15 @@ public class EscapeDirective implements Directive {
 			break;
 		case 1: {
 			params.mapIndices("count");
-			int num = params.getInt("count", "condition count", "^", 0);
+			int num = params.getInt(itemTape, "count", "condition count", "^", 0);
 
 			shouldExit = num == 0;
 			break;
 		}
 		case 2: {
 			params.mapIndices("lhand", "rhand");
-			int left  = params.getInt("lhand", "left-hand condition", "^", 0);
-			int right = params.getInt("rhand", "right-hand condition", "^", 0);
+			int left  = params.getInt(itemTape, "lhand", "left-hand condition", "^", 0);
+			int right = params.getInt(itemTape, "rhand", "right-hand condition", "^", 0);
 
 			shouldExit = left == right;
 			break;
@@ -40,9 +42,9 @@ public class EscapeDirective implements Directive {
 		default: {
 			params.mapIndices("lower", "ival", "upper");
 
-			int low  = params.getInt("lower", "lower-bound condition", "^", 0);
-			int mid  = params.getInt("ival", "interval condition", "^", 0);
-			int high = params.getInt("upper", "upper-bound condition", "^", 0);
+			int low  = params.getInt(itemTape, "lower", "lower-bound condition", "^", 0);
+			int mid  = params.getInt(itemTape, "ival", "interval condition", "^", 0);
+			int high = params.getInt(itemTape, "upper", "upper-bound condition", "^", 0);
 
 			shouldExit = (low <= mid) && (mid <= high);
 			break;

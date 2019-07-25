@@ -253,7 +253,7 @@ public class CLFormatter {
 				if(dirMods   == null) dirMods = "";
 				if(dirParams == null) dirParams = "";
 
-				CLParameters arrParams = CLParameters.fromDirective(dirParams, tParams);
+				CLParameters arrParams = CLParameters.fromDirective(dirParams);
 
 				CLModifiers mods = CLModifiers.fromString(dirMods);
 

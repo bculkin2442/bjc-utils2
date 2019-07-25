@@ -19,6 +19,18 @@ public interface Directive {
 	public void format(FormatParameters dirParams) throws IOException;
 
 	/**
+	 * Compile this directive.
+	 *
+	 * @param compCTX
+	 * 	The state necessary to compile this directive.
+	 *
+	 * @return A compiled form of this directive.
+	 */
+	public default Edict compile(CompileContext compCTX) {
+		throw new IllegalArgumentException("This directive does not support compilation yet");
+	}
+
+	/**
 	 * Check if a particular directive is an opening directive.
 	 *
 	 * @param str

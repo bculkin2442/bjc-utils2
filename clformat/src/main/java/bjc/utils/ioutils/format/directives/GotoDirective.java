@@ -1,6 +1,7 @@
 package bjc.utils.ioutils.format.directives;
 
-import bjc.utils.ioutils.format.CLParameters;
+import bjc.utils.esodata.*;
+import bjc.utils.ioutils.format.*;
 
 /**
  * Implement the * directive.
@@ -12,13 +13,15 @@ public class GotoDirective implements Directive {
 
 	@Override
 	public void format(FormatParameters dirParams) {
+		Tape<Object> itemTape = dirParams.tParams;
+
 		CLParameters params = dirParams.arrParams;
 		if (dirParams.mods.colonMod) {
 			int num = 1;
 			if (params.length() >= 1) {
 				params.mapIndices("numargs");
 
-				num = params.getInt("numargs", "number of arguments backward", "*", 1);
+				num = params.getInt(itemTape, "numargs", "number of arguments backward", "*", 1);
 			}
 
 			dirParams.tParams.left(num);
@@ -27,7 +30,7 @@ public class GotoDirective implements Directive {
 			if (params.length() >= 1) {
 				params.mapIndices("argidx");
 
-				num = params.getInt("argidx", "argument index", "*", 0);
+				num = params.getInt(itemTape, "argidx", "argument index", "*", 0);
 			}
 
 			dirParams.tParams.first();
@@ -37,7 +40,7 @@ public class GotoDirective implements Directive {
 			if (params.length() >= 1) {
 				params.mapIndices("numargs");
 
-				num = params.getInt("numargs", "number of arguments forward", "*", 1);
+				num = params.getInt(itemTape, "numargs", "number of arguments forward", "*", 1);
 			}
 
 			dirParams.tParams.right(num);

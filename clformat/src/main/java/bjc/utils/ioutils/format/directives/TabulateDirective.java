@@ -1,11 +1,14 @@
 package bjc.utils.ioutils.format.directives;
 
-import java.io.IOException;
+import java.io.*;
 
-import bjc.utils.ioutils.format.CLParameters;
+import bjc.utils.esodata.*;
+import bjc.utils.ioutils.format.*;
 
 public class TabulateDirective implements Directive {
 	public void format(FormatParameters dirParams) throws IOException {
+		Tape<Object> itemTape = dirParams.tParams;
+
 		// Support for a possible future feature
 		char padchar = ' ';
 
@@ -22,13 +25,13 @@ public class TabulateDirective implements Directive {
 			if (params.length() > 2) {
 				params.mapIndex("colinc", 1);
 
-				colinc = params.getInt("colinc", "column increment", "T", 1);
+				colinc = params.getInt(itemTape, "colinc", "column increment", "T", 1);
 			}
 
 			if (params.length() > 1) {
 				params.mapIndices("colrel");
 
-				colrel = params.getInt("colrel", "relative column number", "T", 1);
+				colrel = params.getInt(itemTape, "colrel", "relative column number", "T", 1);
 			}
 
 			for (int i = 0; i < colrel; i++) {
@@ -48,13 +51,13 @@ public class TabulateDirective implements Directive {
 			if (params.length() > 2) {
 				params.mapIndex("colinc", 1);
 
-				colinc = params.getInt("colinc", "column increment", "T", 1);
+				colinc = params.getInt(itemTape, "colinc", "column increment", "T", 1);
 			}
 
 			if (params.length() > 1) {
 				params.mapIndices("colnum");
 
-				colnum = params.getInt("colnum", "column number", "T", 1);
+				colnum = params.getInt(itemTape, "colnum", "column number", "T", 1);
 			}
 
 			if (currCol < colnum) {

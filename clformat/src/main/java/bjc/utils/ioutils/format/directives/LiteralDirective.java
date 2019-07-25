@@ -9,7 +9,6 @@ import java.io.IOException;
  *
  */
 public class LiteralDirective implements Directive {
-
 	private String directive;
 	private String lit;
 
@@ -33,7 +32,7 @@ public class LiteralDirective implements Directive {
 		if (dirParams.arrParams.length() >= 1) {
 			dirParams.arrParams.mapIndices("count");
 
-			nTimes = dirParams.arrParams.getInt("count", "occurance count", directive, 1);
+			nTimes = dirParams.arrParams.getInt(dirParams.tParams, "count", "occurance count", directive, 1);
 		}
 
 		for (int i = 0; i < nTimes; i++) {
@@ -42,4 +41,29 @@ public class LiteralDirective implements Directive {
 
 	}
 
+	@Override
+	public Edict compile(CompileContext compCTX) {
+		int nTimes = 1;
+
+		LiteralEdict edict = new LiteralEdict(lit, nTimes);
+
+		return edict;
+	}
+}
+
+/*
+ * Compiled version of the directive.
+ */
+class LiteralEdict implements Edict {
+	private String lit;
+	private int nTimes;
+
+	public LiteralEdict(String lit, int nTimes) {
+
+	}
+
+	@Override
+	public void format(FormatContext formCTX) {
+
+	}
 }

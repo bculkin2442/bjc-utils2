@@ -1,6 +1,8 @@
 package bjc.utils.ioutils.format.directives;
 
-import java.io.IOException;
+import java.io.*;
+
+import bjc.utils.esodata.*;
 
 /**
  * Implement the I directive.
@@ -8,12 +10,12 @@ import java.io.IOException;
  *
  */
 public class IndentDirective implements Directive {
-
 	@Override
 	public void format(FormatParameters dirParams) throws IOException {
+		Tape<Object> itemTape = dirParams.tParams;
+
 		// Dollar mod is indent configuration
 		if (dirParams.mods.dollarMod) {
-
 			return;
 		}
 
@@ -22,7 +24,7 @@ public class IndentDirective implements Directive {
 		if(dirParams.arrParams.length() >= 1) {
 			dirParams.arrParams.mapIndices("count");
 
-			nIndents = dirParams.arrParams.getInt("count", "indent count", "I", 1);
+			nIndents = dirParams.arrParams.getInt(itemTape, "count", "indent count", "I", 1);
 		}
 
 		boolean dedent = false;

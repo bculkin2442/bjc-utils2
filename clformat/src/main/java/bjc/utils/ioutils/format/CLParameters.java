@@ -22,12 +22,12 @@ public class CLParameters {
 	private static String RX_TRUE  = "(?i)y(?:es)?|t(?:rue)?(?i)";
 	private static String RX_FALSE = "(?i)no?|f(?:alse)?(?i)";
 
-	private String[] params;
+	private CLValue[] params;
 
 	private Set<String> abbrevWords;
 	private AbbrevMap   nameAbbrevs;
 
-	private Map<String, String>  namedParams;
+	private Map<String, CLValue>  namedParams;
 	private Map<String, Integer> nameIndices;
 
 	/**
@@ -36,15 +36,15 @@ public class CLParameters {
 	 * @param params
 	 *        The CL format parameters to use.
 	 */
-	public CLParameters(String[] params) {
+	public CLParameters(CLValue[] params) {
 		this(params, new HashMap<>());
 	}
 
-	public CLParameters(Map<String, String> namedParams) {
-		this(new String[0], namedParams);
+	public CLParameters(Map<String, CLValue> namedParams) {
+		this(new CLValue[0], namedParams);
 	}
 
-	public CLParameters(String[] params, Map<String, String> namedParams) {
+	public CLParameters(CLValue[] params, Map<String, CLValue> namedParams) {
 		this.params = params;
 
 		this.namedParams  = namedParams;
@@ -109,11 +109,12 @@ public class CLParameters {
 		if (doRefresh) refreshAbbrevs();
 	}
 
-	public String getByIndex(int idx) {
-		if (idx < 0 || idx >= params.length) return "Out of Bounds";
+	public CLValue getByIndex(int idx) {
+		if (idx < 0 || idx >= params.length) return null;
 
 		return params[idx];
 	}
+
 	/**
 	 * Get the length of the parameter list.
 	 * 
@@ -136,8 +137,9 @@ public class CLParameters {
 	 *
 	 * @return A set of CL parameters.
 	 */
-	public static CLParameters fromDirective(String unsplit, Tape<Object> dirParams) {
-		List<String>  lParams   = new ArrayList<>();
+	public static CLParameters fromDirective(String unsplit) {
+		List<String> lParams = new ArrayList<>();
+
 		StringBuilder currParm = new StringBuilder();
 
 		char prevChar = ' ';
@@ -168,13 +170,13 @@ public class CLParameters {
 		// Add last parameter
 		lParams.add(currParm.toString());
 
-		List<String> parameters = new ArrayList<>();
+		List<CLValue> parameters = new ArrayList<>();
 
 		// Special case empty blocks, so that we don't confuse people
 		if (lParams.size() == 1 && lParams.get(0).equals(""))
-			return new CLParameters(parameters.toArray(new String[0]));
+			return new CLParameters(parameters.toArray(new CLValue[0]));
 
-		Map<String, String>  namedParams  = new HashMap<>();
+		Map<String, CLValue>  namedParams  = new HashMap<>();
 
 		for(String param : lParams) {
 			if (param.startsWith("#") && !param.equals("#")) {
@@ -198,62 +200,52 @@ public class CLParameters {
 				String paramName = param.substring(0, nameIdx);
 				String paramVal  = param.substring(nameIdx + 1);
 
-				String actVal = parseParam(paramVal, dirParams);
+				CLValue actVal = parseParam(paramVal);
 
 				namedParams.put(paramName.toUpperCase(), actVal);
 
 				if (setIndex) parameters.add(actVal);
 			} else {
-				parameters.add(parseParam(param, dirParams));
+				parameters.add(parseParam(param));
 			}
-
-			//currParamNo += 1;
 		}
 
-		return new CLParameters(parameters.toArray(new String[0]), namedParams);
+		return new CLParameters(parameters.toArray(new CLValue[0]), namedParams);
 	}
 
-	private static String parseParam(String param, Tape<Object> dirParams) {
-		if(param.equalsIgnoreCase("V")) {
-			// Read parameter from items
-			Object par = dirParams.item();
-			boolean succ = dirParams.right();
+	private static CLValue parseParam(String param) {
+		String val = param;
 
-			if(!succ) {
-				throw new IllegalStateException("Couldn't advance tape for parameter");
-			} else if(par == null) {
-				throw new IllegalArgumentException(
-						"Expected a format parameter for V inline parameter");
-			} 
-
-			if(par instanceof Number) {
-				int val = ((Number) par).intValue();
-
-				return Integer.toString(val);
-			} else if(par instanceof Character) {
-				char ch = ((Character) par);
-
-				return Character.toString(ch);
-			} else if (par instanceof String) {
-				return (String)par;
-			} else {
-				throw new IllegalArgumentException(
-						"Incorrect type of parameter for V inline parameter");
-			}
-		} else if (param.equals("#")) {
-			return (Integer.toString(dirParams.size() - dirParams.position()));
-		} else if (param.equals("%")) {
-			return Integer.toString(dirParams.position());
-		} else if (param.startsWith("\"")) {
+		if (param.startsWith("\"")) {
 			String dquote = param.substring(1, param.length() - 1);
 
-			return TokenUtils.descapeString(dquote);
+			val = TokenUtils.descapeString(dquote);
 		}
 
-		return param;
+		return CLValue.parse(val);
 	}
 
-	private String resolveKey(String key) {
+	/**
+	 * Get the corresponding value for a key.
+	 *
+	 * @param key
+	 * 	The name of the parameter to look up.
+	 *
+	 * @return The value for that key, or null if none exists.
+	 */
+	public CLValue resolveKey(int key) {
+		return resolveKey(Integer.toString(key));
+	}
+
+	/**
+	 * Get the corresponding value for a key.
+	 *
+	 * @param key
+	 * 	The name of the parameter to look up.
+	 *
+	 * @return The value for that key, or null if none exists.
+	 */
+	public CLValue resolveKey(String key) {
 		String ucKey = key.toUpperCase();
 
 		if (!abbrevWords.contains(ucKey)) refreshAbbrev(ucKey);
@@ -286,16 +278,16 @@ public class CLParameters {
 			// @NOTE 9/22/18
 			//
 			// Consider whether we should throw an exception here.
-			if (idx < 0 || idx >= params.length) return "";
+			if (idx < 0 || idx >= params.length) return null;
 
 			return params[idx];
 		} 
 
-		return "";
+		return null;
 	}
 
-	public boolean getBoolean(String key, String paramName, String directive, boolean def) {
-		String bol = resolveKey(key);
+	public boolean getBoolean(Tape<Object> params, String key, String paramName, String directive, boolean def) {
+		String bol = resolveKey(key).getValue(params);
 
 		if(!bol.equals("")) {
 			if      (bol.matches(RX_TRUE))  return true;
@@ -309,8 +301,8 @@ public class CLParameters {
 		return def;
 	}
 
-	public String getString(String key, String paramName, String directive, String def) {
-		String vl = resolveKey(key);
+	public String getString(Tape<Object> params, String key, String paramName, String directive, String def) {
+		String vl = resolveKey(key).getValue(params);
 
 		// @NOTE 9/19/17
 		//
@@ -321,8 +313,8 @@ public class CLParameters {
 		return def;
 	}
 
-	public char getChar(String key, String paramName, String directive, char def) {
-		String param = resolveKey(key);
+	public char getChar(Tape<Object> params, String key, String paramName, String directive, char def) {
+		String param = resolveKey(key).getValue(params);
 
 		if (!param.equals("")) {
 			if (param.length() == 1) {
@@ -342,8 +334,8 @@ public class CLParameters {
 		return def;
 	}
 
-	public int getInt(String key, String paramName, String directive, int def) {
-		String param = resolveKey(key);
+	public int getInt(Tape<Object> params, String key, String paramName, String directive, int def) {
+		String param = resolveKey(key).getValue(params);
 
 		if (!param.equals("")) {
 			try {

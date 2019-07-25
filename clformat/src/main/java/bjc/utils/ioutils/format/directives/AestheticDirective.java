@@ -1,9 +1,9 @@
 package bjc.utils.ioutils.format.directives;
 
-import java.io.IOException;
+import java.io.*;
 
-import bjc.utils.ioutils.format.CLFormatter;
-import bjc.utils.ioutils.format.CLParameters;
+import bjc.utils.esodata.*;
+import bjc.utils.ioutils.format.*;
 
 /**
  * Implementation of the A directive.
@@ -15,6 +15,8 @@ public class AestheticDirective implements Directive {
 
 	@Override
 	public void format(FormatParameters dirParams) throws IOException {
+		Tape<Object> itemTape = dirParams.tParams;
+
 		// Check that we have an item
 		CLFormatter.checkItem(dirParams.item, 'A');
 
@@ -35,16 +37,16 @@ public class AestheticDirective implements Directive {
 		case 1:
 			params.mapIndices("mincol");
 
-			mincol = params.getInt("mincol", "minimum column count", "A", 0);
+			mincol = params.getInt(itemTape, "mincol", "minimum column count", "A", 0);
 			break;
 		case 4:
 			params.mapIndices("mincol", "colinc", "minpad", "padchar");
 
-			mincol = params.getInt("mincol", "minimum column count", "A", 0);
-			colinc = params.getInt("colinc", "padding increment", "A", 1);
-			minpad = params.getInt("minpad", "minimum amount of padding", "A", 0);
+			mincol = params.getInt(itemTape, "mincol", "minimum column count", "A", 0);
+			colinc = params.getInt(itemTape, "colinc", "padding increment", "A", 1);
+			minpad = params.getInt(itemTape, "minpad", "minimum amount of padding", "A", 0);
 
-			padchar = params.getChar("padchar", "padding character", "A", ' ');
+			padchar = params.getChar(itemTape, "padchar", "padding character", "A", ' ');
 			break;
 		default:
 			throw new IllegalArgumentException("Must provide either zero, one or four arguments to A directive");

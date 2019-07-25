@@ -71,7 +71,8 @@ public class IterationDirective implements Directive {
 		if (params.length() > 0) {
 			params.mapIndices("maxitr");
 
-			maxItr = params.getInt("maxitr", "maximum iterations", "{", Integer.MAX_VALUE);
+			maxItr = params.getInt(dirParams.tParams, "maxitr",
+					"maximum iterations", "{", Integer.MAX_VALUE);
 		}
 
 		int numItr = 0;

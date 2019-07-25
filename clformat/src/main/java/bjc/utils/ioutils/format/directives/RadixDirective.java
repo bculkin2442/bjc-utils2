@@ -43,9 +43,10 @@ public class RadixDirective extends GeneralNumberDirective {
 
 			params.mapIndex("radix", 0);
 
-			int radix = params.getInt("radix", "radix", "R", 10);
+			int radix = params.getInt(dirParams.tParams, "radix", "radix", "R", 10);
 
-			handleNumberDirective(dirParams.rw, dirParams.mods, params, 0, val, radix);
+			handleNumberDirective(dirParams.tParams, dirParams.rw,
+					dirParams.mods, params, 0, val, radix);
 		}
 
 		dirParams.tParams.right();

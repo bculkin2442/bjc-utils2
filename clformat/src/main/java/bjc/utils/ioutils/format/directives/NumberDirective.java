@@ -12,7 +12,6 @@ import bjc.utils.ioutils.format.CLFormatter;
  *
  */
 public class NumberDirective extends GeneralNumberDirective {
-
 	/**
 	 * Create a new radix based number directive.
 	 * 
@@ -43,7 +42,8 @@ public class NumberDirective extends GeneralNumberDirective {
 
 		long val = ((Number) dirParams.item).longValue();
 
-		handleNumberDirective(dirParams.rw, dirParams.mods, dirParams.arrParams, argidx, val, radix);
+		handleNumberDirective(dirParams.tParams, dirParams.rw,
+				dirParams.mods, dirParams.arrParams, argidx, val, radix);
 
 		dirParams.tParams.right();
 	}
