@@ -10,6 +10,12 @@ public class ArrayIterator<T> implements Iterator<T> {
 	private Object[] arr;
 	private int      idx;
 
+	/**
+	 * Create a new array iterator.
+	 *
+	 * @param elems
+	 * 	The array that will be iterated over.
+	 */
 	public ArrayIterator(T... elms) {
 		arr = elms;
 		idx = 0;

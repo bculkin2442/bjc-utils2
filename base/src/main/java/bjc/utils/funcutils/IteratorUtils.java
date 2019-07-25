@@ -1,7 +1,9 @@
 package bjc.utils.funcutils;
 
-import java.util.Iterator;
-import java.util.function.Function;
+import java.util.*;
+import java.util.function.*;
+
+import bjc.utils.data.*;
 
 /**
  * Utility methods for dealing with iterators.
@@ -40,11 +42,13 @@ public class IteratorUtils {
 			return curItr.next();
 		}
 	}
+
 	/**
 	 * Convert an iterator to an iterable.
 	 * 
 	 * @param itr
-	 *                The iterator to convert.
+	 * 	The iterator to convert.
+	 *
 	 * @return An iterable that gives back that iterator.
 	 */
 	public static <E> Iterable<E> I(Iterator<E> itr) {
@@ -55,11 +59,24 @@ public class IteratorUtils {
 	 * Convert an iterable to an iterator.
 	 * 
 	 * @param itr
-	 *                The iterable to convert.
+	 * 	The iterable to convert.
+	 *
 	 * @return The iterator from that iterable
 	 */
 	public static <E> Iterator<E> I(Iterable<E> itr) {
 		return itr.iterator();
+	}
+
+	/**
+	 * Convert an array to an iterator.
+	 *
+	 * @param parms
+	 * 	The array to iterate over.
+	 *
+	 * @return An iterator over the provided array.
+	 */
+	public static <E> Iterator<E> AI(E... parms) {
+		return new ArrayIterator<>(parms);
 	}
 
 	public static <A, B> Iterator<B> chain(Iterator<A> itrA, Function<A, Iterator<B>> itrB) {
