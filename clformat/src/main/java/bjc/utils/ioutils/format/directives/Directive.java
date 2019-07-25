@@ -5,13 +5,13 @@ import java.io.IOException;
 /**
  * A CL format directive.
  * 
- * @author EVE
- *
+ * @author Ben Culkin
  */
 @FunctionalInterface
 public interface Directive {
 	/**
 	 * Execute this format directive.
+	 *
 	 * @param dirParams
 	 * 	The parameters for the directive.
 	 * @throws IOException If something goes wrong.
@@ -20,7 +20,10 @@ public interface Directive {
 
 	/**
 	 * Check if a particular directive is an opening directive.
-	 * @param str The directive to check.
+	 *
+	 * @param str
+	 * 	The directive to check.
+	 *
 	 * @return Whether or not the directive is opening.
 	 */
 	public static boolean isOpening(String str) {
@@ -38,8 +41,12 @@ public interface Directive {
 
 	/**
 	 * Check if a particular directive is an opening directive.
-	 * @param str The directive to check.
-	 * @return Whether or not the directive is opening.
+	 *
+	 * @param str
+	 * 	The directive to check.
+	 *
+	 * @return
+	 * 	Whether or not the directive is opening.
 	 */
 	public static boolean isClosing(String str) {
 		switch(str) {

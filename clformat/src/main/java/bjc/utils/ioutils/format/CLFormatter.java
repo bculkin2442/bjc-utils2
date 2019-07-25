@@ -1,31 +1,38 @@
 package bjc.utils.ioutils.format;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.*;
+import java.util.*;
+import java.util.regex.*;
 
-import bjc.utils.esodata.SingleTape;
-import bjc.utils.esodata.Tape;
-import bjc.utils.ioutils.ReportWriter;
-import bjc.utils.ioutils.SimpleProperties;
+import bjc.utils.data.*;
+import bjc.utils.esodata.*;
+import bjc.utils.funcutils.*;
+import bjc.utils.ioutils.*;
 import bjc.utils.ioutils.format.directives.*;
 
+// Grab our easy converters/constructors
+import static bjc.utils.funcutils.IteratorUtils.AI;
+import static bjc.utils.funcutils.IteratorUtils.I;
+
 /**
- * An implementation of CL's FORMAT.
- * 
- * @author EVE
+ * An implementation of a string formatter strongly inspired by FORMAT from
+ * Common Lisp.
  *
+ * I say 'strongly inspired' instead of 'an implementation' because there are
+ * differences and extensions between this version of FORMAT, and the one
+ * defined by the CLHS.
+ * 
+ * @author Ben Culkin
  */
 public class CLFormatter {
+	// Built-in formatting directives
 	private static Map<String, Directive> builtinDirectives;
+
+	// Extra directives specific to this formatter
 	private        Map<String, Directive> extraDirectives;
 
 	static {
+		// Set up the built-in directives
 		builtinDirectives = new HashMap<>();
 
 		builtinDirectives.put("A", new AestheticDirective());
@@ -70,46 +77,64 @@ public class CLFormatter {
 		extraDirectives = new HashMap<>();
 	}
 
+	/*
+	 * @TODO Ben Culkin 9/24/2019 :checkItem
+	 * Convert this to return a boolean, not throw an exception.
+	 *
+	 * In general, I want to cut down on exceptions, except for where it
+	 * would be very inconvenient to do so (namely, the EscapeException we
+	 * use for the ~^ directive; that would be a pain to implement by hand)
+	 */
 	/**
 	 * Check that an item is valid for a directive.
 	 * 
 	 * @param itm
-	 *        The item to check.
+	 * 	The item to check.
+	 *
 	 * @param directive
-	 *        The directive to check for.
+	 * 	The directive to check for.
+	 *
+	 * @throws IlegalArgumentException if itm is null.
 	 */
 	public static void checkItem(Object itm, char directive) {
-		if(itm == null) throw new IllegalArgumentException(
-				String.format("No argument provided for %c directive", directive));
+		if(itm == null) {
+			String msg =  String.format("No argument provided for %c directive", directive);
+
+			throw new IllegalArgumentException(msg);
+		}
 	}
 
 	/**
 	 * Format a string in the style of CL's FORMAT.
 	 * 
 	 * @param format
-	 *        The format string to use.
+	 * 	The format string to use.
+	 *
 	 * @param params
-	 *        The parameters for the string.
+	 * 	The parameters for the string.
+	 *
 	 * @return The formatted string.
+	 *
+	 * @throws IOException if something goes wrong during formatting the
+	 * string.
 	 */
 	public String formatString(String format, Object... params) throws IOException {
-		ReportWriter rw = new ReportWriter(new StringWriter());
-		/* Put the parameters where we can easily handle them. */
-		Tape<Object> tParams = new SingleTape<>(params);
-
-		doFormatString(format, rw, tParams, true);
-
-		return rw.toString();
+		return formatString(format, I(AI(params)));
 	}
 	
 	/**
 	 * Format a string in the style of CL's FORMAT.
 	 * 
 	 * @param format
-	 *        The format string to use.
+	 * 	The format string to use.
+	 *
 	 * @param params
-	 *        The parameters for the string.
+	 * 	The parameters for the string.
+	 *
 	 * @return The formatted string.
+	 *
+	 * @throws IOException if something goes wrong during formatting the
+	 * string.
 	 */
 	public String formatString(String format, Iterable<Object> params) throws IOException {
 		ReportWriter rw = new ReportWriter(new StringWriter());
@@ -125,10 +150,14 @@ public class CLFormatter {
 	/**
 	 * Format a string in the style of CL's FORMAT.
 	 * 
+	 * @param target
+	 * 	The writer to send output to.
+	 *
 	 * @param format
-	 *        The format string to use.
+	 * 	The format string to use.
+	 *
 	 * @param params
-	 *        The parameters for the string.
+	 * 	The parameters for the string.
 	 */
 	public void formatString(Writer target, String format, Object... params) throws IOException {
 		ReportWriter rw = new ReportWriter(target);
@@ -141,10 +170,14 @@ public class CLFormatter {
 	/**
 	 * Format a string in the style of CL's FORMAT.
 	 * 
+	 * @param target
+	 * 	The writer with configured format options to use.
+	 *
 	 * @param format
-	 *        The format string to use.
+	 * 	The format string to use.
+	 *
 	 * @param params
-	 *        The parameters for the string.
+	 * 	The parameters for the string.
 	 */
 	public void formatString(ReportWriter target, String format, Object... params) throws IOException {
 		/* Put the parameters where we can easily handle them. */
@@ -156,10 +189,14 @@ public class CLFormatter {
 	/**
 	 * Format a string in the style of CL's FORMAT.
 	 * 
+	 * @param target
+	 * 	The writer to send output to.
+	 *
 	 * @param format
-	 *        The format string to use.
+	 * 	The format string to use.
+	 *
 	 * @param params
-	 *        The parameters for the string.
+	 * 	The parameters for the string.
 	 */
 	public void formatString(Writer target, String format, Iterable<Object> params) throws IOException {
 		ReportWriter rw = new ReportWriter(target);
@@ -177,12 +214,17 @@ public class CLFormatter {
 	 * different string.
 	 * 
 	 * @param format
-	 *        The format to use.
+	 * 	The format to use.
+	 *
 	 * @param rw
-	 *        The buffer to file output into.
+	 * 	The buffer to file output into.
+	 *
 	 * @param tParams
-	 *        The parameters to use.
-	 * @param isToplevel Whether or not this is a top-level format
+	 * 	The parameters to use.
+	 *
+	 * @param isToplevel 
+	 * 	Whether or not this is a top-level format
+	 *
 	 * @throws IOException If something goes wrong
 	 */
 	public void doFormatString(String format, ReportWriter rw, Tape<Object> tParams, boolean isToplevel) throws IOException {
