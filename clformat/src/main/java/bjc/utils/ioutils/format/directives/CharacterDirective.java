@@ -24,7 +24,7 @@ public class CharacterDirective implements Directive {
 		char ch = (Character) dirParams.item;
 		int codepoint = ch;
 
-		if (dirParams.mods.colonMod) {
+		if (dirParams.getMods().colonMod) {
 			/*
 			 * Colon mod means print Unicode character name.
 			 */

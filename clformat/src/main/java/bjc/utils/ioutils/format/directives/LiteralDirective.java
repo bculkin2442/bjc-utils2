@@ -1,6 +1,8 @@
 package bjc.utils.ioutils.format.directives;
 
-import java.io.IOException;
+import java.io.*;
+
+import bjc.utils.ioutils.format.*;
 
 /**
  * Implements directives that create a literal string.
@@ -29,10 +31,12 @@ public class LiteralDirective implements Directive {
 	public void format(FormatParameters dirParams) throws IOException {
 		int nTimes = 1;
 
-		if (dirParams.arrParams.length() >= 1) {
-			dirParams.arrParams.mapIndices("count");
+		CLParameters params = dirParams.getParams();
 
-			nTimes = dirParams.arrParams.getInt(dirParams.tParams, "count", "occurance count", directive, 1);
+		if (params.length() >= 1) {
+			params.mapIndices("count");
+
+			nTimes = params.getInt(dirParams.tParams, "count", "occurance count", directive, 1);
 		}
 
 		for (int i = 0; i < nTimes; i++) {

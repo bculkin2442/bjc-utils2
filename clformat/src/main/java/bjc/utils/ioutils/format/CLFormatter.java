@@ -230,57 +230,91 @@ public class CLFormatter {
 	public void doFormatString(String format, ReportWriter rw, Tape<Object> tParams, boolean isToplevel) throws IOException {
 		CLTokenizer cltok = new CLTokenizer(format);
 
+		doFormatString(cltok, rw, tParams, isToplevel);
+	}
+
+	/**
+	 * Fill in a partially started format string.
+	 * 
+	 * Used mostly for directives that require formatting again with a
+	 * different string.
+	 * 
+	 * @param cltok
+	 * 	The place to get tokens from.
+	 *
+	 * @param rw
+	 * 	The buffer to file output into.
+	 *
+	 * @param tParams
+	 * 	The parameters to use.
+	 *
+	 * @param isToplevel 
+	 * 	Whether or not this is a top-level format
+	 *
+	 * @throws IOException If something goes wrong
+	 */
+	public void doFormatString(Iterable<Decree> cltok, ReportWriter rw, Tape<Object> tParams, boolean isToplevel) throws IOException {
+		doFormatString(cltok.iterator(), rw, tParams, isToplevel);
+	}
+	/**
+	 * Fill in a partially started format string.
+	 * 
+	 * Used mostly for directives that require formatting again with a
+	 * different string.
+	 * 
+	 * @param cltok
+	 * 	The place to get tokens from.
+	 *
+	 * @param rw
+	 * 	The buffer to file output into.
+	 *
+	 * @param tParams
+	 * 	The parameters to use.
+	 *
+	 * @param isToplevel 
+	 * 	Whether or not this is a top-level format
+	 *
+	 * @throws IOException If something goes wrong
+	 */
+	public void doFormatString(Iterator<Decree> cltok, ReportWriter rw, Tape<Object> tParams, boolean isToplevel) throws IOException {
 		boolean doTail = true;
+
 		try {
 			while (cltok.hasNext()) {
-				String direc = cltok.next();
+				Decree decr = cltok.next();
 
-				if (!direc.startsWith("~")) {
-					rw.write(direc);
+				if (decr.isLiteral) {
+					rw.write(decr.name);
 					continue;
 				}
 
-				Matcher dirMatcher = CLPattern.getDirectiveMatcher(direc);
-				if (!dirMatcher.find()) {
-					throw new IllegalArgumentException("Unable to match directive found from tokenizer");
-				}
-
-				String dirName   = dirMatcher.group("name");
-				String dirFunc   = dirMatcher.group("funcname");
-				String dirMods   = dirMatcher.group("modifiers");
-				String dirParams = dirMatcher.group("params");
-
-				if(dirMods   == null) dirMods = "";
-				if(dirParams == null) dirParams = "";
-
-				CLParameters arrParams = CLParameters.fromDirective(dirParams);
-
-				CLModifiers mods = CLModifiers.fromString(dirMods);
-
 				Object item = tParams.item();
 
-				if(dirName == null && dirFunc != null) {
+				if(decr.isUserCall) {
 					/*
 					 * @TODO implement user-called functions.
 					 */
 					continue;
 				}
 
-				if(extraDirectives.containsKey(dirName)) {
-					extraDirectives.get(dirName).format(new FormatParameters(rw, item, mods, arrParams, tParams, cltok, this));
+				if(extraDirectives.containsKey(decr.name)) {
+					FormatParameters params = new FormatParameters(rw, item, decr, tParams, cltok, this);
+
+					extraDirectives.get(decr.name).format(params);
 
 					continue;
 				}
 
-				if(builtinDirectives.containsKey(dirName)) {
-					builtinDirectives.get(dirName).format(new FormatParameters(rw, item, mods, arrParams, tParams, cltok, this));
+				if(builtinDirectives.containsKey(decr.name)) {
+					FormatParameters params = new FormatParameters(rw, item, decr, tParams, cltok, this);
 
+					builtinDirectives.get(decr.name).format(params); 
 					continue;
 				}
 
-				if(dirName == null) dirName = "<null>";
+				if(decr.name == null) decr.name = "<null>";
 
-				switch(dirName) {
+				switch(decr.name) {
 					case "]":
 						throw new IllegalArgumentException("Found conditional-end outside of conditional.");
 					case ";":
@@ -325,7 +359,7 @@ public class CLFormatter {
 						 */
 						break;
 					default:
-						String msg = String.format("Unknown format directive '%s'", dirName);
+						String msg = String.format("Unknown format directive '%s'", decr.name);
 						throw new IllegalArgumentException(msg);
 				}
 			}

@@ -27,7 +27,8 @@ public class AestheticDirective implements Directive {
 
 		char padchar = ' ';
 
-		CLParameters params = dirParams.arrParams;
+		CLParameters params = dirParams.getParams();
+		CLModifiers mods = dirParams.getMods();
 
 		// We take 0, 1 or 4 parameters
 		switch (params.length()) {
@@ -56,7 +57,7 @@ public class AestheticDirective implements Directive {
 
 		StringBuilder work = new StringBuilder();
 
-		if (dirParams.mods.atMod) {
+		if (mods.atMod) {
 			for (int i = 0; i < minpad; i++) {
 				work.append(padchar);
 			}
@@ -70,7 +71,7 @@ public class AestheticDirective implements Directive {
 
 		work.append(tmp);
 
-		if (!dirParams.mods.atMod) {
+		if (!mods.atMod) {
 			for (int i = 0; i < minpad; i++) {
 				work.append(padchar);
 			}

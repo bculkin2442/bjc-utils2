@@ -14,8 +14,11 @@ import bjc.utils.math.*;
  *
  */
 public abstract class GeneralNumberDirective implements Directive {
-	protected static void handleNumberDirective(Tape<Object> itemTape, ReportWriter rw, CLModifiers mods, CLParameters params, int argidx,
+	protected static void handleNumberDirective(Tape<Object> itemTape, ReportWriter rw, Decree decr, int argidx,
 			long val, int radix) throws IOException {
+
+		CLParameters params = decr.parameters;
+		CLModifiers mods = decr.modifiers;
 
 		/*
 		 * Initialize the two padding related parameters, and then fill them in from the

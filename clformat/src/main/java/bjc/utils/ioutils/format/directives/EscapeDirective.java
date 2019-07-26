@@ -13,12 +13,13 @@ public class EscapeDirective implements Directive {
 	@Override
 	public void format(FormatParameters dirParams) {
 		Tape<Object> itemTape = dirParams.tParams;
+		CLModifiers mods = dirParams.getMods();
 
 		boolean shouldExit;
 
-		if (dirParams.mods.dollarMod) dirParams.tParams.right();
+		if (mods.dollarMod) dirParams.tParams.right();
 
-		CLParameters params = dirParams.arrParams;
+		CLParameters params = dirParams.getParams();
 		switch(params.length()) {
 		case 0:
 			shouldExit = dirParams.tParams.atEnd();
@@ -51,12 +52,12 @@ public class EscapeDirective implements Directive {
 		}
 		}
 
-		if (dirParams.mods.dollarMod) dirParams.tParams.left();
+		if (mods.dollarMod) dirParams.tParams.left();
 
 		/* At negates it. */
-		if(dirParams.mods.atMod) shouldExit = !shouldExit;
+		if(mods.atMod) shouldExit = !shouldExit;
 
-		if(shouldExit) throw new EscapeException(dirParams.mods.colonMod);
+		if(shouldExit) throw new EscapeException(mods.colonMod);
 	}
 
 }

@@ -7,10 +7,10 @@ import java.util.regex.Matcher;
 import bjc.utils.ioutils.SimpleProperties;
 import bjc.utils.ioutils.format.directives.*;
 
-public class CLTokenizer implements Iterator<String> {
+public class CLTokenizer implements Iterator<Decree> {
 	private Matcher mat;
 
-	private String dir;
+	private Decree dir;
 
 	public CLTokenizer(String strang) {
 		this.mat = CLPattern.getDirectiveMatcher(strang);
@@ -22,20 +22,20 @@ public class CLTokenizer implements Iterator<String> {
 	}
 
 	@Override
-	public String next() {
-		String tk = getNext();
-		// System.out.printf("\tToken: %s\n", tk);
+	public Decree next() {
+		Decree tk = getNext();
 
 		return tk;
 	}
 
-	private String getNext() {
-		if (!hasNext()) return "";
+	private Decree getNext() {
+		if (!hasNext()) return null;
 
 		if (dir != null) {
-			String tmp = dir;
+			Decree tmp = dir;
 
 			dir = null;
+
 			return tmp;
 		}
 
@@ -44,20 +44,42 @@ public class CLTokenizer implements Iterator<String> {
 		while (mat.find()) {
 			mat.appendReplacement(sb, "");
 			
-			dir = mat.group();
-
 			String tmp = sb.toString();
-			if (tmp.equals("")) {
-				dir = null;
 
-				return mat.group();
+			{
+				String dirName   = mat.group("name");
+				String dirFunc   = mat.group("funcname");
+				String dirMods   = mat.group("modifiers");
+				String dirParams = mat.group("params");
+
+				if(dirMods == null) {
+					dirMods = "";
+				}
+
+				if(dirParams == null) {
+					dirParams = "";
+				}
+
+				boolean isUser = dirName == null && dirFunc != null;
+
+				dir = new Decree(dirName, isUser,
+						CLParameters.fromDirective(dirParams),
+						CLModifiers.fromString(dirMods));
 			}
 
-			return sb.toString();
+			if (tmp.equals("")) {
+				Decree dcr = dir;
+
+				dir = null;
+
+				return dcr;
+			}
+
+			return new Decree(sb.toString());
 		}
 
 		mat.appendTail(sb);
 
-		return sb.toString();
+		return new Decree(sb.toString());
 	}
 }

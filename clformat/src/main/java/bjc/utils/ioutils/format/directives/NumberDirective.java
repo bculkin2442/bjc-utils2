@@ -42,8 +42,7 @@ public class NumberDirective extends GeneralNumberDirective {
 
 		long val = ((Number) dirParams.item).longValue();
 
-		handleNumberDirective(dirParams.tParams, dirParams.rw,
-				dirParams.mods, dirParams.arrParams, argidx, val, radix);
+		handleNumberDirective(dirParams.tParams, dirParams.rw, dirParams.decr, argidx, val, radix);
 
 		dirParams.tParams.right();
 	}

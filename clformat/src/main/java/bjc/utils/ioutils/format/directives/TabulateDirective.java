@@ -8,18 +8,19 @@ import bjc.utils.ioutils.format.*;
 public class TabulateDirective implements Directive {
 	public void format(FormatParameters dirParams) throws IOException {
 		Tape<Object> itemTape = dirParams.tParams;
+		CLModifiers mods = dirParams.getMods();
 
 		// Support for a possible future feature
 		char padchar = ' ';
 
 		int currCol = dirParams.rw.getLinePos();
-		if (dirParams.mods.colonMod) {
+		if (mods.colonMod) {
 			currCol = dirParams.rw.getIndentPos();
 		}
 
 
-		CLParameters params = dirParams.arrParams;
-		if (dirParams.mods.atMod) {
+		CLParameters params = dirParams.getParams();
+		if (mods.atMod) {
 			int colrel = 1, colinc = 1;
 
 			if (params.length() > 2) {

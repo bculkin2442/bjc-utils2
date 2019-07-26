@@ -1,12 +1,10 @@
 package bjc.utils.ioutils.format.directives;
 
-import java.io.IOException;
-import java.util.IllegalFormatConversionException;
+import java.io.*;
+import java.util.*;
 
-import bjc.utils.esodata.SingleTape;
-import bjc.utils.esodata.Tape;
-import bjc.utils.ioutils.format.CLFormatter;
-import bjc.utils.ioutils.format.EscapeException;
+import bjc.utils.esodata.*;
+import bjc.utils.ioutils.format.*;
 
 public class RecursiveDirective implements Directive {
 	public void format(FormatParameters dirParams) throws IOException {
@@ -14,7 +12,9 @@ public class RecursiveDirective implements Directive {
 
 		CLFormatter.checkItem(dirParams.item, '?');
 
-		if (dirParams.mods.atMod) {
+		CLModifiers mods = dirParams.getMods();
+
+		if (mods.atMod) {
 			if (!(dirParams.item instanceof String))
 				throw new IllegalFormatConversionException('?', dirParams.item.getClass());
 
@@ -22,7 +22,7 @@ public class RecursiveDirective implements Directive {
 				dirParams.fmt.doFormatString((String)dirParams.item, dirParams.rw, dirParams.tParams, true);
 			} catch (EscapeException eex) {
 				if (eex.endIteration)
-					throw new UnsupportedOperationException("Colon mod not allowed on escape marker without colon mod on iteration");
+					throw new UnsupportedOperationException("Colon mod not allowed on escape marker outside of iteration");
 			}
 		} else {
 			if (dirParams.tParams.atEnd())
@@ -41,7 +41,7 @@ public class RecursiveDirective implements Directive {
 			try {
 				dirParams.fmt.doFormatString((String)dirParams.item, dirParams.rw, newParams, true);
 			} catch (EscapeException eex) {
-				throw new UnsupportedOperationException("Colon mod not allowed on escape marker without colon mod on iteration");
+				throw new UnsupportedOperationException("Colon mod not allowed on escape marker outside of iteration");
 			}
 		}
 	}

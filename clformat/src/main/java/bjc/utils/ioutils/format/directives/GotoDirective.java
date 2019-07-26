@@ -15,8 +15,10 @@ public class GotoDirective implements Directive {
 	public void format(FormatParameters dirParams) {
 		Tape<Object> itemTape = dirParams.tParams;
 
-		CLParameters params = dirParams.arrParams;
-		if (dirParams.mods.colonMod) {
+		CLParameters params = dirParams.getParams();
+		CLModifiers mods = dirParams.getMods();
+
+		if (mods.colonMod) {
 			int num = 1;
 			if (params.length() >= 1) {
 				params.mapIndices("numargs");
@@ -25,7 +27,7 @@ public class GotoDirective implements Directive {
 			}
 
 			dirParams.tParams.left(num);
-		} else if (dirParams.mods.atMod) {
+		} else if (mods.atMod) {
 			int num = 0;
 			if (params.length() >= 1) {
 				params.mapIndices("argidx");

@@ -1,14 +1,13 @@
 package bjc.utils.ioutils.format.directives;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.Iterator;
-import java.util.regex.Matcher;
+import java.io.*;
+import java.util.*;
+import java.util.regex.*;
 
-import bjc.inflexion.InflectionML;
+import bjc.inflexion.*;
 
-import bjc.utils.ioutils.ReportWriter;
-import bjc.utils.ioutils.format.CLPattern;
+import bjc.utils.ioutils.*;
+import bjc.utils.ioutils.format.*;
 
 /**
  * Inflection directive.
@@ -18,34 +17,32 @@ import bjc.utils.ioutils.format.CLPattern;
 public class InflectDirective implements Directive {
 	@Override
 	public void format(FormatParameters dirParams) throws IOException {
-		StringBuilder condBody = new StringBuilder();
+		List<Decree> condBody = new ArrayList<>();
 
 		int nestLevel = 1;
 
-		Iterator<String> dirIter = dirParams.dirIter;
+		Iterator<Decree> dirIter = dirParams.dirIter;
 		while (dirIter.hasNext()) {
-			String direc = dirIter.next();
-			if (!direc.startsWith("~")) {
-				condBody.append(direc);
+			Decree decr = dirIter.next();
+			if (decr.isLiteral) {
+				condBody.add(decr);
+
 				continue;
 			}
 
-			Matcher dirMat = CLPattern.getDirectiveMatcher(direc);
-
-			/* Process a list of clauses. */
-			String dirName = dirMat.group("name");
+			String dirName = decr.name;
 
 			if (dirName != null) {
 				if (dirName.equals("`[")) {
 					if (nestLevel > 0) {
-						condBody.append(dirMat.group());
+						condBody.add(decr);
 					}
 
 					nestLevel += 1;
 				} else if (Directive.isOpening(dirName)) {
 					nestLevel += 1;
 
-					condBody.append(dirMat.group());
+					condBody.add(decr);
 				} else if (dirName.equals("`]")) {
 					nestLevel = Math.max(0, nestLevel - 1);
 
@@ -55,16 +52,14 @@ public class InflectDirective implements Directive {
 					nestLevel = Math.max(0, nestLevel - 1);
 				} else {
 					/* Not a special directive. */
-					condBody.append(dirMat.group());
+					condBody.add(decr);
 				}
 			}
 		}
 
-		String frmt = condBody.toString();
-
 		ReportWriter nrw = dirParams.rw.duplicate(new StringWriter());
 
-		dirParams.fmt.doFormatString(frmt, nrw, dirParams.tParams, false);
+		dirParams.fmt.doFormatString(condBody.iterator(), nrw, dirParams.tParams, false);
 
 		String strang = nrw.toString();
 

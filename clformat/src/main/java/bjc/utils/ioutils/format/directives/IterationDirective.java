@@ -1,12 +1,10 @@
 package bjc.utils.ioutils.format.directives;
 
-import java.io.IOException;
-import java.util.IllegalFormatConversionException;
-import java.util.Iterator;
-import java.util.regex.Matcher;
+import java.io.*;
+import java.util.*;
+import java.util.regex.*;
 
-import bjc.utils.esodata.SingleTape;
-import bjc.utils.esodata.Tape;
+import bjc.utils.esodata.*;
 import bjc.utils.ioutils.format.*;
 
 /**
@@ -21,42 +19,41 @@ public class IterationDirective implements Directive {
 	public void format(FormatParameters dirParams) throws IOException {
 		CLFormatter.checkItem(dirParams.item, '{');
 
-		StringBuilder condBody = new StringBuilder();
+		List<Decree> condBody = new ArrayList<>();
 
-		Iterator<String> dirIter = dirParams.dirIter;
+		Iterator<Decree> dirIter = dirParams.dirIter;
 		while (dirIter.hasNext()) {
-			String direc = dirIter.next();
-			if (!direc.startsWith("~")) {
-				condBody.append(direc);
+			Decree decr = dirIter.next();
+			if (decr.isLiteral) {
+				condBody.add(decr);
 				continue;
 			}
 
-			Matcher dirMat = CLPattern.getDirectiveMatcher(direc);
-			dirMat.find();
-			/* Process a list of clauses. */
-			String dirName = dirMat.group("name");
+			String dirName = decr.name;
 
 			if (dirName != null) {
 				if (dirName.equals("}")) {
 					break;
 				} else {
 					/* Not a special directive. */
-					condBody.append(dirMat.group());
+					condBody.add(decr);
 				}
 			}
 		}
 
-		String frmt = condBody.toString();
 		Object iter = dirParams.item;
 
-		// System.err.printf("Iteration format \"%s\" (iter %s)\n", frmt, item);
-		if (frmt.equals("")) {
+		boolean usingString = false;
+		String strang = "";
+
+		if (condBody.size() == 0) {
 			/* Grab an argument. */
 			if (!(dirParams.item instanceof String)) {
 				throw new IllegalFormatConversionException('{', String.class);
 			}
 
-			frmt = (String) dirParams.item;
+			usingString = true;
+			strang = (String) dirParams.item;
 
 			if (!dirParams.tParams.right()) {
 				throw new IllegalArgumentException("Not enough parameters to '{' directive");
@@ -67,7 +64,9 @@ public class IterationDirective implements Directive {
 
 		int maxItr = Integer.MAX_VALUE;
 
-		CLParameters params = dirParams.arrParams;
+		CLParameters params = dirParams.getParams();
+		CLModifiers mods = dirParams.getMods();
+
 		if (params.length() > 0) {
 			params.mapIndices("maxitr");
 
@@ -77,7 +76,7 @@ public class IterationDirective implements Directive {
 
 		int numItr = 0;
 
-		if (dirParams.mods.atMod && dirParams.mods.colonMod) {
+		if (mods.atMod &&mods.colonMod) {
 			try {
 				do {
 					if (numItr > maxItr) break;
@@ -92,7 +91,11 @@ public class IterationDirective implements Directive {
 					Tape<Object> nParams = new SingleTape<>(nitr);
 
 					try {
-						dirParams.fmt.doFormatString(frmt, dirParams.rw, nParams, false);
+						if (usingString) {
+						dirParams.fmt.doFormatString(strang, dirParams.rw, nParams, false);
+						} else {
+						dirParams.fmt.doFormatString(condBody, dirParams.rw, nParams, false);
+						}
 					} catch (EscapeException eex) {
 						if (eex.endIteration) {
 							if (dirParams.tParams.atEnd()) {
@@ -107,20 +110,24 @@ public class IterationDirective implements Directive {
 			} catch (EscapeException eex) {
 				// Do nothing
 			}
-		} else if (dirParams.mods.atMod) {
+		} else if (mods.atMod) {
 			try {
 				while (!dirParams.tParams.atEnd()) {
 					// System.err.printf("Iterating with format \"%s\"\n", frmt);
 					if (numItr > maxItr) break;
 					numItr += 1;
 
-					dirParams.fmt.doFormatString(frmt, dirParams.rw, dirParams.tParams, false);
+					if (usingString) {
+					dirParams.fmt.doFormatString(strang, dirParams.rw, dirParams.tParams, false);
+					} else {
+					dirParams.fmt.doFormatString(condBody, dirParams.rw, dirParams.tParams, false);
+					}
 				}
 			} catch (EscapeException eex) {
 				if (eex.endIteration)
 					throw new UnsupportedOperationException("Colon mod not allowed on escape marker without colon mod on iteration");
 			}
-		} else if (dirParams.mods.colonMod) {
+		} else if (mods.colonMod) {
 			if (!(dirParams.item instanceof Iterable<?>)) {
 				throw new IllegalFormatConversionException('{', dirParams.item.getClass());
 			}
@@ -144,7 +151,11 @@ public class IterationDirective implements Directive {
 					Tape<Object> nParams = new SingleTape<>(nitr);
 
 					try {
-						dirParams.fmt.doFormatString(frmt, dirParams.rw, nParams, false);
+						if (usingString) {
+						dirParams.fmt.doFormatString(strang, dirParams.rw, nParams, false);
+						} else {
+						dirParams.fmt.doFormatString(condBody, dirParams.rw, nParams, false);
+						}
 					} catch (EscapeException eex) {
 						if(eex.endIteration && !itr.hasNext()) throw eex;
 					}
@@ -166,7 +177,11 @@ public class IterationDirective implements Directive {
 					if (numItr > maxItr) break;
 					numItr += 1;
 
-					dirParams.fmt.doFormatString(frmt, dirParams.rw, nParams, false);
+					if (usingString) {
+					dirParams.fmt.doFormatString(strang, dirParams.rw, nParams, false);
+					} else {
+					dirParams.fmt.doFormatString(condBody, dirParams.rw, nParams, false);
+					}
 				}
 			} catch (EscapeException eex) {
 				if (eex.endIteration)

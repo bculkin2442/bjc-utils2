@@ -1,30 +1,44 @@
 package bjc.utils.ioutils.format.directives;
 
-import java.util.Iterator;
+import java.util.*;
 
-import bjc.utils.esodata.Tape;
-import bjc.utils.ioutils.ReportWriter;
-import bjc.utils.ioutils.format.CLFormatter;
-import bjc.utils.ioutils.format.CLModifiers;
-import bjc.utils.ioutils.format.CLParameters;
+import bjc.utils.esodata.*;
+import bjc.utils.ioutils.*;
+import bjc.utils.ioutils.format.*;
 
 public class FormatParameters {
-	public ReportWriter	rw;
-	public Object		item;
-	public CLModifiers	mods;
-	public CLParameters	arrParams;
-	public Tape<Object>	tParams;
-	public Iterator<String>	dirIter;
-	public CLFormatter	fmt;
+	public ReportWriter rw;
 
-	public FormatParameters(ReportWriter rw, Object item, CLModifiers mods, CLParameters arrParams,
-			Tape<Object> tParams, Iterator<String> dirIter, CLFormatter fmt) {
-		this.rw        = rw;
-		this.item      = item;
-		this.mods      = mods;
-		this.arrParams = arrParams;
-		this.tParams   = tParams;
-		this.dirIter   = dirIter;
-		this.fmt       = fmt;
+	public Object item;
+
+	public Decree decr;
+
+	public Tape<Object> tParams;
+
+	public Iterator<Decree> dirIter;
+
+	public CLFormatter fmt;
+
+	public FormatParameters(ReportWriter rw, Object item, Decree decr, Tape<Object> tParams,
+			Iterator<Decree> dirIter, CLFormatter fmt) {
+		this.rw = rw;
+
+		this.item = item;
+
+		this.decr = decr;
+
+		this.tParams = tParams;
+
+		this.dirIter = dirIter;
+
+		this.fmt = fmt;
+	}
+
+	public CLParameters getParams() {
+		return decr.parameters;
+	}
+
+	public CLModifiers getMods() {
+		return decr.modifiers;
 	}
 }

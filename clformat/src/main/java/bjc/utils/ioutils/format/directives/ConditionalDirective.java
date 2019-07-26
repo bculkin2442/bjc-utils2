@@ -1,14 +1,10 @@
 package bjc.utils.ioutils.format.directives;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.IllegalFormatConversionException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.regex.Matcher;
+import java.io.*;
+import java.util.*;
+import java.util.regex.*;
 
-import bjc.utils.ioutils.format.CLPattern;
-import bjc.utils.ioutils.format.EscapeException;
+import bjc.utils.ioutils.format.*;
 
 /**
  * Implements the [ directive.
@@ -19,46 +15,45 @@ import bjc.utils.ioutils.format.EscapeException;
 public class ConditionalDirective implements Directive {
 	@Override
 	public void format(FormatParameters dirParams) throws IOException {
-		StringBuilder condBody = new StringBuilder();
+		CLModifiers mods = dirParams.getMods();
+		CLParameters params = dirParams.getParams();
 
-		List<String> clauses = new ArrayList<>();
+		List<Decree> condBody = new ArrayList<>();
 
-		String defClause  = null;
+		List<List<Decree>> clauses = new ArrayList<>();
+
+		List<Decree> defClause  = null;
 		boolean isDefault = false;
 
 		int nestLevel = 1;
 
-		Iterator<String> dirIter = dirParams.dirIter;
+		Iterator<Decree> dirIter = dirParams.dirIter;
 		while (dirIter.hasNext()) {
-			String direc = dirIter.next();
-			if (!direc.startsWith("~")) {
-				condBody.append(direc);
+			Decree decr = dirIter.next();
+			if (decr.isLiteral) {
+				condBody.add(decr);
 				continue;
 			}
 
-			Matcher dirMat = CLPattern.getDirectiveMatcher(direc);
-			dirMat.find();
-			/* Process a list of clauses. */
-			String dirName = dirMat.group("name");
-			String dirMods = dirMat.group("modifiers");
-
+			String dirName = decr.name;
 			if (dirName != null) {
 				if (dirName.equals("[")) {
 					if (nestLevel > 0) {
-						condBody.append(dirMat.group());
+						condBody.add(decr);
 					}
 					nestLevel += 1;
 				} else if (Directive.isOpening(dirName)) {
 					nestLevel += 1;
 
-					condBody.append(dirMat.group());
+					condBody.add(decr);
 				} else if (dirName.equals("]")) {
 					nestLevel = Math.max(0, nestLevel - 1);
 
 					if (nestLevel == 0) {
 						/* End the conditional. */
-						String clause = condBody.toString();
-						condBody      = new StringBuilder();
+						List<Decree> clause = condBody;
+
+						condBody = new ArrayList<>();
 
 						if (isDefault) {
 							defClause = clause;
@@ -68,17 +63,18 @@ public class ConditionalDirective implements Directive {
 						break;
 					} else {
 						/* Not a special directive. */
-						condBody.append(dirMat.group());
+						condBody.add(decr);
 					}
 				} else if (Directive.isClosing(dirName)) {
 					nestLevel = Math.max(0, nestLevel - 1);
 
-					condBody.append(dirMat.group());
+					condBody.add(decr);
 				} else if (dirName.equals(";")) {
 					if (nestLevel == 1) {
 						/* End the clause. */
-						String clause = condBody.toString();
-						condBody      = new StringBuilder();
+						List<Decree> clause = condBody;
+
+						condBody = new ArrayList<>();
 
 						if (isDefault) {
 							defClause = clause;
@@ -88,24 +84,24 @@ public class ConditionalDirective implements Directive {
 						/*
 						 * Mark the next clause as the default.
 						 */
-						if (dirMods.contains(":")) {
+						if (decr.modifiers.colonMod) {
 							isDefault = true;
 						}
 					} else {
 						/* Not a special directive. */
-						condBody.append(dirMat.group());
+						condBody.add(decr);
 					}
 				} else {
 					/* Not a special directive. */
-					condBody.append(dirMat.group());
+					condBody.add(decr);
 				}
 			}
 		}
 		
-		if (dirParams.mods.starMod && clauses.size() > 0) defClause = clauses.get(0);
+		if (mods.starMod && clauses.size() > 0) defClause = clauses.get(0);
 
 		try {
-			if (dirParams.mods.colonMod) {
+			if (mods.colonMod) {
 				dirParams.tParams.right();
 
 				boolean res = false;
@@ -117,14 +113,14 @@ public class ConditionalDirective implements Directive {
 					res = (Boolean) dirParams.item;
 				}
 
-				String frmt;
+				List<Decree> frmt;
 				if (res)
 					frmt = clauses.get(1);
 				else
 					frmt = clauses.get(0);
 
 				dirParams.fmt.doFormatString(frmt, dirParams.rw, dirParams.tParams, false);
-			} else if (dirParams.mods.atMod) {
+			} else if (mods.atMod) {
 				boolean res = false;
 				if (dirParams.item == null) {
 					// throw new IllegalArgumentException("No parameter provided for [ directive.");
@@ -143,10 +139,10 @@ public class ConditionalDirective implements Directive {
 				}
 			} else {
 				int res;
-				if (dirParams.arrParams.length() >= 1) {
-					dirParams.arrParams.mapIndices("choice");
+				if (params.length() >= 1) {
+					params.mapIndices("choice");
 
-					res = dirParams.arrParams.getInt(dirParams.tParams, 
+					res = params.getInt(dirParams.tParams, 
 							"choice", "conditional choice", "[", 0);
 				} else {
 					if (dirParams.item == null) {
@@ -159,7 +155,7 @@ public class ConditionalDirective implements Directive {
 					dirParams.tParams.right();
 				}
 
-				if (dirParams.mods.dollarMod) res -= 1;
+				if (mods.dollarMod) res -= 1;
 
 				// System.err.printf("Attempting selection of clause %d of %d (%s) (default %s)\n",
 				//		res, clauses.size(), clauses, defClause);
@@ -172,7 +168,7 @@ public class ConditionalDirective implements Directive {
 
 					if (defClause != null) dirParams.fmt.doFormatString(defClause, dirParams.rw, dirParams.tParams, false);
 				} else {
-					String frmt = clauses.get(res);
+					List<Decree> frmt = clauses.get(res);
 
 					// System.out.printf("Selecting clause %d of %d (params %s): %s\n", res, clauses.size(), formatParams, frmt);
 					dirParams.fmt.doFormatString(frmt, dirParams.rw, dirParams.tParams, false);
