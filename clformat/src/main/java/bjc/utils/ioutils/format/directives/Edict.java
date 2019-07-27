@@ -1,5 +1,7 @@
 package bjc.utils.ioutils.format.directives;
 
+import java.io.*;
+
 /**
  *
  * The compiled equivalent of {@link Directive}.
@@ -14,5 +16,5 @@ public interface Edict {
 	 * @param formCTX
 	 * 	The state needed for this invocation.
 	 */
-	public void format(FormatContext formCTX);
+	public void format(FormatContext formCTX) throws IOException;
 }

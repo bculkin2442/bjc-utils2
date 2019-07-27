@@ -41,4 +41,12 @@ public class FormatParameters {
 	public CLModifiers getMods() {
 		return decr.modifiers;
 	}
+
+	public CompileContext toCompileCTX() {
+		return new CompileContext(dirIter, fmt, decr);
+	}
+
+	public FormatContext toFormatCTX() {
+		return new FormatContext(rw, tParams);
+	}
 }

@@ -20,4 +20,10 @@ public class FormatContext {
 	 * The parameters passed into invocation of formatting.
 	 */
 	public Tape<Object> items;
+
+	public FormatContext(ReportWriter rw, Tape<Object> itms) {
+		writer = rw;
+
+		items = itms;
+	}
 }

@@ -1,15 +1,9 @@
 package bjc.utils.ioutils.format;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-import bjc.utils.esodata.AbbrevMap;
-import bjc.utils.esodata.Tape;
-import bjc.utils.parserutils.TokenUtils;
+import bjc.utils.esodata.*;
+import bjc.utils.parserutils.*;
 
 /**
  * Represents a set of parameters to a CL format directive.

@@ -29,29 +29,24 @@ public class LiteralDirective implements Directive {
 
 	@Override
 	public void format(FormatParameters dirParams) throws IOException {
-		int nTimes = 1;
+		Edict edt = compile(dirParams.toCompileCTX());
 
-		CLParameters params = dirParams.getParams();
-
-		if (params.length() >= 1) {
-			params.mapIndices("count");
-
-			nTimes = params.getInt(dirParams.tParams, "count", "occurance count", directive, 1);
-		}
-
-		for (int i = 0; i < nTimes; i++) {
-			dirParams.rw.write(lit);
-		}
-
+		edt.format(dirParams.toFormatCTX());
 	}
 
 	@Override
 	public Edict compile(CompileContext compCTX) {
-		int nTimes = 1;
+		CLValue nTimes = null;
 
-		LiteralEdict edict = new LiteralEdict(lit, nTimes);
+		CLParameters params = compCTX.decr.parameters;
 
-		return edict;
+		if (params.length() >= 1) {
+			params.mapIndices("count");
+
+			nTimes = params.resolveKey("count");
+		}
+
+		return new LiteralEdict(lit, nTimes);
 	}
 }
 
@@ -60,14 +55,24 @@ public class LiteralDirective implements Directive {
  */
 class LiteralEdict implements Edict {
 	private String lit;
-	private int nTimes;
+	private CLValue nTimes;
 
-	public LiteralEdict(String lit, int nTimes) {
+	public LiteralEdict(String lit, CLValue nTimes) {
+		this.lit = lit;
 
+		this.nTimes = nTimes;
 	}
 
 	@Override
-	public void format(FormatContext formCTX) {
+	public void format(FormatContext formCTX) throws IOException {
+		int num = 1;
 
+		if (nTimes != null) {
+			num = nTimes.asInt(formCTX.items, "occurance count", "literal", 1);
+		}
+
+		for (int i = 0; i < num; i++) {
+			formCTX.writer.write(lit);
+		}
 	}
 }

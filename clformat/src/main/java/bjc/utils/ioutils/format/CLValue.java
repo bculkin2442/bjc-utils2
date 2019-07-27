@@ -40,6 +40,27 @@ public interface CLValue {
 	 *	The parameters passed to the directive.
 	 */
 	public String getValue(Tape<Object> params);
+	
+	static String MSG_FMT = "Invalid %s \"%s\" to %s directive";
+
+	public default int asInt(Tape<Object> params, String paramName, String directive, int def) {
+		String param = getValue(params);
+
+		if (!param.equals("")) {
+			try {
+				return Integer.parseInt(param);
+			} catch(NumberFormatException nfex) {
+				String msg = String.format(MSG_FMT, paramName, param, directive);
+
+				IllegalArgumentException iaex = new IllegalArgumentException(msg);
+				iaex.initCause(nfex);
+
+				throw iaex;
+			}
+		}
+
+		return def;
+	}
 }
 
 class PercValue implements CLValue {
