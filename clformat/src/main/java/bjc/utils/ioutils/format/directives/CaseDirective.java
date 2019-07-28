@@ -7,22 +7,37 @@ import java.util.regex.*;
 import bjc.utils.ioutils.*;
 import bjc.utils.ioutils.format.*;
 
+/**
+ * Implementation of the ( directive.
+ *
+ * This directive does case manipulation of the contained text.
+ *
+ * @author Ben Culkin
+ */
 public class CaseDirective implements Directive {
 	private static final Pattern wordPattern = Pattern.compile("(\\w+)(\\b*)");
 
 	@Override
 	public void format(FormatParameters dirParams) throws IOException {
-		CLModifiers mods = dirParams.getMods();
+		Edict edt = compile(dirParams.toCompileCTX());
+
+		edt.format(dirParams.toFormatCTX());
+	}
+
+	public Edict compile(CompileContext compCTX) {
+		CLModifiers mods = compCTX.decr.modifiers;
 
 		List<Decree> condBody = new ArrayList<>();
 
 		int nestLevel = 1;
 
-		Iterator<Decree> dirIter = dirParams.dirIter;
+		Iterator<Decree> dirIter = compCTX.directives;
 		while (dirIter.hasNext()) {
 			Decree decr = dirIter.next();
+
 			if (decr.isLiteral) {
 				condBody.add(decr);
+
 				continue;
 			}
 
@@ -53,59 +68,109 @@ public class CaseDirective implements Directive {
 			}
 		}
 
-		ReportWriter nrw = dirParams.rw.duplicate(new StringWriter());
+		CaseEdict.Mode mode;
 
-		dirParams.fmt.doFormatString(condBody, nrw, dirParams.tParams, false);
+		if (mods.colonMod && mods.atMod) {
+			mode = CaseEdict.Mode.UPPERCASE;
+		} else if (mods.colonMod) {
+			mode = CaseEdict.Mode.WORD_UPPERCASE;
+		} else if (mods.atMod) {
+			mode = CaseEdict.Mode.FIRST_UPPERCASE;
+		} else {
+			mode = CaseEdict.Mode.LOWERCASE;
+		}
+
+		return new CaseEdict(condBody, mode, compCTX.formatter);
+	}
+}
+
+class CaseEdict implements Edict {
+	public static enum Mode {
+		UPPERCASE,
+		WORD_UPPERCASE,
+		FIRST_UPPERCASE,
+		LOWERCASE
+	}
+
+	private static final Pattern wordPattern = Pattern.compile("(\\w+)(\\b*)");
+
+	private List<Decree> body;
+
+	private Mode caseMode;
+
+	private CLFormatter formatter;
+
+	public CaseEdict(List<Decree> body, Mode caseMode, CLFormatter fmt) {
+		this.body = body;
+		
+		this.caseMode = caseMode;
+
+		this.formatter = fmt;
+	}
+
+	@Override
+	public void format(FormatContext formCTX) throws IOException {
+		ReportWriter nrw = formCTX.writer.duplicate(new StringWriter());
+
+		formatter.doFormatString(body, nrw, formCTX.items, false);
 
 		String strang = nrw.toString();
 
-		if (mods.colonMod && mods.atMod) {
+		switch (caseMode) {
+		case UPPERCASE:
 			strang = strang.toUpperCase();
-		} else if (mods.colonMod) {
-			Matcher mat = wordPattern.matcher(strang);
+			break;
+		case WORD_UPPERCASE:
+			{
+				Matcher mat = wordPattern.matcher(strang);
 
-			StringBuffer sb = new StringBuffer();
-			while(mat.find()) {
-				mat.appendReplacement(sb, "");
+				StringBuffer sb = new StringBuffer();
+				while(mat.find()) {
+					mat.appendReplacement(sb, "");
 
-				String word = mat.group(1);
-				String ward = word.substring(0, 1).toUpperCase() + word.substring(1);
+					String word = mat.group(1);
+					String ward = word.substring(0, 1).toUpperCase() + word.substring(1);
 
-				sb.append(ward);
-				sb.append(mat.group(2));
-			}
-
-			mat.appendTail(sb);
-
-			strang = sb.toString();
-		} else if (mods.atMod) {
-			Matcher mat = wordPattern.matcher(strang);
-
-			StringBuffer sb = new StringBuffer();
-			boolean doCap = true;
-			while(mat.find()) {
-				mat.appendReplacement(sb, "");
-
-				String word = mat.group(1);
-				
-				if (doCap) {
-					doCap = false;
-
-					word = word.substring(0, 1).toUpperCase() + word.substring(1);
+					sb.append(ward);
+					sb.append(mat.group(2));
 				}
 
-				sb.append(word);
-				sb.append(mat.group(2));
+				mat.appendTail(sb);
+
+				strang = sb.toString();
 			}
+			break;
+		case FIRST_UPPERCASE:
+			{
+				Matcher mat = wordPattern.matcher(strang);
 
-			mat.appendTail(sb);
+				StringBuffer sb = new StringBuffer();
+				boolean doCap = true;
+				while(mat.find()) {
+					mat.appendReplacement(sb, "");
 
-			strang = sb.toString();
+					String word = mat.group(1);
 
-		} else {
+					if (doCap) {
+						doCap = false;
+
+						word = word.substring(0, 1).toUpperCase() + word.substring(1);
+					}
+
+					sb.append(word);
+					sb.append(mat.group(2));
+				}
+
+				mat.appendTail(sb);
+
+				strang = sb.toString();
+			}
+			break;
+		case LOWERCASE:
 			strang = strang.toLowerCase();
+			break;
 		}
 
-		dirParams.rw.write(strang);
+		formCTX.writer.write(strang);
 	}
 }

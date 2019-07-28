@@ -8,8 +8,10 @@ import bjc.utils.ioutils.format.*;
 /**
  * Implementation of the A directive.
  * 
- * @author student
+ * This is the directive that does general printing of things, and serves the same general purpose
+ * as the '%s' directive for printf etc.
  *
+ * @author Ben Culkin
  */
 public class AestheticDirective implements Directive {
 
