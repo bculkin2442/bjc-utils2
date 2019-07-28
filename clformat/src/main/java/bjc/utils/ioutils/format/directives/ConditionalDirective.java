@@ -4,22 +4,31 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 
+import bjc.utils.esodata.*;
 import bjc.utils.ioutils.format.*;
 
 /**
  * Implements the [ directive.
  * 
- * @author student
+ * This does varying sorts of conditional dispatches on which string to use for formatting, allowing
+ * it to be based off of general conditions in varying ways.
  *
+ * @author Ben Culkin
  */
 public class ConditionalDirective implements Directive {
 	@Override
 	public void format(FormatParameters dirParams) throws IOException {
-		CLModifiers mods = dirParams.getMods();
-		CLParameters params = dirParams.getParams();
+		Edict edt = compile(dirParams.toCompileCTX());
+		
+		edt.format(dirParams.toFormatCTX());
+	}
+
+	@Override
+	public Edict compile(CompileContext compCTX) {
+		CLModifiers mods = compCTX.decr.modifiers;
+		CLParameters params = compCTX.decr.parameters;
 
 		List<Decree> condBody = new ArrayList<>();
-
 		List<List<Decree>> clauses = new ArrayList<>();
 
 		List<Decree> defClause  = null;
@@ -27,7 +36,7 @@ public class ConditionalDirective implements Directive {
 
 		int nestLevel = 1;
 
-		Iterator<Decree> dirIter = dirParams.dirIter;
+		Iterator<Decree> dirIter = compCTX.directives;
 		while (dirIter.hasNext()) {
 			Decree decr = dirIter.next();
 			if (decr.isLiteral) {
@@ -100,92 +109,151 @@ public class ConditionalDirective implements Directive {
 		
 		if (mods.starMod && clauses.size() > 0) defClause = clauses.get(0);
 
-		try {
-			if (mods.colonMod) {
-				dirParams.tParams.right();
+		CLValue index = null;
 
-				boolean res = false;
-				if (dirParams.item == null) {
-					//throw new IllegalArgumentException("No parameter provided for [ directive.");
-				} else if (!(dirParams.item instanceof Boolean)) {
-					throw new IllegalFormatConversionException('[', dirParams.item.getClass());
-				} else {
-					res = (Boolean) dirParams.item;
-				}
+		if (params.length() >= 1) {
+			params.mapIndices("choice");
 
-				List<Decree> frmt;
-				if (res)
-					frmt = clauses.get(1);
-				else
-					frmt = clauses.get(0);
-
-				dirParams.fmt.doFormatString(frmt, dirParams.rw, dirParams.tParams, false);
-			} else if (mods.atMod) {
-				boolean res = false;
-				if (dirParams.item == null) {
-					// throw new IllegalArgumentException("No parameter provided for [ directive.");
-				} else if (dirParams.item instanceof Integer) {
-					if ((Integer)dirParams.item != 0) res = true;
-				} else if (dirParams.item instanceof Boolean) {
-					res = (Boolean) dirParams.item;
-				} else {
-					throw new IllegalFormatConversionException('[', dirParams.item.getClass());
-				}
-
-				if (res) {
-					dirParams.fmt.doFormatString(clauses.get(0), dirParams.rw, dirParams.tParams, false);
-				} else {
-					dirParams.tParams.right();
-				}
-			} else {
-				int res;
-				if (params.length() >= 1) {
-					params.mapIndices("choice");
-
-					res = params.getInt(dirParams.tParams, 
-							"choice", "conditional choice", "[", 0);
-				} else {
-					if (dirParams.item == null) {
-						throw new IllegalArgumentException("No parameter provided for [ directive.");
-					} else if (!(dirParams.item instanceof Number)) {
-						throw new IllegalFormatConversionException('[', dirParams.item.getClass());
-					}
-					res = ((Number) dirParams.item).intValue();
-
-					dirParams.tParams.right();
-				}
-
-				if (mods.dollarMod) res -= 1;
-
-				// System.err.printf("Attempting selection of clause %d of %d (%s) (default %s)\n",
-				//		res, clauses.size(), clauses, defClause);
-				if (clauses.size() == 0 || res < 0 || res >= clauses.size()) {
-					// System.err.printf("Selecting default clause (res %d, max %d): %s\n", res, clauses.size(), defClause);
-					// int clauseNo = 0;
-					// for (String clause : clauses) {
-						// System.err.printf("... clause %d: %s\n", ++clauseNo, clause); 
-					// }
-
-					if (defClause != null) dirParams.fmt.doFormatString(defClause, dirParams.rw, dirParams.tParams, false);
-				} else {
-					List<Decree> frmt = clauses.get(res);
-
-					// System.out.printf("Selecting clause %d of %d (params %s): %s\n", res, clauses.size(), formatParams, frmt);
-					dirParams.fmt.doFormatString(frmt, dirParams.rw, dirParams.tParams, false);
-				}
-			}
-		} catch (EscapeException eex) {
-			// @NOTE 9/5/18
-			//
-			// I am not sure if it is valid to error here. I'm not
-			// even sure that we need to handle this here, but I
-			// dunno
-			//if (eex.endIteration)
-			//	throw new UnsupportedOperationException("Colon mod not allowed on escape marker without colon mod on iteration");
-			throw eex;
+			index = params.resolveKey("choice");
 		}
 
-		return;
+		ConditionalEdict.Mode mode;
+
+		if (mods.colonMod) {
+			mode = ConditionalEdict.Mode.FIRST_SECOND;
+		} else if (mods.atMod) {
+			mode = ConditionalEdict.Mode.OUTPUT_TRUE;
+		} else {
+			mode = ConditionalEdict.Mode.INDEX_CLAUSE;
+		}
+
+		return new ConditionalEdict(mode, mods.dollarMod, index, clauses,
+				defClause, compCTX.formatter);
+	}
+}
+
+class ConditionalEdict implements Edict {
+	public static enum Mode {
+		FIRST_SECOND,
+		OUTPUT_TRUE,
+		INDEX_CLAUSE
 	}
 
+	private Mode condMode;
+
+	private boolean decrementIndex;
+	private CLValue index;
+
+	private List<List<Decree>> clauses;
+	private List<Decree> defClause;
+
+	private CLFormatter formatter;
+
+	public ConditionalEdict(Mode condMode, boolean decrementIndex,
+			CLValue index, List<List<Decree>> clauses, List<Decree> defClause,
+			CLFormatter fmt) {
+		this.condMode = condMode;
+
+		this.decrementIndex = decrementIndex;
+		this.index = index;
+
+		this.clauses = clauses;
+		this.defClause = defClause;
+
+		this.formatter = fmt;
+	}
+
+	@Override
+	public void format(FormatContext formCTX) throws IOException {
+		Tape<Object> items = formCTX.items;
+
+		try {
+			switch (condMode) {
+			case FIRST_SECOND:
+				{
+					Object o = items.item();
+					items.right();
+
+					boolean res = false;
+					if (o == null) {
+						//throw new IllegalArgumentException("No parameter provided for [ directive.");
+					} else if (!(o instanceof Boolean)) {
+						throw new IllegalFormatConversionException('[', o.getClass());
+					} else {
+						res = (Boolean) o;
+					}
+
+					List<Decree> frmt;
+					if (res) {
+						frmt = clauses.get(1);
+					} else {
+						frmt = clauses.get(0);
+					}
+
+					formatter.doFormatString(frmt, formCTX.writer, formCTX.items, false);
+				}
+				break;
+			case OUTPUT_TRUE:
+				{
+					boolean res = false;
+					Object o = items.item();
+
+					if (o == null) {
+						// throw new IllegalArgumentException("No parameter provided for [ directive.");
+					} else if (o instanceof Integer) {
+						if ((Integer)o != 0) {
+							res = true;
+						}
+					} else if (o instanceof Boolean) {
+						res = (Boolean) o;
+					} else {
+						throw new IllegalFormatConversionException('[', o.getClass());
+					}
+
+					if (res) {
+						formatter.doFormatString(clauses.get(0), formCTX.writer, formCTX.items, false);
+					} else {
+						items.right();
+					}
+				}
+				break;
+			case INDEX_CLAUSE:
+				{
+					int res;
+
+					if (index != null) {
+						res = index.asInt(items, "conditional choice", "[", 0);
+					} else {
+						Object o = items.item();
+
+						if (o == null) {
+							throw new IllegalArgumentException("No parameter provided for [ directive.");
+						} else if (!(o instanceof Number)) {
+							throw new IllegalFormatConversionException('[', o.getClass());
+						}
+
+						res = ((Number) o).intValue();
+
+						items.right();
+					}
+
+					if (decrementIndex) res -= 1;
+
+					if (clauses.size() == 0 || res < 0 || res >= clauses.size()) {
+						if (defClause != null) {
+							formatter.doFormatString(defClause, formCTX.writer, items, false);
+						}
+					} else {
+						List<Decree> frmt = clauses.get(res);
+
+						formatter.doFormatString(frmt, formCTX.writer, items, false);
+					}
+				}
+				break;
+			}
+		} catch (EscapeException eex) {
+			// Conditionals are transparent to iteration-escapes
+			throw eex;
+		}
+	}
 }
