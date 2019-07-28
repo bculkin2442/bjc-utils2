@@ -92,6 +92,8 @@ public interface CLValue {
 }
 
 class NullValue implements CLValue {
+	public static CLValue nullVal = new NullValue();
+
 	public String getValue(Tape<Object> params) {
 		return null;
 	}
