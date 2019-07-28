@@ -20,6 +20,8 @@ public interface CLValue {
 			return new VValue();
 		}
 
+		if (val == null) return new NullValue();
+
 		switch (val) {
 		case "V":
 		case "v":
@@ -46,7 +48,7 @@ public interface CLValue {
 	public default int asInt(Tape<Object> params, String paramName, String directive, int def) {
 		String param = getValue(params);
 
-		if (!param.equals("")) {
+		if (param != null && !param.equals("")) {
 			try {
 				return Integer.parseInt(param);
 			} catch(NumberFormatException nfex) {
@@ -60,6 +62,38 @@ public interface CLValue {
 		}
 
 		return def;
+	}
+
+	public static CLValue nil() {
+		return new NullValue();
+	}
+
+	public default char asChar(Tape<Object> params, String paramName, String directive, char def) {
+		String param = getValue(params);
+
+		if (param != null && !param.equals("")) {
+			if (param.length() == 1) {
+				// Punt in the case we have a slightly malformed
+				// character
+				return param.charAt(0);
+			}
+
+			if(!param.startsWith("'")) {
+				throw new IllegalArgumentException(
+						String.format(MSG_FMT, paramName, param, directive));
+			}
+
+			return param.charAt(1);
+		}
+
+		return def;
+	}
+
+}
+
+class NullValue implements CLValue {
+	public String getValue(Tape<Object> params) {
+		return null;
 	}
 }
 

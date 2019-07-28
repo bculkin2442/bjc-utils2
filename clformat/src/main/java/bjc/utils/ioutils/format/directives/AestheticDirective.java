@@ -15,20 +15,22 @@ public class AestheticDirective implements Directive {
 
 	@Override
 	public void format(FormatParameters dirParams) throws IOException {
-		Tape<Object> itemTape = dirParams.tParams;
+		Edict edt = compile(dirParams.toCompileCTX());
 
-		// Check that we have an item
-		CLFormatter.checkItem(dirParams.item, 'A');
+		edt.format(dirParams.toFormatCTX());
+	}
+
+	@Override
+	public Edict compile(CompileContext compCTX) {
+		CLParameters params = compCTX.decr.parameters;
+		CLModifiers mods = compCTX.decr.modifiers;
 
 		// Parameter values
-		int mincol = 0;
-		int colinc = 1;
-		int minpad = 0;
+		CLValue mincol = CLValue.nil();
+		CLValue colinc = CLValue.nil();
+		CLValue minpad = CLValue.nil();
 
-		char padchar = ' ';
-
-		CLParameters params = dirParams.getParams();
-		CLModifiers mods = dirParams.getMods();
+		CLValue padchar = CLValue.nil();
 
 		// We take 0, 1 or 4 parameters
 		switch (params.length()) {
@@ -38,26 +40,61 @@ public class AestheticDirective implements Directive {
 		case 1:
 			params.mapIndices("mincol");
 
-			mincol = params.getInt(itemTape, "mincol", "minimum column count", "A", 0);
+			mincol = params.resolveKey("mincol");
 			break;
 		case 4:
 			params.mapIndices("mincol", "colinc", "minpad", "padchar");
 
-			mincol = params.getInt(itemTape, "mincol", "minimum column count", "A", 0);
-			colinc = params.getInt(itemTape, "colinc", "padding increment", "A", 1);
-			minpad = params.getInt(itemTape, "minpad", "minimum amount of padding", "A", 0);
+			mincol = params.resolveKey("mincol");
+			colinc = params.resolveKey("colinc");
+			minpad = params.resolveKey("minpad");
 
-			padchar = params.getChar(itemTape, "padchar", "padding character", "A", ' ');
+			padchar = params.resolveKey("padchar");
 			break;
 		default:
 			throw new IllegalArgumentException("Must provide either zero, one or four arguments to A directive");
 		}
 
-		String tmp = dirParams.item.toString();
+		return new AestheticEdict(mods.atMod, padchar, mincol, colinc, minpad);
+	}
+}
+
+class AestheticEdict implements Edict {
+	private boolean padBefore;
+
+	private CLValue padcharPar;
+	private CLValue mincolPar;
+	private CLValue colincPar;
+	private CLValue minpadPar;
+
+	public AestheticEdict(boolean padBefore, CLValue padPar, CLValue minPar,
+			CLValue colPar, CLValue mpadPar) {
+		this.padBefore = padBefore;
+		
+		this.padcharPar = padPar;
+		this.mincolPar = minPar;
+		this.colincPar = colPar;
+		this.minpadPar = mpadPar;
+	}
+
+	@Override
+	public void format(FormatContext formCTX) throws IOException {
+		Tape<Object> itemTape = formCTX.items;
+
+		// Check that we have an item
+		CLFormatter.checkItem(itemTape.item(), 'A');
+
+		String tmp = itemTape.item().toString();
 
 		StringBuilder work = new StringBuilder();
 
-		if (mods.atMod) {
+		char padchar = padcharPar.asChar(itemTape, "padding character", "A", ' '); 
+
+		int mincol = mincolPar.asInt(itemTape, "minimum column count", "A", 0);
+		int colinc = colincPar.asInt(itemTape, "padding increment", "A", 1);
+		int minpad = minpadPar.asInt(itemTape, "minumum amount of padding", "A", 0);
+
+		if (padBefore) {
 			for (int i = 0; i < minpad; i++) {
 				work.append(padchar);
 			}
@@ -71,7 +108,7 @@ public class AestheticDirective implements Directive {
 
 		work.append(tmp);
 
-		if (!mods.atMod) {
+		if (!padBefore) {
 			for (int i = 0; i < minpad; i++) {
 				work.append(padchar);
 			}
@@ -83,8 +120,8 @@ public class AestheticDirective implements Directive {
 			}
 		}
 
-		dirParams.rw.write(work.toString());
+		formCTX.writer.write(work.toString());
 
-		dirParams.tParams.right();
+		itemTape.right();
 	}
 }
