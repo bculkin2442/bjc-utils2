@@ -1,39 +1,60 @@
 package bjc.utils.ioutils.format.directives;
 
-import java.io.IOException;
-import java.util.IllegalFormatConversionException;
+import java.io.*;
+import java.util.*;
 
-import bjc.utils.ioutils.format.CLFormatter;
+import bjc.utils.ioutils.*;
+import bjc.utils.ioutils.format.*;
 
 /**
  * Implements the C directive.
  * 
- * @author student
+ * This serves to print out a single character, in the way that the '%c' printf directive does.
  *
+ * @author Ben Culkin
  */
 public class CharacterDirective implements Directive {
-
 	@Override
 	public void format(FormatParameters dirParams) throws IOException {
-		CLFormatter.checkItem(dirParams.item, 'C');
+		Edict edt = compile(dirParams.toCompileCTX());
 
-		if (!(dirParams.item instanceof Character)) {
-			throw new IllegalFormatConversionException('C', dirParams.item.getClass());
-		}
-
-		char ch = (Character) dirParams.item;
-		int codepoint = ch;
-
-		if (dirParams.getMods().colonMod) {
-			/*
-			 * Colon mod means print Unicode character name.
-			 */
-			dirParams.rw.write(Character.getName(codepoint));
-		} else {
-			dirParams.rw.write(ch);
-		}
-
-		dirParams.tParams.right();
+		edt.format(dirParams.toFormatCTX());
 	}
 
+	@Override
+	public Edict compile(CompileContext compCTX) {
+		return new CharacterEdict(compCTX.decr.modifiers.colonMod);
+	}
+}
+
+class CharacterEdict implements Edict {
+	private boolean printCharName;
+
+	public CharacterEdict(boolean printCharName) {
+		this.printCharName = printCharName;
+	}
+
+	@Override
+	public void format(FormatContext formCTX) throws IOException {
+		Object o = formCTX.items.item();
+
+		CLFormatter.checkItem(o, 'C');
+
+		if (!(o instanceof Character)) {
+			throw new IllegalFormatConversionException('C', o.getClass());
+		}
+
+		char ch = (Character) o;
+		int codepoint = ch;
+
+		ReportWriter rw = formCTX.writer;
+
+		if (printCharName) {
+			rw.write(Character.getName(codepoint));
+		} else {
+			rw.write(ch);
+		}
+
+		formCTX.items.right();
+	}
 }
