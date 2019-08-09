@@ -1,9 +1,12 @@
 package bjc.utils.ioutils.format.directives;
 
-import java.io.IOException;
-import java.util.IllegalFormatConversionException;
+import java.io.*;
+import java.util.*;
 
-import bjc.utils.ioutils.format.CLFormatter;
+import bjc.utils.ioutils.format.*;
+import bjc.utils.math.*;
+
+import static bjc.utils.ioutils.format.directives.GeneralNumberDirective.NumberParams;
 
 /**
  * Implements radix based numbers.
@@ -34,17 +37,66 @@ public class NumberDirective extends GeneralNumberDirective {
 
 	@Override
 	public void format(FormatParameters dirParams) throws IOException {
-		CLFormatter.checkItem(dirParams.item, directive);
+		Edict edt = compile(dirParams.toCompileCTX());
 
-		if (!(dirParams.item instanceof Number)) {
-			throw new IllegalFormatConversionException(directive, dirParams.item.getClass());
-		}
-
-		long val = ((Number) dirParams.item).longValue();
-
-		handleNumberDirective(dirParams.tParams, dirParams.rw, dirParams.decr, argidx, val, radix);
-
-		dirParams.tParams.right();
+		edt.format(dirParams.toFormatCTX());
 	}
 
+	@Override
+	public Edict compile(CompileContext compCTX) {
+		NumberParams np = getParams(compCTX, argidx);
+
+		return new NumberEdict(radix, directive, argidx, np);
+	}
+}
+
+class NumberEdict implements Edict {
+	private int radix;
+	private int argidx;
+
+	private String directive;
+
+	private NumberParams np;
+
+	public NumberEdict(int radix, char directive, int argidx, NumberParams np) {
+		this.radix  = radix;
+		this.argidx = argidx;
+
+		this.directive = Character.toString(directive);
+		
+		this.np = np;
+	}
+
+	@Override
+	public void format(FormatContext formCTX) throws IOException {
+		Object item = formCTX.items.item();
+
+		CLFormatter.checkItem(item, directive.charAt(0));
+
+		if (!(item instanceof Number)) {
+			throw new IllegalFormatConversionException(directive.charAt(0), item.getClass());
+		}
+
+		long val = ((Number) item).longValue();
+
+		int  mincol  = np.mincol.asInt(formCTX.items, "minimum column count", directive, 0);
+		char padchar = np.padchar.asChar(formCTX.items, "padding character", directive, ' ');
+
+		boolean signed = np.signed;
+
+		String res;
+
+		if (np.commaMode) {
+			char commaChar     = np.commaChar.asChar(formCTX.items, "comma character", directive, ',');
+			int  commaInterval = np.commaInterval.asInt(formCTX.items, "comma interval", directive, 0);
+
+			res = NumberUtils.toCommaString(val, mincol, padchar, commaInterval, commaChar, signed, radix);
+		} else {
+			res = NumberUtils.toNormalString(val, mincol, padchar, signed, radix);
+		}
+
+		formCTX.writer.write(res);
+
+		formCTX.items.right();
+	}
 }
