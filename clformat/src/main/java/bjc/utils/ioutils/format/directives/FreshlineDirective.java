@@ -20,23 +20,6 @@ public class FreshlineDirective implements Directive {
 		edt.format(dirParams.toFormatCTX());
 	}
 
-	public void formatF(FormatParameters dirParams) throws IOException {
-		int nTimes = 1;
-
-		CLParameters params = dirParams.getParams();
-
-		if(params.length() >= 1) {
-			params.mapIndices("count");
-			nTimes = params.getInt(dirParams.tParams, "count", "occurance count", "&", 1);
-		}
-
-		if(dirParams.rw.isLastCharNL()) nTimes -= 1;
-
-		for(int i = 0; i < nTimes; i++) {
-			dirParams.rw.write("\n");
-		}
-	}
-
 	@Override
 	public Edict compile(CompileContext compCTX) {
 		CLParameters params = compCTX.decr.parameters;
