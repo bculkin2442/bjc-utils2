@@ -18,42 +18,6 @@ public class IndentDirective implements Directive {
 		edt.format(dirParams.toFormatCTX());
 	}
 
-	public void formatF(FormatParameters dirParams) throws IOException {
-		Tape<Object> itemTape = dirParams.tParams;
-
-		CLModifiers mods = dirParams.getMods();
-		CLParameters params = dirParams.getParams();
-
-		// Dollar mod is indent configuration
-		if (mods.dollarMod) {
-			return;
-		}
-
-		int nIndents = 1;
-
-		if(params.length() >= 1) {
-			params.mapIndices("count");
-
-			nIndents = params.getInt(itemTape, "count", "indent count", "I", 1);
-		}
-
-		boolean dedent = false;
-		if (nIndents < 0) {
-			nIndents = -nIndents;
-
-			dedent = true;
-		}
-
-		if (mods.colonMod) {
-			if (dedent) dirParams.rw.dedent(nIndents);
-			else        dirParams.rw.indent(nIndents);
-		} else {
-			if (dedent) throw new IllegalArgumentException("Cannot have negative indent level");
-
-			dirParams.rw.setLevel(nIndents);
-		}
-	}
-
 	@Override
 	public Edict compile(CompileContext compCTX) {
 		CLParameters params = compCTX.decr.parameters;
