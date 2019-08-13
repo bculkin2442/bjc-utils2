@@ -17,15 +17,22 @@ import bjc.utils.ioutils.format.*;
 public class InflectDirective implements Directive {
 	@Override
 	public void format(FormatParameters dirParams) throws IOException {
-		List<Decree> condBody = new ArrayList<>();
+		Edict edt = compile(dirParams.toCompileCTX());
+
+		edt.format(dirParams.toFormatCTX());
+	}
+
+	@Override
+	public Edict compile(CompileContext compCTX) {
+		List<Decree> body = new ArrayList<>();
 
 		int nestLevel = 1;
 
-		Iterator<Decree> dirIter = dirParams.dirIter;
+		Iterator<Decree> dirIter = compCTX.directives;
 		while (dirIter.hasNext()) {
 			Decree decr = dirIter.next();
 			if (decr.isLiteral) {
-				condBody.add(decr);
+				body.add(decr);
 
 				continue;
 			}
@@ -35,14 +42,14 @@ public class InflectDirective implements Directive {
 			if (dirName != null) {
 				if (dirName.equals("`[")) {
 					if (nestLevel > 0) {
-						condBody.add(decr);
+						body.add(decr);
 					}
 
 					nestLevel += 1;
 				} else if (Directive.isOpening(dirName)) {
 					nestLevel += 1;
 
-					condBody.add(decr);
+					body.add(decr);
 				} else if (dirName.equals("`]")) {
 					nestLevel = Math.max(0, nestLevel - 1);
 
@@ -52,19 +59,36 @@ public class InflectDirective implements Directive {
 					nestLevel = Math.max(0, nestLevel - 1);
 				} else {
 					/* Not a special directive. */
-					condBody.add(decr);
+					body.add(decr);
 				}
 			}
 		}
 
-		ReportWriter nrw = dirParams.rw.duplicate(new StringWriter());
+		return new InflectEdict(body, compCTX.formatter);
+	}
+}
 
-		dirParams.fmt.doFormatString(condBody.iterator(), nrw, dirParams.tParams, false);
+class InflectEdict implements Edict {
+	private List<Decree> body;
+
+	private CLFormatter fmt;
+
+	public InflectEdict(List<Decree> body, CLFormatter fmt) {
+		this.body = body;
+
+		this.fmt = fmt;
+	}
+
+	@Override
+	public void format(FormatContext formCTX) throws IOException {
+		ReportWriter nrw = formCTX.writer.duplicate(new StringWriter());
+
+		fmt.doFormatString(body, nrw, formCTX.items, false);
 
 		String strang = nrw.toString();
 
 		strang = InflectionML.inflect(strang);
 
-		dirParams.rw.write(strang);
+		formCTX.writer.write(strang);
 	}
 }

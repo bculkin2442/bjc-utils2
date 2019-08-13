@@ -256,6 +256,7 @@ public class CLFormatter {
 	public void doFormatString(Iterable<Decree> cltok, ReportWriter rw, Tape<Object> tParams, boolean isToplevel) throws IOException {
 		doFormatString(cltok.iterator(), rw, tParams, isToplevel);
 	}
+
 	/**
 	 * Fill in a partially started format string.
 	 * 
