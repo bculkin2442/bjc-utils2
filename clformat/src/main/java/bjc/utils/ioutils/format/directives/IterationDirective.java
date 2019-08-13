@@ -17,15 +17,22 @@ public class IterationDirective implements Directive {
 
 	@Override
 	public void format(FormatParameters dirParams) throws IOException {
-		CLFormatter.checkItem(dirParams.item, '{');
+		Edict edt = compile(dirParams.toCompileCTX());
 
-		List<Decree> condBody = new ArrayList<>();
+		edt.format(dirParams.toFormatCTX());
+	}
 
-		Iterator<Decree> dirIter = dirParams.dirIter;
+	@Override
+	public Edict compile(CompileContext compCTX) {
+		IterationEdict.Mode mode;
+
+		List<Decree> body = new ArrayList<>();
+
+		Iterator<Decree> dirIter = compCTX.directives;
 		while (dirIter.hasNext()) {
 			Decree decr = dirIter.next();
 			if (decr.isLiteral) {
-				condBody.add(decr);
+				body.add(decr);
 				continue;
 			}
 
@@ -36,54 +43,98 @@ public class IterationDirective implements Directive {
 					break;
 				} else {
 					/* Not a special directive. */
-					condBody.add(decr);
+					body.add(decr);
 				}
 			}
 		}
 
-		Object iter = dirParams.item;
+		CLParameters params = compCTX.decr.parameters;
+		CLModifiers mods = compCTX.decr.modifiers;
+
+		CLValue maxItr = CLValue.nil();
+		if (params.length() > 0) {
+			params.mapIndices("maxitr");
+
+			maxItr = params.resolveKey("maxitr");
+		}
+
+		if (mods.atMod && mods.colonMod) {
+			mode = IterationEdict.Mode.ALL_SUBLISTS;
+		} else if (mods.atMod) {
+			mode = IterationEdict.Mode.ALL;
+		} else if (mods.colonMod) {
+			mode = IterationEdict.Mode.SUBLIST;
+		} else {
+			mode = IterationEdict.Mode.NORMAL;
+		}
+
+		return new IterationEdict(mode, body, compCTX.formatter, maxItr);
+	}
+}
+
+class IterationEdict implements Edict {
+	private static final char DIR_NAME = '{';
+
+	public static enum Mode {
+		ALL_SUBLISTS,
+		ALL,
+		SUBLIST,
+		NORMAL
+	}
+
+	private Mode mode;
+
+	private List<Decree> body;
+
+	private CLFormatter fmt;
+
+	private CLValue maxItrVal;
+
+	public IterationEdict(Mode mode, List<Decree> body, CLFormatter fmt, CLValue maxItr) {
+		this.mode = mode;
+		this.body = body;
+
+		this.fmt = fmt;
+
+		this.maxItrVal = maxItr;
+	}
+
+	@Override
+	public void format(FormatContext formCTX) throws IOException {
+		int maxIterations = maxItrVal.asInt(formCTX.items, "maximum iterations", "{", Integer.MAX_VALUE);
+
+		int numIterations = 0;
+
+		Object iter = formCTX.items.item();
 
 		boolean usingString = false;
-		String strang = "";
+		String strang = null;
 
-		if (condBody.size() == 0) {
+		if (body.size() == 0) {
 			/* Grab an argument. */
-			if (!(dirParams.item instanceof String)) {
+			if (!(iter instanceof String)) {
 				throw new IllegalFormatConversionException('{', String.class);
 			}
 
 			usingString = true;
-			strang = (String) dirParams.item;
+			strang = (String) iter;
 
-			if (!dirParams.tParams.right()) {
+			if (!formCTX.items.right()) {
 				throw new IllegalArgumentException("Not enough parameters to '{' directive");
 			}
 
-			iter = dirParams.tParams.item();
+			iter = formCTX.items.item();
 		}
 
-		int maxItr = Integer.MAX_VALUE;
-
-		CLParameters params = dirParams.getParams();
-		CLModifiers mods = dirParams.getMods();
-
-		if (params.length() > 0) {
-			params.mapIndices("maxitr");
-
-			maxItr = params.getInt(dirParams.tParams, "maxitr",
-					"maximum iterations", "{", Integer.MAX_VALUE);
-		}
-
-		int numItr = 0;
-
-		if (mods.atMod &&mods.colonMod) {
+		switch (mode) {
+		case ALL_SUBLISTS:
 			try {
 				do {
-					if (numItr > maxItr) break;
-					numItr += 1;
+					if (numIterations > maxIterations) break;
+					numIterations += 1;
 
 					if (!(iter instanceof Iterable<?>)) {
-						throw new IllegalFormatConversionException('{', iter.getClass());
+						throw new IllegalFormatConversionException(DIR_NAME, iter.getClass());
 					}
 
 					@SuppressWarnings("unchecked")
@@ -92,58 +143,60 @@ public class IterationDirective implements Directive {
 
 					try {
 						if (usingString) {
-						dirParams.fmt.doFormatString(strang, dirParams.rw, nParams, false);
+						fmt.doFormatString(strang, formCTX.writer, nParams, false);
 						} else {
-						dirParams.fmt.doFormatString(condBody, dirParams.rw, nParams, false);
+						fmt.doFormatString(body, formCTX.writer, nParams, false);
 						}
 					} catch (EscapeException eex) {
 						if (eex.endIteration) {
-							if (dirParams.tParams.atEnd()) {
+							if (formCTX.items.atEnd()) {
 								throw eex;
 							}
 						}
 					}
 
-					dirParams.tParams.right();
-					iter = dirParams.tParams.item();
-				} while (dirParams.tParams.position() < dirParams.tParams.size());
+					formCTX.items.right();
+					iter = formCTX.items.item();
+				} while (formCTX.items.position() < formCTX.items.size());
 			} catch (EscapeException eex) {
 				// Do nothing
 			}
-		} else if (mods.atMod) {
+			break;
+		case ALL:
 			try {
-				while (!dirParams.tParams.atEnd()) {
+				while (!formCTX.items.atEnd()) {
 					// System.err.printf("Iterating with format \"%s\"\n", frmt);
-					if (numItr > maxItr) break;
-					numItr += 1;
+					if (numIterations > maxIterations) break;
+					numIterations += 1;
 
 					if (usingString) {
-					dirParams.fmt.doFormatString(strang, dirParams.rw, dirParams.tParams, false);
+					fmt.doFormatString(strang, formCTX.writer, formCTX.items, false);
 					} else {
-					dirParams.fmt.doFormatString(condBody, dirParams.rw, dirParams.tParams, false);
+					fmt.doFormatString(body, formCTX.writer, formCTX.items, false);
 					}
 				}
 			} catch (EscapeException eex) {
 				if (eex.endIteration)
 					throw new UnsupportedOperationException("Colon mod not allowed on escape marker without colon mod on iteration");
 			}
-		} else if (mods.colonMod) {
-			if (!(dirParams.item instanceof Iterable<?>)) {
-				throw new IllegalFormatConversionException('{', dirParams.item.getClass());
+			break;
+		case SUBLIST:
+			if (!(iter instanceof Iterable<?>)) {
+				throw new IllegalFormatConversionException(DIR_NAME, iter.getClass());
 			}
 
 			try {
 				@SuppressWarnings("unchecked")
-				Iterable<Object> itb = (Iterable<Object>) dirParams.item;
+				Iterable<Object> itb = (Iterable<Object>) iter;
 				Iterator<Object> itr = itb.iterator();
 				while (itr.hasNext()) {
 					Object obj = itr.next();
 
-					if (numItr > maxItr) break;
-					numItr += 1;
+					if (numIterations > maxIterations) break;
+					numIterations += 1;
 
 					if (!(obj instanceof Iterable<?>)) {
-						throw new IllegalFormatConversionException('{', obj.getClass());
+						throw new IllegalFormatConversionException(DIR_NAME, obj.getClass());
 					}
 
 					@SuppressWarnings("unchecked")
@@ -152,9 +205,9 @@ public class IterationDirective implements Directive {
 
 					try {
 						if (usingString) {
-						dirParams.fmt.doFormatString(strang, dirParams.rw, nParams, false);
+						fmt.doFormatString(strang, formCTX.writer, nParams, false);
 						} else {
-						dirParams.fmt.doFormatString(condBody, dirParams.rw, nParams, false);
+						fmt.doFormatString(body, formCTX.writer, nParams, false);
 						}
 					} catch (EscapeException eex) {
 						if(eex.endIteration && !itr.hasNext()) throw eex;
@@ -163,32 +216,36 @@ public class IterationDirective implements Directive {
 			} catch (EscapeException eex) {
 				// Do nothing
 			}
-		} else {
-			if (!(dirParams.item instanceof Iterable<?>)) {
-				throw new IllegalFormatConversionException('{', dirParams.item.getClass());
+			break;
+		case NORMAL:
+			if (!(iter instanceof Iterable<?>)) {
+				throw new IllegalFormatConversionException(DIR_NAME, iter.getClass());
 			}
 
 			try {
 				@SuppressWarnings("unchecked")
-				Iterable<Object> itr = (Iterable<Object>) dirParams.item;
+				Iterable<Object> itr = (Iterable<Object>) iter;
 				Tape<Object> nParams = new SingleTape<>(itr);
 
 				while (!nParams.atEnd()) {
-					if (numItr > maxItr) break;
-					numItr += 1;
+					if (numIterations > maxIterations) break;
+					numIterations += 1;
 
 					if (usingString) {
-					dirParams.fmt.doFormatString(strang, dirParams.rw, nParams, false);
+					fmt.doFormatString(strang, formCTX.writer, nParams, false);
 					} else {
-					dirParams.fmt.doFormatString(condBody, dirParams.rw, nParams, false);
+					fmt.doFormatString(body, formCTX.writer, nParams, false);
 					}
 				}
 			} catch (EscapeException eex) {
 				if (eex.endIteration)
 					throw new UnsupportedOperationException("Colon mod not allowed on escape marker without colon mod on iteration");
 			}
+			break;
+		default:
+			throw new IllegalArgumentException("Unimplemented iteration mode " + mode);
 		}
 
-		dirParams.tParams.right();
+		formCTX.items.right();
 	}
 }
