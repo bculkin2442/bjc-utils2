@@ -142,7 +142,9 @@ public class CLFormatterTest {
 	private String format(String str, Object... params) {
 		try {
 			return fmt.formatString(str, params);
-		} catch (IOException ioex) {
+		} catch (Exception ex) {
+			ex.printStackTrace();
+
 			return null;
 		}
 	}
