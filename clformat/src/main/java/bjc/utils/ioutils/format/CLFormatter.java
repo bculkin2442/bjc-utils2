@@ -370,4 +370,93 @@ public class CLFormatter {
 			doTail = false;
 		}
 	}
+
+	public void compile(Iterator<Decree> cltok) {
+		List<Edict> result = new ArrayList<>();
+
+		while (cltok.hasNext()) {
+			Decree decr = cltok.next();
+			String nam = decr.name;
+
+			CompileContext compCTX = new CompileContext(cltok, this, decr);
+
+			if (decr.isLiteral) {
+				result.add(new StringEdict(decr.name));
+
+				continue;
+			}
+
+			if(decr.isUserCall) {
+				/*
+				 * @TODO implement user-called functions.
+				 */
+				throw new IllegalArgumentException("User-called functions have not yet been implemented");
+			}
+
+			if(extraDirectives.containsKey(nam)) {
+				Edict edt = extraDirectives.get(nam).compile(compCTX);
+
+				result.add(edt);
+
+				continue;
+			} else if(builtinDirectives.containsKey(nam)) {
+				Edict edt = builtinDirectives.get(nam).compile(compCTX); 
+
+				result.add(edt);
+
+				continue;
+			}
+
+			if (nam == null) nam = "<null>";
+
+			switch(nam) {
+			case "]":
+				throw new IllegalArgumentException("Found conditional-end outside of conditional.");
+			case ";":
+				throw new IllegalArgumentException(
+						"Found seperator outside of block.");
+			case "}":
+				throw new IllegalArgumentException("Found iteration-end outside of iteration");
+			case ")":
+				throw new IllegalArgumentException("Case-conversion end outside of case conversion");
+			case "`]":
+				throw new IllegalArgumentException("Inflection-end outside of inflection");
+			case "<":
+			case ">":
+				throw new IllegalArgumentException("Inflection marker outside of inflection");
+			case "`<":
+			case "`>":
+				throw new IllegalArgumentException("Layout-control directives aren't implemented yet.");
+			case "F":
+			case "E":
+			case "G":
+			case "$":
+				/* @TODO 
+				 *
+				 * implement floating point directives.
+				 */
+				throw new IllegalArgumentException("Floating-point directives aren't implemented yet.");
+			case "W":
+				/*
+				 * @TODO 
+				 *
+				 * figure out if we want to
+				 * implement someting for these
+				 * directives instead of
+				 * punting.
+				 */
+				throw new IllegalArgumentException("S and W aren't implemented. Use A instead");
+			case "P":
+				throw new IllegalArgumentException("These directives aren't implemented yet");
+			case "\n":
+				/*
+				 * Ignored newline.
+				 */
+				break;
+			default:
+				String msg = String.format("Unknown format directive '%s'", nam);
+				throw new IllegalArgumentException(msg);
+			}
+		}
+	}
 }
