@@ -33,8 +33,12 @@ public class CLString {
 
 		FormatContext formCTX = new FormatContext(rw, itms);
 
-		for (Edict edt : edicts) {
-			edt.format(formCTX);
+		try {
+			for (Edict edt : edicts) {
+				edt.format(formCTX);
+			}
+		} catch (EscapeException eex) {
+			// General escape exception, so stop formatting.
 		}
 
 		return rw.toString();

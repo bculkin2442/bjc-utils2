@@ -141,7 +141,9 @@ public class CLFormatterTest {
 
 	private String format(String str, Object... params) {
 		try {
-			return fmt.formatString(str, params);
+			CLString strang = fmt.compile(str);
+
+			return strang.format(params);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 

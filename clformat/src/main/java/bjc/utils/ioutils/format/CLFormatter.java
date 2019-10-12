@@ -371,7 +371,15 @@ public class CLFormatter {
 		}
 	}
 
-	public void compile(Iterator<Decree> cltok) {
+	public CLString compile(String inp) {
+		CLTokenizer tokenzer = new CLTokenizer(inp);
+
+		List<Edict> edts = compile(tokenzer);
+
+		return new CLString(edts);
+	}
+
+	public List<Edict> compile(Iterator<Decree> cltok) {
 		List<Edict> result = new ArrayList<>();
 
 		while (cltok.hasNext()) {
@@ -458,5 +466,7 @@ public class CLFormatter {
 				throw new IllegalArgumentException(msg);
 			}
 		}
+
+		return result;
 	}
 }
