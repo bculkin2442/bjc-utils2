@@ -379,6 +379,10 @@ public class CLFormatter {
 		return new CLString(edts);
 	}
 
+	public List<Edict> compile(Iterable<Decree> cltok) {
+		return compile(cltok.iterator());
+	}
+
 	public List<Edict> compile(Iterator<Decree> cltok) {
 		List<Edict> result = new ArrayList<>();
 

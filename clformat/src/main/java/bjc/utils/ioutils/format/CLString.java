@@ -29,10 +29,24 @@ public class CLString {
 		StringWriter sw = new StringWriter();
 		ReportWriter rw = new ReportWriter(sw);
 
+		return format(rw, parms);
+	}
+
+	public String format(ReportWriter rw, Tape<Object> itms) throws IOException {
+		FormatContext formCTX = new FormatContext(rw, itms);
+
+		return format(formCTX);
+	}
+
+	public String format(ReportWriter rw, Object... parms) throws IOException {
 		Tape<Object> itms = new SingleTape<>(parms);
 
 		FormatContext formCTX = new FormatContext(rw, itms);
 
+		return format(formCTX);
+	}
+
+	public String format(FormatContext formCTX) throws IOException {
 		try {
 			for (Edict edt : edicts) {
 				edt.format(formCTX);
@@ -41,6 +55,6 @@ public class CLString {
 			// General escape exception, so stop formatting.
 		}
 
-		return rw.toString();
+		return formCTX.writer.toString();
 	}
 }

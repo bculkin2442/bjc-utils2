@@ -94,14 +94,14 @@ class CaseEdict implements Edict {
 
 	private static final Pattern wordPattern = Pattern.compile("(\\w+)(\\b*)");
 
-	private List<Decree> body;
+	private CLString body;
 
 	private Mode caseMode;
 
 	private CLFormatter formatter;
 
 	public CaseEdict(List<Decree> body, Mode caseMode, CLFormatter fmt) {
-		this.body = body;
+		this.body = new CLString(fmt.compile(body));
 		
 		this.caseMode = caseMode;
 
@@ -110,11 +110,11 @@ class CaseEdict implements Edict {
 
 	@Override
 	public void format(FormatContext formCTX) throws IOException {
-		ReportWriter nrw = formCTX.writer.duplicate(new StringWriter());
+		ReportWriter nrw = formCTX.getScratchWriter();
 
-		formatter.doFormatString(body, nrw, formCTX.items, false);
+		//formatter.doFormatString(body, nrw, formCTX.items, false);
 
-		String strang = nrw.toString();
+		String strang = body.format(nrw, formCTX.items);
 
 		switch (caseMode) {
 		case UPPERCASE:
