@@ -7,7 +7,6 @@ import java.io.IOException;
  * 
  * @author Ben Culkin
  */
-@FunctionalInterface
 public interface Directive {
 	/**
 	 * Execute this format directive.
@@ -16,7 +15,11 @@ public interface Directive {
 	 * 	The parameters for the directive.
 	 * @throws IOException If something goes wrong.
 	 */
-	public void format(FormatParameters dirParams) throws IOException;
+	public default void format(FormatParameters dirParams) throws IOException {
+		Edict edt = compile(dirParams.toCompileCTX());
+
+		edt.format(dirParams.toFormatCTX());
+	};
 
 	/**
 	 * Compile this directive.

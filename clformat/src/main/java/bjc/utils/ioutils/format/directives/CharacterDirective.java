@@ -15,13 +15,6 @@ import bjc.utils.ioutils.format.*;
  */
 public class CharacterDirective implements Directive {
 	@Override
-	public void format(FormatParameters dirParams) throws IOException {
-		Edict edt = compile(dirParams.toCompileCTX());
-
-		edt.format(dirParams.toFormatCTX());
-	}
-
-	@Override
 	public Edict compile(CompileContext compCTX) {
 		return new CharacterEdict(compCTX.decr.modifiers.colonMod);
 	}

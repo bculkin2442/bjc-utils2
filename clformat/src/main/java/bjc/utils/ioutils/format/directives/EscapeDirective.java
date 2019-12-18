@@ -14,13 +14,6 @@ import bjc.utils.ioutils.format.*;
  */
 public class EscapeDirective implements Directive {
 	@Override
-	public void format(FormatParameters dirParams) throws IOException {
-		Edict edt = compile(dirParams.toCompileCTX());
-
-		edt.format(dirParams.toFormatCTX());
-	}
-
-	@Override
 	public Edict compile(CompileContext compCTX) {
 		CLParameters params = compCTX.decr.parameters;
 		CLModifiers mods = compCTX.decr.modifiers;

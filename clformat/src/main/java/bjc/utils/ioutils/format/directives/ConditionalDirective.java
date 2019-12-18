@@ -17,13 +17,6 @@ import bjc.utils.ioutils.format.*;
  */
 public class ConditionalDirective implements Directive {
 	@Override
-	public void format(FormatParameters dirParams) throws IOException {
-		Edict edt = compile(dirParams.toCompileCTX());
-		
-		edt.format(dirParams.toFormatCTX());
-	}
-
-	@Override
 	public Edict compile(CompileContext compCTX) {
 		CLModifiers mods = compCTX.decr.modifiers;
 		CLParameters params = compCTX.decr.parameters;

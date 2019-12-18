@@ -15,13 +15,6 @@ import bjc.utils.ioutils.format.*;
  */
 public class IterationDirective implements Directive {
 	@Override
-	public void format(FormatParameters dirParams) throws IOException {
-		Edict edt = compile(dirParams.toCompileCTX());
-
-		edt.format(dirParams.toFormatCTX());
-	}
-
-	@Override
 	public Edict compile(CompileContext compCTX) {
 		IterationEdict.Mode mode;
 

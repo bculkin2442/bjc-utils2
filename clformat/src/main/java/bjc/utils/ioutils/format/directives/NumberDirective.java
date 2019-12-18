@@ -36,13 +36,6 @@ public class NumberDirective extends GeneralNumberDirective {
 	private char directive;
 
 	@Override
-	public void format(FormatParameters dirParams) throws IOException {
-		Edict edt = compile(dirParams.toCompileCTX());
-
-		edt.format(dirParams.toFormatCTX());
-	}
-
-	@Override
 	public Edict compile(CompileContext compCTX) {
 		NumberParams np = getParams(compCTX, argidx);
 

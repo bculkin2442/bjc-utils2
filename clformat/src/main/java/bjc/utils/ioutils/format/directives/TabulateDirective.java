@@ -7,12 +7,6 @@ import bjc.utils.ioutils.*;
 import bjc.utils.ioutils.format.*;
 
 public class TabulateDirective implements Directive {
-	public void format(FormatParameters dirParams) throws IOException {
-		Edict edt = compile(dirParams.toCompileCTX());
-
-		edt.format(dirParams.toFormatCTX());
-	}
-
 	@Override
 	public Edict compile(CompileContext compCTX) {
 		CLValue colinc = CLValue.nil();

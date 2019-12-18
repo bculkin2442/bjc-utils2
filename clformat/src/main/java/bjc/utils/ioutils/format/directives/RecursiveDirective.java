@@ -8,12 +8,6 @@ import bjc.utils.ioutils.format.*;
 import bjc.utils.ioutils.format.exceptions.*;
 
 public class RecursiveDirective implements Directive {
-	public void format(FormatParameters dirParams) throws IOException {
-		Edict edt = compile(dirParams.toCompileCTX());
-
-		edt.format(dirParams.toFormatCTX());
-	}
-
 	@Override
 	public Edict compile(CompileContext compCTX) {
 		return new RecursiveEdict(compCTX.decr.modifiers.atMod, compCTX.formatter);

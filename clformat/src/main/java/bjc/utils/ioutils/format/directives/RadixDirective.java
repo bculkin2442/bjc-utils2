@@ -16,14 +16,6 @@ import static bjc.utils.ioutils.format.directives.GeneralNumberDirective.NumberP
  *
  */
 public class RadixDirective extends GeneralNumberDirective {
-
-	@Override
-	public void format(FormatParameters dirParams) throws IOException {
-		Edict edt = compile(dirParams.toCompileCTX());
-
-		edt.format(dirParams.toFormatCTX());
-	}
-
 	@Override
 	public Edict compile(CompileContext compCTX) {
 		CLParameters params = compCTX.decr.parameters;

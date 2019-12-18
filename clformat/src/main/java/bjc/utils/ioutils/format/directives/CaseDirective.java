@@ -17,13 +17,6 @@ import bjc.utils.ioutils.format.*;
 public class CaseDirective implements Directive {
 	private static final Pattern wordPattern = Pattern.compile("(\\w+)(\\b*)");
 
-	@Override
-	public void format(FormatParameters dirParams) throws IOException {
-		Edict edt = compile(dirParams.toCompileCTX());
-
-		edt.format(dirParams.toFormatCTX());
-	}
-
 	public Edict compile(CompileContext compCTX) {
 		CLModifiers mods = compCTX.decr.modifiers;
 

@@ -28,13 +28,6 @@ public class LiteralDirective implements Directive {
 	}
 
 	@Override
-	public void format(FormatParameters dirParams) throws IOException {
-		Edict edt = compile(dirParams.toCompileCTX());
-
-		edt.format(dirParams.toFormatCTX());
-	}
-
-	@Override
 	public Edict compile(CompileContext compCTX) {
 		CLValue nTimes = null;
 
