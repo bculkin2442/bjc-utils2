@@ -14,7 +14,6 @@ import bjc.utils.ioutils.format.*;
  *
  */
 public class IterationDirective implements Directive {
-
 	@Override
 	public void format(FormatParameters dirParams) throws IOException {
 		Edict edt = compile(dirParams.toCompileCTX());
@@ -84,7 +83,7 @@ class IterationEdict implements Edict {
 
 	private Mode mode;
 
-	private List<Decree> body;
+	private CLString body;
 
 	private CLFormatter fmt;
 
@@ -92,7 +91,7 @@ class IterationEdict implements Edict {
 
 	public IterationEdict(Mode mode, List<Decree> body, CLFormatter fmt, CLValue maxItr) {
 		this.mode = mode;
-		this.body = body;
+		this.body = new CLString(fmt.compile(body));
 
 		this.fmt = fmt;
 
@@ -110,7 +109,7 @@ class IterationEdict implements Edict {
 		boolean usingString = false;
 		String strang = null;
 
-		if (body.size() == 0) {
+		if (body.isEmpty()) {
 			/* Grab an argument. */
 			if (!(iter instanceof String)) {
 				throw new IllegalFormatConversionException('{', String.class);
@@ -143,9 +142,13 @@ class IterationEdict implements Edict {
 
 					try {
 						if (usingString) {
-						fmt.doFormatString(strang, formCTX.writer, nParams, false);
+							// @Speed @Memory :DynamicFormatString
+							// For a speed/memory tradeoff here, we could be compiling strang into a
+							// CLString and then caching those compiled string. However, we aren't
+							// doing that now. -- ben, 12/17/19
+							fmt.doFormatString(strang, formCTX.writer, nParams, false);
 						} else {
-						fmt.doFormatString(body, formCTX.writer, nParams, false);
+							body.format(formCTX.writer, nParams);
 						}
 					} catch (EscapeException eex) {
 						if (eex.endIteration) {
@@ -165,14 +168,15 @@ class IterationEdict implements Edict {
 		case ALL:
 			try {
 				while (!formCTX.items.atEnd()) {
-					// System.err.printf("Iterating with format \"%s\"\n", frmt);
 					if (numIterations > maxIterations) break;
+
 					numIterations += 1;
 
 					if (usingString) {
-					fmt.doFormatString(strang, formCTX.writer, formCTX.items, false);
+						// :DynamicFormatString
+						fmt.doFormatString(strang, formCTX.writer, formCTX.items, false);
 					} else {
-					fmt.doFormatString(body, formCTX.writer, formCTX.items, false);
+						body.format(formCTX);
 					}
 				}
 			} catch (EscapeException eex) {
@@ -205,9 +209,10 @@ class IterationEdict implements Edict {
 
 					try {
 						if (usingString) {
-						fmt.doFormatString(strang, formCTX.writer, nParams, false);
+							// :DynamicString
+							fmt.doFormatString(strang, formCTX.writer, nParams, false);
 						} else {
-						fmt.doFormatString(body, formCTX.writer, nParams, false);
+							body.format(formCTX.writer, nParams);
 						}
 					} catch (EscapeException eex) {
 						if(eex.endIteration && !itr.hasNext()) throw eex;
@@ -232,9 +237,10 @@ class IterationEdict implements Edict {
 					numIterations += 1;
 
 					if (usingString) {
-					fmt.doFormatString(strang, formCTX.writer, nParams, false);
+						// :DynamicString
+						fmt.doFormatString(strang, formCTX.writer, nParams, false);
 					} else {
-					fmt.doFormatString(body, formCTX.writer, nParams, false);
+						body.format(formCTX.writer, nParams);
 					}
 				}
 			} catch (EscapeException eex) {

@@ -57,4 +57,10 @@ public class CLString {
 
 		return formCTX.writer.toString();
 	}
+
+	public boolean isEmpty() {
+		if (edicts.size() == 0) return true;
+
+		return false;
+	}
 }
