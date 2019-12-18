@@ -380,7 +380,12 @@ public class CLFormatter {
 	}
 
 	public List<Edict> compile(Iterable<Decree> cltok) {
-		return compile(cltok.iterator());
+		// Not 100% sure this is correct, but the tests are passing
+		if (cltok == null) return new ArrayList<>();
+
+		Iterator<Decree> it = cltok.iterator();
+
+		return compile(it);
 	}
 
 	public List<Edict> compile(Iterator<Decree> cltok) {

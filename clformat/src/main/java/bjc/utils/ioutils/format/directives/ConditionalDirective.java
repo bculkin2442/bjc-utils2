@@ -144,8 +144,8 @@ class ConditionalEdict implements Edict {
 	private boolean decrementIndex;
 	private CLValue index;
 
-	private List<List<Decree>> clauses;
-	private List<Decree> defClause;
+	private List<CLString> clauses;
+	private CLString defClause;
 
 	private CLFormatter formatter;
 
@@ -157,8 +157,11 @@ class ConditionalEdict implements Edict {
 		this.decrementIndex = decrementIndex;
 		this.index = index;
 
-		this.clauses = clauses;
-		this.defClause = defClause;
+		this.clauses = new ArrayList<>();
+		for (List<Decree> clause : clauses) {
+			this.clauses.add(new CLString(fmt.compile(clause)));
+		}
+		this.defClause = new CLString(fmt.compile(defClause));
 
 		this.formatter = fmt;
 	}
@@ -183,14 +186,14 @@ class ConditionalEdict implements Edict {
 						res = (Boolean) o;
 					}
 
-					List<Decree> frmt;
+					CLString frmt;
 					if (res) {
 						frmt = clauses.get(1);
 					} else {
 						frmt = clauses.get(0);
 					}
 
-					formatter.doFormatString(frmt, formCTX.writer, formCTX.items, false);
+					frmt.format(formCTX);
 				}
 				break;
 			case OUTPUT_TRUE:
@@ -211,7 +214,7 @@ class ConditionalEdict implements Edict {
 					}
 
 					if (res) {
-						formatter.doFormatString(clauses.get(0), formCTX.writer, formCTX.items, false);
+						clauses.get(0).format(formCTX);
 					} else {
 						items.right();
 					}
@@ -241,12 +244,12 @@ class ConditionalEdict implements Edict {
 
 					if (clauses.size() == 0 || res < 0 || res >= clauses.size()) {
 						if (defClause != null) {
-							formatter.doFormatString(defClause, formCTX.writer, items, false);
+							defClause.format(formCTX.writer, items);
 						}
 					} else {
-						List<Decree> frmt = clauses.get(res);
+						CLString frmt = clauses.get(res);
 
-						formatter.doFormatString(frmt, formCTX.writer, items, false);
+						frmt.format(formCTX.writer, items);
 					}
 				}
 				break;
