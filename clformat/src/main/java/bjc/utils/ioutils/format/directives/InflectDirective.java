@@ -69,12 +69,12 @@ public class InflectDirective implements Directive {
 }
 
 class InflectEdict implements Edict {
-	private List<Decree> body;
+	private CLString body;
 
 	private CLFormatter fmt;
 
 	public InflectEdict(List<Decree> body, CLFormatter fmt) {
-		this.body = body;
+		this.body = new CLString(fmt.compile(body));
 
 		this.fmt = fmt;
 	}
@@ -83,7 +83,7 @@ class InflectEdict implements Edict {
 	public void format(FormatContext formCTX) throws IOException {
 		ReportWriter nrw = formCTX.writer.duplicate(new StringWriter());
 
-		fmt.doFormatString(body, nrw, formCTX.items, false);
+		body.format(nrw, formCTX.items);
 
 		String strang = nrw.toString();
 
