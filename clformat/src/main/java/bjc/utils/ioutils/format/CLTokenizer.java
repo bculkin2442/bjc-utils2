@@ -7,12 +7,75 @@ import bjc.utils.ioutils.*;
 import bjc.utils.ioutils.format.directives.*;
 
 public class CLTokenizer implements Iterator<Decree> {
+	/*
+	 * Internal class for a tokenizer that returns a specific set of tokens.
+	 */
+	private static class SetCLTokenizer extends CLTokenizer {
+		private Iterator<Decree> body;
+
+		public SetCLTokenizer(Iterator<Decree> bod) {
+			body = bod;
+		}
+
+		public SetCLTokenizer(Iterable<Decree> bod) {
+			body = bod.iterator();
+		}
+
+		@Override
+		public boolean hasNext() {
+			return body.hasNext();
+		}
+
+		@Override
+		public Decree next() {
+			return body.next();
+		}
+	}
+
 	private Matcher mat;
 
 	private Decree dir;
 
+	/**
+	 * Empty constructor that should only be invoked if you are a subclass who overrides
+	 * hasNext()/next().
+	 */
+	protected CLTokenizer() {
+
+	}
+
+	/**
+	 * Create a new tokenizer, tokenizing from a given string.
+	 *
+	 * @param strang
+	 * 	The string to tokenize from.
+	 */
 	public CLTokenizer(String strang) {
 		this.mat = CLPattern.getDirectiveMatcher(strang);
+	}
+
+	/**
+	 * Create a CLTokenizer yielding a given set of decrees.
+	 *
+	 * @param bod
+	 * 	The decrees to yield.
+	 *
+	 * @return A tokenizer yielding the given set of decrees.
+	 */
+	public static CLTokenizer fromTokens(Iterator<Decree> bod) {
+		return new SetCLTokenizer(bod);
+	}
+
+	/**
+	 * Create a CLTokenizer yielding a given set of decrees.
+	 *
+	 * @param bod
+	 * 	The decrees to yield.
+	 *
+	 * @return A tokenizer yielding the given set of decrees.
+	 */
+	public static CLTokenizer fromTokens(Iterable<Decree> bod) {
+		return new SetCLTokenizer(bod);
 	}
 
 	@Override

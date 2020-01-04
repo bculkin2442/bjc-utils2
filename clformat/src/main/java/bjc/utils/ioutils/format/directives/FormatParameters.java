@@ -15,12 +15,12 @@ public class FormatParameters {
 
 	public Tape<Object> tParams;
 
-	public Iterator<Decree> dirIter;
+	public CLTokenizer dirIter;
 
 	public CLFormatter fmt;
 
 	public FormatParameters(ReportWriter rw, Object item, Decree decr, Tape<Object> tParams,
-			Iterator<Decree> dirIter, CLFormatter fmt) {
+			CLTokenizer dirIter, CLFormatter fmt) {
 		this.rw = rw;
 
 		this.item = item;

@@ -14,7 +14,7 @@ public class CompileContext {
 	/**
 	 * The stream of parsed directives.
 	 */
-	public Iterator<Decree> directives;
+	public CLTokenizer directives;
 
 	/**
 	 * The configured formatter instance we are using.
@@ -26,7 +26,7 @@ public class CompileContext {
 	 */
 	public Decree decr;
 
-	public CompileContext(Iterator<Decree> dirs, CLFormatter fmt, Decree dcr) {
+	public CompileContext(CLTokenizer dirs, CLFormatter fmt, Decree dcr) {
 		directives = dirs;
 		formatter = fmt;
 		

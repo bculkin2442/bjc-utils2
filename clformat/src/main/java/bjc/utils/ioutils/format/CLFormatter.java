@@ -29,7 +29,7 @@ public class CLFormatter {
 	private static Map<String, Directive> builtinDirectives;
 
 	// Extra directives specific to this formatter
-	private        Map<String, Directive> extraDirectives;
+	private Map<String, Directive> extraDirectives;
 
 	static {
 		// Set up the built-in directives
@@ -253,31 +253,7 @@ public class CLFormatter {
 	 *
 	 * @throws IOException If something goes wrong
 	 */
-	public void doFormatString(Iterable<Decree> cltok, ReportWriter rw, Tape<Object> tParams, boolean isToplevel) throws IOException {
-		doFormatString(cltok.iterator(), rw, tParams, isToplevel);
-	}
-
-	/**
-	 * Fill in a partially started format string.
-	 * 
-	 * Used mostly for directives that require formatting again with a
-	 * different string.
-	 * 
-	 * @param cltok
-	 * 	The place to get tokens from.
-	 *
-	 * @param rw
-	 * 	The buffer to file output into.
-	 *
-	 * @param tParams
-	 * 	The parameters to use.
-	 *
-	 * @param isToplevel 
-	 * 	Whether or not this is a top-level format
-	 *
-	 * @throws IOException If something goes wrong
-	 */
-	public void doFormatString(Iterator<Decree> cltok, ReportWriter rw, Tape<Object> tParams, boolean isToplevel) throws IOException {
+	public void doFormatString(CLTokenizer cltok, ReportWriter rw, Tape<Object> tParams, boolean isToplevel) throws IOException {
 		boolean doTail = true;
 
 		try {
@@ -383,12 +359,11 @@ public class CLFormatter {
 		// Not 100% sure this is correct, but the tests are passing
 		if (cltok == null) return new ArrayList<>();
 
-		Iterator<Decree> it = cltok.iterator();
-
+		CLTokenizer it = CLTokenizer.fromTokens(cltok);
 		return compile(it);
 	}
 
-	public List<Edict> compile(Iterator<Decree> cltok) {
+	public List<Edict> compile(CLTokenizer cltok) {
 		List<Edict> result = new ArrayList<>();
 
 		while (cltok.hasNext()) {
