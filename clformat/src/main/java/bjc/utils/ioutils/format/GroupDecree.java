@@ -74,4 +74,34 @@ public class GroupDecree {
 	public void addChild(ClauseDecree child) {
 		body.add(child);
 	}
+
+	/**
+	 * Get the first clause from the group.
+	 *
+	 * @return The first clause in the group
+	 */
+	public ClauseDecree clause() {
+		return body.get(0);
+	}
+
+	/**
+	 * Get a specific clause from the group.
+	 *
+	 * @param idx
+	 * 	The index of the clause to get.
+	 * 
+	 * @return The clause at that index.
+	 */
+	public ClauseDecree clause(int idx) {
+		return body.get(idx);
+	}
+
+	/**
+	 * Get the body of the first clause. 
+	 * 
+	 * @return The decrees that make up the body of the first clause.
+	 */
+	public List<Decree> unwrap() {
+		return body.get(0).body;
+	}
 }

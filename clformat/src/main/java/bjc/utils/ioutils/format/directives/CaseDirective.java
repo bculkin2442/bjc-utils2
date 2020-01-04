@@ -20,46 +20,7 @@ public class CaseDirective implements Directive {
 	public Edict compile(CompileContext compCTX) {
 		CLModifiers mods = compCTX.decr.modifiers;
 
-		List<Decree> condBody = new ArrayList<>();
-
-		int nestLevel = 1;
-
-		Iterator<Decree> dirIter = compCTX.directives;
-		while (dirIter.hasNext()) {
-			Decree decr = dirIter.next();
-
-			if (decr.isLiteral) {
-				condBody.add(decr);
-
-				continue;
-			}
-
-			String dirName = decr.name;
-
-			if (dirName != null) {
-				if (dirName.equals("(")) {
-					if (nestLevel > 0) {
-						condBody.add(decr);
-					}
-
-					nestLevel += 1;
-				} else if (Directive.isOpening(dirName)) {
-					nestLevel += 1;
-
-					condBody.add(decr);
-				} else if (dirName.equals(")")) {
-					nestLevel = Math.max(0, nestLevel - 1);
-
-					/* End the iteration. */
-					if (nestLevel == 0) break;
-				} else if (Directive.isClosing(dirName)) {
-					nestLevel = Math.max(0, nestLevel - 1);
-				} else {
-					/* Not a special directive. */
-					condBody.add(decr);
-				}
-			}
-		}
+		GroupDecree condBody = compCTX.directives.nextGroup(compCTX.decr, ")");
 
 		CaseEdict.Mode mode;
 
@@ -93,8 +54,8 @@ class CaseEdict implements Edict {
 
 	private CLFormatter formatter;
 
-	public CaseEdict(List<Decree> body, Mode caseMode, CLFormatter fmt) {
-		this.body = new CLString(fmt.compile(body));
+	public CaseEdict(GroupDecree body, Mode caseMode, CLFormatter fmt) {
+		this.body = new CLString(fmt.compile(body.unwrap()));
 		
 		this.caseMode = caseMode;
 

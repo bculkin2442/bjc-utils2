@@ -154,6 +154,21 @@ public class CLTokenizer implements Iterator<Decree> {
 	 * @param desiredClosing
 	 * 	The name of the decree that will close the group.
 	 *
+	 * @return A group decree with the given properties.
+	 */
+	public GroupDecree nextGroup(Decree openedWith, String desiredClosing) {
+		return nextGroup(openedWith, desiredClosing, null);
+	}
+
+	/**
+	 * Read in a group decree.
+	 *
+	 * @param openedWith
+	 * 	The decree that started the group.
+	 *
+	 * @param desiredClosing
+	 * 	The name of the decree that will close the group.
+	 *
 	 * @param clauseSep
 	 * 	The name of the decree that will separate clauses in the group. Pass 'null' if this group
 	 * 	doesn't have separate clauses.
@@ -169,8 +184,10 @@ public class CLTokenizer implements Iterator<Decree> {
 
 		int nestingLevel = 1;
 
+		Decree curDecree; 
+
 		do {
-			Decree curDecree = next();
+			curDecree = next();
 
 			// @TODO handle nesting & such
 			if (curDecree.isLiteral) {
@@ -204,7 +221,8 @@ public class CLTokenizer implements Iterator<Decree> {
 		} while (hasNext());
 
 		if (newGroup.closing == null) {
-			String msg = String.format("Did not find closing directive for group (wanted %s)", desiredClosing);
+			String msg = String.format("Did not find closing directive for group (wanted %s, last decree was %s)",
+					desiredClosing, curDecree.name);
 
 			throw new NoSuchElementException(msg);
 		}
