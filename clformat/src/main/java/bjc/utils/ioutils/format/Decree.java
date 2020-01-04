@@ -103,4 +103,19 @@ public class Decree {
 
 		this.isLiteral = isUser;
 	}
+
+	/**
+	 * Check if this decree is a non-literal, with a particular name.
+	 *
+	 * @param nam
+	 * 	The name to see if we have.
+	 *
+	 * @return Whether or not the provided name equals our name.
+	 */
+	public boolean isNamed(String nam) {
+		// Literals don't have a meaningful name
+		if (isLiteral) return false;
+
+		return name.equals(nam);
+	}
 }

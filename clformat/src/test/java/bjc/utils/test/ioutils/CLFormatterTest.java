@@ -1,6 +1,5 @@
 package bjc.utils.test.ioutils;
 
-
 import java.io.*;
 import java.util.*;
 
@@ -24,6 +23,8 @@ public class CLFormatterTest {
 
 	@Test
 	public void testLiteralString() {
+		// @TODO :assertFormat Ben Culkin 1/3/20
+		// Convert all of these 'assertEquals(..., format(...))' to use assertFormat instead
 		// Print literal strings exactly
 		assertEquals("foo", format("foo"));
 	}
