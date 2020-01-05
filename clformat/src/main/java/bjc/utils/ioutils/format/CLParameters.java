@@ -25,7 +25,7 @@ public class CLParameters {
 	private Map<String, Integer> nameIndices;
 
 	/**
-	 * Create a new set of CL format parameters.
+	 * Create a new set of CL format parameters with unnamed values.
 	 * 
 	 * @param params
 	 *        The CL format parameters to use.
@@ -34,10 +34,25 @@ public class CLParameters {
 		this(params, new HashMap<>());
 	}
 
+	/**
+	 * Create a new set of CL format parameters with named values.
+	 *
+	 * @param namedParams
+	 * 	The named parameters to use.
+	 */
 	public CLParameters(Map<String, CLValue> namedParams) {
 		this(new CLValue[0], namedParams);
 	}
 
+	/**
+	 * Create a new set of CL format parameters with both types of values.
+	 *
+	 * @param params
+	 * 	The unnamed parameters to use.
+	 *
+	 * @param namedParams
+	 * 	The named parameters to use.
+	 */
 	public CLParameters(CLValue[] params, Map<String, CLValue> namedParams) {
 		this.params = params;
 
@@ -50,10 +65,9 @@ public class CLParameters {
 		refreshAbbrevs();
 	}
 
+	// Refresh the mappings that track abbreviations
 	private void refreshAbbrevs() {
-		// @NOTE 9/19/18
-		//
-		// @Cleanup @Leak
+		// @NOTE 9/19/18 @Cleanup @Leak Ben Culkin
 		//
 		// This never clears abbrevWords or nameAbbrevs, which I'm fine
 		// with here, as these objects are fairly temporary.
@@ -74,6 +88,7 @@ public class CLParameters {
 		}
 	}
 
+	// Refresh a particular abbreviation
 	private void refreshAbbrev(String key) {
 		if (abbrevWords.contains(key)) return;
 
@@ -81,6 +96,13 @@ public class CLParameters {
 		nameAbbrevs.addWords(key);
 	}
 
+	/**
+	 * Map a set of names to indices.
+	 *
+	 * @param opts
+	 * 	The names to bind to the parameter indices. The first one will be bound to index 0, and so
+	 * 	forth. Pass an empty string to not bind a name to a particular index.
+	 */
 	public void mapIndices(String... opts) {
 		for (int i = 0; i < opts.length; i++) {
 			String opt = opts[i];
@@ -91,18 +113,39 @@ public class CLParameters {
 		refreshAbbrevs();
 	}
 
+	/**
+	 * Map a singular name to an index.
+	 *
+	 * @param opt
+	 * 	The name to map.
+	 *
+	 * @param idx
+	 * 	The index to map it to.
+	 */
 	public void mapIndex(String opt, int idx) {
 		mapIndex(opt, idx, true);
 	}
 
+	// Actually do the work of mapping an index
 	private void mapIndex(String opt, int idx, boolean doRefresh) {
-		if (params.length <= idx) System.err.printf("WARN: Mapping invalid index %d (max %d) to \"%s\"\n", idx, params.length, opt.toUpperCase());
+		if (params.length <= idx) {
+			System.err.printf("WARN: Mapping invalid index %d (max %d) to \"%s\"\n",
+					idx, params.length, opt.toUpperCase());
+		}
 
 		nameIndices.put(opt.toUpperCase(), idx);
 
 		if (doRefresh) refreshAbbrevs();
 	}
 
+	/**
+	 * Get a parameter by an index.
+	 *
+	 * @param idx
+	 * 	The index to grab.
+	 *
+	 * @return The value at that index.
+	 */
 	public CLValue getByIndex(int idx) {
 		if (idx < 0 || idx >= params.length) return null;
 
@@ -125,9 +168,10 @@ public class CLParameters {
 	 * other special parameter features.
 	 *
 	 * @param unsplit
-	 *        The string to parse parameters from
+	 * 	The string to parse parameters from
+	 *
 	 * @param dirParams
-	 *        The parameters of the format string.
+	 * 	The parameters of the format string.
 	 *
 	 * @return A set of CL parameters.
 	 */
@@ -137,8 +181,10 @@ public class CLParameters {
 		StringBuilder currParm = new StringBuilder();
 
 		char prevChar = ' ';
+		// Are we currently in a string while we are parsing
 		boolean inStr = false;
 
+		// Parse out the parameters
 		for (int i = 0; i < unsplit.length(); i++) {
 			char c = unsplit.charAt(i);
 
@@ -167,11 +213,13 @@ public class CLParameters {
 		List<CLValue> parameters = new ArrayList<>();
 
 		// Special case empty blocks, so that we don't confuse people
-		if (lParams.size() == 1 && lParams.get(0).equals(""))
+		if (lParams.size() == 1 && lParams.get(0).equals("")) {
 			return new CLParameters(parameters.toArray(new CLValue[0]));
+		}
 
 		Map<String, CLValue>  namedParams  = new HashMap<>();
 
+		// Set up parameter names
 		for(String param : lParams) {
 			if (param.startsWith("#") && !param.equals("#")) {
 				// Named parameter
@@ -207,12 +255,14 @@ public class CLParameters {
 		return new CLParameters(parameters.toArray(new CLValue[0]), namedParams);
 	}
 
+	// Actually parse the value for a parameter
 	private static CLValue parseParam(String param) {
 		String val = param;
 
 		if (param.startsWith("\"")) {
 			String dquote = param.substring(1, param.length() - 1);
 
+			// String values get their escapes processed.
 			val = TokenUtils.descapeString(dquote);
 		}
 
@@ -245,6 +295,9 @@ public class CLParameters {
 		if (!abbrevWords.contains(ucKey)) refreshAbbrev(ucKey);
 
 		String[] keys = nameAbbrevs.deabbrev(ucKey);
+
+		// We didn't find a parameter that could have been that. Create an appropriate and useful
+		// error message.
 		if (keys.length > 1) {
 			StringBuilder sb = new StringBuilder();
 
@@ -280,6 +333,27 @@ public class CLParameters {
 		return null;
 	}
 
+	/**
+	 * Get a boolean-valued parameter.
+	 *
+	 * @param params
+	 * 	The format parameters to use.
+	 *
+	 * @param key
+	 * 	The name of the parameter to use for a key.
+	 *
+	 * @param paramName
+	 * 	The name of the parameter, as a user-intelligble string.
+	 *
+	 * @param directive
+	 * 	The directive this parameter belongs to.
+	 *
+	 * @param def
+	 * 	The default value for this parameter.
+	 *
+	 * @return The boolean value for that parameter, or the default value if that parameter didn't
+	 * exist.
+	 */
 	public boolean getBoolean(Tape<Object> params, String key, String paramName, String directive, boolean def) {
 		String bol = resolveKey(key).getValue(params);
 
@@ -295,6 +369,27 @@ public class CLParameters {
 		return def;
 	}
 
+	/**
+	 * Get the string value for a parameter.
+	 *
+	 * @param params
+	 * 	The format parameters we're using.
+	 *
+	 * @param key
+	 * 	The key for the parameter.
+	 *
+	 * @param paramName
+	 * 	The user-intelligble name for the parameter.
+	 *
+	 * @param directive
+	 * 	The directive this parameter is for.
+	 *
+	 * @param def
+	 * 	The default value for the parameter.
+	 *
+	 * @return The string value of the parameter, or the default value if there is no parameter by
+	 * that name.
+	 */
 	public String getString(Tape<Object> params, String key, String paramName, String directive, String def) {
 		String vl = resolveKey(key).getValue(params);
 
@@ -307,6 +402,24 @@ public class CLParameters {
 		return def;
 	}
 
+	/**
+	 * Get the character value of a parameter.
+	 *
+	 * @param params
+	 * 	The format parameters to use.
+	 *
+	 * @param key
+	 * 	The key for the parameter.
+	 *
+	 * @param paramName
+	 * 	The user-intelligble name for the parameter.
+	 *
+	 * @param directive
+	 * 	The directive the parameter is for.
+	 *
+	 * @return The character value of the parameter, or the default value if the parameter isn't
+	 * specified.
+	 */
 	public char getChar(Tape<Object> params, String key, String paramName, String directive, char def) {
 		String param = resolveKey(key).getValue(params);
 
@@ -328,6 +441,27 @@ public class CLParameters {
 		return def;
 	}
 
+	/**
+	 * Get the integer value for a parameter.
+	 *
+	 * @param params
+	 * 	The format parameters we are using.
+	 *
+	 * @param key
+	 * 	The key for the parameter.
+	 *
+	 * @param paramName
+	 * 	The user-intelligble name for the parameter.
+	 *
+	 * @param directive
+	 * 	The directive the parameter is for.
+	 *
+	 * @param def
+	 * 	The default value for the parameter.
+	 *
+	 * @return The integer value of the parameter, or the default value if there is no parameter by
+	 * that name.
+	 */
 	public int getInt(Tape<Object> params, String key, String paramName, String directive, int def) {
 		String param = resolveKey(key).getValue(params);
 
@@ -350,13 +484,62 @@ public class CLParameters {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder("[");
+		Set<Integer> seenIndices = new HashSet<>();
 
-		for (int i = 0; i < params.length; i++) {
-			if (i != 0) sb.append(", ");
+		int idx = 0;
+		// First off, the named parameters
+		for (Map.Entry<String, CLValue> param : namedParams.entrySet()) {
+			String paramName = param.getKey();
+			CLValue paramValue = param.getValue();
 
-			sb.append("\"");
-			sb.append(params[i]);
-			sb.append("\"");
+			if (nameIndices.containsKey(paramName)) {
+				int paramIdx = nameIndices.get(paramName);
+
+				String msg = String.format("%s(%d):'%s'", paramName, paramIdx, paramValue);
+
+				if (idx != 0) sb.append(", ");
+				sb.append(msg);
+
+				seenIndices.add(idx);
+			} else {
+				String msg = String.format("%s:'%s'", paramName, paramValue);
+
+				if (idx != 0) sb.append(", ");
+				sb.append(msg);
+			}
+
+			idx += 1;
+		}
+
+		sb.append(";");
+
+		// Second off, indexed parameters with a name
+		for (Map.Entry<String, Integer> paramMap : nameIndices.entrySet()) {
+			String paramName = paramMap.getKey();
+			int paramIdx = paramMap.getValue();
+
+			// We've already gotten this argument before
+			if (seenIndices.contains(paramIdx)) continue;
+
+			String msg = String.format("%d(%s):'%s'", paramIdx, paramName, params[paramIdx]);
+
+			if (idx != 0) sb.append(", ");
+			sb.append(msg);
+
+			seenIndices.add(paramIdx);
+		}
+
+		sb.append(";");
+
+		// Third, unnamed indexed parameters
+		for (idx = 0; idx < params.length; idx++) {
+			// We've already gotten this argument before
+			if (seenIndices.contains(idx)) continue;
+
+			String msg = String.format("%d:'%s'", idx, params[idx]);
+
+			if (idx != 0) sb.append(", ");
+			sb.append(msg);
 		}
 
 		sb.append("]");
