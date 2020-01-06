@@ -11,7 +11,6 @@ import bjc.utils.ioutils.format.*;
  *
  */
 public class LiteralDirective implements Directive {
-	private String directive;
 	private String lit;
 
 	/**
@@ -23,7 +22,7 @@ public class LiteralDirective implements Directive {
 	 *            The character for the directive.
 	 */
 	public LiteralDirective(String lit, char directive) {
-		this.directive = Character.toString(directive);
+		Character.toString(directive);
 		this.lit = lit;
 	}
 

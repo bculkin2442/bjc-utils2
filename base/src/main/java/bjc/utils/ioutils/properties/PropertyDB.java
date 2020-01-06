@@ -1,8 +1,11 @@
 package bjc.utils.ioutils.properties;
 
-import bjc.utils.esodata.Directory;
-import bjc.utils.esodata.SimpleDirectory;
-
+/**
+ * A database of properties.
+ * 
+ * @author bjculkin
+ *
+ */
 public class PropertyDB {
-
+	// @TODO Implement me :) - Ben Culkin, 1/5/20
 }

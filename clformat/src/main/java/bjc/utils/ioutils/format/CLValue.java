@@ -14,13 +14,15 @@ public interface CLValue {
 	 *
 	 * @param val
 	 * 	The string to create the value from.
+	 * 
+	 * @return The CLValue represented by the string.
 	 */
 	public static CLValue parse(String val) {
+		if (val == null) return new NullValue();
+
 		if (val.equalsIgnoreCase("V")) {
 			return new VValue();
 		}
-
-		if (val == null) return new NullValue();
 
 		switch (val) {
 		case "V":
@@ -40,11 +42,33 @@ public interface CLValue {
 	 *
 	 * @param params
 	 *	The parameters passed to the directive.
+	 *
+	 * @return The string value of the parameter.
 	 */
 	public String getValue(Tape<Object> params);
 	
-	static String MSG_FMT = "Invalid %s \"%s\" to %s directive";
+	/**
+	 * The format string to use for an invalid usage of a directive.
+	 */
+	public static final String MSG_FMT = "Invalid %s \"%s\" to %s directive";
 
+	/**
+	 * Get the value as an integer.
+	 * 
+	 * @param params
+	 * 	The format parameters to use.
+	 * 
+	 * @param paramName
+	 * 	The user-intelligble name for the value.
+	 * 
+	 * @param directive
+	 * 	The directive this value is for.
+	 * 
+	 * @param def
+	 * 	The default value for this value.
+	 * 
+	 * @return The value as an integer, or the default value if the value has no value.
+	 */
 	public default int asInt(Tape<Object> params, String paramName, String directive, int def) {
 		String param = getValue(params);
 
@@ -64,10 +88,32 @@ public interface CLValue {
 		return def;
 	}
 
+	/**
+	 * Get a CLValue that represent 'nothing'.
+	 * 
+	 * @return A CLValue that represents nothing.
+	 */
 	public static CLValue nil() {
 		return new NullValue();
 	}
 
+	/**
+	 * Get the value as a character.
+	 * 
+	 * @param params
+	 * 	The format parameters to use.
+	 * 
+	 * @param paramName
+	 * 	The user-intelligble name for the value.
+	 * 
+	 * @param directive
+	 * 	The directive the value is for.
+	 * 
+	 * @param def
+	 * 	The default value for the value.
+	 * 
+	 * @return The value as an character, or the default value if the value has no value.
+	 */
 	public default char asChar(Tape<Object> params, String paramName, String directive, char def) {
 		String param = getValue(params);
 
@@ -94,24 +140,28 @@ public interface CLValue {
 class NullValue implements CLValue {
 	public static CLValue nullVal = new NullValue();
 
+	@Override
 	public String getValue(Tape<Object> params) {
 		return null;
 	}
 }
 
 class PercValue implements CLValue {
+	@Override
 	public String getValue(Tape<Object> params) {
 		return Integer.toString(params.position());
 	}
 }
 
 class HashValue implements CLValue {
+	@Override
 	public String getValue(Tape<Object> params) {
 		return (Integer.toString(params.size() - params.position()));
 	}
 }
 
 class VValue implements CLValue {
+	@Override
 	public String getValue(Tape<Object> params) {
 		// Read parameter from items
 		Object par = params.item();

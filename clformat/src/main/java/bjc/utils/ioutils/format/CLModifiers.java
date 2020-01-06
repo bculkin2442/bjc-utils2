@@ -11,14 +11,17 @@ public class CLModifiers {
 	 * Whether the at mod is on.
 	 */
 	public final boolean atMod;
+	
 	/**
 	 * Whether the colon mod is on.
 	 */
 	public final boolean colonMod;
+	
 	/**
 	 * Whether the dollar mod is on.
 	 */
 	public final boolean dollarMod;
+	
 	/**
 	 * Whether the star mod is on.
 	 */
@@ -62,5 +65,17 @@ public class CLModifiers {
 		}
 
 		return new CLModifiers(atMod, colonMod, dollarMod, starMod);
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		
+		if (atMod) sb.append('@');
+		if (colonMod) sb.append(':');
+		if (dollarMod) sb.append('$');
+		if (starMod) sb.append('*');
+		
+		return sb.toString();
 	}
 }

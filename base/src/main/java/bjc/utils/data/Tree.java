@@ -109,7 +109,7 @@ public class Tree<ContainedType> implements ITree<ContainedType> {
 
 	@Override
 	public void addChild(final ContainedType child) {
-		addChild(new Tree(child));
+		addChild(new Tree<>(child));
 	}
 
 	@Override

@@ -3,9 +3,12 @@ package bjc.utils.ioutils.format;
 import java.util.*;
 import java.util.regex.*;
 
-import bjc.utils.ioutils.*;
-import bjc.utils.ioutils.format.directives.*;
-
+/**
+ * Tokenizer for creating @{link Decree}s from strings.
+ * 
+ * @author bjculkin
+ *
+ */
 public class CLTokenizer implements Iterator<Decree> {
 	/*
 	 * Internal class for a tokenizer that returns a specific set of tokens.

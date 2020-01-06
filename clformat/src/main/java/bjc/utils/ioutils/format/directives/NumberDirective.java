@@ -45,16 +45,12 @@ public class NumberDirective extends GeneralNumberDirective {
 
 class NumberEdict implements Edict {
 	private int radix;
-	private int argidx;
-
 	private String directive;
 
 	private NumberParams np;
 
 	public NumberEdict(int radix, char directive, int argidx, NumberParams np) {
 		this.radix  = radix;
-		this.argidx = argidx;
-
 		this.directive = Character.toString(directive);
 		
 		this.np = np;

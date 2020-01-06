@@ -1,12 +1,16 @@
 package bjc.utils.ioutils.format.directives;
 
 import java.io.*;
-import java.util.*;
-
 import bjc.utils.esodata.*;
 import bjc.utils.ioutils.format.*;
 import bjc.utils.ioutils.format.exceptions.*;
 
+/**
+ * Implementation of the ? directive, which does recursive execution of a format string.
+ * 
+ *  @author bjculkin
+ *
+ */
 public class RecursiveDirective implements Directive {
 	@Override
 	public Edict compile(CompileContext compCTX) {

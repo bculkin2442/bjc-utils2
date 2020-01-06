@@ -1,5 +1,7 @@
 package bjc.utils.ioutils.properties;
 
+// @TODO implement me - ben, 1/6/20
+@SuppressWarnings("javadoc")
 public class Property {
 	public String name;
 	public String comment;

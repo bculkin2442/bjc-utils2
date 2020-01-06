@@ -4,6 +4,8 @@ import java.util.Iterator;
 /**
  * Represents an iterator over an array of values.
  *
+ * @param <T> The type of values in the array.
+ * 
  * @author Ben Culkin
  */
 public class ArrayIterator<T> implements Iterator<T> {
@@ -13,9 +15,10 @@ public class ArrayIterator<T> implements Iterator<T> {
 	/**
 	 * Create a new array iterator.
 	 *
-	 * @param elems
+	 * @param elms
 	 * 	The array that will be iterated over.
 	 */
+	@SafeVarargs
 	public ArrayIterator(T... elms) {
 		arr = elms;
 		idx = 0;
@@ -26,6 +29,7 @@ public class ArrayIterator<T> implements Iterator<T> {
 		return idx < arr.length;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public T next() {
 		if (idx >= arr.length) return null;

@@ -1,11 +1,6 @@
 package bjc.utils.ioutils.format.directives;
 
-import java.io.*;
-
-import bjc.utils.esodata.*;
-import bjc.utils.ioutils.*;
 import bjc.utils.ioutils.format.*;
-import bjc.utils.math.*;
 
 /**
  * Implementation skeleton for number directives.
@@ -14,11 +9,17 @@ import bjc.utils.math.*;
  *
  */
 public abstract class GeneralNumberDirective implements Directive {
+	/**
+	 * Parameters for doing number formatting.
+	 * 
+	 * @author bjculkin
+	 *
+	 */
 	public static class NumberParams {
 		/**
 		 * Minimum # of printed columns
 		 */
-		public CLValue mincol  = CLValue.nil();
+		public CLValue mincol = CLValue.nil();
 		/**
 		 * Character to use for padding if needed.
 		 */
@@ -41,12 +42,12 @@ public abstract class GeneralNumberDirective implements Directive {
 		/**
 		 * Character to use as a comma.
 		 */
-		public CLValue commaChar     = CLValue.nil();
+		public CLValue commaChar = CLValue.nil();
 	}
 
 	protected NumberParams getParams(CompileContext compCTX, int argidx) {
 		CLParameters params = compCTX.decr.parameters;
-		CLModifiers mods    = compCTX.decr.modifiers;
+		CLModifiers mods = compCTX.decr.modifiers;
 
 		NumberParams np = new NumberParams();
 

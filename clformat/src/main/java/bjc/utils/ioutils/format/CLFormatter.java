@@ -2,11 +2,8 @@ package bjc.utils.ioutils.format;
 
 import java.io.*;
 import java.util.*;
-import java.util.regex.*;
 
-import bjc.utils.data.*;
 import bjc.utils.esodata.*;
-import bjc.utils.funcutils.*;
 import bjc.utils.ioutils.*;
 import bjc.utils.ioutils.format.directives.*;
 
@@ -43,8 +40,8 @@ public class CLFormatter {
 
 		builtinDirectives.put("C", new CharacterDirective());
 
-		builtinDirectives.put("B", new NumberDirective(-1, 2,  'B'));
-		builtinDirectives.put("O", new NumberDirective(-1, 8,  'O'));
+		builtinDirectives.put("B", new NumberDirective(-1, 2, 'B'));
+		builtinDirectives.put("O", new NumberDirective(-1, 8, 'O'));
 		builtinDirectives.put("D", new NumberDirective(-1, 10, 'D'));
 		builtinDirectives.put("X", new NumberDirective(-1, 16, 'X'));
 
@@ -54,7 +51,7 @@ public class CLFormatter {
 
 		builtinDirectives.put("%", new LiteralDirective("\n", '%'));
 		builtinDirectives.put("|", new LiteralDirective("\f", '|'));
-		builtinDirectives.put("~", new LiteralDirective("~",  '~'));
+		builtinDirectives.put("~", new LiteralDirective("~", '~'));
 		builtinDirectives.put("?", new RecursiveDirective());
 
 		builtinDirectives.put("*", new GotoDirective());
@@ -78,8 +75,8 @@ public class CLFormatter {
 	}
 
 	/*
-	 * @TODO Ben Culkin 9/24/2019 :checkItem
-	 * Convert this to return a boolean, not throw an exception.
+	 * @TODO Ben Culkin 9/24/2019 :checkItem Convert this to return a
+	 * boolean, not throw an exception.
 	 *
 	 * In general, I want to cut down on exceptions, except for where it
 	 * would be very inconvenient to do so (namely, the EscapeException we
@@ -89,16 +86,17 @@ public class CLFormatter {
 	 * Check that an item is valid for a directive.
 	 * 
 	 * @param itm
-	 * 	The item to check.
+	 *                The item to check.
 	 *
 	 * @param directive
-	 * 	The directive to check for.
+	 *                The directive to check for.
 	 *
-	 * @throws IlegalArgumentException if itm is null.
+	 * @throws IllegalArgumentException
+	 *                 if itm is null.
 	 */
 	public static void checkItem(Object itm, char directive) {
-		if(itm == null) {
-			String msg =  String.format("No argument provided for %c directive", directive);
+		if (itm == null) {
+			String msg = String.format("No argument provided for %c directive", directive);
 
 			throw new IllegalArgumentException(msg);
 		}
@@ -108,33 +106,33 @@ public class CLFormatter {
 	 * Format a string in the style of CL's FORMAT.
 	 * 
 	 * @param format
-	 * 	The format string to use.
+	 *                The format string to use.
 	 *
 	 * @param params
-	 * 	The parameters for the string.
+	 *                The parameters for the string.
 	 *
 	 * @return The formatted string.
 	 *
-	 * @throws IOException if something goes wrong during formatting the
-	 * string.
+	 * @throws IOException
+	 *                 if something goes wrong during formatting the string.
 	 */
 	public String formatString(String format, Object... params) throws IOException {
 		return formatString(format, I(AI(params)));
 	}
-	
+
 	/**
 	 * Format a string in the style of CL's FORMAT.
 	 * 
 	 * @param format
-	 * 	The format string to use.
+	 *                The format string to use.
 	 *
 	 * @param params
-	 * 	The parameters for the string.
+	 *                The parameters for the string.
 	 *
 	 * @return The formatted string.
 	 *
-	 * @throws IOException if something goes wrong during formatting the
-	 * string.
+	 * @throws IOException
+	 *                 if something goes wrong during formatting the string.
 	 */
 	public String formatString(String format, Iterable<Object> params) throws IOException {
 		ReportWriter rw = new ReportWriter(new StringWriter());
@@ -151,33 +149,42 @@ public class CLFormatter {
 	 * Format a string in the style of CL's FORMAT.
 	 * 
 	 * @param target
-	 * 	The writer to send output to.
+	 *                The writer to send output to.
 	 *
 	 * @param format
-	 * 	The format string to use.
+	 *                The format string to use.
 	 *
 	 * @param params
-	 * 	The parameters for the string.
+	 *                The parameters for the string.
+	 * 
+	 * @throws IOException
+	 *                 If something I/O related goes wrong.
 	 */
 	public void formatString(Writer target, String format, Object... params) throws IOException {
-		ReportWriter rw = new ReportWriter(target);
-		/* Put the parameters where we can easily handle them. */
-		Tape<Object> tParams = new SingleTape<>(params);
+		try (ReportWriter rw = new ReportWriter(target)) {
+			/*
+			 * Put the parameters where we can easily handle them.
+			 */
+			Tape<Object> tParams = new SingleTape<>(params);
 
-		doFormatString(format, rw, tParams, true);
+			doFormatString(format, rw, tParams, true);
+		}
 	}
-	
+
 	/**
 	 * Format a string in the style of CL's FORMAT.
 	 * 
 	 * @param target
-	 * 	The writer with configured format options to use.
+	 *                The writer with configured format options to use.
 	 *
 	 * @param format
-	 * 	The format string to use.
+	 *                The format string to use.
 	 *
 	 * @param params
-	 * 	The parameters for the string.
+	 *                The parameters for the string.
+	 * 
+	 * @throws IOException
+	 *                 If something I/O related goes wrong.
 	 */
 	public void formatString(ReportWriter target, String format, Object... params) throws IOException {
 		/* Put the parameters where we can easily handle them. */
@@ -190,13 +197,15 @@ public class CLFormatter {
 	 * Format a string in the style of CL's FORMAT.
 	 * 
 	 * @param target
-	 * 	The writer to send output to.
+	 *                The writer to send output to.
 	 *
 	 * @param format
-	 * 	The format string to use.
+	 *                The format string to use.
 	 *
 	 * @param params
-	 * 	The parameters for the string.
+	 *                The parameters for the string.
+	 *                
+	 * @throws IOException If something I/O related goes wrong.
 	 */
 	public void formatString(Writer target, String format, Iterable<Object> params) throws IOException {
 		ReportWriter rw = new ReportWriter(target);
@@ -214,20 +223,22 @@ public class CLFormatter {
 	 * different string.
 	 * 
 	 * @param format
-	 * 	The format to use.
+	 *                The format to use.
 	 *
 	 * @param rw
-	 * 	The buffer to file output into.
+	 *                The buffer to file output into.
 	 *
 	 * @param tParams
-	 * 	The parameters to use.
+	 *                The parameters to use.
 	 *
-	 * @param isToplevel 
-	 * 	Whether or not this is a top-level format
+	 * @param isToplevel
+	 *                Whether or not this is a top-level format
 	 *
-	 * @throws IOException If something goes wrong
+	 * @throws IOException
+	 *                 If something goes wrong
 	 */
-	public void doFormatString(String format, ReportWriter rw, Tape<Object> tParams, boolean isToplevel) throws IOException {
+	public void doFormatString(String format, ReportWriter rw, Tape<Object> tParams, boolean isToplevel)
+			throws IOException {
 		CLTokenizer cltok = new CLTokenizer(format);
 
 		doFormatString(cltok, rw, tParams, isToplevel);
@@ -240,22 +251,22 @@ public class CLFormatter {
 	 * different string.
 	 * 
 	 * @param cltok
-	 * 	The place to get tokens from.
+	 *                The place to get tokens from.
 	 *
 	 * @param rw
-	 * 	The buffer to file output into.
+	 *                The buffer to file output into.
 	 *
 	 * @param tParams
-	 * 	The parameters to use.
+	 *                The parameters to use.
 	 *
-	 * @param isToplevel 
-	 * 	Whether or not this is a top-level format
+	 * @param isToplevel
+	 *                Whether or not this is a top-level format
 	 *
-	 * @throws IOException If something goes wrong
+	 * @throws IOException
+	 *                 If something goes wrong
 	 */
-	public void doFormatString(CLTokenizer cltok, ReportWriter rw, Tape<Object> tParams, boolean isToplevel) throws IOException {
-		boolean doTail = true;
-
+	public void doFormatString(CLTokenizer cltok, ReportWriter rw, Tape<Object> tParams, boolean isToplevel)
+			throws IOException {
 		try {
 			while (cltok.hasNext()) {
 				Decree decr = cltok.next();
@@ -267,86 +278,98 @@ public class CLFormatter {
 
 				Object item = tParams.item();
 
-				if(decr.isUserCall) {
+				if (decr.isUserCall) {
 					/*
-					 * @TODO implement user-called functions.
+					 * @TODO implement user-called
+					 * functions.
 					 */
 					continue;
 				}
 
-				if(extraDirectives.containsKey(decr.name)) {
-					FormatParameters params = new FormatParameters(rw, item, decr, tParams, cltok, this);
+				if (extraDirectives.containsKey(decr.name)) {
+					FormatParameters params = new FormatParameters(rw, item, decr, tParams, cltok,
+							this);
 
 					extraDirectives.get(decr.name).format(params);
 
 					continue;
 				}
 
-				if(builtinDirectives.containsKey(decr.name)) {
-					FormatParameters params = new FormatParameters(rw, item, decr, tParams, cltok, this);
+				if (builtinDirectives.containsKey(decr.name)) {
+					FormatParameters params = new FormatParameters(rw, item, decr, tParams, cltok,
+							this);
 
-					builtinDirectives.get(decr.name).format(params); 
+					builtinDirectives.get(decr.name).format(params);
 					continue;
 				}
 
-				if(decr.name == null) decr.name = "<null>";
+				if (decr.name == null) decr.name = "<null>";
 
-				switch(decr.name) {
-					case "]":
-						throw new IllegalArgumentException("Found conditional-end outside of conditional.");
-					case ";":
-						throw new IllegalArgumentException(
-								"Found seperator outside of block.");
-					case "}":
-						throw new IllegalArgumentException("Found iteration-end outside of iteration");
-					case ")":
-						throw new IllegalArgumentException("Case-conversion end outside of case conversion");
-					case "`]":
-						throw new IllegalArgumentException("Inflection-end outside of inflection");
-					case "<":
-					case ">":
-						throw new IllegalArgumentException("Inflection marker outside of inflection");
-					case "`<":
-					case "`>":
-						throw new IllegalArgumentException("Layout-control directives aren't implemented yet.");
-					case "F":
-					case "E":
-					case "G":
-					case "$":
-						/* @TODO 
-						 *
-						 * implement floating point directives.
-						 */
-						throw new IllegalArgumentException("Floating-point directives aren't implemented yet.");
-					case "W":
-						/*
-						 * @TODO 
-						 *
-						 * figure out if we want to
-						 * implement someting for these
-						 * directives instead of
-						 * punting.
-						 */
-						throw new IllegalArgumentException("S and W aren't implemented. Use A instead");
-					case "P":
-						throw new IllegalArgumentException("These directives aren't implemented yet");
-					case "\n":
-						/*
-						 * Ignored newline.
-						 */
-						break;
-					default:
-						String msg = String.format("Unknown format directive '%s'", decr.name);
-						throw new IllegalArgumentException(msg);
+				switch (decr.name) {
+				case "]":
+					throw new IllegalArgumentException(
+							"Found conditional-end outside of conditional.");
+				case ";":
+					throw new IllegalArgumentException("Found seperator outside of block.");
+				case "}":
+					throw new IllegalArgumentException("Found iteration-end outside of iteration");
+				case ")":
+					throw new IllegalArgumentException(
+							"Case-conversion end outside of case conversion");
+				case "`]":
+					throw new IllegalArgumentException("Inflection-end outside of inflection");
+				case "<":
+				case ">":
+					throw new IllegalArgumentException("Inflection marker outside of inflection");
+				case "`<":
+				case "`>":
+					throw new IllegalArgumentException(
+							"Layout-control directives aren't implemented yet.");
+				case "F":
+				case "E":
+				case "G":
+				case "$":
+					/*
+					 * @TODO
+					 *
+					 * implement floating point directives.
+					 */
+					throw new IllegalArgumentException(
+							"Floating-point directives aren't implemented yet.");
+				case "W":
+					/*
+					 * @TODO
+					 *
+					 * figure out if we want to implement
+					 * someting for these directives instead
+					 * of punting.
+					 */
+					throw new IllegalArgumentException("S and W aren't implemented. Use A instead");
+				case "P":
+					throw new IllegalArgumentException("These directives aren't implemented yet");
+				case "\n":
+					/*
+					 * Ignored newline.
+					 */
+					break;
+				default:
+					String msg = String.format("Unknown format directive '%s'", decr.name);
+					throw new IllegalArgumentException(msg);
 				}
 			}
 		} catch (EscapeException eex) {
 			if (!isToplevel) throw eex;
-
-			doTail = false;
 		}
 	}
 
+	/**
+	 * Compile a CLString from a string.
+	 * 
+	 * @param inp
+	 *                The string to compile.
+	 * 
+	 * @return The compiled string.
+	 */
 	public CLString compile(String inp) {
 		CLTokenizer tokenzer = new CLTokenizer(inp);
 
@@ -355,14 +378,30 @@ public class CLFormatter {
 		return new CLString(edts);
 	}
 
-	public List<Edict> compile(Iterable<Decree> cltok) {
+	/**
+	 * Compile a set of decrees into a set of edicts.
+	 * 
+	 * @param decrees
+	 *                The decrees to compile.
+	 * 
+	 * @return The edicts compiled from the decrees.
+	 */
+	public List<Edict> compile(Iterable<Decree> decrees) {
 		// Not 100% sure this is correct, but the tests are passing
-		if (cltok == null) return new ArrayList<>();
+		if (decrees == null) return new ArrayList<>();
 
-		CLTokenizer it = CLTokenizer.fromTokens(cltok);
+		CLTokenizer it = CLTokenizer.fromTokens(decrees);
 		return compile(it);
 	}
 
+	/**
+	 * Compile a set of edicts from a tokenizer.
+	 * 
+	 * @param cltok
+	 *                The tokenizer to get decrees from.
+	 * 
+	 * @return The set of edicts compiled from the tokenizer.
+	 */
 	public List<Edict> compile(CLTokenizer cltok) {
 		List<Edict> result = new ArrayList<>();
 
@@ -378,21 +417,22 @@ public class CLFormatter {
 				continue;
 			}
 
-			if(decr.isUserCall) {
+			if (decr.isUserCall) {
 				/*
 				 * @TODO implement user-called functions.
 				 */
-				throw new IllegalArgumentException("User-called functions have not yet been implemented");
+				throw new IllegalArgumentException(
+						"User-called functions have not yet been implemented");
 			}
 
-			if(extraDirectives.containsKey(nam)) {
+			if (extraDirectives.containsKey(nam)) {
 				Edict edt = extraDirectives.get(nam).compile(compCTX);
 
 				result.add(edt);
 
 				continue;
-			} else if(builtinDirectives.containsKey(nam)) {
-				Edict edt = builtinDirectives.get(nam).compile(compCTX); 
+			} else if (builtinDirectives.containsKey(nam)) {
+				Edict edt = builtinDirectives.get(nam).compile(compCTX);
 
 				result.add(edt);
 
@@ -401,12 +441,11 @@ public class CLFormatter {
 
 			if (nam == null) nam = "<null>";
 
-			switch(nam) {
+			switch (nam) {
 			case "]":
 				throw new IllegalArgumentException("Found conditional-end outside of conditional.");
 			case ";":
-				throw new IllegalArgumentException(
-						"Found seperator outside of block.");
+				throw new IllegalArgumentException("Found seperator outside of block.");
 			case "}":
 				throw new IllegalArgumentException("Found iteration-end outside of iteration");
 			case ")":
@@ -423,19 +462,18 @@ public class CLFormatter {
 			case "E":
 			case "G":
 			case "$":
-				/* @TODO 
+				/*
+				 * @TODO
 				 *
 				 * implement floating point directives.
 				 */
 				throw new IllegalArgumentException("Floating-point directives aren't implemented yet.");
 			case "W":
 				/*
-				 * @TODO 
+				 * @TODO
 				 *
-				 * figure out if we want to
-				 * implement someting for these
-				 * directives instead of
-				 * punting.
+				 * figure out if we want to implement someting
+				 * for these directives instead of punting.
 				 */
 				throw new IllegalArgumentException("S and W aren't implemented. Use A instead");
 			case "P":

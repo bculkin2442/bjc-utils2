@@ -2,8 +2,6 @@ package bjc.utils.ioutils.format.directives;
 
 import java.io.*;
 import java.util.*;
-import java.util.regex.*;
-
 import bjc.inflexion.*;
 
 import bjc.utils.ioutils.*;
@@ -64,12 +62,8 @@ public class InflectDirective implements Directive {
 class InflectEdict implements Edict {
 	private CLString body;
 
-	private CLFormatter fmt;
-
 	public InflectEdict(List<Decree> body, CLFormatter fmt) {
 		this.body = new CLString(fmt.compile(body));
-
-		this.fmt = fmt;
 	}
 
 	@Override

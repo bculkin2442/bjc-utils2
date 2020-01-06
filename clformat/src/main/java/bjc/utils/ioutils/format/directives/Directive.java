@@ -19,7 +19,7 @@ public interface Directive {
 		Edict edt = compile(dirParams.toCompileCTX());
 
 		edt.format(dirParams.toFormatCTX());
-	};
+	}
 
 	/**
 	 * Compile this directive.

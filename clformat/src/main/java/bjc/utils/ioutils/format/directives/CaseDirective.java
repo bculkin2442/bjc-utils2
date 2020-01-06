@@ -1,7 +1,6 @@
 package bjc.utils.ioutils.format.directives;
 
 import java.io.*;
-import java.util.*;
 import java.util.regex.*;
 
 import bjc.utils.ioutils.*;
@@ -15,8 +14,12 @@ import bjc.utils.ioutils.format.*;
  * @author Ben Culkin
  */
 public class CaseDirective implements Directive {
-	private static final Pattern wordPattern = Pattern.compile("(\\w+)(\\b*)");
-
+	/**
+	 * Compile a case directive.
+	 * 
+	 * @param compCTX
+	 * 	The context to use for compilation.
+	 */
 	public Edict compile(CompileContext compCTX) {
 		CLModifiers mods = compCTX.decr.modifiers;
 
@@ -40,10 +43,7 @@ public class CaseDirective implements Directive {
 
 class CaseEdict implements Edict {
 	public static enum Mode {
-		UPPERCASE,
-		WORD_UPPERCASE,
-		FIRST_UPPERCASE,
-		LOWERCASE
+		UPPERCASE, WORD_UPPERCASE, FIRST_UPPERCASE, LOWERCASE
 	}
 
 	private static final Pattern wordPattern = Pattern.compile("(\\w+)(\\b*)");
@@ -52,34 +52,26 @@ class CaseEdict implements Edict {
 
 	private Mode caseMode;
 
-	private CLFormatter formatter;
-
 	public CaseEdict(GroupDecree body, Mode caseMode, CLFormatter fmt) {
 		this.body = new CLString(fmt.compile(body.unwrap()));
-		
-		this.caseMode = caseMode;
 
-		this.formatter = fmt;
+		this.caseMode = caseMode;
 	}
 
 	@Override
 	public void format(FormatContext formCTX) throws IOException {
-		ReportWriter nrw = formCTX.getScratchWriter();
+		try (ReportWriter nrw = formCTX.getScratchWriter()) {
+			String strang = body.format(nrw, formCTX.items);
 
-		//formatter.doFormatString(body, nrw, formCTX.items, false);
-
-		String strang = body.format(nrw, formCTX.items);
-
-		switch (caseMode) {
-		case UPPERCASE:
-			strang = strang.toUpperCase();
-			break;
-		case WORD_UPPERCASE:
-			{
+			switch (caseMode) {
+			case UPPERCASE:
+				strang = strang.toUpperCase();
+				break;
+			case WORD_UPPERCASE: {
 				Matcher mat = wordPattern.matcher(strang);
 
 				StringBuffer sb = new StringBuffer();
-				while(mat.find()) {
+				while (mat.find()) {
 					mat.appendReplacement(sb, "");
 
 					String word = mat.group(1);
@@ -93,14 +85,13 @@ class CaseEdict implements Edict {
 
 				strang = sb.toString();
 			}
-			break;
-		case FIRST_UPPERCASE:
-			{
+				break;
+			case FIRST_UPPERCASE: {
 				Matcher mat = wordPattern.matcher(strang);
 
 				StringBuffer sb = new StringBuffer();
 				boolean doCap = true;
-				while(mat.find()) {
+				while (mat.find()) {
 					mat.appendReplacement(sb, "");
 
 					String word = mat.group(1);
@@ -119,12 +110,16 @@ class CaseEdict implements Edict {
 
 				strang = sb.toString();
 			}
-			break;
-		case LOWERCASE:
-			strang = strang.toLowerCase();
-			break;
-		}
+				break;
+			case LOWERCASE:
+				strang = strang.toLowerCase();
+				break;
+			default:
+				throw new IllegalArgumentException("INTERNAL ERROR: CaseEdict mode " + caseMode
+						+ " is not supported. This is a bug.");
+			}
 
-		formCTX.writer.write(strang);
+			formCTX.writer.write(strang);
+		}
 	}
 }

@@ -1,8 +1,5 @@
 package bjc.utils.ioutils.format.directives;
 
-import java.util.*;
-
-import bjc.utils.esodata.*;
 import bjc.utils.ioutils.format.*;
 
 /**
@@ -26,6 +23,18 @@ public class CompileContext {
 	 */
 	public Decree decr;
 
+	/**
+	 * Create a new compilation context.
+	 * 
+	 * @param dirs
+	 * 	The directives to compile from.
+	 * 
+	 * @param fmt
+	 * 	The formatter being used to compile.
+	 * 
+	 * @param dcr
+	 * 	The decree currently being compiled.
+	 */
 	public CompileContext(CLTokenizer dirs, CLFormatter fmt, Decree dcr) {
 		directives = dirs;
 		formatter = fmt;

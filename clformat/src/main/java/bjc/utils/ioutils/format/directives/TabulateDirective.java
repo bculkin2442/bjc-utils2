@@ -6,6 +6,12 @@ import bjc.utils.esodata.*;
 import bjc.utils.ioutils.*;
 import bjc.utils.ioutils.format.*;
 
+/**
+ * Implementation of the T directive, which is used for some formatting based controls.
+ * 
+ * @author bjculkin
+ *
+ */
 public class TabulateDirective implements Directive {
 	@Override
 	public Edict compile(CompileContext compCTX) {

@@ -12,12 +12,31 @@ import bjc.utils.data.*;
  *
  */
 public class IteratorUtils {
+	/**
+	 * A chain iterator. This is essentially flatMap in iterator form.
+	 * @author bjculkin
+	 *
+	 * @param <T1> 
+	 * 	The type of the input values.
+	 * 
+	 * @param <T2> 
+	 * 	The type of the output values.
+	 */
 	public static class ChainIterator<T1, T2> implements Iterator<T2> {
 		private Iterator<T1> mainItr;
 		private Function<T1, Iterator<T2>> trans;
 
 		private Iterator<T2> curItr;
 
+		/**
+		 * Create a new chain iterator.
+		 * 
+		 * @param mainItr
+		 * 	The main iterator for input.
+		 * 
+		 * @param trans
+		 * 	The transformation to use to produce the outputs.
+		 */
 		public ChainIterator(Iterator<T1> mainItr, Function<T1, Iterator<T2>> trans) {
 			this.mainItr = mainItr;
 			this.trans   = trans;
@@ -75,11 +94,23 @@ public class IteratorUtils {
 	 *
 	 * @return An iterator over the provided array.
 	 */
+	@SafeVarargs
 	public static <E> Iterator<E> AI(E... parms) {
 		return new ArrayIterator<>(parms);
 	}
 
+	/**
+	 * Create a chain iterator.
+	 * 
+	 * @param itrA
+	 * 	The iterator for input values.
+	 * 
+	 * @param itrB
+	 * 	The transformation for output values.
+	 * 
+	 * @return A chain iterator from the provided values.
+	 */
 	public static <A, B> Iterator<B> chain(Iterator<A> itrA, Function<A, Iterator<B>> itrB) {
-		return new ChainIterator(itrA, itrB);
+		return new ChainIterator<>(itrA, itrB);
 	}
 }

@@ -52,6 +52,15 @@ public class TestUtils {
 		assertEquals(hasMore, src.hasNext());
 	}
 
+	/**
+	 * Assert that a list has a given set of contents.
+	 * 
+	 * @param src 
+	 * 	The list of actual elements.
+	 * 
+	 * @param exps
+	 * 	The list of expected elements.
+	 */
 	@SafeVarargs
 	public static <T> void assertListEquals(List<T> src, T... exps) {
 		assertEquals(exps.length, src.size());

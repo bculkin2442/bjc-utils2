@@ -3,7 +3,6 @@ package bjc.utils.ioutils.format.directives;
 import java.io.*;
 import java.util.*;
 
-import bjc.utils.esodata.*;
 import bjc.utils.ioutils.format.*;
 import bjc.utils.math.*;
 

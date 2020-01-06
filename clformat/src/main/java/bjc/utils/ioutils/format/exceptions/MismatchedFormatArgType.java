@@ -6,6 +6,8 @@ package bjc.utils.ioutils.format.exceptions;
  * @author Ben Culkin
  */
 public class MismatchedFormatArgType extends RuntimeException {
+	private static final long serialVersionUID = 7013519754361279429L;
+
 	/**
 	 * Create a new format arg mismatch with a given message.
 	 *

@@ -7,6 +7,12 @@ import java.util.regex.Pattern;
 
 import bjc.utils.ioutils.SimpleProperties;
 
+/**
+ * Utility class for reading in the pattern for parsing format directives.
+ * 
+ * @author bjculkin
+ *
+ */
 public class CLPattern {
 	private static String prefixParam;
 	private static String formatMod;
@@ -26,14 +32,14 @@ public class CLPattern {
 			// WELP, we failed. Bail
 			throw new RuntimeException("Couldn't load formats for formatter");
 		}
-		
-		String seqPrefixParam   = props.get("clFormatPrefixParam");
 
-		prefixParam   = String.format(props.get("clFormatPrefix"), seqPrefixParam);
-		formatMod     = props.get("clFormatModifier");
+		String seqPrefixParam = props.get("clFormatPrefixParam");
+
+		prefixParam = String.format(props.get("clFormatPrefix"), seqPrefixParam);
+		formatMod = props.get("clFormatModifier");
 		directiveName = props.get("clFormatName");
 
-		prefixList      = String.format(props.get("delimSeparatedList"), prefixParam, ",");
+		prefixList = String.format(props.get("delimSeparatedList"), prefixParam, ",");
 		formatDirective = String.format(props.get("clFormatDirective"), prefixList, formatMod, directiveName);
 
 		pFormatDirective = Pattern.compile(formatDirective);
@@ -43,7 +49,7 @@ public class CLPattern {
 	 * Get a matcher for FORMAT directives.
 	 *
 	 * @param inp
-	 * 	The string to parse directives from.
+	 *                The string to parse directives from.
 	 */
 	public static Matcher getDirectiveMatcher(String inp) {
 		return pFormatDirective.matcher(inp);

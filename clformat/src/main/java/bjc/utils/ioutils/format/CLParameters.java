@@ -168,10 +168,7 @@ public class CLParameters {
 	 * other special parameter features.
 	 *
 	 * @param unsplit
-	 * 	The string to parse parameters from
-	 *
-	 * @param dirParams
-	 * 	The parameters of the format string.
+	 * 	The string to parse parameters from.
 	 *
 	 * @return A set of CL parameters.
 	 */
