@@ -6,7 +6,7 @@ package bjc.utils.ioutils.format;
  * @author EVE
  *
  */
-public class EscapeException extends RuntimeException {
+public class DirectiveEscape extends RuntimeException {
 	private static final long serialVersionUID = -4552821131068559005L;
 
 	/**
@@ -15,19 +15,19 @@ public class EscapeException extends RuntimeException {
 	public final boolean endIteration;
 
 	/**
-	 * Create a new escape exception.
+	 * Create a new directive escape.
 	 */
-	public EscapeException() {
+	public DirectiveEscape() {
 		endIteration = false;
 	}
 
 	/**
-	 * Create a new escape exception.
+	 * Create a new directive escape.
 	 * 
 	 * @param end
 	 *        Whether or not to end the iteration.
 	 */
-	public EscapeException(boolean end) {
+	public DirectiveEscape(boolean end) {
 		endIteration = end;
 	}
 }

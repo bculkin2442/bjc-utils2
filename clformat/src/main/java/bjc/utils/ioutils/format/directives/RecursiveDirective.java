@@ -45,7 +45,7 @@ class RecursiveEdict implements Edict {
 				String bod = (String)body;
 
 				fmt.doFormatString(bod, formCTX.writer, formCTX.items, true);
-			} catch (EscapeException eex) {
+			} catch (DirectiveEscape eex) {
 				if (eex.endIteration) {
 					throw new UnexpectedColonEscape();
 				}
@@ -75,7 +75,7 @@ class RecursiveEdict implements Edict {
 
 				// :DynamicString
 				fmt.doFormatString(bod, formCTX.writer, newParams, true);
-			} catch (EscapeException eex) {
+			} catch (DirectiveEscape eex) {
 				throw new UnexpectedColonEscape();
 			}
 		}

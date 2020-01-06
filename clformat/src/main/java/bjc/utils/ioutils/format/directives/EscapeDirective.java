@@ -132,7 +132,7 @@ class EscapeEdict implements Edict {
 		}
 
 		if (shouldExit) {
-			throw new EscapeException(terminateIteration);
+			throw new DirectiveEscape(terminateIteration);
 		}
 	}
 }

@@ -141,7 +141,7 @@ class IterationEdict implements Edict {
 						} else {
 							body.format(formCTX.writer, nParams);
 						}
-					} catch (EscapeException eex) {
+					} catch (DirectiveEscape eex) {
 						if (eex.endIteration) {
 							if (formCTX.items.atEnd()) {
 								throw eex;
@@ -152,7 +152,7 @@ class IterationEdict implements Edict {
 					formCTX.items.right();
 					iter = formCTX.items.item();
 				} while (formCTX.items.position() < formCTX.items.size());
-			} catch (EscapeException eex) {
+			} catch (DirectiveEscape eex) {
 				// Do nothing
 			}
 			break;
@@ -170,7 +170,7 @@ class IterationEdict implements Edict {
 						body.format(formCTX);
 					}
 				}
-			} catch (EscapeException eex) {
+			} catch (DirectiveEscape eex) {
 				if (eex.endIteration)
 					throw new UnsupportedOperationException("Colon mod not allowed on escape marker without colon mod on iteration");
 			}
@@ -205,11 +205,11 @@ class IterationEdict implements Edict {
 						} else {
 							body.format(formCTX.writer, nParams);
 						}
-					} catch (EscapeException eex) {
+					} catch (DirectiveEscape eex) {
 						if(eex.endIteration && !itr.hasNext()) throw eex;
 					}
 				}
-			} catch (EscapeException eex) {
+			} catch (DirectiveEscape eex) {
 				// Do nothing
 			}
 			break;
@@ -234,7 +234,7 @@ class IterationEdict implements Edict {
 						body.format(formCTX.writer, nParams);
 					}
 				}
-			} catch (EscapeException eex) {
+			} catch (DirectiveEscape eex) {
 				if (eex.endIteration)
 					throw new UnsupportedOperationException("Colon mod not allowed on escape marker without colon mod on iteration");
 			}

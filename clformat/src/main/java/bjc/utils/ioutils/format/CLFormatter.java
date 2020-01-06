@@ -357,7 +357,7 @@ public class CLFormatter {
 					throw new IllegalArgumentException(msg);
 				}
 			}
-		} catch (EscapeException eex) {
+		} catch (DirectiveEscape eex) {
 			if (!isToplevel) throw eex;
 		}
 	}

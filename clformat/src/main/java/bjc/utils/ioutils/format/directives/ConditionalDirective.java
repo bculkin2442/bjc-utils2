@@ -237,7 +237,7 @@ class ConditionalEdict implements Edict {
 				throw new IllegalArgumentException("INTERNAL ERROR: ConditionalEdict mode " + condMode
 						+ " is not supported. This is a bug.");
 			}
-		} catch (EscapeException eex) {
+		} catch (DirectiveEscape eex) {
 			// Conditionals are transparent to iteration-escapes
 			throw eex;
 		}
