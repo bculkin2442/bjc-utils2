@@ -97,7 +97,7 @@ public class CLString {
 			for (Edict edt : edicts) {
 				edt.format(formCTX);
 			}
-		} catch (EscapeException eex) {
+		} catch (DirectiveEscape eex) {
 			// General escape exception, so stop formatting.
 		}
 
@@ -113,5 +113,10 @@ public class CLString {
 		if (edicts.size() == 0) return true;
 
 		return false;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("CLString [edicts=%s]", edicts);
 	}
 }

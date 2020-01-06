@@ -67,4 +67,9 @@ public class ClauseDecree {
 	public void addChild(Decree child) {
 		body.add(child);
 	}
+
+	@Override
+	public String toString() {
+		return String.format("ClauseDecree [body=%s, terminator=%s]", body, terminator);
+	}
 }

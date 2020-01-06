@@ -45,7 +45,7 @@ public class Decree {
 	 * Create a new literal text directive.
 	 *
 	 * @param txt
-	 * 	The text of the directive.
+	 *                The text of the directive.
 	 */
 	public Decree(String txt) {
 		this.name = txt;
@@ -57,14 +57,15 @@ public class Decree {
 	 * Create a new directive.
 	 *
 	 * @param name
-	 * 	The name of the directive. Whether or not it is an actual directive will
-	 * 	be auto-determined (if it starts with a ~, it's a directive.)
+	 *                The name of the directive. Whether or not it is an
+	 *                actual directive will be auto-determined (if it starts
+	 *                with a ~, it's a directive.)
 	 *
 	 * @param params
-	 * 	The prefix parameters to the directive.
+	 *                The prefix parameters to the directive.
 	 *
 	 * @param mods
-	 * 	The modifiers to the directive.
+	 *                The modifiers to the directive.
 	 */
 	public Decree(String name, CLParameters params, CLModifiers mods) {
 		this.name = name;
@@ -80,17 +81,19 @@ public class Decree {
 	 * Create a new directive that may be a user function.
 	 *
 	 * @param name
-	 * 	The name of the directive. Whether or not it is an actual directive will
-	 * 	be auto-determined (if it starts with a ~ and is not a user function, it's a directive.)
+	 *                The name of the directive. Whether or not it is an
+	 *                actual directive will be auto-determined (if it starts
+	 *                with a ~ and is not a user function, it's a
+	 *                directive.)
 	 *
 	 * @param isUser
-	 * 	Is this directive a user function?
+	 *                Is this directive a user function?
 	 *
 	 * @param params
-	 * 	The prefix parameters to the directive.
+	 *                The prefix parameters to the directive.
 	 *
 	 * @param mods
-	 * 	The modifiers to the directive.
+	 *                The modifiers to the directive.
 	 */
 	public Decree(String name, boolean isUser, CLParameters params, CLModifiers mods) {
 		this.name = name;
@@ -108,7 +111,7 @@ public class Decree {
 	 * Check if this decree is a non-literal, with a particular name.
 	 *
 	 * @param nam
-	 * 	The name to see if we have.
+	 *                The name to see if we have.
 	 *
 	 * @return Whether or not the provided name equals our name.
 	 */
@@ -117,5 +120,11 @@ public class Decree {
 		if (isLiteral) return false;
 
 		return name.equals(nam);
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Decree [name=%s, isLiteral=%s, isUserCall=%s, parameters=%s, modifiers=%s]", name,
+				isLiteral, isUserCall, parameters, modifiers);
 	}
 }

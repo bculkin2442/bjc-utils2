@@ -104,4 +104,9 @@ public class GroupDecree {
 	public List<Decree> unwrap() {
 		return body.get(0).body;
 	}
+
+	@Override
+	public String toString() {
+		return String.format("GroupDecree [opening=%s, closing=%s, body=%s]", opening, closing, body);
+	}
 }
