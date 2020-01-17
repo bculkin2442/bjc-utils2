@@ -12,7 +12,7 @@ import java.util.*;
  *
  * @author Ben Culkin
  */
-public class GroupDecree {
+public class GroupDecree implements Iterable<ClauseDecree> {
 	/**
 	 * The decree that opened this group.
 	 */
@@ -133,5 +133,19 @@ public class GroupDecree {
 			return "<IOEXCEPTION>";
 		}
 		// return String.format("GroupDecree [opening=%s, closing=%s, body=%s]", opening, closing, body);
+	}
+	
+	@Override
+	public Iterator<ClauseDecree> iterator() {
+		return body.iterator();
+	}
+
+	/**
+	 * Get the number of clauses in this group.
+	 *
+	 * @return The number of clauses in the group.
+	 */
+	public int size() {
+		return body.size();
 	}
 }
