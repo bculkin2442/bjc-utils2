@@ -1,5 +1,8 @@
 package bjc.utils.ioutils.format;
 
+import bjc.utils.ioutils.*;
+
+import java.io.*;
 import java.util.*;
 
 /**
@@ -70,6 +73,24 @@ public class ClauseDecree {
 
 	@Override
 	public String toString() {
-		return String.format("ClauseDecree [body=%s, terminator=%s]", body, terminator);
+		try (ReportWriter rw = new ReportWriter()) {
+			String term = "<null>";
+			if (terminator != null) term = terminator.toString();
+
+			rw.write("ClauseDecree (terminator " + term.toString() + ")");
+			rw.indent();
+			rw.write("\n");
+
+			for (Decree kid : body) {
+				rw.write("Child: " + kid.toString() + "\n");
+			}
+
+			rw.dedent();
+
+			return rw.toString();
+		} catch (IOException ioex) {
+			return "<IOEXCEPTION>";
+		}
+		// return String.format("ClauseDecree [body=%s, terminator=%s]", body, terminator);
 	}
 }

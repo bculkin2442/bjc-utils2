@@ -26,7 +26,7 @@ public class CLPattern {
 	static {
 		SimpleProperties props = new SimpleProperties();
 
-		try (InputStream is = CLFormatter.class.getResourceAsStream("/formats.sprop")) {
+		try (InputStream is = CLFormatter.class.getResourceAsStream("/clformat.sprop")) {
 			props.loadFrom(is, false);
 		} catch (IOException ioex) {
 			// WELP, we failed. Bail

@@ -2,7 +2,8 @@ package bjc.utils.ioutils.format;
 
 import java.util.*;
 
-import bjc.utils.esodata.*;
+import bjc.esodata.AbbrevMap2;
+import bjc.utils.esodata.Tape;
 import bjc.utils.parserutils.*;
 
 /**
@@ -19,10 +20,17 @@ public class CLParameters {
 	private CLValue[] params;
 
 	private Set<String> abbrevWords;
-	private AbbrevMap   nameAbbrevs;
+	private AbbrevMap2   nameAbbrevs;
 
 	private Map<String, CLValue>  namedParams;
 	private Map<String, Integer> nameIndices;
+
+	/**
+	 * Create a new set of blank CL format parameters.
+	 */
+	public CLParameters() {
+		this(new CLValue[0], new HashMap<>());
+	}
 
 	/**
 	 * Create a new set of CL format parameters with unnamed values.
@@ -60,7 +68,7 @@ public class CLParameters {
 		this.nameIndices = new HashMap<>();
 
 		abbrevWords = new HashSet<>();
-		nameAbbrevs = new AbbrevMap();
+		nameAbbrevs = new AbbrevMap2();
 
 		refreshAbbrevs();
 	}
@@ -77,14 +85,14 @@ public class CLParameters {
 			if (abbrevWords.contains(key)) continue;
 
 			abbrevWords.add(key);
-			nameAbbrevs.addWords(key);
+			nameAbbrevs.add(key);
 		}
 
 		for (String key : nameIndices.keySet()) {
 			if (abbrevWords.contains(key)) continue;
 
 			abbrevWords.add(key);
-			nameAbbrevs.addWords(key);
+			nameAbbrevs.add(key);
 		}
 	}
 
@@ -93,7 +101,7 @@ public class CLParameters {
 		if (abbrevWords.contains(key)) return;
 
 		abbrevWords.add(key);
-		nameAbbrevs.addWords(key);
+		nameAbbrevs.add(key);
 	}
 
 	/**
@@ -236,7 +244,8 @@ public class CLParameters {
 					}
 				}
 
-				String paramName = param.substring(0, nameIdx);
+				// Trim off the 'hash' indicator
+				String paramName = param.substring(1, nameIdx);
 				String paramVal  = param.substring(nameIdx + 1);
 
 				CLValue actVal = parseParam(paramVal);
@@ -289,30 +298,31 @@ public class CLParameters {
 	public CLValue resolveKey(String key) {
 		String ucKey = key.toUpperCase();
 
-		if (!abbrevWords.contains(ucKey)) refreshAbbrev(ucKey);
-
-		String[] keys = nameAbbrevs.deabbrev(ucKey);
+		Set<String> keys = nameAbbrevs.deabbrevAll(ucKey);
 
 		// We didn't find a parameter that could have been that. Create an appropriate and useful
 		// error message.
-		if (keys.length > 1) {
+		if (keys.size() > 1) {
 			StringBuilder sb = new StringBuilder();
 
 			sb.append("Ambiguous parameter name \"");
 			sb.append(ucKey);
 			sb.append("\". Could've meant: ");
-			for (int i = 0; i < keys.length; i++) {
+			boolean isFirst = true;
+			for (String possKey : keys) {
+				if (!isFirst) sb.append(", ");
+				if (isFirst) isFirst = false;
+
 				sb.append("\"");
-				sb.append(keys[i]);
+				sb.append(possKey);
 				sb.append("\"");
-				if (i < keys.length - 1) sb.append(", ");
 			}
 			sb.append(".");
 
 			throw new IllegalArgumentException(sb.toString());
 		}
 
-		String actKey = keys[0];
+		String actKey = keys.iterator().next();
 
 		if (namedParams.containsKey(actKey)) {
 			return namedParams.get(actKey);

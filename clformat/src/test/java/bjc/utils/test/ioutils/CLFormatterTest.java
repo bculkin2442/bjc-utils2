@@ -99,12 +99,26 @@ public class CLFormatterTest {
 	}
 
 	@Test
+	public void testNestLists() {
+		String fmtStr = "~#[ none~;~A~;~A ~#[ hallo thar ~] ~]";
+
+		//CLTokenizer.DEBUG = true;
+		fmt.DEBUG = true;
+		assertEquals("none", format(fmtStr));
+		fmt.DEBUG = false;
+		//CLTokenizer.DEBUG = false;
+	}
+
+	//@Test
 	public void testListPrinting() {
 		// Test printing a list
 		// String fmtStr = "Items:~#[ none~; ~A~; ~A and ~A~:;~@{~#[~; and~] ~A~^,~}~].";
 		String fmtStr = "Items:~#[ none~; ~A~; ~A and ~A~:;~@{~#*[ ~A,~; and ~A~; ~A~]~}~].";
 
+		fmt.DEBUG = true;
 		assertEquals("Items: none.",                   format(fmtStr));
+		fmt.DEBUG = false;
+
 		assertEquals("Items: foo.",                    format(fmtStr, "foo"));
 		assertEquals("Items: foo and bar.",            format(fmtStr, "foo", "bar"));
 		assertEquals("Items: foo, bar and baz.",       format(fmtStr, "foo", "bar", "baz"));

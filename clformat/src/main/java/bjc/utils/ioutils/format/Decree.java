@@ -124,7 +124,7 @@ public class Decree {
 
 	@Override
 	public String toString() {
-		return String.format("Decree [name=%s, isLiteral=%s, isUserCall=%s, parameters=%s, modifiers=%s]", name,
+		return String.format("Decree [name='%s', isLiteral=%s, isUserCall=%s, parameters=%s, modifiers='%s']", name,
 				isLiteral, isUserCall, parameters, modifiers);
 	}
 }

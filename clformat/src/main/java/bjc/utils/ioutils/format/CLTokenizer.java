@@ -10,6 +10,8 @@ import java.util.regex.*;
  *
  */
 public class CLTokenizer implements Iterator<Decree> {
+	public static boolean DEBUG = false;
+
 	/*
 	 * Internal class for a tokenizer that returns a specific set of tokens.
 	 */
@@ -26,12 +28,16 @@ public class CLTokenizer implements Iterator<Decree> {
 
 		@Override
 		public boolean hasNext() {
-			return body.hasNext();
+			boolean nxt = body.hasNext();
+
+			return nxt;
 		}
 
 		@Override
 		public Decree next() {
-			return body.next();
+			Decree nxt = body.next();
+			
+			return nxt;
 		}
 	}
 
@@ -83,7 +89,9 @@ public class CLTokenizer implements Iterator<Decree> {
 
 	@Override
 	public boolean hasNext() {
-		return !mat.hitEnd();
+		boolean nxt = !mat.hitEnd();
+
+		return nxt;
 	}
 
 	@Override
@@ -180,6 +188,7 @@ public class CLTokenizer implements Iterator<Decree> {
 	 */
 	public GroupDecree nextGroup(Decree openedWith, String desiredClosing, String clauseSep) {
 		GroupDecree newGroup = new GroupDecree();
+		newGroup.opening = openedWith;
 		
 		if (!hasNext()) throw new NoSuchElementException("No decrees available");
 		
@@ -192,7 +201,6 @@ public class CLTokenizer implements Iterator<Decree> {
 		do {
 			curDecree = next();
 
-			// @TODO handle nesting & such
 			if (curDecree.isLiteral) {
 				curClause.addChild(curDecree);
 			} else if (nestingLevel == 1) {
@@ -201,8 +209,13 @@ public class CLTokenizer implements Iterator<Decree> {
 					newGroup.addChild(curClause);
 					newGroup.closing = curDecree;
 
+					if (DEBUG) {
+						System.err.printf("[TRACE] Closing with %s\n", curDecree);
+					}
+
 					break;
 				} else if (clauseSep != null && curDecree.isNamed(clauseSep)) {
+					if (DEBUG) System.err.printf("[TRACE] Clause separator %s\n", curDecree);
 					curClause.terminator = curDecree;
 					newGroup.addChild(curClause);
 

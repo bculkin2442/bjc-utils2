@@ -1,5 +1,8 @@
 package bjc.utils.ioutils.format;
 
+import bjc.utils.ioutils.*;
+
+import java.io.*;
 import java.util.*;
 
 /**
@@ -107,7 +110,29 @@ public class GroupDecree implements Iterable<ClauseDecree> {
 
 	@Override
 	public String toString() {
-		return String.format("GroupDecree [opening=%s, closing=%s, body=%s]", opening, closing, body);
+		try (ReportWriter rw = new ReportWriter()) {
+			String open = "<null>";
+			String close = "<null>";
+
+			if (opening != null) open = opening.toString();
+			if (closing != null) close = closing.toString();
+
+			rw.write("GroupDecree (opening " + open + ") (closing " + close + ")");
+			rw.indent();
+			rw.write("\n");
+
+			int idx = 0;
+			for (ClauseDecree clause : body) {
+				rw.write("Clause " + idx++ + ": " + clause.toString() + "\n");
+			}
+
+			rw.dedent();
+
+			return rw.toString();
+		} catch (IOException ioex) {
+			return "<IOEXCEPTION>";
+		}
+		// return String.format("GroupDecree [opening=%s, closing=%s, body=%s]", opening, closing, body);
 	}
 	
 	@Override

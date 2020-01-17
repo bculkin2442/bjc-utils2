@@ -10,8 +10,9 @@ import bjc.utils.ioutils.format.*;
 /**
  * Implements the [ directive.
  * 
- * This does varying sorts of conditional dispatches on which string to use for formatting, allowing
- * it to be based off of general conditions in varying ways.
+ * This does varying sorts of conditional dispatches on which string to use for
+ * formatting, allowing it to be based off of general conditions in varying
+ * ways.
  *
  * @author Ben Culkin
  */

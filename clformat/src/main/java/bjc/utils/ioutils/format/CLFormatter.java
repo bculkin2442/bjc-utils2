@@ -22,6 +22,11 @@ import static bjc.utils.funcutils.IteratorUtils.I;
  * @author Ben Culkin
  */
 public class CLFormatter {
+	/**
+	 * Set this to true to enable additional debug output.
+	 */
+	public boolean DEBUG;
+
 	// Built-in formatting directives
 	private static Map<String, Directive> builtinDirectives;
 

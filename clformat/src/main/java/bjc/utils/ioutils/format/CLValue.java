@@ -144,6 +144,11 @@ class NullValue implements CLValue {
 	public String getValue(Tape<Object> params) {
 		return null;
 	}
+
+	@Override
+	public String toString() {
+		return String.format("NullValue []");
+	}
 }
 
 class PercValue implements CLValue {
@@ -151,12 +156,22 @@ class PercValue implements CLValue {
 	public String getValue(Tape<Object> params) {
 		return Integer.toString(params.position());
 	}
+
+	@Override
+	public String toString() {
+		return String.format("PercValue []");
+	}
 }
 
 class HashValue implements CLValue {
 	@Override
 	public String getValue(Tape<Object> params) {
 		return (Integer.toString(params.size() - params.position()));
+	}
+
+	@Override
+	public String toString() {
+		return String.format("HashValue []");
 	}
 }
 
@@ -190,6 +205,11 @@ class VValue implements CLValue {
 			throw new IllegalArgumentException(msg);
 		}
 	}
+
+	@Override
+	public String toString() {
+		return String.format("VValue []");
+	}
 }
 
 class LiteralValue implements CLValue {
@@ -211,7 +231,13 @@ class LiteralValue implements CLValue {
 	 * @param params
 	 *	The parameters passed to the directive.
 	 */
+	@Override
 	public String getValue(Tape<Object> params) {
 		return val;	
+	}
+
+	@Override
+	public String toString() {
+		return String.format("LiteralValue [val=%s]", val);
 	}
 }
