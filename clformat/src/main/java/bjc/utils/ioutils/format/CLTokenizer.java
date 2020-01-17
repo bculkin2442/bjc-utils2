@@ -231,6 +231,8 @@ public class CLTokenizer implements Iterator<Decree> {
 			} else if (curDecree.isNamed(desiredClosing)) {
 				// Unnest
 				nestingLevel -= 1;
+
+				curClause.addChild(curDecree);
 			} else {
 				curClause.addChild(curDecree);
 			}
