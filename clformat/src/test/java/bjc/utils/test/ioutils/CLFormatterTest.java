@@ -98,17 +98,6 @@ public class CLFormatterTest {
 		assertEquals("XIV xiv", format("~@R ~(~@R~)", 14, 14));
 	}
 
-	@Test
-	public void testNestLists() {
-		String fmtStr = "~#[ none~;~A~;~A ~#[ hallo thar ~] ~]";
-
-		//CLTokenizer.DEBUG = true;
-		fmt.DEBUG = true;
-		assertEquals("none", format(fmtStr));
-		fmt.DEBUG = false;
-		//CLTokenizer.DEBUG = false;
-	}
-
 	//@Test
 	public void testListPrinting() {
 		// Test printing a list
