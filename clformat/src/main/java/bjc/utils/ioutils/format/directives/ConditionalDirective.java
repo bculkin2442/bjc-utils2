@@ -2,8 +2,6 @@ package bjc.utils.ioutils.format.directives;
 
 import java.io.*;
 import java.util.*;
-import java.util.regex.*;
-
 import bjc.utils.esodata.*;
 import bjc.utils.ioutils.format.*;
 
@@ -22,20 +20,85 @@ public class ConditionalDirective implements Directive {
 		CLModifiers mods = compCTX.decr.modifiers;
 		CLParameters params = compCTX.decr.parameters;
 
-		GroupDecree clauses = compCTX.directives.nextGroup(compCTX.decr, "]", ";");
+		List<Decree> condBody = new ArrayList<>();
+		List<List<Decree>> clauses = new ArrayList<>();
 
-		ClauseDecree defClause  = null;
+		List<Decree> defClause = null;
 		boolean isDefault = false;
 
-		for (ClauseDecree clause : clauses) {
-			if (isDefault) defClause = clause;
+		int nestLevel = 1;
 
-			if (clause.terminator != null && clause.terminator.modifiers.colonMod) {
-				isDefault = true;
+		Iterator<Decree> dirIter = compCTX.directives;
+		while (dirIter.hasNext()) {
+			Decree decr = dirIter.next();
+			if (decr.isLiteral) {
+				condBody.add(decr);
+				continue;
+			}
+
+			String dirName = decr.name;
+			if (dirName != null) {
+				if (dirName.equals("[")) {
+					if (nestLevel > 0) {
+						condBody.add(decr);
+					}
+					nestLevel += 1;
+				} else if (Directive.isOpening(dirName)) {
+					nestLevel += 1;
+
+					condBody.add(decr);
+				} else if (dirName.equals("]")) {
+					nestLevel = Math.max(0, nestLevel - 1);
+
+					if (nestLevel == 0) {
+						/* End the conditional. */
+						List<Decree> clause = condBody;
+
+						if (isDefault) {
+							defClause = clause;
+						}
+						clauses.add(clause);
+
+						break;
+					} else {
+						/* Not a special directive. */
+						condBody.add(decr);
+					}
+				} else if (Directive.isClosing(dirName)) {
+					nestLevel = Math.max(0, nestLevel - 1);
+
+					condBody.add(decr);
+				} else if (dirName.equals(";")) {
+					if (nestLevel == 1) {
+						/* End the clause. */
+						List<Decree> clause = condBody;
+
+						condBody = new ArrayList<>();
+
+						if (isDefault) {
+							defClause = clause;
+						}
+						clauses.add(clause);
+
+						/*
+						 * Mark the next clause as the
+						 * default.
+						 */
+						if (decr.modifiers.colonMod) {
+							isDefault = true;
+						}
+					} else {
+						/* Not a special directive. */
+						condBody.add(decr);
+					}
+				} else {
+					/* Not a special directive. */
+					condBody.add(decr);
+				}
 			}
 		}
 
-		if (mods.starMod && clauses.size() > 0) defClause = clauses.clause();
+		if (mods.starMod && clauses.size() > 0) defClause = clauses.get(0);
 
 		CLValue index = null;
 
@@ -55,16 +118,13 @@ public class ConditionalDirective implements Directive {
 			mode = ConditionalEdict.Mode.INDEX_CLAUSE;
 		}
 
-		return new ConditionalEdict(mode, mods.dollarMod, index, clauses,
-				defClause, compCTX.formatter);
+		return new ConditionalEdict(mode, mods.dollarMod, index, clauses, defClause, compCTX.formatter);
 	}
 }
 
 class ConditionalEdict implements Edict {
 	public static enum Mode {
-		FIRST_SECOND,
-		OUTPUT_TRUE,
-		INDEX_CLAUSE
+		FIRST_SECOND, OUTPUT_TRUE, INDEX_CLAUSE
 	}
 
 	private Mode condMode;
@@ -75,23 +135,18 @@ class ConditionalEdict implements Edict {
 	private List<CLString> clauses;
 	private CLString defClause;
 
-	private CLFormatter formatter;
-
-	public ConditionalEdict(Mode condMode, boolean decrementIndex,
-			CLValue index, GroupDecree clauses, ClauseDecree defClause,
-			CLFormatter fmt) {
+	public ConditionalEdict(Mode condMode, boolean decrementIndex, CLValue index, List<List<Decree>> clauses,
+			List<Decree> defClause, CLFormatter fmt) {
 		this.condMode = condMode;
 
 		this.decrementIndex = decrementIndex;
 		this.index = index;
 
 		this.clauses = new ArrayList<>();
-		for (ClauseDecree clause : clauses) {
+		for (List<Decree> clause : clauses) {
 			this.clauses.add(new CLString(fmt.compile(clause)));
 		}
 		this.defClause = new CLString(fmt.compile(defClause));
-
-		this.formatter = fmt;
 	}
 
 	@Override
@@ -100,91 +155,91 @@ class ConditionalEdict implements Edict {
 
 		try {
 			switch (condMode) {
-			case FIRST_SECOND:
-				{
-					Object o = items.item();
-					items.right();
+			case FIRST_SECOND: {
+				Object o = items.item();
+				items.right();
 
-					boolean res = false;
-					if (o == null) {
-						//throw new IllegalArgumentException("No parameter provided for [ directive.");
-					} else if (!(o instanceof Boolean)) {
-						throw new IllegalFormatConversionException('[', o.getClass());
-					} else {
-						res = (Boolean) o;
-					}
-
-					CLString frmt;
-					if (res) {
-						frmt = clauses.get(1);
-					} else {
-						frmt = clauses.get(0);
-					}
-
-					frmt.format(formCTX);
+				boolean res = false;
+				if (o == null) {
+					//throw new IllegalArgumentException("No parameter provided for [ directive.");
+				} else if (!(o instanceof Boolean)) {
+					throw new IllegalFormatConversionException('[', o.getClass());
+				} else {
+					res = (Boolean) o;
 				}
-				break;
-			case OUTPUT_TRUE:
-				{
-					boolean res = false;
-					Object o = items.item();
 
-					if (o == null) {
-						// throw new IllegalArgumentException("No parameter provided for [ directive.");
-					} else if (o instanceof Integer) {
-						if ((Integer)o != 0) {
-							res = true;
-						}
-					} else if (o instanceof Boolean) {
-						res = (Boolean) o;
-					} else {
-						throw new IllegalFormatConversionException('[', o.getClass());
-					}
-
-					if (res) {
-						clauses.get(0).format(formCTX);
-					} else {
-						items.right();
-					}
+				CLString frmt;
+				if (res) {
+					frmt = clauses.get(1);
+				} else {
+					frmt = clauses.get(0);
 				}
-				break;
-			case INDEX_CLAUSE:
-				{
-					int res;
 
-					if (index != null) {
-						res = index.asInt(items, "conditional choice", "[", 0);
-					} else {
-						Object o = items.item();
-
-						if (o == null) {
-							throw new IllegalArgumentException("No parameter provided for [ directive.");
-						} else if (!(o instanceof Number)) {
-							throw new IllegalFormatConversionException('[', o.getClass());
-						}
-
-						res = ((Number) o).intValue();
-
-						items.right();
-					}
-
-					if (decrementIndex) res -= 1;
-
-					if (clauses.size() == 0 || res < 0 || res >= clauses.size()) {
-						if (defClause != null) {
-							defClause.format(formCTX.writer, items);
-						}
-					} else {
-						CLString frmt = clauses.get(res);
-
-						frmt.format(formCTX.writer, items);
-					}
-				}
-				break;
+				frmt.format(formCTX);
 			}
-		} catch (DirectiveEscape dex) {
+				break;
+			case OUTPUT_TRUE: {
+				boolean res = false;
+				Object o = items.item();
+
+				if (o == null) {
+					// throw new IllegalArgumentException("No parameter provided for [ directive.");
+				} else if (o instanceof Integer) {
+					if ((Integer) o != 0) {
+						res = true;
+					}
+				} else if (o instanceof Boolean) {
+					res = (Boolean) o;
+				} else {
+					throw new IllegalFormatConversionException('[', o.getClass());
+				}
+
+				if (res) {
+					clauses.get(0).format(formCTX);
+				} else {
+					items.right();
+				}
+			}
+				break;
+			case INDEX_CLAUSE: {
+				int res;
+
+				if (index != null) {
+					res = index.asInt(items, "conditional choice", "[", 0);
+				} else {
+					Object o = items.item();
+
+					if (o == null) {
+						throw new IllegalArgumentException(
+								"No parameter provided for [ directive.");
+					} else if (!(o instanceof Number)) { throw new IllegalFormatConversionException(
+							'[', o.getClass()); }
+
+					res = ((Number) o).intValue();
+
+					items.right();
+				}
+
+				if (decrementIndex) res -= 1;
+
+				if (clauses.size() == 0 || res < 0 || res >= clauses.size()) {
+					if (defClause != null) {
+						defClause.format(formCTX.writer, items);
+					}
+				} else {
+					CLString frmt = clauses.get(res);
+
+					frmt.format(formCTX.writer, items);
+				}
+			}
+				break;
+			default:
+				throw new IllegalArgumentException("INTERNAL ERROR: ConditionalEdict mode " + condMode
+						+ " is not supported. This is a bug.");
+			}
+		} catch (DirectiveEscape eex) {
 			// Conditionals are transparent to iteration-escapes
-			throw dex;
+			throw eex;
 		}
 	}
 }

@@ -237,7 +237,7 @@ public class CLTokenizer implements Iterator<Decree> {
 		} while (hasNext());
 
 		if (newGroup.closing == null) {
-			String msg = String.format("Did not find closing directive for group (wanted \"%s\", last decree was \"%s\")",
+			String msg = String.format("Did not find closing directive for group (wanted %s, last decree was %s)",
 					desiredClosing, curDecree.name);
 
 			throw new NoSuchElementException(msg);

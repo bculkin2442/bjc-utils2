@@ -369,11 +369,11 @@ public class CLFormatter {
 
 	/**
 	 * Compile a CLString from a string.
-	 *
+	 * 
 	 * @param inp
-	 * 	The string to compile.
-	 *
-	 * @return A CLString compiled from the input.
+	 *                The string to compile.
+	 * 
+	 * @return The compiled string.
 	 */
 	public CLString compile(String inp) {
 		CLTokenizer tokenzer = new CLTokenizer(inp);
@@ -384,15 +384,15 @@ public class CLFormatter {
 	}
 
 	/**
-	 * Compile a set of edicts from a list of decrees.
-	 *
+	 * Compile a set of decrees into a set of edicts.
+	 * 
 	 * @param decrees
-	 * 	The decrees to compile.
-	 *
-	 * @return A set of edicts compiled from the decrees.
+	 *                The decrees to compile.
+	 * 
+	 * @return The edicts compiled from the decrees.
 	 */
 	public List<Edict> compile(Iterable<Decree> decrees) {
-		// If we have no decrees, there are no edicts.
+		// Not 100% sure this is correct, but the tests are passing
 		if (decrees == null) return new ArrayList<>();
 
 		CLTokenizer it = CLTokenizer.fromTokens(decrees);
@@ -400,26 +400,12 @@ public class CLFormatter {
 	}
 
 	/**
-	 * Compile a set of edicts from a clause.
-	 *
-	 * @param clause
-	 * 	The clause to compile.
-	 *
-	 * @return The set of edicts compiled from the clause.
-	 */
-	public List<Edict> compile(ClauseDecree clause) {
-		if (clause == null) return new ArrayList<>();
-
-		return compile(clause.body);
-	}
-
-	/**
-	 * Compile a set of edicts from a set of tokens.
-	 *
+	 * Compile a set of edicts from a tokenizer.
+	 * 
 	 * @param cltok
-	 * 	The tokenizer providing us with our tokens.
-	 *
-	 * @return The edicts compiled from those tokens.
+	 *                The tokenizer to get decrees from.
+	 * 
+	 * @return The set of edicts compiled from the tokenizer.
 	 */
 	public List<Edict> compile(CLTokenizer cltok) {
 		List<Edict> result = new ArrayList<>();
