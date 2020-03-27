@@ -1,4 +1,4 @@
-package bjc.utils.data;
+package bjc.utils.test.data;
 
 import static bjc.utils.funcutils.TestUtils.assertIteratorEquals;
 
@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
+
+import bjc.utils.data.CircularIterator;
 
 /**
  * Test for circular iterators.,

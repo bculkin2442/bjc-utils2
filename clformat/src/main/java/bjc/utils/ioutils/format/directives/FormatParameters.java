@@ -1,7 +1,7 @@
 package bjc.utils.ioutils.format.directives;
 
 import bjc.utils.esodata.*;
-import bjc.utils.ioutils.*;
+import bjc.utils.ioutils.ReportWriter;
 import bjc.utils.ioutils.format.*;
 
 /**

@@ -1,8 +1,10 @@
-package bjc.utils.cli.objects;
+package bjc.utils.test.cli.objects;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+
+import bjc.utils.cli.objects.Command;
 
 /**
  * Test that CLI command objects work correctly.

@@ -1,10 +1,12 @@
-package bjc.utils.data;
+package bjc.utils.test.data;
 
 import static bjc.utils.data.QueuedIterator.queued;
 import static bjc.utils.funcutils.TestUtils.assertIteratorEquals;
 import static java.util.Arrays.asList;
 
 import org.junit.Test;
+
+import bjc.utils.data.QueuedIterator;
 
 /**
  * Test of QueuedIterator.

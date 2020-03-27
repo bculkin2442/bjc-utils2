@@ -1,9 +1,11 @@
-package bjc.utils.ioutils;
+package bjc.utils.test.ioutils;
 
 import static bjc.utils.funcutils.TestUtils.assertListEquals;
-import static bjc.utils.ioutils.LevelSplitterTest.RXPair.pair;
+import static bjc.utils.test.ioutils.LevelSplitterTest.RXPair.pair;
 
 import org.junit.Test;
+
+import bjc.utils.ioutils.LevelSplitter;
 
 /**
  * Test of LevelSplitter.

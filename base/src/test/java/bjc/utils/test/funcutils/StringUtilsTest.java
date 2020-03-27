@@ -1,4 +1,4 @@
-package bjc.utils.funcutils;
+package bjc.utils.test.funcutils;
 
 import java.io.StringReader;
 

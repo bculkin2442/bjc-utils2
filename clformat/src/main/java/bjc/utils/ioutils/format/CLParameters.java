@@ -4,7 +4,7 @@ import java.util.*;
 
 import bjc.esodata.AbbrevMap2;
 import bjc.utils.esodata.Tape;
-import bjc.utils.parserutils.*;
+import bjc.utils.parserutils.TokenUtils;
 
 /**
  * Represents a set of parameters to a CL format directive.
@@ -82,17 +82,11 @@ public class CLParameters {
 		//
 		// If it becomes an issue, I'll resolve it
 		for (String key : namedParams.keySet()) {
-			if (abbrevWords.contains(key)) continue;
-
-			abbrevWords.add(key);
-			nameAbbrevs.add(key);
+			refreshAbbrev(key);
 		}
 
 		for (String key : nameIndices.keySet()) {
-			if (abbrevWords.contains(key)) continue;
-
-			abbrevWords.add(key);
-			nameAbbrevs.add(key);
+			refreshAbbrev(key);
 		}
 	}
 

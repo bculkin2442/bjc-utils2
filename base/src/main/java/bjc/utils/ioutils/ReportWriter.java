@@ -1,6 +1,7 @@
 package bjc.utils.ioutils;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.io.Writer;
 
 import bjc.utils.esodata.DefaultList;
@@ -413,6 +414,9 @@ public class ReportWriter extends Writer {
 		return rw;
 	}
 
+	public ReportWriter() {
+		this(new StringWriter());
+	}
 	/**
 	 * Create a new ReportWriter.
 	 * @param write The place to write to.

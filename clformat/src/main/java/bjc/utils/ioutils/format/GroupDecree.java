@@ -1,9 +1,9 @@
 package bjc.utils.ioutils.format;
 
-import bjc.utils.ioutils.*;
-
 import java.io.*;
 import java.util.*;
+
+import bjc.utils.ioutils.ReportWriter;
 
 /**
  * Represents an enclosed group of decrees.

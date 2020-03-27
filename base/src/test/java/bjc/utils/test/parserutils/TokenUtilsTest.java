@@ -1,4 +1,4 @@
-package bjc.utils.parserutils;
+package bjc.utils.test.parserutils;
 
 import static bjc.utils.parserutils.TokenUtils.descapeString;
 import static bjc.utils.parserutils.TokenUtils.removeDQuotedStrings;

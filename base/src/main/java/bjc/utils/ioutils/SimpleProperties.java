@@ -1,10 +1,12 @@
 package bjc.utils.ioutils;
 
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.io.Reader;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -15,6 +17,33 @@ import java.util.Set;
  *
  */
 public class SimpleProperties implements Map<String, String> {
+	/**
+	 * Exception thrown when there is a duplicate key, when they are forbidden.
+	 * 
+	 * @author 15405
+	 *
+	 */
+	public static class DuplicateKeys extends RuntimeException {
+		private static final long serialVersionUID = -5521190136366024804L;
+
+		/**
+		 * Create a new duplicate key exception.
+		 * 
+		 * @param keyName
+		 * 	The name of the key that has been duplicated.
+		 */
+		public DuplicateKeys(String keyName) {
+			super(String.format("Duplicate value encountered for key '%s'", keyName));
+		}
+	}
+	
+	public static class InvalidLineFormat extends RuntimeException {
+		private static final long serialVersionUID = 5332131472090792841L;
+		
+		public InvalidLineFormat(String lne) {
+			super(String.format("Line '%s' is improperly formatted.\n\tExpected format is a string key, followed by a single space, followed by the value", ""));
+		}
+	}
 	private final Map<String, String> props;
 
 	/**
@@ -23,22 +52,40 @@ public class SimpleProperties implements Map<String, String> {
 	public SimpleProperties() {
 		props = new HashMap<>();
 	}
-
+	
 	/**
-	 * Load properties from the provided input stream.
+	 * Load properties from an input stream.
+	 * 
+	 * Delegates to {@link SimpleProperties#loadFrom(Reader, boolean)} to allow
+	 * you to pass a input stream instead of a reader.
+	 * 
+	 * @param is 
+	 * 	The stream to read from.
+	 * @param allowDuplicates
+	 * 	Whether or not duplicate keys should be allowed.
+	 */
+	public void loadFrom(final InputStream is, final boolean allowDuplicates) {
+		loadFrom(new InputStreamReader(is), allowDuplicates);
+	}
+	
+	/**
+	 * Load properties from the provided input reader.
 	 *
 	 * The format is the name, a space, then the body.
 	 *
 	 * All leading/trailing spaces from the name &amp; body are removed.
 	 *
 	 * @param is
-	 *        The stream to read from.
+	 *        The reader to read from.
 	 *
 	 * @param allowDuplicates
-	 *        Whether or not duplicate keys should be allowed.
+	 *        Whether or not duplicate keys should be allowed. If they are,
+	 *        the end-value of the property will be what the last one was.
+	 * 
+	 * @throws DuplicateKeys If duplicate keys have been found when they are prohibited.
 	 */
-	public void loadFrom(final InputStream is, final boolean allowDuplicates) {
-		try(Scanner scn = new Scanner(is)) {
+	public void loadFrom(final Reader rdr, final boolean allowDuplicates) {
+		try(Scanner scn = new Scanner(rdr)) {
 			while(scn.hasNextLine()) {
 				final String ln = scn.nextLine().trim();
 
@@ -55,10 +102,7 @@ public class SimpleProperties implements Map<String, String> {
 				 * Complain about improperly formatted lines.
 				 */
 				if(sepIdx == -1) {
-					final String fmt = "Properties must be a name, a space, then the body.\n\tOffending line is '%s'";
-					final String msg = String.format(fmt, ln);
-
-					throw new NoSuchElementException(msg);
+					throw new InvalidLineFormat(ln);
 				}
 
 				final String name = ln.substring(0, sepIdx).trim();
@@ -68,9 +112,7 @@ public class SimpleProperties implements Map<String, String> {
 				 * Complain about duplicates, if that is wanted.
 				 */
 				if(!allowDuplicates && containsKey(name)) {
-					final String msg = String.format("Duplicate key '%s'", name);
-
-					throw new IllegalStateException(msg);
+					throw new DuplicateKeys(name);
 				}
 
 				put(name, body);
@@ -80,15 +122,26 @@ public class SimpleProperties implements Map<String, String> {
 
 	/**
 	 * Output the set of read properties.
+	 * 
+	 * Uses System.out, since one isn't specified.
 	 */
 	public void outputProperties() {
-		System.out.println("Read properties:");
+		outputProperties(System.out);
+	}
+
+	/**
+	 * Output the set of read properties.
+	 * 
+	 * @param strim The stream to output properties to.
+	 */
+	public void outputProperties(PrintStream strim) {
+		strim.println("Read properties:");
 
 		for(final Entry<String, String> entry : entrySet()) {
-			System.out.printf("\t'%s'\t'%s'\n", entry.getKey(), entry.getValue());
+			strim.printf("\t'%s'\t'%s'\n", entry.getKey(), entry.getValue());
 		}
 
-		System.out.println();
+		strim.println();
 	}
 
 	@Override

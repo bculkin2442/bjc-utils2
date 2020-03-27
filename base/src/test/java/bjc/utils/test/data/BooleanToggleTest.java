@@ -1,8 +1,10 @@
-package bjc.utils.data;
+package bjc.utils.test.data;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+
+import bjc.utils.data.BooleanToggle;
 
 /**
  * Test for boolean toggles.

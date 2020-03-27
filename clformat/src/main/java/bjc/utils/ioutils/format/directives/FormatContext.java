@@ -3,7 +3,7 @@ package bjc.utils.ioutils.format.directives;
 import java.io.*;
 
 import bjc.utils.esodata.*;
-import bjc.utils.ioutils.*;
+import bjc.utils.ioutils.ReportWriter;
 
 /**
  * Encapsulates all of the state that is provided to edicts when they are

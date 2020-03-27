@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 
 import bjc.utils.esodata.*;
-import bjc.utils.ioutils.*;
+import bjc.utils.ioutils.ReportWriter;
 import bjc.utils.ioutils.format.directives.*;
 
 /**

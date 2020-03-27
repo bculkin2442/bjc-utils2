@@ -54,7 +54,7 @@ public class PropertyDB {
 			regexes = new SimpleProperties();
 			regexes.loadFrom(PropertyDB.class.getResourceAsStream("/regexes.sprop"), false);
 			if(LOGLOAD) {
-				regexes.outputProperties();
+				regexes.outputProperties(System.out);
 				System.out.println();
 			}
 			compiledRegexes = new HashMap<>();
@@ -67,7 +67,7 @@ public class PropertyDB {
 			formats = new SimpleProperties();
 			formats.loadFrom(PropertyDB.class.getResourceAsStream("/formats.sprop"), false);
 			if(LOGLOAD) {
-				formats.outputProperties();
+				formats.outputProperties(System.out);
 				System.out.println();
 			}
 		});
