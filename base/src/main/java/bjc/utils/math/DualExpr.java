@@ -81,15 +81,9 @@ public class DualExpr {
 	public DualExpr right;
 
 	/**
-	 * The power to use, for power operations.
-	 */
-	public int power;
-
-	/**
 	 * Create a new constant dual number.
 	 *
-	 * @param num
-	 *        The value of the dual number.
+	 * @param num The value of the dual number.
 	 */
 	public DualExpr(Dual num) {
 		this.type = ExprType.CONSTANT;
@@ -100,10 +94,8 @@ public class DualExpr {
 	/**
 	 * Create a new unary dual number.
 	 *
-	 * @param type
-	 *        The type of operation to perform.
-	 * @param val
-	 *        The parameter to the value.
+	 * @param type The type of operation to perform.
+	 * @param val  The parameter to the value.
 	 */
 	public DualExpr(DualExpr.ExprType type, DualExpr val) {
 		this.type = type;
@@ -114,33 +106,15 @@ public class DualExpr {
 	/**
 	 * Create a new binary dual number.
 	 *
-	 * @param type
-	 *        The type of operation to perform.
-	 * @param left
-	 *        The left hand side of the expression.
-	 * @param right
-	 *        The right hand side of the expression.
+	 * @param type  The type of operation to perform.
+	 * @param left  The left hand side of the expression.
+	 * @param right The right hand side of the expression.
 	 */
 	public DualExpr(DualExpr.ExprType type, DualExpr left, DualExpr right) {
 		this.type = type;
 
 		this.left = left;
 		this.right = right;
-	}
-
-	/**
-	 * Create a new power expression.
-	 *
-	 * @param left
-	 *        The expression to raise.
-	 * @param power
-	 *        The power to raise it by.
-	 */
-	public DualExpr(DualExpr left, int power) {
-		this.type = ExprType.POWER;
-
-		this.left = left;
-		this.power = power;
 	}
 
 	/**
@@ -156,7 +130,7 @@ public class DualExpr {
 		Dual lval, rval;
 
 		/* Perform the right operation for each type. */
-		switch(type) {
+		switch (type) {
 		case CONSTANT:
 			return number;
 		case ADDITION:
@@ -184,7 +158,7 @@ public class DualExpr {
 			rval = right.evaluate();
 
 		{
-			if(rval.real == 0) {
+			if (rval.real == 0) {
 				throw new IllegalArgumentException("ERROR: Attempted to divide by zero.");
 			}
 
@@ -214,24 +188,32 @@ public class DualExpr {
 		case LOGARITHM:
 			lval = left.evaluate();
 
-			if(lval.real <= 0) {
+			if (lval.real <= 0) {
 				throw new IllegalArgumentException("ERROR: Attempted to take non-positive log.");
 			}
 
 			return new Dual(Math.log(lval.real), lval.dual / lval.real);
 		case POWER:
+			// @TODO Ben Culkin 3/27/2020 :RealPower
+			// Make this no longer a special case; since it doesn't have to be one.
+			//
+			// 3/28/2020 - This is less of a special case, but I've not implemented the bit for variable exponents.
 			lval = left.evaluate();
+			rval = right.evaluate();
 
-			if(lval.real == 0) {
+			if (lval.real == 0) {
 				throw new IllegalArgumentException("ERROR: Raising zero to a power.");
 			}
 
-		{
-			double rl = Math.pow(lval.real, power);
+			if (rval.dual != 0.0) {
+				throw new IllegalArgumentException(
+						"ERROR: Powers with a non-zero dual component not currently implemented");
+			} {
+			double rl = Math.pow(lval.real, rval.real);
 
-			double lft = Math.pow(lval.real, power - 1);
+			double lft = Math.pow(lval.real, rval.real - 1);
 
-			return new Dual(rl, power * lft * lval.dual);
+			return new Dual(rl, rval.real * lft * lval.dual);
 		}
 		case ABSOLUTE:
 			lval = left.evaluate();
@@ -246,7 +228,7 @@ public class DualExpr {
 
 	@Override
 	public String toString() {
-		switch(type) {
+		switch (type) {
 		case ABSOLUTE:
 			return String.format("abs(%s)", left.toString());
 		case ADDITION:
@@ -264,7 +246,7 @@ public class DualExpr {
 		case MULTIPLICATION:
 			return String.format("(%s * %s)", left.toString(), right.toString());
 		case POWER:
-			return String.format("(%s ^ %d)", left.toString(), power);
+			return String.format("(%s ^ %d)", left.toString(), right.toString());
 		case SIN:
 			return String.format("sin(%s)", left.toString());
 		case SUBTRACTION:
@@ -281,7 +263,6 @@ public class DualExpr {
 
 		result = prime * result + ((left == null) ? 0 : left.hashCode());
 		result = prime * result + ((number == null) ? 0 : number.hashCode());
-		result = prime * result + power;
 		result = prime * result + ((right == null) ? 0 : right.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 
@@ -290,39 +271,39 @@ public class DualExpr {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj) return true;
-		if(obj == null) return false;
-		if(getClass() != obj.getClass()) return false;
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
 
 		DualExpr other = (DualExpr) obj;
 
-		if(type != other.type) {
+		if (type != other.type) {
 			return false;
 		}
 
-		if(left == null) {
-			if(other.left != null) {
+		if (left == null) {
+			if (other.left != null) {
 				return false;
 			}
-		} else if(!left.equals(other.left)) {
+		} else if (!left.equals(other.left)) {
 			return false;
 		}
 
-		if(right == null) {
-			if(other.right != null) {
+		if (right == null) {
+			if (other.right != null) {
 				return false;
 			}
-		} else if(!right.equals(other.right)) {
+		} else if (!right.equals(other.right)) {
 			return false;
 		}
 
-		if(number == null) {
-			if(other.number != null) return false;
-		} else if(!number.equals(other.number)) {
-			return false;
-		}
-
-		if(power != other.power) {
+		if (number == null) {
+			if (other.number != null)
+				return false;
+		} else if (!number.equals(other.number)) {
 			return false;
 		}
 
