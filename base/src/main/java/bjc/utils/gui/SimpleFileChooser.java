@@ -195,4 +195,26 @@ public class SimpleFileChooser {
 
 		return files.getSelectedFile();
 	}
+	
+	/**
+	 * Show a dialog box to pick a directory.
+	 * 
+	 * @param parent
+	 * 	The component to use as the parent for the dialog.
+	 * @param title
+	 * 	The title of the dialog for prompting.
+	 * @return The directory picked, if the user picked one; null if they didn't.
+	 */
+	public static File pickDirectory(final Component parent, final String title) {
+		if (title == null) throw new NullPointerException("Title must not be null");
+		
+		final JFileChooser files = new JFileChooser();
+		files.setDialogType(JFileChooser.OPEN_DIALOG);
+		files.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		files.setDialogTitle(title);
+		
+		files.showOpenDialog(parent);
+		
+		return files.getSelectedFile();
+	}
 }
