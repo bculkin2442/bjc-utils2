@@ -181,6 +181,11 @@ public class SingleTape<T> implements Tape<T> {
 	}
 
 	@Override
+	public void append(T itm) {
+		backing.add(itm);
+	}
+	
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 
