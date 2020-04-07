@@ -7,7 +7,7 @@ import bjc.utils.funcdata.IMap;
  * 
  * @author bjculkin
  *
- * @param <ComponentType>
+ * @param <ComponentType> The type of component stored in the repository.
  */
 public class MemoryComponentRepository<ComponentType extends IDescribedComponent>
 		implements IComponentRepository<ComponentType> {

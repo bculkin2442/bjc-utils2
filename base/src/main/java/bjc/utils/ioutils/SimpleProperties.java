@@ -75,7 +75,7 @@ public class SimpleProperties implements Map<String, String> {
 	 *
 	 * All leading/trailing spaces from the name &amp; body are removed.
 	 *
-	 * @param is
+	 * @param rdr
 	 *        The reader to read from.
 	 *
 	 * @param allowDuplicates

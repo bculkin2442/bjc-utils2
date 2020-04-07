@@ -74,6 +74,8 @@ class ConditionalEdict implements Edict {
 	private List<CLString> clauses;
 	private CLString defClause;
 
+	// Think I might need this for something...
+	@SuppressWarnings("unused")
 	private CLFormatter formatter;
 
 	public ConditionalEdict(Mode condMode, boolean decrementIndex,

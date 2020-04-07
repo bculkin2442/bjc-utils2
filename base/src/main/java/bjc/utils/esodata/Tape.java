@@ -1,7 +1,5 @@
 package bjc.utils.esodata;
 
-import com.sun.rowset.internal.InsertRow;
-
 /**
  * Interface for something that acts like a tape.
  *

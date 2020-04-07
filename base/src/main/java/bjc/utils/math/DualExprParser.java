@@ -33,9 +33,8 @@ public class DualExprParser {
 	/**
 	 * Parses a dual expression from a postfix expression string.
 	 * 
-	 * @param expr    The string to parse the dual expression from.
-	 *
-	 * @param preVars Any pre-existing variables to use.
+	 * @param expr
+	 *             The string to parse the dual expression from.
 	 * 
 	 * @return Both the parsed expression, and a map of all the variables used
 	 */
@@ -46,13 +45,16 @@ public class DualExprParser {
 	/**
 	 * Parses a dual expression from a postfix expression string.
 	 * 
-	 * @param expr    The string to parse the dual expression from.
+	 * @param expr
+	 *                The string to parse the dual expression from.
 	 *
-	 * @param preVars Any pre-existing variables to use.
+	 * @param preVars
+	 *                Any pre-existing variables to use.
 	 * 
 	 * @return Both the parsed expression, and a map of all the variables used
 	 * 
-	 * @throws StackUnderflowException If the expression is not properly formatted.
+	 * @throws StackUnderflowException
+	 *                                 If the expression is not properly formatted.
 	 */
 	public static Result parseExpression(String expr, Map<String, DualExpr> preVars) {
 		Result res = new Result();
@@ -157,7 +159,8 @@ public class DualExprParser {
 				DualExpr dual = exprStack.pop();
 				DualExpr real = exprStack.pop();
 
-				exprStack.push(new DualExpr(new Dual(real.evaluate().real, dual.evaluate().real)));
+				exprStack.push(new DualExpr(
+						new Dual(real.evaluate().real, dual.evaluate().real)));
 				break;
 			}
 			default:
