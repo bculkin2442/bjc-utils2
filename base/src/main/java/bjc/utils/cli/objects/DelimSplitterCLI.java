@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import bjc.utils.data.ITree;
+import bjc.data.ITree;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IList;
 import bjc.utils.funcutils.StringUtils;

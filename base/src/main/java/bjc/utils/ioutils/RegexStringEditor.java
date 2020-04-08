@@ -5,8 +5,8 @@ import java.util.function.UnaryOperator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import bjc.utils.data.Toggle;
-import bjc.utils.data.ValueToggle;
+import bjc.data.Toggle;
+import bjc.data.ValueToggle;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IList;
 import bjc.utils.functypes.ID;

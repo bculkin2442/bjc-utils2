@@ -1,6 +1,6 @@
 package bjc.utils.parserutils.delims;
 
-import bjc.utils.data.ITree;
+import bjc.data.ITree;
 
 /**
  * A sequence delimiter specialized for strings.

@@ -3,7 +3,7 @@ package bjc.utils.funcutils;
 import java.util.LinkedList;
 import java.util.function.Predicate;
 
-import bjc.utils.data.ITree;
+import bjc.data.ITree;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IList;
 

@@ -6,10 +6,10 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
-import bjc.utils.data.IHolder;
-import bjc.utils.data.ITree;
-import bjc.utils.data.Pair;
-import bjc.utils.data.Tree;
+import bjc.data.IHolder;
+import bjc.data.ITree;
+import bjc.data.Pair;
+import bjc.data.Tree;
 import bjc.utils.parserutils.TreeConstructor.ConstructorState;
 import bjc.utils.parserutils.TreeConstructor.QueueFlattener;
 

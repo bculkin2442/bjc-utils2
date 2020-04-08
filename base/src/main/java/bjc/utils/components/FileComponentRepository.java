@@ -9,8 +9,8 @@ import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import bjc.utils.data.IHolder;
-import bjc.utils.data.Identity;
+import bjc.data.IHolder;
+import bjc.data.Identity;
 import bjc.utils.funcdata.FunctionalMap;
 import bjc.utils.funcdata.IList;
 import bjc.utils.funcdata.IMap;

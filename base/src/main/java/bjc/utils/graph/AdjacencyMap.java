@@ -6,8 +6,8 @@ import java.io.PrintStream;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import bjc.utils.data.IHolder;
-import bjc.utils.data.Identity;
+import bjc.data.IHolder;
+import bjc.data.Identity;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.FunctionalMap;
 import bjc.utils.funcdata.IList;

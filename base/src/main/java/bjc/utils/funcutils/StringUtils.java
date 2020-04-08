@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 import com.ibm.icu.text.BreakIterator;
 
-import bjc.utils.data.BooleanToggle;
+import bjc.data.BooleanToggle;
 import bjc.utils.ioutils.LevelSplitter;
 import bjc.utils.parserutils.TokenUtils;
 

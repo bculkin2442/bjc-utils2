@@ -2,7 +2,7 @@ package bjc.utils.ioutils.blocks;
 
 import java.io.IOException;
 
-import bjc.utils.data.BooleanToggle;
+import bjc.data.BooleanToggle;
 
 /**
  * A block reader that toggles between two sources.

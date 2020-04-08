@@ -2,8 +2,8 @@ package bjc.utils.gen;
 
 import java.util.Random;
 
-import bjc.utils.data.IPair;
-import bjc.utils.data.Pair;
+import bjc.data.IPair;
+import bjc.data.Pair;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.IList;
 

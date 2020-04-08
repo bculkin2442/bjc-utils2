@@ -3,7 +3,7 @@ package bjc.utils.funcutils;
 import java.util.*;
 import java.util.function.*;
 
-import bjc.utils.data.ArrayIterator;
+import bjc.data.ArrayIterator;
 
 /**
  * Utility methods for dealing with iterators.

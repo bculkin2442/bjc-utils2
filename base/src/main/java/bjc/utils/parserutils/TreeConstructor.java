@@ -5,11 +5,11 @@ import java.util.LinkedList;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import bjc.utils.data.IHolder;
-import bjc.utils.data.IPair;
-import bjc.utils.data.ITree;
-import bjc.utils.data.Identity;
-import bjc.utils.data.Pair;
+import bjc.data.IHolder;
+import bjc.data.IPair;
+import bjc.data.ITree;
+import bjc.data.Identity;
+import bjc.data.Pair;
 import bjc.utils.funcdata.IList;
 
 /**

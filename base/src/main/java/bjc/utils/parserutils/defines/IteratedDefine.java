@@ -6,7 +6,7 @@ import java.util.function.UnaryOperator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import bjc.utils.data.CircularIterator;
+import bjc.data.CircularIterator;
 
 /**
  * An iterated find/replace, using a circular assortment of replacements.

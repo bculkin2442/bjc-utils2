@@ -9,9 +9,9 @@ import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
 
-import bjc.utils.data.IPair;
-import bjc.utils.data.ITree;
-import bjc.utils.data.Tree;
+import bjc.data.IPair;
+import bjc.data.ITree;
+import bjc.data.Tree;
 import bjc.utils.esodata.PushdownMap;
 import bjc.utils.esodata.SimpleStack;
 import bjc.utils.esodata.Stack;

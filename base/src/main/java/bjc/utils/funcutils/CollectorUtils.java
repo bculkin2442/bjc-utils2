@@ -2,8 +2,8 @@ package bjc.utils.funcutils;
 
 import java.util.stream.Collector;
 
-import bjc.utils.data.IHolder;
-import bjc.utils.data.IPair;
+import bjc.data.IHolder;
+import bjc.data.IPair;
 
 /**
  * Utilities for producing implementations of {@link Collector}

@@ -6,8 +6,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-import bjc.utils.data.IPair;
-import bjc.utils.data.Pair;
+import bjc.data.IPair;
+import bjc.data.Pair;
 import bjc.utils.funcdata.FunctionalList;
 import bjc.utils.funcdata.FunctionalMap;
 import bjc.utils.funcdata.IList;

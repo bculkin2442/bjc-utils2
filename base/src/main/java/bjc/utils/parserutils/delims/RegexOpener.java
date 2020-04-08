@@ -4,8 +4,8 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import bjc.utils.data.IPair;
-import bjc.utils.data.Pair;
+import bjc.data.IPair;
+import bjc.data.Pair;
 
 /**
  * A predicated opener for use with {@link RegexCloser}

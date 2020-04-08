@@ -4,7 +4,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import bjc.utils.data.IHolder;
+import bjc.data.IHolder;
 import bjc.utils.gui.layout.HLayout;
 
 /**

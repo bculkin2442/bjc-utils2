@@ -7,10 +7,10 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 
-import bjc.utils.data.IHolder;
-import bjc.utils.data.IPair;
-import bjc.utils.data.Identity;
-import bjc.utils.data.Pair;
+import bjc.data.IHolder;
+import bjc.data.IPair;
+import bjc.data.Identity;
+import bjc.data.Pair;
 
 /**
  * Implementation of a collecter that uses two collectors.

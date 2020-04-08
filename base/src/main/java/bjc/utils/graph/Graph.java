@@ -10,8 +10,8 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 
-import bjc.utils.data.IHolder;
-import bjc.utils.data.Identity;
+import bjc.data.IHolder;
+import bjc.data.Identity;
 import bjc.utils.funcdata.FunctionalMap;
 import bjc.utils.funcdata.IList;
 import bjc.utils.funcdata.IMap;
