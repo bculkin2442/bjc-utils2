@@ -1,3 +1,0 @@
-@TODO 10/11/17 Ben Culkin :CursorHands
-	Add cursored list/tree data structures with the ability to pick/put the
-	current node.

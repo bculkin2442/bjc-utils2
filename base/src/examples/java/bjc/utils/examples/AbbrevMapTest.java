@@ -4,7 +4,7 @@ import java.io.PrintStream;
 import java.util.List;
 import java.util.Scanner;
 
-import bjc.utils.esodata.AbbrevMap;
+import bjc.esodata.AbbrevMap2;
 import bjc.utils.funcutils.StringUtils;
 
 /**
@@ -23,7 +23,7 @@ public class AbbrevMapTest {
 	public static void main(final String[] args) {
 		final Scanner scn = new Scanner(System.in);
 
-		final AbbrevMap map = new AbbrevMap();
+		final AbbrevMap2 map = new AbbrevMap2();
 
 		System.out.print("Enter a command (blank line to quit): ");
 		String ln = scn.nextLine().trim();
@@ -33,16 +33,13 @@ public class AbbrevMapTest {
 
 			switch (commParts.get(0)) {
 			case "add":
-				map.addWords(commParts.get(1));
+				map.add(commParts.get(1));
 				break;
 			case "remove":
 				map.removeWords(commParts.get(1));
 				break;
-			case "recalc":
-				map.recalculate();
-				break;
 			case "check": {
-				String[] strings = map.deabbrev(commParts.get(1));
+				String[] strings = map.deabbrevAll(commParts.get(1)).toArray(new String[0]);
 				
 				final String list = StringUtils.toEnglishList(strings, false);
 				
@@ -76,7 +73,6 @@ public class AbbrevMapTest {
 		strm.println("Abbreviation Map Testing Commands:");
 		strm.println("\tadd    <word>\tAdd a word to the abbreviation map");
 		strm.println("\tremove <word>\tRemove a word from the abbreviation map");
-		strm.println("\trecalc       \tRecalculate the abbreviation map");
 		strm.println("\tcheck  <word>\tCheck all of the possible things a word could be an abbreviation for");
 		strm.println("\tdebug        \tPrint out the abbreviation map");
 		strm.println("\thelp         \tList commands, or get help on a command\n");

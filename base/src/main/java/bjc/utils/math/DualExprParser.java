@@ -6,9 +6,9 @@ package bjc.utils.math;
 import java.util.HashMap;
 import java.util.Map;
 
-import bjc.utils.esodata.SimpleStack;
-import bjc.utils.esodata.Stack;
-import bjc.utils.esodata.Stack.StackUnderflowException;
+import bjc.esodata.SimpleStack;
+import bjc.esodata.Stack;
+import bjc.esodata.Stack.StackUnderflow;
 import bjc.utils.exceptions.InvalidToken;
 import bjc.utils.exceptions.NonConstantPower;
 import bjc.utils.exceptions.OperandsRemaining;
@@ -53,7 +53,7 @@ public class DualExprParser {
 	 * 
 	 * @return Both the parsed expression, and a map of all the variables used
 	 * 
-	 * @throws StackUnderflowException
+	 * @throws StackUnderflow
 	 *                                 If the expression is not properly formatted.
 	 */
 	public static Result parseExpression(String expr, Map<String, DualExpr> preVars) {

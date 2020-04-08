@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 
-import bjc.utils.esodata.DefaultList;
+import bjc.esodata.DefaultList;
 
 /**
  * A writer with support for some formatting operations, such as autoindentation

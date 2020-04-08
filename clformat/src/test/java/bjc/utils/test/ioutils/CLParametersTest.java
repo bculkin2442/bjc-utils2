@@ -1,6 +1,6 @@
 package bjc.utils.test.ioutils;
 
-import bjc.utils.esodata.*;
+import bjc.esodata.*;
 import bjc.utils.ioutils.format.*;
 
 import org.junit.*;

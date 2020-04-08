@@ -1,6 +1,6 @@
 package bjc.utils.ioutils.format.directives;
 
-import bjc.utils.esodata.*;
+import bjc.esodata.*;
 import bjc.utils.ioutils.format.*;
 
 /**

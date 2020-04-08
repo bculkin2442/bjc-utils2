@@ -2,8 +2,7 @@ package bjc.utils.ioutils.format;
 
 import java.util.*;
 
-import bjc.esodata.AbbrevMap2;
-import bjc.utils.esodata.Tape;
+import bjc.esodata.*;
 import bjc.utils.parserutils.TokenUtils;
 
 /**

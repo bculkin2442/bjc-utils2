@@ -1,7 +1,7 @@
 package bjc.utils.ioutils.format.directives;
 
 import java.io.*;
-import bjc.utils.esodata.*;
+import bjc.esodata.*;
 import bjc.utils.ioutils.format.*;
 import bjc.utils.ioutils.format.exceptions.*;
 

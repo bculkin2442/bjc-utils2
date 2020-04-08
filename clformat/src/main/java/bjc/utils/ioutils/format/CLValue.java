@@ -1,6 +1,6 @@
 package bjc.utils.ioutils.format;
 
-import bjc.utils.esodata.*;
+import bjc.esodata.*;
 
 /**
  * Represents a parameter value to an edict that may have a dynamic value

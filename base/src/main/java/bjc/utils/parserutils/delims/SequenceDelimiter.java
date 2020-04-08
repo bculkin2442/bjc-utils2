@@ -12,10 +12,10 @@ import com.google.common.collect.Multiset;
 import bjc.data.IPair;
 import bjc.data.ITree;
 import bjc.data.Tree;
-import bjc.utils.esodata.PushdownMap;
-import bjc.utils.esodata.SimpleStack;
-import bjc.utils.esodata.Stack;
-import bjc.utils.funcdata.IMap;
+import bjc.esodata.PushdownMap;
+import bjc.esodata.SimpleStack;
+import bjc.esodata.Stack;
+import bjc.funcdata.IMap;
 import bjc.utils.funcutils.StringUtils;
 
 /**
@@ -187,7 +187,7 @@ public class SequenceDelimiter<T> {
 
 					whoForbid.put(exclusion, possibleOpen);
 				}
-			} else if(!groupStack.empty() && groupStack.top().isClosing(tok)) {
+			} else if(!groupStack.isEmpty() && groupStack.top().isClosing(tok)) {
 				/*
 				 * Close the group.
 				 */
@@ -216,7 +216,7 @@ public class SequenceDelimiter<T> {
 					allowedDelimiters.drop();
 					forbiddenDelimiters.drop();
 				}
-			} else if(!groupStack.empty() && groupStack.top().marksSubgroup(tok)) {
+			} else if(!groupStack.isEmpty() && groupStack.top().marksSubgroup(tok)) {
 				/*
 				 * Mark a subgroup.
 				 */
@@ -254,7 +254,7 @@ public class SequenceDelimiter<T> {
 		/*
 		 * Check if a delimiter is locally forbidden.
 		 */
-		if(groupStack.empty()) {
+		if(groupStack.isEmpty()) {
 			localForbid = false;
 		} else {
 			localForbid = groupStack.top().excludes(groupName);
