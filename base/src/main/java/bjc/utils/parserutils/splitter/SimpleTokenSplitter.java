@@ -2,8 +2,8 @@ package bjc.utils.parserutils.splitter;
 
 import java.util.regex.Pattern;
 
-import bjc.utils.funcdata.IList;
-import bjc.utils.functypes.ID;
+import bjc.funcdata.IList;
+import bjc.functypes.ID;
 import bjc.utils.ioutils.RegexStringEditor;
 
 /**

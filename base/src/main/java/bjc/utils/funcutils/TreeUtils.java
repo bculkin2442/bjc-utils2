@@ -4,8 +4,8 @@ import java.util.LinkedList;
 import java.util.function.Predicate;
 
 import bjc.data.ITree;
-import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.IList;
+import bjc.funcdata.FunctionalList;
+import bjc.funcdata.IList;
 
 /**
  * Implements various utilities for trees.

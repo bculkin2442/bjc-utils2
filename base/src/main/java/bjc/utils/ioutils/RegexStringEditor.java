@@ -7,9 +7,9 @@ import java.util.regex.Pattern;
 
 import bjc.data.Toggle;
 import bjc.data.ValueToggle;
-import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.IList;
-import bjc.utils.functypes.ID;
+import bjc.funcdata.FunctionalList;
+import bjc.funcdata.IList;
+import bjc.functypes.ID;
 
 /**
  * Editor methods for strings based off the command language for the Sam editor.

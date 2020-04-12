@@ -2,7 +2,7 @@ package bjc.utils.parserutils.splitter;
 
 import java.util.function.Predicate;
 
-import bjc.utils.funcdata.IList;
+import bjc.funcdata.IList;
 
 /**
  * A token splitter that removes tokens that match a predicate from the stream

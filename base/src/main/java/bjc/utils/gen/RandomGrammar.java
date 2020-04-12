@@ -1,7 +1,7 @@
 package bjc.utils.gen;
 
-import bjc.utils.funcdata.FunctionalMap;
-import bjc.utils.funcdata.IList;
+import bjc.funcdata.FunctionalMap;
+import bjc.funcdata.IList;
 
 /**
  * A weighted grammar where all the rules have a equal chance of occuring.

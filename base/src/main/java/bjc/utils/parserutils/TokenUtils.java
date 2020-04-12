@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.IList;
+import bjc.funcdata.FunctionalList;
+import bjc.funcdata.IList;
 import bjc.utils.parserutils.splitter.TokenSplitter;
 
 /**

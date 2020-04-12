@@ -2,8 +2,8 @@ package bjc.utils.examples;
 
 import java.util.Scanner;
 
-import bjc.utils.funcdata.FunctionalStringTokenizer;
-import bjc.utils.funcdata.IList;
+import bjc.funcdata.FunctionalStringTokenizer;
+import bjc.funcdata.IList;
 import bjc.utils.parserutils.ShuntingYard;
 
 /**

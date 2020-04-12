@@ -1,6 +1,6 @@
 package bjc.utils.components;
 
-import bjc.utils.funcdata.IMap;
+import bjc.funcdata.IMap;
 
 /**
  * A repository of components stored in memory.

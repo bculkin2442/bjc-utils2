@@ -3,7 +3,7 @@ package bjc.utils.ioutils;
 import java.util.function.BiConsumer;
 
 import bjc.utils.exceptions.PragmaFormatException;
-import bjc.utils.funcdata.FunctionalStringTokenizer;
+import bjc.funcdata.FunctionalStringTokenizer;
 import bjc.utils.funcutils.ListUtils;
 
 /**

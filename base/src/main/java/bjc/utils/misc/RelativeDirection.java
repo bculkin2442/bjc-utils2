@@ -4,8 +4,8 @@ import java.util.Random;
 import java.util.function.Consumer;
 
 import bjc.utils.exceptions.InvalidDirectionException;
-import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.IList;
+import bjc.funcdata.FunctionalList;
+import bjc.funcdata.IList;
 
 /**
  * Represents a direction that is relative to another direction

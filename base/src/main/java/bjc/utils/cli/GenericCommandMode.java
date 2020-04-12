@@ -4,8 +4,8 @@ import java.util.TreeMap;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import bjc.utils.funcdata.FunctionalMap;
-import bjc.utils.funcdata.IMap;
+import bjc.funcdata.FunctionalMap;
+import bjc.funcdata.IMap;
 
 /**
  * A general command mode, with a customizable set of commands.

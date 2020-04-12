@@ -2,8 +2,8 @@ package bjc.utils.examples;
 
 import java.util.Scanner;
 
-import bjc.utils.funcdata.bst.BinarySearchTree;
-import bjc.utils.funcdata.bst.TreeLinearizationMethod;
+import bjc.funcdata.bst.BinarySearchTree;
+import bjc.funcdata.bst.TreeLinearizationMethod;
 
 /**
  * Example showing how to use the binary search tree.

@@ -1,7 +1,7 @@
 package bjc.utils.parserutils.splitter;
 
-import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.IList;
+import bjc.funcdata.FunctionalList;
+import bjc.funcdata.IList;
 
 /**
  * A token splitter that chains several other splitters together.

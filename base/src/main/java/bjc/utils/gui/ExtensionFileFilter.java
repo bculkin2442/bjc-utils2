@@ -5,8 +5,8 @@ import java.util.List;
 
 import javax.swing.filechooser.FileFilter;
 
-import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.IList;
+import bjc.funcdata.FunctionalList;
+import bjc.funcdata.IList;
 
 /**
  * A file filter based on extensions.

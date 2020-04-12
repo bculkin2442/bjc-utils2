@@ -1,6 +1,6 @@
 package bjc.utils.parserutils.splitter;
 
-import bjc.utils.funcdata.IList;
+import bjc.funcdata.IList;
 
 /**
  * Split a string into a list of pieces.

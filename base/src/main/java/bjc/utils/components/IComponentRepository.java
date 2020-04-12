@@ -1,7 +1,7 @@
 package bjc.utils.components;
 
-import bjc.utils.funcdata.IList;
-import bjc.utils.funcdata.IMap;
+import bjc.funcdata.IList;
+import bjc.funcdata.IMap;
 
 /**
  * A collection of implementations of a particular type of

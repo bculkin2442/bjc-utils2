@@ -15,8 +15,8 @@ import bjc.data.IPair;
 import bjc.data.ITree;
 import bjc.data.Pair;
 import bjc.data.Tree;
-import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.IList;
+import bjc.funcdata.FunctionalList;
+import bjc.funcdata.IList;
 
 /**
  * Represents a possible delimiter group to match.

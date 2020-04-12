@@ -10,7 +10,7 @@ import bjc.data.IPair;
 import bjc.data.ITree;
 import bjc.data.Identity;
 import bjc.data.Pair;
-import bjc.utils.funcdata.IList;
+import bjc.funcdata.IList;
 
 /**
  * Creates a parse tree from a postfix expression.

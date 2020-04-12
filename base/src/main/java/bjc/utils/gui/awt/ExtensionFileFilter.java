@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.util.List;
 
-import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.IList;
+import bjc.funcdata.FunctionalList;
+import bjc.funcdata.IList;
 
 /**
  * Filter a set of filenames by extension.

@@ -11,9 +11,9 @@ import bjc.data.IPair;
 import bjc.data.Identity;
 import bjc.data.Pair;
 import bjc.utils.exceptions.UnknownPragmaException;
-import bjc.utils.funcdata.FunctionalMap;
-import bjc.utils.funcdata.FunctionalStringTokenizer;
-import bjc.utils.funcdata.IMap;
+import bjc.funcdata.FunctionalMap;
+import bjc.funcdata.FunctionalStringTokenizer;
+import bjc.funcdata.IMap;
 
 /**
  * This class parses a rules based config file, and uses it to drive a provided

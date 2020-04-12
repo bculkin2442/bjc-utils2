@@ -9,7 +9,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 
-import bjc.utils.funcdata.IList;
+import bjc.funcdata.IList;
 import bjc.utils.gui.SimpleJList;
 import bjc.utils.gui.layout.HLayout;
 import bjc.utils.gui.layout.VLayout;

@@ -4,8 +4,8 @@ import java.util.Random;
 
 import bjc.data.IPair;
 import bjc.data.Pair;
-import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.IList;
+import bjc.funcdata.FunctionalList;
+import bjc.funcdata.IList;
 
 /**
  * Represents a random number generator where certain results are weighted more

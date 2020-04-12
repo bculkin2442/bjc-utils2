@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.IList;
+import bjc.funcdata.FunctionalList;
+import bjc.funcdata.IList;
 
 /**
  * Utilities for manipulating FunctionalLists and regular Collections lists that

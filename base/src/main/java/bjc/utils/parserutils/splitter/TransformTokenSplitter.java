@@ -2,7 +2,7 @@ package bjc.utils.parserutils.splitter;
 
 import java.util.function.UnaryOperator;
 
-import bjc.utils.funcdata.IList;
+import bjc.funcdata.IList;
 
 /**
  * A token splitter that performs a transform on the tokens from another

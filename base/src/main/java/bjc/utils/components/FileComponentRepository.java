@@ -11,9 +11,9 @@ import java.util.logging.Logger;
 
 import bjc.data.IHolder;
 import bjc.data.Identity;
-import bjc.utils.funcdata.FunctionalMap;
-import bjc.utils.funcdata.IList;
-import bjc.utils.funcdata.IMap;
+import bjc.funcdata.FunctionalMap;
+import bjc.funcdata.IList;
+import bjc.funcdata.IMap;
 import bjc.utils.funcutils.FileUtils;
 
 /**

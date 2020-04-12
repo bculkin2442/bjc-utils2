@@ -3,8 +3,8 @@ package bjc.utils.funcutils;
 import java.util.Random;
 import java.util.function.Consumer;
 
-import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.IList;
+import bjc.funcdata.FunctionalList;
+import bjc.funcdata.IList;
 
 /**
  * Utility methods on enums.

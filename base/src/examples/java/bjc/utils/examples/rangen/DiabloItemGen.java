@@ -1,7 +1,7 @@
 package bjc.utils.examples.rangen;
 
-import bjc.utils.funcdata.FunctionalStringTokenizer;
-import bjc.utils.funcdata.IList;
+import bjc.funcdata.FunctionalStringTokenizer;
+import bjc.funcdata.IList;
 import bjc.utils.gen.WeightedGrammar;
 
 /**

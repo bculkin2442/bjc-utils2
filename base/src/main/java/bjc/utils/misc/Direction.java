@@ -6,8 +6,8 @@ import java.util.function.Consumer;
 import org.apache.commons.lang3.text.WordUtils;
 
 import bjc.utils.exceptions.InvalidDirectionException;
-import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.IList;
+import bjc.funcdata.FunctionalList;
+import bjc.funcdata.IList;
 
 /**
  * A set of cardinal directions

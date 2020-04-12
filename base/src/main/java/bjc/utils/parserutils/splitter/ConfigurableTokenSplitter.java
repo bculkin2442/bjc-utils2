@@ -6,7 +6,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import bjc.utils.funcdata.IList;
+import bjc.funcdata.IList;
 
 /**
  * Split a string into pieces around a regular expression, and offer an easy way

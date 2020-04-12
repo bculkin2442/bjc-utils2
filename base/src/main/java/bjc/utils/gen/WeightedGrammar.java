@@ -8,10 +8,10 @@ import java.util.function.Supplier;
 
 import bjc.data.IPair;
 import bjc.data.Pair;
-import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.FunctionalMap;
-import bjc.utils.funcdata.IList;
-import bjc.utils.funcdata.IMap;
+import bjc.funcdata.FunctionalList;
+import bjc.funcdata.FunctionalMap;
+import bjc.funcdata.IList;
+import bjc.funcdata.IMap;
 
 /**
  * A random grammar, where certain rules will come up more often than others.

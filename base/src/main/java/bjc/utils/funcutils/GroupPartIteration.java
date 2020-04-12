@@ -3,8 +3,8 @@ package bjc.utils.funcutils;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.IList;
+import bjc.funcdata.FunctionalList;
+import bjc.funcdata.IList;
 
 /**
  * Implements a single group partitioning pass on a list.

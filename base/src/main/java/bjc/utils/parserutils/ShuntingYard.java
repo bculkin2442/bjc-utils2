@@ -4,10 +4,10 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.function.Function;
 
-import bjc.utils.funcdata.FunctionalList;
-import bjc.utils.funcdata.FunctionalMap;
-import bjc.utils.funcdata.IList;
-import bjc.utils.funcdata.IMap;
+import bjc.funcdata.FunctionalList;
+import bjc.funcdata.FunctionalMap;
+import bjc.funcdata.IList;
+import bjc.funcdata.IMap;
 import bjc.utils.funcutils.StringUtils;
 
 /**
