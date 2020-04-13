@@ -3,8 +3,8 @@ package bjc.utils.math;
 /**
  * Represents a 'dual' number.
  *
- * Think imaginary numbers, where instead of i, we add a value d such that 
- * d^2 = 0.
+ * Think imaginary numbers, where instead of i, we add a value d such that d^2 =
+ * 0.
  */
 public class Dual {
 	/**
@@ -28,7 +28,7 @@ public class Dual {
 	 * Create a new dual number with a zero dual part.
 	 *
 	 * @param real
-	 *        The real part of the number.
+	 *             The real part of the number.
 	 */
 	public Dual(double real) {
 		this.real = real;
@@ -39,9 +39,9 @@ public class Dual {
 	 * Create a new dual number with a specified dual part.
 	 *
 	 * @param real
-	 *        The real part of the number.
+	 *             The real part of the number.
 	 * @param dual
-	 *        The dual part of the number.
+	 *             The dual part of the number.
 	 */
 	public Dual(double real, double dual) {
 		this.real = real;
@@ -67,12 +67,17 @@ public class Dual {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj) return true;
-		if(obj == null) return false;
-		if(getClass() != obj.getClass()) return false;
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
 		Dual other = (Dual) obj;
-		if(Double.doubleToLongBits(dual) != Double.doubleToLongBits(other.dual)) return false;
-		if(Double.doubleToLongBits(real) != Double.doubleToLongBits(other.real)) return false;
+		if (Double.doubleToLongBits(dual) != Double.doubleToLongBits(other.dual))
+			return false;
+		if (Double.doubleToLongBits(real) != Double.doubleToLongBits(other.real))
+			return false;
 		return true;
 	}
 }

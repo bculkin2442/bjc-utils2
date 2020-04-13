@@ -6,14 +6,14 @@ import java.util.function.Supplier;
 
 /**
  * A block reader composed from functions.
- * 
+ *
  * @author EVE
  *
  */
 public class BoundBlockReader implements BlockReader {
 	/**
 	 * A function that serves to close an I/O source.
-	 * 
+	 *
 	 * @author EVE
 	 *
 	 */
@@ -21,9 +21,9 @@ public class BoundBlockReader implements BlockReader {
 	public interface Closer {
 		/**
 		 * Close the I/O source this is attached to.
-		 * 
+		 *
 		 * @throws IOException
-		 *         If something goes wrong
+		 *                     If something goes wrong
 		 */
 		public void close() throws IOException;
 	}
@@ -38,15 +38,16 @@ public class BoundBlockReader implements BlockReader {
 
 	/**
 	 * Create a new bound block reader.
-	 * 
+	 *
 	 * @param blockChecker
-	 *        Predicate for checking if a block is available
+	 *                     Predicate for checking if a block is available
 	 * @param blockGetter
-	 *        Function to retrieve a block
+	 *                     Function to retrieve a block
 	 * @param blockCloser
-	 *        Function to close a block source
+	 *                     Function to close a block source
 	 */
-	public BoundBlockReader(BooleanSupplier blockChecker, Supplier<Block> blockGetter, Closer blockCloser) {
+	public BoundBlockReader(BooleanSupplier blockChecker, Supplier<Block> blockGetter,
+			Closer blockCloser) {
 		checker = blockChecker;
 		getter = blockGetter;
 		closer = blockCloser;
@@ -66,7 +67,7 @@ public class BoundBlockReader implements BlockReader {
 
 	@Override
 	public boolean nextBlock() {
-		if(checker.getAsBoolean()) {
+		if (checker.getAsBoolean()) {
 			current = getter.get();
 			blockNo += 1;
 

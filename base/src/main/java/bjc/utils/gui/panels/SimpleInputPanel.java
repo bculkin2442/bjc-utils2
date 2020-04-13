@@ -24,16 +24,16 @@ public class SimpleInputPanel extends JPanel {
 	 * Create a new input panel
 	 *
 	 * @param label
-	 *        The label for the field
+	 *                The label for the field
 	 * @param columns
-	 *        The number of columns of text input to take
+	 *                The number of columns of text input to take
 	 */
 	public SimpleInputPanel(final String label, final int columns) {
 		setLayout(new BorderLayout());
 
 		final JLabel inputLabel = new JLabel(label);
 
-		if(columns < 1) {
+		if (columns < 1) {
 			inputValue = new JTextField();
 		} else {
 			inputValue = new JTextField(columns);

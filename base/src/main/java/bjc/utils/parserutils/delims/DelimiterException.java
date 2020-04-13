@@ -10,7 +10,7 @@ public class DelimiterException extends RuntimeException {
 	 * Create a new generic delimiter exception.
 	 *
 	 * @param res
-	 *        The reason for this exception.
+	 *            The reason for this exception.
 	 */
 	public DelimiterException(final String res) {
 		super(res);

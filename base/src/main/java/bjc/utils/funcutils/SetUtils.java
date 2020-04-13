@@ -7,17 +7,20 @@ import java.util.Set;
 
 /**
  * Various utility functions dealing with sets.
+ * 
  * @author bjculkin
  *
  */
 public class SetUtils {
 	/**
 	 * Create a power-set (set of all subsets) of a given set.
-	 * @param originalSet The set to create a power-set of.
+	 * 
+	 * @param originalSet
+	 *                    The set to create a power-set of.
 	 * @return The power-set of the set.
 	 */
 	public static <T> Set<Set<T>> powerSet(Set<T> originalSet) {
-		Set<Set<T>> sets = new HashSet<Set<T>>();
+		Set<Set<T>> sets = new HashSet<>();
 
 		// Special-case empty input
 		if (originalSet.isEmpty()) {
@@ -25,18 +28,18 @@ public class SetUtils {
 			return sets;
 		}
 
-		List<T> list = new ArrayList<T>(originalSet);
+		List<T> list = new ArrayList<>(originalSet);
 
 		// Add original set to list.
 		T head = list.get(0);
 
 		// Trim leading element from set.
-		Set<T> rest = new HashSet<T>(list.subList(1, list.size()));
+		Set<T> rest = new HashSet<>(list.subList(1, list.size()));
 
 		Set<Set<T>> remSets = powerSet(rest);
-		
+
 		for (Set<T> set : remSets) {
-			Set<T> newSet = new HashSet<T>();
+			Set<T> newSet = new HashSet<>();
 
 			// Create a new set with the removed element.
 			newSet.add(head);
@@ -51,14 +54,16 @@ public class SetUtils {
 
 	/**
 	 * Utility method for set construction.
-	 * @param elms The elements to stick in the set.
+	 * 
+	 * @param elms
+	 *             The elements to stick in the set.
 	 * @return A set containing the specified elements.
 	 */
 	@SafeVarargs
 	public static <T> Set<T> toSet(T... elms) {
 		Set<T> set = new HashSet<>();
 
-		for(T elm : elms) {
+		for (T elm : elms) {
 			set.add(elm);
 		}
 

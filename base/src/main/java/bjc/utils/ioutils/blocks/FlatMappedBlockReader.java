@@ -36,11 +36,11 @@ public class FlatMappedBlockReader implements BlockReader {
 
 	/**
 	 * Create a new flat-mapping block reader.
-	 * 
+	 *
 	 * @param source
-	 *        The source to read blocks from
+	 *               The source to read blocks from
 	 * @param trans
-	 *        The transform to use.
+	 *               The transform to use.
 	 */
 	public FlatMappedBlockReader(BlockReader source, Function<Block, List<Block>> trans) {
 		reader = source;
@@ -62,11 +62,11 @@ public class FlatMappedBlockReader implements BlockReader {
 	@Override
 	public boolean nextBlock() {
 		/*
-		 * Attempt to get a new pending list if the one we have isn't
-		 * valid.
+		 * Attempt to get a new pending list if the one we have isn't valid.
 		 */
-		while(pending == null || !pending.hasNext()) {
-			if(!reader.hasNext()) return false;
+		while (pending == null || !pending.hasNext()) {
+			if (!reader.hasNext())
+				return false;
 
 			pending = transform.apply(reader.next()).iterator();
 		}

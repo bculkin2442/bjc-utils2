@@ -22,10 +22,10 @@ public class TriggeredBlockReader implements BlockReader {
 	 * Create a new triggered reader with the specified source/action.
 	 *
 	 * @param source
-	 *        The block reader to read blocks from.
+	 *               The block reader to read blocks from.
 	 *
 	 * @param action
-	 *        The action to execute before reading a block.
+	 *               The action to execute before reading a block.
 	 */
 	public TriggeredBlockReader(final BlockReader source, final Runnable action) {
 		this.source = source;

@@ -26,27 +26,26 @@ public class StringUtils {
 	 * expression.
 	 *
 	 * @param input
-	 *                The string to check.
+	 *               The string to check.
 	 *
 	 * @param rRegex
-	 *                The regex to see if the string only contains matches
-	 *                of.
+	 *               The regex to see if the string only contains matches of.
 	 *
-	 * @return Whether or not the string consists only of multiple matches
-	 *         of the provided regex.
+	 * @return Whether or not the string consists only of multiple matches of the
+	 *         provided regex.
 	 */
 	public static boolean containsOnly(final String input, final String rRegex) {
 		if (input == null)
 			throw new NullPointerException("Input must not be null");
-		else if (rRegex == null) throw new NullPointerException("Regex must not be null");
+		else if (rRegex == null)
+			throw new NullPointerException("Regex must not be null");
 
 		/*
 		 * This regular expression is fairly simple.
 		 *
-		 * First, we match the beginning of the string. Then, we start a
-		 * non-capturing group whose contents are the passed in regex.
-		 * That group is then matched one or more times and the pattern
-		 * matches to the end of the string.
+		 * First, we match the beginning of the string. Then, we start a non-capturing
+		 * group whose contents are the passed in regex. That group is then matched one
+		 * or more times and the pattern matches to the end of the string.
 		 */
 		return input.matches("\\A(?:" + rRegex + ")+\\Z");
 	}
@@ -67,17 +66,15 @@ public class StringUtils {
 	}
 
 	/**
-	 * Print out a deque with a special case for easily showing a deque is
-	 * empty.
+	 * Print out a deque with a special case for easily showing a deque is empty.
 	 *
 	 * @param <ContainedType>
-	 *                The type in the deque.
+	 *                        The type in the deque.
 	 *
 	 * @param queue
-	 *                The deque to print.
+	 *                        The deque to print.
 	 *
-	 * @return A string version of the deque, with allowance for an empty
-	 *         deque.
+	 * @return A string version of the deque, with allowance for an empty deque.
 	 */
 	public static <ContainedType> String printDeque(final Deque<ContainedType> queue) {
 		return queue.isEmpty() ? "(none)" : queue.toString();
@@ -90,16 +87,18 @@ public class StringUtils {
 	 *                The sequence to convert to an English list.
 	 *
 	 * @param join
-	 *                The string to use for separating the last element from
-	 *                the rest.
+	 *                The string to use for separating the last element from the
+	 *                rest.
 	 *
 	 * @param comma
 	 *                The string to use as a comma
 	 *
 	 * @return The sequence as an English list.
 	 */
-	public static String toEnglishList(final Object[] objects, final String join, final String comma) {
-		if (objects == null) throw new NullPointerException("Sequence must not be null");
+	public static String toEnglishList(final Object[] objects, final String join,
+			final String comma) {
+		if (objects == null)
+			throw new NullPointerException("Sequence must not be null");
 
 		final StringBuilder sb = new StringBuilder();
 
@@ -107,35 +106,35 @@ public class StringUtils {
 		final String coma = comma;
 
 		switch (objects.length) {
-			case 0:
-				/* Empty list. */
-				break;
-			case 1:
-				/* One item. */
-				sb.append(objects[0].toString());
-				break;
-			case 2:
-				/* Two items. */
-				sb.append(objects[0].toString());
-				sb.append(" " + joiner + " ");
-				sb.append(objects[1].toString());
-				break;
-			default:
-				/* Three or more items. */
-				for (int i = 0; i < objects.length - 1; i++) {
-					sb.append(objects[i].toString());
-					sb.append(coma + " ");
-				}
+		case 0:
+			/* Empty list. */
+			break;
+		case 1:
+			/* One item. */
+			sb.append(objects[0].toString());
+			break;
+		case 2:
+			/* Two items. */
+			sb.append(objects[0].toString());
+			sb.append(" " + joiner + " ");
+			sb.append(objects[1].toString());
+			break;
+		default:
+			/* Three or more items. */
+			for (int i = 0; i < objects.length - 1; i++) {
+				sb.append(objects[i].toString());
+				sb.append(coma + " ");
+			}
 
-				/*
-				 * Uncomment this to remove serial commas.
-				 *
-				 * int lc = sb.length() - 1;
-				 *
-				 * sb.delete(lc - coma.length(), lc);
-				 */
-				sb.append(joiner + " ");
-				sb.append(objects[objects.length - 1].toString());
+			/*
+			 * Uncomment this to remove serial commas.
+			 *
+			 * int lc = sb.length() - 1;
+			 *
+			 * sb.delete(lc - coma.length(), lc);
+			 */
+			sb.append(joiner + " ");
+			sb.append(objects[objects.length - 1].toString());
 		}
 
 		return sb.toString();
@@ -148,8 +147,8 @@ public class StringUtils {
 	 *                The sequence to convert to an English list.
 	 *
 	 * @param join
-	 *                The string to use for separating the last element from
-	 *                the rest.
+	 *                The string to use for separating the last element from the
+	 *                rest.
 	 *
 	 * @return The sequence as an English list.
 	 */
@@ -169,7 +168,9 @@ public class StringUtils {
 	 * @return The sequence as an English list.
 	 */
 	public static String toEnglishList(final Object[] objects, final boolean and) {
-		if (and) { return toEnglishList(objects, "and"); }
+		if (and) {
+			return toEnglishList(objects, "and");
+		}
 
 		return toEnglishList(objects, "or");
 	}
@@ -178,7 +179,7 @@ public class StringUtils {
 	 * Count the number of graphemes in a string.
 	 *
 	 * @param value
-	 *                The string to check.
+	 *              The string to check.
 	 *
 	 * @return The number of graphemes in the string.
 	 */
@@ -216,12 +217,12 @@ public class StringUtils {
 
 	/**
 	 * Get a substring until a specified string.
-	 * 
+	 *
 	 * @param strang
-	 *                The string to substring.
+	 *               The string to substring.
 	 * @param vx
-	 *                The place to substring until.
-	 * 
+	 *               The place to substring until.
+	 *
 	 * @return The specified substring.
 	 */
 	public static String substringTo(String strang, String vx) {
@@ -230,22 +231,23 @@ public class StringUtils {
 
 	/**
 	 * Get a substring until a specified string.
-	 * 
+	 *
 	 * @param strang
-	 *                The string to substring.
+	 *                  The string to substring.
 	 * @param vx
-	 *                The place to substring until.
+	 *                  The place to substring until.
 	 * @param allowFail
-	 *                Whether or not to allow failure.
-	 * 
-	 * @return The specified substring, or null if the specified place to
-	 *         substring to was not found, and we were not allowed to fail.
+	 *                  Whether or not to allow failure.
+	 *
+	 * @return The specified substring, or null if the specified place to substring
+	 *         to was not found, and we were not allowed to fail.
 	 */
 	public static String substringTo(String strang, String vx, boolean allowFail) {
 		int idx = strang.indexOf(vx);
 
 		if (idx == -1) {
-			if (allowFail) return strang;
+			if (allowFail)
+				return strang;
 
 			return null;
 		}
@@ -254,11 +256,11 @@ public class StringUtils {
 	}
 
 	/**
-	 * Split a line into a series of space-separated arguments, including
-	 * string literals.
-	 * 
+	 * Split a line into a series of space-separated arguments, including string
+	 * literals.
+	 *
 	 * @param com
-	 *                The command to split from
+	 *            The command to split from
 	 * @return The split arguments.
 	 */
 	public static List<String> processArguments(String com) {
@@ -283,7 +285,7 @@ public class StringUtils {
 		private Scanner scn;
 
 		public boolean processComments;
-		public String  commentInd;
+		public String commentInd;
 
 		public boolean skipBlanks;
 
@@ -304,13 +306,16 @@ public class StringUtils {
 			boolean doLoop = true;
 
 			do {
-				if (!scn.hasNextLine()) break;
+				if (!scn.hasNextLine())
+					break;
 
 				tmp = scn.nextLine().trim();
 
 				// Skip blank lines
-				if (skipBlanks && tmp.equals("")) continue;
-				if (processComments && tmp.startsWith(commentInd)) continue;
+				if (skipBlanks && tmp.equals(""))
+					continue;
+				if (processComments && tmp.startsWith(commentInd))
+					continue;
 
 				doLoop = tmp.endsWith("\\") && !tmp.endsWith("\\\\");
 
@@ -329,7 +334,7 @@ public class StringUtils {
 	 * Read a series of lines from an input source.
 	 *
 	 * @param scn
-	 *		The source to read the lines from.
+	 *            The source to read the lines from.
 	 *
 	 * @return An iterator over the lines from the input source.
 	 */
@@ -341,24 +346,25 @@ public class StringUtils {
 	 * Read a series of lines from an input source.
 	 *
 	 * @param scn
-	 *		The source to read the lines from.
+	 *                        The source to read the lines from.
 	 *
 	 * @param processComments
-	 *		Whether or not to skip comment lines.
+	 *                        Whether or not to skip comment lines.
 	 *
 	 * @param commentInd
-	 *		Indicator for starting comment lines.
+	 *                        Indicator for starting comment lines.
 	 *
 	 * @param skipBlanks
-	 * 		Whether or not to skip blank lines.
+	 *                        Whether or not to skip blank lines.
 	 *
 	 * @return An iterator over the lines from the input source.
 	 */
-	public static Iterator<String> readLines(Scanner scn, boolean processComments, String commentInd, boolean skipBlanks) {
+	public static Iterator<String> readLines(Scanner scn, boolean processComments,
+			String commentInd, boolean skipBlanks) {
 		LineIterator itr = new LineIterator(scn);
 
 		itr.processComments = processComments;
-		itr.commentInd      = commentInd;
+		itr.commentInd = commentInd;
 
 		itr.skipBlanks = skipBlanks;
 
@@ -368,13 +374,12 @@ public class StringUtils {
 	/**
 	 * Check if a string contains any one of a specified number of things,
 	 * respecting groups.
-	 * 
+	 *
 	 * @param haystack
-	 *                The string to look in.
+	 *                 The string to look in.
 	 * @param needles
-	 *                The strings to look for.
-	 * @return Whether or not any of the strings were contained outside of
-	 *         groups.
+	 *                 The strings to look for.
+	 * @return Whether or not any of the strings were contained outside of groups.
 	 */
 	public static boolean levelContains(String haystack, String... needles) {
 		return LevelSplitter.def.levelContains(haystack, needles);
@@ -382,13 +387,13 @@ public class StringUtils {
 
 	/**
 	 * Split a string, respecting groups.
-	 * 
+	 *
 	 * @param phrase
-	 *                The string to split.
+	 *               The string to split.
 	 * @param splits
-	 *                The strings to split on.
-	 * @return A list of split strings. If keepDelims is true, it also
-	 *         includes the delimiters in between the split strings.
+	 *               The strings to split on.
+	 * @return A list of split strings. If keepDelims is true, it also includes the
+	 *         delimiters in between the split strings.
 	 */
 	public static List<String> levelSplit(String phrase, String... splits) {
 		return LevelSplitter.def.levelSplit(phrase, false, splits);
@@ -396,18 +401,18 @@ public class StringUtils {
 
 	/**
 	 * Split a string, respecting groups.
-	 * 
+	 *
 	 * @param phrase
-	 *                The string to split.
+	 *                   The string to split.
 	 * @param keepDelims
-	 *                Whether or not to include the delimiters in the
-	 *                results.
+	 *                   Whether or not to include the delimiters in the results.
 	 * @param splits
-	 *                The strings to split on.
-	 * @return A list of split strings. If keepDelims is true, it also
-	 *         includes the delimiters in between the split strings.
+	 *                   The strings to split on.
+	 * @return A list of split strings. If keepDelims is true, it also includes the
+	 *         delimiters in between the split strings.
 	 */
-	public static List<String> levelSplit(String phrase, boolean keepDelims, String... splits) {
+	public static List<String> levelSplit(String phrase, boolean keepDelims,
+			String... splits) {
 		return LevelSplitter.def.levelSplit(phrase, keepDelims, splits);
 	}
 }

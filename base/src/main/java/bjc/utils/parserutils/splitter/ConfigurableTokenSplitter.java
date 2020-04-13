@@ -16,15 +16,15 @@ import bjc.funcdata.IList;
  *
  */
 public class ConfigurableTokenSplitter extends SimpleTokenSplitter {
-	private final Set<String>	simpleDelimiters;
-	private final Set<String>	multipleDelimiters;
-	private final Set<String>	rRawDelimiters;
+	private final Set<String> simpleDelimiters;
+	private final Set<String> multipleDelimiters;
+	private final Set<String> rRawDelimiters;
 
 	/**
 	 * Create a new token splitter with blank configuration.
 	 *
 	 * @param keepDelims
-	 *                Whether or not to keep delimiters.
+	 *                   Whether or not to keep delimiters.
 	 */
 	public ConfigurableTokenSplitter(final boolean keepDelims) {
 		super(null, keepDelims);
@@ -50,7 +50,7 @@ public class ConfigurableTokenSplitter extends SimpleTokenSplitter {
 	 * Simple delimiters match one occurrence of themselves as literals.
 	 *
 	 * @param simpleDelims
-	 *                The simple delimiters to add.
+	 *                     The simple delimiters to add.
 	 */
 	public void addSimpleDelimiters(final String... simpleDelims) {
 		for (final String simpleDelim : simpleDelims) {
@@ -61,11 +61,10 @@ public class ConfigurableTokenSplitter extends SimpleTokenSplitter {
 	/**
 	 * Add a set of multiple delimiters to this splitter.
 	 *
-	 * Multiple delimiters match one or more occurrences of themselves as
-	 * literals.
+	 * Multiple delimiters match one or more occurrences of themselves as literals.
 	 *
 	 * @param multiDelims
-	 *                The multiple delimiters to add.
+	 *                    The multiple delimiters to add.
 	 */
 	public void addMultiDelimiters(final String... multiDelims) {
 		for (final String multiDelim : multiDelims) {
@@ -76,11 +75,10 @@ public class ConfigurableTokenSplitter extends SimpleTokenSplitter {
 	/**
 	 * Add a set of raw delimiters to this splitter.
 	 *
-	 * Raw delimiters match one occurrence of themselves as regular
-	 * expressions.
+	 * Raw delimiters match one occurrence of themselves as regular expressions.
 	 *
 	 * @param rRawDelims
-	 *                The raw delimiters to add.
+	 *                   The raw delimiters to add.
 	 */
 	public void addRawDelimiters(final String... rRawDelims) {
 		for (final String rRawDelim : rRawDelims) {
@@ -89,8 +87,8 @@ public class ConfigurableTokenSplitter extends SimpleTokenSplitter {
 	}
 
 	/**
-	 * Take the configuration and compile it into a regular expression to
-	 * use when splitting.
+	 * Take the configuration and compile it into a regular expression to use when
+	 * splitting.
 	 */
 	public void compile() {
 		final StringBuilder rPattern = new StringBuilder();
@@ -114,22 +112,25 @@ public class ConfigurableTokenSplitter extends SimpleTokenSplitter {
 
 	@Override
 	public IList<String> split(final String input) {
-		if (spliter == null) throw new IllegalStateException("Must compile splitter before use");
+		if (spliter == null)
+			throw new IllegalStateException("Must compile splitter before use");
 
 		return super.split(input);
 	}
 
 	@Override
 	public String toString() {
-		final String fmt = "ConfigurableTokenSplitter [simpleDelimiters=%s, multipleDelimiters=%s,"
-				+ " rRawDelimiters=%s, spliter=%s]";
+		final String fmt
+				= "ConfigurableTokenSplitter [simpleDelimiters=%s, multipleDelimiters=%s,"
+						+ " rRawDelimiters=%s, spliter=%s]";
 
-		return String.format(fmt, simpleDelimiters, multipleDelimiters, rRawDelimiters, spliter);
+		return String.format(fmt, simpleDelimiters, multipleDelimiters, rRawDelimiters,
+				spliter);
 	}
 
 	/**
 	 * Builder class for the configurable token splitter.
-	 * 
+	 *
 	 * @author bjculkin
 	 *
 	 */
@@ -138,9 +139,9 @@ public class ConfigurableTokenSplitter extends SimpleTokenSplitter {
 
 		/**
 		 * Create a new splitter builder.
-		 * 
+		 *
 		 * @param keepDelims
-		 *                Whether or not to keep the delimited splitter.
+		 *                   Whether or not to keep the delimited splitter.
 		 */
 		public Builder(boolean keepDelims) {
 			cts = new ConfigurableTokenSplitter(keepDelims);
@@ -148,7 +149,7 @@ public class ConfigurableTokenSplitter extends SimpleTokenSplitter {
 
 		/**
 		 * Add a set of simple delimiters.
-		 * 
+		 *
 		 * @param strings
 		 *                The simple delimiters to use.
 		 * @return The builder, for chaining.
@@ -161,7 +162,7 @@ public class ConfigurableTokenSplitter extends SimpleTokenSplitter {
 
 		/**
 		 * Add a set of multiple delimiters.
-		 * 
+		 *
 		 * @param strings
 		 *                The multiple delimiters to use.
 		 * @return The builder, for chaining.
@@ -174,7 +175,7 @@ public class ConfigurableTokenSplitter extends SimpleTokenSplitter {
 
 		/**
 		 * Add a set of raw delimiters.
-		 * 
+		 *
 		 * @param strings
 		 *                The raw delimiters to use.
 		 * @return The builder, for chaining.
@@ -187,14 +188,14 @@ public class ConfigurableTokenSplitter extends SimpleTokenSplitter {
 
 		/**
 		 * Build the splitter.
-		 * 
+		 *
 		 * @return The built splitter.
 		 */
 		public ConfigurableTokenSplitter build() {
 			ConfigurableTokenSplitter ret = new ConfigurableTokenSplitter(cts.keepDelim,
 					cts.simpleDelimiters, cts.multipleDelimiters, cts.rRawDelimiters);
 			ret.compile();
-			
+
 			return ret;
 		}
 	}

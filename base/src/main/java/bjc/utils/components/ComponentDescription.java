@@ -8,12 +8,13 @@ package bjc.utils.components;
 public class ComponentDescription implements IDescribedComponent {
 	/* Check arguments are good. */
 	@SuppressWarnings("unused")
-	private static void sanityCheckArgs(final String name, final String author, final String description,
-			final int version) {
-		if(name == null) {
+	private static void sanityCheckArgs(final String name, final String author,
+			final String description, final int version) {
+		if (name == null) {
 			throw new NullPointerException("Component name can't be null");
-		} else if(version <= 0) {
-			throw new IllegalArgumentException("Component version must be greater than 0");
+		} else if (version <= 0) {
+			throw new IllegalArgumentException(
+					"Component version must be greater than 0");
 		}
 	}
 
@@ -30,22 +31,22 @@ public class ComponentDescription implements IDescribedComponent {
 	 * Create a new component description.
 	 *
 	 * @param name
-	 *        The name of the component.
+	 *                    The name of the component.
 	 *
 	 * @param author
-	 *        The author of the component.
+	 *                    The author of the component.
 	 *
 	 * @param description
-	 *        The description of the component.
+	 *                    The description of the component.
 	 *
 	 * @param version
-	 *        The version of the component.
+	 *                    The version of the component.
 	 *
 	 * @throws IllegalArgumentException
-	 *         Thrown if version is less than 1.
+	 *                                  Thrown if version is less than 1.
 	 */
-	public ComponentDescription(final String name, final String author, final String description,
-			final int version) {
+	public ComponentDescription(final String name, final String author,
+			final String description, final int version) {
 		sanityCheckArgs(name, author, description, version);
 
 		this.name = name;
@@ -56,7 +57,7 @@ public class ComponentDescription implements IDescribedComponent {
 
 	@Override
 	public String getAuthor() {
-		if(author == null) {
+		if (author == null) {
 			return IDescribedComponent.super.getAuthor();
 		}
 
@@ -65,7 +66,7 @@ public class ComponentDescription implements IDescribedComponent {
 
 	@Override
 	public String getDescription() {
-		if(description == null) {
+		if (description == null) {
 			return IDescribedComponent.super.getDescription();
 		}
 
@@ -112,25 +113,35 @@ public class ComponentDescription implements IDescribedComponent {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if(this == obj) return true;
-		if(obj == null) return false;
-		if(getClass() != obj.getClass()) return false;
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
 
 		final ComponentDescription other = (ComponentDescription) obj;
 
-		if(author == null) {
-			if(other.author != null) return false;
-		} else if(!author.equals(other.author)) return false;
+		if (author == null) {
+			if (other.author != null)
+				return false;
+		} else if (!author.equals(other.author))
+			return false;
 
-		if(description == null) {
-			if(other.description != null) return false;
-		} else if(!description.equals(other.description)) return false;
+		if (description == null) {
+			if (other.description != null)
+				return false;
+		} else if (!description.equals(other.description))
+			return false;
 
-		if(name == null) {
-			if(other.name != null) return false;
-		} else if(!name.equals(other.name)) return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
 
-		if(version != other.version) return false;
+		if (version != other.version)
+			return false;
 
 		return true;
 	}

@@ -21,10 +21,10 @@ public class SimpleTokenSplitter implements TokenSplitter {
 	 * Create a new simple token splitter.
 	 *
 	 * @param splitter
-	 *        The pattern to split around.
+	 *                   The pattern to split around.
 	 *
 	 * @param keepDelims
-	 *        Whether or not delimiters should be kept.
+	 *                   Whether or not delimiters should be kept.
 	 */
 	public SimpleTokenSplitter(final Pattern splitter, final boolean keepDelims) {
 		spliter = splitter;
@@ -34,7 +34,7 @@ public class SimpleTokenSplitter implements TokenSplitter {
 
 	@Override
 	public IList<String> split(final String input) {
-		if(keepDelim) {
+		if (keepDelim) {
 			return RegexStringEditor.mapOccurances(input, spliter, ID.id(), ID.id());
 		}
 
@@ -43,6 +43,7 @@ public class SimpleTokenSplitter implements TokenSplitter {
 
 	@Override
 	public String toString() {
-		return String.format("SimpleTokenSplitter [spliter=%s, keepDelim=%s]", spliter, keepDelim);
+		return String.format("SimpleTokenSplitter [spliter=%s, keepDelim=%s]", spliter,
+				keepDelim);
 	}
 }

@@ -6,7 +6,7 @@ import bjc.data.BooleanToggle;
 
 /**
  * A block reader that toggles between two sources.
- * 
+ *
  * @author EVE
  *
  */
@@ -21,11 +21,11 @@ public class ToggledBlockReader implements BlockReader {
 
 	/**
 	 * Create a new toggling block reader.
-	 * 
+	 *
 	 * @param left
-	 *        The first block reader to use.
+	 *              The first block reader to use.
 	 * @param right
-	 *        The second block reader to use.
+	 *              The second block reader to use.
 	 */
 	public ToggledBlockReader(BlockReader left, BlockReader right) {
 		leftSource = left;
@@ -38,7 +38,7 @@ public class ToggledBlockReader implements BlockReader {
 
 	@Override
 	public boolean hasNextBlock() {
-		if(leftToggle.peek()) {
+		if (leftToggle.peek()) {
 			return leftSource.hasNextBlock();
 		}
 
@@ -47,7 +47,7 @@ public class ToggledBlockReader implements BlockReader {
 
 	@Override
 	public Block getBlock() {
-		if(leftToggle.peek()) {
+		if (leftToggle.peek()) {
 			return leftSource.getBlock();
 		}
 
@@ -58,13 +58,14 @@ public class ToggledBlockReader implements BlockReader {
 	public boolean nextBlock() {
 		boolean succ;
 
-		if(leftToggle.get()) {
+		if (leftToggle.get()) {
 			succ = leftSource.nextBlock();
 		} else {
 			succ = rightSource.nextBlock();
 		}
 
-		if(succ) blockNo += 1;
+		if (succ)
+			blockNo += 1;
 		return succ;
 	}
 

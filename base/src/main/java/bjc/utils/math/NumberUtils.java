@@ -2,26 +2,26 @@ package bjc.utils.math;
 
 /**
  * A variety of functions for doing useful stuff with numbers.
- * 
+ *
  * @author EVE
  *
  */
 public class NumberUtils {
 	/*
 	 * @TODO 2/12/18 Ben Culkin :RomanExpansion
-	 * 
-	 * Use U+305 for large roman numerals, as well as excels 'concise'
-	 * numerals (as implemented by roman()).
+	 *
+	 * Use U+305 for large roman numerals, as well as excels 'concise' numerals (as
+	 * implemented by roman()).
 	 */
 
 	/**
 	 * Convert a number into a roman numeral.
-	 * 
+	 *
 	 * @param number
-	 *        The number to convert.
+	 *                The number to convert.
 	 * @param classic
-	 *        Whether to use classic roman numerals (use IIII instead of IV,
-	 *        and such).
+	 *                Whether to use classic roman numerals (use IIII instead of IV,
+	 *                and such).
 	 * @return The number as a roman numeral.
 	 */
 	public static String toRoman(long number, boolean classic) {
@@ -29,102 +29,102 @@ public class NumberUtils {
 
 		long currNumber = number;
 
-		if(currNumber == 0) {
+		if (currNumber == 0) {
 			return "N";
 		}
 
-		if(currNumber < 0) {
+		if (currNumber < 0) {
 			currNumber *= -1;
 
 			work.append("-");
 		}
 
-		if(currNumber >= 1000) {
+		if (currNumber >= 1000) {
 			int numM = (int) (currNumber / 1000);
 			currNumber = currNumber % 1000;
 
-			for(int i = 0; i < numM; i++) {
+			for (int i = 0; i < numM; i++) {
 				work.append("M");
 			}
 		}
 
-		if(currNumber >= 900 && !classic) {
+		if (currNumber >= 900 && !classic) {
 			currNumber = currNumber % 900;
 
 			work.append("CM");
 		}
 
-		if(currNumber >= 500) {
+		if (currNumber >= 500) {
 			currNumber = currNumber % 500;
 
 			work.append("D");
 		}
 
-		if(currNumber >= 400 && !classic) {
+		if (currNumber >= 400 && !classic) {
 			currNumber = currNumber % 400;
 
 			work.append("CD");
 		}
 
-		if(currNumber >= 100) {
+		if (currNumber >= 100) {
 			int numC = (int) (currNumber / 100);
 			currNumber = currNumber % 100;
 
-			for(int i = 0; i < numC; i++) {
+			for (int i = 0; i < numC; i++) {
 				work.append("C");
 			}
 		}
 
-		if(currNumber >= 90 && !classic) {
+		if (currNumber >= 90 && !classic) {
 			currNumber = currNumber % 90;
 
 			work.append("XC");
 		}
 
-		if(currNumber >= 50) {
+		if (currNumber >= 50) {
 			currNumber = currNumber % 50;
 
 			work.append("L");
 		}
 
-		if(currNumber >= 40 && !classic) {
+		if (currNumber >= 40 && !classic) {
 			currNumber = currNumber % 40;
 
 			work.append("XL");
 		}
 
-		if(currNumber >= 10) {
+		if (currNumber >= 10) {
 			int numX = (int) (currNumber / 10);
 			currNumber = currNumber % 10;
 
-			for(int i = 0; i < numX; i++) {
+			for (int i = 0; i < numX; i++) {
 				work.append("X");
 			}
 		}
 
-		if(currNumber >= 9 && !classic) {
+		if (currNumber >= 9 && !classic) {
 			currNumber = currNumber % 9;
 
 			work.append("IX");
 		}
 
-		if(currNumber >= 5) {
+		if (currNumber >= 5) {
 			currNumber = currNumber % 5;
 
 			work.append("V");
 		}
 
-		if(currNumber >= 4 && !classic) {
+		if (currNumber >= 4 && !classic) {
 			currNumber = currNumber % 4;
 
 			work.append("IV");
 		}
 
-		if(currNumber >= 1) {
+		if (currNumber >= 1) {
 			int numI = (int) (currNumber / 1);
 			currNumber = currNumber % 1;
 
-			for(int i = 0; i < numI; i++) {
+			for (int i = 0; i < numI; i++) {
 				work.append("I");
 			}
 		}
@@ -134,9 +134,9 @@ public class NumberUtils {
 
 	/**
 	 * Convert a number into a cardinal number.
-	 * 
+	 *
 	 * @param number
-	 *        The number to convert
+	 *               The number to convert
 	 * @return The number as a cardinal.
 	 */
 	public static String toCardinal(long number) {
@@ -144,34 +144,37 @@ public class NumberUtils {
 	}
 
 	private static String[] cardinals = new String[] {
-			"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven",
-			"twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen",
-			"twenty",
+			"zero", "one", "two", "three", "four", "five", "six", "seven", "eight",
+			"nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen",
+			"sixteen", "seventeen", "eighteen", "nineteen", "twenty",
 	};
 
 	/**
 	 * Convert a number into a cardinal number.
-	 * 
+	 *
 	 * @param number
-	 *        The number to convert to a cardinal.
+	 *               The number to convert to a cardinal.
 	 * @param custom
-	 *        The customizations to use.
+	 *               The customizations to use.
 	 * @return The number as a cardinal.
 	 */
 	public static String toCardinal(long number, CardinalState custom) {
-		if(custom != null) {
+		if (custom != null) {
 			String res = custom.handleCustom(number);
 
-			if(res != null) return res;
+			if (res != null)
+				return res;
 		}
 
-		if(number < 0) return "negative " + toCardinal(number * -1, custom);
+		if (number < 0)
+			return "negative " + toCardinal(number * -1, custom);
 
-		if(number <= 20) return cardinals[(int) number];
+		if (number <= 20)
+			return cardinals[(int) number];
 
-		if(number < 100) {
-			if(number % 10 == 0) {
-				switch((int) number) {
+		if (number < 100) {
+			if (number % 10 == 0) {
+				switch ((int) number) {
 				case 30:
 					return "thirty";
 				case 40:
@@ -200,35 +203,39 @@ public class NumberUtils {
 			return toCardinal(numTens, custom) + "-" + toCardinal(numOnes, custom);
 		}
 
-		if(number < 1000) {
+		if (number < 1000) {
 			long numHundreds = number / 100;
 			long rest = number % 100;
 
-			return toCardinal(numHundreds, custom) + " hundred and " + toCardinal(rest, custom);
+			return toCardinal(numHundreds, custom) + " hundred and "
+					+ toCardinal(rest, custom);
 		}
 
 		long MILLION = (long) (Math.pow(10, 6));
-		if(number < MILLION) {
+		if (number < MILLION) {
 			long numThousands = number / 1000;
 			long rest = number % 1000;
 
-			return toCardinal(numThousands, custom) + " thousand, " + toCardinal(rest, custom);
+			return toCardinal(numThousands, custom) + " thousand, "
+					+ toCardinal(rest, custom);
 		}
 
 		long BILLION = (long) (Math.pow(10, 9));
-		if(number < BILLION) {
+		if (number < BILLION) {
 			long numMillions = number / MILLION;
 			long rest = number % MILLION;
 
-			return toCardinal(numMillions, custom) + " million, " + toCardinal(rest, custom);
+			return toCardinal(numMillions, custom) + " million, "
+					+ toCardinal(rest, custom);
 		}
 
 		long TRILLION = (long) (Math.pow(10, 12));
-		if(number < TRILLION) {
+		if (number < TRILLION) {
 			long numBillions = number / BILLION;
 			long rest = number % BILLION;
 
-			return toCardinal(numBillions, custom) + " billion, " + toCardinal(rest, custom);
+			return toCardinal(numBillions, custom) + " billion, "
+					+ toCardinal(rest, custom);
 		}
 
 		throw new IllegalArgumentException(
@@ -237,18 +244,18 @@ public class NumberUtils {
 
 	/**
 	 * Convert a number into an ordinal.
-	 * 
+	 *
 	 * @param number
-	 *        The number to convert to an ordinal.
+	 *               The number to convert to an ordinal.
 	 * @return The number as an ordinal.
 	 */
 	public static String toOrdinal(long number) {
-		if(number < 0) {
+		if (number < 0) {
 			return "minus " + toOrdinal(number);
 		}
 
-		if(number < 20) {
-			switch((int) number) {
+		if (number < 20) {
+			switch ((int) number) {
 			case 0:
 				return "zeroth";
 			case 1:
@@ -297,9 +304,9 @@ public class NumberUtils {
 			}
 		}
 
-		if(number < 100) {
-			if(number % 10 == 0) {
-				switch((int) number) {
+		if (number < 100) {
+			if (number % 10 == 0) {
+				switch ((int) number) {
 				case 20:
 					return "twentieth";
 				case 30:
@@ -317,7 +324,8 @@ public class NumberUtils {
 				case 90:
 					return "ninetieth";
 				default:
-					throw new IllegalArgumentException(String.format("Illegal number %d", number));
+					throw new IllegalArgumentException(
+							String.format("Illegal number %d", number));
 				}
 			}
 
@@ -329,11 +337,11 @@ public class NumberUtils {
 		long tens = procNum / 10;
 		long ones = procNum % 10;
 
-		if(tens == 1) {
+		if (tens == 1) {
 			return Long.toString(number) + "th";
 		}
 
-		switch((int) ones) {
+		switch ((int) ones) {
 		case 1:
 			return Long.toString(number) + "st";
 		case 2:
@@ -349,19 +357,19 @@ public class NumberUtils {
 	static {
 		int idx = 0;
 
-		for(char i = 0; i < 10; i++) {
+		for (char i = 0; i < 10; i++) {
 			radixChars[idx] = (char) ('0' + i);
 
 			idx += 1;
 		}
 
-		for(char i = 0; i < 26; i++) {
+		for (char i = 0; i < 26; i++) {
 			radixChars[idx] = (char) ('A' + i);
 
 			idx += 1;
 		}
 
-		for(char i = 0; i < 26; i++) {
+		for (char i = 0; i < 26; i++) {
 			radixChars[idx] = (char) ('a' + i);
 
 			idx += 1;
@@ -370,58 +378,61 @@ public class NumberUtils {
 
 	/**
 	 * Convert a number into a commafied string.
-	 * 
+	 *
 	 * @param val
-	 *        The number to convert.
+	 *                      The number to convert.
 	 * @param mincols
-	 *        The minimum number of columns to use.
+	 *                      The minimum number of columns to use.
 	 * @param padchar
-	 *        The padding char to use.
+	 *                      The padding char to use.
 	 * @param commaInterval
-	 *        The interval to place commas at.
+	 *                      The interval to place commas at.
 	 * @param commaChar
-	 *        The character to use as a comma
+	 *                      The character to use as a comma
 	 * @param signed
-	 *        Whether or not to always display a sign
+	 *                      Whether or not to always display a sign
 	 * @param radix
-	 *        The radix to use
+	 *                      The radix to use
 	 * @return The number as a commafied string.
 	 */
-	public static String toCommaString(long val, int mincols, char padchar, int commaInterval, char commaChar,
-			boolean signed, int radix) {
-		if(radix > radixChars.length) {
+	public static String toCommaString(long val, int mincols, char padchar,
+			int commaInterval, char commaChar, boolean signed, int radix) {
+		if (radix > radixChars.length) {
 			throw new IllegalArgumentException(
-					String.format("Radix %d is larger than largest supported radix %d", radix,
-							radixChars.length));
+					String.format("Radix %d is larger than largest supported radix %d",
+							radix, radixChars.length));
 		}
 
 		StringBuilder work = new StringBuilder();
 
 		boolean isNeg = false;
 		long currVal = val;
-		if(currVal < 0) {
-			isNeg    = true;
+		if (currVal < 0) {
+			isNeg = true;
 			currVal *= -1;
 		}
 
-		if(currVal == 0) {
+		if (currVal == 0) {
 			work.append(radixChars[0]);
 		} else {
 			int valCounter = 0;
 
-			while(currVal != 0) {
+			while (currVal != 0) {
 				valCounter += 1;
 
 				int radDigit = (int) (currVal % radix);
 				work.append(radixChars[radDigit]);
 				currVal = currVal / radix;
 
-				if(commaInterval != 0 && valCounter % commaInterval == 0 && currVal != 0) work.append(commaChar);
+				if (commaInterval != 0 && valCounter % commaInterval == 0 && currVal != 0)
+					work.append(commaChar);
 			}
 		}
 
-		if(isNeg)       work.append("-");
-		else if(signed) work.append("+");
+		if (isNeg)
+			work.append("-");
+		else if (signed)
+			work.append("+");
 
 		work.reverse();
 
@@ -430,25 +441,24 @@ public class NumberUtils {
 		 *
 		 * Should we have some way to specify how to pad?
 		 *
-		 * By this, I mean specify padding direction (left, right,
-		 * balanced...)
+		 * By this, I mean specify padding direction (left, right, balanced...)
 		 */
 		StringBuilder pad = new StringBuilder();
 
-		if(work.length() < mincols) {
+		if (work.length() < mincols) {
 			@SuppressWarnings("unused")
 			int padCount = 0;
-			for(int i = work.length(); i < mincols; i++) {
+			for (int i = work.length(); i < mincols; i++) {
 				// @NOTE 9/6/18 :CommaPad
 				//
 				// I have no idea if this is the intended
 				// behavior, or if something is wrong with the
 				// example case in the menu
 				// if (commaInterval != 0 && padCount != 0) {
-				// 	if (Character.isDigit(padchar) && padCount % commaInterval == 0)
-				// 		pad.append(commaChar);
-				// 	else
-						pad.append(padchar);
+				// if (Character.isDigit(padchar) && padCount % commaInterval == 0)
+				// pad.append(commaChar);
+				// else
+				pad.append(padchar);
 				// }
 
 				padCount++;
@@ -460,20 +470,21 @@ public class NumberUtils {
 
 	/**
 	 * Convert a number to a normal commafied string.
-	 * 
+	 *
 	 * @param val
-	 *        The value to convert.
+	 *                The value to convert.
 	 * @param mincols
-	 *        The minimum number of columns.
+	 *                The minimum number of columns.
 	 * @param padchar
-	 *        The padding char to use.
+	 *                The padding char to use.
 	 * @param signed
-	 *        Whether or not to display the sign.
+	 *                Whether or not to display the sign.
 	 * @param radix
-	 *        The radix to use.
+	 *                The radix to use.
 	 * @return The number as a normal commafied string.
 	 */
-	public static String toNormalString(long val, int mincols, char padchar, boolean signed, int radix) {
+	public static String toNormalString(long val, int mincols, char padchar,
+			boolean signed, int radix) {
 		return toCommaString(val, mincols, padchar, 0, ',', signed, radix);
 	}
 }

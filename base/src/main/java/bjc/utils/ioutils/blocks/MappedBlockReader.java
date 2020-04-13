@@ -5,7 +5,7 @@ import java.util.function.UnaryOperator;
 
 /**
  * A block reader that applies a transform to each block.
- * 
+ *
  * @author EVE
  *
  */
@@ -20,11 +20,11 @@ public class MappedBlockReader implements BlockReader {
 
 	/**
 	 * Create a new mapped block reader.
-	 * 
+	 *
 	 * @param source
-	 *        The source for blocks
+	 *               The source for blocks
 	 * @param trans
-	 *        The transform to apply.
+	 *               The transform to apply.
 	 */
 	public MappedBlockReader(BlockReader source, UnaryOperator<Block> trans) {
 		reader = source;
@@ -45,7 +45,7 @@ public class MappedBlockReader implements BlockReader {
 
 	@Override
 	public boolean nextBlock() {
-		if(hasNextBlock()) {
+		if (hasNextBlock()) {
 			current = transform.apply(reader.next());
 			blockNo += 1;
 

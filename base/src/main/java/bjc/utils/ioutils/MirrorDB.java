@@ -13,7 +13,7 @@ import java.util.Scanner;
 
 /**
  * A database for describing mirrored characters.
- * 
+ *
  * @author bjculkin
  *
  */
@@ -57,9 +57,9 @@ public class MirrorDB {
 
 	/**
 	 * Check if a string can be mirrored.
-	 * 
+	 *
 	 * @param mir
-	 *                The string to check for mirroring.
+	 *            The string to check for mirroring.
 	 * @return Whether or not the given string can be mirrored.
 	 */
 	public boolean canMirror(String mir) {
@@ -68,9 +68,9 @@ public class MirrorDB {
 
 	/**
 	 * Mirror a string.
-	 * 
+	 *
 	 * @param mir
-	 *                The string to mirror.
+	 *            The string to mirror.
 	 * @return The mirrored version of the string.
 	 */
 	public String mirror(String mir) {

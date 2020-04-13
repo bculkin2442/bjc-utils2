@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 /**
  * A line reader
+ * 
  * @author bjculkin
  *
  */
@@ -14,6 +15,6 @@ public class LineReader implements AutoCloseable {
 	public void close() {
 		scn.close();
 	}
-	
+
 	// @TODO Implement me - ben, 1/6/20
 }

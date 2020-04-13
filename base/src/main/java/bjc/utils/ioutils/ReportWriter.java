@@ -9,7 +9,7 @@ import bjc.esodata.DefaultList;
 /**
  * A writer with support for some formatting operations, such as autoindentation
  * and pagination.
- * 
+ *
  * @author bjculkin
  *
  */
@@ -82,7 +82,7 @@ public class ReportWriter extends Writer {
 
 	/**
 	 * Get the current indent level.
-	 * 
+	 *
 	 * @return The current indent level.
 	 */
 	public int getLevel() {
@@ -91,10 +91,10 @@ public class ReportWriter extends Writer {
 
 	/**
 	 * Get the current line-spacing.
-	 * 
-	 * This is the number of blank lines to print out every time a blank
-	 * line is encountered in the input, and is set to 1 by default.
-	 * 
+	 *
+	 * This is the number of blank lines to print out every time a blank line is
+	 * encountered in the input, and is set to 1 by default.
+	 *
 	 * @return The current line spacing.
 	 */
 	public int getLineSpacing() {
@@ -103,7 +103,7 @@ public class ReportWriter extends Writer {
 
 	/**
 	 * Get the current line on the page.
-	 * 
+	 *
 	 * @return The current line on the page.
 	 */
 	public int getPageLine() {
@@ -112,7 +112,7 @@ public class ReportWriter extends Writer {
 
 	/**
 	 * Get the current page number.
-	 * 
+	 *
 	 * @return The current page number.
 	 */
 	public int getPageNum() {
@@ -121,7 +121,7 @@ public class ReportWriter extends Writer {
 
 	/**
 	 * Get the number of lines per page.
-	 * 
+	 *
 	 * @return The number of lines per page.
 	 */
 	public int getLinesPerPage() {
@@ -130,9 +130,9 @@ public class ReportWriter extends Writer {
 
 	/**
 	 * Get the current indent position.
-	 * 
+	 *
 	 * This is the count of columns the indentation occupies.
-	 * 
+	 *
 	 * @return The current indent position.
 	 */
 	public int getIndentPos() {
@@ -141,7 +141,7 @@ public class ReportWriter extends Writer {
 
 	/**
 	 * Get the string of the default indentation value.
-	 * 
+	 *
 	 * @return The string for the default indentation value.
 	 */
 	public String getString() {
@@ -150,9 +150,9 @@ public class ReportWriter extends Writer {
 
 	/**
 	 * Get the string of a specific indentation value.
-	 * 
+	 *
 	 * @param lvl
-	 *                The level to get the value for.
+	 *            The level to get the value for.
 	 * @return The string for the specified indentation value.
 	 */
 	public String getString(int lvl) {
@@ -161,7 +161,7 @@ public class ReportWriter extends Writer {
 
 	/**
 	 * Get the number of spaces to a tab.
-	 * 
+	 *
 	 * @return The number of spaces to a tab.
 	 */
 	public int getTabEqv() {
@@ -170,7 +170,7 @@ public class ReportWriter extends Writer {
 
 	/**
 	 * Get the total number of lines written.
-	 * 
+	 *
 	 * @return The total number of lines written.
 	 */
 	public int getLinesWritter() {
@@ -179,7 +179,7 @@ public class ReportWriter extends Writer {
 
 	/**
 	 * Get the current position in the line.
-	 * 
+	 *
 	 * @return The current position in the line.
 	 */
 	public int getLinePos() {
@@ -188,7 +188,7 @@ public class ReportWriter extends Writer {
 
 	/**
 	 * Get the last character printed.
-	 * 
+	 *
 	 * @return The last character printed.
 	 */
 	public char getLastChar() {
@@ -197,7 +197,7 @@ public class ReportWriter extends Writer {
 
 	/**
 	 * Get the contained writer.
-	 * 
+	 *
 	 * @return The contained writer.
 	 */
 	public Writer getWriter() {
@@ -206,7 +206,7 @@ public class ReportWriter extends Writer {
 
 	/**
 	 * Check if the last character was a newline.
-	 * 
+	 *
 	 * @return Was the last character a new line?
 	 */
 	public boolean isLastCharNL() {
@@ -215,7 +215,7 @@ public class ReportWriter extends Writer {
 
 	/**
 	 * Check if tabs are being printed as spaces.
-	 * 
+	 *
 	 * @return Are tabs being printed as spaces?
 	 */
 	public boolean isPrintingTabsAsSpaces() {
@@ -224,10 +224,9 @@ public class ReportWriter extends Writer {
 
 	/**
 	 * Set the line spacing.
-	 * 
+	 *
 	 * @param spacing
-	 *                The number of lines to print for every blank line
-	 *                encountered.
+	 *                The number of lines to print for every blank line encountered.
 	 */
 	public void setLineSpacing(int spacing) {
 		lineSpacing = spacing;
@@ -235,9 +234,9 @@ public class ReportWriter extends Writer {
 
 	/**
 	 * Set whether tabs are being printed as spaces.
-	 * 
+	 *
 	 * @param tabsAsSpaces
-	 *                Whether to print tabs as spaces.
+	 *                     Whether to print tabs as spaces.
 	 */
 	public void setPrintTabsAsSpaces(boolean tabsAsSpaces) {
 		printTabsAsSpaces = tabsAsSpaces;
@@ -248,9 +247,9 @@ public class ReportWriter extends Writer {
 
 	/**
 	 * Set the number of lines per page.
-	 * 
+	 *
 	 * @param lines
-	 *                The number of lines per page.
+	 *              The number of lines per page.
 	 */
 	public void setLinesPerPage(int lines) {
 		linesPerPage = lines;
@@ -273,9 +272,9 @@ public class ReportWriter extends Writer {
 
 	/**
 	 * Set the current indentation level.
-	 * 
+	 *
 	 * @param level
-	 *                The indentation level.
+	 *              The indentation level.
 	 */
 	public void setLevel(int level) {
 		indentLevel = level;
@@ -283,9 +282,9 @@ public class ReportWriter extends Writer {
 
 	/**
 	 * Set the current amount of spaces per tab.
-	 * 
+	 *
 	 * @param eqv
-	 *                The amount of spaces per tab.
+	 *            The amount of spaces per tab.
 	 */
 	public void setTabEqv(int eqv) {
 		tabEqv = eqv;
@@ -302,12 +301,12 @@ public class ReportWriter extends Writer {
 
 	/**
 	 * Set the default indentation string to use.
-	 * 
-	 * NOTE: Using a string that contains a newline may cause weirdness of
-	 * various sorts to happen.
-	 * 
+	 *
+	 * NOTE: Using a string that contains a newline may cause weirdness of various
+	 * sorts to happen.
+	 *
 	 * @param str
-	 *                The string to use for default indentation.
+	 *            The string to use for default indentation.
 	 */
 	public void setString(String str) {
 		defIVal.indentStr = str;
@@ -317,11 +316,11 @@ public class ReportWriter extends Writer {
 
 	/**
 	 * Set the indentation string for a specific indentation level.
-	 * 
+	 *
 	 * @param lvl
-	 *                The level to set the indentation string for.
+	 *            The level to set the indentation string for.
 	 * @param str
-	 *                The indentation string to use.
+	 *            The indentation string to use.
 	 */
 	public void setString(int lvl, String str) {
 		iVals.get(lvl).indentStr = str;
@@ -336,11 +335,11 @@ public class ReportWriter extends Writer {
 	// Pass -2 to refresh the default index
 	/**
 	 * Refresh the indentation settings.
-	 * 
+	 *
 	 * @param lvl
-	 *                The level of indents to refresh. Passing a number >= 0
-	 *                refreshes that level, -1 refreshes every level, and -2
-	 *                refreshes just the default indentation.
+	 *            The level of indents to refresh. Passing a number >= 0 refreshes
+	 *            that level, -1 refreshes every level, and -2 refreshes just the
+	 *            default indentation.
 	 */
 	private void refreshIndents(int lvl) {
 		if (lvl == -2) {
@@ -349,7 +348,7 @@ public class ReportWriter extends Writer {
 			for (IndentVal ival : iVals) {
 				refreshIndent(ival);
 			}
-			
+
 			refreshIndent(defIVal);
 		} else {
 			refreshIndent(iVals.get(lvl));
@@ -382,8 +381,11 @@ public class ReportWriter extends Writer {
 
 	/**
 	 * Duplicate this writers settings.
-	 * @param contents The internal writer to use.
-	 * @return A new writer, sharing this ones settings, but writing to the provided Writer instead.
+	 * 
+	 * @param contents
+	 *                 The internal writer to use.
+	 * @return A new writer, sharing this ones settings, but writing to the provided
+	 *         Writer instead.
 	 */
 	public ReportWriter duplicate(Writer contents) {
 		ReportWriter rw = new ReportWriter(contents);
@@ -417,9 +419,12 @@ public class ReportWriter extends Writer {
 	public ReportWriter() {
 		this(new StringWriter());
 	}
+
 	/**
 	 * Create a new ReportWriter.
-	 * @param write The place to write to.
+	 * 
+	 * @param write
+	 *              The place to write to.
 	 */
 	public ReportWriter(Writer write) {
 		this(write, 0, "\t");
@@ -427,9 +432,13 @@ public class ReportWriter extends Writer {
 
 	/**
 	 * Create a new ReportWriter with the specified default indentation values.
-	 * @param write The place to write to.
-	 * @param level The current indentation level.
-	 * @param indentStr The indentation string.
+	 * 
+	 * @param write
+	 *                  The place to write to.
+	 * @param level
+	 *                  The current indentation level.
+	 * @param indentStr
+	 *                  The indentation string.
 	 */
 	public ReportWriter(Writer write, int level, String indentStr) {
 		super();
@@ -446,7 +455,9 @@ public class ReportWriter extends Writer {
 
 	/**
 	 * Indent a specific number of levels.
-	 * @param lvl The number of levels to indent.
+	 * 
+	 * @param lvl
+	 *            The number of levels to indent.
 	 */
 	public void indent(int lvl) {
 		indentLevel += lvl;
@@ -461,7 +472,9 @@ public class ReportWriter extends Writer {
 
 	/**
 	 * Dedent a specific number of levels.
-	 * @param lvl The number of levels to dedent.
+	 * 
+	 * @param lvl
+	 *            The number of levels to dedent.
 	 */
 	public void dedent(int lvl) {
 		// @NOTE 9/5/18
@@ -480,8 +493,11 @@ public class ReportWriter extends Writer {
 
 	/**
 	 * Writes a buffer to the output, then clears it.
-	 * @param sb The buffer to write and clear.
-	 * @throws IOException If something goes wrong writing the buffer.
+	 * 
+	 * @param sb
+	 *           The buffer to write and clear.
+	 * @throws IOException
+	 *                     If something goes wrong writing the buffer.
 	 */
 	public void writeBuffer(StringBuffer sb) throws IOException {
 		write(sb.toString());
@@ -514,7 +530,8 @@ public class ReportWriter extends Writer {
 			// If we're printing CRLF pairs, make sure that we don't
 			// print incomplete pairs.
 			if (i < lineSpacing - 1) {
-				if (c == '\n' && lastChar == '\r') contained.write('\r');
+				if (c == '\n' && lastChar == '\r')
+					contained.write('\r');
 			}
 		}
 
@@ -532,7 +549,8 @@ public class ReportWriter extends Writer {
 	@Override
 	public void write(char[] cbuf, int off, int len) throws IOException {
 		// Skip empty writes
-		if (len == 0) return;
+		if (len == 0)
+			return;
 
 		// Last character was a new line, print the indent string
 		if (lastCharWasNL) {
@@ -546,7 +564,7 @@ public class ReportWriter extends Writer {
 
 			char c = cbuf[idx];
 
-			if ((c == '\n' && lastChar != '\r') || c == '\n' || c == '\r' ||  c == '\f') {
+			if ((c == '\n' && lastChar != '\r') || c == '\n' || c == '\r' || c == '\f') {
 				writeNL(c);
 			} else {
 				if (lastCharWasNL) {
@@ -577,7 +595,8 @@ public class ReportWriter extends Writer {
 
 			if (printTabsAsSpaces)
 				contained.write(ival.indentStrSpacedTabs);
-			else contained.write(ival.indentStr);
+			else
+				contained.write(ival.indentStr);
 
 			linePos += ival.indentStrPos;
 			indentPos += ival.indentStrPos;

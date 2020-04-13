@@ -20,7 +20,8 @@ final class TokenTransformer<TokenType> implements Consumer<TokenType> {
 	/*
 	 * Handle operators
 	 */
-	private final class OperatorHandler implements UnaryOperator<ConstructorState<TokenType>> {
+	private final class OperatorHandler
+			implements UnaryOperator<ConstructorState<TokenType>> {
 		/* The handled element. */
 		private final TokenType element;
 
@@ -32,14 +33,14 @@ final class TokenTransformer<TokenType> implements Consumer<TokenType> {
 		@Override
 		public ConstructorState<TokenType> apply(final ConstructorState<TokenType> pair) {
 			/*
-			 * Replace the current AST with the result of handling
-			 * an operator
+			 * Replace the current AST with the result of handling an operator
 			 */
-			return new ConstructorState<>(pair.bindLeft(
-						queuedASTs -> handleOperator(queuedASTs)));
+			return new ConstructorState<>(
+					pair.bindLeft(queuedASTs -> handleOperator(queuedASTs)));
 		}
 
-		private ConstructorState<TokenType> handleOperator(final Deque<ITree<TokenType>> queuedASTs) {
+		private ConstructorState<TokenType>
+				handleOperator(final Deque<ITree<TokenType>> queuedASTs) {
 			/*
 			 * The AST we're going to hand back
 			 */
@@ -48,14 +49,13 @@ final class TokenTransformer<TokenType> implements Consumer<TokenType> {
 			/*
 			 * Handle special operators
 			 */
-			if(isSpecialOperator.test(element)) {
+			if (isSpecialOperator.test(element)) {
 				newAST = handleSpecialOperator.apply(element).apply(queuedASTs);
 			} else {
 				/*
-				 * Error if we don't have enough for a binary
-				 * operator
+				 * Error if we don't have enough for a binary operator
 				 */
-				if(queuedASTs.size() < 2) {
+				if (queuedASTs.size() < 2) {
 					final String msg = String.format(
 							"Attempted to parse binary operator without enough operands\n\tProblem operator is: %s\n\tPossible operand is: %s",
 							element.toString(), queuedASTs.peek().toString());
@@ -67,7 +67,7 @@ final class TokenTransformer<TokenType> implements Consumer<TokenType> {
 				 * Grab the two operands
 				 */
 				final ITree<TokenType> right = queuedASTs.pop();
-				final ITree<TokenType> left  = queuedASTs.pop();
+				final ITree<TokenType> left = queuedASTs.pop();
 
 				/*
 				 * Create a new AST
@@ -94,27 +94,30 @@ final class TokenTransformer<TokenType> implements Consumer<TokenType> {
 	private final Predicate<TokenType> operatorPredicate;
 
 	/* The predicate for detecting special operators. */
-	private final Predicate<TokenType>				isSpecialOperator;
+	private final Predicate<TokenType> isSpecialOperator;
 	/* The function for handling special operators. */
-	private final Function<TokenType, QueueFlattener<TokenType>>	handleSpecialOperator;
+	private final Function<TokenType, QueueFlattener<TokenType>> handleSpecialOperator;
 
 	/**
 	 * Create a new transformer
 	 *
 	 * @param initialState
-	 * 	The initial state of the transformer.
+	 *                              The initial state of the transformer.
 	 *
 	 * @param operatorPredicate
-	 * 	The predicate to use to identify operators.
+	 *                              The predicate to use to identify operators.
 	 *
 	 * @param isSpecialOperator
-	 * 	The predicate used to identify special operators.
+	 *                              The predicate used to identify special
+	 *                              operators.
 	 *
 	 * @param handleSpecialOperator
-	 * 	The function used for handling special operators.
+	 *                              The function used for handling special
+	 *                              operators.
 	 */
 	public TokenTransformer(final IHolder<ConstructorState<TokenType>> initialState,
-			final Predicate<TokenType> operatorPredicate, final Predicate<TokenType> isSpecialOperator,
+			final Predicate<TokenType> operatorPredicate,
+			final Predicate<TokenType> isSpecialOperator,
 			final Function<TokenType, QueueFlattener<TokenType>> handleSpecialOperator) {
 		this.initialState = initialState;
 		this.operatorPredicate = operatorPredicate;
@@ -127,7 +130,7 @@ final class TokenTransformer<TokenType> implements Consumer<TokenType> {
 		/*
 		 * Handle operators
 		 */
-		if(operatorPredicate.test(element)) {
+		if (operatorPredicate.test(element)) {
 			initialState.transform(new OperatorHandler(element));
 		} else {
 			final ITree<TokenType> newAST = new Tree<>(element);
@@ -135,18 +138,11 @@ final class TokenTransformer<TokenType> implements Consumer<TokenType> {
 			/*
 			 * Insert the new tree into the AST
 			 */
-			initialState.transform(pair -> {
-				/*
-				 * Transform the pair, ignoring the current AST
-				 * in favor of the one consisting of the current
-				 * element
-				 */
-				return new ConstructorState<>(pair.bindLeft(queue -> {
-					queue.push(newAST);
+			initialState.transform(pair -> new ConstructorState<>(pair.bindLeft(queue -> {
+				queue.push(newAST);
 
-					return new Pair<>(queue, newAST);
-				}));
-			});
+				return new Pair<>(queue, newAST);
+			})));
 		}
 	}
 }

@@ -18,7 +18,8 @@ import bjc.data.Pair;
  * @author Ben Culkin
  */
 final class CompoundCollector<InitialType, AuxType1, AuxType2, FinalType1, FinalType2>
-		implements Collector<InitialType, IHolder<IPair<AuxType1, AuxType2>>, IPair<FinalType1, FinalType2>> {
+		implements Collector<InitialType, IHolder<IPair<AuxType1, AuxType2>>,
+				IPair<FinalType1, FinalType2>> {
 	/* Our characteristics. */
 	private final Set<java.util.stream.Collector.Characteristics> characteristicSet;
 
@@ -31,10 +32,10 @@ final class CompoundCollector<InitialType, AuxType1, AuxType2, FinalType1, Final
 	 * Create a collector that uses two collectors.
 	 *
 	 * @param first
-	 *        The first collector.
+	 *               The first collector.
 	 *
 	 * @param second
-	 *        The second collector.
+	 *               The second collector.
 	 */
 	public CompoundCollector(final Collector<InitialType, AuxType1, FinalType1> first,
 			final Collector<InitialType, AuxType2, FinalType2> second) {
@@ -71,27 +72,24 @@ final class CompoundCollector<InitialType, AuxType1, AuxType2, FinalType1, Final
 		final BinaryOperator<AuxType1> firstCombiner = first.combiner();
 		final BinaryOperator<AuxType2> secondCombiner = second.combiner();
 
-		return (leftState, rightState) -> {
-			return leftState.unwrap(leftPair -> {
-				return rightState.transform(rightPair -> {
-					return leftPair.combine(rightPair, firstCombiner, secondCombiner);
-				});
+		return (leftState, rightState) -> leftState.unwrap(leftPair -> {
+			return rightState.transform(rightPair -> {
+				return leftPair.combine(rightPair, firstCombiner, secondCombiner);
 			});
-		};
+		});
 	}
 
 	@Override
-	public Function<IHolder<IPair<AuxType1, AuxType2>>, IPair<FinalType1, FinalType2>> finisher() {
-		return state -> {
-			return state.unwrap(pair -> {
-				return pair.bind((left, right) -> {
-					final FinalType1 finalLeft = first.finisher().apply(left);
-					final FinalType2 finalRight = second.finisher().apply(right);
+	public Function<IHolder<IPair<AuxType1, AuxType2>>, IPair<FinalType1, FinalType2>>
+			finisher() {
+		return state -> state.unwrap(pair -> {
+			return pair.bind((left, right) -> {
+				final FinalType1 finalLeft = first.finisher().apply(left);
+				final FinalType2 finalRight = second.finisher().apply(right);
 
-					return new Pair<>(finalLeft, finalRight);
-				});
+				return new Pair<>(finalLeft, finalRight);
 			});
-		};
+		});
 	}
 
 	@Override

@@ -21,39 +21,40 @@ public class RegexStringEditor {
 	private static final UnaryOperator<String> SID = ID.id();
 
 	/**
-	 * Replace every occurrence of the pattern with the result of applying
-	 * the action to the string matched by the pattern.
+	 * Replace every occurrence of the pattern with the result of applying the
+	 * action to the string matched by the pattern.
 	 *
 	 * @param input
-	 *        The input string to process.
+	 *               The input string to process.
 	 *
 	 * @param patt
-	 *        The pattern to match the string against.
+	 *               The pattern to match the string against.
 	 *
 	 * @param action
-	 *        The action to transform matches with.
+	 *               The action to transform matches with.
 	 *
 	 * @return The string, with matches replaced with the action.
 	 */
-	public static String onOccurances(final String input, final Pattern patt, final UnaryOperator<String> action) {
+	public static String onOccurances(final String input, final Pattern patt,
+			final UnaryOperator<String> action) {
 		return reduceOccurances(input, patt, SID, action);
 	}
 
 	/**
-	 * Replace every occurrence between the patterns with the result of
-	 * applying the action to the strings between the patterns.
+	 * Replace every occurrence between the patterns with the result of applying the
+	 * action to the strings between the patterns.
 	 *
 	 * @param input
-	 *        The input string to process.
+	 *               The input string to process.
 	 *
 	 * @param patt
-	 *        The pattern to match the string against.
+	 *               The pattern to match the string against.
 	 *
 	 * @param action
-	 *        The action to transform matches with.
+	 *               The action to transform matches with.
 	 *
-	 * @return The string, with strings between the matches replaced with
-	 *         the action.
+	 * @return The string, with strings between the matches replaced with the
+	 *         action.
 	 */
 	public static String betweenOccurances(final String input, final Pattern patt,
 			final UnaryOperator<String> action) {
@@ -64,21 +65,22 @@ public class RegexStringEditor {
 	 * Execute actions between and on matches of a regular expression.
 	 *
 	 * @param input
-	 *        The input string.
+	 *                      The input string.
 	 *
 	 * @param rPatt
-	 *        The pattern to match against the string.
+	 *                      The pattern to match against the string.
 	 *
 	 * @param betweenAction
-	 *        The function to execute between matches of the string.
+	 *                      The function to execute between matches of the string.
 	 *
 	 * @param onAction
-	 *        The function to execute on matches of the string.
+	 *                      The function to execute on matches of the string.
 	 *
 	 * @return The string, with both actions applied.
 	 */
 	public static String reduceOccurances(final String input, final Pattern rPatt,
-			final UnaryOperator<String> betweenAction, final UnaryOperator<String> onAction) {
+			final UnaryOperator<String> betweenAction,
+			final UnaryOperator<String> onAction) {
 		/*
 		 * Get all of the occurances.
 		 */
@@ -87,36 +89,38 @@ public class RegexStringEditor {
 		/*
 		 * Execute the correct action on every occurance.
 		 */
-		final Toggle<UnaryOperator<String>> actions = new ValueToggle<>(onAction, betweenAction);
-		final BiFunction<String, StringBuilder, StringBuilder> reducer = (strang, state) -> {
-			return state.append(actions.get().apply(strang));
-		};
+		final Toggle<UnaryOperator<String>> actions
+				= new ValueToggle<>(onAction, betweenAction);
+		final BiFunction<String, StringBuilder, StringBuilder> reducer
+				= (strang, state) -> state.append(actions.get().apply(strang));
 
 		/*
 		 * Convert the list back to a string.
 		 */
-		return occurances.reduceAux(new StringBuilder(), reducer, StringBuilder::toString);
+		return occurances.reduceAux(new StringBuilder(), reducer,
+				StringBuilder::toString);
 	}
 
 	/**
 	 * Execute actions between and on matches of a regular expression.
 	 *
 	 * @param input
-	 *        The input string.
+	 *                      The input string.
 	 *
 	 * @param rPatt
-	 *        The pattern to match against the string.
+	 *                      The pattern to match against the string.
 	 *
 	 * @param betweenAction
-	 *        The function to execute between matches of the string.
+	 *                      The function to execute between matches of the string.
 	 *
 	 * @param onAction
-	 *        The function to execute on matches of the string.
+	 *                      The function to execute on matches of the string.
 	 *
 	 * @return The string, with both actions applied.
 	 */
 	public static IList<String> mapOccurances(final String input, final Pattern rPatt,
-			final UnaryOperator<String> betweenAction, final UnaryOperator<String> onAction) {
+			final UnaryOperator<String> betweenAction,
+			final UnaryOperator<String> onAction) {
 		/*
 		 * Get all of the occurances.
 		 */
@@ -125,7 +129,8 @@ public class RegexStringEditor {
 		/*
 		 * Execute the correct action on every occurance.
 		 */
-		final Toggle<UnaryOperator<String>> actions = new ValueToggle<>(onAction, betweenAction);
+		final Toggle<UnaryOperator<String>> actions
+				= new ValueToggle<>(onAction, betweenAction);
 		return occurances.map(strang -> actions.get().apply(strang));
 	}
 
@@ -133,13 +138,13 @@ public class RegexStringEditor {
 	 * Separate a string into match/non-match segments.
 	 *
 	 * @param input
-	 *        The string to separate.
+	 *              The string to separate.
 	 *
 	 * @param rPatt
-	 *        The pattern to use for separation.
+	 *              The pattern to use for separation.
 	 *
-	 * @return The string, as a list of match/non-match segments,
-	 *         starting/ending with a non-match segment.
+	 * @return The string, as a list of match/non-match segments, starting/ending
+	 *         with a non-match segment.
 	 */
 	public static IList<String> listOccurances(final String input, final Pattern rPatt) {
 		final IList<String> res = new FunctionalList<>();
@@ -153,7 +158,7 @@ public class RegexStringEditor {
 		/*
 		 * For every match.
 		 */
-		while(matcher.find()) {
+		while (matcher.find()) {
 			final String match = matcher.group();
 
 			/*
@@ -183,20 +188,21 @@ public class RegexStringEditor {
 	 * Apply an operation to a string if it matches a regular expression.
 	 *
 	 * @param input
-	 *        The input string.
+	 *               The input string.
 	 *
 	 * @param patt
-	 *        The pattern to match against it.
+	 *               The pattern to match against it.
 	 *
 	 * @param action
-	 *        The action to execute if it matches.
+	 *               The action to execute if it matches.
 	 *
 	 * @return The string, modified by the action if the pattern matched.
 	 */
-	public static String ifMatches(final String input, final Pattern patt, final UnaryOperator<String> action) {
+	public static String ifMatches(final String input, final Pattern patt,
+			final UnaryOperator<String> action) {
 		final Matcher matcher = patt.matcher(input);
 
-		if(matcher.matches()) {
+		if (matcher.matches()) {
 			return action.apply(input);
 		}
 
@@ -207,21 +213,21 @@ public class RegexStringEditor {
 	 * Apply an operation to a string if it doesn't match a regular expression.
 	 *
 	 * @param input
-	 *        The input string.
+	 *               The input string.
 	 *
 	 * @param patt
-	 *        The pattern to match against it.
+	 *               The pattern to match against it.
 	 *
 	 * @param action
-	 *        The action to execute if it doesn't match.
+	 *               The action to execute if it doesn't match.
 	 *
-	 * @return The string, modified by the action if the pattern didn't
-	 *         match.
+	 * @return The string, modified by the action if the pattern didn't match.
 	 */
-	public static String ifNotMatches(final String input, final Pattern patt, final UnaryOperator<String> action) {
+	public static String ifNotMatches(final String input, final Pattern patt,
+			final UnaryOperator<String> action) {
 		final Matcher matcher = patt.matcher(input);
 
-		if(matcher.matches()) {
+		if (matcher.matches()) {
 			return input;
 		}
 

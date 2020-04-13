@@ -25,9 +25,9 @@ public class SimpleSpinnerPanel extends JPanel {
 	 * Create a new spinner panel
 	 *
 	 * @param label
-	 *        The label for the spinner
+	 *              The label for the spinner
 	 * @param model
-	 *        The model to attach to the spinner
+	 *              The model to attach to the spinner
 	 */
 	public SimpleSpinnerPanel(final String label, final SpinnerModel model) {
 		setLayout(new BorderLayout());

@@ -60,18 +60,19 @@ public class Command {
 	 * Create a new command.
 	 *
 	 * @param ln
-	 *                The string to get the command from.
+	 *              The string to get the command from.
 	 *
 	 * @param lno
-	 *                The number of the line the command came from.
+	 *              The number of the line the command came from.
 	 *
 	 * @param ioSrc
-	 *                The name of where the I/O came from.
+	 *              The name of where the I/O came from.
 	 */
 	public Command(String ln, int lno, String ioSrc) {
 		int idx = ln.indexOf(' ');
 
-		if (idx == -1) idx = ln.length();
+		if (idx == -1)
+			idx = ln.length();
 
 		/* Grab command parts. */
 		full = ln;
@@ -86,15 +87,14 @@ public class Command {
 	/**
 	 * Removes up until the first occurrence of a particular string for the
 	 * remaining command, and returns the removed string.
-	 * 
+	 *
 	 * By default, both the substring and the remaining text are trimmed
 	 * (leading/trailing spaces removed).
-	 * 
+	 *
 	 * @param delm
-	 *                The delimiter to stop substringing at.
-	 * 
-	 * @return The substring, or null if there is no occurrence of the
-	 *         delimiter.
+	 *             The delimiter to stop substringing at.
+	 *
+	 * @return The substring, or null if there is no occurrence of the delimiter.
 	 */
 	public String trimTo(String delm) {
 		return trimTo(delm, true);
@@ -103,19 +103,19 @@ public class Command {
 	/**
 	 * Removes up until the first occurrence of a particular string for the
 	 * remaining command, and returns the removed string.
-	 * 
+	 *
 	 * @param delm
-	 *                The delimiter to stop substringing at.
+	 *               The delimiter to stop substringing at.
 	 * @param doTrim
-	 *                Whether or not to trim the substring and remaining
-	 *                command (Remove leading/trailing spaces).
-	 * 
-	 * @return The substring, or null if there is no occurrence of the
-	 *         delimiter.
+	 *               Whether or not to trim the substring and remaining command
+	 *               (Remove leading/trailing spaces).
+	 *
+	 * @return The substring, or null if there is no occurrence of the delimiter.
 	 */
 	public String trimTo(String delm, boolean doTrim) {
 		int idx = remn.indexOf(delm);
-		if (idx == -1) return null;
+		if (idx == -1)
+			return null;
 
 		String tmp = remn.substring(0, idx);
 		remn = remn.substring(idx);
@@ -129,15 +129,15 @@ public class Command {
 	}
 
 	/**
-	 * Removes up until the first occurrence of a particular regex for the
-	 * remaining command, and returns the removed string.
-	 * 
+	 * Removes up until the first occurrence of a particular regex for the remaining
+	 * command, and returns the removed string.
+	 *
 	 * By default, both the substring and the remaining text are trimmed
 	 * (leading/trailing spaces removed).
-	 * 
+	 *
 	 * @param rDelm
-	 *                The regex to stop substringing at.
-	 * 
+	 *              The regex to stop substringing at.
+	 *
 	 * @return The string, up to the matched pattern.
 	 */
 	public String trimToRX(String rDelm) {
@@ -145,15 +145,15 @@ public class Command {
 	}
 
 	/**
-	 * Removes up until the first occurrence of a particular regex for the
-	 * remaining command, and returns the removed string.
-	 * 
+	 * Removes up until the first occurrence of a particular regex for the remaining
+	 * command, and returns the removed string.
+	 *
 	 * By default, both the substring and the remaining text are trimmed
 	 * (leading/trailing spaces removed).
-	 * 
+	 *
 	 * @param delm
-	 *                The regex to stop substringing at.
-	 * 
+	 *             The regex to stop substringing at.
+	 *
 	 * @return The string, up to the matched pattern.
 	 */
 	public String trimToRX(Pattern delm) {
@@ -161,15 +161,15 @@ public class Command {
 	}
 
 	/**
-	 * Removes up until the first occurrence of a particular regex for the
-	 * remaining command, and returns the removed string.
-	 * 
+	 * Removes up until the first occurrence of a particular regex for the remaining
+	 * command, and returns the removed string.
+	 *
 	 * @param rDelm
-	 *                The regex to stop substringing at.
+	 *               The regex to stop substringing at.
 	 * @param doTrim
-	 *                Whether or not to trim the substring and remaining
-	 *                command (Remove leading/trailing spaces).
-	 * 
+	 *               Whether or not to trim the substring and remaining command
+	 *               (Remove leading/trailing spaces).
+	 *
 	 * @return The string, up to the matched pattern.
 	 */
 	public String trimToRX(String rDelm, boolean doTrim) {
@@ -177,20 +177,21 @@ public class Command {
 	}
 
 	/**
-	 * Removes up until the first occurrence of a particular regex for the
-	 * remaining command, and returns the removed string.
+	 * Removes up until the first occurrence of a particular regex for the remaining
+	 * command, and returns the removed string.
 	 *
 	 * @param delm
-	 *                The regex to stop substringing at.
+	 *               The regex to stop substringing at.
 	 * @param doTrim
-	 *                Whether or not to trim the substring and remaining
-	 *                command (Remove leading/trailing spaces).
-	 * 
+	 *               Whether or not to trim the substring and remaining command
+	 *               (Remove leading/trailing spaces).
+	 *
 	 * @return The string, up to the matched pattern.
 	 */
 	public String trimToRX(Pattern delm, boolean doTrim) {
 		Matcher mat = delm.matcher(remn);
-		if (!mat.find()) return null;
+		if (!mat.find())
+			return null;
 
 		String tmp = remn.substring(0, mat.start());
 		remn = remn.substring(mat.end());
@@ -206,15 +207,14 @@ public class Command {
 	/**
 	 * Removes up until the first occurrence of a particular string for the
 	 * remaining command, and returns the removed string.
-	 * 
+	 *
 	 * By default, both the substring and the remaining text are trimmed
 	 * (leading/trailing spaces removed).
-	 * 
+	 *
 	 * @param delm
-	 *                The delimiter to stop substringing at.
-	 * 
-	 * @return The substring, or null if there is no occurrence of the
-	 *         delimiter.
+	 *             The delimiter to stop substringing at.
+	 *
+	 * @return The substring, or null if there is no occurrence of the delimiter.
 	 */
 	public String trimTo(char delm) {
 		return trimTo(delm, true);
@@ -223,19 +223,19 @@ public class Command {
 	/**
 	 * Removes up until the first occurrence of a particular string for the
 	 * remaining command, and returns the removed string.
-	 * 
+	 *
 	 * @param delm
-	 *                The delimiter to stop substringing at.
+	 *               The delimiter to stop substringing at.
 	 * @param doTrim
-	 *                Whether or not to trim the substring and remaining
-	 *                command (Remove leading/trailing spaces).
-	 * 
-	 * @return The substring, or null if there is no occurrence of the
-	 *         delimiter.
+	 *               Whether or not to trim the substring and remaining command
+	 *               (Remove leading/trailing spaces).
+	 *
+	 * @return The substring, or null if there is no occurrence of the delimiter.
 	 */
 	public String trimTo(char delm, boolean doTrim) {
 		int idx = remn.indexOf(delm);
-		if (idx == -1) return null;
+		if (idx == -1)
+			return null;
 
 		String tmp = remn.substring(0, idx);
 		remn = remn.substring(idx);
@@ -250,7 +250,7 @@ public class Command {
 
 	/**
 	 * Check if this command has text after its name.
-	 * 
+	 *
 	 * @return Whether or not this command has text after its name.
 	 */
 	public boolean hasRemaining() {
@@ -260,9 +260,8 @@ public class Command {
 	/**
 	 * Parse a command from a string.
 	 *
-	 * The main thing this does is ignore blank lines, as well as comments
-	 * marked by #'s either at the start of the line or part of the way
-	 * through the line.
+	 * The main thing this does is ignore blank lines, as well as comments marked by
+	 * #'s either at the start of the line or part of the way through the line.
 	 *
 	 * @param ln
 	 *                The string to get the command from.
@@ -276,8 +275,10 @@ public class Command {
 	 */
 	public static Command fromString(String ln, int lno, String srcName) {
 		/* Ignore blank lines and comments. */
-		if (ln.equals("")) return null;
-		if (ln.startsWith("#")) return null;
+		if (ln.equals(""))
+			return null;
+		if (ln.startsWith("#"))
+			return null;
 
 		/* Trim off comments part-way through the line. */
 		int idxHash = ln.indexOf('#');
@@ -289,14 +290,13 @@ public class Command {
 	}
 
 	/**
-	 * Give an informational message about something in relation to this
-	 * command.
+	 * Give an informational message about something in relation to this command.
 	 *
 	 * @param info
-	 *                The informational message.
+	 *              The informational message.
 	 *
 	 * @param parms
-	 *                The parameters for the informational message.
+	 *              The parameters for the informational message.
 	 * @return The information message.
 	 */
 	public String info(String info, Object... parms) {
@@ -313,7 +313,7 @@ public class Command {
 	 *
 	 * @param parms
 	 *                The parameters for the warning message.
-	 * 
+	 *
 	 * @return The formatted warning.
 	 */
 	public String warn(String warning, Object... parms) {
@@ -326,11 +326,11 @@ public class Command {
 	 * Give an error about something in relation to this command.
 	 *
 	 * @param err
-	 *                The error message.
+	 *              The error message.
 	 *
 	 * @param parms
-	 *                The parameters for the error message.
-	 * 
+	 *              The parameters for the error message.
+	 *
 	 * @return The formatted error
 	 */
 	public String error(String err, Object... parms) {

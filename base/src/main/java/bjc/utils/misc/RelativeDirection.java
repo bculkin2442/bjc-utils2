@@ -9,7 +9,7 @@ import bjc.funcdata.IList;
 
 /**
  * Represents a direction that is relative to another direction
- * 
+ *
  * @author ben
  *
  */
@@ -34,17 +34,17 @@ public enum RelativeDirection {
 	private static Random RNG = new Random();
 
 	/**
-	 * Perform a specified action for a random number of relative
-	 * directions.
-	 * 
+	 * Perform a specified action for a random number of relative directions.
+	 *
 	 * @param numDirections
-	 *            The number of cardinal directions to act on. Must be
-	 *            greater than 0 and less then 5
+	 *                        The number of cardinal directions to act on. Must be
+	 *                        greater than 0 and less then 5
 	 * @param action
-	 *            The action to perform for each of the relative directions
+	 *                        The action to perform for each of the relative
+	 *                        directions
 	 * @param ignoreBackwards
-	 *            Whether or not to not have a chance of one of the
-	 *            directions being backwards
+	 *                        Whether or not to not have a chance of one of the
+	 *                        directions being backwards
 	 */
 	public static void forRandomDirections(int numDirections,
 			Consumer<RelativeDirection> action, boolean ignoreBackwards) {
@@ -62,16 +62,14 @@ public enum RelativeDirection {
 							+ numDirections);
 		}
 
-		IList<RelativeDirection> relativeDirs =
-				new FunctionalList<>(values());
+		IList<RelativeDirection> relativeDirs = new FunctionalList<>(values());
 
 		if (ignoreBackwards) {
 			relativeDirs.removeMatching(BACKWARD);
 		}
 
 		for (int i = 0; i <= maxNDirections - numDirections; i++) {
-			RelativeDirection relativeDir =
-					relativeDirs.randItem(RNG::nextInt);
+			RelativeDirection relativeDir = relativeDirs.randItem(RNG::nextInt);
 
 			relativeDirs.removeMatching(relativeDir);
 		}
@@ -81,9 +79,9 @@ public enum RelativeDirection {
 
 	/**
 	 * Properly convert a string to a relative direction
-	 * 
+	 *
 	 * @param value
-	 *            The string to convert
+	 *              The string to convert
 	 * @return The relative direction represented by the string
 	 */
 	public static RelativeDirection properValueOf(String value) {
@@ -92,7 +90,7 @@ public enum RelativeDirection {
 
 	/**
 	 * Change another direction by turning the way this direction specifies
-	 * 
+	 *
 	 * @param dir
 	 *            The direction to change
 	 * @return The direction after turning this way
@@ -101,18 +99,18 @@ public enum RelativeDirection {
 		// Only cardinal directions can be truly absolutized
 		if (dir.isCardinal()) {
 			switch (this) {
-				case BACKWARD:
-					return dir;
-				case FORWARD:
-					return dir.opposing();
-				case LEFT:
-					return dir.rotateCounterClockwise();
-				case RIGHT:
-					return dir.rotateClockwise();
-				default:
-					throw new InvalidDirectionException(
-							"Attempted to make absolute a direction in a unknown way "
-									+ this);
+			case BACKWARD:
+				return dir;
+			case FORWARD:
+				return dir.opposing();
+			case LEFT:
+				return dir.rotateCounterClockwise();
+			case RIGHT:
+				return dir.rotateClockwise();
+			default:
+				throw new InvalidDirectionException(
+						"Attempted to make absolute a direction in a unknown way "
+								+ this);
 			}
 		}
 

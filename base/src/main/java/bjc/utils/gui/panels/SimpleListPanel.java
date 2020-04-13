@@ -24,11 +24,12 @@ import bjc.utils.gui.layout.HLayout;
 public class SimpleListPanel extends JPanel {
 	private static final long serialVersionUID = 2719963952350133541L;
 
-	private static void addItem(final DefaultListModel<String> model, final Predicate<String> verifier,
-			final Consumer<String> onFailure, final JTextField addItemField) {
+	private static void addItem(final DefaultListModel<String> model,
+			final Predicate<String> verifier, final Consumer<String> onFailure,
+			final JTextField addItemField) {
 		final String potentialItem = addItemField.getText();
 
-		if(verifier == null || verifier.test(potentialItem)) {
+		if (verifier == null || verifier.test(potentialItem)) {
 			model.addElement(potentialItem);
 		} else {
 			onFailure.accept(potentialItem);
@@ -41,13 +42,13 @@ public class SimpleListPanel extends JPanel {
 	 * Create a new list panel
 	 *
 	 * @param type
-	 *        The type of things in the list
+	 *                  The type of things in the list
 	 * @param model
-	 *        The model to put items into
+	 *                  The model to put items into
 	 * @param verifier
-	 *        The predicate to use to verify items
+	 *                  The predicate to use to verify items
 	 * @param onFailure
-	 *        The function to call when an item doesn't verify
+	 *                  The function to call when an item doesn't verify
 	 */
 	public SimpleListPanel(final String type, final DefaultListModel<String> model,
 			final Predicate<String> verifier, final Consumer<String> onFailure) {
@@ -72,15 +73,15 @@ public class SimpleListPanel extends JPanel {
 
 		final JButton removeItemButton = new JButton("Remove " + type);
 
-		addItemButton.addActionListener((ev) -> {
+		addItemButton.addActionListener(ev -> {
 			addItem(model, verifier, onFailure, addItemField);
 		});
 
-		addItemField.addActionListener((ev) -> {
+		addItemField.addActionListener(ev -> {
 			addItem(model, verifier, onFailure, addItemField);
 		});
 
-		removeItemButton.addActionListener((ev) -> {
+		removeItemButton.addActionListener(ev -> {
 			model.remove(itemList.getSelectedIndex());
 		});
 

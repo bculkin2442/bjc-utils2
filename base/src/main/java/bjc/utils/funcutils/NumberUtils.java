@@ -12,22 +12,22 @@ public class NumberUtils {
 	 * Compute the falling factorial of a number.
 	 *
 	 * @param value
-	 *        The number to compute.
+	 *              The number to compute.
 	 *
 	 * @param power
-	 *        The power to do the falling factorial for.
+	 *              The power to do the falling factorial for.
 	 *
 	 * @return The falling factorial of the number to the power.
 	 */
 	public static int fallingFactorial(final int value, final int power) {
-		if(power == 0) {
+		if (power == 0) {
 			return 1;
-		} else if(power == 1) {
+		} else if (power == 1) {
 			return value;
 		} else {
 			int result = 1;
 
-			for(int currentSub = 0; currentSub < power + 1; currentSub++) {
+			for (int currentSub = 0; currentSub < power + 1; currentSub++) {
 				result *= value - currentSub;
 			}
 
@@ -39,17 +39,18 @@ public class NumberUtils {
 	 * Evaluates a linear probability distribution.
 	 *
 	 * @param winning
-	 *        The number of winning possibilities.
+	 *                The number of winning possibilities.
 	 *
 	 * @param total
-	 *        The number of total possibilities.
+	 *                The number of total possibilities.
 	 *
 	 * @param rng
-	 *        The function to use to generate a random possibility.
+	 *                The function to use to generate a random possibility.
 	 *
 	 * @return Whether or not a random possibility was a winning one.
 	 */
-	public static boolean isProbable(final int winning, final int total, final Function<Integer, Integer> rng) {
+	public static boolean isProbable(final int winning, final int total,
+			final Function<Integer, Integer> rng) {
 		return rng.apply(total) < winning;
 	}
 
@@ -57,13 +58,13 @@ public class NumberUtils {
 	 * Check if a number is in an inclusive range.
 	 *
 	 * @param min
-	 *        The minimum value of the range.
+	 *            The minimum value of the range.
 	 *
 	 * @param max
-	 *        The maximum value of the range.
+	 *            The maximum value of the range.
 	 *
 	 * @param i
-	 *        The number to check.
+	 *            The number to check.
 	 *
 	 * @return Whether the number is in the range.
 	 */

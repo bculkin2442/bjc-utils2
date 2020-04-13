@@ -83,7 +83,8 @@ public class DualExpr {
 	/**
 	 * Create a new constant dual number.
 	 *
-	 * @param num The value of the dual number.
+	 * @param num
+	 *            The value of the dual number.
 	 */
 	public DualExpr(Dual num) {
 		this.type = ExprType.CONSTANT;
@@ -94,8 +95,10 @@ public class DualExpr {
 	/**
 	 * Create a new unary dual number.
 	 *
-	 * @param type The type of operation to perform.
-	 * @param val  The parameter to the value.
+	 * @param type
+	 *             The type of operation to perform.
+	 * @param val
+	 *             The parameter to the value.
 	 */
 	public DualExpr(DualExpr.ExprType type, DualExpr val) {
 		this.type = type;
@@ -106,9 +109,12 @@ public class DualExpr {
 	/**
 	 * Create a new binary dual number.
 	 *
-	 * @param type  The type of operation to perform.
-	 * @param left  The left hand side of the expression.
-	 * @param right The right hand side of the expression.
+	 * @param type
+	 *              The type of operation to perform.
+	 * @param left
+	 *              The left hand side of the expression.
+	 * @param right
+	 *              The right hand side of the expression.
 	 */
 	public DualExpr(DualExpr.ExprType type, DualExpr left, DualExpr right) {
 		this.type = type;
@@ -189,7 +195,8 @@ public class DualExpr {
 			lval = left.evaluate();
 
 			if (lval.real <= 0) {
-				throw new IllegalArgumentException("ERROR: Attempted to take non-positive log.");
+				throw new IllegalArgumentException(
+						"ERROR: Attempted to take non-positive log.");
 			}
 
 			return new Dual(Math.log(lval.real), lval.dual / lval.real);
@@ -197,7 +204,8 @@ public class DualExpr {
 			// @TODO Ben Culkin 3/27/2020 :RealPower
 			// Make this no longer a special case; since it doesn't have to be one.
 			//
-			// 3/28/2020 - This is less of a special case, but I've not implemented the bit for variable exponents.
+			// 3/28/2020 - This is less of a special case, but I've not implemented the
+			// bit for variable exponents.
 			lval = left.evaluate();
 			rval = right.evaluate();
 

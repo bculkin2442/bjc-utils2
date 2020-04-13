@@ -19,19 +19,20 @@ public class SerialBlockReader implements BlockReader {
 	 * Create a new serial block reader.
 	 *
 	 * @param readers
-	 *        The readers to pull from, in the order to pull from them.
+	 *                The readers to pull from, in the order to pull from them.
 	 */
 	public SerialBlockReader(final BlockReader... readers) {
 		readerQueue = new LinkedList<>();
-		
-		for(final BlockReader reader : readers) {
+
+		for (final BlockReader reader : readers) {
 			readerQueue.add(reader);
 		}
 	}
 
 	@Override
 	public boolean hasNextBlock() {
-		if(readerQueue.isEmpty()) return false;
+		if (readerQueue.isEmpty())
+			return false;
 
 		/*
 		 * Attempt to get a block from the first reader.
@@ -42,11 +43,12 @@ public class SerialBlockReader implements BlockReader {
 		/*
 		 * Close/dispose of readers until we get an open one.
 		 */
-		while(!cont) {
+		while (!cont) {
 			try {
 				readerQueue.pop().close();
-			} catch(final IOException ioex) {
-				throw new IllegalStateException("Exception thrown by discarded reader", ioex);
+			} catch (final IOException ioex) {
+				throw new IllegalStateException("Exception thrown by discarded reader",
+						ioex);
 			}
 
 			hasBlock = readerQueue.peek().hasNextBlock();
@@ -58,7 +60,7 @@ public class SerialBlockReader implements BlockReader {
 
 	@Override
 	public Block getBlock() {
-		if(readerQueue.isEmpty()) {
+		if (readerQueue.isEmpty()) {
 			return null;
 		}
 
@@ -67,23 +69,25 @@ public class SerialBlockReader implements BlockReader {
 
 	@Override
 	public boolean nextBlock() {
-		if(readerQueue.isEmpty()) return false;
+		if (readerQueue.isEmpty())
+			return false;
 
 		boolean gotBlock = readerQueue.peek().nextBlock();
 		boolean cont = gotBlock || readerQueue.isEmpty();
 
-		while(!cont) {
+		while (!cont) {
 			try {
 				readerQueue.pop().close();
-			} catch(final IOException ioex) {
-				throw new IllegalStateException("Exception thrown by discarded reader", ioex);
+			} catch (final IOException ioex) {
+				throw new IllegalStateException("Exception thrown by discarded reader",
+						ioex);
 			}
 
 			gotBlock = readerQueue.peek().nextBlock();
 			cont = gotBlock || readerQueue.isEmpty();
 		}
 
-		if(cont) {
+		if (cont) {
 			blockNo += 1;
 		}
 
@@ -97,7 +101,7 @@ public class SerialBlockReader implements BlockReader {
 
 	@Override
 	public void close() throws IOException {
-		while(!readerQueue.isEmpty()) {
+		while (!readerQueue.isEmpty()) {
 			final BlockReader reader = readerQueue.pop();
 
 			reader.close();

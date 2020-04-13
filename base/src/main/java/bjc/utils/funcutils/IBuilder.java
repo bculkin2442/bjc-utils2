@@ -6,7 +6,7 @@ package bjc.utils.funcutils;
  * @author ben
  *
  * @param <E>
- *        The type of object being built.
+ *            The type of object being built.
  */
 public interface IBuilder<E> {
 	/**
@@ -15,8 +15,8 @@ public interface IBuilder<E> {
 	 * @return The built object.
 	 *
 	 * @throws IllegalStateException
-	 *         If the data in the builder cannot be built into its
-	 *         corresponding object at this point in time.
+	 *                               If the data in the builder cannot be built into
+	 *                               its corresponding object at this point in time.
 	 */
 	public E build();
 
@@ -24,9 +24,11 @@ public interface IBuilder<E> {
 	 * Reset the state of this builder to its initial state.
 	 *
 	 * @throws UnsupportedOperationException
-	 *         If the builder doesn't support resetting its state.
+	 *                                       If the builder doesn't support
+	 *                                       resetting its state.
 	 */
 	public default void reset() {
-		throw new UnsupportedOperationException("Builder doesn't support state resetting");
+		throw new UnsupportedOperationException(
+				"Builder doesn't support state resetting");
 	}
 }

@@ -56,7 +56,8 @@ public class BlockReaderCLI {
 		 * @param sources
 		 *                The set of configured I/O sources.
 		 */
-		public BlockReaderState(Map<String, BlockReader> readers, Map<String, Reader> sources) {
+		public BlockReaderState(Map<String, BlockReader> readers,
+				Map<String, Reader> sources) {
 			this.readers = readers;
 			this.sources = sources;
 		}
@@ -83,7 +84,7 @@ public class BlockReaderCLI {
 	 * Create a new CLI for configuring BlockReaders.
 	 *
 	 * @param srcs
-	 *                The container of initial I/O sources.
+	 *             The container of initial I/O sources.
 	 */
 	public BlockReaderCLI(Map<String, Reader> srcs) {
 		stat = new BlockReaderState(srcs);
@@ -93,7 +94,7 @@ public class BlockReaderCLI {
 	 * Create a new CLI for configuring BlockReaders.
 	 *
 	 * @param state
-	 *                The state object to use.
+	 *              The state object to use.
 	 */
 	public BlockReaderCLI(BlockReaderState state) {
 		stat = state;
@@ -104,7 +105,7 @@ public class BlockReaderCLI {
 	 * Run the command line interface
 	 *
 	 * @param args
-	 *                Ignored CLI args.
+	 *             Ignored CLI args.
 	 */
 	public static void main(String[] args) {
 		/* Create/configure I/O sources. */
@@ -122,13 +123,13 @@ public class BlockReaderCLI {
 	 * Run the CLI on an input source.
 	 *
 	 * @param input
-	 *                The place to read input from.
+	 *                    The place to read input from.
 	 *
 	 * @param srcName
-	 *                The name of the place to read input from.
+	 *                    The name of the place to read input from.
 	 *
 	 * @param interactive
-	 *                Whether or not the source is interactive
+	 *                    Whether or not the source is interactive
 	 */
 	public void run(Scanner input, String srcName, boolean interactive) {
 		int lno = 0;
@@ -146,12 +147,15 @@ public class BlockReaderCLI {
 			/* Parse the command. */
 			Command com = Command.fromString(ln, lno, srcName);
 			/* Ignore blank commands. */
-			if (com == null) continue;
+			if (com == null)
+				continue;
 
 			/* Handle a command. */
 			CommandStatus sts = handleCommand(com, interactive);
 			/* Exit if we finished or encountered a fatal error. */
-			if (sts == FINISH || sts == ERROR) { return; }
+			if (sts == FINISH || sts == ERROR) {
+				return;
+			}
 		} while (input.hasNextLine());
 	}
 
@@ -159,11 +163,10 @@ public class BlockReaderCLI {
 	 * Handle a command.
 	 *
 	 * @param com
-	 *                The command to handle
+	 *                    The command to handle
 	 *
 	 * @param interactive
-	 *                Whether the current input source is interactive or
-	 *                not.
+	 *                    Whether the current input source is interactive or not.
 	 * @return The status of the executed command.
 	 */
 	public CommandStatus handleCommand(Command com, boolean interactive) {
@@ -186,7 +189,8 @@ public class BlockReaderCLI {
 		case "exit":
 		case "quit":
 			if (interactive)
-				System.out.printf("Exiting reader-conf, %d readers configured in %d commands\n",
+				System.out.printf(
+						"Exiting reader-conf, %d readers configured in %d commands\n",
 						stat.readers.size(), com.lno);
 			return FINISH;
 		default:
@@ -244,18 +248,19 @@ public class BlockReaderCLI {
 		try {
 			Pattern pat = Pattern.compile(filter);
 
-			Predicate<Block> pred = (block) -> {
+			Predicate<Block> pred = block -> {
 				Matcher mat = pat.matcher(block.contents);
 
 				return mat.matches();
 			};
 
-			BlockReader reader = new FilteredBlockReader(stat.readers.get(readerName), pred);
+			BlockReader reader
+					= new FilteredBlockReader(stat.readers.get(readerName), pred);
 
 			stat.readers.put(blockName, reader);
 		} catch (PatternSyntaxException psex) {
-			LOGGER.severe(com.error("Invalid regular expression '%s' for filter. (%s)\n", filter,
-					psex.getMessage()));
+			LOGGER.severe(com.error("Invalid regular expression '%s' for filter. (%s)\n",
+					filter, psex.getMessage()));
 			return FAIL;
 		}
 
@@ -319,7 +324,8 @@ public class BlockReaderCLI {
 			return FAIL;
 		}
 
-		BlockReader reader = new ToggledBlockReader(stat.readers.get(parts[1]), stat.readers.get(parts[2]));
+		BlockReader reader = new ToggledBlockReader(stat.readers.get(parts[1]),
+				stat.readers.get(parts[2]));
 		stat.readers.put(blockName, reader);
 
 		return SUCCESS;
@@ -355,7 +361,8 @@ public class BlockReaderCLI {
 			return FAIL;
 		}
 
-		BlockReader reader = new LayeredBlockReader(stat.readers.get(parts[1]), stat.readers.get(parts[2]));
+		BlockReader reader = new LayeredBlockReader(stat.readers.get(parts[1]),
+				stat.readers.get(parts[2]));
 		stat.readers.put(blockName, reader);
 
 		return SUCCESS;
@@ -460,12 +467,14 @@ public class BlockReaderCLI {
 
 		/* Get the delimiter, and create the reader. */
 		try {
-			BlockReader reader = new SimpleBlockReader(delim, stat.sources.get(sourceName));
+			BlockReader reader
+					= new SimpleBlockReader(delim, stat.sources.get(sourceName));
 
 			stat.readers.put(blockName, reader);
 		} catch (PatternSyntaxException psex) {
-			LOGGER.severe(com.error("Invalid regular expression '%s' for delimiter. (%s)\n", delim,
-					psex.getMessage()));
+			LOGGER.severe(
+					com.error("Invalid regular expression '%s' for delimiter. (%s)\n",
+							delim, psex.getMessage()));
 			return FAIL;
 		}
 

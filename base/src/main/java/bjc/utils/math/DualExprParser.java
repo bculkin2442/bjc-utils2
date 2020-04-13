@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package bjc.utils.math;
 
@@ -16,19 +16,20 @@ import bjc.utils.math.DualExpr.ExprType;
 
 /**
  * Create DualExprs from strings.
- * 
+ *
  * @author Ben Culkin
  *
  */
 public class DualExprParser {
 	/**
 	 * Result class from parsing exprs.
+	 * 
 	 * @author Ben Culkin
 	 *
 	 */
 	public static class Result {
 		/**
-		 * The resulting expression. 
+		 * The resulting expression.
 		 */
 		public DualExpr expr;
 		/**
@@ -46,10 +47,10 @@ public class DualExprParser {
 
 	/**
 	 * Parses a dual expression from a postfix expression string.
-	 * 
+	 *
 	 * @param expr
 	 *             The string to parse the dual expression from.
-	 * 
+	 *
 	 * @return Both the parsed expression, and a map of all the variables used
 	 */
 	public static Result parseExpression(String expr) {
@@ -58,17 +59,17 @@ public class DualExprParser {
 
 	/**
 	 * Parses a dual expression from a postfix expression string.
-	 * 
+	 *
 	 * @param expr
 	 *                The string to parse the dual expression from.
 	 *
 	 * @param preVars
 	 *                Any pre-existing variables to use.
-	 * 
+	 *
 	 * @return Both the parsed expression, and a map of all the variables used
-	 * 
+	 *
 	 * @throws StackUnderflow
-	 *                                 If the expression is not properly formatted.
+	 *                        If the expression is not properly formatted.
 	 */
 	public static Result parseExpression(String expr, Map<String, DualExpr> preVars) {
 		Result res = new Result();

@@ -21,16 +21,16 @@ public class ListUtils {
 	private static final int MAX_NTRIESPART = 50;
 
 	/**
-	 * Collapse a string of tokens into a single string without adding any
-	 * spaces.
+	 * Collapse a string of tokens into a single string without adding any spaces.
 	 *
 	 * @param input
-	 *                The list of tokens to collapse.
+	 *              The list of tokens to collapse.
 	 *
 	 * @return The collapsed string of tokens.
 	 */
 	public static String collapseTokens(final IList<String> input) {
-		if (input == null) throw new NullPointerException("Input must not be null");
+		if (input == null)
+			throw new NullPointerException("Input must not be null");
 
 		return collapseTokens(input, "");
 	}
@@ -40,14 +40,15 @@ public class ListUtils {
 	 * separator after each token.
 	 *
 	 * @param input
-	 *                The list of tokens to collapse.
+	 *                  The list of tokens to collapse.
 	 *
 	 * @param seperator
-	 *                The separator to use for separating tokens.
+	 *                  The separator to use for separating tokens.
 	 *
 	 * @return The collapsed string of tokens.
 	 */
-	public static String collapseTokens(final IList<String> input, final String seperator) {
+	public static String collapseTokens(final IList<String> input,
+			final String seperator) {
 		if (input == null) {
 			throw new NullPointerException("Input must not be null");
 		} else if (seperator == null) {
@@ -80,23 +81,23 @@ public class ListUtils {
 	 * Select a number of random items from the list without replacement.
 	 *
 	 * @param <E>
-	 *                The type of items to select.
+	 *               The type of items to select.
 	 *
 	 * @param list
-	 *                The list to select from.
+	 *               The list to select from.
 	 *
 	 * @param number
-	 *                The number of items to selet.
+	 *               The number of items to selet.
 	 *
 	 * @param rng
-	 *                A function that creates a random number from 0 to the
-	 *                desired number.
+	 *               A function that creates a random number from 0 to the desired
+	 *               number.
 	 *
-	 * @return A new list containing the desired number of items randomly
-	 *         selected from the specified list without replacement.
+	 * @return A new list containing the desired number of items randomly selected
+	 *         from the specified list without replacement.
 	 */
-	public static <E> IList<E> drawWithoutReplacement(final IList<E> list, final int number,
-			final Function<Integer, Integer> rng) {
+	public static <E> IList<E> drawWithoutReplacement(final IList<E> list,
+			final int number, final Function<Integer, Integer> rng) {
 		final IList<E> selected = new FunctionalList<>(new ArrayList<>(number));
 
 		final int total = list.getSize();
@@ -124,20 +125,20 @@ public class ListUtils {
 	 * Select a number of random items from the list, with replacement.
 	 *
 	 * @param <E>
-	 *                The type of items to select.
+	 *               The type of items to select.
 	 *
 	 * @param list
-	 *                The list to select from.
+	 *               The list to select from.
 	 *
 	 * @param number
-	 *                The number of items to select.
+	 *               The number of items to select.
 	 *
 	 * @param rng
-	 *                A function that creates a random number from 0 to the
-	 *                desired number.
+	 *               A function that creates a random number from 0 to the desired
+	 *               number.
 	 *
-	 * @return A new list containing the desired number of items randomly
-	 *         selected from the specified list.
+	 * @return A new list containing the desired number of items randomly selected
+	 *         from the specified list.
 	 */
 	public static <E> IList<E> drawWithReplacement(final IList<E> list, final int number,
 			final Function<Integer, Integer> rng) {
@@ -151,32 +152,33 @@ public class ListUtils {
 	}
 
 	/**
-	 * Partition a list into a list of lists, where each element can count
-	 * for more than one element in a partition.
+	 * Partition a list into a list of lists, where each element can count for more
+	 * than one element in a partition.
 	 *
 	 * @param <E>
-	 *                The type of elements in the list to partition.
+	 *                      The type of elements in the list to partition.
 	 *
 	 * @param input
-	 *                The list to partition.
+	 *                      The list to partition.
 	 *
 	 * @param counter
-	 *                The function to determine the count for each element
-	 *                for.
+	 *                      The function to determine the count for each element
+	 *                      for.
 	 *
 	 * @param partitionSize
-	 *                The number of elements to put in each partition.
+	 *                      The number of elements to put in each partition.
 	 *
 	 * @return A list partitioned according to the above rules.
 	 */
-	public static <E> IList<IList<E>> groupPartition(final IList<E> input, final Function<E, Integer> counter,
-			final int partitionSize) {
+	public static <E> IList<IList<E>> groupPartition(final IList<E> input,
+			final Function<E, Integer> counter, final int partitionSize) {
 		if (input == null) {
 			throw new NullPointerException("Input list must not be null");
 		} else if (counter == null) {
 			throw new NullPointerException("Counter must not be null");
 		} else if (partitionSize < 1 || partitionSize > input.getSize()) {
-			final String fmt = "%d is not a valid partition size. Must be between 1 and %d";
+			final String fmt
+					= "%d is not a valid partition size. Must be between 1 and %d";
 			final String msg = String.format(fmt, partitionSize, input.getSize());
 
 			throw new IllegalArgumentException(msg);
@@ -188,11 +190,13 @@ public class ListUtils {
 		/* List that holds elements rejected during current pass. */
 		final IList<E> rejected = new FunctionalList<>();
 
-		final GroupPartIteration<E> it = new GroupPartIteration<>(returned, rejected, partitionSize, counter);
+		final GroupPartIteration<E> it
+				= new GroupPartIteration<>(returned, rejected, partitionSize, counter);
 
 		/* Run up to a certain number of passes. */
-		for (int numberOfIterations = 0; numberOfIterations < MAX_NTRIESPART
-				&& !rejected.isEmpty(); numberOfIterations++) {
+		for (int numberOfIterations = 0;
+				numberOfIterations < MAX_NTRIESPART && !rejected.isEmpty();
+				numberOfIterations++) {
 			input.forEach(it);
 
 			if (rejected.isEmpty()) {
@@ -201,10 +205,11 @@ public class ListUtils {
 			}
 		}
 
-		final String fmt = "Heuristic (more than %d iterations of partitioning) detected an unpartitionable list. (%s)\nThe following elements were not partitioned: %s\nCurrent group in formation: %s\nPreviously formed groups: %s\n";
+		final String fmt
+				= "Heuristic (more than %d iterations of partitioning) detected an unpartitionable list. (%s)\nThe following elements were not partitioned: %s\nCurrent group in formation: %s\nPreviously formed groups: %s\n";
 
-		final String msg = String.format(fmt, MAX_NTRIESPART, input.toString(), rejected.toString(),
-				it.currentPartition.toString(), returned.toString());
+		final String msg = String.format(fmt, MAX_NTRIESPART, input.toString(),
+				rejected.toString(), it.currentPartition.toString(), returned.toString());
 
 		throw new IllegalArgumentException(msg);
 	}
@@ -213,10 +218,10 @@ public class ListUtils {
 	 * Merge the contents of a bunch of lists together into a single list.
 	 *
 	 * @param <E>
-	 *                The type of value in this lists.
+	 *              The type of value in this lists.
 	 *
 	 * @param lists
-	 *                The values in the lists to merge.
+	 *              The values in the lists to merge.
 	 *
 	 * @return A list containing all the elements of the lists.
 	 */
@@ -254,9 +259,11 @@ public class ListUtils {
 	 * @return The list, padded to the desired size.
 	 *
 	 * @throws IllegalArgumentException
-	 *                 If the list couldn't be padded to the desired size.
+	 *                                  If the list couldn't be padded to the
+	 *                                  desired size.
 	 */
-	public static <E> IList<E> padList(final IList<E> list, final Function<E, Integer> counter, final int size,
+	public static <E> IList<E> padList(final IList<E> list,
+			final Function<E, Integer> counter, final int size,
 			final Supplier<E> padder) {
 		int count = 0;
 
@@ -289,7 +296,8 @@ public class ListUtils {
 			}
 
 			if (threshold > MAX_NTRIESPART) {
-				final String fmt = "Heuristic (more than %d iterations of attempting to pad) detected an unpaddable list. (%s)\nPartially padded list: %S";
+				final String fmt
+						= "Heuristic (more than %d iterations of attempting to pad) detected an unpaddable list. (%s)\nPartially padded list: %S";
 
 				final String msg = String.format(fmt, MAX_NTRIESPART, list.toString(),
 						returned.toString());
@@ -303,9 +311,9 @@ public class ListUtils {
 
 	/**
 	 * Convert a list of longs into an array of longs.
-	 * 
+	 *
 	 * @param list
-	 *                The list to convert.
+	 *             The list to convert.
 	 * @return The list as an array.
 	 */
 	public static long[] toPrimitive(List<Long> list) {
@@ -324,11 +332,10 @@ public class ListUtils {
 	/**
 	 * Generate all of the permuations of a list.
 	 *
-	 * This is a version of Algorith P (Plain Changes) from Knuth (vol 4A,
-	 * pg 322)
+	 * This is a version of Algorith P (Plain Changes) from Knuth (vol 4A, pg 322)
 	 *
 	 * @param list
-	 *                The list to generate permutations from.
+	 *             The list to generate permutations from.
 	 * @return The list of permutations of the list.
 	 */
 	public static <T> List<List<T>> permuteList(List<T> list) {
@@ -396,7 +403,8 @@ public class ListUtils {
 			}
 
 			if (q == j) {
-				if (j == 0) break;
+				if (j == 0)
+					break;
 
 				s += 1;
 

@@ -22,12 +22,12 @@ public class IteratedDefine implements UnaryOperator<String> {
 	 * Create a new iterated define.
 	 *
 	 * @param pattern
-	 *        The pattern to use for matching.
+	 *                  The pattern to use for matching.
 	 * @param circular
-	 *        Whether or not to loop through the list of replacers, or just
-	 *        repeat the last one.
+	 *                  Whether or not to loop through the list of replacers, or
+	 *                  just repeat the last one.
 	 * @param replacers
-	 *        The set of replacement strings to use.
+	 *                  The set of replacement strings to use.
 	 */
 	public IteratedDefine(Pattern pattern, boolean circular, String... replacers) {
 		patt = pattern;
@@ -40,7 +40,7 @@ public class IteratedDefine implements UnaryOperator<String> {
 		Matcher mat = patt.matcher(ln);
 		StringBuffer sb = new StringBuffer();
 
-		while(mat.find()) {
+		while (mat.find()) {
 			String repl = repls.next();
 
 			mat.appendReplacement(sb, repl);

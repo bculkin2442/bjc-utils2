@@ -29,10 +29,10 @@ public class LayeredBlockReader implements BlockReader {
 	 * Create a new layered block reader.
 	 *
 	 * @param primary
-	 *        The first source to read blocks from.
+	 *                  The first source to read blocks from.
 	 *
 	 * @param secondary
-	 *        The second source to read blocks from.
+	 *                  The second source to read blocks from.
 	 */
 	public LayeredBlockReader(final BlockReader primary, final BlockReader secondary) {
 		first = primary;
@@ -49,8 +49,8 @@ public class LayeredBlockReader implements BlockReader {
 		final Block firstBlock = first.getBlock();
 
 		/*
-		 * Only drain a block from the second reader if none are
-		 * available in the first reader.
+		 * Only drain a block from the second reader if none are available in the first
+		 * reader.
 		 */
 		return firstBlock == null ? second.getBlock() : firstBlock;
 	}
@@ -60,7 +60,7 @@ public class LayeredBlockReader implements BlockReader {
 		final boolean gotFirst = first.nextBlock();
 		final boolean succ = gotFirst ? gotFirst : second.nextBlock();
 
-		if(succ) {
+		if (succ) {
 			blockNo += 1;
 		}
 

@@ -19,7 +19,7 @@ import java.util.Set;
 public class SimpleProperties implements Map<String, String> {
 	/**
 	 * Exception thrown when there is a duplicate key, when they are forbidden.
-	 * 
+	 *
 	 * @author 15405
 	 *
 	 */
@@ -28,22 +28,25 @@ public class SimpleProperties implements Map<String, String> {
 
 		/**
 		 * Create a new duplicate key exception.
-		 * 
+		 *
 		 * @param keyName
-		 * 	The name of the key that has been duplicated.
+		 *                The name of the key that has been duplicated.
 		 */
 		public DuplicateKeys(String keyName) {
 			super(String.format("Duplicate value encountered for key '%s'", keyName));
 		}
 	}
-	
+
 	public static class InvalidLineFormat extends RuntimeException {
 		private static final long serialVersionUID = 5332131472090792841L;
-		
+
 		public InvalidLineFormat(String lne) {
-			super(String.format("Line '%s' is improperly formatted.\n\tExpected format is a string key, followed by a single space, followed by the value", ""));
+			super(String.format(
+					"Line '%s' is improperly formatted.\n\tExpected format is a string key, followed by a single space, followed by the value",
+					""));
 		}
 	}
+
 	private final Map<String, String> props;
 
 	/**
@@ -52,22 +55,22 @@ public class SimpleProperties implements Map<String, String> {
 	public SimpleProperties() {
 		props = new HashMap<>();
 	}
-	
+
 	/**
 	 * Load properties from an input stream.
-	 * 
-	 * Delegates to {@link SimpleProperties#loadFrom(Reader, boolean)} to allow
-	 * you to pass a input stream instead of a reader.
-	 * 
-	 * @param is 
-	 * 	The stream to read from.
+	 *
+	 * Delegates to {@link SimpleProperties#loadFrom(Reader, boolean)} to allow you
+	 * to pass a input stream instead of a reader.
+	 *
+	 * @param is
+	 *                        The stream to read from.
 	 * @param allowDuplicates
-	 * 	Whether or not duplicate keys should be allowed.
+	 *                        Whether or not duplicate keys should be allowed.
 	 */
 	public void loadFrom(final InputStream is, final boolean allowDuplicates) {
 		loadFrom(new InputStreamReader(is), allowDuplicates);
 	}
-	
+
 	/**
 	 * Load properties from the provided input reader.
 	 *
@@ -76,23 +79,26 @@ public class SimpleProperties implements Map<String, String> {
 	 * All leading/trailing spaces from the name &amp; body are removed.
 	 *
 	 * @param rdr
-	 *        The reader to read from.
+	 *                        The reader to read from.
 	 *
 	 * @param allowDuplicates
-	 *        Whether or not duplicate keys should be allowed. If they are,
-	 *        the end-value of the property will be what the last one was.
-	 * 
-	 * @throws DuplicateKeys If duplicate keys have been found when they are prohibited.
+	 *                        Whether or not duplicate keys should be allowed. If
+	 *                        they are, the end-value of the property will be what
+	 *                        the last one was.
+	 *
+	 * @throws DuplicateKeys
+	 *                       If duplicate keys have been found when they are
+	 *                       prohibited.
 	 */
 	public void loadFrom(final Reader rdr, final boolean allowDuplicates) {
-		try(Scanner scn = new Scanner(rdr)) {
-			while(scn.hasNextLine()) {
+		try (Scanner scn = new Scanner(rdr)) {
+			while (scn.hasNextLine()) {
 				final String ln = scn.nextLine().trim();
 
 				/*
 				 * Skip blank lines/comments
 				 */
-				if(ln.equals("") || ln.startsWith("#")) {
+				if (ln.equals("") || ln.startsWith("#")) {
 					continue;
 				}
 
@@ -101,7 +107,7 @@ public class SimpleProperties implements Map<String, String> {
 				/*
 				 * Complain about improperly formatted lines.
 				 */
-				if(sepIdx == -1) {
+				if (sepIdx == -1) {
 					throw new InvalidLineFormat(ln);
 				}
 
@@ -111,7 +117,7 @@ public class SimpleProperties implements Map<String, String> {
 				/*
 				 * Complain about duplicates, if that is wanted.
 				 */
-				if(!allowDuplicates && containsKey(name)) {
+				if (!allowDuplicates && containsKey(name)) {
 					throw new DuplicateKeys(name);
 				}
 
@@ -122,7 +128,7 @@ public class SimpleProperties implements Map<String, String> {
 
 	/**
 	 * Output the set of read properties.
-	 * 
+	 *
 	 * Uses System.out, since one isn't specified.
 	 */
 	public void outputProperties() {
@@ -131,13 +137,14 @@ public class SimpleProperties implements Map<String, String> {
 
 	/**
 	 * Output the set of read properties.
-	 * 
-	 * @param strim The stream to output properties to.
+	 *
+	 * @param strim
+	 *              The stream to output properties to.
 	 */
 	public void outputProperties(PrintStream strim) {
 		strim.println("Read properties:");
 
-		for(final Entry<String, String> entry : entrySet()) {
+		for (final Entry<String, String> entry : entrySet()) {
 			strim.printf("\t'%s'\t'%s'\n", entry.getKey(), entry.getValue());
 		}
 

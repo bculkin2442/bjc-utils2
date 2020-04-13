@@ -14,13 +14,12 @@ import bjc.funcdata.IList;
  */
 public class TreeUtils {
 	/**
-	 * Convert a tree into a list of outline nodes that match a certain
-	 * path.
-	 * 
+	 * Convert a tree into a list of outline nodes that match a certain path.
+	 *
 	 * @param tre
-	 *        The tree to outline.
+	 *                   The tree to outline.
 	 * @param leafMarker
-	 *        The path to mark nodes with.
+	 *                   The path to mark nodes with.
 	 * @return The list of marked paths.
 	 */
 	public static <T> IList<IList<T>> outlineTree(ITree<T> tre, Predicate<T> leafMarker) {
@@ -29,19 +28,19 @@ public class TreeUtils {
 		LinkedList<T> path = new LinkedList<>();
 		path.add(tre.getHead());
 
-		tre.doForChildren((child) -> findPath(child, path, leafMarker, paths));
+		tre.doForChildren(child -> findPath(child, path, leafMarker, paths));
 
 		return paths;
 	}
 
 	/* Find a path in a tree. */
-	private static <T> void findPath(ITree<T> subtree, LinkedList<T> path, Predicate<T> leafMarker,
-			IList<IList<T>> paths) {
-		if(subtree.getChildrenCount() == 0 && leafMarker.test(subtree.getHead())) {
+	private static <T> void findPath(ITree<T> subtree, LinkedList<T> path,
+			Predicate<T> leafMarker, IList<IList<T>> paths) {
+		if (subtree.getChildrenCount() == 0 && leafMarker.test(subtree.getHead())) {
 			/* We're at a matching leaf node. Add it. */
 			IList<T> finalPath = new FunctionalList<>();
 
-			for(T ePath : path) {
+			for (T ePath : path) {
 				finalPath.add(ePath);
 			}
 
@@ -52,7 +51,7 @@ public class TreeUtils {
 			/* Check the children of this node. */
 			path.add(subtree.getHead());
 
-			subtree.doForChildren((child) -> findPath(child, path, leafMarker, paths));
+			subtree.doForChildren(child -> findPath(child, path, leafMarker, paths));
 
 			path.removeLast();
 		}

@@ -22,10 +22,10 @@ final class FunctionalFileVisitor extends SimpleFileVisitor<Path> {
 	 * Create a new file visitor, powered by functions.
 	 *
 	 * @param predicate
-	 *        The predicate to use to pick which files to traverse.
+	 *                  The predicate to use to pick which files to traverse.
 	 *
 	 * @param action
-	 *        The function to execute on every file.
+	 *                  The function to execute on every file.
 	 */
 	public FunctionalFileVisitor(final BiPredicate<Path, BasicFileAttributes> predicate,
 			final BiPredicate<Path, BasicFileAttributes> action) {
@@ -34,15 +34,19 @@ final class FunctionalFileVisitor extends SimpleFileVisitor<Path> {
 	}
 
 	@Override
-	public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs) throws IOException {
-		if(predicate.test(dir, attrs)) return FileVisitResult.CONTINUE;
+	public FileVisitResult preVisitDirectory(final Path dir,
+			final BasicFileAttributes attrs) throws IOException {
+		if (predicate.test(dir, attrs))
+			return FileVisitResult.CONTINUE;
 
 		return FileVisitResult.SKIP_SUBTREE;
 	}
 
 	@Override
-	public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
-		if(action.test(file, attrs)) return FileVisitResult.CONTINUE;
+	public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs)
+			throws IOException {
+		if (action.test(file, attrs))
+			return FileVisitResult.CONTINUE;
 
 		return FileVisitResult.TERMINATE;
 	}

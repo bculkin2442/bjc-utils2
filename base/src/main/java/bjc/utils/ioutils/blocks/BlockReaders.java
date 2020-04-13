@@ -13,10 +13,10 @@ public class BlockReaders {
 	 * Create a new simple block reader that works off a regex.
 	 *
 	 * @param blockDelim
-	 *        The regex that separates blocks.
+	 *                   The regex that separates blocks.
 	 *
 	 * @param source
-	 *        The reader to get blocks from.
+	 *                   The reader to get blocks from.
 	 *
 	 * @return A configured simple reader.
 	 */
@@ -28,7 +28,7 @@ public class BlockReaders {
 	 * Create a new pushback block reader.
 	 *
 	 * @param src
-	 *        The block reader to read blocks from.
+	 *            The block reader to read blocks from.
 	 *
 	 * @return A configured pushback reader.
 	 */
@@ -40,10 +40,10 @@ public class BlockReaders {
 	 * Create a new triggered block reader.
 	 *
 	 * @param source
-	 *        The block reader to read blocks from.
+	 *               The block reader to read blocks from.
 	 *
 	 * @param action
-	 *        The action to execute before reading a block.
+	 *               The action to execute before reading a block.
 	 *
 	 * @return A configured triggered block reader.
 	 */
@@ -55,14 +55,15 @@ public class BlockReaders {
 	 * Create a new layered block reader.
 	 *
 	 * @param primary
-	 *        The first source to read blocks from.
+	 *                  The first source to read blocks from.
 	 *
 	 * @param secondary
-	 *        The second source to read blocks from.
+	 *                  The second source to read blocks from.
 	 *
 	 * @return A configured layered block reader.
 	 */
-	public static BlockReader layered(final BlockReader primary, final BlockReader secondary) {
+	public static BlockReader layered(final BlockReader primary,
+			final BlockReader secondary) {
 		return new LayeredBlockReader(primary, secondary);
 	}
 
@@ -70,7 +71,7 @@ public class BlockReaders {
 	 * Create a new serial block reader.
 	 *
 	 * @param readers
-	 *        The readers to pull from, in the order to pull from them.
+	 *                The readers to pull from, in the order to pull from them.
 	 *
 	 * @return A configured serial block reader.
 	 */

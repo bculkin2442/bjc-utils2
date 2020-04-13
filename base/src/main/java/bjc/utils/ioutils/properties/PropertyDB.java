@@ -2,7 +2,7 @@ package bjc.utils.ioutils.properties;
 
 /**
  * A database of properties.
- * 
+ *
  * @author bjculkin
  *
  */

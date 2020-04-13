@@ -38,11 +38,11 @@ public class SimpleBlockReader implements BlockReader {
 	 * Create a new block reader.
 	 *
 	 * @param blockDelim
-	 *        The pattern that separates blocks. Note that the end of file
-	 *        is always considered to end a block.
+	 *                   The pattern that separates blocks. Note that the end of
+	 *                   file is always considered to end a block.
 	 *
 	 * @param source
-	 *        The source to read blocks from.
+	 *                   The source to read blocks from.
 	 */
 	public SimpleBlockReader(final String blockDelim, final Reader source) {
 		blockReader = new Scanner(source);
@@ -59,12 +59,12 @@ public class SimpleBlockReader implements BlockReader {
 	 * Create a new block reader.
 	 *
 	 * @param blockDelim
-	 *        The pattern that separates blocks. Note that the end of file
-	 *        is always considered to end a block.
+	 *                   The pattern that separates blocks. Note that the end of
+	 *                   file is always considered to end a block.
 	 *
 	 * @param source
-	 *        The source to read blocks from.
-	 *        NOTE: This does modify the provided scanner.
+	 *                   The source to read blocks from. NOTE: This does modify the
+	 *                   provided scanner.
 	 */
 	public SimpleBlockReader(final String blockDelim, final Scanner source) {
 		blockReader = source;
@@ -96,7 +96,8 @@ public class SimpleBlockReader implements BlockReader {
 			final String blockContents = blockReader.next();
 
 			final int blockStartLine = lineNo;
-			final int blockEndLine = lineNo + StringUtils.countMatches(blockContents, "\\R");
+			final int blockEndLine
+					= lineNo + StringUtils.countMatches(blockContents, "\\R");
 
 			lineNo = blockEndLine;
 			blockNo += 1;
@@ -104,10 +105,10 @@ public class SimpleBlockReader implements BlockReader {
 			currBlock = new Block(blockNo, blockContents, blockStartLine, blockEndLine);
 
 			return true;
-		} catch(final NoSuchElementException nseex) {
+		} catch (final NoSuchElementException nseex) {
 			// Don't null out the current block, let it be the last
 			// one
-			//currBlock = null;
+			// currBlock = null;
 
 			return false;
 		}
@@ -127,7 +128,7 @@ public class SimpleBlockReader implements BlockReader {
 	 * Set the delimiter used to separate blocks.
 	 *
 	 * @param delim
-	 *        The delimiter used to separate blocks.
+	 *              The delimiter used to separate blocks.
 	 */
 	public void setDelimiter(final String delim) {
 		blockReader.useDelimiter(delim);
@@ -135,6 +136,7 @@ public class SimpleBlockReader implements BlockReader {
 
 	@Override
 	public String toString() {
-		return String.format("SimpleBlockReader [currBlock=%s, blockNo=%s]", currBlock, blockNo);
+		return String.format("SimpleBlockReader [currBlock=%s, blockNo=%s]", currBlock,
+				blockNo);
 	}
 }

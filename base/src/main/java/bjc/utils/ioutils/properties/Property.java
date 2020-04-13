@@ -8,8 +8,8 @@ public class Property {
 	public String value;
 
 	public Property(String name, String comment, String value) {
-		this.name    = name;
+		this.name = name;
 		this.comment = comment;
-		this.value   = value;
+		this.value = value;
 	}
 }

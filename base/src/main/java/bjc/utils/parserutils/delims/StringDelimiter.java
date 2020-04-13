@@ -16,16 +16,18 @@ public class StringDelimiter extends SequenceDelimiter<String> {
 	 * for ease of use for strings.
 	 *
 	 * @param seq
-	 *        The sequence to delimit.
+	 *            The sequence to delimit.
 	 *
 	 * @return The sequence as a tree.
 	 *
 	 * @throws DelimiterException
-	 *         if something went wrong with delimiting the sequence.
+	 *                            if something went wrong with delimiting the
+	 *                            sequence.
 	 *
 	 * @see SequenceDelimiter
 	 */
 	public ITree<String> delimitSequence(final String... seq) throws DelimiterException {
-		return super.delimitSequence(new SequenceCharacteristics<>("root", "contents", "subgroup"), seq);
+		return super.delimitSequence(
+				new SequenceCharacteristics<>("root", "contents", "subgroup"), seq);
 	}
 }

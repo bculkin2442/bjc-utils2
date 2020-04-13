@@ -22,8 +22,8 @@ public interface IDescribedComponent extends Comparable<IDescribedComponent> {
 	/**
 	 * Get the description of this component.
 	 *
-	 * Providing this is optional, with the default being a note that no
-	 * description was provided.
+	 * Providing this is optional, with the default being a note that no description
+	 * was provided.
 	 *
 	 * @return The description of the component
 	 */
@@ -55,7 +55,7 @@ public interface IDescribedComponent extends Comparable<IDescribedComponent> {
 	default int compareTo(final IDescribedComponent o) {
 		int res = getName().compareTo(o.getName());
 
-		if(res == 0) {
+		if (res == 0) {
 			res = getVersion() - o.getVersion();
 		}
 

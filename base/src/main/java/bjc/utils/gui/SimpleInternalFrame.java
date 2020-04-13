@@ -22,7 +22,7 @@ public class SimpleInternalFrame extends JInternalFrame {
 	 * Create a new blank internal frame with a specific title
 	 *
 	 * @param title
-	 *        The title of the internal frame
+	 *              The title of the internal frame
 	 */
 	public SimpleInternalFrame(final String title) {
 		super(title);

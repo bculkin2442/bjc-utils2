@@ -23,7 +23,7 @@ public class ChainTokenSplitter implements TokenSplitter {
 	 * Append a series of splitters to the chain.
 	 *
 	 * @param splitters
-	 *        The splitters to append to the chain.
+	 *                  The splitters to append to the chain.
 	 */
 	public void appendSplitters(final TokenSplitter... splitters) {
 		spliters.addAll(splitters);
@@ -33,7 +33,7 @@ public class ChainTokenSplitter implements TokenSplitter {
 	 * Prepend a series of splitters to the chain.
 	 *
 	 * @param splitters
-	 *        The splitters to append to the chain.
+	 *                  The splitters to append to the chain.
 	 */
 	public void prependSplitters(final TokenSplitter... splitters) {
 		spliters.prependAll(splitters);
@@ -43,8 +43,6 @@ public class ChainTokenSplitter implements TokenSplitter {
 	public IList<String> split(final String input) {
 		final IList<String> initList = new FunctionalList<>(input);
 
-		return spliters.reduceAux(initList, (splitter, strangs) -> {
-			return strangs.flatMap(splitter::split);
-		});
+		return spliters.reduceAux(initList, (splitter, strangs) -> strangs.flatMap(splitter::split));
 	}
 }

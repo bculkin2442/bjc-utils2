@@ -23,10 +23,10 @@ public class RegexOpener implements Function<String, IPair<String, String[]>> {
 	 * Create a new regex opener.
 	 *
 	 * @param groupName
-	 *        The name of the opened group.
+	 *                   The name of the opened group.
 	 *
 	 * @param groupRegex
-	 *        The regex that matches the opener.
+	 *                   The regex that matches the opener.
 	 */
 	public RegexOpener(final String groupName, final String groupRegex) {
 		name = groupName;
@@ -38,12 +38,12 @@ public class RegexOpener implements Function<String, IPair<String, String[]>> {
 	public IPair<String, String[]> apply(final String str) {
 		final Matcher m = patt.matcher(str);
 
-		if(m.matches()) {
+		if (m.matches()) {
 			final int numGroups = m.groupCount();
 
 			final String[] parms = new String[numGroups + 1];
 
-			for(int i = 0; i <= numGroups; i++) {
+			for (int i = 0; i <= numGroups; i++) {
 				parms[i] = m.group(i);
 			}
 

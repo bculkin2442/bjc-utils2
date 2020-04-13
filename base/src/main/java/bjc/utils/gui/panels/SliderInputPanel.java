@@ -38,14 +38,15 @@ public class SliderInputPanel extends JPanel {
 			try {
 				final int val = Integer.parseInt(text);
 
-				if(val < minValue)
+				if (val < minValue)
 					throw new ParseException("Value must be greater than " + minValue, 0);
-				else if(val > maxValue)
+				else if (val > maxValue)
 					throw new ParseException("Value must be smaller than " + maxValue, 0);
 				else
 					return val;
-			} catch(final NumberFormatException nfex) {
-				final ParseException pex = new ParseException("Value must be a valid integer", 0);
+			} catch (final NumberFormatException nfex) {
+				final ParseException pex
+						= new ParseException("Value must be a valid integer", 0);
 
 				pex.initCause(nfex);
 
@@ -55,7 +56,8 @@ public class SliderInputPanel extends JPanel {
 
 		@Override
 		public String valueToString(final Object value) throws ParseException {
-			if(value == null) return Integer.toString(initValue);
+			if (value == null)
+				return Integer.toString(initValue);
 
 			return Integer.toString((Integer) value);
 		}
@@ -83,13 +85,12 @@ public class SliderInputPanel extends JPanel {
 		public final int initValue;
 
 		/**
-		 * Create a new slider settings, with the initial value in the
-		 * middle
+		 * Create a new slider settings, with the initial value in the middle
 		 *
 		 * @param min
-		 *        The minimum value of the slider
+		 *            The minimum value of the slider
 		 * @param max
-		 *        The maximum value of the slider
+		 *            The maximum value of the slider
 		 */
 		public SliderSettings(final int min, final int max) {
 			this(min, max, (min + max) / 2);
@@ -99,11 +100,11 @@ public class SliderInputPanel extends JPanel {
 		 * Create a new set of slider sttings
 		 *
 		 * @param min
-		 *        The minimum slider value
+		 *             The minimum slider value
 		 * @param max
-		 *        The maximum slider value
+		 *             The maximum slider value
 		 * @param init
-		 *        Th initial slider value
+		 *             Th initial slider value
 		 */
 		public SliderSettings(final int min, final int max, final int init) {
 			minValue = min;
@@ -121,18 +122,18 @@ public class SliderInputPanel extends JPanel {
 	 * Create a new slider input panel
 	 *
 	 * @param lab
-	 *        The label for the field
+	 *                  The label for the field
 	 * @param settings
-	 *        The settings for slider values
+	 *                  The settings for slider values
 	 * @param majorTick
-	 *        The setting for where to place big ticks
+	 *                  The setting for where to place big ticks
 	 * @param minorTick
-	 *        The setting for where to place small ticks
+	 *                  The setting for where to place small ticks
 	 * @param action
-	 *        The action to execute for a given value
+	 *                  The action to execute for a given value
 	 */
-	public SliderInputPanel(final String lab, final SliderSettings settings, final int majorTick,
-			final int minorTick, final Consumer<Integer> action) {
+	public SliderInputPanel(final String lab, final SliderSettings settings,
+			final int majorTick, final int minorTick, final Consumer<Integer> action) {
 		setLayout(new HLayout(3));
 
 		final JLabel label = new JLabel(lab);
@@ -145,8 +146,8 @@ public class SliderInputPanel extends JPanel {
 		slider.setPaintTicks(true);
 		slider.setPaintLabels(true);
 
-		slider.addChangeListener((event) -> {
-			if(slider.getValueIsAdjusting()) {
+		slider.addChangeListener(event -> {
+			if (slider.getValueIsAdjusting()) {
 				// Do nothing
 			} else {
 				final int val = slider.getValue();
@@ -159,10 +160,10 @@ public class SliderInputPanel extends JPanel {
 
 		field.setFocusLostBehavior(JFormattedTextField.COMMIT_OR_REVERT);
 		field.setColumns(15);
-		field.addPropertyChangeListener("value", (event) -> {
+		field.addPropertyChangeListener("value", event -> {
 			final Object value = field.getValue();
 
-			if(value == null) {
+			if (value == null) {
 				// Do nothing
 			} else {
 				slider.setValue((Integer) value);
@@ -178,7 +179,7 @@ public class SliderInputPanel extends JPanel {
 	 * Reset the values in this panel to a specified value
 	 *
 	 * @param value
-	 *        The value to reset the fields to
+	 *              The value to reset the fields to
 	 */
 	public void resetValues(final int value) {
 		slider.setValue(value);

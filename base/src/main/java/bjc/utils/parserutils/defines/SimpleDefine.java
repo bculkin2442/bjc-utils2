@@ -17,9 +17,9 @@ public class SimpleDefine implements UnaryOperator<String> {
 	 * Create a new simple define.
 	 *
 	 * @param pattern
-	 *        The pattern to match against.
+	 *                The pattern to match against.
 	 * @param replace
-	 *        The text to use as a replacement.
+	 *                The text to use as a replacement.
 	 */
 	public SimpleDefine(Pattern pattern, String replace) {
 		patt = pattern;

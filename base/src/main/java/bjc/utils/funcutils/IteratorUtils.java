@@ -7,20 +7,21 @@ import bjc.data.ArrayIterator;
 
 /**
  * Utility methods for dealing with iterators.
- * 
+ *
  * @author bjculkin
  *
  */
 public class IteratorUtils {
 	/**
 	 * A chain iterator. This is essentially flatMap in iterator form.
+	 * 
 	 * @author bjculkin
 	 *
-	 * @param <T1> 
-	 * 	The type of the input values.
-	 * 
-	 * @param <T2> 
-	 * 	The type of the output values.
+	 * @param <T1>
+	 *             The type of the input values.
+	 *
+	 * @param <T2>
+	 *             The type of the output values.
 	 */
 	public static class ChainIterator<T1, T2> implements Iterator<T2> {
 		private Iterator<T1> mainItr;
@@ -30,23 +31,25 @@ public class IteratorUtils {
 
 		/**
 		 * Create a new chain iterator.
-		 * 
+		 *
 		 * @param mainItr
-		 * 	The main iterator for input.
-		 * 
+		 *                The main iterator for input.
+		 *
 		 * @param trans
-		 * 	The transformation to use to produce the outputs.
+		 *                The transformation to use to produce the outputs.
 		 */
 		public ChainIterator(Iterator<T1> mainItr, Function<T1, Iterator<T2>> trans) {
 			this.mainItr = mainItr;
-			this.trans   = trans;
+			this.trans = trans;
 		}
 
 		@Override
 		public boolean hasNext() {
 			if (curItr != null) {
-				if (curItr.hasNext()) return true;
-				else                  return mainItr.hasNext();
+				if (curItr.hasNext())
+					return true;
+				else
+					return mainItr.hasNext();
 			}
 
 			return mainItr.hasNext();
@@ -64,9 +67,9 @@ public class IteratorUtils {
 
 	/**
 	 * Convert an iterator to an iterable.
-	 * 
+	 *
 	 * @param itr
-	 * 	The iterator to convert.
+	 *            The iterator to convert.
 	 *
 	 * @return An iterable that gives back that iterator.
 	 */
@@ -76,9 +79,9 @@ public class IteratorUtils {
 
 	/**
 	 * Convert an iterable to an iterator.
-	 * 
+	 *
 	 * @param itr
-	 * 	The iterable to convert.
+	 *            The iterable to convert.
 	 *
 	 * @return The iterator from that iterable
 	 */
@@ -90,7 +93,7 @@ public class IteratorUtils {
 	 * Convert an array to an iterator.
 	 *
 	 * @param parms
-	 * 	The array to iterate over.
+	 *              The array to iterate over.
 	 *
 	 * @return An iterator over the provided array.
 	 */
@@ -101,16 +104,17 @@ public class IteratorUtils {
 
 	/**
 	 * Create a chain iterator.
-	 * 
+	 *
 	 * @param itrA
-	 * 	The iterator for input values.
-	 * 
+	 *             The iterator for input values.
+	 *
 	 * @param itrB
-	 * 	The transformation for output values.
-	 * 
+	 *             The transformation for output values.
+	 *
 	 * @return A chain iterator from the provided values.
 	 */
-	public static <A, B> Iterator<B> chain(Iterator<A> itrA, Function<A, Iterator<B>> itrB) {
+	public static <A, B> Iterator<B> chain(Iterator<A> itrA,
+			Function<A, Iterator<B>> itrB) {
 		return new ChainIterator<>(itrA, itrB);
 	}
 }

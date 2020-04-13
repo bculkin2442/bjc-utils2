@@ -83,8 +83,10 @@ public class DelimSplitterCLI {
 	/*
 	 * Handle a input command.
 	 */
-	private void handleCommand(final String inp, final Scanner scn, final boolean isInteractive) {
-		if (inp.equals("")) return;
+	private void handleCommand(final String inp, final Scanner scn,
+			final boolean isInteractive) {
+		if (inp.equals(""))
+			return;
 
 		int idx = inp.indexOf(' ');
 
@@ -116,14 +118,15 @@ public class DelimSplitterCLI {
 		case "splitter-add":
 			split.addSimpleDelimiters(argArray);
 			if (verbose) {
-				System.out.println("Added delimiters " + StringUtils.toEnglishList(argArray, true));
+				System.out.println(
+						"Added delimiters " + StringUtils.toEnglishList(argArray, true));
 			}
 			break;
 		case "splitter-addmulti":
 			split.addMultiDelimiters(argArray);
 			if (verbose) {
-				System.out.println(
-						"Added multi-delimiters " + StringUtils.toEnglishList(argArray, true));
+				System.out.println("Added multi-delimiters "
+						+ StringUtils.toEnglishList(argArray, true));
 			}
 			break;
 		case "splitter-addmatch":
@@ -150,7 +153,8 @@ public class DelimSplitterCLI {
 				dlm.addGroup(groups.get(arg));
 			}
 			if (verbose) {
-				System.out.println("Added groups " + StringUtils.toEnglishList(argArray, true));
+				System.out.println(
+						"Added groups " + StringUtils.toEnglishList(argArray, true));
 			}
 			break;
 		case "delims-setinitial":
@@ -176,7 +180,8 @@ public class DelimSplitterCLI {
 				groups.put(arg, new DelimiterGroup<>(arg));
 			}
 			if (verbose) {
-				System.out.println("Created groups " + StringUtils.toEnglishList(argArray, true));
+				System.out.println(
+						"Created groups " + StringUtils.toEnglishList(argArray, true));
 			}
 			break;
 		case "delimgroups-edit":
@@ -238,14 +243,16 @@ public class DelimSplitterCLI {
 		} catch (final FileNotFoundException fnfex) {
 			System.out.println("Couldn't find file '" + args + "'");
 		} catch (final IOException ioex) {
-			System.out.println("I/O error with file '" + args + "'\nCause: " + ioex.getMessage());
+			System.out.println(
+					"I/O error with file '" + args + "'\nCause: " + ioex.getMessage());
 		}
 	}
 
 	/*
 	 * Handle editing a group.
 	 */
-	private void handleEditGroup(final String arg, final Scanner scn, final boolean isInteractive) {
+	private void handleEditGroup(final String arg, final Scanner scn,
+			final boolean isInteractive) {
 		if (!groups.containsKey(arg)) {
 			System.out.println("No group named '" + arg + "'");
 			return;
@@ -306,8 +313,8 @@ public class DelimSplitterCLI {
 			case "add-implied-subgroup":
 				group.implySubgroup(argArray[0], argArray[1]);
 				if (verbose) {
-					System.out.printf("Made closer '%s' imply a '%s' subgroup\n", argArray[0],
-							argArray[1]);
+					System.out.printf("Made closer '%s' imply a '%s' subgroup\n",
+							argArray[0], argArray[1]);
 				}
 				break;
 			case "add-opener":
@@ -320,14 +327,15 @@ public class DelimSplitterCLI {
 			case "add-reopener":
 				group.addPredOpener(new RegexOpener(argArray[0], argArray[1]));
 				if (verbose) {
-					System.out.printf("Added regex '%s' as opener for '%s'\n", argArray[1],
-							argArray[0]);
+					System.out.printf("Added regex '%s' as opener for '%s'\n",
+							argArray[1], argArray[0]);
 				}
 				break;
 			case "add-recloser":
 				group.addPredCloser(new RegexCloser(argArray[0]));
 				if (verbose) {
-					System.out.printf("Added parameterized string '%s' as closer\n", argArray[0]);
+					System.out.printf("Added parameterized string '%s' as closer\n",
+							argArray[0]);
 				}
 				break;
 			case "debug":
@@ -355,8 +363,8 @@ public class DelimSplitterCLI {
 
 			printDelimSeq(res);
 		} catch (final DelimiterException dex) {
-			System.out.println("Expression '" + args + "' isn't properly delimited.\n\tCause: "
-					+ dex.getMessage());
+			System.out.println("Expression '" + args
+					+ "' isn't properly delimited.\n\tCause: " + dex.getMessage());
 		}
 	}
 
@@ -392,7 +400,8 @@ public class DelimSplitterCLI {
 			strings = new FunctionalList<>(tks);
 		}
 		try {
-			final ITree<String> delim = dlm.delimitSequence(strings.toArray(new String[0]));
+			final ITree<String> delim
+					= dlm.delimitSequence(strings.toArray(new String[0]));
 
 			printDelimSeq(delim);
 		} catch (final DelimiterException dex) {
@@ -420,7 +429,7 @@ public class DelimSplitterCLI {
 	}
 
 	private void intPrintDelimTree(final ITree<String> tree, final StringBuilder sb) {
-		tree.doForChildren((child) -> {
+		tree.doForChildren(child -> {
 			intPrintDelimNode(child, sb);
 		});
 	}
@@ -462,7 +471,7 @@ public class DelimSplitterCLI {
 	 * Main method
 	 *
 	 * @param args
-	 *                Unused CLI args.
+	 *             Unused CLI args.
 	 */
 	public static void main(final String[] args) {
 		final DelimSplitterCLI tst = new DelimSplitterCLI();

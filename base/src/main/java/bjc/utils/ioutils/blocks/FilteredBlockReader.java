@@ -6,7 +6,7 @@ import java.util.function.Predicate;
 
 /**
  * A block reader that only yields blocks that pass a predicate.
- * 
+ *
  * @author EVE
  *
  */
@@ -41,28 +41,29 @@ public class FilteredBlockReader implements BlockReader {
 
 	/**
 	 * Create a new filtered block reader with a given filter.
-	 * 
+	 *
 	 * @param src
-	 *        The place to read blocks from.
+	 *               The place to read blocks from.
 	 * @param predic
-	 *        The predicate to use to pass blocks.
+	 *               The predicate to use to pass blocks.
 	 */
 	public FilteredBlockReader(BlockReader src, Predicate<Block> predic) {
 		this(src, predic, null);
 	}
 
 	/**
-	 * Create a new filtered block reader with a given filter that executes
-	 * a specific action when a block fails.
-	 * 
+	 * Create a new filtered block reader with a given filter that executes a
+	 * specific action when a block fails.
+	 *
 	 * @param src
-	 *        The place to read blocks from.
+	 *                The place to read blocks from.
 	 * @param predic
-	 *        The predicate to use to pass blocks.
+	 *                The predicate to use to pass blocks.
 	 * @param failAct
-	 *        The action to take when a block fails.
+	 *                The action to take when a block fails.
 	 */
-	public FilteredBlockReader(BlockReader src, Predicate<Block> predic, Consumer<Block> failAct) {
+	public FilteredBlockReader(BlockReader src, Predicate<Block> predic,
+			Consumer<Block> failAct) {
 		source = src;
 		pred = predic;
 		failAction = failAct;
@@ -72,16 +73,16 @@ public class FilteredBlockReader implements BlockReader {
 
 	@Override
 	public boolean hasNextBlock() {
-		if(pending != null) return true;
+		if (pending != null)
+			return true;
 
-		while(source.hasNextBlock()) {
+		while (source.hasNextBlock()) {
 			/*
-			 * Only say we have a next block if the next block would
-			 * pass the predicate.
+			 * Only say we have a next block if the next block would pass the predicate.
 			 */
 			pending = source.next();
 
-			if(pred.test(pending)) {
+			if (pred.test(pending)) {
 				blockNo += 1;
 				return true;
 			}
@@ -99,7 +100,7 @@ public class FilteredBlockReader implements BlockReader {
 
 	@Override
 	public boolean nextBlock() {
-		if(pending != null || hasNextBlock()) {
+		if (pending != null || hasNextBlock()) {
 			current = pending;
 			pending = null;
 

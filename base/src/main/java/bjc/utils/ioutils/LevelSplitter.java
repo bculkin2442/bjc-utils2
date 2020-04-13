@@ -7,10 +7,10 @@ import java.util.regex.Pattern;
 
 /**
  * Splits a string on a delimiter, respecting grouping delimiters.
- * 
+ *
  * By default, grouping delimiters are (), [], {}, and <>, as well as single and
  * double quoted strings.
- * 
+ *
  * @author bjculkin
  *
  */
@@ -23,13 +23,12 @@ public class LevelSplitter {
 	/**
 	 * Check if a string contains any one of a specified number of things,
 	 * respecting groups.
-	 * 
+	 *
 	 * @param haystack
-	 *                The string to look in.
+	 *                 The string to look in.
 	 * @param needles
-	 *                The strings to look for.
-	 * @return Whether or not any of the strings were contained outside of
-	 *         groups.
+	 *                 The strings to look for.
+	 * @return Whether or not any of the strings were contained outside of groups.
 	 */
 	public boolean levelContains(String haystack, String... needles) {
 		int nestLevel = 0;
@@ -43,7 +42,9 @@ public class LevelSplitter {
 		while (i < haystack.length()) {
 			if (inString == false && nestLevel == 0) {
 				for (String needle : needles) {
-					if (haystack.regionMatches(i, needle, 0, needle.length())) { return true; }
+					if (haystack.regionMatches(i, needle, 0, needle.length())) {
+						return true;
+					}
 				}
 			}
 
@@ -86,13 +87,13 @@ public class LevelSplitter {
 
 	/**
 	 * Split a string, respecting groups.
-	 * 
+	 *
 	 * @param phrase
-	 *                The string to split.
+	 *               The string to split.
 	 * @param splits
-	 *                The strings to split on.
-	 * @return A list of split strings. If keepDelims is true, it also
-	 *         includes the delimiters in between the split strings.
+	 *               The strings to split on.
+	 * @return A list of split strings. If keepDelims is true, it also includes the
+	 *         delimiters in between the split strings.
 	 */
 	public List<String> levelSplit(String phrase, String... splits) {
 		return levelSplit(phrase, false, splits);
@@ -100,16 +101,15 @@ public class LevelSplitter {
 
 	/**
 	 * Split a string, respecting groups.
-	 * 
+	 *
 	 * @param phrase
-	 *                The string to split.
+	 *                   The string to split.
 	 * @param keepDelims
-	 *                Whether or not to include the delimiters in the
-	 *                results.
+	 *                   Whether or not to include the delimiters in the results.
 	 * @param splits
-	 *                The strings to split on.
-	 * @return A list of split strings. If keepDelims is true, it also
-	 *         includes the delimiters in between the split strings.
+	 *                   The strings to split on.
+	 * @return A list of split strings. If keepDelims is true, it also includes the
+	 *         delimiters in between the split strings.
 	 */
 	public List<String> levelSplit(String phrase, boolean keepDelims, String... splits) {
 		String work = phrase;
@@ -137,7 +137,8 @@ public class LevelSplitter {
 					if (work.regionMatches(i, split, 0, split.length())) {
 						strangs.add(work.substring(0, i));
 
-						if (keepDelims) strangs.add(split);
+						if (keepDelims)
+							strangs.add(split);
 
 						work = work.substring(i + split.length());
 						i = 0;
@@ -157,8 +158,8 @@ public class LevelSplitter {
 				/*
 				 * @TODO Ben Culkin 9/4/18
 				 *
-				 * This currently crashes if the string ends
-				 * with one of the delimiters in question.
+				 * This currently crashes if the string ends with one of the delimiters in
+				 * question.
 				 */
 				switch (work.charAt(i)) {
 				case '\'':
@@ -226,9 +227,10 @@ public class LevelSplitter {
 				if (mat.lookingAt()) {
 
 					strangs.add(phrase.substring(lastMatch, mat.start()));
-					if (keepDelims) strangs.add(mat.group());
+					if (keepDelims)
+						strangs.add(mat.group());
 					lastMatch = mat.end();
-					//work = work.substring(mat.end());
+					// work = work.substring(mat.end());
 					// i = 0;
 
 					// mat = pat.matcher(work);

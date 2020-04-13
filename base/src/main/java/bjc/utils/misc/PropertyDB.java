@@ -16,8 +16,8 @@ import bjc.utils.ioutils.SimpleProperties;
  */
 public class PropertyDB {
 	/* Regex storage. */
-	private static SimpleProperties		regexes;
-	private static Map<String, Pattern>	compiledRegexes;
+	private static SimpleProperties regexes;
+	private static Map<String, Pattern> compiledRegexes;
 
 	/* Format string storage. */
 	private static SimpleProperties formats;
@@ -40,33 +40,35 @@ public class PropertyDB {
 	/**
 	 * Reload all the properties from their files.
 	 *
-	 * NOTE: Any attempts to read from the property DB while properties are
-	 * being loaded will block, to prevent reads from partial states.
+	 * NOTE: Any attempts to read from the property DB while properties are being
+	 * loaded will block, to prevent reads from partial states.
 	 */
 	public static void reloadProperties() {
 		/* * Do the load with the write lock taken. */
 		loadLock.write(() -> {
-			if(LOGLOAD) {
+			if (LOGLOAD) {
 				System.out.println("Reading regex properties:");
 			}
 
 			/* * Load regexes. */
 			regexes = new SimpleProperties();
-			regexes.loadFrom(PropertyDB.class.getResourceAsStream("/regexes.sprop"), false);
-			if(LOGLOAD) {
+			regexes.loadFrom(PropertyDB.class.getResourceAsStream("/regexes.sprop"),
+					false);
+			if (LOGLOAD) {
 				regexes.outputProperties(System.out);
 				System.out.println();
 			}
 			compiledRegexes = new HashMap<>();
 
-			if(LOGLOAD) {
+			if (LOGLOAD) {
 				System.out.println("Reading format properties:");
 			}
 
 			/* * Load formats. */
 			formats = new SimpleProperties();
-			formats.loadFrom(PropertyDB.class.getResourceAsStream("/formats.sprop"), false);
-			if(LOGLOAD) {
+			formats.loadFrom(PropertyDB.class.getResourceAsStream("/formats.sprop"),
+					false);
+			if (LOGLOAD) {
 				formats.outputProperties(System.out);
 				System.out.println();
 			}
@@ -77,14 +79,15 @@ public class PropertyDB {
 	 * Retrieve a persisted regular expression.
 	 *
 	 * @param key
-	 *        The name of the regular expression.
+	 *            The name of the regular expression.
 	 *
 	 * @return The regular expression with that name.
 	 */
 	public static String getRegex(final String key) {
 		return loadLock.read(() -> {
-			if(!regexes.containsKey(key)) {
-				final String msg = String.format("No regular expression named '%s' found", key);
+			if (!regexes.containsKey(key)) {
+				final String msg
+						= String.format("No regular expression named '%s' found", key);
 
 				throw new NoSuchElementException(msg);
 			}
@@ -94,26 +97,24 @@ public class PropertyDB {
 	}
 
 	/**
-	 * Retrieve a persisted regular expression, compiled into a regular
-	 * expression.
+	 * Retrieve a persisted regular expression, compiled into a regular expression.
 	 *
 	 * @param key
-	 *        The name of the regular expression.
+	 *            The name of the regular expression.
 	 *
 	 * @return The regular expression with that name.
 	 */
 	public static Pattern getCompiledRegex(final String key) {
 		return loadLock.read(() -> {
-			if(!regexes.containsKey(key)) {
-				final String msg = String.format("No regular expression named '%s' found", key);
+			if (!regexes.containsKey(key)) {
+				final String msg
+						= String.format("No regular expression named '%s' found", key);
 
 				throw new NoSuchElementException(msg);
 			}
 
 			/* * Get the regex, and cache a compiled version. */
-			return compiledRegexes.computeIfAbsent(key, strang -> {
-				return Pattern.compile(regexes.get(strang));
-			});
+			return compiledRegexes.computeIfAbsent(key, strang -> Pattern.compile(regexes.get(strang)));
 		});
 	}
 
@@ -121,14 +122,15 @@ public class PropertyDB {
 	 * Retrieve a persisted format string.
 	 *
 	 * @param key
-	 *        The name of the format string.
+	 *            The name of the format string.
 	 *
 	 * @return The format string with that name.
 	 */
 	public static String getFormat(final String key) {
 		return loadLock.read(() -> {
-			if(!formats.containsKey(key)) {
-				final String msg = String.format("No format string named '%s' found", key);
+			if (!formats.containsKey(key)) {
+				final String msg
+						= String.format("No format string named '%s' found", key);
 
 				throw new NoSuchElementException(msg);
 			}
@@ -138,14 +140,13 @@ public class PropertyDB {
 	}
 
 	/**
-	 * Retrieve a persisted format string, and apply it to a set of
-	 * arguments.
+	 * Retrieve a persisted format string, and apply it to a set of arguments.
 	 *
 	 * @param key
-	 *        The name of the format string.
+	 *                The name of the format string.
 	 *
 	 * @param objects
-	 *        The parameters to the format string.
+	 *                The parameters to the format string.
 	 *
 	 * @return The format string with that name.
 	 */

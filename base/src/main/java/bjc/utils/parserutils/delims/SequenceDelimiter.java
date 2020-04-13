@@ -24,7 +24,7 @@ import bjc.utils.funcutils.StringUtils;
  * @author EVE
  *
  * @param <T>
- *        The type of items in the sequence.
+ *            The type of items in the sequence.
  */
 public class SequenceDelimiter<T> {
 	/* Mapping from group names to actual groups. */
@@ -39,11 +39,10 @@ public class SequenceDelimiter<T> {
 	}
 
 	/**
-	 * Convert a linear sequence into a tree that matches the delimiter
-	 * structure.
+	 * Convert a linear sequence into a tree that matches the delimiter structure.
 	 *
-	 * Essentially, creates a parse tree of the expression against the
-	 * following grammar while obeying the defined grouping rules.
+	 * Essentially, creates a parse tree of the expression against the following
+	 * grammar while obeying the defined grouping rules.
 	 *
 	 * <pre>
 	 *         <tree>     → (<data> | <subgroup> | <group>)*
@@ -57,39 +56,37 @@ public class SequenceDelimiter<T> {
 	 * </pre>
 	 *
 	 * @param chars
-	 *        The parameters on how to mark certain portions of the tree.
+	 *              The parameters on how to mark certain portions of the tree.
 	 * @param seq
-	 *        The sequence to delimit.
+	 *              The sequence to delimit.
 	 *
-	 * @return The sequence as a tree that matches its group structure. Each
-	 *         node in the tree is either a data node, a subgroup node, or a
-	 *         group node.
+	 * @return The sequence as a tree that matches its group structure. Each node in
+	 *         the tree is either a data node, a subgroup node, or a group node.
 	 *
-	 *         A data node is a leaf node whose data is the string it
-	 *         represents.
+	 *         A data node is a leaf node whose data is the string it represents.
 	 *
-	 *         A subgroup node is a node with two children, and the name of
-	 *         the sub-group as its label. The first child is the contents
-	 *         of the sub-group, and the second is the marker that started
-	 *         the subgroup. The marker is a leaf node labeled with its
-	 *         contents, and the contents contains a recursive tree.
+	 *         A subgroup node is a node with two children, and the name of the
+	 *         sub-group as its label. The first child is the contents of the
+	 *         sub-group, and the second is the marker that started the subgroup.
+	 *         The marker is a leaf node labeled with its contents, and the contents
+	 *         contains a recursive tree.
 	 *
-	 *         A group node is a node with three children, and the name of
-	 *         the group as its label. The first child is the opening
-	 *         delimiter, the second is the group contents, and the third is
-	 *         the closing delimiter. The delimiters are leaf nodes labeled
-	 *         with their contents, while the group node contains a
-	 *         recursive tree.
+	 *         A group node is a node with three children, and the name of the group
+	 *         as its label. The first child is the opening delimiter, the second is
+	 *         the group contents, and the third is the closing delimiter. The
+	 *         delimiters are leaf nodes labeled with their contents, while the
+	 *         group node contains a recursive tree.
 	 *
 	 * @throws DelimiterException
-	 *         Thrown if something went wrong during sequence delimitation.
+	 *                            Thrown if something went wrong during sequence
+	 *                            delimitation.
 	 *
 	 */
 	public ITree<T> delimitSequence(final SequenceCharacteristics<T> chars,
 			@SuppressWarnings("unchecked") final T... seq) throws DelimiterException {
-		if(initialGroup == null) {
+		if (initialGroup == null) {
 			throw new NullPointerException("Initial group must be specified.");
-		} else if(chars == null) {
+		} else if (chars == null) {
 			throw new NullPointerException("Sequence characteristics must not be null");
 		}
 
@@ -113,21 +110,20 @@ public class SequenceDelimiter<T> {
 		/*
 		 * Process each member of the sequence.
 		 */
-		for(int i = 0; i < seq.length; i++) {
+		for (int i = 0; i < seq.length; i++) {
 			final T tok = seq[i];
 
 			/* Check if this token could open a group. */
 			final IPair<T, T[]> possibleOpenPar = groupStack.top().doesOpen(tok);
 			T possibleOpen = possibleOpenPar.getLeft();
 
-			if(possibleOpen == null) {
+			if (possibleOpen == null) {
 				/*
 				 * Handle nested openers.
 				 *
-				 * Local openers take priority over nested ones
-				 * if they overlap.
+				 * Local openers take priority over nested ones if they overlap.
 				 */
-				if(allowedDelimiters.top().containsKey(tok)) {
+				if (allowedDelimiters.top().containsKey(tok)) {
 					possibleOpen = allowedDelimiters.top().get(tok).iterator().next();
 				}
 			}
@@ -135,59 +131,61 @@ public class SequenceDelimiter<T> {
 			/*
 			 * If we have an opening delimiter, handle it.
 			 */
-			if(possibleOpen != null) {
+			if (possibleOpen != null) {
 				final DelimiterGroup<T> group = groups.get(possibleOpen);
 
 				/*
-				 * Error on groups that can't open in this
-				 * context.
+				 * Error on groups that can't open in this context.
 				 *
-				 * This means groups that can't occur at the
-				 * top-level of this group, as well as nested
-				 * exclusions from all enclosing groups.
+				 * This means groups that can't occur at the top-level of this group, as
+				 * well as nested exclusions from all enclosing groups.
 				 */
-				if(isForbidden(groupStack, forbiddenDelimiters, possibleOpen)) {
+				if (isForbidden(groupStack, forbiddenDelimiters, possibleOpen)) {
 					T forbiddenBy;
 
-					if(whoForbid.containsKey(tok)) {
+					if (whoForbid.containsKey(tok)) {
 						forbiddenBy = whoForbid.get(tok);
 					} else {
 						forbiddenBy = groupStack.top().getName();
 					}
 
-					final String ctxList = StringUtils.toEnglishList(groupStack.toArray(), "then");
+					final String ctxList
+							= StringUtils.toEnglishList(groupStack.toArray(), "then");
 
-					final String fmt = "Group '%s' can't be opened in this context. (forbidden by '%s')\nContext Stack: %s";
+					final String fmt
+							= "Group '%s' can't be opened in this context. (forbidden by '%s')\nContext Stack: %s";
 
-					throw new DelimiterException(String.format(fmt, group, forbiddenBy, ctxList));
+					throw new DelimiterException(
+							String.format(fmt, group, forbiddenBy, ctxList));
 				}
 
 				/* Add an open group. */
-				final DelimiterGroup<T>.OpenGroup open = group.open(tok, possibleOpenPar.getRight());
+				final DelimiterGroup<T>.OpenGroup open
+						= group.open(tok, possibleOpenPar.getRight());
 				groupStack.push(open);
 
 				/*
 				 * Handle 'forgetful' groups that reset nesting
 				 */
-				if(open.isForgetful()) {
+				if (open.isForgetful()) {
 					allowedDelimiters.push(HashMultimap.create());
 					forbiddenDelimiters.push(HashMultiset.create());
 				}
 
 				/* Add the nested opens from this group. */
 				final Multimap<T, T> currentAllowed = allowedDelimiters.top();
-				for(final Entry<T, T> opener : open.getNestingOpeners().entrySet()) {
+				for (final Entry<T, T> opener : open.getNestingOpeners().entrySet()) {
 					currentAllowed.put(opener.getKey(), opener.getValue());
 				}
 
 				/* Add the nested exclusions from this group */
 				final Multiset<T> currentForbidden = forbiddenDelimiters.top();
-				for(final T exclusion : open.getNestingExclusions()) {
+				for (final T exclusion : open.getNestingExclusions()) {
 					currentForbidden.add(exclusion);
 
 					whoForbid.put(exclusion, possibleOpen);
 				}
-			} else if(!groupStack.isEmpty() && groupStack.top().isClosing(tok)) {
+			} else if (!groupStack.isEmpty() && groupStack.top().isClosing(tok)) {
 				/*
 				 * Close the group.
 				 */
@@ -197,7 +195,7 @@ public class SequenceDelimiter<T> {
 
 				/* Remove nested exclusions from this group. */
 				final Multiset<T> currentForbidden = forbiddenDelimiters.top();
-				for(final T excludedGroup : closed.getNestingExclusions()) {
+				for (final T excludedGroup : closed.getNestingExclusions()) {
 					currentForbidden.remove(excludedGroup);
 
 					whoForbid.remove(excludedGroup);
@@ -205,18 +203,18 @@ public class SequenceDelimiter<T> {
 
 				/* Remove the nested opens from this group. */
 				final Multimap<T, T> currentAllowed = allowedDelimiters.top();
-				for(final Entry<T, T> closer : closed.getNestingOpeners().entrySet()) {
+				for (final Entry<T, T> closer : closed.getNestingOpeners().entrySet()) {
 					currentAllowed.remove(closer.getKey(), closer.getValue());
 				}
 
 				/*
 				 * Handle 'forgetful' groups that reset nesting.
 				 */
-				if(closed.isForgetful()) {
+				if (closed.isForgetful()) {
 					allowedDelimiters.drop();
 					forbiddenDelimiters.drop();
 				}
-			} else if(!groupStack.isEmpty() && groupStack.top().marksSubgroup(tok)) {
+			} else if (!groupStack.isEmpty() && groupStack.top().marksSubgroup(tok)) {
 				/*
 				 * Mark a subgroup.
 				 */
@@ -230,17 +228,20 @@ public class SequenceDelimiter<T> {
 		/*
 		 * Error if not all groups were closed.
 		 */
-		if(groupStack.size() > 1) {
+		if (groupStack.size() > 1) {
 			final DelimiterGroup<T>.OpenGroup group = groupStack.top();
 
-			final String closingDelims = StringUtils.toEnglishList(group.getNestingExclusions().toArray(),
-					false);
+			final String closingDelims = StringUtils
+					.toEnglishList(group.getNestingExclusions().toArray(), false);
 
-			final String ctxList = StringUtils.toEnglishList(groupStack.toArray(), "then");
+			final String ctxList
+					= StringUtils.toEnglishList(groupStack.toArray(), "then");
 
-			final String fmt = "Unclosed group '%s'. Expected one of %s to close it.\nOpen groups: %n";
+			final String fmt
+					= "Unclosed group '%s'. Expected one of %s to close it.\nOpen groups: %n";
 
-			throw new DelimiterException(String.format(fmt, group.getName(), closingDelims, ctxList));
+			throw new DelimiterException(
+					String.format(fmt, group.getName(), closingDelims, ctxList));
 		}
 
 		return groupStack.pop().toTree(chars.root, chars);
@@ -254,7 +255,7 @@ public class SequenceDelimiter<T> {
 		/*
 		 * Check if a delimiter is locally forbidden.
 		 */
-		if(groupStack.isEmpty()) {
+		if (groupStack.isEmpty()) {
 			localForbid = false;
 		} else {
 			localForbid = groupStack.top().excludes(groupName);
@@ -267,10 +268,10 @@ public class SequenceDelimiter<T> {
 	 * Add a delimiter group.
 	 *
 	 * @param group
-	 *        The delimiter group.
+	 *              The delimiter group.
 	 */
 	public void addGroup(final DelimiterGroup<T> group) {
-		if(group == null) {
+		if (group == null) {
 			throw new NullPointerException("Group must not be null");
 		}
 
@@ -281,20 +282,21 @@ public class SequenceDelimiter<T> {
 	 * Creates and adds a delimiter group using the provided settings.
 	 *
 	 * @param openers
-	 *        The tokens that open this group
+	 *                  The tokens that open this group
 	 * @param groupName
-	 *        The name of the group
+	 *                  The name of the group
 	 * @param closers
-	 *        The tokens that close this group
+	 *                  The tokens that close this group
 	 */
-	public void addGroup(final T[] openers, final T groupName, @SuppressWarnings("unchecked") final T... closers) {
+	public void addGroup(final T[] openers, final T groupName,
+			@SuppressWarnings("unchecked") final T... closers) {
 		final DelimiterGroup<T> group = new DelimiterGroup<>(groupName);
 
 		group.addClosing(closers);
 
 		addGroup(group);
 
-		for(final T open : openers) {
+		for (final T open : openers) {
 			group.addOpener(open, groupName);
 		}
 	}
@@ -305,13 +307,13 @@ public class SequenceDelimiter<T> {
 
 		builder.append("SequenceDelimiter [");
 
-		if(groups != null) {
+		if (groups != null) {
 			builder.append("groups=");
 			builder.append(groups);
 			builder.append(",");
 		}
 
-		if(initialGroup != null) {
+		if (initialGroup != null) {
 			builder.append("initialGroup=");
 			builder.append(initialGroup);
 		}
@@ -325,7 +327,7 @@ public class SequenceDelimiter<T> {
 	 * Set the initial group of this delimiter.
 	 *
 	 * @param initialGroup
-	 *        The initial group of this delimiter.
+	 *                     The initial group of this delimiter.
 	 */
 	public void setInitialGroup(final DelimiterGroup<T> initialGroup) {
 		this.initialGroup = initialGroup;

@@ -41,8 +41,9 @@ public class DefineCLI {
 			this(new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>());
 		}
 
-		public DefineState(Map<String, UnaryOperator<String>> defines, Map<String, String> strings,
-				Map<String, String> formats, Map<String, Pattern> patterns) {
+		public DefineState(Map<String, UnaryOperator<String>> defines,
+				Map<String, String> strings, Map<String, String> formats,
+				Map<String, Pattern> patterns) {
 			this.defines = defines;
 
 			this.strings = strings;
@@ -63,14 +64,14 @@ public class DefineCLI {
 
 	/**
 	 * Main method
-	 * 
+	 *
 	 * @param args
-	 *        CLI args
+	 *             CLI args
 	 */
 	public static void main(String[] args) {
 		DefineCLI defin = new DefineCLI();
 
-		try(Scanner scn = new Scanner(System.in)) {
+		try (Scanner scn = new Scanner(System.in)) {
 			defin.run(scn, "console", true);
 		}
 	}
@@ -79,23 +80,25 @@ public class DefineCLI {
 	 * Run the CLI on an input source.
 	 *
 	 * @param input
-	 *        The place to read input from.
+	 *                    The place to read input from.
 	 * @param ioSource
-	 *        The name of the place to read input from.
+	 *                    The name of the place to read input from.
 	 * @param interactive
-	 *        Whether or not the source is interactive
+	 *                    Whether or not the source is interactive
 	 */
 	public void run(Scanner input, String ioSource, boolean interactive) {
 		int lno = 0;
-		while(input.hasNextLine()) {
-			if(interactive) System.out.printf("define-conf(%d)>", lno);
+		while (input.hasNextLine()) {
+			if (interactive)
+				System.out.printf("define-conf(%d)>", lno);
 
 			String ln = input.nextLine();
 
 			lno += 1;
 
 			Command com = Command.fromString(ln, lno, ioSource);
-			if(com == null) continue;
+			if (com == null)
+				continue;
 
 			handleCommand(com, interactive);
 		}
@@ -105,15 +108,15 @@ public class DefineCLI {
 
 	/**
 	 * Handle a command
-	 * 
+	 *
 	 * @param com
-	 *        The command to handle
+	 *                    The command to handle
 	 * @param interactive
-	 *        Whether or not our I/O stream is interactive
+	 *                    Whether or not our I/O stream is interactive
 	 * @return The status of the executed command.
 	 */
 	public CommandStatus handleCommand(Command com, boolean interactive) {
-		switch(com.name) {
+		switch (com.name) {
 		case "def-string":
 			return defString(com);
 		case "def-format":
@@ -129,7 +132,7 @@ public class DefineCLI {
 	private CommandStatus defString(Command com) {
 		List<String> arguments = StringUtils.processArguments(com.remn);
 
-		if(arguments.size() < 1) {
+		if (arguments.size() < 1) {
 			LOGGER.severe(com.error(
 					"def-string expects at least one argument: the name of the string to bind"));
 			return FAIL;
@@ -138,14 +141,14 @@ public class DefineCLI {
 		String name = arguments.get(0);
 		String strang;
 
-		if(arguments.size() < 2) {
+		if (arguments.size() < 2) {
 			LOGGER.warning(com.warn("Binding empty string to name '%s'\n", name));
 			strang = "";
 		} else {
 			strang = arguments.get(1);
 		}
 
-		if(stat.strings.containsKey(name)) {
+		if (stat.strings.containsKey(name)) {
 			LOGGER.warning(com.warn("Shadowing string '%s'\n", name));
 		}
 
@@ -157,7 +160,7 @@ public class DefineCLI {
 	private CommandStatus defFormat(Command com) {
 		List<String> arguments = StringUtils.processArguments(com.remn);
 
-		if(arguments.size() < 1) {
+		if (arguments.size() < 1) {
 			LOGGER.severe(com.error(
 					"def-format expects at least one argument: the name of the format to bind"));
 			return FAIL;
@@ -166,14 +169,14 @@ public class DefineCLI {
 		String name = arguments.get(0);
 		String fmt;
 
-		if(arguments.size() < 2) {
+		if (arguments.size() < 2) {
 			LOGGER.warning(com.warn("Binding empty format to name '%s'\n", name));
 			fmt = "";
 		} else {
 			fmt = arguments.get(1);
 		}
 
-		if(stat.formats.containsKey(name)) {
+		if (stat.formats.containsKey(name)) {
 			LOGGER.warning(com.warn("Shadowing format '%s'\n", name));
 		}
 
@@ -185,20 +188,20 @@ public class DefineCLI {
 	private CommandStatus bindFormat(Command com) {
 		List<String> strings = StringUtils.processArguments(com.remn);
 
-		if(strings.size() < 2) {
+		if (strings.size() < 2) {
 			LOGGER.severe(com.error(
 					"Binding a format requires at least two arguments: the format to bind, and the name to bind it to."));
 			return FAIL;
 		}
 
 		String formatName = strings.get(0);
-		if(!stat.formats.containsKey(formatName)) {
+		if (!stat.formats.containsKey(formatName)) {
 			LOGGER.severe(com.error("Unknown format %s", formatName));
 			return FAIL;
 		}
 
 		String bindName = strings.get(1);
-		if(stat.strings.containsKey(bindName)) {
+		if (stat.strings.containsKey(bindName)) {
 			LOGGER.warning(com.warn("Shadowing string '%s'", bindName));
 		}
 
@@ -209,13 +212,13 @@ public class DefineCLI {
 		itr.next();
 		itr.next();
 
-		while(itr.hasNext()) {
+		while (itr.hasNext()) {
 			String name = itr.next();
 
-			if(name.startsWith("$")) {
+			if (name.startsWith("$")) {
 				String varName = name.substring(1);
 
-				if(stat.strings.containsKey(varName)) {
+				if (stat.strings.containsKey(varName)) {
 					fillIns.add(stat.strings.get(varName));
 				} else {
 					LOGGER.severe(com.error("Unknown string '%s'", varName));
@@ -226,15 +229,16 @@ public class DefineCLI {
 			}
 		}
 
-	//	CLFormatter fmt = new CLFormatter();
+		// CLFormatter fmt = new CLFormatter();
 
 		String formatted = "";
-	//	try {
-	//		formatted = fmt.formatString(stat.formats.get(formatName), fillIns);
-	//	} catch (IOException ioex) {
-	//		LOGGER.severe(com.error("IOException formatting string: %s", ioex.getMessage()));
-	//		return FAIL;
-	//	}
+		// try {
+		// formatted = fmt.formatString(stat.formats.get(formatName), fillIns);
+		// } catch (IOException ioex) {
+		// LOGGER.severe(com.error("IOException formatting string: %s",
+		// ioex.getMessage()));
+		// return FAIL;
+		// }
 
 		stat.strings.put(bindName, formatted);
 
