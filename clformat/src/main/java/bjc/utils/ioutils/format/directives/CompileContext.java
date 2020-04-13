@@ -25,20 +25,20 @@ public class CompileContext {
 
 	/**
 	 * Create a new compilation context.
-	 * 
+	 *
 	 * @param dirs
-	 * 	The directives to compile from.
-	 * 
+	 *             The directives to compile from.
+	 *
 	 * @param fmt
-	 * 	The formatter being used to compile.
-	 * 
+	 *             The formatter being used to compile.
+	 *
 	 * @param dcr
-	 * 	The decree currently being compiled.
+	 *             The decree currently being compiled.
 	 */
 	public CompileContext(CLTokenizer dirs, CLFormatter fmt, Decree dcr) {
 		directives = dirs;
 		formatter = fmt;
-		
+
 		decr = dcr;
 	}
 }

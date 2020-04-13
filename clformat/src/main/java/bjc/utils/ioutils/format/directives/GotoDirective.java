@@ -5,7 +5,7 @@ import bjc.utils.ioutils.format.*;
 
 /**
  * Implement the * directive.
- * 
+ *
  * @author student
  *
  */
@@ -47,9 +47,7 @@ public class GotoDirective implements Directive {
 
 class GotoEdict implements Edict {
 	public static enum Mode {
-		FORWARD,
-		BACKWARD,
-		INDEX
+		FORWARD, BACKWARD, INDEX
 	}
 
 	private Mode mode;
@@ -67,7 +65,7 @@ class GotoEdict implements Edict {
 		Tape<Object> items = formCTX.items;
 
 		int num;
-		switch(mode) {
+		switch (mode) {
 		case FORWARD:
 			num = numVal.asInt(items, "number of arguments forward", "*", 1);
 			items.right(num);

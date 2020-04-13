@@ -8,8 +8,9 @@ import bjc.utils.ioutils.format.*;
 
 /**
  * Implements the C directive.
- * 
- * This serves to print out a single character, in the way that the '%c' printf directive does.
+ *
+ * This serves to print out a single character, in the way that the '%c' printf
+ * directive does.
  *
  * @author Ben Culkin
  */

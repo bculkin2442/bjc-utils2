@@ -6,11 +6,11 @@ import bjc.utils.ioutils.format.*;
 
 /**
  * The set of parameters used during formatting.
- * 
+ *
  * Since the refactor to use compilation (e.g {@link CLString} and it's ilk),
  * this is now mostly used as a way of creating the {@link FormatContext} and
  * {@link CompileContext} objects.
- * 
+ *
  * @author bjculkin
  *
  */
@@ -47,27 +47,27 @@ public class FormatParameters {
 
 	/**
 	 * Create a new set of format parameters.
-	 * 
+	 *
 	 * @param rw
-	 * 	The writer we are sending output to.
-	 * 
+	 *                The writer we are sending output to.
+	 *
 	 * @param item
-	 * 	The current format parameter.
-	 * 
+	 *                The current format parameter.
+	 *
 	 * @param decr
-	 * 	The decree being formatted.
-	 * 
+	 *                The decree being formatted.
+	 *
 	 * @param tParams
-	 * 	The list of all the format parameters.
-	 * 
+	 *                The list of all the format parameters.
+	 *
 	 * @param dirIter
-	 * 	The set of format decrees.
-	 * 
+	 *                The set of format decrees.
+	 *
 	 * @param fmt
-	 * 	The formatter we are using
+	 *                The formatter we are using
 	 */
-	public FormatParameters(ReportWriter rw, Object item, Decree decr, Tape<Object> tParams,
-			CLTokenizer dirIter, CLFormatter fmt) {
+	public FormatParameters(ReportWriter rw, Object item, Decree decr,
+			Tape<Object> tParams, CLTokenizer dirIter, CLFormatter fmt) {
 		this.rw = rw;
 
 		this.item = item;
@@ -83,7 +83,7 @@ public class FormatParameters {
 
 	/**
 	 * Get the parameters for the current decree.
-	 * 
+	 *
 	 * @return The parameters to the current decree.
 	 */
 	public CLParameters getParams() {
@@ -92,7 +92,7 @@ public class FormatParameters {
 
 	/**
 	 * Get the modifiers for the current decree.
-	 * 
+	 *
 	 * @return The modifiers for the current decree.
 	 */
 	public CLModifiers getMods() {
@@ -101,16 +101,16 @@ public class FormatParameters {
 
 	/**
 	 * Convert this set of parameters into a compilation context.
-	 * 
+	 *
 	 * @return The compilation context from these parameters.
 	 */
 	public CompileContext toCompileCTX() {
 		return new CompileContext(dirIter, fmt, decr);
 	}
-	
+
 	/**
 	 * Convert this set of parameters into a format context.
-	 * 
+	 *
 	 * @return The format context from these parameters.
 	 */
 	public FormatContext toFormatCTX() {

@@ -24,10 +24,12 @@ public class StringUtilsTest {
 
 		assertReadLines("hallo there\na second line", "hallo there", "a second line");
 
-		assertReadLines("hallo there \\\na continued line", "hallo there a continued line");
+		assertReadLines("hallo there \\\na continued line",
+				"hallo there a continued line");
 
-		assertReadLines("hallo there\\\\\na second line", "hallo there\\", "a second line");
-	
+		assertReadLines("hallo there\\\\\na second line", "hallo there\\",
+				"a second line");
+
 		assertReadLines("a\n\nb", "a", "", "b");
 	}
 

@@ -18,7 +18,8 @@ public class RandomStringExamples {
 		final IList<IList<String>> cses = new FunctionalList<>();
 
 		for (final String strang : cases) {
-			final IList<String> lst = FunctionalStringTokenizer.fromString(strang).toList(s -> s);
+			final IList<String> lst
+					= FunctionalStringTokenizer.fromString(strang).toList(s -> s);
 
 			cses.add(lst);
 		}
@@ -30,13 +31,14 @@ public class RandomStringExamples {
 	 * Main method
 	 *
 	 * @param args
-	 *                Unused CLI args
+	 *             Unused CLI args
 	 */
 	public static void main(final String[] args) {
 		rg = new RandomGrammar<>();
 
-		addRule("<sentance>", "<person> <opines> <something>", "<person> thinks that I am <property>",
-				"I <opine> <something>", "You think that I am <property>");
+		addRule("<sentance>", "<person> <opines> <something>",
+				"<person> thinks that I am <property>", "I <opine> <something>",
+				"You think that I am <property>");
 
 		addRule("<activity>", "dancing", "eating", "sleeping");
 
@@ -46,7 +48,8 @@ public class RandomStringExamples {
 
 		addRule("<opines>", "hates", "loves");
 
-		addRule("<person>", "my sister", "my father", "my girlfriend", "the man next door");
+		addRule("<person>", "my sister", "my father", "my girlfriend",
+				"the man next door");
 
 		addRule("<property>", "creative", "intelligent");
 

@@ -8,7 +8,7 @@ import bjc.utils.ioutils.format.*;
 
 /**
  * Implements the [ directive.
- * 
+ *
  * This does varying sorts of conditional dispatches on which string to use for
  * formatting, allowing it to be based off of general conditions in varying
  * ways.
@@ -23,18 +23,20 @@ public class ConditionalDirective implements Directive {
 
 		GroupDecree clauses = compCTX.directives.nextGroup(compCTX.decr, "]", ";");
 
-		ClauseDecree defClause  = null;
+		ClauseDecree defClause = null;
 		boolean isDefault = false;
 
 		for (ClauseDecree clause : clauses) {
-			if (isDefault) defClause = clause;
+			if (isDefault)
+				defClause = clause;
 
 			if (clause.terminator != null && clause.terminator.modifiers.colonMod) {
 				isDefault = true;
 			}
 		}
 
-		if (mods.starMod && clauses.size() > 0) defClause = clauses.clause();
+		if (mods.starMod && clauses.size() > 0)
+			defClause = clauses.clause();
 
 		CLValue index = null;
 
@@ -54,16 +56,14 @@ public class ConditionalDirective implements Directive {
 			mode = ConditionalEdict.Mode.INDEX_CLAUSE;
 		}
 
-		return new ConditionalEdict(mode, mods.dollarMod, index, clauses,
-				defClause, compCTX.formatter);
+		return new ConditionalEdict(mode, mods.dollarMod, index, clauses, defClause,
+				compCTX.formatter);
 	}
 }
 
 class ConditionalEdict implements Edict {
 	public static enum Mode {
-		FIRST_SECOND,
-		OUTPUT_TRUE,
-		INDEX_CLAUSE
+		FIRST_SECOND, OUTPUT_TRUE, INDEX_CLAUSE
 	}
 
 	private Mode condMode;
@@ -78,9 +78,8 @@ class ConditionalEdict implements Edict {
 	@SuppressWarnings("unused")
 	private CLFormatter formatter;
 
-	public ConditionalEdict(Mode condMode, boolean decrementIndex,
-			CLValue index, GroupDecree clauses, ClauseDecree defClause,
-			CLFormatter fmt) {
+	public ConditionalEdict(Mode condMode, boolean decrementIndex, CLValue index,
+			GroupDecree clauses, ClauseDecree defClause, CLFormatter fmt) {
 		this.condMode = condMode;
 
 		this.decrementIndex = decrementIndex;
@@ -101,86 +100,87 @@ class ConditionalEdict implements Edict {
 
 		try {
 			switch (condMode) {
-			case FIRST_SECOND:
-				{
-					Object o = items.item();
+			case FIRST_SECOND: {
+				Object o = items.item();
+				items.right();
+
+				boolean res = false;
+				if (o == null) {
+					// throw new IllegalArgumentException("No parameter provided for [
+					// directive.");
+				} else if (!(o instanceof Boolean)) {
+					throw new IllegalFormatConversionException('[', o.getClass());
+				} else {
+					res = (Boolean) o;
+				}
+
+				CLString frmt;
+				if (res) {
+					frmt = clauses.get(1);
+				} else {
+					frmt = clauses.get(0);
+				}
+
+				frmt.format(formCTX);
+			}
+				break;
+			case OUTPUT_TRUE: {
+				boolean res = false;
+				Object o = items.item();
+
+				if (o == null) {
+					// throw new IllegalArgumentException("No parameter provided for [
+					// directive.");
+				} else if (o instanceof Integer) {
+					if ((Integer) o != 0) {
+						res = true;
+					}
+				} else if (o instanceof Boolean) {
+					res = (Boolean) o;
+				} else {
+					throw new IllegalFormatConversionException('[', o.getClass());
+				}
+
+				if (res) {
+					clauses.get(0).format(formCTX);
+				} else {
 					items.right();
-
-					boolean res = false;
-					if (o == null) {
-						//throw new IllegalArgumentException("No parameter provided for [ directive.");
-					} else if (!(o instanceof Boolean)) {
-						throw new IllegalFormatConversionException('[', o.getClass());
-					} else {
-						res = (Boolean) o;
-					}
-
-					CLString frmt;
-					if (res) {
-						frmt = clauses.get(1);
-					} else {
-						frmt = clauses.get(0);
-					}
-
-					frmt.format(formCTX);
 				}
+			}
 				break;
-			case OUTPUT_TRUE:
-				{
-					boolean res = false;
+			case INDEX_CLAUSE: {
+				int res;
+
+				if (index != null) {
+					res = index.asInt(items, "conditional choice", "[", 0);
+				} else {
 					Object o = items.item();
 
 					if (o == null) {
-						// throw new IllegalArgumentException("No parameter provided for [ directive.");
-					} else if (o instanceof Integer) {
-						if ((Integer)o != 0) {
-							res = true;
-						}
-					} else if (o instanceof Boolean) {
-						res = (Boolean) o;
-					} else {
+						throw new IllegalArgumentException(
+								"No parameter provided for [ directive.");
+					} else if (!(o instanceof Number)) {
 						throw new IllegalFormatConversionException('[', o.getClass());
 					}
 
-					if (res) {
-						clauses.get(0).format(formCTX);
-					} else {
-						items.right();
-					}
+					res = ((Number) o).intValue();
+
+					items.right();
 				}
-				break;
-			case INDEX_CLAUSE:
-				{
-					int res;
 
-					if (index != null) {
-						res = index.asInt(items, "conditional choice", "[", 0);
-					} else {
-						Object o = items.item();
+				if (decrementIndex)
+					res -= 1;
 
-						if (o == null) {
-							throw new IllegalArgumentException("No parameter provided for [ directive.");
-						} else if (!(o instanceof Number)) {
-							throw new IllegalFormatConversionException('[', o.getClass());
-						}
-
-						res = ((Number) o).intValue();
-
-						items.right();
+				if (clauses.size() == 0 || res < 0 || res >= clauses.size()) {
+					if (defClause != null) {
+						defClause.format(formCTX.writer, items);
 					}
+				} else {
+					CLString frmt = clauses.get(res);
 
-					if (decrementIndex) res -= 1;
-
-					if (clauses.size() == 0 || res < 0 || res >= clauses.size()) {
-						if (defClause != null) {
-							defClause.format(formCTX.writer, items);
-						}
-					} else {
-						CLString frmt = clauses.get(res);
-
-						frmt.format(formCTX.writer, items);
-					}
+					frmt.format(formCTX.writer, items);
 				}
+			}
 				break;
 			}
 		} catch (DirectiveEscape dex) {

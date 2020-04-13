@@ -6,9 +6,10 @@ import bjc.utils.ioutils.format.*;
 import bjc.utils.ioutils.format.exceptions.*;
 
 /**
- * Implementation of the ? directive, which does recursive execution of a format string.
- * 
- *  @author bjculkin
+ * Implementation of the ? directive, which does recursive execution of a format
+ * string.
+ *
+ * @author bjculkin
  *
  */
 public class RecursiveDirective implements Directive {
@@ -31,7 +32,8 @@ class RecursiveEdict implements Edict {
 
 	@Override
 	public void format(FormatContext formCTX) throws IOException {
-		// System.err.printf("[TRACE] Processing ? directive with params: " + formCTX.items.toString());
+		// System.err.printf("[TRACE] Processing ? directive with params: " +
+		// formCTX.items.toString());
 		Object body = formCTX.items.item();
 
 		formCTX.items.right();
@@ -42,7 +44,7 @@ class RecursiveEdict implements Edict {
 			}
 
 			try {
-				String bod = (String)body;
+				String bod = (String) body;
 
 				fmt.doFormatString(bod, formCTX.writer, formCTX.items, true);
 			} catch (DirectiveEscape eex) {
@@ -52,7 +54,8 @@ class RecursiveEdict implements Edict {
 			}
 		} else {
 			if (formCTX.items.atEnd()) {
-				throw new IllegalArgumentException("? directive requires two format parameters");
+				throw new IllegalArgumentException(
+						"? directive requires two format parameters");
 			}
 
 			Object o = formCTX.items.item();
@@ -67,11 +70,11 @@ class RecursiveEdict implements Edict {
 			}
 
 			@SuppressWarnings("unchecked")
-			Iterable<Object> itb = (Iterable<Object>)o;
+			Iterable<Object> itb = (Iterable<Object>) o;
 			Tape<Object> newParams = new SingleTape<>(itb);
 
 			try {
-				String bod = (String)body;
+				String bod = (String) body;
 
 				// :DynamicString
 				fmt.doFormatString(bod, formCTX.writer, newParams, true);

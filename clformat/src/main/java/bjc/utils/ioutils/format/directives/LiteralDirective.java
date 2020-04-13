@@ -6,7 +6,7 @@ import bjc.utils.ioutils.format.*;
 
 /**
  * Implements directives that create a literal string.
- * 
+ *
  * @author student
  *
  */
@@ -15,11 +15,11 @@ public class LiteralDirective implements Directive {
 
 	/**
 	 * Create a new literal directive.
-	 * 
+	 *
 	 * @param lit
-	 *            The string for the directive.
+	 *                  The string for the directive.
 	 * @param directive
-	 *            The character for the directive.
+	 *                  The character for the directive.
 	 */
 	public LiteralDirective(String lit, char directive) {
 		Character.toString(directive);

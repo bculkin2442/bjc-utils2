@@ -17,7 +17,7 @@ public class ShuntTest {
 	 * Main method
 	 *
 	 * @param args
-	 *                Unused CLI args
+	 *             Unused CLI args
 	 */
 	public static void main(final String[] args) {
 		final Scanner inputSource = new Scanner(System.in);
@@ -27,7 +27,8 @@ public class ShuntTest {
 
 		final ShuntingYard<String> yard = new ShuntingYard<>(true);
 
-		final IList<String> preTokens = new FunctionalStringTokenizer(line).toList(strang -> strang);
+		final IList<String> preTokens
+				= new FunctionalStringTokenizer(line).toList(strang -> strang);
 		final IList<String> shuntedTokens = yard.postfix(preTokens, strang -> strang);
 
 		System.out.println(shuntedTokens.toString());

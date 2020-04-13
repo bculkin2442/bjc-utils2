@@ -9,7 +9,7 @@ import bjc.utils.ioutils.LevelSplitter;
 
 /**
  * Test of LevelSplitter.
- * 
+ *
  * @author bjculkin
  *
  */
@@ -33,11 +33,11 @@ public class LevelSplitterTest {
 	 */
 	@Test
 	public void testRXSplit() {
-		//LevelSplitter splitter = LevelSplitter.def;
+		// LevelSplitter splitter = LevelSplitter.def;
 
 		// Check generic splitting works
-		assertRXSplit("\\s+", pair("", ""), pair("a", "a"), pair("a b", "a", "b"), pair("a  b", "a", "b"),
-				pair("a\t \tb", "a", "b"));
+		assertRXSplit("\\s+", pair("", ""), pair("a", "a"), pair("a b", "a", "b"),
+				pair("a  b", "a", "b"), pair("a\t \tb", "a", "b"));
 	}
 
 	private static void assertRXSplit(String pat, RXPair... pairs) {

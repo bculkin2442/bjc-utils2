@@ -4,6 +4,7 @@ import bjc.utils.ioutils.format.*;
 
 /**
  * Implement the I directive.
+ * 
  * @author student
  *
  */
@@ -18,7 +19,7 @@ public class IndentDirective implements Directive {
 		}
 
 		CLValue indentCount = CLValue.nil();
-		if(params.length() >= 1) {
+		if (params.length() >= 1) {
 			params.mapIndices("count");
 
 			indentCount = params.resolveKey("count");

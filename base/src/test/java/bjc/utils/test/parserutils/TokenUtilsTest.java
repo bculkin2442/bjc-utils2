@@ -29,7 +29,8 @@ public class TokenUtilsTest {
 	 * Check handling of mismatched strings with no matching strings.
 	 */
 	@Test
-	public void testRemoveDQuoted_MismatchedStringNoMatch() throws IllegalArgumentException {
+	public void testRemoveDQuoted_MismatchedStringNoMatch()
+			throws IllegalArgumentException {
 		exp.expect(IllegalArgumentException.class);
 		exp.expectMessage(containsString("Opening quote was at position 0"));
 
@@ -40,7 +41,8 @@ public class TokenUtilsTest {
 	 * Check handling of mismatched strings with a matching string.
 	 */
 	@Test
-	public void testRemoveDQuoted_MismatchedStringMatch() throws IllegalArgumentException {
+	public void testRemoveDQuoted_MismatchedStringMatch()
+			throws IllegalArgumentException {
 		exp.expect(IllegalArgumentException.class);
 		exp.expectMessage(containsString("Opening quote was at position 7"));
 
@@ -62,7 +64,8 @@ public class TokenUtilsTest {
 	 */
 	@Test
 	public void testRemoveDQuoted_MultipleSerialString() {
-		final List<String> onMultipleSerialMatchString = removeDQuotedStrings("\"hello\"\"there\"");
+		final List<String> onMultipleSerialMatchString
+				= removeDQuotedStrings("\"hello\"\"there\"");
 
 		assertThat(onMultipleSerialMatchString, hasItems("\"hello\"", "\"there\""));
 	}
@@ -72,9 +75,11 @@ public class TokenUtilsTest {
 	 */
 	@Test
 	public void testRemoveDQuoted_MultipleInterleavedString() {
-		final List<String> onMultipleInterleaveMatchString = removeDQuotedStrings("one\"two\"three\"four\"");
+		final List<String> onMultipleInterleaveMatchString
+				= removeDQuotedStrings("one\"two\"three\"four\"");
 
-		assertThat(onMultipleInterleaveMatchString, hasItems("one", "\"two\"", "three", "\"four\""));
+		assertThat(onMultipleInterleaveMatchString,
+				hasItems("one", "\"two\"", "three", "\"four\""));
 	}
 
 	/*
@@ -144,7 +149,8 @@ public class TokenUtilsTest {
 	 * Check handling of strings with invalid single escapes.
 	 */
 	@Test
-	public void testDescapeString_InvalidSingleEscapeString() throws IllegalArgumentException {
+	public void testDescapeString_InvalidSingleEscapeString()
+			throws IllegalArgumentException {
 		exp.expect(IllegalArgumentException.class);
 		exp.expectMessage(containsString("at position 0"));
 

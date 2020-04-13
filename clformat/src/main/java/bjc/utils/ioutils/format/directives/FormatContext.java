@@ -26,9 +26,9 @@ public class FormatContext {
 	 * Create a new format context.
 	 *
 	 * @param rw
-	 * 	The writer to store output into.
+	 *             The writer to store output into.
 	 * @param itms
-	 * 	The items that shall serve as format parameters.
+	 *             The items that shall serve as format parameters.
 	 */
 	public FormatContext(ReportWriter rw, Tape<Object> itms) {
 		writer = rw;
@@ -37,7 +37,8 @@ public class FormatContext {
 	}
 
 	/**
-	 * Get a new scratch writer, with the same format settings as the current writer.
+	 * Get a new scratch writer, with the same format settings as the current
+	 * writer.
 	 *
 	 * @return A new writer, as described above.
 	 */

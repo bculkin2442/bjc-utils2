@@ -10,18 +10,18 @@ import static bjc.utils.ioutils.format.directives.GeneralNumberDirective.NumberP
 
 /**
  * Implements radix based numbers.
- * 
+ *
  * @author student
  *
  */
 public class NumberDirective extends GeneralNumberDirective {
 	/**
 	 * Create a new radix based number directive.
-	 * 
+	 *
 	 * @param argidx
-	 *            The argument offset to use.
+	 *               The argument offset to use.
 	 * @param radix
-	 *            The radix of the number to use.
+	 *               The radix of the number to use.
 	 */
 	public NumberDirective(int argidx, int radix, char directive) {
 		this.argidx = argidx;
@@ -50,9 +50,9 @@ class NumberEdict implements Edict {
 	private NumberParams np;
 
 	public NumberEdict(int radix, char directive, int argidx, NumberParams np) {
-		this.radix  = radix;
+		this.radix = radix;
 		this.directive = Character.toString(directive);
-		
+
 		this.np = np;
 	}
 
@@ -63,23 +63,28 @@ class NumberEdict implements Edict {
 		CLFormatter.checkItem(item, directive.charAt(0));
 
 		if (!(item instanceof Number)) {
-			throw new IllegalFormatConversionException(directive.charAt(0), item.getClass());
+			throw new IllegalFormatConversionException(directive.charAt(0),
+					item.getClass());
 		}
 
 		long val = ((Number) item).longValue();
 
-		int  mincol  = np.mincol.asInt(formCTX.items, "minimum column count", directive, 0);
-		char padchar = np.padchar.asChar(formCTX.items, "padding character", directive, ' ');
+		int mincol = np.mincol.asInt(formCTX.items, "minimum column count", directive, 0);
+		char padchar
+				= np.padchar.asChar(formCTX.items, "padding character", directive, ' ');
 
 		boolean signed = np.signed;
 
 		String res;
 
 		if (np.commaMode) {
-			char commaChar     = np.commaChar.asChar(formCTX.items, "comma character", directive, ',');
-			int  commaInterval = np.commaInterval.asInt(formCTX.items, "comma interval", directive, 0);
+			char commaChar = np.commaChar.asChar(formCTX.items, "comma character",
+					directive, ',');
+			int commaInterval = np.commaInterval.asInt(formCTX.items, "comma interval",
+					directive, 0);
 
-			res = NumberUtils.toCommaString(val, mincol, padchar, commaInterval, commaChar, signed, radix);
+			res = NumberUtils.toCommaString(val, mincol, padchar, commaInterval,
+					commaChar, signed, radix);
 		} else {
 			res = NumberUtils.toNormalString(val, mincol, padchar, signed, radix);
 		}

@@ -9,7 +9,7 @@ import bjc.utils.ioutils.SimpleProperties;
 
 /**
  * Utility class for reading in the pattern for parsing format directives.
- * 
+ *
  * @author bjculkin
  *
  */
@@ -40,7 +40,8 @@ public class CLPattern {
 		directiveName = props.get("clFormatName");
 
 		prefixList = String.format(props.get("delimSeparatedList"), prefixParam, ",");
-		formatDirective = String.format(props.get("clFormatDirective"), prefixList, formatMod, directiveName);
+		formatDirective = String.format(props.get("clFormatDirective"), prefixList,
+				formatMod, directiveName);
 
 		pFormatDirective = Pattern.compile(formatDirective);
 	}
@@ -49,7 +50,7 @@ public class CLPattern {
 	 * Get a matcher for FORMAT directives.
 	 *
 	 * @param inp
-	 *                The string to parse directives from.
+	 *            The string to parse directives from.
 	 */
 	public static Matcher getDirectiveMatcher(String inp) {
 		return pFormatDirective.matcher(inp);

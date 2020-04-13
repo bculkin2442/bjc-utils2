@@ -7,7 +7,7 @@ import bjc.utils.ioutils.format.*;
 
 /**
  * Implements the { directive.
- * 
+ *
  * @author student
  *
  */
@@ -66,10 +66,7 @@ class IterationEdict implements Edict {
 	private static final char DIR_NAME = '{';
 
 	public static enum Mode {
-		ALL_SUBLISTS,
-		ALL,
-		SUBLIST,
-		NORMAL
+		ALL_SUBLISTS, ALL, SUBLIST, NORMAL
 	}
 
 	private Mode mode;
@@ -91,7 +88,8 @@ class IterationEdict implements Edict {
 
 	@Override
 	public void format(FormatContext formCTX) throws IOException {
-		int maxIterations = maxItrVal.asInt(formCTX.items, "maximum iterations", "{", Integer.MAX_VALUE);
+		int maxIterations = maxItrVal.asInt(formCTX.items, "maximum iterations", "{",
+				Integer.MAX_VALUE);
 
 		int numIterations = 0;
 
@@ -110,7 +108,8 @@ class IterationEdict implements Edict {
 			strang = (String) iter;
 
 			if (!formCTX.items.right()) {
-				throw new IllegalArgumentException("Not enough parameters to '{' directive");
+				throw new IllegalArgumentException(
+						"Not enough parameters to '{' directive");
 			}
 
 			iter = formCTX.items.item();
@@ -120,11 +119,13 @@ class IterationEdict implements Edict {
 		case ALL_SUBLISTS:
 			try {
 				do {
-					if (numIterations > maxIterations) break;
+					if (numIterations > maxIterations)
+						break;
 					numIterations += 1;
 
 					if (!(iter instanceof Iterable<?>)) {
-						throw new IllegalFormatConversionException(DIR_NAME, iter.getClass());
+						throw new IllegalFormatConversionException(DIR_NAME,
+								iter.getClass());
 					}
 
 					@SuppressWarnings("unchecked")
@@ -134,8 +135,10 @@ class IterationEdict implements Edict {
 					try {
 						if (usingString) {
 							// @Speed @Memory :DynamicFormatString
-							// For a speed/memory tradeoff here, we could be compiling strang into a
-							// CLString and then caching those compiled string. However, we aren't
+							// For a speed/memory tradeoff here, we could be compiling
+							// strang into a
+							// CLString and then caching those compiled string. However,
+							// we aren't
 							// doing that now. -- ben, 12/17/19
 							fmt.doFormatString(strang, formCTX.writer, nParams, false);
 						} else {
@@ -159,7 +162,8 @@ class IterationEdict implements Edict {
 		case ALL:
 			try {
 				while (!formCTX.items.atEnd()) {
-					if (numIterations > maxIterations) break;
+					if (numIterations > maxIterations)
+						break;
 
 					numIterations += 1;
 
@@ -172,7 +176,8 @@ class IterationEdict implements Edict {
 				}
 			} catch (DirectiveEscape eex) {
 				if (eex.endIteration)
-					throw new UnsupportedOperationException("Colon mod not allowed on escape marker without colon mod on iteration");
+					throw new UnsupportedOperationException(
+							"Colon mod not allowed on escape marker without colon mod on iteration");
 			}
 			break;
 		case SUBLIST:
@@ -187,11 +192,13 @@ class IterationEdict implements Edict {
 				while (itr.hasNext()) {
 					Object obj = itr.next();
 
-					if (numIterations > maxIterations) break;
+					if (numIterations > maxIterations)
+						break;
 					numIterations += 1;
 
 					if (!(obj instanceof Iterable<?>)) {
-						throw new IllegalFormatConversionException(DIR_NAME, obj.getClass());
+						throw new IllegalFormatConversionException(DIR_NAME,
+								obj.getClass());
 					}
 
 					@SuppressWarnings("unchecked")
@@ -206,7 +213,8 @@ class IterationEdict implements Edict {
 							body.format(formCTX.writer, nParams);
 						}
 					} catch (DirectiveEscape eex) {
-						if(eex.endIteration && !itr.hasNext()) throw eex;
+						if (eex.endIteration && !itr.hasNext())
+							throw eex;
 					}
 				}
 			} catch (DirectiveEscape eex) {
@@ -224,7 +232,8 @@ class IterationEdict implements Edict {
 				Tape<Object> nParams = new SingleTape<>(itr);
 
 				while (!nParams.atEnd()) {
-					if (numIterations > maxIterations) break;
+					if (numIterations > maxIterations)
+						break;
 					numIterations += 1;
 
 					if (usingString) {
@@ -236,7 +245,8 @@ class IterationEdict implements Edict {
 				}
 			} catch (DirectiveEscape eex) {
 				if (eex.endIteration)
-					throw new UnsupportedOperationException("Colon mod not allowed on escape marker without colon mod on iteration");
+					throw new UnsupportedOperationException(
+							"Colon mod not allowed on escape marker without colon mod on iteration");
 			}
 			break;
 		default:

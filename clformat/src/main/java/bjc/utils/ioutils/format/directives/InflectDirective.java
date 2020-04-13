@@ -8,6 +8,7 @@ import bjc.utils.ioutils.format.*;
 
 /**
  * Inflection directive.
+ * 
  * @author bjculkin
  *
  */
@@ -44,7 +45,8 @@ public class InflectDirective implements Directive {
 					nestLevel = Math.max(0, nestLevel - 1);
 
 					/* End the iteration. */
-					if (nestLevel == 0) break;
+					if (nestLevel == 0)
+						break;
 				} else if (Directive.isClosing(dirName)) {
 					nestLevel = Math.max(0, nestLevel - 1);
 				} else {

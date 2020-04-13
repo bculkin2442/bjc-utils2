@@ -14,7 +14,7 @@ public class StringEdict implements Edict {
 	 * Create a new string edict for a given string.
 	 *
 	 * @param vl
-	 * 	The string to print.
+	 *           The string to print.
 	 */
 	public StringEdict(String vl) {
 		this.val = vl;

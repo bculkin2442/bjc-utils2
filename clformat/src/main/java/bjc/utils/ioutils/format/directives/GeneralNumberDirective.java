@@ -4,14 +4,14 @@ import bjc.utils.ioutils.format.*;
 
 /**
  * Implementation skeleton for number directives.
- * 
+ *
  * @author student
  *
  */
 public abstract class GeneralNumberDirective implements Directive {
 	/**
 	 * Parameters for doing number formatting.
-	 * 
+	 *
 	 * @author bjculkin
 	 *
 	 */

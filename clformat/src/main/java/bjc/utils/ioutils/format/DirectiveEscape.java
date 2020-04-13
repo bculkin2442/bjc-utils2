@@ -2,7 +2,7 @@ package bjc.utils.ioutils.format;
 
 /**
  * An exception thrown to escape CL iteration directives.
- * 
+ *
  * @author EVE
  *
  */
@@ -23,9 +23,9 @@ public class DirectiveEscape extends RuntimeException {
 
 	/**
 	 * Create a new directive escape.
-	 * 
+	 *
 	 * @param end
-	 *        Whether or not to end the iteration.
+	 *            Whether or not to end the iteration.
 	 */
 	public DirectiveEscape(boolean end) {
 		endIteration = end;

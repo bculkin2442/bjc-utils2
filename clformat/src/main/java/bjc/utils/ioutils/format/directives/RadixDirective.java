@@ -10,7 +10,7 @@ import static bjc.utils.ioutils.format.directives.GeneralNumberDirective.NumberP
 
 /**
  * Generalized radix directive.
- * 
+ *
  * @author student
  *
  */
@@ -38,7 +38,8 @@ public class RadixDirective extends GeneralNumberDirective {
 			mode = RadixEdict.Mode.NORMAL;
 
 			if (params.length() < 1)
-				throw new IllegalArgumentException("R directive requires at least one parameter, the radix");
+				throw new IllegalArgumentException(
+						"R directive requires at least one parameter, the radix");
 
 			params.mapIndex("radix", 0);
 			radixVal = params.resolveKey("radix");
@@ -52,10 +53,7 @@ public class RadixDirective extends GeneralNumberDirective {
 
 class RadixEdict implements Edict {
 	public static enum Mode {
-		NORMAL,
-		ROMAN,
-		ORDINAL,
-		CARDINAL
+		NORMAL, ROMAN, ORDINAL, CARDINAL
 	}
 
 	private Mode mode;
@@ -97,20 +95,23 @@ class RadixEdict implements Edict {
 		case CARDINAL:
 			res = NumberUtils.toCardinal(val);
 			break;
-		case NORMAL: 
-		{
+		case NORMAL: {
 			int radix = radixVal.asInt(formCTX.items, "radix", "R", 10);
 
-			int  mincol  = np.mincol.asInt(formCTX.items, "minimum column count", "R", 0);
-			char padchar = np.padchar.asChar(formCTX.items, "padding character", "R", ' ');
+			int mincol = np.mincol.asInt(formCTX.items, "minimum column count", "R", 0);
+			char padchar
+					= np.padchar.asChar(formCTX.items, "padding character", "R", ' ');
 
 			boolean signed = np.signed;
 
 			if (np.commaMode) {
-				char commaChar     = np.commaChar.asChar(formCTX.items, "comma character", "R", ',');
-				int  commaInterval = np.commaInterval.asInt(formCTX.items, "comma interval", "R", 0);
+				char commaChar
+						= np.commaChar.asChar(formCTX.items, "comma character", "R", ',');
+				int commaInterval
+						= np.commaInterval.asInt(formCTX.items, "comma interval", "R", 0);
 
-				res = NumberUtils.toCommaString(val, mincol, padchar, commaInterval, commaChar, signed, radix);
+				res = NumberUtils.toCommaString(val, mincol, padchar, commaInterval,
+						commaChar, signed, radix);
 			} else {
 				res = NumberUtils.toNormalString(val, mincol, padchar, signed, radix);
 			}

@@ -13,12 +13,13 @@ public interface CLValue {
 	 * Create a CLValue from a string.
 	 *
 	 * @param val
-	 * 	The string to create the value from.
-	 * 
+	 *            The string to create the value from.
+	 *
 	 * @return The CLValue represented by the string.
 	 */
 	public static CLValue parse(String val) {
-		if (val == null) return new NullValue();
+		if (val == null)
+			return new NullValue();
 
 		if (val.equalsIgnoreCase("V")) {
 			return new VValue();
@@ -41,12 +42,12 @@ public interface CLValue {
 	 * Get the value of the parameter.
 	 *
 	 * @param params
-	 *	The parameters passed to the directive.
+	 *               The parameters passed to the directive.
 	 *
 	 * @return The string value of the parameter.
 	 */
 	public String getValue(Tape<Object> params);
-	
+
 	/**
 	 * The format string to use for an invalid usage of a directive.
 	 */
@@ -54,28 +55,30 @@ public interface CLValue {
 
 	/**
 	 * Get the value as an integer.
-	 * 
+	 *
 	 * @param params
-	 * 	The format parameters to use.
-	 * 
+	 *                  The format parameters to use.
+	 *
 	 * @param paramName
-	 * 	The user-intelligble name for the value.
-	 * 
+	 *                  The user-intelligble name for the value.
+	 *
 	 * @param directive
-	 * 	The directive this value is for.
-	 * 
+	 *                  The directive this value is for.
+	 *
 	 * @param def
-	 * 	The default value for this value.
-	 * 
-	 * @return The value as an integer, or the default value if the value has no value.
+	 *                  The default value for this value.
+	 *
+	 * @return The value as an integer, or the default value if the value has no
+	 *         value.
 	 */
-	public default int asInt(Tape<Object> params, String paramName, String directive, int def) {
+	public default int asInt(Tape<Object> params, String paramName, String directive,
+			int def) {
 		String param = getValue(params);
 
 		if (param != null && !param.equals("")) {
 			try {
 				return Integer.parseInt(param);
-			} catch(NumberFormatException nfex) {
+			} catch (NumberFormatException nfex) {
 				String msg = String.format(MSG_FMT, paramName, param, directive);
 
 				IllegalArgumentException iaex = new IllegalArgumentException(msg);
@@ -90,7 +93,7 @@ public interface CLValue {
 
 	/**
 	 * Get a CLValue that represent 'nothing'.
-	 * 
+	 *
 	 * @return A CLValue that represents nothing.
 	 */
 	public static CLValue nil() {
@@ -99,22 +102,24 @@ public interface CLValue {
 
 	/**
 	 * Get the value as a character.
-	 * 
+	 *
 	 * @param params
-	 * 	The format parameters to use.
-	 * 
+	 *                  The format parameters to use.
+	 *
 	 * @param paramName
-	 * 	The user-intelligble name for the value.
-	 * 
+	 *                  The user-intelligble name for the value.
+	 *
 	 * @param directive
-	 * 	The directive the value is for.
-	 * 
+	 *                  The directive the value is for.
+	 *
 	 * @param def
-	 * 	The default value for the value.
-	 * 
-	 * @return The value as an character, or the default value if the value has no value.
+	 *                  The default value for the value.
+	 *
+	 * @return The value as an character, or the default value if the value has no
+	 *         value.
 	 */
-	public default char asChar(Tape<Object> params, String paramName, String directive, char def) {
+	public default char asChar(Tape<Object> params, String paramName, String directive,
+			char def) {
 		String param = getValue(params);
 
 		if (param != null && !param.equals("")) {
@@ -124,7 +129,7 @@ public interface CLValue {
 				return param.charAt(0);
 			}
 
-			if(!param.startsWith("'")) {
+			if (!param.startsWith("'")) {
 				throw new IllegalArgumentException(
 						String.format(MSG_FMT, paramName, param, directive));
 			}
@@ -182,18 +187,18 @@ class VValue implements CLValue {
 		Object par = params.item();
 		boolean succ = params.right();
 
-		if(!succ) {
+		if (!succ) {
 			throw new IllegalStateException("Couldn't advance tape for parameter");
-		} else if(par == null) {
+		} else if (par == null) {
 			throw new IllegalArgumentException(
 					"Expected a format parameter for V inline parameter");
-		} 
+		}
 
-		if(par instanceof Number) {
+		if (par instanceof Number) {
 			int val = ((Number) par).intValue();
 
 			return Integer.toString(val);
-		} else if(par instanceof Character) {
+		} else if (par instanceof Character) {
 			char ch = ((Character) par);
 
 			return Character.toString(ch);
@@ -219,7 +224,7 @@ class LiteralValue implements CLValue {
 	 * Create a new CLValue.
 	 *
 	 * @param vul
-	 * 	The value of the parameter.
+	 *            The value of the parameter.
 	 */
 	public LiteralValue(String vul) {
 		val = vul;
@@ -229,11 +234,11 @@ class LiteralValue implements CLValue {
 	 * Get the value of the parameter.
 	 *
 	 * @param params
-	 *	The parameters passed to the directive.
+	 *               The parameters passed to the directive.
 	 */
 	@Override
 	public String getValue(Tape<Object> params) {
-		return val;	
+		return val;
 	}
 
 	@Override

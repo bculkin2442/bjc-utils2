@@ -12,8 +12,10 @@ import bjc.funcdata.bst.TreeLinearizationMethod;
  *
  */
 public class BinarySearchTest {
-	private static void display(final BinarySearchTree<Character> tree, final Scanner input) {
-		System.out.print("What order would you like the tree to be printed in (m for options): ");
+	private static void display(final BinarySearchTree<Character> tree,
+			final Scanner input) {
+		System.out.print(
+				"What order would you like the tree to be printed in (m for options): ");
 		char command;
 
 		while (true) {
@@ -23,9 +25,12 @@ public class BinarySearchTest {
 			switch (command) {
 			case 'm':
 				System.out.println("Possible tree printing methods: ");
-				System.out.println("\tp: Preorder printing (print parent first, then left & right).");
-				System.out.println("\ti: Inorder printing (print left first, then parent & right).");
-				System.out.println("\to: Postorder printing (print left first, then right & parent).");
+				System.out.println(
+						"\tp: Preorder printing (print parent first, then left & right).");
+				System.out.println(
+						"\ti: Inorder printing (print left first, then parent & right).");
+				System.out.println(
+						"\to: Postorder printing (print left first, then right & parent).");
 				break;
 			case 'p':
 				method = TreeLinearizationMethod.PREORDER;
@@ -41,7 +46,7 @@ public class BinarySearchTest {
 			}
 
 			if (method != null) {
-				tree.traverse(method, (element) -> {
+				tree.traverse(method, element -> {
 					System.out.println("Node: " + element);
 					return true;
 				});
@@ -49,7 +54,8 @@ public class BinarySearchTest {
 				return;
 			}
 
-			System.out.print("What order would you like the tree to be printed in (m for options): ");
+			System.out.print(
+					"What order would you like the tree to be printed in (m for options): ");
 		}
 	}
 
@@ -57,12 +63,13 @@ public class BinarySearchTest {
 	 * Main method of class
 	 *
 	 * @param args
-	 *                Unused CLI args
+	 *             Unused CLI args
 	 */
 	public static void main(final String[] args) {
 		final Scanner input = new Scanner(System.in);
 		System.out.println("Binary Tree Constructor/Searcher");
-		final BinarySearchTree<Character> tree = new BinarySearchTree<>((o1, o2) -> o1 - o2);
+		final BinarySearchTree<Character> tree
+				= new BinarySearchTree<>((o1, o2) -> o1 - o2);
 
 		char command = ' ';
 		while (command != 'e') {

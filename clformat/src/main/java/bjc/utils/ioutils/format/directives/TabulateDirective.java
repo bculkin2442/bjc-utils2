@@ -7,8 +7,9 @@ import bjc.utils.ioutils.ReportWriter;
 import bjc.utils.ioutils.format.*;
 
 /**
- * Implementation of the T directive, which is used for some formatting based controls.
- * 
+ * Implementation of the T directive, which is used for some formatting based
+ * controls.
+ *
  * @author bjculkin
  *
  */
@@ -55,13 +56,14 @@ class TabulateEdict implements Edict {
 	private CLValue colincVal;
 	private CLValue colidVal;
 
-	public TabulateEdict(boolean isRelative, CLValue colinc, boolean fromIndent, CLValue colid) {
+	public TabulateEdict(boolean isRelative, CLValue colinc, boolean fromIndent,
+			CLValue colid) {
 		this.isRelative = isRelative;
 		this.fromIndent = fromIndent;
 
 		this.colincVal = colinc;
 
-		this.colidVal  = colid;
+		this.colidVal = colid;
 	}
 
 	@Override
@@ -104,7 +106,8 @@ class TabulateEdict implements Edict {
 					rw.write(padchar);
 				}
 			} else {
-				if (colinc == 0) return;
+				if (colinc == 0)
+					return;
 
 				int k = 0;
 

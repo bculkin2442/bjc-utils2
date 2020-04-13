@@ -14,7 +14,7 @@ public interface Edict {
 	 * Invoke this format directive.
 	 *
 	 * @param formCTX
-	 * 	The state needed for this invocation.
+	 *                The state needed for this invocation.
 	 */
 	public void format(FormatContext formCTX) throws IOException;
 }

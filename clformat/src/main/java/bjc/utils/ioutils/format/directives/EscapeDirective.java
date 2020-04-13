@@ -22,42 +22,39 @@ public class EscapeDirective implements Directive {
 
 		EscapeEdict.Mode mode;
 		switch (params.length()) {
-			case 0:
-				mode = EscapeEdict.Mode.END;
-				break;
-			case 1:
-				mode = EscapeEdict.Mode.COUNT;
-				params.mapIndices("count");
-				param1 = params.resolveKey("count");
-				break;
-			case 2:
-				params.mapIndices("lhand", "rhand");
-				param1 = params.resolveKey("lhand");
-				param2 = params.resolveKey("rhand");
-				mode = EscapeEdict.Mode.EQUALITY;
-				break;
-			case 3:
-				params.mapIndices("lower", "ival", "upper");
-				param1 = params.resolveKey("lower");
-				param2 = params.resolveKey("ival");
-				param3 = params.resolveKey("upper");
-				mode = EscapeEdict.Mode.RANGE;
-				break;
-			default:
-				throw new IllegalArgumentException("Too many parameters to ^ directive");
+		case 0:
+			mode = EscapeEdict.Mode.END;
+			break;
+		case 1:
+			mode = EscapeEdict.Mode.COUNT;
+			params.mapIndices("count");
+			param1 = params.resolveKey("count");
+			break;
+		case 2:
+			params.mapIndices("lhand", "rhand");
+			param1 = params.resolveKey("lhand");
+			param2 = params.resolveKey("rhand");
+			mode = EscapeEdict.Mode.EQUALITY;
+			break;
+		case 3:
+			params.mapIndices("lower", "ival", "upper");
+			param1 = params.resolveKey("lower");
+			param2 = params.resolveKey("ival");
+			param3 = params.resolveKey("upper");
+			mode = EscapeEdict.Mode.RANGE;
+			break;
+		default:
+			throw new IllegalArgumentException("Too many parameters to ^ directive");
 		}
 
-		return new EscapeEdict(mods.atMod, mode, mods.colonMod, param1, param2,
-				param3, mods.dollarMod);
+		return new EscapeEdict(mods.atMod, mode, mods.colonMod, param1, param2, param3,
+				mods.dollarMod);
 	}
 }
 
 class EscapeEdict implements Edict {
 	public static enum Mode {
-		END,
-		COUNT,
-		EQUALITY,
-		RANGE
+		END, COUNT, EQUALITY, RANGE
 	}
 
 	private Mode mode;
@@ -91,41 +88,41 @@ class EscapeEdict implements Edict {
 
 		Tape<Object> items = formCTX.items;
 
-		if (advance) items.right();
+		if (advance)
+			items.right();
 
 		switch (mode) {
 		case END:
 			shouldExit = items.atEnd();
 			break;
-		case COUNT:
-			{
-				int num = param1.asInt(items, "condition count", "^", 0);
+		case COUNT: {
+			int num = param1.asInt(items, "condition count", "^", 0);
 
-				shouldExit = (num == 0);
-			}
+			shouldExit = (num == 0);
+		}
 			break;
-		case EQUALITY:
-			{
-				int left  = param1.asInt(items, "left-hand condition", "^", 0);
-				int right = param2.asInt(items, "right-hand condition", "^", 0);
+		case EQUALITY: {
+			int left = param1.asInt(items, "left-hand condition", "^", 0);
+			int right = param2.asInt(items, "right-hand condition", "^", 0);
 
-				shouldExit = (left == right);
-			}
+			shouldExit = (left == right);
+		}
 			break;
-		case RANGE:
-			{
-				int low  = param1.asInt(items, "lower-bound condition", "^", 0);
-				int mid  = param2.asInt(items, "interval condition", "^", 0);
-				int high = param3.asInt(items, "upper-bound condition", "^", 0);
+		case RANGE: {
+			int low = param1.asInt(items, "lower-bound condition", "^", 0);
+			int mid = param2.asInt(items, "interval condition", "^", 0);
+			int high = param3.asInt(items, "upper-bound condition", "^", 0);
 
-				shouldExit = (low <= mid) && (mid <= high);
-			}
+			shouldExit = (low <= mid) && (mid <= high);
+		}
 			break;
 		default:
-			throw new IllegalArgumentException("Escape condition mode " + mode + " isn't supported");
+			throw new IllegalArgumentException(
+					"Escape condition mode " + mode + " isn't supported");
 		}
 
-		if (advance) items.left();
+		if (advance)
+			items.left();
 
 		if (isNegated) {
 			shouldExit = !shouldExit;

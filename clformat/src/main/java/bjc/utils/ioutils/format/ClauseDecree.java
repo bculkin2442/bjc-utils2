@@ -8,8 +8,8 @@ import bjc.utils.ioutils.ReportWriter;
 /**
  * A decree that represents a single clause in a {@link GroupDecree}.
  *
- * Has a list of decrees for a body, and then a single decree as the 'terminator' if this was a
- * terminated clause.
+ * Has a list of decrees for a body, and then a single decree as the
+ * 'terminator' if this was a terminated clause.
  *
  * @author Ben Culkin
  */
@@ -36,7 +36,7 @@ public class ClauseDecree {
 	 * Create a new clause decree with specific contents.
 	 *
 	 * @param children
-	 * 	The decrees to form the body of the clause.
+	 *                 The decrees to form the body of the clause.
 	 */
 	public ClauseDecree(Decree... children) {
 		this();
@@ -50,10 +50,10 @@ public class ClauseDecree {
 	 * Create a new clause with both a body and a terminator.
 	 *
 	 * @param term
-	 * 	The decree that terminates the clause.
-	 * 
+	 *                 The decree that terminates the clause.
+	 *
 	 * @param children
-	 * 	The decrees that form the body of the clause.
+	 *                 The decrees that form the body of the clause.
 	 */
 	public ClauseDecree(Decree term, Decree... children) {
 		this(children);
@@ -65,7 +65,7 @@ public class ClauseDecree {
 	 * Add a decree to this clause.
 	 *
 	 * @param child
-	 * 	The decree to add to this clause.
+	 *              The decree to add to this clause.
 	 */
 	public void addChild(Decree child) {
 		body.add(child);
@@ -75,7 +75,8 @@ public class ClauseDecree {
 	public String toString() {
 		try (ReportWriter rw = new ReportWriter()) {
 			String term = "<null>";
-			if (terminator != null) term = terminator.toString();
+			if (terminator != null)
+				term = terminator.toString();
 
 			rw.write("ClauseDecree (terminator " + term.toString() + ")");
 			rw.indent();
@@ -91,6 +92,7 @@ public class ClauseDecree {
 		} catch (IOException ioex) {
 			return "<IOEXCEPTION>";
 		}
-		// return String.format("ClauseDecree [body=%s, terminator=%s]", body, terminator);
+		// return String.format("ClauseDecree [body=%s, terminator=%s]", body,
+		// terminator);
 	}
 }

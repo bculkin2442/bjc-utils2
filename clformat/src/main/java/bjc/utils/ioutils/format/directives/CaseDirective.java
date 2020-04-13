@@ -16,10 +16,11 @@ import bjc.utils.ioutils.format.*;
 public class CaseDirective implements Directive {
 	/**
 	 * Compile a case directive.
-	 * 
+	 *
 	 * @param compCTX
-	 * 	The context to use for compilation.
+	 *                The context to use for compilation.
 	 */
+	@Override
 	public Edict compile(CompileContext compCTX) {
 		CLModifiers mods = compCTX.decr.modifiers;
 
@@ -115,8 +116,8 @@ class CaseEdict implements Edict {
 				strang = strang.toLowerCase();
 				break;
 			default:
-				throw new IllegalArgumentException("INTERNAL ERROR: CaseEdict mode " + caseMode
-						+ " is not supported. This is a bug.");
+				throw new IllegalArgumentException("INTERNAL ERROR: CaseEdict mode "
+						+ caseMode + " is not supported. This is a bug.");
 			}
 
 			formCTX.writer.write(strang);

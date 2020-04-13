@@ -11,7 +11,7 @@ import bjc.utils.ioutils.ReportWriter;
 
 /**
  * Tests for ReportWriter.
- * 
+ *
  * @author EVE
  *
  */

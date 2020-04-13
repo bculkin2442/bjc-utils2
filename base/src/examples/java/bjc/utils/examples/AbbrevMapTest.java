@@ -18,7 +18,7 @@ public class AbbrevMapTest {
 	 * Main method.
 	 *
 	 * @param args
-	 *                Unused CLI args.
+	 *             Unused CLI args.
 	 */
 	public static void main(final String[] args) {
 		final Scanner scn = new Scanner(System.in);
@@ -39,10 +39,11 @@ public class AbbrevMapTest {
 				map.removeWords(commParts.get(1));
 				break;
 			case "check": {
-				String[] strings = map.deabbrevAll(commParts.get(1)).toArray(new String[0]);
-				
+				String[] strings
+						= map.deabbrevAll(commParts.get(1)).toArray(new String[0]);
+
 				final String list = StringUtils.toEnglishList(strings, false);
-				
+
 				System.out.println(list);
 				break;
 			}
@@ -50,7 +51,7 @@ public class AbbrevMapTest {
 				System.out.println(map.toString());
 				break;
 			case "help":
-				if(commParts.size() > 1) {
+				if (commParts.size() > 1) {
 					help(commParts.get(1));
 				} else {
 					help();
@@ -69,17 +70,18 @@ public class AbbrevMapTest {
 
 	private static void help() {
 		PrintStream strm = System.out;
-		
+
 		strm.println("Abbreviation Map Testing Commands:");
 		strm.println("\tadd    <word>\tAdd a word to the abbreviation map");
 		strm.println("\tremove <word>\tRemove a word from the abbreviation map");
-		strm.println("\tcheck  <word>\tCheck all of the possible things a word could be an abbreviation for");
+		strm.println(
+				"\tcheck  <word>\tCheck all of the possible things a word could be an abbreviation for");
 		strm.println("\tdebug        \tPrint out the abbreviation map");
 		strm.println("\thelp         \tList commands, or get help on a command\n");
 	}
 
 	private static void help(String com) {
-		switch(com) {
+		switch (com) {
 		default:
 			System.out.printf("\tNo help available for command: %s\n", com);
 		}

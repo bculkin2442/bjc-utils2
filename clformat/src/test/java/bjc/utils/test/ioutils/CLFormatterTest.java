@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 
 /**
  * Tests for CL format strings.
- * 
+ *
  * @author EVE
  *
  */
@@ -21,7 +21,8 @@ public class CLFormatterTest {
 	@Test
 	public void testLiteralString() {
 		// @TODO :assertFormat Ben Culkin 1/3/20
-		// Convert all of these 'assertEquals(..., format(...))' to use assertFormat instead
+		// Convert all of these 'assertEquals(..., format(...))' to use assertFormat
+		// instead
 		// Print literal strings exactly
 		assertEquals("foo", format("foo"));
 	}
@@ -29,7 +30,7 @@ public class CLFormatterTest {
 	@Test
 	public void testDecimalPrinting() {
 		// Test decimal printing
-		assertEquals("5",   format("~D", 5));
+		assertEquals("5", format("~D", 5));
 		assertEquals("  5", format("~3D", 5));
 		assertEquals("005", format("~3,'0D", 5));
 		assertEquals("6|55|35", format("~,,'|,2:D", 0xFFFF));
@@ -57,24 +58,25 @@ public class CLFormatterTest {
 	@Test
 	public void testConditionalPrinting() {
 		// Test conditional printing
-		assertEquals("print length = 5", format("~@[print level = ~D~]~@[print length = ~D~]", null, 5));
+		assertEquals("print length = 5",
+				format("~@[print level = ~D~]~@[print length = ~D~]", null, 5));
 	}
 
 	@Test
 	public void testIterationPrinting() {
-		assertEquals("The winners are: fred harry jill.", format("The winners are:~{ ~S~}.",
-					asList("fred", "harry", "jill")));
-		assertEquals("Pairs: (1, 1) (2, 2) (3, 3).", format("Pairs:~{ (~S, ~S)~}.",
-					asList(1, 1, 2, 2, 3, 3)));
+		assertEquals("The winners are: fred harry jill.",
+				format("The winners are:~{ ~S~}.", asList("fred", "harry", "jill")));
+		assertEquals("Pairs: (1, 1) (2, 2) (3, 3).",
+				format("Pairs:~{ (~S, ~S)~}.", asList(1, 1, 2, 2, 3, 3)));
 
 		assertEquals("Pairs: (1, 1) (2, 2) (3, 3).", format("Pairs:~:{ (~S, ~S)~}.",
-					asList(asList(1, 1), asList(2, 2), asList(3, 3))));
+				asList(asList(1, 1), asList(2, 2), asList(3, 3))));
 
-		assertEquals("Pairs: (1, 1) (2, 2) (3, 3).", format("Pairs:~@{ (~S, ~S)~}.",
-					1, 1, 2, 2, 3, 3));
+		assertEquals("Pairs: (1, 1) (2, 2) (3, 3).",
+				format("Pairs:~@{ (~S, ~S)~}.", 1, 1, 2, 2, 3, 3));
 
 		assertEquals("Pairs: (1, 1) (2, 2) (3, 3).", format("Pairs:~:@{ (~S, ~S)~}.",
-					asList(1, 1), asList(2, 2), asList(3, 3)));
+				asList(1, 1), asList(2, 2), asList(3, 3)));
 	}
 
 	@Test
@@ -82,15 +84,16 @@ public class CLFormatterTest {
 		assertEquals("<Foo 5> 7", format("~? ~D", "<~A ~D>", asList("Foo", 5), 7));
 		assertEquals("<Foo 5> 7", format("~? ~D", "<~A ~D>", asList("Foo", 5, 14), 7));
 
-		assertEquals("<Foo 5> 7",  format("~@? ~D", "<~A ~D>", "Foo", 5, 7));
+		assertEquals("<Foo 5> 7", format("~@? ~D", "<~A ~D>", "Foo", 5, 7));
 		assertEquals("<Foo 5> 14", format("~@? ~D", "<~A ~D>", "Foo", 5, 14, 7));
 	}
 
 	@Test
 	public void testEscapePrinting() {
-		assertEquals("Done.",                     format("Done.~^ ~D warning.~^ ~D error."));
-		assertEquals("Done. 3 warning.",          format("Done.~^ ~D warning.~^ ~D error.", 3));
-		assertEquals("Done. 1 warning. 5 error.", format("Done.~^ ~D warning.~^ ~D error.", 1, 5));
+		assertEquals("Done.", format("Done.~^ ~D warning.~^ ~D error."));
+		assertEquals("Done. 3 warning.", format("Done.~^ ~D warning.~^ ~D error.", 3));
+		assertEquals("Done. 1 warning. 5 error.",
+				format("Done.~^ ~D warning.~^ ~D error.", 1, 5));
 	}
 
 	@Test
@@ -98,20 +101,23 @@ public class CLFormatterTest {
 		assertEquals("XIV xiv", format("~@R ~(~@R~)", 14, 14));
 	}
 
-	//@Test
+	// @Test
 	public void testListPrinting() {
 		// Test printing a list
-		// String fmtStr = "Items:~#[ none~; ~A~; ~A and ~A~:;~@{~#[~; and~] ~A~^,~}~].";
-		String fmtStr = "Items:~#[ none~; ~A~; ~A and ~A~:;~@{~#*[ ~A,~; and ~A~; ~A~]~}~].";
+		// String fmtStr = "Items:~#[ none~; ~A~; ~A and ~A~:;~@{~#[~; and~]
+		// ~A~^,~}~].";
+		String fmtStr
+				= "Items:~#[ none~; ~A~; ~A and ~A~:;~@{~#*[ ~A,~; and ~A~; ~A~]~}~].";
 
 		fmt.DEBUG = true;
-		assertEquals("Items: none.",                   format(fmtStr));
+		assertEquals("Items: none.", format(fmtStr));
 		fmt.DEBUG = false;
 
-		assertEquals("Items: foo.",                    format(fmtStr, "foo"));
-		assertEquals("Items: foo and bar.",            format(fmtStr, "foo", "bar"));
-		assertEquals("Items: foo, bar and baz.",       format(fmtStr, "foo", "bar", "baz"));
-		assertEquals("Items: foo, bar, baz and quux.", format(fmtStr, "foo", "bar", "baz", "quux"));
+		assertEquals("Items: foo.", format(fmtStr, "foo"));
+		assertEquals("Items: foo and bar.", format(fmtStr, "foo", "bar"));
+		assertEquals("Items: foo, bar and baz.", format(fmtStr, "foo", "bar", "baz"));
+		assertEquals("Items: foo, bar, baz and quux.",
+				format(fmtStr, "foo", "bar", "baz", "quux"));
 	}
 
 	@Test
@@ -119,7 +125,8 @@ public class CLFormatterTest {
 		assertFormat("foo", "~A", "foo");
 		assertFormat("foobar ", "~7A", "foobar");
 		assertFormat(" foobar", "~7@A", "foobar");
-		assertFormat("   foobar", "~#mincol;8,#colinc;2,#minpad;1,#padchar;' @A", "foobar");
+		assertFormat("   foobar", "~#mincol;8,#colinc;2,#minpad;1,#padchar;' @A",
+				"foobar");
 	}
 
 	@Test

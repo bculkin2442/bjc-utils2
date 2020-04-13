@@ -35,7 +35,7 @@ public class CLParametersTest {
 
 			assertEquals("First integer reads correctly", "1", val1.getValue(scratch));
 			assertEquals("Second integer reads correctly", "2", val2.getValue(scratch));
-		}	
+		}
 
 		{
 			CLParameters params = fromDirective("'a,\"abc\"");
@@ -50,7 +50,7 @@ public class CLParametersTest {
 
 		{
 			CLParameters params = fromDirective("1,2,3");
-			params.mapIndices("arg1","arrg2","arg3");
+			params.mapIndices("arg1", "arrg2", "arg3");
 
 			CLValue val1 = params.resolveKey("arg1");
 			CLValue val2 = params.resolveKey("arr");

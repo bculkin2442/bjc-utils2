@@ -18,6 +18,8 @@ public class IteratorUtilsTest {
 	 */
 	@Test
 	public void testChain() {
-		assertIteratorEquals(chain(I(asList("a b", "b c")), (arg) -> I(asList(arg.split(" ")))), "a", "b", "b", "c");
+		assertIteratorEquals(
+				chain(I(asList("a b", "b c")), arg -> I(asList(arg.split(" ")))), "a",
+				"b", "b", "c");
 	}
 }

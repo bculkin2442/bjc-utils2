@@ -7,9 +7,9 @@ import bjc.utils.ioutils.format.*;
 
 /**
  * Implementation of the A directive.
- * 
- * This is the directive that does general printing of things, and serves the same general purpose
- * as the '%s' directive for printf etc.
+ *
+ * This is the directive that does general printing of things, and serves the
+ * same general purpose as the '%s' directive for printf etc.
  *
  * @author Ben Culkin
  */
@@ -28,7 +28,7 @@ public class AestheticDirective implements Directive {
 
 		// We take 0, 1 or 4 parameters
 		switch (params.length()) {
-		case 0:	
+		case 0:
 			// Zero parameters, use all defaults
 			break;
 		case 1:
@@ -46,7 +46,8 @@ public class AestheticDirective implements Directive {
 			padchar = params.resolveKey("padchar");
 			break;
 		default:
-			throw new IllegalArgumentException("Must provide either zero, one or four arguments to A directive");
+			throw new IllegalArgumentException(
+					"Must provide either zero, one or four arguments to A directive");
 		}
 
 		return new AestheticEdict(mods.atMod, padchar, mincol, colinc, minpad);
@@ -64,7 +65,7 @@ class AestheticEdict implements Edict {
 	public AestheticEdict(boolean padBefore, CLValue padPar, CLValue minPar,
 			CLValue colPar, CLValue mpadPar) {
 		this.padBefore = padBefore;
-		
+
 		this.padcharPar = padPar;
 		this.mincolPar = minPar;
 		this.colincPar = colPar;
@@ -82,7 +83,7 @@ class AestheticEdict implements Edict {
 
 		StringBuilder work = new StringBuilder();
 
-		char padchar = padcharPar.asChar(itemTape, "padding character", "A", ' '); 
+		char padchar = padcharPar.asChar(itemTape, "padding character", "A", ' ');
 
 		int mincol = mincolPar.asInt(itemTape, "minimum column count", "A", 0);
 		int colinc = colincPar.asInt(itemTape, "padding increment", "A", 1);

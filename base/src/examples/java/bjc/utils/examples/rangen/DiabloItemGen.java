@@ -13,8 +13,10 @@ import bjc.utils.gen.WeightedGrammar;
 public class DiabloItemGen {
 	private static WeightedGrammar<String> rules = new WeightedGrammar<>();
 
-	private static void addCase(final String ruleName, final int probability, final String ruleParts) {
-		final IList<String> parts = FunctionalStringTokenizer.fromString(ruleParts).toList(strang -> strang);
+	private static void addCase(final String ruleName, final int probability,
+			final String ruleParts) {
+		final IList<String> parts = FunctionalStringTokenizer.fromString(ruleParts)
+				.toList(strang -> strang);
 
 		rules.addCase(ruleName, probability, parts);
 	}
@@ -67,7 +69,7 @@ public class DiabloItemGen {
 	 * Main Method
 	 *
 	 * @param args
-	 *                Unused CLI args
+	 *             Unused CLI args
 	 */
 	public static void main(final String[] args) {
 		rules.addRule("<item>");

@@ -19,7 +19,7 @@ public class CLString {
 	 * Create a new compiled format string.
 	 *
 	 * @param edts
-	 * 	The compiled directives that make up the format.
+	 *             The compiled directives that make up the format.
 	 */
 	public CLString(List<Edict> edts) {
 		edicts = edts;
@@ -27,13 +27,14 @@ public class CLString {
 
 	/**
 	 * Execute this string with the given parameters.
-	 * 
-	 * @param parms 
-	 * 	The format parameters for the string.
-	 * 
+	 *
+	 * @param parms
+	 *              The format parameters for the string.
+	 *
 	 * @return The result from executing the format string.
-	 * 
-	 * @throws IOException If something I/O related has gone wrong.
+	 *
+	 * @throws IOException
+	 *                     If something I/O related has gone wrong.
 	 */
 	public String format(Object... parms) throws IOException {
 		StringWriter sw = new StringWriter();
@@ -44,16 +45,17 @@ public class CLString {
 
 	/**
 	 * Execute this string with the given parameters.
-	 * 
+	 *
 	 * @param rw
-	 * 	The writer to write the string to.
-	 * 
+	 *             The writer to write the string to.
+	 *
 	 * @param itms
-	 * 	The format parameters to use.
-	 * 
+	 *             The format parameters to use.
+	 *
 	 * @return The result of executing the string.
-	 * 
-	 * @throws IOException If something I/O related goes wrong.
+	 *
+	 * @throws IOException
+	 *                     If something I/O related goes wrong.
 	 */
 	public String format(ReportWriter rw, Tape<Object> itms) throws IOException {
 		FormatContext formCTX = new FormatContext(rw, itms);
@@ -63,16 +65,17 @@ public class CLString {
 
 	/**
 	 * Execute this string with the given parameters.
-	 * 
+	 *
 	 * @param rw
-	 * 	The writer to write the string to.
-	 * 
+	 *              The writer to write the string to.
+	 *
 	 * @param parms
-	 * 	The format parameters to use.
-	 * 
+	 *              The format parameters to use.
+	 *
 	 * @return The result of executing the string.
-	 * 
-	 * @throws IOException If something I/O related goes wrong.
+	 *
+	 * @throws IOException
+	 *                     If something I/O related goes wrong.
 	 */
 	public String format(ReportWriter rw, Object... parms) throws IOException {
 		Tape<Object> itms = new SingleTape<>(parms);
@@ -84,13 +87,14 @@ public class CLString {
 
 	/**
 	 * Execute a format string in a given context.
+	 *
+	 * @param formCTX
+	 *                The context to use for formatting.
 	 * 
-	 * @param formCTX 
-	 * 	The context to use for formatting.
-	 *  
 	 * @return The result of executing the format string.
-	 * 
-	 * @throws IOException If something I/O related goes wrong.
+	 *
+	 * @throws IOException
+	 *                     If something I/O related goes wrong.
 	 */
 	public String format(FormatContext formCTX) throws IOException {
 		try {
@@ -106,11 +110,12 @@ public class CLString {
 
 	/**
 	 * Is this format string empty? (does it have 0 edicts?)
-	 * 
+	 *
 	 * @return If this format string is empty.
 	 */
 	public boolean isEmpty() {
-		if (edicts.size() == 0) return true;
+		if (edicts.size() == 0)
+			return true;
 
 		return false;
 	}
