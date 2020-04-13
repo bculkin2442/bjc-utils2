@@ -21,10 +21,24 @@ import bjc.utils.math.DualExpr.ExprType;
  *
  */
 public class DualExprParser {
+	/**
+	 * Result class from parsing exprs.
+	 * @author Ben Culkin
+	 *
+	 */
 	public static class Result {
+		/**
+		 * The resulting expression. 
+		 */
 		public DualExpr expr;
+		/**
+		 * Any variables we found in the expression.
+		 */
 		public Map<String, DualExpr> varMap;
 
+		/**
+		 * Create a new result.
+		 */
 		public Result() {
 			this.varMap = new HashMap<>();
 		}

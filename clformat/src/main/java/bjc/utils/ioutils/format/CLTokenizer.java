@@ -10,6 +10,9 @@ import java.util.regex.*;
  *
  */
 public class CLTokenizer implements Iterator<Decree> {
+	/**
+	 * Whether or not the tokenizer is in debug mode or not.
+	 */
 	public static boolean DEBUG = false;
 
 	/*

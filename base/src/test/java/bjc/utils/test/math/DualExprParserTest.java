@@ -14,6 +14,7 @@ import bjc.utils.math.DualExpr;
 import bjc.utils.math.DualExprParser;
 import bjc.utils.math.DualExprParser.Result;
 
+@SuppressWarnings("javadoc")
 public class DualExprParserTest {
 
 	@Test
