@@ -130,7 +130,7 @@ public class GenericCommandMode implements CommandMode {
 		} else if (handler == null) {
 			throw new NullPointerException("Handler must not be null");
 		} else if (canHandle(command)) {
-			String msg = String.format("Command '%s' already has a registered handler");
+			String msg = String.format("Command '%s' already has a registered handler", command);
 			throw new IllegalArgumentException(msg);
 		} else {
 			commandHandlers.put(command, handler);

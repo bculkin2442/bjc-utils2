@@ -267,7 +267,7 @@ public class TokenUtils {
 
 			if (codepoint > 255) {
 				final String msg = String
-						.format("'%d' is outside the range of octal escapes', codepoint");
+						.format("'%d' is outside the range of octal escapes'", codepoint);
 
 				throw new IllegalArgumentException(msg);
 			}

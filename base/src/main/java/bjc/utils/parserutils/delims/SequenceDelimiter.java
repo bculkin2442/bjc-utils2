@@ -238,7 +238,7 @@ public class SequenceDelimiter<T> {
 					= StringUtils.toEnglishList(groupStack.toArray(), "then");
 
 			final String fmt
-					= "Unclosed group '%s'. Expected one of %s to close it.\nOpen groups: %n";
+					= "Unclosed group '%s'. Expected one of %s to close it.\nOpen groups: %s";
 
 			throw new DelimiterException(
 					String.format(fmt, group.getName(), closingDelims, ctxList));

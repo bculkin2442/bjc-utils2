@@ -1,7 +1,5 @@
 package bjc.utils.ioutils;
 
-import java.util.Scanner;
-
 /**
  * A line reader
  * 
@@ -9,11 +7,11 @@ import java.util.Scanner;
  *
  */
 public class LineReader implements AutoCloseable {
-	private Scanner scn;
+	//private Scanner scn;
 
 	@Override
 	public void close() {
-		scn.close();
+		//scn.close();
 	}
 
 	// @TODO Implement me - ben, 1/6/20

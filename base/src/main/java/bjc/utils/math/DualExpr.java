@@ -254,7 +254,7 @@ public class DualExpr {
 		case MULTIPLICATION:
 			return String.format("(%s * %s)", left.toString(), right.toString());
 		case POWER:
-			return String.format("(%s ^ %d)", left.toString(), right.toString());
+			return String.format("(%s ^ %s)", left.toString(), right.toString());
 		case SIN:
 			return String.format("sin(%s)", left.toString());
 		case SUBTRACTION:

@@ -81,9 +81,10 @@ public class AbbrevMapTest {
 	}
 
 	private static void help(String com) {
-		switch (com) {
+		/*
+		 * switch (com) {
 		default:
 			System.out.printf("\tNo help available for command: %s\n", com);
-		}
+		}*/
 	}
 }
