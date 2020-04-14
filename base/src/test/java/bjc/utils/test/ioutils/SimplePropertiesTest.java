@@ -16,8 +16,8 @@ import bjc.utils.ioutils.SimpleProperties.InvalidLineFormat;
  * @author Ben Culkin
  *
  */
+@SuppressWarnings("javadoc")
 public class SimplePropertiesTest {
-
 	@Test
 	public void testSimpleProperties() {
 		SimpleProperties props = new SimpleProperties();

@@ -19,9 +19,11 @@ public class NumberDirective extends GeneralNumberDirective {
 	 * Create a new radix based number directive.
 	 *
 	 * @param argidx
-	 *               The argument offset to use.
+	 *                  The argument offset to use.
 	 * @param radix
-	 *               The radix of the number to use.
+	 *                  The radix of the number to use.
+	 * @param directive
+	 *                  The character that marks this directive.
 	 */
 	public NumberDirective(int argidx, int radix, char directive) {
 		this.argidx = argidx;

@@ -36,6 +36,8 @@ public class CLModifiers {
 	 *               The state of the colon mod.
 	 * @param dollar
 	 *               The state of the dollar mod.
+	 * @param star
+	 *               The state of the star mod.
 	 */
 	public CLModifiers(boolean at, boolean colon, boolean dollar, boolean star) {
 		atMod = at;

@@ -46,10 +46,7 @@ public class IteratorUtils {
 		@Override
 		public boolean hasNext() {
 			if (curItr != null) {
-				if (curItr.hasNext())
-					return true;
-				else
-					return mainItr.hasNext();
+				return curItr.hasNext() ? true : mainItr.hasNext();
 			}
 
 			return mainItr.hasNext();

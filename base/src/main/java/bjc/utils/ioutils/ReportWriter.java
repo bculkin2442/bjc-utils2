@@ -416,6 +416,10 @@ public class ReportWriter extends Writer {
 		return rw;
 	}
 
+	
+	/**
+	 * Create a new report writer that writes to a new blank string writer.
+	 */
 	public ReportWriter() {
 		this(new StringWriter());
 	}

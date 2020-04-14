@@ -143,8 +143,8 @@ public class CLFormatterTest {
 		assertEquals("3 dogs are here", format("~D dog~:[s are~; is~] here", 3, 3 == 1));
 	}
 
-	private void assertFormat(String res, String fmt, Object... params) {
-		assertEquals(res, format(fmt, params));
+	private void assertFormat(String res, String fomt, Object... params) {
+		assertEquals(res, format(fomt, params));
 	}
 
 	private String format(String str, Object... params) {

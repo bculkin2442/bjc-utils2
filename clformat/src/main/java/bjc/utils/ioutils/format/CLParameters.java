@@ -347,7 +347,7 @@ public class CLParameters {
 	/**
 	 * Get a boolean-valued parameter.
 	 *
-	 * @param params
+	 * @param parms
 	 *                  The format parameters to use.
 	 *
 	 * @param key
@@ -365,9 +365,9 @@ public class CLParameters {
 	 * @return The boolean value for that parameter, or the default value if that
 	 *         parameter didn't exist.
 	 */
-	public boolean getBoolean(Tape<Object> params, String key, String paramName,
+	public boolean getBoolean(Tape<Object> parms, String key, String paramName,
 			String directive, boolean def) {
-		String bol = resolveKey(key).getValue(params);
+		String bol = resolveKey(key).getValue(parms);
 
 		if (!bol.equals("")) {
 			if (bol.matches(RX_TRUE))
@@ -386,7 +386,7 @@ public class CLParameters {
 	/**
 	 * Get the string value for a parameter.
 	 *
-	 * @param params
+	 * @param parms
 	 *                  The format parameters we're using.
 	 *
 	 * @param key
@@ -404,9 +404,9 @@ public class CLParameters {
 	 * @return The string value of the parameter, or the default value if there is
 	 *         no parameter by that name.
 	 */
-	public String getString(Tape<Object> params, String key, String paramName,
+	public String getString(Tape<Object> parms, String key, String paramName,
 			String directive, String def) {
-		String vl = resolveKey(key).getValue(params);
+		String vl = resolveKey(key).getValue(parms);
 
 		// @NOTE 9/19/17
 		//
@@ -421,7 +421,7 @@ public class CLParameters {
 	/**
 	 * Get the character value of a parameter.
 	 *
-	 * @param params
+	 * @param parms
 	 *                  The format parameters to use.
 	 *
 	 * @param key
@@ -432,13 +432,14 @@ public class CLParameters {
 	 *
 	 * @param directive
 	 *                  The directive the parameter is for.
+	 * @param def The default value of the char.
 	 *
 	 * @return The character value of the parameter, or the default value if the
 	 *         parameter isn't specified.
 	 */
-	public char getChar(Tape<Object> params, String key, String paramName,
+	public char getChar(Tape<Object> parms, String key, String paramName,
 			String directive, char def) {
-		String param = resolveKey(key).getValue(params);
+		String param = resolveKey(key).getValue(parms);
 
 		if (!param.equals("")) {
 			if (param.length() == 1) {
@@ -461,7 +462,7 @@ public class CLParameters {
 	/**
 	 * Get the integer value for a parameter.
 	 *
-	 * @param params
+	 * @param parms
 	 *                  The format parameters we are using.
 	 *
 	 * @param key
@@ -479,9 +480,9 @@ public class CLParameters {
 	 * @return The integer value of the parameter, or the default value if there is
 	 *         no parameter by that name.
 	 */
-	public int getInt(Tape<Object> params, String key, String paramName, String directive,
+	public int getInt(Tape<Object> parms, String key, String paramName, String directive,
 			int def) {
-		String param = resolveKey(key).getValue(params);
+		String param = resolveKey(key).getValue(parms);
 
 		if (!param.equals("")) {
 			try {

@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import bjc.utils.math.NumberUtils;
 
+@SuppressWarnings("javadoc")
 public class NumberUtilsTest {
 
 	@Test

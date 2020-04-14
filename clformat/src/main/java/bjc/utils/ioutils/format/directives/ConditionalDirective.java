@@ -182,6 +182,10 @@ class ConditionalEdict implements Edict {
 				}
 			}
 				break;
+			default:
+				// IMPROVE Should probably handle this
+				// -- Ben Culkin, 4/14/2020
+				break;
 			}
 		} catch (DirectiveEscape dex) {
 			// Conditionals are transparent to iteration-escapes

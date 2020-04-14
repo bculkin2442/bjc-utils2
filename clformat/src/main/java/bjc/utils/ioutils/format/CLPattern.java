@@ -51,6 +51,7 @@ public class CLPattern {
 	 *
 	 * @param inp
 	 *            The string to parse directives from.
+	 * @return A matcher for format directives in the string.          
 	 */
 	public static Matcher getDirectiveMatcher(String inp) {
 		return pFormatDirective.matcher(inp);
