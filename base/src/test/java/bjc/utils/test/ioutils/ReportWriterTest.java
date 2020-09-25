@@ -24,7 +24,7 @@ public class ReportWriterTest {
 
 			assertEquals("foo", rw.toString());
 		} catch (IOException ioex) {
-
+			// Do nothing
 		}
 	}
 }

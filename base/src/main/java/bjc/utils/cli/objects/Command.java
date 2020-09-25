@@ -263,7 +263,7 @@ public class Command {
 	 * The main thing this does is ignore blank lines, as well as comments marked by
 	 * #'s either at the start of the line or part of the way through the line.
 	 *
-	 * @param ln
+	 * @param lne
 	 *                The string to get the command from.
 	 *
 	 * @param lno
@@ -273,7 +273,9 @@ public class Command {
 	 *                The name of where the I/O came from.
 	 * @return The parsed command
 	 */
-	public static Command fromString(String ln, int lno, String srcName) {
+	public static Command fromString(String lne, int lno, String srcName) {
+		String ln = lne;
+		
 		/* Ignore blank lines and comments. */
 		if (ln.equals(""))
 			return null;

@@ -464,6 +464,9 @@ public class DelimSplitterCLI {
 			intPrintDelimNode(tree.getChild(2), sb);
 
 			break;
+		default:
+			// Don't think this is ever a case we have to handle, but maybe it is
+			break;
 		}
 	}
 

@@ -244,7 +244,9 @@ public class RuleBasedConfigReader<E> {
 		this.start = start;
 	}
 
-	private boolean startRule(final E state, boolean isRuleOpen, final String line) {
+	private boolean startRule(final E state, boolean isRulOpen, final String line) {
+		boolean isRuleOpen = isRulOpen;
+		
 		/*
 		 * Create the line tokenizer
 		 */

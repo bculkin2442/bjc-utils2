@@ -75,6 +75,7 @@ public class DualExprParser {
 		Result res = new Result();
 
 		if (preVars == null) {
+			res.varMap = new HashMap<>();
 		} else {
 			res.varMap = preVars;
 		}

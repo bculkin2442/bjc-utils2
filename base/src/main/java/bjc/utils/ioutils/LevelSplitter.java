@@ -76,6 +76,9 @@ public class LevelSplitter {
 				case '>':
 					nestLevel = Math.max(0, nestLevel - 1);
 					break;
+				default:
+					// Not a character we care about
+					break;
 				}
 			}
 
@@ -156,7 +159,7 @@ public class LevelSplitter {
 				}
 			} else {
 				/*
-				 * @TODO Ben Culkin 9/4/18
+				 * @TODO Ben Culkin 9/4/18 :DelimiterEnd
 				 *
 				 * This currently crashes if the string ends with one of the delimiters in
 				 * question.
@@ -181,6 +184,9 @@ public class LevelSplitter {
 				case '}':
 				case '>':
 					nestLevel = Math.max(0, nestLevel - 1);
+					break;
+				default:
+					// Not a character we care about
 					break;
 				}
 			}
@@ -265,6 +271,9 @@ public class LevelSplitter {
 				case '}':
 				case '>':
 					nestLevel = Math.max(0, nestLevel - 1);
+					break;
+				default:
+					// Not a character we care about
 					break;
 				}
 			}

@@ -170,19 +170,16 @@ public class SimpleProperties implements Map<String, String> {
 		return props.isEmpty();
 	}
 
-	@SuppressWarnings("unlikely-arg-type")
 	@Override
 	public boolean containsKey(final Object key) {
 		return props.containsKey(key);
 	}
 
-	@SuppressWarnings("unlikely-arg-type")
 	@Override
 	public boolean containsValue(final Object value) {
 		return props.containsValue(value);
 	}
 
-	@SuppressWarnings("unlikely-arg-type")
 	@Override
 	public String get(final Object key) {
 		return props.get(key);
@@ -193,7 +190,6 @@ public class SimpleProperties implements Map<String, String> {
 		return props.put(key, value);
 	}
 
-	@SuppressWarnings("unlikely-arg-type")
 	@Override
 	public String remove(final Object key) {
 		return props.remove(key);
