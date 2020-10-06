@@ -28,6 +28,9 @@ public class SimpleInternalFrame extends JInternalFrame {
 		super(title);
 	}
 
+	/**
+	 * Setup the basic attributes for the frame.
+	 */
 	protected void setupFrame() {
 		setSize(320, 240);
 

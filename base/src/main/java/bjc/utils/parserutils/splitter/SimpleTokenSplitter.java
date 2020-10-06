@@ -13,8 +13,14 @@ import bjc.utils.ioutils.RegexStringEditor;
  *
  */
 public class SimpleTokenSplitter implements TokenSplitter {
+	/**
+	 * The pattern to split on.
+	 */
 	protected Pattern spliter;
 
+	/**
+	 * Whether or not to keep the delimiters.
+	 */
 	protected final boolean keepDelim;
 
 	/**

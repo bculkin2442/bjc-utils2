@@ -45,6 +45,16 @@ public abstract class GeneralNumberDirective implements Directive {
 		public CLValue commaChar = CLValue.nil();
 	}
 
+	/**
+	 * Get the parameters for a general number-handling directive.
+	 * 
+	 * @param compCTX
+	 *                The compilation context at this point.
+	 * @param argidx
+	 *                The argument index to start looking at.
+	 * 
+	 * @return The parsed number parameters.
+	 */
 	protected NumberParams getParams(CompileContext compCTX, int argidx) {
 		CLParameters params = compCTX.decr.parameters;
 		CLModifiers mods = compCTX.decr.modifiers;
