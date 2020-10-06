@@ -6,7 +6,7 @@ package bjc.utils.exceptions;
  * @author ben
  *
  */
-public class InvalidDirectionException extends IllegalArgumentException {
+public class DirectionInvalid extends IllegalArgumentException {
 
 	/**
 	 * Version for serialization
@@ -14,12 +14,12 @@ public class InvalidDirectionException extends IllegalArgumentException {
 	private static final long serialVersionUID = 6852151917518831932L;
 
 	/**
-	 * Create a new {@link InvalidDirectionException} with the given cause
+	 * Create a new {@link DirectionInvalid} with the given cause
 	 *
 	 * @param cause
 	 *              The situation that resulting in this exit being thrown
 	 */
-	public InvalidDirectionException(String cause) {
+	public DirectionInvalid(String cause) {
 		super(cause);
 	}
 

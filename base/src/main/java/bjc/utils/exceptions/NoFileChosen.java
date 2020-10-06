@@ -7,12 +7,12 @@ import java.io.IOException;
  *
  * @author ben
  */
-public class FileNotChosenException extends IOException {
+public class NoFileChosen extends IOException {
 	/* Version ID for serialization. */
 	private static final long serialVersionUID = -8753348705210831096L;
 
 	/** Create a new exception. */
-	public FileNotChosenException() {
+	public NoFileChosen() {
 		super();
 	}
 
@@ -22,7 +22,7 @@ public class FileNotChosenException extends IOException {
 	 * @param cause
 	 *              The cause of why the exception was thrown.
 	 */
-	public FileNotChosenException(final String cause) {
+	public NoFileChosen(final String cause) {
 		super(cause);
 	}
 }

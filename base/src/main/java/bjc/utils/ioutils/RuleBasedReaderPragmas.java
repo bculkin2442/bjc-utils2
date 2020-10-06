@@ -2,7 +2,7 @@ package bjc.utils.ioutils;
 
 import java.util.function.BiConsumer;
 
-import bjc.utils.exceptions.PragmaFormatException;
+import bjc.utils.exceptions.BadPragmaFormat;
 import bjc.funcdata.FunctionalStringTokenizer;
 import bjc.utils.funcutils.ListUtils;
 
@@ -35,7 +35,7 @@ public class RuleBasedReaderPragmas {
 			if (!tokenizer.hasMoreTokens()) {
 				String fmt = "Pragma %s requires one integer argument";
 
-				throw new PragmaFormatException(String.format(fmt, name));
+				throw new BadPragmaFormat(String.format(fmt, name));
 			}
 
 			/*
@@ -55,8 +55,8 @@ public class RuleBasedReaderPragmas {
 				String fmt
 						= "Argument %s to %s pragma isn't a valid integer, and this pragma requires an integer argument.";
 
-				final PragmaFormatException pfex
-						= new PragmaFormatException(String.format(fmt, token, name));
+				final BadPragmaFormat pfex
+						= new BadPragmaFormat(String.format(fmt, token, name));
 
 				pfex.initCause(nfex);
 
@@ -87,7 +87,7 @@ public class RuleBasedReaderPragmas {
 			if (!tokenizer.hasMoreTokens()) {
 				String fmt = "Pragma %s requires one or more string arguments.";
 
-				throw new PragmaFormatException(String.format(fmt, name));
+				throw new BadPragmaFormat(String.format(fmt, name));
 			}
 
 			/*

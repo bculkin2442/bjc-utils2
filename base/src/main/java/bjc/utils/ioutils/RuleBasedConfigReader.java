@@ -10,7 +10,7 @@ import bjc.data.IHolder;
 import bjc.data.IPair;
 import bjc.data.Identity;
 import bjc.data.Pair;
-import bjc.utils.exceptions.UnknownPragmaException;
+import bjc.utils.exceptions.UnknownPragma;
 import bjc.funcdata.FunctionalMap;
 import bjc.funcdata.FunctionalStringTokenizer;
 import bjc.funcdata.IMap;
@@ -271,7 +271,7 @@ public class RuleBasedConfigReader<E> {
 			 * Handle pragmas
 			 */
 			pragmas.getOrDefault(token, (tokenzer, stat) -> {
-				throw new UnknownPragmaException("Unknown pragma " + token);
+				throw new UnknownPragma("Unknown pragma " + token);
 			}).accept(tokenizer, state);
 		} else {
 			/*

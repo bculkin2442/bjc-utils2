@@ -3,7 +3,7 @@ package bjc.utils.misc;
 import java.util.Random;
 import java.util.function.Consumer;
 
-import bjc.utils.exceptions.InvalidDirectionException;
+import bjc.utils.exceptions.DirectionInvalid;
 import bjc.funcdata.FunctionalList;
 import bjc.funcdata.IList;
 
@@ -108,7 +108,7 @@ public enum RelativeDirection {
 			case RIGHT:
 				return dir.rotateClockwise();
 			default:
-				throw new InvalidDirectionException(
+				throw new DirectionInvalid(
 						"Attempted to make absolute a direction in a unknown way "
 								+ this);
 			}

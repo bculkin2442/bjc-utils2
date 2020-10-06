@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 
 import org.apache.commons.lang3.text.WordUtils;
 
-import bjc.utils.exceptions.InvalidDirectionException;
+import bjc.utils.exceptions.DirectionInvalid;
 import bjc.funcdata.FunctionalList;
 import bjc.funcdata.IList;
 
@@ -122,7 +122,7 @@ public enum Direction {
 		case UP:
 			return false;
 		default:
-			throw new InvalidDirectionException(
+			throw new DirectionInvalid(
 					"WAT. Somehow ended up with an invalid direction " + this);
 		}
 	}
@@ -171,7 +171,7 @@ public enum Direction {
 		case UP:
 		case DOWN:
 		default:
-			throw new InvalidDirectionException(
+			throw new DirectionInvalid(
 					"Can't rotate non-cardinal direction clockwise: " + this);
 
 		}
@@ -197,7 +197,7 @@ public enum Direction {
 		case UP:
 		case DOWN:
 		default:
-			throw new InvalidDirectionException(
+			throw new DirectionInvalid(
 					"Can't rotate non-cardinal direction counterclockwise: " + this);
 
 		}

@@ -5,7 +5,7 @@ import java.io.File;
 
 import javax.swing.JFileChooser;
 
-import bjc.utils.exceptions.FileNotChosenException;
+import bjc.utils.exceptions.NoFileChosen;
 
 /**
  * Utility class for easily prompting user for files.
@@ -30,7 +30,7 @@ public class SimpleFileChooser {
 				maybeDoOpenFile(parent, files);
 
 				success = true;
-			} catch (final FileNotChosenException fncx) {
+			} catch (final NoFileChosen fncx) {
 				// We don't care about specifics
 				SimpleDialogs.showError(parent, "I/O Error",
 						"Please pick a file to open");
@@ -54,7 +54,7 @@ public class SimpleFileChooser {
 				maybeDoSaveFile(parent, files);
 
 				return files.getSelectedFile();
-			} catch (final FileNotChosenException fncex) {
+			} catch (final NoFileChosen fncex) {
 				// We don't care about specifics
 				SimpleDialogs.showError(parent, "I/O Error",
 						"Please pick a file to save to");
@@ -135,7 +135,7 @@ public class SimpleFileChooser {
 	}
 
 	private static void maybeDoOpenFile(final Component parent, final JFileChooser files)
-			throws FileNotChosenException {
+			throws NoFileChosen {
 		if (parent == null)
 			throw new NullPointerException("Parent must not be null");
 		else if (files == null)
@@ -144,11 +144,11 @@ public class SimpleFileChooser {
 		final int result = files.showSaveDialog(parent);
 
 		if (result != JFileChooser.APPROVE_OPTION)
-			throw new FileNotChosenException();
+			throw new NoFileChosen();
 	}
 
 	private static void maybeDoSaveFile(final Component parent, final JFileChooser files)
-			throws FileNotChosenException {
+			throws NoFileChosen {
 		if (parent == null)
 			throw new NullPointerException("Parent must not be null");
 		else if (files == null)
@@ -157,7 +157,7 @@ public class SimpleFileChooser {
 		final int result = files.showSaveDialog(parent);
 
 		if (result != JFileChooser.APPROVE_OPTION)
-			throw new FileNotChosenException();
+			throw new NoFileChosen();
 	}
 
 	/**
@@ -178,7 +178,7 @@ public class SimpleFileChooser {
 
 		try {
 			maybeDoOpenFile(parent, files);
-		} catch (final FileNotChosenException fncex) {
+		} catch (final NoFileChosen fncex) {
 			// We don't care about specifics
 		}
 
@@ -203,7 +203,7 @@ public class SimpleFileChooser {
 
 		try {
 			maybeDoSaveFile(parent, files);
-		} catch (final FileNotChosenException fncex) {
+		} catch (final NoFileChosen fncex) {
 			// We don't care about specifics
 		}
 

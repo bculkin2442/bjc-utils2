@@ -7,7 +7,7 @@ import java.util.InputMismatchException;
  *
  * @author ben
  */
-public class UnknownPragmaException extends InputMismatchException {
+public class UnknownPragma extends InputMismatchException {
 	/* Version ID for serialization. */
 	private static final long serialVersionUID = -4277573484926638662L;
 
@@ -17,7 +17,7 @@ public class UnknownPragmaException extends InputMismatchException {
 	 * @param cause
 	 *              The cause for throwing this exception.
 	 */
-	public UnknownPragmaException(final String cause) {
+	public UnknownPragma(final String cause) {
 		super(cause);
 	}
 

@@ -7,12 +7,12 @@ import java.util.InputMismatchException;
  *
  * @author ben
  */
-public class PragmaFormatException extends InputMismatchException {
+public class BadPragmaFormat extends InputMismatchException {
 	/* Version ID for serialization. */
 	private static final long serialVersionUID = 1288536477368021069L;
 
 	/** Create a new exception */
-	public PragmaFormatException() {
+	public BadPragmaFormat() {
 		super();
 	}
 
@@ -22,7 +22,7 @@ public class PragmaFormatException extends InputMismatchException {
 	 * @param message
 	 *                The message to explain why the exception was thrown.
 	 */
-	public PragmaFormatException(final String message) {
+	public BadPragmaFormat(final String message) {
 		super(message);
 	}
 }
