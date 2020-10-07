@@ -26,6 +26,18 @@ public class SimpleDefine implements UnaryOperator<String> {
 
 		repl = replace;
 	}
+	
+	/**
+	 * Create a new simple define.
+	 *
+	 * @param pattern
+	 *                The pattern to match against.
+	 * @param replace
+	 *                The text to use as a replacement.
+	 */
+	public SimpleDefine(String pattern, String replace) {
+		this(Pattern.compile(pattern), replace);
+	}
 
 	@Override
 	public String apply(String line) {
