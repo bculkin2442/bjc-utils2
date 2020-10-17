@@ -1,19 +1,6 @@
 \# CLFormat documentation
-\# Useful macros
-\# Section header
-.de Section
-.NH 1
-..
-\# Subsection header
-.de Subsection
-.NH 2
-..
-\# Bulleted list item
-.de Bullet
-.IP \[bu]
-..
-\# Set in 12pt font
-.nr PS 12p
+\# Load macros and stuff
+.so clformat.tmac
 .TL
 CLFormat Documentation
 .AU
@@ -25,47 +12,43 @@ Ben Culkin
 CLFormat is an implementation of something that is strongly reminiscent of the
 Common Lisp FORMAT function. I say 'strongly reminiscent', because we don't
 support quite all the directives they, but support several new ones they don't.
-.Section
-Directives
-.PP
+.Section "Directive Syntax"
 FORMAT strings are made up of free-form text, with all of the functionality
 coming from \fIdirectives\fP. A directive is always started with a tilde, and
 consists of the following parts:
-.IP 1.
-An optional set of \fIprefix parameters\fP
-.IP 2.
-An optional set of \fIdirective modifiers\fP
-.IP 3.
+.Numlist
+.Numitem
+.Italic "An optional set of " "prefix parameters" "."
+.Numitem
+.Italic "An optional set of " "directive modifiers" "."
+.Numitem
 The name of the directive
 .PP
 To execute a format string, and get it to provide formatting, a set of arguments
 called \fIformat items\fP must be provided. These serve the same purpose as the
 arguments provided to printf and other similar functions after their format
 string.
-.Subsection
-Prefix Parameters
-.RS
-.PP
+.Subsection "Prefix Parameters"
 Prefix parameters are used to configure the options for a directive. These can
 include things varying from the number of columns to print a field in, to the
 radix that a number should be printed in. They are separated from each by
 commas.
 .PP
 A prefix parameter can be any one of the following:
-.IP "A signed decimal number"
-	The value of this parameter is the provided number.
-.IP "A single character, preceeded by a single-quote"
-	The value of this parameter is the provided character
-.IP "The letter V"
-	The value of this parameter will be read from the format string items.
-.IP "The character #"
-	The value of this parameter will be set to the number of format string
-	parameters remaining
-.IP "The character %"
-	The value of this paramter will be set to the current position in the list
-	of format string items.
-.IP "A double quoted string"
-	The value of this parameter is the represented string.
+.Defn "A signed decimal number"
+The value of this parameter is the provided number.
+.Defn "A single character, preceeded by a single-quote"
+The value of this parameter is the provided character
+.Defn "The letter V"
+The value of this parameter will be read from the format string items.
+.Defn "The character #"
+The value of this parameter will be set to the number of format string
+parameters remaining
+.Defn "The character %"
+The value of this paramter will be set to the current position in the list
+of format string items.
+.Defn "A double quoted string"
+The value of this parameter is the represented string.
 .PP
 Prefix parameters are numbered positionally by default, but they can be given a
 name by starting the parameter with a # character, following that with a
@@ -73,10 +56,7 @@ parameter name (which can be any series of printing characters that is not a
 whitespace character, and not one of the following separator characters: ',',
 ',', ':' or ';'). It is then followed by a name-separator character (either ':'
 or ';') then its value from the above list.
-.RS
-.SH 3
-Notes
-.PP
+.Supersection "Notes"
 .Bullet
 The difference between ':' and ';' is that if you use ':', that
 parameter can't be addressed positionally, while if you use ';', it still can.
@@ -93,24 +73,22 @@ normal rule that you can provide unused named parameters, passing an ambiguous
 parameter name will cause an error. For instance, if a directive took the
 parameters 'foo', 'foobar' and 'fizz', these are some of the results:
 .RS
-.IP \f(CRfoo\fP
+.CWDefn "foo"
 	Refers to foo
-.IP foobar
+.CWDefn "foobar"
 	Refers to foobar
-.IP foob
+.CWDefn "foob"
 	Refers to foobar
-.IP fizz
+.CWDefn "fizz"
 	Refers to fizz
-.IP fi
+.CWDefn "fi"
 	Refers to fizz
-.IP f
+.CWDefn "f"
 	Error, could refer to foo, foobar or fizz
 .RE
-.RE
-.Subsection
-Directive modifiers
-.RS
-.PP
+.Endsupersection
+.Endsubsection
+.Subsection "Directive modifiers"
 Directive modifiers, or \fImodifier sets\fP, are any combination of the
 following characters (with duplicate characters having no effect)
 .Bullet
@@ -121,11 +99,8 @@ following characters (with duplicate characters having no effect)
 .CW "*"
 .Bullet
 .CW "@"
-.RE
-.Subsection
-Directive names
-.RS
-.PP
+.Endsubsection
+.Subsection "Directive names"
 A directive name can be either
 .Bullet
 A single, non-whitespace, non-/ character, optionally preceeded by a grave
@@ -134,11 +109,10 @@ A name bracketed by /
 .PP
 If the directive is a bracketed name, then it is a call to a user-specified
 function. Otherwise, it is an invocation of one of the built-in directives.
-.RE
-.Section
-Directives
-.PP
-The following is a list of all of the directives that are currently implemented,
+.Endsubsection
+.Endsection
+.Section "Directive List"
+The following is a table of all of the directives that are currently implemented,
 as well as a short description of what each directive does.
 .KS
 .TS H
@@ -169,7 +143,7 @@ R	Radix	Print out an integer in an arbitrary base\[bu]
 [	Conditional	Select a sub-format string, based on a conditional
 {	Iteration	Repeatedly invoke a sub-format string
 (	Case	Perform case-manipulation on text
-`[	Inflection	Perform inflection (pluralization/singularization) on a sub-format string
+\`[	Inflection	Perform inflection (pluralization/singularization) on a sub-format string
 T	Tabulate	Print items in a tabular format
 .TE
 .ce 1
@@ -201,7 +175,7 @@ lfCR | l | l .
 ]	End Conditional	Ends a conditional directive
 ;	Clause Separator	Separates two clauses in a block directive
 )	End Case	Ends a case directive
-']	End Inflection	Ends a inflection directive
+\']	End Inflection	Ends a inflection directive
 <	Inflection Start 	Starts an inflection control
 >	Inflection End	Ends an inflection control
 .TE
@@ -221,8 +195,8 @@ _
 .TH
 .T&
 lfCR | l | l .
-`<	Start Layout	Start a layout-control block
-`>	End Layout	Ends a layout-control block
+\`<	Start Layout	Start a layout-control block
+\`>	End Layout	Ends a layout-control block
 F	Fixed-Format Float	Print a floating-point number in a fixed-point format
 E	Exponential Float	Print a engineering-style (1.2e2) floating point number
 G	General Float	Print a general floating point number
@@ -238,10 +212,7 @@ The following section contains a detailed reference for the directives mentioned
 above. This details how the directive works, how many parameters it takes, and
 of what sort they should be, and whatever other details are necessary for that
 particular directive.
-.Subsection
-A Directive
-.RS
-.RE
+.Subsection "A Directive"
 .PP
 The A directive is the general purpose string formatting directive, serving as
 the equivalent to the S specifier in printf and other similar formats.
@@ -256,3 +227,5 @@ Sample Format String	Description
 ~a	Prints out the format string item as a string
 .TE
 .KE
+.Endsubsection
+.Endsection

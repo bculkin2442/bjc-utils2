@@ -2,14 +2,62 @@
 \# Section header
 .de Section
 .NH 1
+\s+4\\$1\s-4
+\# Place current section title in right corner
+.ds RH "\\$1
+.PP
+..
+\# Section footer
+.de Endsection
 ..
 \# Subsection header
 .de Subsection
 .NH 2
+\s+2\\$1\s-2
+.RS
+.PP
+..
+\# Subsection footer
+.de Endsubsection
+.RE
+..
+\# Supersection header
+.de Supersection
+.NH 3
+\\$1
+.RS
+.PP
+..
+\# Supersection footer
+.de Endsupersection
+.RE
 ..
 \# Bulleted list item
 .de Bullet
 .IP \[bu]
 ..
+\# Simple numbered list
+.de Numlist
+.nr listitem 0 1
+..
+\# Item in numbered list
+.de Numitem
+.IP "\\n+[listitem]."
+..
+\# Italicize text
+.de Italic
+.I "\\$2" "\\$3" "\\$1"
+..
+\# Definition-list item
+.de Defn
+.IP "\fB\\$1\fP"
+..
+\# Constant-width Definition-list item
+.de CWDefn
+.IP "\f(CB\\$1\fP"
+..
 \# Set in 12pt font
 .nr PS 12p
+\# Put manual title in left corner
+.ds LH "CLFormat Manual
+.DA
