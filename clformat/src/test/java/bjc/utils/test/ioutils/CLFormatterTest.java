@@ -138,6 +138,12 @@ public class CLFormatterTest {
 	}
 
 	@Test
+	public void testFloatPrinting() {
+		assertFormat("1", "~`D", 1);
+		assertFormat("1.1", "~`D", 1.1);
+	}
+
+	@Test
 	public void testRandomCases() {
 		// Random test cases
 		assertEquals("3 dogs are here", format("~D dog~:[s are~; is~] here", 3, 3 == 1));

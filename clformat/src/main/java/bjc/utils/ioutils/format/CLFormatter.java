@@ -70,6 +70,8 @@ public class CLFormatter {
 		builtinDirectives.put("`[", new InflectDirective());
 
 		builtinDirectives.put("T", new TabulateDirective());
+
+		builtinDirectives.put("`D", new DecimalDirective());
 	}
 
 	/**
@@ -101,13 +103,31 @@ public class CLFormatter {
 	 */
 	public static void checkItem(Object itm, char directive) {
 		if (itm == null) {
-			String msg
-					= String.format("No argument provided for %c directive", directive);
+			String msg = String.format("No argument provided for %c directive", directive);
 
 			throw new IllegalArgumentException(msg);
 		}
 	}
 
+	/**
+	 * Check that an item is valid for a directive.
+	 *
+	 * @param itm
+	 *                  The item to check.
+	 *
+	 * @param directive
+	 *                  The directive to check for.
+	 *
+	 * @throws IllegalArgumentException
+	 *                                  if itm is null.
+	 */
+	public static void checkItem(Object itm, String directive) {
+		if (itm == null) {
+			String msg = String.format("No argument provided for %s directive", directive);
+
+			throw new IllegalArgumentException(msg);
+		}
+	}
 	/**
 	 * Format a string in the style of CL's FORMAT.
 	 *
