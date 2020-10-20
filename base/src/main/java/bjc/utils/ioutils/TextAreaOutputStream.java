@@ -1,4 +1,4 @@
-package bjc.utils.gui;
+package bjc.utils.ioutils;
 
 import java.io.IOException;
 import java.io.OutputStream;
