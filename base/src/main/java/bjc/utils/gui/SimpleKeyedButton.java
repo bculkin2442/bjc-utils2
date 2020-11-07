@@ -59,8 +59,9 @@ public class SimpleKeyedButton extends JButton {
 	 * @param aevListener
 	 *                    The listener that handles the implementation of the
 	 *                    action.
+	 * @return The action that was bound to the button.
 	 */
-	public void setGlobalDefaultKeystroke(String eventName, String keystroke,
+	public Action setGlobalDefaultKeystroke(String eventName, String keystroke,
 			Consumer<ActionEvent> aevListener) {
 		Action act = new KeyedButtonAction(eventName, aevListener);
 		KeyStroke stroke = KeyStroke.getKeyStroke(keystroke);
@@ -69,6 +70,8 @@ public class SimpleKeyedButton extends JButton {
 		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(stroke, eventName);
 		this.getActionMap().put(eventName, act);
 		this.setText(label);
+		
+		return act;
 	}
 
 	/**
@@ -82,8 +85,9 @@ public class SimpleKeyedButton extends JButton {
 	 * @param aevListener
 	 *                    The listener that handles the implementation of the
 	 *                    action.
+	 * @return The action that was bound to the button.
 	 */
-	public void addGlobalKeystroke(String eventName, String keystroke,
+	public Action addGlobalKeystroke(String eventName, String keystroke,
 			Consumer<ActionEvent> aevListener) {
 		Action act = new KeyedButtonAction(eventName, aevListener);
 		KeyStroke stroke = KeyStroke.getKeyStroke(keystroke);
@@ -91,5 +95,7 @@ public class SimpleKeyedButton extends JButton {
 		this.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(stroke, eventName);
 		this.getActionMap().put(eventName, act);
 		this.setText(label);
+		
+		return act;
 	}
 }
