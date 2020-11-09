@@ -8,7 +8,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
 
 /**
- * A simple spinner control
+ * A simple spinner control alongside a label
  *
  * @author ben
  *

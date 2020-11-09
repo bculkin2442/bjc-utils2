@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 
 import bjc.utils.gui.layout.HLayout;
+import bjc.utils.gui.panels.SliderInputPanel.*;
 
 /**
  * A simple input panel for a slider-controlled value and a manual-input field
@@ -18,51 +19,6 @@ import bjc.utils.gui.layout.HLayout;
  *
  */
 public class SliderInputPanel extends JPanel {
-	private final class NumberFormatter extends JFormattedTextField.AbstractFormatter {
-		private static final long serialVersionUID = -4448291795913908270L;
-
-		private final int minValue;
-		private final int maxValue;
-
-		private final int initValue;
-
-		public NumberFormatter(final SliderSettings settings) {
-			minValue = settings.minValue;
-			maxValue = settings.maxValue;
-
-			initValue = settings.initValue;
-		}
-
-		@Override
-		public Object stringToValue(final String text) throws ParseException {
-			try {
-				final int val = Integer.parseInt(text);
-
-				if (val < minValue)
-					throw new ParseException("Value must be greater than " + minValue, 0);
-				else if (val > maxValue)
-					throw new ParseException("Value must be smaller than " + maxValue, 0);
-				else
-					return val;
-			} catch (final NumberFormatException nfex) {
-				final ParseException pex
-						= new ParseException("Value must be a valid integer", 0);
-
-				pex.initCause(nfex);
-
-				throw pex;
-			}
-		}
-
-		@Override
-		public String valueToString(final Object value) throws ParseException {
-			if (value == null)
-				return Integer.toString(initValue);
-
-			return Integer.toString((Integer) value);
-		}
-	}
-
 	/**
 	 * Represents the settings for a slider
 	 *
@@ -104,7 +60,7 @@ public class SliderInputPanel extends JPanel {
 		 * @param max
 		 *             The maximum slider value
 		 * @param init
-		 *             Th initial slider value
+		 *             The initial slider value
 		 */
 		public SliderSettings(final int min, final int max, final int init) {
 			minValue = min;
@@ -153,7 +109,6 @@ public class SliderInputPanel extends JPanel {
 				final int val = slider.getValue();
 
 				field.setValue(val);
-
 				action.accept(val);
 			}
 		});
@@ -185,5 +140,48 @@ public class SliderInputPanel extends JPanel {
 		slider.setValue(value);
 
 		field.setValue(value);
+	}
+}
+
+final class NumberFormatter extends JFormattedTextField.AbstractFormatter {
+	private static final long serialVersionUID = -4448291795913908270L;
+
+	private final int minValue;
+	private final int maxValue;
+
+	private final int initValue;
+
+	public NumberFormatter(final SliderSettings settings) {
+		minValue = settings.minValue;
+		maxValue = settings.maxValue;
+
+		initValue = settings.initValue;
+	}
+
+	@Override
+	public Object stringToValue(final String text) throws ParseException {
+		try {
+			final int val = Integer.parseInt(text);
+
+			if      (val < minValue) throw new ParseException(
+					"Value must be greater than " + minValue, 0);
+			else if (val > maxValue) throw new ParseException(
+					"Value must be smaller than " + maxValue, 0);
+			else                     return val;
+		} catch (final NumberFormatException nfex) {
+			final ParseException pex
+					= new ParseException("Value must be a valid integer", 0);
+
+			pex.initCause(nfex);
+
+			throw pex;
+		}
+	}
+
+	@Override
+	public String valueToString(final Object value) throws ParseException {
+		if (value == null) return Integer.toString(initValue);
+
+		return Integer.toString((Integer) value);
 	}
 }

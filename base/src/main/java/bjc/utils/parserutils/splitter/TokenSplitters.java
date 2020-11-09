@@ -25,6 +25,15 @@ public class TokenSplitters {
 	}
 
 	/**
+	 * Create a new identity token splitter, which doesn't actually do any splitting.
+	 * 
+	 * @return A new identity splitter.
+	 */
+	public static TokenSplitter identitySplitter() {
+		return new IdentityTokenSplitter();
+	}
+	
+	/**
 	 * Create a new transforming token splitter.
 	 *
 	 * @param splitter
