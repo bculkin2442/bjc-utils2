@@ -26,8 +26,7 @@ public class ReportWriter extends Writer {
 		// Indent string w/ tabs replaced with spaces
 		public String indentStrSpacedTabs;
 
-		public IndentVal() {
-		}
+		public IndentVal() {}
 	}
 
 	// Writer to print to
@@ -265,9 +264,7 @@ public class ReportWriter extends Writer {
 		// that case; whether we should continue calling the function,
 		// or just adjust the counts and pretend that nothing
 		// significant happened
-		while (pageLine > linesPerPage) {
-			writePage();
-		}
+		while (pageLine > linesPerPage) writePage();
 	}
 
 	/**
@@ -328,6 +325,11 @@ public class ReportWriter extends Writer {
 		refreshIndents(lvl);
 	}
 
+	// @FIXME Ben Culkin 11/13/2020 IntArgument
+	// Overloading an argument like this is bogus. This should be restructured,
+	// probably as three different functions; one to refresh a general level,
+	// one to refresh every level, and one to refresh the default indentation
+	
 	// Parameter is the level of indents to refresh.
 	//
 	// Pass a index to refresh that level
@@ -345,9 +347,7 @@ public class ReportWriter extends Writer {
 		if (lvl == -2) {
 			refreshIndent(defIVal);
 		} else if (lvl == -1) {
-			for (IndentVal ival : iVals) {
-				refreshIndent(ival);
-			}
+			for (IndentVal ival : iVals) refreshIndent(ival);
 
 			refreshIndent(defIVal);
 		} else {
@@ -364,10 +364,9 @@ public class ReportWriter extends Writer {
 		StringBuilder conv = new StringBuilder();
 		for (int i = 0; i < indentLength; i++) {
 			char c = vl.indentStr.charAt(i);
+			
 			if (c == '\t') {
-				for (int j = 0; j < tabEqv; j++) {
-					conv.append(' ');
-				}
+				for (int j = 0; j < tabEqv; j++) conv.append(' ');
 
 				vl.indentStrPos += tabEqv;
 			} else {
@@ -534,17 +533,14 @@ public class ReportWriter extends Writer {
 			// If we're printing CRLF pairs, make sure that we don't
 			// print incomplete pairs.
 			if (i < lineSpacing - 1) {
-				if (c == '\n' && lastChar == '\r')
-					contained.write('\r');
+				if (c == '\n' && lastChar == '\r') contained.write('\r');
 			}
 		}
 
 		// @NOTE 9/17/18
 		//
 		// Not sure if this should be here, or before the above loop
-		if (pageLine > linesPerPage || c == '\f') {
-			writePage();
-		}
+		if (pageLine > linesPerPage || c == '\f') writePage();
 
 		linePos = 0;
 		indentPos = 0;
@@ -553,8 +549,7 @@ public class ReportWriter extends Writer {
 	@Override
 	public void write(char[] cbuf, int off, int len) throws IOException {
 		// Skip empty writes
-		if (len == 0)
-			return;
+		if (len == 0) return;
 
 		// Last character was a new line, print the indent string
 		if (lastCharWasNL) {
@@ -568,7 +563,10 @@ public class ReportWriter extends Writer {
 
 			char c = cbuf[idx];
 
-			if ((c == '\n' && lastChar != '\r') || c == '\n' || c == '\r' || c == '\f') {
+			if ((c == '\n' && lastChar != '\r') 
+					|| c == '\n' 
+					|| c == '\r'
+					|| c == '\f') {
 				writeNL(c);
 			} else {
 				if (lastCharWasNL) {
@@ -580,9 +578,7 @@ public class ReportWriter extends Writer {
 				if (c == '\t') {
 					linePos += tabEqv;
 
-					for (int j = 0; j < tabEqv; j++) {
-						contained.write(' ');
-					}
+					for (int j = 0; j < tabEqv; j++) contained.write(' ');
 				} else {
 					linePos += 1;
 					contained.write(c);
@@ -597,12 +593,10 @@ public class ReportWriter extends Writer {
 		for (int j = 0; j < indentLevel; j++) {
 			IndentVal ival = iVals.get(j);
 
-			if (printTabsAsSpaces)
-				contained.write(ival.indentStrSpacedTabs);
-			else
-				contained.write(ival.indentStr);
+			if (printTabsAsSpaces) contained.write(ival.indentStrSpacedTabs);
+			else                   contained.write(ival.indentStr);
 
-			linePos += ival.indentStrPos;
+			linePos   += ival.indentStrPos;
 			indentPos += ival.indentStrPos;
 		}
 	}
@@ -625,5 +619,16 @@ public class ReportWriter extends Writer {
 	@Override
 	public String toString() {
 		return contained.toString();
+	}
+	
+	/**
+	 * Write out a formatted string.
+	 * 
+	 * @param format The format string.
+	 * @param items The arguments to the format string.
+	 * @throws IOException Thrown if something goes wrong.
+	 */
+	public void writef(String format, Object... items) throws IOException {
+		write(String.format(format, items));
 	}
 }

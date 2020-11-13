@@ -13,13 +13,13 @@ import bjc.utils.parserutils.TokenUtils;
 public class CLParameters {
 	private static String MSG_FMT = "Invalid %s (%s) \"%s\" to %s directive";
 
-	private static String RX_TRUE = "(?i)y(?:es)?|t(?:rue)?(?i)";
+	private static String RX_TRUE  = "(?i)y(?:es)?|t(?:rue)?(?i)";
 	private static String RX_FALSE = "(?i)no?|f(?:alse)?(?i)";
 
 	private CLValue[] params;
 
 	private Set<String> abbrevWords;
-	private AbbrevMap2 nameAbbrevs;
+	private AbbrevMap2  nameAbbrevs;
 
 	private Map<String, CLValue> namedParams;
 	private Map<String, Integer> nameIndices;
@@ -80,19 +80,13 @@ public class CLParameters {
 		// with here, as these objects are fairly temporary.
 		//
 		// If it becomes an issue, I'll resolve it
-		for (String key : namedParams.keySet()) {
-			refreshAbbrev(key);
-		}
-
-		for (String key : nameIndices.keySet()) {
-			refreshAbbrev(key);
-		}
+		for (String key : namedParams.keySet()) refreshAbbrev(key);
+		for (String key : nameIndices.keySet())	refreshAbbrev(key);
 	}
 
 	// Refresh a particular abbreviation
 	private void refreshAbbrev(String key) {
-		if (abbrevWords.contains(key))
-			return;
+		if (abbrevWords.contains(key)) return;
 
 		abbrevWords.add(key);
 		nameAbbrevs.add(key);
@@ -110,8 +104,7 @@ public class CLParameters {
 		for (int i = 0; i < opts.length; i++) {
 			String opt = opts[i];
 
-			if (!opt.equals(""))
-				mapIndex(opt, i);
+			if (!opt.equals("")) mapIndex(opt, i);
 		}
 
 		refreshAbbrevs();
@@ -139,8 +132,7 @@ public class CLParameters {
 
 		nameIndices.put(opt.toUpperCase(), idx);
 
-		if (doRefresh)
-			refreshAbbrevs();
+		if (doRefresh) refreshAbbrevs();
 	}
 
 	/**
@@ -152,8 +144,7 @@ public class CLParameters {
 	 * @return The value at that index.
 	 */
 	public CLValue getByIndex(int idx) {
-		if (idx < 0 || idx >= params.length)
-			return null;
+		if (idx < 0 || idx >= params.length) return null;
 
 		return params[idx];
 	}
@@ -235,8 +226,7 @@ public class CLParameters {
 					if (ch == ':' || ch == ';') {
 						// Semicolon says to add as
 						// indexed parameter
-						if (ch == ';')
-							setIndex = true;
+						if (ch == ';') setIndex = true;
 
 						nameIdx = i;
 						break;
@@ -251,8 +241,7 @@ public class CLParameters {
 
 				namedParams.put(paramName.toUpperCase(), actVal);
 
-				if (setIndex)
-					parameters.add(actVal);
+				if (setIndex) parameters.add(actVal);
 			} else {
 				parameters.add(parseParam(param));
 			}
@@ -311,10 +300,11 @@ public class CLParameters {
 			sb.append("\". Could've meant: ");
 			boolean isFirst = true;
 			for (String possKey : keys) {
-				if (!isFirst)
-					sb.append(", ");
-				if (isFirst)
+				if (isFirst) {
 					isFirst = false;
+				} else {					
+					sb.append(", ");
+				}
 
 				sb.append("\"");
 				sb.append(possKey);
@@ -335,10 +325,8 @@ public class CLParameters {
 			// @NOTE 9/22/18
 			//
 			// Consider whether we should throw an exception here.
-			if (idx < 0 || idx >= params.length)
-				return null;
-
-			return params[idx];
+			if (idx < 0 || idx >= params.length) return null;
+			else                                 return params[idx];
 		}
 
 		return null;
@@ -370,10 +358,8 @@ public class CLParameters {
 		String bol = resolveKey(key).getValue(parms);
 
 		if (!bol.equals("")) {
-			if (bol.matches(RX_TRUE))
-				return true;
-			else if (bol.matches(RX_FALSE))
-				return false;
+			if (bol.matches(RX_TRUE))       return true;
+			else if (bol.matches(RX_FALSE)) return false;
 			else {
 				String msg = String.format(MSG_FMT, paramName, key, bol, directive);
 				throw new IllegalArgumentException(msg);
@@ -412,8 +398,7 @@ public class CLParameters {
 		//
 		// This raises the question of what to do if the empty string is a valid
 		// value for a parameter
-		if (!vl.equals(""))
-			return vl;
+		if (!vl.equals("")) return vl;
 
 		return def;
 	}
@@ -508,25 +493,23 @@ public class CLParameters {
 		int idx = 0;
 		// First off, the named parameters
 		for (Map.Entry<String, CLValue> param : namedParams.entrySet()) {
-			String paramName = param.getKey();
+			String  paramName  = param.getKey();
 			CLValue paramValue = param.getValue();
 
 			if (nameIndices.containsKey(paramName)) {
 				int paramIdx = nameIndices.get(paramName);
 
-				String msg
-						= String.format("%s(%d):'%s'", paramName, paramIdx, paramValue);
+				String msg = String.format("%s(%d):'%s'",
+						paramName, paramIdx, paramValue);
 
-				if (idx != 0)
-					sb.append(", ");
+				if (idx != 0) sb.append(", ");
 				sb.append(msg);
 
 				seenIndices.add(idx);
 			} else {
 				String msg = String.format("%s:'%s'", paramName, paramValue);
 
-				if (idx != 0)
-					sb.append(", ");
+				if (idx != 0) sb.append(", ");
 				sb.append(msg);
 			}
 
@@ -541,14 +524,12 @@ public class CLParameters {
 			int paramIdx = paramMap.getValue();
 
 			// We've already gotten this argument before
-			if (seenIndices.contains(paramIdx))
-				continue;
+			if (seenIndices.contains(paramIdx))	continue;
 
-			String msg
-					= String.format("%d(%s):'%s'", paramIdx, paramName, params[paramIdx]);
+			String msg = String.format("%d(%s):'%s'",
+					paramIdx, paramName, params[paramIdx]);
 
-			if (idx != 0)
-				sb.append(", ");
+			if (idx != 0) sb.append(", ");
 			sb.append(msg);
 
 			seenIndices.add(paramIdx);
@@ -559,13 +540,11 @@ public class CLParameters {
 		// Third, unnamed indexed parameters
 		for (idx = 0; idx < params.length; idx++) {
 			// We've already gotten this argument before
-			if (seenIndices.contains(idx))
-				continue;
+			if (seenIndices.contains(idx)) continue;
 
 			String msg = String.format("%d:'%s'", idx, params[idx]);
 
-			if (idx != 0)
-				sb.append(", ");
+			if (idx != 0) sb.append(", ");
 			sb.append(msg);
 		}
 

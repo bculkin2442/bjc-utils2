@@ -18,12 +18,7 @@ public interface CLValue {
 	 * @return The CLValue represented by the string.
 	 */
 	public static CLValue parse(String val) {
-		if (val == null)
-			return new NullValue();
-
-		if (val.equalsIgnoreCase("V")) {
-			return new VValue();
-		}
+		if (val == null) return new NullValue();
 
 		switch (val) {
 		case "V":

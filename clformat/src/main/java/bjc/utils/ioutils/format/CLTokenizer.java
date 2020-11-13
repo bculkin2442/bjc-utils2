@@ -31,16 +31,12 @@ public class CLTokenizer implements Iterator<Decree> {
 
 		@Override
 		public boolean hasNext() {
-			boolean nxt = body.hasNext();
-
-			return nxt;
+			return body.hasNext();
 		}
 
 		@Override
 		public Decree next() {
-			Decree nxt = body.next();
-
-			return nxt;
+			return body.next();
 		}
 	}
 
@@ -92,16 +88,12 @@ public class CLTokenizer implements Iterator<Decree> {
 
 	@Override
 	public boolean hasNext() {
-		boolean nxt = !mat.hitEnd();
-
-		return nxt;
+		return !mat.hitEnd();
 	}
 
 	@Override
 	public Decree next() {
-		Decree tk = getNext();
-
-		return tk;
+		return getNext();
 	}
 
 	private Decree getNext() {
@@ -124,23 +116,19 @@ public class CLTokenizer implements Iterator<Decree> {
 			String tmp = sb.toString();
 
 			{
-				String dirName = mat.group("name");
-				String dirFunc = mat.group("funcname");
-				String dirMods = mat.group("modifiers");
-				String dirParams = mat.group("params");
+				String directiveName = mat.group("name");
+				String directiveFunction = mat.group("funcname");
+				String directiveModifierString = mat.group("modifiers");
+				String directiveParameterString = mat.group("params");
 
-				if (dirMods == null) {
-					dirMods = "";
-				}
+				if (directiveModifierString  == null)  directiveModifierString  = "";
+				if (directiveParameterString == null)  directiveParameterString = "";
 
-				if (dirParams == null) {
-					dirParams = "";
-				}
+				boolean isUser = directiveName == null && directiveFunction != null;
 
-				boolean isUser = dirName == null && dirFunc != null;
-
-				dir = new Decree(dirName, isUser, CLParameters.fromDirective(dirParams),
-						CLModifiers.fromString(dirMods));
+				dir = new Decree(directiveName, isUser,
+						CLParameters.fromDirective(directiveParameterString),
+						CLModifiers.fromString(directiveModifierString));
 			}
 
 			if (tmp.equals("")) {
@@ -195,8 +183,7 @@ public class CLTokenizer implements Iterator<Decree> {
 		GroupDecree newGroup = new GroupDecree();
 		newGroup.opening = openedWith;
 
-		if (!hasNext())
-			throw new NoSuchElementException("No decrees available");
+		if (!hasNext()) throw new NoSuchElementException("No decrees available");
 
 		ClauseDecree curClause = new ClauseDecree();
 

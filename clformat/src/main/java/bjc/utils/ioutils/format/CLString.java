@@ -98,9 +98,7 @@ public class CLString {
 	 */
 	public String format(FormatContext formCTX) throws IOException {
 		try {
-			for (Edict edt : edicts) {
-				edt.format(formCTX);
-			}
+			for (Edict edt : edicts) edt.format(formCTX);
 		} catch (DirectiveEscape eex) {
 			// General escape exception, so stop formatting.
 		}
@@ -114,10 +112,8 @@ public class CLString {
 	 * @return If this format string is empty.
 	 */
 	public boolean isEmpty() {
-		if (edicts.size() == 0)
-			return true;
-
-		return false;
+		if (edicts.size() == 0) return true;
+		else                    return false;
 	}
 
 	@Override

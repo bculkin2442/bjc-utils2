@@ -304,45 +304,178 @@ public class CLFormatter {
 
 				if (decr.isLiteral) {
 					rw.write(decr.name);
-					continue;
-				}
-
-				Object item = tParams.item();
-
-				if (decr.isUserCall) {
+				} else if (decr.isUserCall) {
 					/*
 					 * @TODO implement user-called functions.
 					 */
-					continue;
-				}
-
-				if (extraDirectives.containsKey(decr.name)) {
+				} else if (extraDirectives.containsKey(decr.name)) {
 					FormatParameters params
-							= new FormatParameters(rw, item, decr, tParams, cltok, this);
+							= new FormatParameters(rw, tParams.item(), decr,
+									tParams, cltok, this);
 
 					extraDirectives.get(decr.name).format(params);
-
-					continue;
-				}
-
-				if (builtinDirectives.containsKey(decr.name)) {
+				} else if (builtinDirectives.containsKey(decr.name)) {
 					FormatParameters params
-							= new FormatParameters(rw, item, decr, tParams, cltok, this);
+							= new FormatParameters(rw, tParams.item(), decr,
+									tParams, cltok, this);
 
 					builtinDirectives.get(decr.name).format(params);
-					continue;
+				} else {
+					// All of these conditions are an error in some way
+					if (decr.name == null) decr.name = "<null>";
+	
+					switch (decr.name) {
+					case "]":
+						throw new IllegalArgumentException(
+								"Found conditional-end outside of conditional.");
+					case ";":
+						throw new IllegalArgumentException(
+								"Found seperator outside of block.");
+					case "}":
+						throw new IllegalArgumentException(
+								"Found iteration-end outside of iteration");
+					case ")":
+						throw new IllegalArgumentException(
+								"Case-conversion end outside of case conversion");
+					case "`]":
+						throw new IllegalArgumentException(
+								"Inflection-end outside of inflection");
+					case "<":
+					case ">":
+						throw new IllegalArgumentException(
+								"Inflection marker outside of inflection");
+					case "`<":
+					case "`>":
+						throw new IllegalArgumentException(
+								"Layout-control directives aren't implemented yet.");
+					case "F":
+					case "E":
+					case "G":
+					case "$":
+						/*
+						 * @TODO
+						 *
+						 * implement floating point directives.
+						 */
+						throw new IllegalArgumentException(
+								"Floating-point directives aren't implemented yet.");
+					case "W":
+						/*
+						 * @TODO
+						 *
+						 * figure out if we want to implement someting for these directives
+						 * instead of punting.
+						 */
+						throw new IllegalArgumentException(
+								"S and W aren't implemented. Use A instead");
+					case "P":
+						throw new IllegalArgumentException(
+								"These directives aren't implemented yet");
+					case "\n":
+						/*
+						 * Ignored newline.
+						 */
+						break;
+					default:
+						String msg
+								= String.format("Unknown format directive '%s'", decr.name);
+						throw new IllegalArgumentException(msg);
+					}
 				}
+			}
+		} catch (DirectiveEscape eex) {
+			if (!isToplevel) throw eex;
+		}
+	}
 
-				if (decr.name == null)
-					decr.name = "<null>";
+	/**
+	 * Compile a CLString from a string.
+	 *
+	 * @param inp
+	 *            The string to compile.
+	 *
+	 * @return A CLString compiled from the input.
+	 */
+	public CLString compile(String inp) {
+		CLTokenizer tokenzer = new CLTokenizer(inp);
 
-				switch (decr.name) {
+		List<Edict> edts = compile(tokenzer);
+
+		return new CLString(edts);
+	}
+
+	/**
+	 * Compile a set of edicts from a list of decrees.
+	 *
+	 * @param decrees
+	 *                The decrees to compile.
+	 *
+	 * @return A set of edicts compiled from the decrees.
+	 */
+	public List<Edict> compile(Iterable<Decree> decrees) {
+		// If we have no decrees, there are no edicts.
+		if (decrees == null) return new ArrayList<>();
+
+		CLTokenizer it = CLTokenizer.fromTokens(decrees);
+		return compile(it);
+	}
+
+	/**
+	 * Compile a set of edicts from a clause.
+	 *
+	 * @param clause
+	 *               The clause to compile.
+	 *
+	 * @return The set of edicts compiled from the clause.
+	 */
+	public List<Edict> compile(ClauseDecree clause) {
+		if (clause == null) return new ArrayList<>();
+		else                return compile(clause.body);
+	}
+
+	/**
+	 * Compile a set of edicts from a set of tokens.
+	 *
+	 * @param cltok
+	 *              The tokenizer providing us with our tokens.
+	 *
+	 * @return The edicts compiled from those tokens.
+	 */
+	public List<Edict> compile(CLTokenizer cltok) {
+		List<Edict> result = new ArrayList<>();
+
+		while (cltok.hasNext()) {
+			Decree decr = cltok.next();
+			String nam = decr.name;
+
+			CompileContext compCTX = new CompileContext(cltok, this, decr);
+
+			if (decr.isLiteral) {
+				result.add(new StringEdict(decr.name));
+			} else if (decr.isUserCall) {
+				/*
+				 * @TODO implement user-called functions.
+				 */
+				throw new IllegalArgumentException(
+						"User-called functions have not yet been implemented");
+			} else if (extraDirectives.containsKey(nam)) {
+				Edict edt = extraDirectives.get(nam).compile(compCTX);
+
+				result.add(edt);
+			} else if (builtinDirectives.containsKey(nam)) {
+				Edict edt = builtinDirectives.get(nam).compile(compCTX);
+
+				result.add(edt);
+			} else {
+				// All of these conditions are an error in some way
+				if (nam == null) nam = "<null>";
+	
+				switch (nam) {
 				case "]":
 					throw new IllegalArgumentException(
 							"Found conditional-end outside of conditional.");
 				case ";":
-					throw new IllegalArgumentException(
-							"Found seperator outside of block.");
+					throw new IllegalArgumentException("Found seperator outside of block.");
 				case "}":
 					throw new IllegalArgumentException(
 							"Found iteration-end outside of iteration");
@@ -389,167 +522,9 @@ public class CLFormatter {
 					 */
 					break;
 				default:
-					String msg
-							= String.format("Unknown format directive '%s'", decr.name);
+					String msg = String.format("Unknown format directive '%s'", nam);
 					throw new IllegalArgumentException(msg);
 				}
-			}
-		} catch (DirectiveEscape eex) {
-			if (!isToplevel)
-				throw eex;
-		}
-	}
-
-	/**
-	 * Compile a CLString from a string.
-	 *
-	 * @param inp
-	 *            The string to compile.
-	 *
-	 * @return A CLString compiled from the input.
-	 */
-	public CLString compile(String inp) {
-		CLTokenizer tokenzer = new CLTokenizer(inp);
-
-		List<Edict> edts = compile(tokenzer);
-
-		return new CLString(edts);
-	}
-
-	/**
-	 * Compile a set of edicts from a list of decrees.
-	 *
-	 * @param decrees
-	 *                The decrees to compile.
-	 *
-	 * @return A set of edicts compiled from the decrees.
-	 */
-	public List<Edict> compile(Iterable<Decree> decrees) {
-		// If we have no decrees, there are no edicts.
-		if (decrees == null)
-			return new ArrayList<>();
-
-		CLTokenizer it = CLTokenizer.fromTokens(decrees);
-		return compile(it);
-	}
-
-	/**
-	 * Compile a set of edicts from a clause.
-	 *
-	 * @param clause
-	 *               The clause to compile.
-	 *
-	 * @return The set of edicts compiled from the clause.
-	 */
-	public List<Edict> compile(ClauseDecree clause) {
-		if (clause == null)
-			return new ArrayList<>();
-
-		return compile(clause.body);
-	}
-
-	/**
-	 * Compile a set of edicts from a set of tokens.
-	 *
-	 * @param cltok
-	 *              The tokenizer providing us with our tokens.
-	 *
-	 * @return The edicts compiled from those tokens.
-	 */
-	public List<Edict> compile(CLTokenizer cltok) {
-		List<Edict> result = new ArrayList<>();
-
-		while (cltok.hasNext()) {
-			Decree decr = cltok.next();
-			String nam = decr.name;
-
-			CompileContext compCTX = new CompileContext(cltok, this, decr);
-
-			if (decr.isLiteral) {
-				result.add(new StringEdict(decr.name));
-
-				continue;
-			}
-
-			if (decr.isUserCall) {
-				/*
-				 * @TODO implement user-called functions.
-				 */
-				throw new IllegalArgumentException(
-						"User-called functions have not yet been implemented");
-			}
-
-			if (extraDirectives.containsKey(nam)) {
-				Edict edt = extraDirectives.get(nam).compile(compCTX);
-
-				result.add(edt);
-
-				continue;
-			} else if (builtinDirectives.containsKey(nam)) {
-				Edict edt = builtinDirectives.get(nam).compile(compCTX);
-
-				result.add(edt);
-
-				continue;
-			}
-
-			if (nam == null)
-				nam = "<null>";
-
-			switch (nam) {
-			case "]":
-				throw new IllegalArgumentException(
-						"Found conditional-end outside of conditional.");
-			case ";":
-				throw new IllegalArgumentException("Found seperator outside of block.");
-			case "}":
-				throw new IllegalArgumentException(
-						"Found iteration-end outside of iteration");
-			case ")":
-				throw new IllegalArgumentException(
-						"Case-conversion end outside of case conversion");
-			case "`]":
-				throw new IllegalArgumentException(
-						"Inflection-end outside of inflection");
-			case "<":
-			case ">":
-				throw new IllegalArgumentException(
-						"Inflection marker outside of inflection");
-			case "`<":
-			case "`>":
-				throw new IllegalArgumentException(
-						"Layout-control directives aren't implemented yet.");
-			case "F":
-			case "E":
-			case "G":
-			case "$":
-				/*
-				 * @TODO
-				 *
-				 * implement floating point directives.
-				 */
-				throw new IllegalArgumentException(
-						"Floating-point directives aren't implemented yet.");
-			case "W":
-				/*
-				 * @TODO
-				 *
-				 * figure out if we want to implement someting for these directives
-				 * instead of punting.
-				 */
-				throw new IllegalArgumentException(
-						"S and W aren't implemented. Use A instead");
-			case "P":
-				throw new IllegalArgumentException(
-						"These directives aren't implemented yet");
-			case "\n":
-				/*
-				 * Ignored newline.
-				 */
-				break;
-			default:
-				String msg = String.format("Unknown format directive '%s'", nam);
-				throw new IllegalArgumentException(msg);
 			}
 		}
 

@@ -8,7 +8,7 @@ package bjc.utils.ioutils.format;
  *
  * @author Ben Culkin.
  */
-public class Decree {
+public class Decree implements IDecree {
 	/**
 	 * The name of the directive.
 	 */
@@ -116,10 +116,8 @@ public class Decree {
 	 */
 	public boolean isNamed(String nam) {
 		// Literals don't have a meaningful name
-		if (isLiteral)
-			return false;
-
-		return name.equals(nam);
+		if (isLiteral) return false;
+		else           return name.equals(nam);
 	}
 
 	@Override

@@ -60,10 +60,10 @@ public class CLModifiers {
 		boolean starMod = false;
 
 		if (modString != null) {
-			atMod = modString.contains("@");
-			colonMod = modString.contains(":");
+			atMod     = modString.contains("@");
+			colonMod  = modString.contains(":");
 			dollarMod = modString.contains("$");
-			starMod = modString.contains("*");
+			starMod   = modString.contains("*");
 		}
 
 		return new CLModifiers(atMod, colonMod, dollarMod, starMod);
@@ -73,14 +73,10 @@ public class CLModifiers {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 
-		if (atMod)
-			sb.append('@');
-		if (colonMod)
-			sb.append(':');
-		if (dollarMod)
-			sb.append('$');
-		if (starMod)
-			sb.append('*');
+		if (atMod)     sb.append('@');
+		if (colonMod)  sb.append(':');
+		if (dollarMod) sb.append('$');
+		if (starMod)   sb.append('*');
 
 		return sb.toString();
 	}

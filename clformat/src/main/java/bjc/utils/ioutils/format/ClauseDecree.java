@@ -13,7 +13,7 @@ import bjc.utils.ioutils.ReportWriter;
  *
  * @author Ben Culkin
  */
-public class ClauseDecree {
+public class ClauseDecree implements IDecree {
 	/**
 	 * The decrees that make up the body of this clause.
 	 */
@@ -41,9 +41,7 @@ public class ClauseDecree {
 	public ClauseDecree(Decree... children) {
 		this();
 
-		for (Decree child : children) {
-			body.add(child);
-		}
+		for (Decree child : children) body.add(child);
 	}
 
 	/**
@@ -73,26 +71,34 @@ public class ClauseDecree {
 
 	@Override
 	public String toString() {
-		try (ReportWriter rw = new ReportWriter()) {
-			String term = "<null>";
-			if (terminator != null)
-				term = terminator.toString();
+		try (ReportWriter writer = new ReportWriter()) {
+			toReportWriter(writer);
 
-			rw.write("ClauseDecree (terminator " + term.toString() + ")");
-			rw.indent();
-			rw.write("\n");
-
-			for (Decree kid : body) {
-				rw.write("Child: " + kid.toString() + "\n");
-			}
-
-			rw.dedent();
-
-			return rw.toString();
+			return writer.toString();
 		} catch (IOException ioex) {
 			return "<IOEXCEPTION>";
 		}
 		// return String.format("ClauseDecree [body=%s, terminator=%s]", body,
 		// terminator);
+	}
+	
+	/**
+	 * Write the string version of this decree to a report writer.
+	 * @param writer The report write to write to.
+	 * @throws IOException If something goes wrong
+	 */
+	public void toReportWriter(ReportWriter writer) throws IOException {
+		String term = "<null>";
+		if (terminator != null) term = terminator.toString();
+
+		writer.writef("ClauseDecree (terminator %s)", term);
+		writer.indent();
+		writer.write("\n");
+
+		int idx = 0;
+		for (Decree kid : body) 
+			writer.writef("Child %d: %s\n", idx, kid.toString());
+
+		writer.dedent();
 	}
 }

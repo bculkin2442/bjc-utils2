@@ -13,7 +13,7 @@ import bjc.utils.ioutils.ReportWriter;
  *
  * @author Ben Culkin
  */
-public class GroupDecree implements Iterable<ClauseDecree> {
+public class GroupDecree implements Iterable<ClauseDecree>, IDecree {
 	/**
 	 * The decree that opened this group.
 	 */
@@ -45,9 +45,7 @@ public class GroupDecree implements Iterable<ClauseDecree> {
 	public GroupDecree(ClauseDecree... children) {
 		this();
 
-		for (ClauseDecree child : children) {
-			body.add(child);
-		}
+		for (ClauseDecree child : children) body.add(child);
 	}
 
 	/**
@@ -111,27 +109,26 @@ public class GroupDecree implements Iterable<ClauseDecree> {
 
 	@Override
 	public String toString() {
-		try (ReportWriter rw = new ReportWriter()) {
-			String open = "<null>";
+		try (ReportWriter writer = new ReportWriter()) {
+			String open  = "<null>";
 			String close = "<null>";
 
-			if (opening != null)
-				open = opening.toString();
-			if (closing != null)
-				close = closing.toString();
+			if (opening != null) open  = opening.toString();
+			if (closing != null) close = closing.toString();
 
-			rw.write("GroupDecree (opening " + open + ") (closing " + close + ")");
-			rw.indent();
-			rw.write("\n");
-
+			writer.writef("GroupDecree (opening %s) (closing %s)\n", open, close);
+			writer.indent();
+			
 			int idx = 0;
 			for (ClauseDecree clause : body) {
-				rw.write("Clause " + idx++ + ": " + clause.toString() + "\n");
+				writer.writef("Clause %d:", idx++);
+				
+				clause.toReportWriter(writer);
 			}
 
-			rw.dedent();
+			writer.dedent();
 
-			return rw.toString();
+			return writer.toString();
 		} catch (IOException ioex) {
 			return "<IOEXCEPTION>";
 		}
