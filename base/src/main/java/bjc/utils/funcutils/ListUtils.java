@@ -28,8 +28,7 @@ public class ListUtils {
 	 * @return The collapsed string of tokens.
 	 */
 	public static String collapseTokens(final IList<String> input) {
-		if (input == null)
-			throw new NullPointerException("Input must not be null");
+		if (input == null) throw new NullPointerException("Input must not be null");
 
 		return collapseTokens(input, "");
 	}
@@ -48,11 +47,8 @@ public class ListUtils {
 	 */
 	public static String collapseTokens(final IList<String> input,
 			final String seperator) {
-		if (input == null) {
-			throw new NullPointerException("Input must not be null");
-		} else if (seperator == null) {
-			throw new NullPointerException("Seperator must not be null");
-		}
+		if (input == null)          throw new NullPointerException("Input must not be null");
+		else if (seperator == null) throw new NullPointerException("Seperator must not be null");
 
 		if (input.getSize() < 1) {
 			return "";
@@ -65,9 +61,7 @@ public class ListUtils {
 			for (final String itm : input.toIterable()) {
 				state.append(itm);
 
-				if (i != input.getSize()) {
-					state.append(seperator);
-				}
+				if (i != input.getSize()) state.append(seperator);
 
 				i += 1;
 			}
@@ -143,9 +137,7 @@ public class ListUtils {
 			final Function<Integer, Integer> rng) {
 		final IList<E> selected = new FunctionalList<>(new ArrayList<>(number));
 
-		for (int i = 0; i < number; i++) {
-			selected.add(list.randItem(rng));
-		}
+		for (int i = 0; i < number; i++) selected.add(list.randItem(rng));
 
 		return selected;
 	}
@@ -198,10 +190,8 @@ public class ListUtils {
 				numberOfIterations++) {
 			input.forEach(it);
 
-			if (rejected.isEmpty()) {
-				/* Nothing was rejected, so we're done. */
-				return returned;
-			}
+			/* Nothing was rejected, so we're done. */
+			if (rejected.isEmpty()) return returned;
 		}
 
 		final String fmt
@@ -229,9 +219,7 @@ public class ListUtils {
 		final IList<E> returned = new FunctionalList<>();
 
 		for (final IList<E> list : lists) {
-			for (final E itm : list.toIterable()) {
-				returned.add(itm);
-			}
+			for (final E itm : list.toIterable()) returned.add(itm);
 		}
 
 		return returned;
@@ -343,9 +331,7 @@ public class ListUtils {
 		/*
 		 * Special-case small usages.
 		 */
-		if (list.size() == 0) {
-			return permutes;
-		}
+		if (list.size() == 0) return permutes;
 
 		if (list.size() == 1) {
 			permutes.add(list);
@@ -383,9 +369,7 @@ public class ListUtils {
 		}
 
 		List<T> currentPermute = new ArrayList<>(list.size());
-		for (T elm : list) {
-			currentPermute.add(elm);
-		}
+		for (T elm : list) currentPermute.add(elm);
 		permutes.add(currentPermute);
 
 		int j = list.size() - 1;
@@ -421,9 +405,7 @@ public class ListUtils {
 			auxC[j] = q;
 
 			currentPermute = new ArrayList<>(list.size());
-			for (T elm : list) {
-				currentPermute.add(elm);
-			}
+			for (T elm : list) currentPermute.add(elm);
 			permutes.add(currentPermute);
 
 			j = list.size() - 1;

@@ -1,19 +1,12 @@
 package bjc.utils.funcutils;
 
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Scanner;
-
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.ibm.icu.text.BreakIterator;
 
-import bjc.data.BooleanToggle;
 import bjc.utils.ioutils.LevelSplitter;
-import bjc.utils.parserutils.TokenUtils;
 
 /**
  * Utility methods for operations on strings.
@@ -35,10 +28,8 @@ public class StringUtils {
 	 *         provided regex.
 	 */
 	public static boolean containsOnly(final String input, final String rRegex) {
-		if (input == null)
-			throw new NullPointerException("Input must not be null");
-		else if (rRegex == null)
-			throw new NullPointerException("Regex must not be null");
+		if (input == null)       throw new NullPointerException("Input must not be null");
+		else if (rRegex == null) throw new NullPointerException("Regex must not be null");
 
 		/*
 		 * This regular expression is fairly simple.
@@ -60,9 +51,7 @@ public class StringUtils {
 	 *                The number of levels to indent.
 	 */
 	public static void indentNLevels(final StringBuilder builder, final int levels) {
-		for (int i = 0; i < levels; i++) {
-			builder.append("\t");
-		}
+		for (int i = 0; i < levels; i++) builder.append("\t");
 	}
 
 	/**
@@ -168,11 +157,8 @@ public class StringUtils {
 	 * @return The sequence as an English list.
 	 */
 	public static String toEnglishList(final Object[] objects, final boolean and) {
-		if (and) {
-			return toEnglishList(objects, "and");
-		}
-
-		return toEnglishList(objects, "or");
+		if (and) return toEnglishList(objects, "and");
+		else     return toEnglishList(objects, "or");
 	}
 
 	/**
@@ -188,9 +174,7 @@ public class StringUtils {
 		it.setText(value);
 
 		int count = 0;
-		while (it.next() != BreakIterator.DONE) {
-			count++;
-		}
+		while (it.next() != BreakIterator.DONE) count++;
 
 		return count;
 	}
@@ -209,8 +193,7 @@ public class StringUtils {
 		Matcher mat = Pattern.compile(pattern).matcher(value);
 
 		int num = 0;
-		while (mat.find())
-			num += 1;
+		while (mat.find()) num += 1;
 
 		return num;
 	}
@@ -246,39 +229,11 @@ public class StringUtils {
 		int idx = strang.indexOf(vx);
 
 		if (idx == -1) {
-			if (allowFail)
-				return strang;
-
-			return null;
+			if (allowFail) return strang;
+			else           return null;
 		}
 
 		return strang.substring(0, strang.indexOf(vx));
-	}
-
-	/**
-	 * Split a line into a series of space-separated arguments, including string
-	 * literals.
-	 *
-	 * @param com
-	 *            The command to split from
-	 * @return The split arguments.
-	 */
-	public static List<String> processArguments(String com) {
-		List<String> strings = new ArrayList<>();
-
-		BooleanToggle togg = new BooleanToggle();
-
-		for (String strang : TokenUtils.removeDQuotedStrings(com)) {
-			if (togg.get()) {
-				strings.add(TokenUtils.descapeString(strang));
-			} else {
-				for (String strung : strang.split("\\s+")) {
-					strings.add(strung);
-				}
-			}
-		}
-
-		return strings;
 	}
 
 	private static class LineIterator implements Iterator<String> {
@@ -306,16 +261,13 @@ public class StringUtils {
 			boolean doLoop = true;
 
 			do {
-				if (!scn.hasNextLine())
-					break;
+				if (!scn.hasNextLine()) break;
 
 				tmp = scn.nextLine().trim();
 
 				// Skip blank lines
-				if (skipBlanks && tmp.equals(""))
-					continue;
-				if (processComments && tmp.startsWith(commentInd))
-					continue;
+				if (skipBlanks && tmp.equals(""))                  continue;
+				if (processComments && tmp.startsWith(commentInd)) continue;
 
 				doLoop = tmp.endsWith("\\") && !tmp.endsWith("\\\\");
 

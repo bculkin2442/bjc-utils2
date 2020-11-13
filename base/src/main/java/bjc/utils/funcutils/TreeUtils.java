@@ -39,9 +39,7 @@ public class TreeUtils {
 			/* We're at a matching leaf node. Add it. */
 			IList<T> finalPath = new FunctionalList<>();
 
-			for (T ePath : path) {
-				finalPath.add(ePath);
-			}
+			for (T ePath : path) finalPath.add(ePath);
 
 			finalPath.add(subtree.getHead());
 

@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import bjc.utils.cli.objects.Command.CommandStatus;
-import bjc.utils.funcutils.StringUtils;
+import bjc.utils.parserutils.*;
 
 /*
  * @TODO 10/09/17 :DefineCLIFinish
@@ -130,7 +130,7 @@ public class DefineCLI {
 	}
 
 	private CommandStatus defString(Command com) {
-		List<String> arguments = StringUtils.processArguments(com.remn);
+		List<String> arguments = TokenUtils.processArguments(com.remn);
 
 		if (arguments.size() < 1) {
 			LOGGER.severe(com.error(
@@ -158,7 +158,7 @@ public class DefineCLI {
 	}
 
 	private CommandStatus defFormat(Command com) {
-		List<String> arguments = StringUtils.processArguments(com.remn);
+		List<String> arguments = TokenUtils.processArguments(com.remn);
 
 		if (arguments.size() < 1) {
 			LOGGER.severe(com.error(
@@ -186,7 +186,7 @@ public class DefineCLI {
 	}
 
 	private CommandStatus bindFormat(Command com) {
-		List<String> strings = StringUtils.processArguments(com.remn);
+		List<String> strings = TokenUtils.processArguments(com.remn);
 
 		if (strings.size() < 2) {
 			LOGGER.severe(com.error(

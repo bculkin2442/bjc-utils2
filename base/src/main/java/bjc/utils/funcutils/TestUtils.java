@@ -22,9 +22,7 @@ public class TestUtils {
 	 */
 	@SafeVarargs
 	public static <T> void assertIteratorEquals(Iterator<T> src, T... vals) {
-		for (T val : vals) {
-			assertEquals(val, src.next());
-		}
+		for (T val : vals) assertEquals(val, src.next());
 	}
 
 	/**

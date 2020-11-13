@@ -72,16 +72,11 @@ public class Graph<T> {
 	public void addEdge(final T source, final T target, final int distance,
 			final boolean directed) {
 		/* Can't add edges with a null source or target. */
-		if (source == null) {
-			throw new NullPointerException("The source vertex cannot be null");
-		} else if (target == null) {
-			throw new NullPointerException("The target vertex cannot be null");
-		}
+		if (source == null)      throw new NullPointerException("The source vertex cannot be null");
+		else if (target == null) throw new NullPointerException("The target vertex cannot be null");
 
 		/* Initialize adjacency list for vertices if necessary. */
-		if (!backing.containsKey(source)) {
-			backing.put(source, new FunctionalMap<T, Integer>());
-		}
+		if (!backing.containsKey(source)) backing.put(source, new FunctionalMap<T, Integer>());
 
 		/* Add the edge to the graph. */
 		backing.get(source).put(target, distance);
@@ -110,16 +105,11 @@ public class Graph<T> {
 	 */
 	public void forAllEdgesMatchingAt(final T source,
 			final BiPredicate<T, Integer> matcher, final BiConsumer<T, Integer> action) {
-		if (matcher == null) {
-			throw new NullPointerException("Matcher must not be null");
-		} else if (action == null) {
-			throw new NullPointerException("Action must not be null");
-		}
+		if (matcher == null)     throw new NullPointerException("Matcher must not be null");
+		else if (action == null) throw new NullPointerException("Action must not be null");
 
 		getEdges(source).forEach((target, weight) -> {
-			if (matcher.test(target, weight)) {
-				action.accept(target, weight);
-			}
+			if (matcher.test(target, weight)) action.accept(target, weight);
 		});
 	}
 
@@ -132,10 +122,11 @@ public class Graph<T> {
 	 */
 	public IMap<T, Integer> getEdges(final T source) {
 		/* Can't find edges for a null source. */
-		if (source == null)
+		if (source == null) {
 			throw new NullPointerException("The source cannot be null.");
-		else if (!backing.containsKey(source))
+		} else if (!backing.containsKey(source)) {
 			throw new IllegalArgumentException("Vertex " + source + " is not in graph");
+		}
 
 		return backing.get(source);
 	}
@@ -176,11 +167,14 @@ public class Graph<T> {
 		while (visited.size() != getVertexCount()) {
 			/* Grab all edges adjacent to the provided edge. */
 
-			forAllEdgesMatchingAt(source.getValue(), (target, weight) -> !visited.contains(target), (target, weight) -> {
-				final T vert = source.unwrap(vertex -> vertex);
+			forAllEdgesMatchingAt(source.getValue(),
+					(target, weight) -> !visited.contains(target),
+					(target, weight) -> {
+						final T vert = source.unwrap(vertex -> vertex);
 
-				available.add(new Edge<>(vert, target, weight));
-			});
+						available.add(new Edge<>(vert, target, weight));
+					}
+			);
 
 			/* Get the edge with the minimum distance. */
 			final IHolder<Edge<T>> minimum = new Identity<>(available.poll());

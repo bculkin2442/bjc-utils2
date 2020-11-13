@@ -32,8 +32,7 @@ public class AdjacencyMap<T> {
 	 * @return An adjacency map defined by the text
 	 */
 	public static AdjacencyMap<Integer> fromStream(final InputStream stream) {
-		if (stream == null)
-			throw new NullPointerException("Input source must not be null");
+		if (stream == null) throw new NullPointerException("Input source must not be null");
 
 		/* Create the adjacency map. */
 		AdjacencyMap<Integer> adjacency;
@@ -60,8 +59,7 @@ public class AdjacencyMap<T> {
 				throw imex;
 			}
 
-			if (vertexCount <= 0)
-				throw new InputMismatchException(
+			if (vertexCount <= 0) throw new InputMismatchException(
 						"The number of vertices must be greater than 0");
 
 			final IList<Integer> vertices = new FunctionalList<>();
@@ -126,8 +124,7 @@ public class AdjacencyMap<T> {
 	 *                 The set of vertices to create a map from
 	 */
 	public AdjacencyMap(final IList<T> vertices) {
-		if (vertices == null)
-			throw new NullPointerException("Vertices must not be null");
+		if (vertices == null) throw new NullPointerException("Vertices must not be null");
 
 		vertices.forEach(vertex -> {
 			final IMap<T, Integer> row = new FunctionalMap<>();
@@ -152,9 +149,7 @@ public class AdjacencyMap<T> {
 			sourceValue.forEach((targetKey, targetValue) -> {
 				final int inverseValue = adjacency.get(targetKey).get(sourceKey);
 
-				if (targetValue != inverseValue) {
-					result.replace(false);
-				}
+				if (targetValue != inverseValue) result.replace(false);
 			});
 		});
 
@@ -172,11 +167,8 @@ public class AdjacencyMap<T> {
 	 *               The weight of the edge.
 	 */
 	public void setWeight(final T source, final T target, final int weight) {
-		if (source == null) {
-			throw new NullPointerException("Source vertex must not be null");
-		} else if (target == null) {
-			throw new NullPointerException("Target vertex must not be null");
-		}
+		if (source == null)      throw new NullPointerException("Source vertex must not be null");
+		else if (target == null) throw new NullPointerException("Target vertex must not be null");
 
 		if (!adjacency.containsKey(source)) {
 			String msg = String.format("Source vertex %s isn't present in map", source);
@@ -215,8 +207,7 @@ public class AdjacencyMap<T> {
 	 *             The stream to convert to.
 	 */
 	public void toStream(final OutputStream sink) {
-		if (sink == null)
-			throw new NullPointerException("Output source must not be null");
+		if (sink == null) throw new NullPointerException("Output source must not be null");
 
 		final PrintStream outputPrinter = new PrintStream(sink);
 

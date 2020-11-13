@@ -63,9 +63,7 @@ public class SetUtils {
 	public static <T> Set<T> toSet(T... elms) {
 		Set<T> set = new HashSet<>();
 
-		for (T elm : elms) {
-			set.add(elm);
-		}
+		for (T elm : elms) set.add(elm);
 
 		return set;
 	}

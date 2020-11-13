@@ -38,8 +38,7 @@ public class WeightedRandom<E> {
 	public WeightedRandom(Random src) {
 		values = new FunctionalList<>();
 
-		if (src == null)
-			throw new NullPointerException("Source of randomness must not be null");
+		if (src == null) throw new NullPointerException("Source of randomness must not be null");
 
 		source = src;
 	}
@@ -156,12 +155,10 @@ public class WeightedRandom<E> {
 	 * @return A random value.
 	 */
 	public E getDescent(int factor, Random rn) {
-		if (values.getSize() == 0)
-			return null;
+		if (values.getSize() == 0) return null;
 
 		for (IPair<Integer, E> val : values) {
-			if (rn.nextInt(factor) == 0)
-				continue;
+			if (rn.nextInt(factor) == 0) continue;
 
 			if (exhaust) {
 				totalChance -= val.getLeft();
@@ -173,8 +170,7 @@ public class WeightedRandom<E> {
 		}
 
 		IPair<Integer, E> val = values.getByIndex(values.getSize() - 1);
-		if (exhaust)
-			values.removeMatching(val);
+		if (exhaust) values.removeMatching(val);
 
 		return val.getRight();
 	}
@@ -214,8 +210,7 @@ public class WeightedRandom<E> {
 	 * @return The value at the index corresponding to the number of successes.
 	 */
 	public E getBinomial(int target, int bound, int trials, Random rn) {
-		if (values.getSize() == 0)
-			return null;
+		if (values.getSize() == 0) return null;
 
 		int numSuc = 0;
 
@@ -254,9 +249,7 @@ public class WeightedRandom<E> {
 	 */
 	public WeightedRandom<E> exhaustible() {
 		IList<IPair<Integer, E>> lst = new FunctionalList<>();
-		for (IPair<Integer, E> val : values) {
-			lst.add(val);
-		}
+		for (IPair<Integer, E> val : values) lst.add(val);
 
 		WeightedRandom<E> res = new WeightedRandom<>(source, lst, totalChance);
 

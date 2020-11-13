@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import bjc.esodata.AbbrevMap2;
 import bjc.utils.funcutils.StringUtils;
+import bjc.utils.parserutils.*;
 
 /**
  * Test for abbreviation map.
@@ -29,7 +30,7 @@ public class AbbrevMapTest {
 		String ln = scn.nextLine().trim();
 
 		while (!ln.equals("")) {
-			final List<String> commParts = StringUtils.processArguments(ln);
+			final List<String> commParts = TokenUtils.processArguments(ln);
 
 			switch (commParts.get(0)) {
 			case "add":

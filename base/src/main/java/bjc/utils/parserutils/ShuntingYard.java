@@ -113,10 +113,8 @@ public class ShuntingYard<TokenType> {
 		/*
 		 * Complain about trying to add an incorrect operator
 		 */
-		if (operator == null)
-			throw new NullPointerException("Operator must not be null");
-		else if (precedence == null)
-			throw new NullPointerException("Precedence must not be null");
+		if (operator == null)        throw new NullPointerException("Operator must not be null");
+		else if (precedence == null) throw new NullPointerException("Precedence must not be null");
 
 		/*
 		 * Add the operator to the ones we handle
@@ -141,7 +139,7 @@ public class ShuntingYard<TokenType> {
 		 * Get the precedence of operators
 		 */
 		final int rightPrecedence = operators.get(right).getPrecedence();
-		final int leftPrecedence = operators.get(left).getPrecedence();
+		final int leftPrecedence  = operators.get(left).getPrecedence();
 
 		/*
 		 * Evaluate what we were asked
@@ -165,10 +163,8 @@ public class ShuntingYard<TokenType> {
 		/*
 		 * Check our input
 		 */
-		if (input == null)
-			throw new NullPointerException("Input must not be null");
-		else if (transformer == null)
-			throw new NullPointerException("Transformer must not be null");
+		if (input == null)            throw new NullPointerException("Input must not be null");
+		else if (transformer == null) throw new NullPointerException("Transformer must not be null");
 
 		/*
 		 * Here's what we're handing back
@@ -226,9 +222,7 @@ public class ShuntingYard<TokenType> {
 			}
 		}
 
-		for (String token : stack) {
-			output.add(transformer.apply(token));
-		}
+		for (String token : stack) output.add(transformer.apply(token));
 
 		return output;
 	}
@@ -244,10 +238,7 @@ public class ShuntingYard<TokenType> {
 		/*
 		 * Check if we want to remove all operators
 		 */
-		if (operator == null) {
-			operators = new FunctionalMap<>();
-		} else {
-			operators.remove(operator);
-		}
+		if (operator == null) operators = new FunctionalMap<>();
+		else                  operators.remove(operator);
 	}
 }

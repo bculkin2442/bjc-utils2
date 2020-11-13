@@ -28,11 +28,8 @@ public class Edge<T> {
 	 *                 The distance between initial and terminal edge.
 	 */
 	public Edge(final T initial, final T terminal, final int distance) {
-		if (initial == null) {
-			throw new NullPointerException("Initial node must not be null");
-		} else if (terminal == null) {
-			throw new NullPointerException("Terminal node must not be null");
-		}
+		if (initial == null)       throw new NullPointerException("Initial node must not be null");
+		else if (terminal == null) throw new NullPointerException("Terminal node must not be null");
 
 		this.source = initial;
 		this.target = terminal;
@@ -41,27 +38,23 @@ public class Edge<T> {
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
-			return true;
-		else if (obj == null)
-			return false;
-		else if (getClass() != obj.getClass())
-			return false;
+		if (this == obj)                       return true;
+		else if (obj == null)                  return false;
+		else if (getClass() != obj.getClass()) return false;
 		else {
 			final Edge<?> other = (Edge<?>) obj;
 
-			if (distance != other.distance)
+			if (distance != other.distance) {
 				return false;
-			else if (source == null) {
-				if (other.source != null)
-					return false;
-			} else if (!source.equals(other.source))
+			} else if (source == null) {
+				if (other.source != null) return false;
+			} else if (!source.equals(other.source)) {
 				return false;
-			else if (target == null) {
-				if (other.target != null)
-					return false;
-			} else if (!target.equals(other.target))
+			} else if (target == null) {
+				if (other.target != null) return false;
+			} else if (!target.equals(other.target)) {
 				return false;
+			}
 
 			return true;
 		}

@@ -4,11 +4,11 @@ import static bjc.utils.misc.PropertyDB.applyFormat;
 import static bjc.utils.misc.PropertyDB.getCompiledRegex;
 import static bjc.utils.misc.PropertyDB.getRegex;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import bjc.data.*;
 import bjc.funcdata.FunctionalList;
 import bjc.funcdata.IList;
 import bjc.utils.parserutils.splitter.TokenSplitter;
@@ -315,5 +315,29 @@ public class TokenUtils {
 		} catch (NumberFormatException nfex) {
 			return false;
 		}
+	}
+
+	/**
+	 * Split a line into a series of space-separated arguments, including string
+	 * literals.
+	 *
+	 * @param com
+	 *            The command to split from
+	 * @return The split arguments.
+	 */
+	public static List<String> processArguments(String com) {
+		List<String> strings = new ArrayList<>();
+	
+		BooleanToggle togg = new BooleanToggle();
+	
+		for (String strang : removeDQuotedStrings(com)) {
+			if (togg.get()) {
+				strings.add(descapeString(strang));
+			} else {
+				for (String strung : strang.split("\\s+")) strings.add(strung);
+			}
+		}
+	
+		return strings;
 	}
 }

@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 /**
- * <<<<<<< Updated upstream Customizable string escapes.
+ * Customizable string escapes.
  *
  * @author Benjamin Culkin
  */
