@@ -79,7 +79,7 @@ class AestheticEdict implements Edict {
 		// Check that we have an item
 		CLFormatter.checkItem(itemTape.item(), 'A');
 
-		String tmp = itemTape.item().toString();
+		String itemString = itemTape.item().toString();
 
 		StringBuilder work = new StringBuilder();
 
@@ -89,34 +89,23 @@ class AestheticEdict implements Edict {
 		int colinc = colincPar.asInt(itemTape, "padding increment", "A", 1);
 		int minpad = minpadPar.asInt(itemTape, "minumum amount of padding", "A", 0);
 
-		if (padBefore) {
-			for (int i = 0; i < minpad; i++) {
-				work.append(padchar);
-			}
+		if (padBefore) doPadding(work, padchar, mincol, colinc, minpad);
 
-			for (int i = work.length() + tmp.length(); i < mincol; i++) {
-				for (int k = 0; k < colinc; k++) {
-					work.append(padchar);
-				}
-			}
-		}
+		work.append(itemString);
 
-		work.append(tmp);
-
-		if (!padBefore) {
-			for (int i = 0; i < minpad; i++) {
-				work.append(padchar);
-			}
-
-			for (int i = work.length(); i < mincol; i++) {
-				for (int k = 0; k < colinc; k++) {
-					work.append(padchar);
-				}
-			}
-		}
+		if (!padBefore) doPadding(work, padchar, mincol, colinc, minpad);
 
 		formCTX.writer.write(work.toString());
 
 		itemTape.right();
+	}
+
+	private void doPadding(StringBuilder work, char padchar, int mincol, int colinc,
+			int minpad) {
+		for (int i = 0; i < minpad; i++) work.append(padchar);
+
+		for (int i = work.length(); i < mincol; i++) {
+			for (int k = 0; k < colinc; k++) work.append(padchar);
+		}
 	}
 }

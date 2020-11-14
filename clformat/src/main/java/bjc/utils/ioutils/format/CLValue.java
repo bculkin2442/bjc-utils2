@@ -2,6 +2,22 @@ package bjc.utils.ioutils.format;
 
 import bjc.esodata.*;
 
+// @TODO Nov 13th, 2020 Ben Culkin :DefaultValues
+// Create some way to specify default values for the arguments to the various
+// asWhatever methods. This will cleanup use-site code for them
+
+/* @TODO Nov 13th, 2020 Ben Culkin :ParamVariables
+ * Create a new CLValue type that implements variables in a way. There are a
+ * number of different sorts of 'scopes' that could be useful, so here is the
+ * list of them:
+ * - Static variables, stored on the CLString instance
+ * - Global variables, stored on a map set on the FormatContext when formatting
+ *   starts, and copied over whenever a new context is built.
+ * - Lexical variables, stored on the FormatContext, but in some sort of map which
+ *   models lexical scopes (extend on FunctionalMap may do the right thing, not sure)
+ * - Local variables, stored on the FormatContext as well, but these
+ *   aren't copied over when a new context is built.
+ */
 /**
  * Represents a parameter value to an edict that may have a dynamic value
  * obtained from the format arguments.
@@ -21,15 +37,11 @@ public interface CLValue {
 		if (val == null) return new NullValue();
 
 		switch (val) {
-		case "V":
-		case "v":
-			return new VValue();
-		case "#":
-			return new HashValue();
-		case "%":
-			return new PercValue();
-		default:
-			return new LiteralValue(val);
+		case "V": // Fall-through, V is the same as v
+		case "v": return new VValue();
+		case "#": return new HashValue();
+		case "%": return new PercValue();
+		default:  return new LiteralValue(val);
 		}
 	}
 
@@ -55,7 +67,7 @@ public interface CLValue {
 	 *                  The format parameters to use.
 	 *
 	 * @param paramName
-	 *                  The user-intelligble name for the value.
+	 *                  The user-intelligible name for the value.
 	 *
 	 * @param directive
 	 *                  The directive this value is for.
@@ -102,7 +114,7 @@ public interface CLValue {
 	 *                  The format parameters to use.
 	 *
 	 * @param paramName
-	 *                  The user-intelligble name for the value.
+	 *                  The user-intelligible name for the value.
 	 *
 	 * @param directive
 	 *                  The directive the value is for.
