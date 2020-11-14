@@ -1,0 +1,15 @@
+@TODO Nov 13th, 2020 Ben Culkin :InvokeDirective
+This is more a 'mad-science' kind of thing, but creating a directive that allows
+people to invoke invokable items passed as format arguments could be interesting.
+	The key-name for this directive would probably be `I, and there are a number
+	of invokable types that could be interesting
+	* Supplier<String> to just insert the resulting string.
+	* Function<Object, String> to convert a format item to a string.
+
+@TODO Nov 13th, 2020 Ben Culkin :ConfigDirectives
+Add a way to configure user-based directives from reading a config file, which
+allows you to bind directives to various characters and customize their behavior.
+One thing that will need to be involved is that all of the directives should
+probably have their interfaces tweaked to allow you to provide a custom form of
+them. One could argue this is the sort of thing that macros could do, but I can
+see no compelling reason not to implement both features
