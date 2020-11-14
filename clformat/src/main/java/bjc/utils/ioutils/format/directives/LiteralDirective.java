@@ -63,8 +63,6 @@ class LiteralEdict implements Edict {
 			num = nTimes.asInt(formCTX.items, "occurance count", "literal", 1);
 		}
 
-		for (int i = 0; i < num; i++) {
-			formCTX.writer.write(lit);
-		}
+		for (int i = 0; i < num; i++) formCTX.writer.write(lit);
 	}
 }

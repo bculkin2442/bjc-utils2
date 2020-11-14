@@ -97,8 +97,7 @@ public class CLTokenizer implements Iterator<Decree> {
 	}
 
 	private Decree getNext() {
-		if (!hasNext())
-			throw new NoSuchElementException("No possible decrees remaining");
+		if (!hasNext()) throw new NoSuchElementException("No possible decrees remaining");
 
 		if (dir != null) {
 			Decree tmp = dir;

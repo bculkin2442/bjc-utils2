@@ -18,25 +18,24 @@ import bjc.utils.ioutils.format.*;
 public class ConditionalDirective implements Directive {
 	@Override
 	public Edict compile(CompileContext compCTX) {
-		CLModifiers mods = compCTX.decr.modifiers;
+		CLModifiers mods    = compCTX.decr.modifiers;
 		CLParameters params = compCTX.decr.parameters;
 
+		// :ConfigDirectives
 		GroupDecree clauses = compCTX.directives.nextGroup(compCTX.decr, "]", ";");
 
 		ClauseDecree defClause = null;
-		boolean isDefault = false;
+		boolean isDefault      = false;
 
 		for (ClauseDecree clause : clauses) {
-			if (isDefault)
-				defClause = clause;
+			if (isDefault) defClause = clause;
 
 			if (clause.terminator != null && clause.terminator.modifiers.colonMod) {
 				isDefault = true;
 			}
 		}
 
-		if (mods.starMod && clauses.size() > 0)
-			defClause = clauses.clause();
+		if (mods.starMod && clauses.size() > 0)defClause = clauses.clause();
 
 		CLValue index = null;
 
@@ -56,8 +55,8 @@ public class ConditionalDirective implements Directive {
 			mode = ConditionalEdict.Mode.INDEX_CLAUSE;
 		}
 
-		return new ConditionalEdict(mode, mods.dollarMod, index, clauses, defClause,
-				compCTX.formatter);
+		return new ConditionalEdict(mode, mods.dollarMod, index, clauses,
+				defClause, compCTX.formatter);
 	}
 }
 
@@ -87,7 +86,9 @@ class ConditionalEdict implements Edict {
 
 		this.clauses = new ArrayList<>();
 		for (ClauseDecree clause : clauses) {
-			this.clauses.add(new CLString(fmt.compile(clause)));
+			List<Edict> compiled = fmt.compile(clause);
+			
+			this.clauses.add(new CLString(compiled));
 		}
 		this.defClause = new CLString(fmt.compile(defClause));
 
@@ -101,47 +102,47 @@ class ConditionalEdict implements Edict {
 		try {
 			switch (condMode) {
 			case FIRST_SECOND: {
-				Object o = items.item();
+				Object item = items.item();
 				items.right();
 
-				boolean res = false;
-				if (o == null) {
+				boolean conditionResult = false;
+				if (item == null) {
 					// throw new IllegalArgumentException("No parameter provided for [
 					// directive.");
-				} else if (!(o instanceof Boolean)) {
-					throw new IllegalFormatConversionException('[', o.getClass());
+				} else if (!(item instanceof Boolean)) {
+					throw new IllegalFormatConversionException('[', item.getClass());
 				} else {
-					res = (Boolean) o;
+					conditionResult = (Boolean) item;
 				}
 
-				CLString frmt;
-				if (res) {
-					frmt = clauses.get(1);
+				CLString pickedFormat;
+				if (conditionResult) {
+					pickedFormat = clauses.get(1);
 				} else {
-					frmt = clauses.get(0);
+					pickedFormat = clauses.get(0);
 				}
 
-				frmt.format(formCTX);
+				pickedFormat.format(formCTX);
 			}
 				break;
 			case OUTPUT_TRUE: {
-				boolean res = false;
-				Object o = items.item();
+				boolean conditionResult = false;
+				Object item = items.item();
 
-				if (o == null) {
+				if (item == null) {
 					// throw new IllegalArgumentException("No parameter provided for [
 					// directive.");
-				} else if (o instanceof Integer) {
-					if ((Integer) o != 0) {
-						res = true;
+				} else if (item instanceof Integer) {
+					if ((Integer) item != 0) {
+						conditionResult = true;
 					}
-				} else if (o instanceof Boolean) {
-					res = (Boolean) o;
+				} else if (item instanceof Boolean) {
+					conditionResult = (Boolean) item;
 				} else {
-					throw new IllegalFormatConversionException('[', o.getClass());
+					throw new IllegalFormatConversionException('[', item.getClass());
 				}
 
-				if (res) {
+				if (conditionResult) {
 					clauses.get(0).format(formCTX);
 				} else {
 					items.right();
@@ -149,34 +150,32 @@ class ConditionalEdict implements Edict {
 			}
 				break;
 			case INDEX_CLAUSE: {
-				int res;
+				int clauseIndex;
 
 				if (index != null) {
-					res = index.asInt(items, "conditional choice", "[", 0);
+					clauseIndex = index.asInt(items, "conditional choice", "[", 0);
 				} else {
-					Object o = items.item();
+					Object item = items.item();
 
-					if (o == null) {
+					if (item == null) {
 						throw new IllegalArgumentException(
 								"No parameter provided for [ directive.");
-					} else if (!(o instanceof Number)) {
-						throw new IllegalFormatConversionException('[', o.getClass());
+					} else if (!(item instanceof Number)) {
+						throw new IllegalFormatConversionException('[', item.getClass());
 					}
 
-					res = ((Number) o).intValue();
+					clauseIndex = ((Number) item).intValue();
 
 					items.right();
 				}
 
 				if (decrementIndex)
-					res -= 1;
+					clauseIndex -= 1;
 
-				if (clauses.size() == 0 || res < 0 || res >= clauses.size()) {
-					if (defClause != null) {
-						defClause.format(formCTX.writer, items);
-					}
+				if (clauses.size() == 0 || clauseIndex < 0 || clauseIndex >= clauses.size()) {
+					if (defClause != null) defClause.format(formCTX.writer, items);
 				} else {
-					CLString frmt = clauses.get(res);
+					CLString frmt = clauses.get(clauseIndex);
 
 					frmt.format(formCTX.writer, items);
 				}

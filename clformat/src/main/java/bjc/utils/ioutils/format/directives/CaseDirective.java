@@ -75,10 +75,11 @@ class CaseEdict implements Edict {
 				while (mat.find()) {
 					mat.appendReplacement(sb, "");
 
-					String word = mat.group(1);
-					String ward = word.substring(0, 1).toUpperCase() + word.substring(1);
+					String word      = mat.group(1);
+					String upperWord = word.substring(0, 1).toUpperCase()
+							           + word.substring(1);
 
-					sb.append(ward);
+					sb.append(upperWord);
 					sb.append(mat.group(2));
 				}
 
@@ -100,7 +101,8 @@ class CaseEdict implements Edict {
 					if (doCap) {
 						doCap = false;
 
-						word = word.substring(0, 1).toUpperCase() + word.substring(1);
+						word = word.substring(0, 1).toUpperCase()
+							   + word.substring(1);
 					}
 
 					sb.append(word);
@@ -116,8 +118,10 @@ class CaseEdict implements Edict {
 				strang = strang.toLowerCase();
 				break;
 			default:
-				throw new IllegalArgumentException("INTERNAL ERROR: CaseEdict mode "
-						+ caseMode + " is not supported. This is a bug.");
+				String msg = String.format(
+						"INTERNAL ERROR: CaseEdict mode %s is not supported. This is a bug.",
+						caseMode);
+				throw new IllegalArgumentException(msg);
 			}
 
 			formCTX.writer.write(strang);

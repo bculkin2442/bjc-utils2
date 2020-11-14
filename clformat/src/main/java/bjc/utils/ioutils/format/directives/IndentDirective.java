@@ -14,9 +14,7 @@ public class IndentDirective implements Directive {
 		CLParameters params = compCTX.decr.parameters;
 		CLModifiers mods = compCTX.decr.modifiers;
 
-		if (mods.dollarMod) {
-			return new IndentConfigureEdict();
-		}
+		if (mods.dollarMod) return new IndentConfigureEdict();
 
 		CLValue indentCount = CLValue.nil();
 		if (params.length() >= 1) {
@@ -52,11 +50,8 @@ class IndentEdict implements Edict {
 		}
 
 		if (isRelative) {
-			if (dedent) {
-				formCTX.writer.dedent(numIndents);
-			} else {
-				formCTX.writer.indent(numIndents);
-			}
+			if (dedent) formCTX.writer.dedent(numIndents);
+			else        formCTX.writer.indent(numIndents);
 		} else {
 			if (dedent) {
 				throw new IllegalArgumentException("Cannot have negative indent level");

@@ -19,27 +19,23 @@ public class IterationDirective implements Directive {
 		List<Decree> body = new ArrayList<>();
 
 		Iterator<Decree> dirIter = compCTX.directives;
+		// :GroupDecree
 		while (dirIter.hasNext()) {
 			Decree decr = dirIter.next();
 			if (decr.isLiteral) {
 				body.add(decr);
-				continue;
-			}
-
-			String dirName = decr.name;
-
-			if (dirName != null) {
-				if (dirName.equals("}")) {
-					break;
-				} else {
-					/* Not a special directive. */
-					body.add(decr);
+			} else {
+				String dirName = decr.name;
+	
+				if (dirName != null) {
+					if (dirName.equals("}")) break;
+					else                     body.add(decr);
 				}
 			}
 		}
 
 		CLParameters params = compCTX.decr.parameters;
-		CLModifiers mods = compCTX.decr.modifiers;
+		CLModifiers  mods   = compCTX.decr.modifiers;
 
 		CLValue maxItr = CLValue.nil();
 		if (params.length() > 0) {
@@ -96,7 +92,7 @@ class IterationEdict implements Edict {
 		Object iter = formCTX.items.item();
 
 		boolean usingString = false;
-		String strang = null;
+		String currBody = null;
 
 		if (body.isEmpty()) {
 			/* Grab an argument. */
@@ -105,7 +101,7 @@ class IterationEdict implements Edict {
 			}
 
 			usingString = true;
-			strang = (String) iter;
+			currBody    = (String) iter;
 
 			if (!formCTX.items.right()) {
 				throw new IllegalArgumentException(
@@ -119,8 +115,7 @@ class IterationEdict implements Edict {
 		case ALL_SUBLISTS:
 			try {
 				do {
-					if (numIterations > maxIterations)
-						break;
+					if (numIterations > maxIterations) break;
 					numIterations += 1;
 
 					if (!(iter instanceof Iterable<?>)) {
@@ -129,8 +124,8 @@ class IterationEdict implements Edict {
 					}
 
 					@SuppressWarnings("unchecked")
-					Iterable<Object> nitr = (Iterable<Object>) iter;
-					Tape<Object> nParams = new SingleTape<>(nitr);
+					Iterable<Object> nitr    = (Iterable<Object>) iter;
+					Tape<Object>     nParams = new SingleTape<>(nitr);
 
 					try {
 						if (usingString) {
@@ -140,15 +135,13 @@ class IterationEdict implements Edict {
 							// CLString and then caching those compiled string. However,
 							// we aren't
 							// doing that now. -- ben, 12/17/19
-							fmt.doFormatString(strang, formCTX.writer, nParams, false);
+							fmt.doFormatString(currBody, formCTX.writer, nParams, false);
 						} else {
 							body.format(formCTX.writer, nParams);
 						}
 					} catch (DirectiveEscape eex) {
 						if (eex.endIteration) {
-							if (formCTX.items.atEnd()) {
-								throw eex;
-							}
+							if (formCTX.items.atEnd()) throw eex;
 						}
 					}
 
@@ -162,14 +155,13 @@ class IterationEdict implements Edict {
 		case ALL:
 			try {
 				while (!formCTX.items.atEnd()) {
-					if (numIterations > maxIterations)
-						break;
+					if (numIterations > maxIterations) break;
 
 					numIterations += 1;
 
 					if (usingString) {
 						// :DynamicFormatString
-						fmt.doFormatString(strang, formCTX.writer, formCTX.items, false);
+						fmt.doFormatString(currBody, formCTX.writer, formCTX.items, false);
 					} else {
 						body.format(formCTX);
 					}
@@ -192,8 +184,7 @@ class IterationEdict implements Edict {
 				while (itr.hasNext()) {
 					Object obj = itr.next();
 
-					if (numIterations > maxIterations)
-						break;
+					if (numIterations > maxIterations) break;
 					numIterations += 1;
 
 					if (!(obj instanceof Iterable<?>)) {
@@ -208,13 +199,12 @@ class IterationEdict implements Edict {
 					try {
 						if (usingString) {
 							// :DynamicString
-							fmt.doFormatString(strang, formCTX.writer, nParams, false);
+							fmt.doFormatString(currBody, formCTX.writer, nParams, false);
 						} else {
 							body.format(formCTX.writer, nParams);
 						}
 					} catch (DirectiveEscape eex) {
-						if (eex.endIteration && !itr.hasNext())
-							throw eex;
+						if (eex.endIteration && !itr.hasNext()) throw eex;
 					}
 				}
 			} catch (DirectiveEscape eex) {
@@ -232,13 +222,12 @@ class IterationEdict implements Edict {
 				Tape<Object> nParams = new SingleTape<>(itr);
 
 				while (!nParams.atEnd()) {
-					if (numIterations > maxIterations)
-						break;
+					if (numIterations > maxIterations) break;
 					numIterations += 1;
 
 					if (usingString) {
 						// :DynamicString
-						fmt.doFormatString(strang, formCTX.writer, nParams, false);
+						fmt.doFormatString(currBody, formCTX.writer, nParams, false);
 					} else {
 						body.format(formCTX.writer, nParams);
 					}

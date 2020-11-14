@@ -68,7 +68,7 @@ class TabulateEdict implements Edict {
 
 	@Override
 	public void format(FormatContext formCTX) throws IOException {
-		ReportWriter rw = formCTX.writer;
+		ReportWriter writer = formCTX.writer;
 
 		Tape<Object> itms = formCTX.items;
 
@@ -76,24 +76,19 @@ class TabulateEdict implements Edict {
 
 		int currCol;
 
-		if (fromIndent) {
-			currCol = rw.getIndentPos();
-		} else {
-			currCol = rw.getLinePos();
-		}
+		if (fromIndent) currCol = writer.getIndentPos();
+		else            currCol = writer.getLinePos();
 
 		if (isRelative) {
 			int colinc = colincVal.asInt(itms, "column increment", "T", 1);
 			int colrel = colidVal.asInt(itms, "relative column number", "T", 1);
 
-			for (int i = 0; i < colrel; i++) {
-				rw.write(padchar);
-			}
+			for (int i = 0; i < colrel; i++) writer.write(padchar);
 
 			int nSpaces = 0;
 
 			while ((currCol + nSpaces) % colinc != 0) {
-				rw.write(padchar);
+				writer.write(padchar);
 
 				nSpaces++;
 			}
@@ -102,17 +97,14 @@ class TabulateEdict implements Edict {
 			int colnum = colidVal.asInt(itms, "column number", "T", 1);
 
 			if (currCol < colnum) {
-				for (int i = currCol; i < colnum; i++) {
-					rw.write(padchar);
-				}
+				for (int i = currCol; i < colnum; i++) writer.write(padchar);
 			} else {
-				if (colinc == 0)
-					return;
+				if (colinc == 0) return;
 
 				int k = 0;
 
 				while (colnum > (currCol + (k * colinc))) {
-					rw.write(padchar);
+					writer.write(padchar);
 
 					k++;
 				}

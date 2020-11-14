@@ -57,7 +57,7 @@ public abstract class GeneralNumberDirective implements Directive {
 	 */
 	protected NumberParams getParams(CompileContext compCTX, int argidx) {
 		CLParameters params = compCTX.decr.parameters;
-		CLModifiers mods = compCTX.decr.modifiers;
+		CLModifiers  mods   = compCTX.decr.modifiers;
 
 		NumberParams np = new NumberParams();
 

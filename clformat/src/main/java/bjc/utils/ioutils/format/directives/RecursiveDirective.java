@@ -48,9 +48,7 @@ class RecursiveEdict implements Edict {
 
 				fmt.doFormatString(bod, formCTX.writer, formCTX.items, true);
 			} catch (DirectiveEscape eex) {
-				if (eex.endIteration) {
-					throw new UnexpectedColonEscape();
-				}
+				if (eex.endIteration) throw new UnexpectedColonEscape();
 			}
 		} else {
 			if (formCTX.items.atEnd()) {
@@ -58,11 +56,11 @@ class RecursiveEdict implements Edict {
 						"? directive requires two format parameters");
 			}
 
-			Object o = formCTX.items.item();
+			Object item = formCTX.items.item();
 			formCTX.items.right();
 
-			if (!(o instanceof Iterable<?>)) {
-				throw new MismatchedFormatArgType("?", Iterable.class, o.getClass());
+			if (!(item instanceof Iterable<?>)) {
+				throw new MismatchedFormatArgType("?", Iterable.class, item.getClass());
 			}
 
 			if (!(body instanceof String)) {
@@ -70,7 +68,7 @@ class RecursiveEdict implements Edict {
 			}
 
 			@SuppressWarnings("unchecked")
-			Iterable<Object> itb = (Iterable<Object>) o;
+			Iterable<Object> itb = (Iterable<Object>) item;
 			Tape<Object> newParams = new SingleTape<>(itb);
 
 			try {

@@ -18,7 +18,8 @@ public class DecimalDirective implements Directive {
 	@Override
 	public Edict compile(CompileContext compCTX) {
 		CLParameters params = compCTX.decr.parameters;
-		CLModifiers mods = compCTX.decr.modifiers;
+		@SuppressWarnings("unused")
+		CLModifiers  mods   = compCTX.decr.modifiers;
 
 		CLValue decForm = CLValue.nil();
 

@@ -27,13 +27,9 @@ public class RadixDirective extends GeneralNumberDirective {
 		NumberParams np = null;
 
 		if (params.length() == 0) {
-			if (mods.atMod) {
-				mode = RadixEdict.Mode.ROMAN;
-			} else if (mods.colonMod) {
-				mode = RadixEdict.Mode.ORDINAL;
-			} else {
-				mode = RadixEdict.Mode.CARDINAL;
-			}
+			if      (mods.atMod)    mode = RadixEdict.Mode.ROMAN;
+			else if (mods.colonMod) mode = RadixEdict.Mode.ORDINAL;
+			else                    mode = RadixEdict.Mode.CARDINAL;
 		} else {
 			mode = RadixEdict.Mode.NORMAL;
 
@@ -96,11 +92,9 @@ class RadixEdict implements Edict {
 			res = NumberUtils.toCardinal(val);
 			break;
 		case NORMAL: {
-			int radix = radixVal.asInt(formCTX.items, "radix", "R", 10);
-
-			int mincol = np.mincol.asInt(formCTX.items, "minimum column count", "R", 0);
-			char padchar
-					= np.padchar.asChar(formCTX.items, "padding character", "R", ' ');
+			int radix    = radixVal.asInt(formCTX.items, "radix", "R", 10);
+			int mincol   = np.mincol.asInt(formCTX.items, "minimum column count", "R", 0);
+			char padchar = np.padchar.asChar(formCTX.items, "padding character", "R", ' ');
 
 			boolean signed = np.signed;
 

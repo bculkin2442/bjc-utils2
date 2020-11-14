@@ -71,9 +71,8 @@ class NumberEdict implements Edict {
 
 		long val = ((Number) item).longValue();
 
-		int mincol = np.mincol.asInt(formCTX.items, "minimum column count", directive, 0);
-		char padchar
-				= np.padchar.asChar(formCTX.items, "padding character", directive, ' ');
+		int  mincol  = np.mincol.asInt(formCTX.items, "minimum column count", directive, 0);
+		char padchar = np.padchar.asChar(formCTX.items, "padding character", directive, ' ');
 
 		boolean signed = np.signed;
 

@@ -14,7 +14,7 @@ public class EscapeDirective implements Directive {
 	@Override
 	public Edict compile(CompileContext compCTX) {
 		CLParameters params = compCTX.decr.parameters;
-		CLModifiers mods = compCTX.decr.modifiers;
+		CLModifiers  mods   = compCTX.decr.modifiers;
 
 		CLValue param1 = CLValue.nil();
 		CLValue param2 = CLValue.nil();
@@ -27,28 +27,31 @@ public class EscapeDirective implements Directive {
 			break;
 		case 1:
 			mode = EscapeEdict.Mode.COUNT;
+			
 			params.mapIndices("count");
 			param1 = params.resolveKey("count");
 			break;
 		case 2:
+			mode = EscapeEdict.Mode.EQUALITY;
+
 			params.mapIndices("lhand", "rhand");
 			param1 = params.resolveKey("lhand");
 			param2 = params.resolveKey("rhand");
-			mode = EscapeEdict.Mode.EQUALITY;
 			break;
 		case 3:
+			mode = EscapeEdict.Mode.RANGE;
+
 			params.mapIndices("lower", "ival", "upper");
 			param1 = params.resolveKey("lower");
 			param2 = params.resolveKey("ival");
 			param3 = params.resolveKey("upper");
-			mode = EscapeEdict.Mode.RANGE;
 			break;
 		default:
 			throw new IllegalArgumentException("Too many parameters to ^ directive");
 		}
 
-		return new EscapeEdict(mods.atMod, mode, mods.colonMod, param1, param2, param3,
-				mods.dollarMod);
+		return new EscapeEdict(mods.atMod, mode, mods.colonMod,
+				param1, param2, param3, mods.dollarMod);
 	}
 }
 
@@ -88,8 +91,7 @@ class EscapeEdict implements Edict {
 
 		Tape<Object> items = formCTX.items;
 
-		if (advance)
-			items.right();
+		if (advance) items.right();
 
 		switch (mode) {
 		case END:
@@ -102,15 +104,15 @@ class EscapeEdict implements Edict {
 		}
 			break;
 		case EQUALITY: {
-			int left = param1.asInt(items, "left-hand condition", "^", 0);
+			int left  = param1.asInt(items, "left-hand condition", "^", 0);
 			int right = param2.asInt(items, "right-hand condition", "^", 0);
 
 			shouldExit = (left == right);
 		}
 			break;
 		case RANGE: {
-			int low = param1.asInt(items, "lower-bound condition", "^", 0);
-			int mid = param2.asInt(items, "interval condition", "^", 0);
+			int low  = param1.asInt(items, "lower-bound condition", "^", 0);
+			int mid  = param2.asInt(items, "interval condition", "^", 0);
 			int high = param3.asInt(items, "upper-bound condition", "^", 0);
 
 			shouldExit = (low <= mid) && (mid <= high);
@@ -121,15 +123,9 @@ class EscapeEdict implements Edict {
 					"Escape condition mode " + mode + " isn't supported");
 		}
 
-		if (advance)
-			items.left();
+		if (advance)   items.left();
+		if (isNegated) shouldExit = !shouldExit;
 
-		if (isNegated) {
-			shouldExit = !shouldExit;
-		}
-
-		if (shouldExit) {
-			throw new DirectiveEscape(terminateIteration);
-		}
+		if (shouldExit) throw new DirectiveEscape(terminateIteration);
 	}
 }

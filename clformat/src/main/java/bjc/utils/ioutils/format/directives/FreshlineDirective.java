@@ -38,11 +38,8 @@ class FreshlineEdict implements Edict {
 	public void format(FormatContext formCTX) throws IOException {
 		int nTimes = times.asInt(formCTX.items, "occurance count", "&", 1);
 
-		if (formCTX.writer.isLastCharNL())
-			nTimes -= 1;
+		if (formCTX.writer.isLastCharNL()) nTimes -= 1;
 
-		for (int i = 0; i < nTimes; i++) {
-			formCTX.writer.write("\n");
-		}
+		for (int i = 0; i < nTimes; i++) formCTX.writer.write("\n");
 	}
 }

@@ -30,24 +30,21 @@ class CharacterEdict implements Edict {
 
 	@Override
 	public void format(FormatContext formCTX) throws IOException {
-		Object o = formCTX.items.item();
+		Object item = formCTX.items.item();
 
-		CLFormatter.checkItem(o, 'C');
+		CLFormatter.checkItem(item, 'C');
 
-		if (!(o instanceof Character)) {
-			throw new IllegalFormatConversionException('C', o.getClass());
+		if (!(item instanceof Character)) {
+			throw new IllegalFormatConversionException('C', item.getClass());
 		}
 
-		char ch = (Character) o;
+		char ch = (Character) item;
 		int codepoint = ch;
 
 		ReportWriter rw = formCTX.writer;
 
-		if (printCharName) {
-			rw.write(Character.getName(codepoint));
-		} else {
-			rw.write(ch);
-		}
+		if (printCharName) rw.write(Character.getName(codepoint));
+		else               rw.write(ch);
 
 		formCTX.items.right();
 	}

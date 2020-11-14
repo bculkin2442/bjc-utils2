@@ -18,7 +18,7 @@ public class FormatParameters {
 	/**
 	 * The {@link ReportWriter} used for output.
 	 */
-	public ReportWriter rw;
+	public ReportWriter writer;
 
 	/**
 	 * The current format parameter.
@@ -43,12 +43,12 @@ public class FormatParameters {
 	/**
 	 * The formatter we are going from.
 	 */
-	public CLFormatter fmt;
+	public CLFormatter formatter;
 
 	/**
 	 * Create a new set of format parameters.
 	 *
-	 * @param rw
+	 * @param writer
 	 *                The writer we are sending output to.
 	 *
 	 * @param item
@@ -63,12 +63,12 @@ public class FormatParameters {
 	 * @param dirIter
 	 *                The set of format decrees.
 	 *
-	 * @param fmt
+	 * @param formatter
 	 *                The formatter we are using
 	 */
-	public FormatParameters(ReportWriter rw, Object item, Decree decr,
-			Tape<Object> tParams, CLTokenizer dirIter, CLFormatter fmt) {
-		this.rw = rw;
+	public FormatParameters(ReportWriter writer, Object item, Decree decr,
+			Tape<Object> tParams, CLTokenizer dirIter, CLFormatter formatter) {
+		this.writer = writer;
 
 		this.item = item;
 
@@ -78,7 +78,7 @@ public class FormatParameters {
 
 		this.dirIter = dirIter;
 
-		this.fmt = fmt;
+		this.formatter = formatter;
 	}
 
 	/**
@@ -105,7 +105,7 @@ public class FormatParameters {
 	 * @return The compilation context from these parameters.
 	 */
 	public CompileContext toCompileCTX() {
-		return new CompileContext(dirIter, fmt, decr);
+		return new CompileContext(dirIter, formatter, decr);
 	}
 
 	/**
@@ -114,6 +114,6 @@ public class FormatParameters {
 	 * @return The format context from these parameters.
 	 */
 	public FormatContext toFormatCTX() {
-		return new FormatContext(rw, tParams);
+		return new FormatContext(writer, tParams);
 	}
 }
