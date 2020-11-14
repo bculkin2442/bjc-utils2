@@ -27,9 +27,9 @@ clFormatPrefixParam (?:(?:[-+]?\d+|'.|[Vv]|#|%|".*?(?<!\\)")?)
 ## 
 ## Parameters are seperated by ','
 ## 
-## Named parameters are indicated by a preceeding #, which is followed by a
-## parameter name (any sequence of non-space, non-seperator (',', ':', ';')
-## printing characters), a seperator (: or ;), then the value of the parameter
+## Named parameters are indicated by a preceding #, which is followed by a
+## parameter name (any sequence of non-space, non-separator (',', ':', ';')
+## printing characters), a separator (: or ;), then the value of the parameter
 clFormatPrefix (?:(?:#[\S&&[^,:;]]+[:;]%1$s)|%1$s)
 
 ## Match a format string modifier
@@ -42,9 +42,10 @@ clFormatModifier (?:[@$:*]+)
 
 ## Matches a directive name.
 ## A directive name is either
-## 1) A single, non-whitespace, non-/ character, optionally preceded by a grave
+## 1) A single, non-whitespace, non-/ character, optionally preceded by any
+##    number of grave characters.
 ## 2) A name enclosed in /'s
-clFormatName (?:(?<name>`?[\S&&[^/]])|(?:/(?<funcname>[\S&&[^/]]+)/))
+clFormatName (?:(?<name>`*?[\S&&[^/]])|(?:/(?<funcname>[\S&&[^/]]+)/))
 
 #################################################
 # Generic format strings for regular expressions.
