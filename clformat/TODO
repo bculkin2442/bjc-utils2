@@ -13,3 +13,8 @@ One thing that will need to be involved is that all of the directives should
 probably have their interfaces tweaked to allow you to provide a custom form of
 them. One could argue this is the sort of thing that macros could do, but I can
 see no compelling reason not to implement both features
+
+@TODO Nov 14th, 2020 Ben Culkin :OnceDirective
+Implement a directive (`O probably) that will only be executed once per given
+invocation of 'format', or maybe one for 'once per enclosing directive'. Could
+be useful, especially once we have more stateful directives.

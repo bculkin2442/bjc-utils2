@@ -17,6 +17,9 @@ import bjc.esodata.*;
  *   models lexical scopes (extend on FunctionalMap may do the right thing, not sure)
  * - Local variables, stored on the FormatContext as well, but these
  *   aren't copied over when a new context is built.
+ *   
+ *   For static/global variables, maybe some equivalent of 'local' from perl to
+ *   localize them.
  */
 /**
  * Represents a parameter value to an edict that may have a dynamic value
