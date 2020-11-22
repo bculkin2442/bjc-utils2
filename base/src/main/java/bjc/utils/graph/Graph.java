@@ -79,7 +79,7 @@ public class Graph<T> {
 		if (!backing.containsKey(source)) backing.put(source, new FunctionalMap<T, Integer>());
 
 		/* Add the edge to the graph. */
-		backing.get(source).put(target, distance);
+		backing.get(source).get().put(target, distance);
 
 		/* Handle possible directed edges. */
 		if (!directed) {
@@ -87,7 +87,7 @@ public class Graph<T> {
 				backing.put(target, new FunctionalMap<T, Integer>());
 			}
 
-			backing.get(target).put(source, distance);
+			backing.get(target).get().put(source, distance);
 		}
 	}
 
@@ -128,7 +128,7 @@ public class Graph<T> {
 			throw new IllegalArgumentException("Vertex " + source + " is not in graph");
 		}
 
-		return backing.get(source);
+		return backing.get(source).get();
 	}
 
 	/**
@@ -247,7 +247,7 @@ public class Graph<T> {
 			throw new NoSuchElementException(msg);
 		}
 
-		backing.get(source).remove(target);
+		backing.get(source).get().remove(target);
 
 		/*
 		 * Uncomment this to turn the graph undirected

@@ -47,7 +47,7 @@ public class MemoryComponentRepository<ComponentType extends IDescribedComponent
 
 	@Override
 	public ComponentType getByName(String name) {
-		return repo.get(name);
+		return repo.get(name).get();
 	}
 
 	@Override

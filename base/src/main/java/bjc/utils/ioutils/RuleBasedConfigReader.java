@@ -270,7 +270,7 @@ public class RuleBasedConfigReader<E> {
 			/*
 			 * Handle pragmas
 			 */
-			pragmas.getOrDefault(token, (tokenzer, stat) -> {
+			pragmas.get(token).orElse((tokenzer, stat) -> {
 				throw new UnknownPragma("Unknown pragma " + token);
 			}).accept(tokenizer, state);
 		} else {

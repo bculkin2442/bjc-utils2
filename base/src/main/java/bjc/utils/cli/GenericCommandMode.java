@@ -102,9 +102,9 @@ public class GenericCommandMode implements CommandMode {
 
 			/* Get the alias. */
 			if (defaultHandlers.containsKey(commandName)) {
-				aliasedCommand = defaultHandlers.get(commandName).aliased();
+				aliasedCommand = defaultHandlers.get(commandName).get().aliased();
 			} else {
-				aliasedCommand = commandHandlers.get(commandName).aliased();
+				aliasedCommand = commandHandlers.get(commandName).get().aliased();
 			}
 
 			commandHandlers.put(aliasName, aliasedCommand);
@@ -262,16 +262,16 @@ public class GenericCommandMode implements CommandMode {
 	private void doHelpCommand(final String commandName) {
 		if (commandHandlers.containsKey(commandName)) {
 			final String desc
-					= commandHandlers.get(commandName).getHelp().getDescription();
+					= commandHandlers.get(commandName).get().getHelp().getDescription();
 
 			normalOutput.accept("\n" + desc);
 		} else if (defaultHandlers.containsKey(commandName)) {
 			final String desc
-					= defaultHandlers.get(commandName).getHelp().getDescription();
+					= defaultHandlers.get(commandName).get().getHelp().getDescription();
 
 			normalOutput.accept("\n" + desc);
 		} else if (helpTopics.containsKey(commandName)) {
-			normalOutput.accept("\n" + helpTopics.get(commandName).getDescription());
+			normalOutput.accept("\n" + helpTopics.get(commandName).get().getDescription());
 		} else {
 			String msg = String.format("ERROR: No help available for '%s'", commandName);
 
@@ -371,9 +371,9 @@ public class GenericCommandMode implements CommandMode {
 		normalOutput.accept("\n");
 
 		if (defaultHandlers.containsKey(command))
-			return defaultHandlers.get(command).getHandler().handle(args);
+			return defaultHandlers.get(command).get().getHandler().handle(args);
 		else if (commandHandlers.containsKey(command))
-			return commandHandlers.get(command).getHandler().handle(args);
+			return commandHandlers.get(command).get().getHandler().handle(args);
 		else {
 			if (args != null) {
 				String argString = String.join(", ", args);

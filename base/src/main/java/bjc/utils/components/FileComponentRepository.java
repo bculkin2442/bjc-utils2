@@ -116,7 +116,7 @@ public class FileComponentRepository<ComponentType extends IDescribedComponent>
 
 	@Override
 	public ComponentType getByName(final String name) {
-		return components.get(name);
+		return components.get(name).get();
 	}
 
 	@Override

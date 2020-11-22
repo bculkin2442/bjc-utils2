@@ -143,11 +143,7 @@ public class SequenceDelimiter<T> {
 				if (isForbidden(groupStack, forbiddenDelimiters, possibleOpen)) {
 					T forbiddenBy;
 
-					if (whoForbid.containsKey(tok)) {
-						forbiddenBy = whoForbid.get(tok);
-					} else {
-						forbiddenBy = groupStack.top().getName();
-					}
+					forbiddenBy = whoForbid.get(tok).orElse(groupStack.top().getName());
 
 					final String ctxList
 							= StringUtils.toEnglishList(groupStack.toArray(), "then");

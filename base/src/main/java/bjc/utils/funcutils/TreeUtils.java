@@ -87,6 +87,9 @@ public class TreeUtils {
 	public static <ContainedType> ITree<ContainedType> substitute(
 			ITree<ContainedType> tree,
 			IMap<ContainedType, ITree<ContainedType>> environment) {
-		return substitute(tree, environment::containsKey, environment::get);
+		return substitute(
+				tree,
+				environment::containsKey,
+				(element) -> environment.get(element).get());
 	}
 }

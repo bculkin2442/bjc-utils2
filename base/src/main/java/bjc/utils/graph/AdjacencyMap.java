@@ -147,7 +147,7 @@ public class AdjacencyMap<T> {
 
 		adjacency.forEach((sourceKey, sourceValue) -> {
 			sourceValue.forEach((targetKey, targetValue) -> {
-				final int inverseValue = adjacency.get(targetKey).get(sourceKey);
+				final int inverseValue = adjacency.get(targetKey).get().get(sourceKey).get();
 
 				if (targetValue != inverseValue) result.replace(false);
 			});
@@ -180,7 +180,7 @@ public class AdjacencyMap<T> {
 			throw new IllegalArgumentException(msg);
 		}
 
-		adjacency.get(source).put(target, weight);
+		adjacency.get(source).get().put(target, weight);
 	}
 
 	/**

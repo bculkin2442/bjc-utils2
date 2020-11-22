@@ -138,8 +138,8 @@ public class ShuntingYard<TokenType> {
 		/*
 		 * Get the precedence of operators
 		 */
-		final int rightPrecedence = operators.get(right).getPrecedence();
-		final int leftPrecedence  = operators.get(left).getPrecedence();
+		final int rightPrecedence = operators.get(right).get().getPrecedence();
+		final int leftPrecedence  = operators.get(left).get().getPrecedence();
 
 		/*
 		 * Evaluate what we were asked
