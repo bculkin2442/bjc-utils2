@@ -125,7 +125,8 @@ public class CLFormatterTest {
 		assertFormat("foo", "~A", "foo");
 		assertFormat("foobar ", "~7A", "foobar");
 		assertFormat(" foobar", "~7@A", "foobar");
-		assertFormat("   foobar", "~#mincol;8,#colinc;2,#minpad;1,#padchar;' @A",
+		assertFormat("     foobar",
+				"~#mincol;8,#colinc;2,#minpad;1,#padchar;' @A",
 				"foobar");
 	}
 
@@ -146,8 +147,13 @@ public class CLFormatterTest {
 	@Test
 	public void testRandomCases() {
 		// Random test cases
-		assertEquals("3 dogs are here", format("~D dog~:[s are~; is~] here", 3, 3 == 1));
+		assertEquals("3 dogs are here",
+				format("~D dog~:[s are~; is~] here", 3, 3 == 1));
 	}
+
+	/*private void assertFormat(String msg, String res, String fomt, Object... params) {
+		assertEquals(msg, res, format(fomt, params));
+	}*/
 
 	private void assertFormat(String res, String fomt, Object... params) {
 		assertEquals(res, format(fomt, params));

@@ -83,21 +83,48 @@ class AestheticEdict implements Edict {
 
 		StringBuilder work = new StringBuilder();
 
-		char padchar = padcharPar.asChar(itemTape, "padding character", "A", ' ');
+		char padchar = padcharPar.asChar(itemTape,
+				"padding character", "A", ' ');
 
-		int mincol = mincolPar.asInt(itemTape, "minimum column count", "A", 0);
-		int colinc = colincPar.asInt(itemTape, "padding increment", "A", 1);
-		int minpad = minpadPar.asInt(itemTape, "minumum amount of padding", "A", 0);
+		int mincol = mincolPar.asInt(itemTape,
+				"minimum column count", "A", 0);
+		int colinc = colincPar.asInt(itemTape,
+				"padding increment", "A", 1);
+		int minpad = minpadPar.asInt(itemTape,
+				"minumum amount of padding", "A", 0);
 
-		if (padBefore) doPadding(work, padchar, mincol, colinc, minpad);
+	//	if (padBefore) doPadding(work, padchar, mincol, colinc, minpad);
 
 		work.append(itemString);
 
-		if (!padBefore) doPadding(work, padchar, mincol, colinc, minpad);
+	//	if (!padBefore) doPadding(work, padchar, mincol, colinc, minpad);
+
+		String padding = createPadding(work, padchar, mincol, colinc, minpad);
+		if (padBefore) work.insert(0, padding);
+		else           work.append(padding);
 
 		formCTX.writer.write(work.toString());
 
 		itemTape.right();
+	}
+
+	private String createPadding(
+			StringBuilder work,
+			char padchar,
+			int mincol,
+			int colinc,
+			int minpad) 
+	{
+		StringBuilder padding = new StringBuilder();
+		for (int i = 0; i < minpad; i++) padding.append(padchar);
+
+		for (int i = work.length(); i < mincol; i++) {
+			for (int k = 0; k < colinc; k++) {
+				padding.append(padchar);
+			}
+		}
+
+		return padding.toString();
 	}
 
 	private void doPadding(StringBuilder work, char padchar, int mincol, int colinc,
