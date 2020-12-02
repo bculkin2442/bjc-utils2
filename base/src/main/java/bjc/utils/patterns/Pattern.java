@@ -1,11 +1,5 @@
 package bjc.utils.patterns;
 
-import java.util.*;
-import java.util.function.*;
-import java.util.regex.*;
-
-import bjc.data.*;
-
 /**
  * A simpler version of ComplexPattern, which always applies against Object
  * 

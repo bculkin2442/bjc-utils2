@@ -35,6 +35,8 @@ public interface ComplexPattern<ReturnType, PredType, InputType> {
 	 */
 	ReturnType apply(InputType input, PredType state);
 	
+	/* Pattern producing functions */
+	
 	/**
 	 * Create a pattern composed from a predicate & a function.
 	 * 
@@ -49,7 +51,8 @@ public interface ComplexPattern<ReturnType, PredType, InputType> {
 	 */
 	static <RetType, PreType, InpType> ComplexPattern<RetType, PreType, InpType> from(
 			Function<InpType, IPair<Boolean, PreType>> matcher,
-			BiFunction<InpType, PreType, RetType> accepter) {
+			BiFunction<InpType, PreType, RetType> accepter)
+	{
 		return new FunctionalPattern<>(matcher, accepter);
 	}
 	
@@ -68,7 +71,8 @@ public interface ComplexPattern<ReturnType, PredType, InputType> {
 	@SuppressWarnings("unchecked")
 	static <ClassType, RetType, InpType> ComplexPattern<RetType, ?, InpType> ofClass(
 			Class<ClassType> clasz,
-			Function<ClassType, RetType> action) {
+			Function<ClassType, RetType> action) 
+	{
 		return from(
 				(input)          -> IPair.pair(clasz.isInstance(input), null),
 				(input, ignored) -> action.apply((ClassType)input)
@@ -89,11 +93,12 @@ public interface ComplexPattern<ReturnType, PredType, InputType> {
 	static <RetType, InpType> ComplexPattern<RetType, ?, InpType> matchesObject(
 			InpType obj,
 			Function<InpType, RetType> action
-			) {
+			) 
+	{
 		return from(
-					(input)          -> IPair.pair(obj.equals(input), null),
-					(input, ignored) -> action.apply(input)
-				);
+				(input)          -> IPair.pair(obj.equals(input), null),
+				(input, ignored) -> action.apply(input)
+		);
 	}
 	
 	/**
@@ -113,13 +118,16 @@ public interface ComplexPattern<ReturnType, PredType, InputType> {
 	static <RetType, InpType> ComplexPattern<RetType, ?, InpType> equalsString(
 			String pattern,
 			BiFunction<InpType, String, RetType> action
-			) {
+			) 
+	{
+		Function<InpType, IPair<Boolean, String>> matcher = (input) -> {
+			String objString = input.toString();
+			
+			return IPair.pair(pattern.equals(objString), objString);
+		};
+		
 		return from(
-				(input) -> {			
-					String objString = input.toString();
-					
-					return IPair.pair(pattern.equals(objString), objString);
-				},
+				matcher,
 				(input, objString) -> action.apply(input, objString)
 		);
 	}
@@ -140,21 +148,21 @@ public interface ComplexPattern<ReturnType, PredType, InputType> {
 		String regex,
 		Predicate<Matcher> cond,
 		BiFunction<InpType, Matcher, RetType> action
-	) {
+	)
+	{
 		java.util.regex.Pattern regexPat = java.util.regex.Pattern.compile(regex);
 
+		Function<InpType, IPair<Boolean, Matcher>> matcher = (input) -> {
+			String inpString = input.toString();
+		
+			Matcher mat = regexPat.matcher(inpString);
+			
+			if (cond.test(mat)) return IPair.pair(true, mat);
+			else                return IPair.pair(false, null);
+		};
+		
 		return from(
-				(input) -> {
-					String inpString = input.toString();
-				
-					Matcher mat = regexPat.matcher(inpString);
-					
-					if (cond.test(mat)) {
-						return IPair.pair(true, mat);
-					} else {
-						return IPair.pair(false, null);
-					}
-				},
+				matcher,
 				(input, res) -> action.apply(input, res)
 		);
 	}
@@ -162,6 +170,7 @@ public interface ComplexPattern<ReturnType, PredType, InputType> {
 	// @TODO Nov 21, 2020 Ben Culkin :MorePatterns
 	// Try and write something to iterate over Iterator in a type-safe manner
 	// Also, something for doing a sub-pattern match
+	
 	/**
 	 * Create a pattern which will always execute.
 	 * 
@@ -174,10 +183,41 @@ public interface ComplexPattern<ReturnType, PredType, InputType> {
 	 */
 	static <RetType, InpType> ComplexPattern<RetType, ?, InpType> otherwise(
 			Function<InpType, RetType> action
-			) {
+			) 
+	{
 		return from(
 				(input)          -> IPair.pair(true, null),
 				(input, ignored) -> action.apply(input)
 		);
+	}
+	
+	/**
+	 * Create a pattern which checks if the string form of a given object starts
+	 * with a specific string.
+	 * 
+	 * @param <RetType> The type returned by the matcher.
+	 * @param <InpType> The type being matched against.
+	 * 
+	 * @param pattern The string to check against.
+	 * @param action The action to execute.
+	 * 
+	 * @return A pattern which functions as described.
+	 */
+	static <RetType, InpType> ComplexPattern<RetType, String, InpType> startsWith(
+			String pattern,
+			Function<String, RetType> action)
+	{
+		return from((input) -> {
+			String objString = input.toString();
+			
+			if (objString.startsWith(pattern)) {
+				return IPair.pair(
+						true,
+						objString.substring(
+							pattern.length()));
+			} else {
+				return IPair.pair(false, null);
+			}
+		}, (ignored, input) -> action.apply(input));
 	}
 }
