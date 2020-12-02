@@ -8,7 +8,6 @@ import bjc.utils.ioutils.ReportWriter;
 import bjc.utils.ioutils.format.directives.*;
 
 // Grab our easy converters/constructors
-import static bjc.utils.funcutils.IteratorUtils.AI;
 import static bjc.utils.funcutils.IteratorUtils.I;
 
 /**
@@ -143,7 +142,7 @@ public class CLFormatter {
 	 *                     if something goes wrong during formatting the string.
 	 */
 	public String formatString(String format, Object... params) throws IOException {
-		return formatString(format, I(AI(params)));
+		return formatString(format, I(I(params)));
 	}
 
 	/**
