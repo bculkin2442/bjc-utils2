@@ -5,7 +5,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import bjc.funcdata.FunctionalMap;
-import bjc.funcdata.IMap;
+import bjc.funcdata.MapEx;
 
 /**
  * A general command mode, with a customizable set of commands.
@@ -18,12 +18,12 @@ import bjc.funcdata.IMap;
  */
 public class GenericCommandMode implements CommandMode {
 	/* Contains the commands this mode handles. */
-	private final IMap<String, Command> commandHandlers;
+	private final MapEx<String, Command> commandHandlers;
 	/* Commands to execute in every mode. */
-	private final IMap<String, Command> defaultHandlers;
+	private final MapEx<String, Command> defaultHandlers;
 
 	/* Contains help topics without an associated command */
-	private final IMap<String, CommandHelp> helpTopics;
+	private final MapEx<String, CommandHelp> helpTopics;
 
 	/* The action to execute upon encountering an unknown command */
 	private BiConsumer<String, String[]> unknownCommandHandler;

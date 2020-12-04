@@ -1,6 +1,6 @@
 package bjc.utils.parserutils.splitter;
 
-import bjc.funcdata.IList;
+import bjc.funcdata.ListEx;
 
 /**
  * Split a string into a list of pieces.
@@ -17,5 +17,5 @@ public interface TokenSplitter {
 	 *
 	 * @return The pieces of the string.
 	 */
-	public IList<String> split(String input);
+	public ListEx<String> split(String input);
 }

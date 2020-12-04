@@ -30,7 +30,7 @@ public class PatternMatcher<ReturnType, InputType>
 	@Override
 	public ReturnType matchFor(InputType input) throws NonExhaustiveMatch {
 		for (ComplexPattern<ReturnType, Object, InputType> pattern : patterns) {
-			IPair<Boolean, Object> matches = pattern.matches(input);
+			Pair<Boolean, Object> matches = pattern.matches(input);
 			if (matches.getLeft()) {
 				pattern.apply(input, matches.getRight());
 			}

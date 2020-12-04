@@ -23,7 +23,7 @@ public interface ComplexPattern<ReturnType, PredType, InputType> {
 	 * @return Whether or not this pattern is matched, as well as a state value
 	 *         that will get passed to the pattern if it did match.
 	 */
-	IPair<Boolean, PredType> matches(InputType input);
+	Pair<Boolean, PredType> matches(InputType input);
 	
 	/**
 	 * Apply this pattern, once it has matched.
@@ -50,7 +50,7 @@ public interface ComplexPattern<ReturnType, PredType, InputType> {
 	 * @return A pattern composed from the passed in functions.
 	 */
 	static <RetType, PreType, InpType> ComplexPattern<RetType, PreType, InpType> from(
-			Function<InpType, IPair<Boolean, PreType>> matcher,
+			Function<InpType, Pair<Boolean, PreType>> matcher,
 			BiFunction<InpType, PreType, RetType> accepter)
 	{
 		return new FunctionalPattern<>(matcher, accepter);
@@ -74,7 +74,7 @@ public interface ComplexPattern<ReturnType, PredType, InputType> {
 			Function<ClassType, RetType> action) 
 	{
 		return from(
-				(input)          -> IPair.pair(clasz.isInstance(input), null),
+				(input)          -> Pair.pair(clasz.isInstance(input), null),
 				(input, ignored) -> action.apply((ClassType)input)
 		);
 	}
@@ -96,7 +96,7 @@ public interface ComplexPattern<ReturnType, PredType, InputType> {
 			) 
 	{
 		return from(
-				(input)          -> IPair.pair(obj.equals(input), null),
+				(input)          -> Pair.pair(obj.equals(input), null),
 				(input, ignored) -> action.apply(input)
 		);
 	}
@@ -120,10 +120,10 @@ public interface ComplexPattern<ReturnType, PredType, InputType> {
 			BiFunction<InpType, String, RetType> action
 			) 
 	{
-		Function<InpType, IPair<Boolean, String>> matcher = (input) -> {
+		Function<InpType, Pair<Boolean, String>> matcher = (input) -> {
 			String objString = input.toString();
 			
-			return IPair.pair(pattern.equals(objString), objString);
+			return Pair.pair(pattern.equals(objString), objString);
 		};
 		
 		return from(
@@ -152,13 +152,13 @@ public interface ComplexPattern<ReturnType, PredType, InputType> {
 	{
 		java.util.regex.Pattern regexPat = java.util.regex.Pattern.compile(regex);
 
-		Function<InpType, IPair<Boolean, Matcher>> matcher = (input) -> {
+		Function<InpType, Pair<Boolean, Matcher>> matcher = (input) -> {
 			String inpString = input.toString();
 		
 			Matcher mat = regexPat.matcher(inpString);
 			
-			if (cond.test(mat)) return IPair.pair(true, mat);
-			else                return IPair.pair(false, null);
+			if (cond.test(mat)) return Pair.pair(true, mat);
+			else                return Pair.pair(false, null);
 		};
 		
 		return from(
@@ -186,7 +186,7 @@ public interface ComplexPattern<ReturnType, PredType, InputType> {
 			) 
 	{
 		return from(
-				(input)          -> IPair.pair(true, null),
+				(input)          -> Pair.pair(true, null),
 				(input, ignored) -> action.apply(input)
 		);
 	}
@@ -211,12 +211,12 @@ public interface ComplexPattern<ReturnType, PredType, InputType> {
 			String objString = input.toString();
 			
 			if (objString.startsWith(pattern)) {
-				return IPair.pair(
+				return Pair.pair(
 						true,
 						objString.substring(
 							pattern.length()));
 			} else {
-				return IPair.pair(false, null);
+				return Pair.pair(false, null);
 			}
 		}, (ignored, input) -> action.apply(input));
 	}

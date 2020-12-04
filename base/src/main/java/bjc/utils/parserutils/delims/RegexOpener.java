@@ -4,8 +4,8 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import bjc.data.IPair;
 import bjc.data.Pair;
+import bjc.data.SimplePair;
 
 /**
  * A predicated opener for use with {@link RegexCloser}
@@ -13,7 +13,7 @@ import bjc.data.Pair;
  * @author bjculkin
  *
  */
-public class RegexOpener implements Function<String, IPair<String, String[]>> {
+public class RegexOpener implements Function<String, Pair<String, String[]>> {
 	/* The name of the group. */
 	private final String name;
 	/* The pattern that marks an opening group. */
@@ -35,7 +35,7 @@ public class RegexOpener implements Function<String, IPair<String, String[]>> {
 	}
 
 	@Override
-	public IPair<String, String[]> apply(final String str) {
+	public Pair<String, String[]> apply(final String str) {
 		final Matcher m = patt.matcher(str);
 
 		if (m.matches()) {
@@ -47,9 +47,9 @@ public class RegexOpener implements Function<String, IPair<String, String[]>> {
 				parms[i] = m.group(i);
 			}
 
-			return new Pair<>(name, parms);
+			return new SimplePair<>(name, parms);
 		}
 
-		return new Pair<>(null, null);
+		return new SimplePair<>(null, null);
 	}
 }

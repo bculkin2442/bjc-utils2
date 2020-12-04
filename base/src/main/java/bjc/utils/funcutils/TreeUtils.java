@@ -21,8 +21,8 @@ public class TreeUtils {
 	 *                   The path to mark nodes with.
 	 * @return The list of marked paths.
 	 */
-	public static <T> IList<IList<T>> outlineTree(ITree<T> tre, Predicate<T> leafMarker) {
-		IList<IList<T>> paths = new FunctionalList<>();
+	public static <T> ListEx<ListEx<T>> outlineTree(Tree<T> tre, Predicate<T> leafMarker) {
+		ListEx<ListEx<T>> paths = new FunctionalList<>();
 
 		LinkedList<T> path = new LinkedList<>();
 		path.add(tre.getHead());
@@ -33,11 +33,11 @@ public class TreeUtils {
 	}
 
 	/* Find a path in a tree. */
-	private static <T> void findPath(ITree<T> subtree, LinkedList<T> path,
-			Predicate<T> leafMarker, IList<IList<T>> paths) {
+	private static <T> void findPath(Tree<T> subtree, LinkedList<T> path,
+			Predicate<T> leafMarker, ListEx<ListEx<T>> paths) {
 		if (subtree.getChildrenCount() == 0 && leafMarker.test(subtree.getHead())) {
 			/* We're at a matching leaf node. Add it. */
-			IList<T> finalPath = new FunctionalList<>();
+			ListEx<T> finalPath = new FunctionalList<>();
 
 			for (T ePath : path) finalPath.add(ePath);
 
@@ -63,10 +63,10 @@ public class TreeUtils {
 	 * @param expander The function to expand nodes.
 	 * @return A transformed copy of the tree.
 	 */
-	public static <ContainedType> ITree<ContainedType> substitute(
-			ITree<ContainedType> tree,
+	public static <ContainedType> Tree<ContainedType> substitute(
+			Tree<ContainedType> tree,
 			Predicate<ContainedType> marker,
-			Function<ContainedType, ITree<ContainedType>> expander) {
+			Function<ContainedType, Tree<ContainedType>> expander) {
 		tree.topDownTransform((contents) -> {
 			if (marker.test(contents)) return TopDownTransformResult.TRANSFORM;
 			else                       return TopDownTransformResult.PASSTHROUGH;
@@ -84,9 +84,9 @@ public class TreeUtils {
 	 * @param environment A map which contains the variables to substitute.
 	 * @return A transformed copy of the tree.
 	 */
-	public static <ContainedType> ITree<ContainedType> substitute(
-			ITree<ContainedType> tree,
-			IMap<ContainedType, ITree<ContainedType>> environment) {
+	public static <ContainedType> Tree<ContainedType> substitute(
+			Tree<ContainedType> tree,
+			MapEx<ContainedType, Tree<ContainedType>> environment) {
 		return substitute(
 				tree,
 				environment::containsKey,

@@ -50,7 +50,7 @@ public class MutablePatternMatcher<ReturnType, InputType>
 		while(iterator.hasNext()) {
 			ComplexPattern<ReturnType, Object, InputType> pattern = iterator.next();
 			
-			IPair<Boolean, Object> matches = pattern.matches(input);
+			Pair<Boolean, Object> matches = pattern.matches(input);
 			
 			matches.doWith((bool, obj) -> {
 				if (bool) pattern.apply(input, obj);

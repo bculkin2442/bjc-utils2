@@ -9,11 +9,11 @@ import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import bjc.data.IHolder;
+import bjc.data.Holder;
 import bjc.data.Identity;
 import bjc.funcdata.FunctionalMap;
-import bjc.funcdata.IList;
-import bjc.funcdata.IMap;
+import bjc.funcdata.ListEx;
+import bjc.funcdata.MapEx;
 import bjc.utils.funcutils.FileUtils;
 
 /**
@@ -31,7 +31,7 @@ public class FileComponentRepository<ComponentType extends IDescribedComponent>
 			= Logger.getLogger("FileComponentRepository");
 
 	/* The internal storage of components. */
-	private IMap<String, ComponentType> components;
+	private MapEx<String, ComponentType> components;
 
 	/* The path that all the components came from. */
 	private Path sourceDirectory;
@@ -69,7 +69,7 @@ public class FileComponentRepository<ComponentType extends IDescribedComponent>
 		sourceDirectory = directory.toPath().toAbsolutePath();
 
 		/* Marker for making sure we don't skip the parent. */
-		final IHolder<Boolean> isFirstDir = new Identity<>(true);
+		final Holder<Boolean> isFirstDir = new Identity<>(true);
 
 		/*
 		 * Predicate to use to traverse all the files in a directory, but not recurse
@@ -110,7 +110,7 @@ public class FileComponentRepository<ComponentType extends IDescribedComponent>
 	}
 
 	@Override
-	public IMap<String, ComponentType> getAll() {
+	public MapEx<String, ComponentType> getAll() {
 		return components;
 	}
 
@@ -120,7 +120,7 @@ public class FileComponentRepository<ComponentType extends IDescribedComponent>
 	}
 
 	@Override
-	public IList<ComponentType> getList() {
+	public ListEx<ComponentType> getList() {
 		return components.valueList();
 	}
 

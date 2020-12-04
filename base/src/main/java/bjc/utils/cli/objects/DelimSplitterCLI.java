@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import bjc.data.ITree;
+import bjc.data.Tree;
 import bjc.funcdata.FunctionalList;
-import bjc.funcdata.IList;
+import bjc.funcdata.ListEx;
 import bjc.utils.funcutils.StringUtils;
 import bjc.utils.ioutils.MirrorDB;
 import bjc.utils.parserutils.delims.DelimiterException;
@@ -359,7 +359,7 @@ public class DelimSplitterCLI {
 
 	private void handleDelim(final String args) {
 		try {
-			final ITree<String> res = dlm.delimitSequence(args.split(" "));
+			final Tree<String> res = dlm.delimitSequence(args.split(" "));
 
 			printDelimSeq(res);
 		} catch (final DelimiterException dex) {
@@ -372,14 +372,14 @@ public class DelimSplitterCLI {
 		for (int i = 0; i < argArray.length; i++) {
 			final String arg = argArray[i];
 
-			final IList<String> strangs = split.split(arg);
+			final ListEx<String> strangs = split.split(arg);
 
 			System.out.printf("%d '%s' %s\n", i, arg, strangs);
 		}
 	}
 
 	private void handleTest(final String inp, final boolean splitWS) {
-		IList<String> strings;
+		ListEx<String> strings;
 
 		try {
 			strings = split.split(inp);
@@ -400,7 +400,7 @@ public class DelimSplitterCLI {
 			strings = new FunctionalList<>(tks);
 		}
 		try {
-			final ITree<String> delim
+			final Tree<String> delim
 					= dlm.delimitSequence(strings.toArray(new String[0]));
 
 			printDelimSeq(delim);
@@ -410,7 +410,7 @@ public class DelimSplitterCLI {
 		}
 	}
 
-	private void printDelimSeq(final ITree<String> delim) {
+	private void printDelimSeq(final Tree<String> delim) {
 		System.out.println("Delimited tokens:\n" + delim.getChild(1).toString());
 		System.out.print("Delimited expr: ");
 		printDelimTree(delim);
@@ -420,7 +420,7 @@ public class DelimSplitterCLI {
 		System.out.println();
 	}
 
-	private void printDelimTree(final ITree<String> tree) {
+	private void printDelimTree(final Tree<String> tree) {
 		final StringBuilder sb = new StringBuilder();
 
 		intPrintDelimTree(tree.getChild(1), sb);
@@ -428,13 +428,13 @@ public class DelimSplitterCLI {
 		System.out.println(sb.toString().replaceAll("\\s+", " "));
 	}
 
-	private void intPrintDelimTree(final ITree<String> tree, final StringBuilder sb) {
+	private void intPrintDelimTree(final Tree<String> tree, final StringBuilder sb) {
 		tree.doForChildren(child -> {
 			intPrintDelimNode(child, sb);
 		});
 	}
 
-	private void intPrintDelimNode(final ITree<String> tree, final StringBuilder sb) {
+	private void intPrintDelimNode(final Tree<String> tree, final StringBuilder sb) {
 		if (tree.getHead().equals("contents")) {
 			intPrintDelimTree(tree, sb);
 			return;
@@ -458,7 +458,7 @@ public class DelimSplitterCLI {
 		case 3:
 			intPrintDelimNode(tree.getChild(0), sb);
 
-			final ITree<String> contents = tree.getChild(1);
+			final Tree<String> contents = tree.getChild(1);
 
 			intPrintDelimTree(contents.getChild(0), sb);
 			intPrintDelimNode(tree.getChild(2), sb);

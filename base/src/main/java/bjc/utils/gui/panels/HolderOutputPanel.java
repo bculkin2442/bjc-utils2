@@ -4,11 +4,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import bjc.data.IHolder;
+import bjc.data.Holder;
 import bjc.utils.gui.layout.HLayout;
 
 /**
- * A panel that outputs a value bound to a {@link IHolder}
+ * A panel that outputs a value bound to a {@link Holder}
  *
  * @author ben
  *
@@ -19,7 +19,7 @@ public class HolderOutputPanel extends JPanel {
 	private Timer updater;
 	private final JLabel value;
 	private final int nDelay;
-	private final IHolder<String> val;
+	private final Holder<String> val;
 
 	/**
 	 * Create a new display panel, backed by a holder
@@ -31,7 +31,7 @@ public class HolderOutputPanel extends JPanel {
 	 * @param nDelay
 	 *                    The delay in ms between value updates
 	 */
-	public HolderOutputPanel(final String lab, final IHolder<String> valueHolder,
+	public HolderOutputPanel(final String lab, final Holder<String> valueHolder,
 			final int nDelay) {
 		this.val = valueHolder;
 		this.nDelay = nDelay;

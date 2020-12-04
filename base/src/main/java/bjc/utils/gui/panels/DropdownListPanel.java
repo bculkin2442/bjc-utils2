@@ -9,7 +9,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 
-import bjc.funcdata.IList;
+import bjc.funcdata.ListEx;
 import bjc.utils.gui.layout.AutosizeLayout;
 import bjc.utils.gui.layout.HLayout;
 
@@ -35,7 +35,7 @@ public class DropdownListPanel extends JPanel {
 	 *                The items to choose from
 	 */
 	public <T> DropdownListPanel(final String type, final DefaultListModel<T> model,
-			final IList<T> choices) {
+			final ListEx<T> choices) {
 		setLayout(new AutosizeLayout());
 
 		final JPanel itemInputPanel = new JPanel();

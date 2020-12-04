@@ -1,7 +1,7 @@
 package bjc.utils.gen;
 
 import bjc.funcdata.FunctionalMap;
-import bjc.funcdata.IList;
+import bjc.funcdata.ListEx;
 
 /**
  * A weighted grammar where all the rules have a equal chance of occuring.
@@ -27,8 +27,8 @@ public class RandomGrammar<E> extends WeightedGrammar<E> {
 	 *              The cases to add for this rule.
 	 */
 	@SafeVarargs
-	public final void addCases(final E rule, final IList<E>... cases) {
-		for (final IList<E> currentCase : cases) {
+	public final void addCases(final E rule, final ListEx<E>... cases) {
+		for (final ListEx<E> currentCase : cases) {
 			super.addCase(rule, 1, currentCase);
 		}
 	}
@@ -43,10 +43,10 @@ public class RandomGrammar<E> extends WeightedGrammar<E> {
 	 *              The cases to add for this rule.
 	 */
 	@SafeVarargs
-	public final void makeRule(final E rule, final IList<E>... cases) {
+	public final void makeRule(final E rule, final ListEx<E>... cases) {
 		super.addRule(rule);
 
-		for (final IList<E> currentCase : cases) {
+		for (final ListEx<E> currentCase : cases) {
 			super.addCase(rule, 1, currentCase);
 		}
 	}
@@ -60,7 +60,7 @@ public class RandomGrammar<E> extends WeightedGrammar<E> {
 	 * @param cases
 	 *              The cases to add for this rule.
 	 */
-	public void makeRule(final E rule, final IList<IList<E>> cases) {
+	public void makeRule(final E rule, final ListEx<ListEx<E>> cases) {
 		if (cases == null)
 			throw new NullPointerException("Cases must not be null");
 

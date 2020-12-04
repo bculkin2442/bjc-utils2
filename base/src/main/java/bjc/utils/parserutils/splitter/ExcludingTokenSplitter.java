@@ -5,7 +5,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import bjc.funcdata.FunctionalList;
-import bjc.funcdata.IList;
+import bjc.funcdata.ListEx;
 
 /**
  * A token splitter that will not split certain tokens.
@@ -15,7 +15,7 @@ import bjc.funcdata.IList;
  */
 public class ExcludingTokenSplitter implements TokenSplitter {
 	private final Set<String> literalExclusions;
-	private final IList<Predicate<String>> predExclusions;
+	private final ListEx<Predicate<String>> predExclusions;
 
 	private final TokenSplitter spliter;
 
@@ -59,7 +59,7 @@ public class ExcludingTokenSplitter implements TokenSplitter {
 	}
 
 	@Override
-	public IList<String> split(final String input) {
+	public ListEx<String> split(final String input) {
 		if (literalExclusions.contains(input))
 			return new FunctionalList<>(input);
 		else if (predExclusions.anyMatch(pred -> pred.test(input)))

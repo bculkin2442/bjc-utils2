@@ -7,7 +7,7 @@ import org.apache.commons.lang3.text.WordUtils;
 
 import bjc.utils.exceptions.DirectionInvalid;
 import bjc.funcdata.FunctionalList;
-import bjc.funcdata.IList;
+import bjc.funcdata.ListEx;
 
 /**
  * A set of cardinal directions
@@ -54,7 +54,7 @@ public enum Direction {
 	 *
 	 * @return A list of all the cardinal directions
 	 */
-	public static IList<Direction> cardinals() {
+	public static ListEx<Direction> cardinals() {
 		return new FunctionalList<>(NORTH, SOUTH, EAST, WEST);
 	}
 
@@ -84,7 +84,7 @@ public enum Direction {
 							+ nCardinals);
 		}
 
-		IList<Direction> cards = cardinals();
+		ListEx<Direction> cards = cardinals();
 
 		for (int i = 0; i <= 4 - nCardinals; i++) {
 			Direction rDir = cards.randItem(RNG::nextInt);

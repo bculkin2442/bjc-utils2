@@ -107,9 +107,9 @@ public class IteratorUtils {
 	 *         yields the consumed values.
 	 */
 	public static <ElementType>
-	IPair<Consumer<ElementType>, Iterator<ElementType>> entangle()
+	Pair<Consumer<ElementType>, Iterator<ElementType>> entangle()
 	{
 		Queue<ElementType> backer = new ArrayDeque<>();
-		return IPair.pair(backer::add, new QueueBackedIterator<>(backer));
+		return Pair.pair(backer::add, new QueueBackedIterator<>(backer));
 	}
 }

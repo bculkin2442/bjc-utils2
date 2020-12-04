@@ -1,7 +1,7 @@
 package bjc.utils.components;
 
-import bjc.funcdata.IList;
-import bjc.funcdata.IMap;
+import bjc.funcdata.ListEx;
+import bjc.funcdata.MapEx;
 
 /**
  * A collection of implementations of a particular type of
@@ -19,7 +19,7 @@ public interface IComponentRepository<ComponentType extends IDescribedComponent>
 	 * @return A map from component name to component, containing all of the
 	 *         components in the repositories.
 	 */
-	public IMap<String, ComponentType> getAll();
+	public MapEx<String, ComponentType> getAll();
 
 	/**
 	 * Get a component with a specific name.
@@ -36,7 +36,7 @@ public interface IComponentRepository<ComponentType extends IDescribedComponent>
 	 *
 	 * @return A list of all the registered components.
 	 */
-	public default IList<ComponentType> getList() {
+	public default ListEx<ComponentType> getList() {
 		return getAll().valueList();
 	}
 

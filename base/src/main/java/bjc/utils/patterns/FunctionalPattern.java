@@ -7,11 +7,11 @@ import bjc.data.*;
 
 class FunctionalPattern<ReturnType, PredType, InputType>
 	implements ComplexPattern<ReturnType, PredType, InputType> {
-	private final Function<InputType, IPair<Boolean, PredType>> matcher;
+	private final Function<InputType, Pair<Boolean, PredType>> matcher;
 	private final BiFunction<InputType, PredType, ReturnType> accepter;
 
 	FunctionalPattern(
-			Function<InputType, IPair<Boolean, PredType>> matcher,
+			Function<InputType, Pair<Boolean, PredType>> matcher,
 			BiFunction<InputType, PredType, ReturnType> accepter) {
 		super();
 		this.matcher = matcher;
@@ -19,7 +19,7 @@ class FunctionalPattern<ReturnType, PredType, InputType>
 	}
 
 	@Override
-	public IPair<Boolean, PredType> matches(InputType input) {
+	public Pair<Boolean, PredType> matches(InputType input) {
 		return matcher.apply(input);
 	}
 	

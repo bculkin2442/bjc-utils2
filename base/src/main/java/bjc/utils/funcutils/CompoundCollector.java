@@ -7,10 +7,10 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 
-import bjc.data.IHolder;
-import bjc.data.IPair;
-import bjc.data.Identity;
+import bjc.data.Holder;
 import bjc.data.Pair;
+import bjc.data.Identity;
+import bjc.data.SimplePair;
 
 /**
  * Implementation of a collecter that uses two collectors.
@@ -18,8 +18,8 @@ import bjc.data.Pair;
  * @author Ben Culkin
  */
 final class CompoundCollector<InitialType, AuxType1, AuxType2, FinalType1, FinalType2>
-		implements Collector<InitialType, IHolder<IPair<AuxType1, AuxType2>>,
-				IPair<FinalType1, FinalType2>> {
+		implements Collector<InitialType, Holder<Pair<AuxType1, AuxType2>>,
+				Pair<FinalType1, FinalType2>> {
 	/* Our characteristics. */
 	private final Set<java.util.stream.Collector.Characteristics> characteristicSet;
 
@@ -48,7 +48,7 @@ final class CompoundCollector<InitialType, AuxType1, AuxType2, FinalType1, Final
 	}
 
 	@Override
-	public BiConsumer<IHolder<IPair<AuxType1, AuxType2>>, InitialType> accumulator() {
+	public BiConsumer<Holder<Pair<AuxType1, AuxType2>>, InitialType> accumulator() {
 		final BiConsumer<AuxType1, InitialType> firstAccumulator = first.accumulator();
 		final BiConsumer<AuxType2, InitialType> secondAccumulator = second.accumulator();
 
@@ -68,7 +68,7 @@ final class CompoundCollector<InitialType, AuxType1, AuxType2, FinalType1, Final
 	}
 
 	@Override
-	public BinaryOperator<IHolder<IPair<AuxType1, AuxType2>>> combiner() {
+	public BinaryOperator<Holder<Pair<AuxType1, AuxType2>>> combiner() {
 		final BinaryOperator<AuxType1> firstCombiner = first.combiner();
 		final BinaryOperator<AuxType2> secondCombiner = second.combiner();
 
@@ -80,25 +80,25 @@ final class CompoundCollector<InitialType, AuxType1, AuxType2, FinalType1, Final
 	}
 
 	@Override
-	public Function<IHolder<IPair<AuxType1, AuxType2>>, IPair<FinalType1, FinalType2>>
+	public Function<Holder<Pair<AuxType1, AuxType2>>, Pair<FinalType1, FinalType2>>
 			finisher() {
 		return state -> state.unwrap(pair -> {
 			return pair.bind((left, right) -> {
 				final FinalType1 finalLeft = first.finisher().apply(left);
 				final FinalType2 finalRight = second.finisher().apply(right);
 
-				return new Pair<>(finalLeft, finalRight);
+				return new SimplePair<>(finalLeft, finalRight);
 			});
 		});
 	}
 
 	@Override
-	public Supplier<IHolder<IPair<AuxType1, AuxType2>>> supplier() {
+	public Supplier<Holder<Pair<AuxType1, AuxType2>>> supplier() {
 		return () -> {
 			final AuxType1 initialLeft = first.supplier().get();
 			final AuxType2 initialRight = second.supplier().get();
 
-			return new Identity<>(new Pair<>(initialLeft, initialRight));
+			return new Identity<>(new SimplePair<>(initialLeft, initialRight));
 		};
 	}
 }

@@ -9,13 +9,13 @@ import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
 
-import bjc.data.IPair;
-import bjc.data.ITree;
+import bjc.data.Pair;
 import bjc.data.Tree;
+import bjc.data.SimpleTree;
 import bjc.esodata.PushdownMap;
 import bjc.esodata.SimpleStack;
 import bjc.esodata.Stack;
-import bjc.funcdata.IMap;
+import bjc.funcdata.MapEx;
 import bjc.utils.funcutils.StringUtils;
 
 /**
@@ -82,7 +82,7 @@ public class SequenceDelimiter<T> {
 	 *                            delimitation.
 	 *
 	 */
-	public ITree<T> delimitSequence(final SequenceCharacteristics<T> chars,
+	public Tree<T> delimitSequence(final SequenceCharacteristics<T> chars,
 			@SuppressWarnings("unchecked") final T... seq) throws DelimiterException {
 		if (initialGroup == null) {
 			throw new NullPointerException("Initial group must be specified.");
@@ -105,7 +105,7 @@ public class SequenceDelimiter<T> {
 		allowedDelimiters.push(HashMultimap.create());
 
 		/* Map of who forbid what for debugging purposes. */
-		final IMap<T, T> whoForbid = new PushdownMap<>();
+		final MapEx<T, T> whoForbid = new PushdownMap<>();
 
 		/*
 		 * Process each member of the sequence.
@@ -114,7 +114,7 @@ public class SequenceDelimiter<T> {
 			final T tok = seq[i];
 
 			/* Check if this token could open a group. */
-			final IPair<T, T[]> possibleOpenPar = groupStack.top().doesOpen(tok);
+			final Pair<T, T[]> possibleOpenPar = groupStack.top().doesOpen(tok);
 			T possibleOpen = possibleOpenPar.getLeft();
 
 			if (possibleOpen == null) {
@@ -217,7 +217,7 @@ public class SequenceDelimiter<T> {
 				groupStack.top().markSubgroup(tok, chars);
 			} else {
 				/* Add an item to the group. */
-				groupStack.top().addItem(new Tree<>(tok));
+				groupStack.top().addItem(new SimpleTree<>(tok));
 			}
 		}
 

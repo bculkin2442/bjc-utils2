@@ -5,7 +5,7 @@ import java.io.FilenameFilter;
 import java.util.List;
 
 import bjc.funcdata.FunctionalList;
-import bjc.funcdata.IList;
+import bjc.funcdata.ListEx;
 
 /**
  * Filter a set of filenames by extension.
@@ -16,7 +16,7 @@ import bjc.funcdata.IList;
  */
 public class ExtensionFileFilter implements FilenameFilter {
 	/* The list of extensions to filter */
-	private final IList<String> extensions;
+	private final ListEx<String> extensions;
 
 	/**
 	 * Create a new filter only showing files with the specified extensions.

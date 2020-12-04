@@ -6,14 +6,14 @@ import java.util.Scanner;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import bjc.data.IHolder;
-import bjc.data.IPair;
-import bjc.data.Identity;
+import bjc.data.Holder;
 import bjc.data.Pair;
+import bjc.data.Identity;
+import bjc.data.SimplePair;
 import bjc.utils.exceptions.UnknownPragma;
 import bjc.funcdata.FunctionalMap;
 import bjc.funcdata.FunctionalStringTokenizer;
-import bjc.funcdata.IMap;
+import bjc.funcdata.MapEx;
 
 /**
  * This class parses a rules based config file, and uses it to drive a provided
@@ -31,7 +31,7 @@ public class RuleBasedConfigReader<E> {
 	 *
 	 * Takes the tokenizer, and a pair of the read token and application state
 	 */
-	private BiConsumer<FunctionalStringTokenizer, IPair<String, E>> start;
+	private BiConsumer<FunctionalStringTokenizer, Pair<String, E>> start;
 
 	/*
 	 * Function to use when continuing a rule.
@@ -52,7 +52,7 @@ public class RuleBasedConfigReader<E> {
 	 *
 	 * Pragma actions are functions taking a tokenizer and application state
 	 */
-	private final IMap<String, BiConsumer<FunctionalStringTokenizer, E>> pragmas;
+	private final MapEx<String, BiConsumer<FunctionalStringTokenizer, E>> pragmas;
 
 	/**
 	 * Create a new rule-based config reader
@@ -65,7 +65,7 @@ public class RuleBasedConfigReader<E> {
 	 *                     The action to fire when ending a rule
 	 */
 	public RuleBasedConfigReader(
-			final BiConsumer<FunctionalStringTokenizer, IPair<String, E>> start,
+			final BiConsumer<FunctionalStringTokenizer, Pair<String, E>> start,
 			final BiConsumer<FunctionalStringTokenizer, E> continueRule,
 			final Consumer<E> end) {
 		this.start = start;
@@ -161,7 +161,7 @@ public class RuleBasedConfigReader<E> {
 			/*
 			 * This is true when a rule's open
 			 */
-			final IHolder<Boolean> isRuleOpen = new Identity<>(false);
+			final Holder<Boolean> isRuleOpen = new Identity<>(false);
 
 			/*
 			 * Do something for every line of the file
@@ -237,7 +237,7 @@ public class RuleBasedConfigReader<E> {
 	 *              The action to execute on starting of a rule
 	 */
 	public void setStartRule(
-			final BiConsumer<FunctionalStringTokenizer, IPair<String, E>> start) {
+			final BiConsumer<FunctionalStringTokenizer, Pair<String, E>> start) {
 		if (start == null)
 			throw new NullPointerException("Action on rule start must be non-null");
 
@@ -284,7 +284,7 @@ public class RuleBasedConfigReader<E> {
 			/*
 			 * Start a rule
 			 */
-			start.accept(tokenizer, new Pair<>(nextToken, state));
+			start.accept(tokenizer, new SimplePair<>(nextToken, state));
 
 			isRuleOpen = true;
 		}

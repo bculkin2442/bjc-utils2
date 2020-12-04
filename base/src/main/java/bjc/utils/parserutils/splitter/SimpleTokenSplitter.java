@@ -2,7 +2,7 @@ package bjc.utils.parserutils.splitter;
 
 import java.util.regex.Pattern;
 
-import bjc.funcdata.IList;
+import bjc.funcdata.ListEx;
 import bjc.functypes.ID;
 import bjc.utils.ioutils.RegexStringEditor;
 
@@ -39,7 +39,7 @@ public class SimpleTokenSplitter implements TokenSplitter {
 	}
 
 	@Override
-	public IList<String> split(final String input) {
+	public ListEx<String> split(final String input) {
 		if (keepDelim) {
 			return RegexStringEditor.mapOccurances(input, spliter, ID.id(), ID.id());
 		}

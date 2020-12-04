@@ -2,7 +2,7 @@ package bjc.utils.parserutils.splitter;
 
 import java.util.function.UnaryOperator;
 
-import bjc.funcdata.IList;
+import bjc.funcdata.ListEx;
 
 /**
  * A token splitter that performs a transform on the tokens from another
@@ -31,7 +31,7 @@ public class TransformTokenSplitter implements TokenSplitter {
 	}
 
 	@Override
-	public IList<String> split(String input) {
+	public ListEx<String> split(String input) {
 		return source.split(input).map(transform);
 	}
 

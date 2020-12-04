@@ -6,12 +6,12 @@ import java.io.PrintStream;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import bjc.data.IHolder;
+import bjc.data.Holder;
 import bjc.data.Identity;
 import bjc.funcdata.FunctionalList;
 import bjc.funcdata.FunctionalMap;
-import bjc.funcdata.IList;
-import bjc.funcdata.IMap;
+import bjc.funcdata.ListEx;
+import bjc.funcdata.MapEx;
 import bjc.utils.funcutils.FuncUtils;
 
 /**
@@ -62,13 +62,13 @@ public class AdjacencyMap<T> {
 			if (vertexCount <= 0) throw new InputMismatchException(
 						"The number of vertices must be greater than 0");
 
-			final IList<Integer> vertices = new FunctionalList<>();
+			final ListEx<Integer> vertices = new FunctionalList<>();
 
 			FuncUtils.doTimes(vertexCount, vertexNo -> vertices.add(vertexNo));
 
 			adjacency = new AdjacencyMap<>(vertices);
 
-			final IHolder<Integer> row = new Identity<>(0);
+			final Holder<Integer> row = new Identity<>(0);
 
 			input.forEachRemaining(strang -> {
 				readRow(adjacency, vertexCount, row, strang);
@@ -80,7 +80,7 @@ public class AdjacencyMap<T> {
 
 	/* Read a row of edges. */
 	private static void readRow(final AdjacencyMap<Integer> adjacency,
-			final int vertexCount, final IHolder<Integer> row, final String strang) {
+			final int vertexCount, final Holder<Integer> row, final String strang) {
 		final String[] parts = strang.split(" ");
 
 		if (parts.length != vertexCount) {
@@ -115,7 +115,7 @@ public class AdjacencyMap<T> {
 	}
 
 	/** The backing storage of the map */
-	private final IMap<T, IMap<T, Integer>> adjacency = new FunctionalMap<>();
+	private final MapEx<T, MapEx<T, Integer>> adjacency = new FunctionalMap<>();
 
 	/**
 	 * Create a new map from a set of vertices
@@ -123,11 +123,11 @@ public class AdjacencyMap<T> {
 	 * @param vertices
 	 *                 The set of vertices to create a map from
 	 */
-	public AdjacencyMap(final IList<T> vertices) {
+	public AdjacencyMap(final ListEx<T> vertices) {
 		if (vertices == null) throw new NullPointerException("Vertices must not be null");
 
 		vertices.forEach(vertex -> {
-			final IMap<T, Integer> row = new FunctionalMap<>();
+			final MapEx<T, Integer> row = new FunctionalMap<>();
 
 			vertices.forEach(target -> {
 				row.put(target, 0);
@@ -143,7 +143,7 @@ public class AdjacencyMap<T> {
 	 * @return Whether or not the graph is directed
 	 */
 	public boolean isDirected() {
-		final IHolder<Boolean> result = new Identity<>(true);
+		final Holder<Boolean> result = new Identity<>(true);
 
 		adjacency.forEach((sourceKey, sourceValue) -> {
 			sourceValue.forEach((targetKey, targetValue) -> {

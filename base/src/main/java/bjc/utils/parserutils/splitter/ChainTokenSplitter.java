@@ -1,7 +1,7 @@
 package bjc.utils.parserutils.splitter;
 
 import bjc.funcdata.FunctionalList;
-import bjc.funcdata.IList;
+import bjc.funcdata.ListEx;
 
 /**
  * A token splitter that chains several other splitters together.
@@ -10,7 +10,7 @@ import bjc.funcdata.IList;
  *
  */
 public class ChainTokenSplitter implements TokenSplitter {
-	private final IList<TokenSplitter> spliters;
+	private final ListEx<TokenSplitter> spliters;
 
 	/**
 	 * Create a new chain token splitter.
@@ -40,8 +40,8 @@ public class ChainTokenSplitter implements TokenSplitter {
 	}
 
 	@Override
-	public IList<String> split(final String input) {
-		final IList<String> initList = new FunctionalList<>(input);
+	public ListEx<String> split(final String input) {
+		final ListEx<String> initList = new FunctionalList<>(input);
 
 		return spliters.reduceAux(initList, (splitter, strangs) -> strangs.flatMap(splitter::split));
 	}

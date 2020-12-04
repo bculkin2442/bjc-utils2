@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 import bjc.data.Toggle;
 import bjc.data.ValueToggle;
 import bjc.funcdata.FunctionalList;
-import bjc.funcdata.IList;
+import bjc.funcdata.ListEx;
 import bjc.functypes.ID;
 
 /**
@@ -84,7 +84,7 @@ public class RegexStringEditor {
 		/*
 		 * Get all of the occurances.
 		 */
-		final IList<String> occurances = listOccurances(input, rPatt);
+		final ListEx<String> occurances = listOccurances(input, rPatt);
 
 		/*
 		 * Execute the correct action on every occurance.
@@ -118,13 +118,13 @@ public class RegexStringEditor {
 	 *
 	 * @return The string, with both actions applied.
 	 */
-	public static IList<String> mapOccurances(final String input, final Pattern rPatt,
+	public static ListEx<String> mapOccurances(final String input, final Pattern rPatt,
 			final UnaryOperator<String> betweenAction,
 			final UnaryOperator<String> onAction) {
 		/*
 		 * Get all of the occurances.
 		 */
-		final IList<String> occurances = listOccurances(input, rPatt);
+		final ListEx<String> occurances = listOccurances(input, rPatt);
 
 		/*
 		 * Execute the correct action on every occurance.
@@ -146,8 +146,8 @@ public class RegexStringEditor {
 	 * @return The string, as a list of match/non-match segments, starting/ending
 	 *         with a non-match segment.
 	 */
-	public static IList<String> listOccurances(final String input, final Pattern rPatt) {
-		final IList<String> res = new FunctionalList<>();
+	public static ListEx<String> listOccurances(final String input, final Pattern rPatt) {
+		final ListEx<String> res = new FunctionalList<>();
 
 		/*
 		 * Create the matcher and work buffer.

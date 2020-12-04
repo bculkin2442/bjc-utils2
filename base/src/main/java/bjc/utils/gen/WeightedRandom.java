@@ -2,10 +2,10 @@ package bjc.utils.gen;
 
 import java.util.Random;
 
-import bjc.data.IPair;
 import bjc.data.Pair;
+import bjc.data.SimplePair;
 import bjc.funcdata.FunctionalList;
-import bjc.funcdata.IList;
+import bjc.funcdata.ListEx;
 
 /**
  * Represents a random number generator where certain results are weighted more
@@ -17,7 +17,7 @@ import bjc.funcdata.IList;
  *            The type of values that are randomly selected.
  */
 public class WeightedRandom<E> {
-	private final IList<IPair<Integer, E>> values;
+	private final ListEx<Pair<Integer, E>> values;
 
 	/* The source for any needed random numbers */
 	private Random source;
@@ -50,7 +50,7 @@ public class WeightedRandom<E> {
 		this(BASE);
 	}
 
-	private WeightedRandom(Random src, IList<IPair<Integer, E>> vals, int chance) {
+	private WeightedRandom(Random src, ListEx<Pair<Integer, E>> vals, int chance) {
 		source = src;
 
 		values = vals;
@@ -68,7 +68,7 @@ public class WeightedRandom<E> {
 	 *               The result to get when the chance comes up.
 	 */
 	public void addProbability(final int chance, final E result) {
-		values.add(new Pair<>(chance, result));
+		values.add(new SimplePair<>(chance, result));
 
 		totalChance += chance;
 	}
@@ -91,7 +91,7 @@ public class WeightedRandom<E> {
 	 */
 	public E generateValue(Random rn) {
 		int target = rn.nextInt(totalChance);
-		for (IPair<Integer, E> val : values) {
+		for (Pair<Integer, E> val : values) {
 			int prob = val.getLeft();
 
 			if (target < prob) {
@@ -114,8 +114,8 @@ public class WeightedRandom<E> {
 	 *
 	 * @return A list of all the values that can be generated
 	 */
-	public IList<E> getResults() {
-		return values.map(IPair::getRight);
+	public ListEx<E> getResults() {
+		return values.map(Pair::getRight);
 	}
 
 	/**
@@ -124,7 +124,7 @@ public class WeightedRandom<E> {
 	 *
 	 * @return A list of pairs of values and value probabilities
 	 */
-	public IList<IPair<Integer, E>> getValues() {
+	public ListEx<Pair<Integer, E>> getValues() {
 		return values;
 	}
 
@@ -157,7 +157,7 @@ public class WeightedRandom<E> {
 	public E getDescent(int factor, Random rn) {
 		if (values.getSize() == 0) return null;
 
-		for (IPair<Integer, E> val : values) {
+		for (Pair<Integer, E> val : values) {
 			if (rn.nextInt(factor) == 0) continue;
 
 			if (exhaust) {
@@ -169,7 +169,7 @@ public class WeightedRandom<E> {
 			return val.getRight();
 		}
 
-		IPair<Integer, E> val = values.getByIndex(values.getSize() - 1);
+		Pair<Integer, E> val = values.getByIndex(values.getSize() - 1);
 		if (exhaust) values.removeMatching(val);
 
 		return val.getRight();
@@ -231,7 +231,7 @@ public class WeightedRandom<E> {
 
 		// System.err.printf("\tTRACE: got %d success for binomial trials (%d <= 1d%d,
 		// %d times)\n", numSuc, target, bound, trials);
-		IPair<Integer, E> val = values.getByIndex(Math.min(numSuc, values.getSize() - 1));
+		Pair<Integer, E> val = values.getByIndex(Math.min(numSuc, values.getSize() - 1));
 		if (exhaust) {
 			totalChance -= val.getLeft();
 
@@ -248,8 +248,8 @@ public class WeightedRandom<E> {
 	 * @return A new WeightedRandom that is exhaustible.
 	 */
 	public WeightedRandom<E> exhaustible() {
-		IList<IPair<Integer, E>> lst = new FunctionalList<>();
-		for (IPair<Integer, E> val : values) lst.add(val);
+		ListEx<Pair<Integer, E>> lst = new FunctionalList<>();
+		for (Pair<Integer, E> val : values) lst.add(val);
 
 		WeightedRandom<E> res = new WeightedRandom<>(source, lst, totalChance);
 

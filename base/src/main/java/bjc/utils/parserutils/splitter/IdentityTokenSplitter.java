@@ -10,7 +10,7 @@ import bjc.funcdata.*;
  */
 public class IdentityTokenSplitter implements TokenSplitter {
 	@Override
-	public IList<String> split(String input) {
+	public ListEx<String> split(String input) {
 		return new FunctionalList<>(input);
 	}
 }
