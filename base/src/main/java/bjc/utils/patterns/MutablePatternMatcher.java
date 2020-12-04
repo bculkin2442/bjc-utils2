@@ -16,7 +16,7 @@ import bjc.data.*;
  * @param <InputType> The type of the input to match against.
  */
 public class MutablePatternMatcher<ReturnType, InputType>
-	implements IPatternMatcher<ReturnType, InputType> {
+	implements PatternMatcher<ReturnType, InputType> {
 	private final List<ComplexPattern<ReturnType, Object, InputType>> patterns;
 	
 	/**

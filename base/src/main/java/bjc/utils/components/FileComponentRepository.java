@@ -24,8 +24,8 @@ import bjc.utils.funcutils.FileUtils;
  * @param <ComponentType>
  *                        The type of component being read in.
  */
-public class FileComponentRepository<ComponentType extends IDescribedComponent>
-		implements IComponentRepository<ComponentType> {
+public class FileComponentRepository<ComponentType extends DescribedComponent>
+		implements ComponentRepository<ComponentType> {
 	/* The logger to use for storing data about this class. */
 	private static final Logger CLASS_LOGGER
 			= Logger.getLogger("FileComponentRepository");

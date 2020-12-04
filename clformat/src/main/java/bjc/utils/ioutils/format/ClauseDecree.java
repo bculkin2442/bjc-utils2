@@ -13,16 +13,16 @@ import bjc.utils.ioutils.ReportWriter;
  *
  * @author Ben Culkin
  */
-public class ClauseDecree implements IDecree {
+public class ClauseDecree implements Decree {
 	/**
 	 * The decrees that make up the body of this clause.
 	 */
-	public List<Decree> body;
+	public List<SimpleDecree> body;
 
 	/**
 	 * The decree that terminated this clause.
 	 */
-	public Decree terminator;
+	public SimpleDecree terminator;
 
 	/**
 	 * Create a new blank clause decree.
@@ -38,10 +38,10 @@ public class ClauseDecree implements IDecree {
 	 * @param children
 	 *                 The decrees to form the body of the clause.
 	 */
-	public ClauseDecree(Decree... children) {
+	public ClauseDecree(SimpleDecree... children) {
 		this();
 
-		for (Decree child : children) body.add(child);
+		for (SimpleDecree child : children) body.add(child);
 	}
 
 	/**
@@ -53,7 +53,7 @@ public class ClauseDecree implements IDecree {
 	 * @param children
 	 *                 The decrees that form the body of the clause.
 	 */
-	public ClauseDecree(Decree term, Decree... children) {
+	public ClauseDecree(SimpleDecree term, SimpleDecree... children) {
 		this(children);
 
 		this.terminator = term;
@@ -65,7 +65,7 @@ public class ClauseDecree implements IDecree {
 	 * @param child
 	 *              The decree to add to this clause.
 	 */
-	public void addChild(Decree child) {
+	public void addChild(SimpleDecree child) {
 		body.add(child);
 	}
 
@@ -96,7 +96,7 @@ public class ClauseDecree implements IDecree {
 		writer.write("\n");
 
 		int idx = 0;
-		for (Decree kid : body) 
+		for (SimpleDecree kid : body) 
 			writer.writef("Child %d: %s\n", idx, kid.toString());
 
 		writer.dedent();

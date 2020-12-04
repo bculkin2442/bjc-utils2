@@ -10,8 +10,8 @@ import bjc.funcdata.MapEx;
  * @param <ComponentType>
  *                        The type of component stored in the repository.
  */
-public class MemoryComponentRepository<ComponentType extends IDescribedComponent>
-		implements IComponentRepository<ComponentType> {
+public class MemoryComponentRepository<ComponentType extends DescribedComponent>
+		implements ComponentRepository<ComponentType> {
 	private final MapEx<String, ComponentType> repo;
 
 	private final String source;

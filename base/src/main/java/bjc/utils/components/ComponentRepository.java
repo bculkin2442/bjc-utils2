@@ -5,14 +5,14 @@ import bjc.funcdata.MapEx;
 
 /**
  * A collection of implementations of a particular type of
- * {@link IDescribedComponent}.
+ * {@link DescribedComponent}.
  *
  * @author ben
  *
  * @param <ComponentType>
  *                        The type of components contained in this repository.
  */
-public interface IComponentRepository<ComponentType extends IDescribedComponent> {
+public interface ComponentRepository<ComponentType extends DescribedComponent> {
 	/**
 	 * Get all of the components this repository knows about.
 	 *

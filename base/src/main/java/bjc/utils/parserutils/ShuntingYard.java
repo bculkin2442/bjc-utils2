@@ -25,7 +25,7 @@ public class ShuntingYard<TokenType> {
 	 * @author ben
 	 *
 	 */
-	public static enum Operator implements IPrecedent {
+	public static enum Operator implements Precedent {
 		/**
 		 * Represents addition.
 		 */
@@ -59,7 +59,7 @@ public class ShuntingYard<TokenType> {
 	/*
 	 * Holds all the shuntable operations.
 	 */
-	private MapEx<String, IPrecedent> operators;
+	private MapEx<String, Precedent> operators;
 
 	/**
 	 * Create a new shunting yard with a default set of operators.
@@ -95,7 +95,7 @@ public class ShuntingYard<TokenType> {
 		/*
 		 * Create the precedence marker
 		 */
-		final IPrecedent prec = IPrecedent.newSimplePrecedent(precedence);
+		final Precedent prec = Precedent.newSimplePrecedent(precedence);
 
 		this.addOp(operator, prec);
 	}
@@ -109,7 +109,7 @@ public class ShuntingYard<TokenType> {
 	 * @param precedence
 	 *                   The precedence of the operator.
 	 */
-	public void addOp(final String operator, final IPrecedent precedence) {
+	public void addOp(final String operator, final Precedent precedence) {
 		/*
 		 * Complain about trying to add an incorrect operator
 		 */

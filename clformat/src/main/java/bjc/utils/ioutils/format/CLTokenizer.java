@@ -9,7 +9,7 @@ import java.util.regex.*;
  * @author bjculkin
  *
  */
-public class CLTokenizer implements Iterator<Decree> {
+public class CLTokenizer implements Iterator<SimpleDecree> {
 	/**
 	 * Whether or not the tokenizer is in debug mode or not.
 	 */
@@ -19,13 +19,13 @@ public class CLTokenizer implements Iterator<Decree> {
 	 * Internal class for a tokenizer that returns a specific set of tokens.
 	 */
 	private static class SetCLTokenizer extends CLTokenizer {
-		private Iterator<Decree> body;
+		private Iterator<SimpleDecree> body;
 
-		public SetCLTokenizer(Iterator<Decree> bod) {
+		public SetCLTokenizer(Iterator<SimpleDecree> bod) {
 			body = bod;
 		}
 
-		public SetCLTokenizer(Iterable<Decree> bod) {
+		public SetCLTokenizer(Iterable<SimpleDecree> bod) {
 			body = bod.iterator();
 		}
 
@@ -35,14 +35,14 @@ public class CLTokenizer implements Iterator<Decree> {
 		}
 
 		@Override
-		public Decree next() {
+		public SimpleDecree next() {
 			return body.next();
 		}
 	}
 
 	private Matcher mat;
 
-	private Decree dir;
+	private SimpleDecree dir;
 
 	/**
 	 * Empty constructor that should only be invoked if you are a subclass who
@@ -70,7 +70,7 @@ public class CLTokenizer implements Iterator<Decree> {
 	 *
 	 * @return A tokenizer yielding the given set of decrees.
 	 */
-	public static CLTokenizer fromTokens(Iterator<Decree> bod) {
+	public static CLTokenizer fromTokens(Iterator<SimpleDecree> bod) {
 		return new SetCLTokenizer(bod);
 	}
 
@@ -82,7 +82,7 @@ public class CLTokenizer implements Iterator<Decree> {
 	 *
 	 * @return A tokenizer yielding the given set of decrees.
 	 */
-	public static CLTokenizer fromTokens(Iterable<Decree> bod) {
+	public static CLTokenizer fromTokens(Iterable<SimpleDecree> bod) {
 		return new SetCLTokenizer(bod);
 	}
 
@@ -92,15 +92,15 @@ public class CLTokenizer implements Iterator<Decree> {
 	}
 
 	@Override
-	public Decree next() {
+	public SimpleDecree next() {
 		return getNext();
 	}
 
-	private Decree getNext() {
+	private SimpleDecree getNext() {
 		if (!hasNext()) throw new NoSuchElementException("No possible decrees remaining");
 
 		if (dir != null) {
-			Decree tmp = dir;
+			SimpleDecree tmp = dir;
 
 			dir = null;
 
@@ -125,25 +125,25 @@ public class CLTokenizer implements Iterator<Decree> {
 
 				boolean isUser = directiveName == null && directiveFunction != null;
 
-				dir = new Decree(directiveName, isUser,
+				dir = new SimpleDecree(directiveName, isUser,
 						CLParameters.fromDirective(directiveParameterString),
 						CLModifiers.fromString(directiveModifierString));
 			}
 
 			if (tmp.equals("")) {
-				Decree dcr = dir;
+				SimpleDecree dcr = dir;
 
 				dir = null;
 
 				return dcr;
 			}
 
-			return new Decree(sb.toString());
+			return new SimpleDecree(sb.toString());
 		}
 
 		mat.appendTail(sb);
 
-		return new Decree(sb.toString());
+		return new SimpleDecree(sb.toString());
 	}
 
 	/**
@@ -157,7 +157,7 @@ public class CLTokenizer implements Iterator<Decree> {
 	 *
 	 * @return A group decree with the given properties.
 	 */
-	public GroupDecree nextGroup(Decree openedWith, String desiredClosing) {
+	public GroupDecree nextGroup(SimpleDecree openedWith, String desiredClosing) {
 		return nextGroup(openedWith, desiredClosing, null);
 	}
 
@@ -177,7 +177,7 @@ public class CLTokenizer implements Iterator<Decree> {
 	 *
 	 * @return A group decree with the given properties.
 	 */
-	public GroupDecree nextGroup(Decree openedWith, String desiredClosing,
+	public GroupDecree nextGroup(SimpleDecree openedWith, String desiredClosing,
 			String clauseSep) {
 		GroupDecree newGroup = new GroupDecree();
 		newGroup.opening = openedWith;
@@ -188,7 +188,7 @@ public class CLTokenizer implements Iterator<Decree> {
 
 		int nestingLevel = 1;
 
-		Decree curDecree;
+		SimpleDecree curDecree;
 
 		do {
 			curDecree = next();

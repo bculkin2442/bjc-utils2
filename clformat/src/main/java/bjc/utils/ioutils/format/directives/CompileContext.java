@@ -21,7 +21,7 @@ public class CompileContext {
 	/**
 	 * The decree that is currently being parsed.
 	 */
-	public Decree decr;
+	public SimpleDecree decr;
 
 	/**
 	 * Create a new compilation context.
@@ -35,7 +35,7 @@ public class CompileContext {
 	 * @param dcr
 	 *             The decree currently being compiled.
 	 */
-	public CompileContext(CLTokenizer dirs, CLFormatter fmt, Decree dcr) {
+	public CompileContext(CLTokenizer dirs, CLFormatter fmt, SimpleDecree dcr) {
 		directives = dirs;
 		formatter = fmt;
 

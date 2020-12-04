@@ -1,41 +1,85 @@
 package bjc.utils.patterns;
 
-import bjc.data.*;
+import java.util.function.*;
+
+import bjc.functypes.*;
 
 /**
- * Implements pattern-matching (of a sort) against a collection of patterns.
+ * Represents a pattern matcher against a series of patterns.
  * 
  * @author Ben Culkin
- * 
- * @param <ReturnType> The type returned by the pattern.
+ *
+ * @param <ReturnType> The type returned from matching the patterns.
+ * @param <InputType> The type to match against.
  */
-public class PatternMatcher<ReturnType, InputType>
-	implements IPatternMatcher<ReturnType, InputType> {
-	private final ComplexPattern<ReturnType, Object, InputType>[] patterns;
+@FunctionalInterface
+public interface PatternMatcher<ReturnType, InputType> {
+	/**
+	 * Match an input object against a set of patterns.
+	 * 
+	 * @param input The object to match against.
+	 * 
+	 * @return The result of matching against the object.
+	 * 
+	 * @throws NonExhaustiveMatch If none of the patterns in this set match
+	 */
+	ReturnType matchFor(InputType input) throws NonExhaustiveMatch;
 	
 	/**
-	 * Create a new pattern matcher.
+	 * Create a pattern matcher against a static set of patterns.
 	 * 
-	 * @param patterns The set of patterns to match against.
+	 * @param <RetType> The type returned from matching the patterns.
+	 * @param <InpType> The type to match against.
+	 * 
+	 * @param patterns The set of patterns to match on.
+	 * 
+	 * @return A pattern matcher which matches on the given patterns.
 	 */
-	@SuppressWarnings("unchecked")
 	@SafeVarargs
-	public PatternMatcher(ComplexPattern<ReturnType, ?, InputType>...patterns) {
-		// Note: this may seem a somewhat questionable cast, but because we never
-		// actually do anything with the value who has a type matching the second
-		// parameter, this should be safe
-		this.patterns = (ComplexPattern<ReturnType, Object, InputType>[]) patterns;
+	static <RetType, InpType> PatternMatcher<RetType, InpType> matchingOn(
+			ComplexPattern<RetType, ?, InpType>... patterns) {
+		return new SimplePatternMatcher<>(patterns);
+	}
+	
+	/**
+	 * Create a pattern matcher from a handler function.
+	 * 
+	 * @param <RetType> The type returned by the matcher.
+	 * @param <InpType> The type to match against.
+	 * 
+	 * @param handler The handler function.
+	 * 
+	 * @return A pattern matcher defined by the given handler.
+	 */
+	static <RetType, InpType> PatternMatcher<RetType, InpType> from(
+			ThrowFunction<InpType, RetType, NonExhaustiveMatch> handler) {
+		return new FunctionalPatternMatcher<>(handler);
+	}
+	
+	/**
+	 * Create a pattern matcher which applies a transform to its input.
+	 * 
+	 * @param <NewInput> The new input type to use.
+	 * @param transformer The function to convert from the new input to the old input.
+	 * 
+	 * @return A pattern matcher which takes values of the new type instead.
+	 */
+	default <NewInput> PatternMatcher<ReturnType, NewInput> transformInput(
+			Function<NewInput, InputType> transformer) {
+		return from(inp -> matchFor(transformer.apply(inp)));
 	}
 
-	@Override
-	public ReturnType matchFor(InputType input) throws NonExhaustiveMatch {
-		for (ComplexPattern<ReturnType, Object, InputType> pattern : patterns) {
-			Pair<Boolean, Object> matches = pattern.matches(input);
-			if (matches.getLeft()) {
-				pattern.apply(input, matches.getRight());
-			}
-		}
-		
-		throw new NonExhaustiveMatch("Non-exhaustive match against " + input);
+	/**
+	 * Create a pattern matcher which applies a transform to its output.
+	 * 
+	 * @param <NewOutput> The new output type to use.
+	 * 
+	 * @param transformer The function to convert from the new output to the old output.
+	 * 
+	 * @return A pattern matcher which takes values of the new type instead.
+	 */
+	default <NewOutput> PatternMatcher<NewOutput, InputType> transformOutput(
+			Function<ReturnType, NewOutput> transformer) {
+		return from(inp -> transformer.apply(matchFor(inp)));
 	}
 }

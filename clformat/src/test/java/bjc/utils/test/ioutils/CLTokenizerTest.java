@@ -18,7 +18,7 @@ public class CLTokenizerTest {
 		CLTokenizer tokenzer = new CLTokenizer("");
 
 		assertTrue("Empty tokenizer has a decree", tokenzer.hasNext());
-		Decree dec = tokenzer.next();
+		SimpleDecree dec = tokenzer.next();
 		assertFalse("Empty tokenizer has only one decree", tokenzer.hasNext());
 
 		assertTrue("Decree from empty tokenizer is a literal", dec.isLiteral);

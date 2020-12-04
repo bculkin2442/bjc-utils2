@@ -13,16 +13,16 @@ import bjc.utils.ioutils.ReportWriter;
  *
  * @author Ben Culkin
  */
-public class GroupDecree implements Iterable<ClauseDecree>, IDecree {
+public class GroupDecree implements Iterable<ClauseDecree>, Decree {
 	/**
 	 * The decree that opened this group.
 	 */
-	public Decree opening;
+	public SimpleDecree opening;
 
 	/**
 	 * The decree that closed this group.
 	 */
-	public Decree closing;
+	public SimpleDecree closing;
 
 	/**
 	 * The clauses that make up the body of this group.
@@ -60,7 +60,7 @@ public class GroupDecree implements Iterable<ClauseDecree>, IDecree {
 	 * @param children
 	 *                 The decree making up the body of the group.
 	 */
-	public GroupDecree(Decree opening, Decree closing, ClauseDecree... children) {
+	public GroupDecree(SimpleDecree opening, SimpleDecree closing, ClauseDecree... children) {
 		this(children);
 
 		this.opening = opening;
@@ -103,7 +103,7 @@ public class GroupDecree implements Iterable<ClauseDecree>, IDecree {
 	 *
 	 * @return The decrees that make up the body of the first clause.
 	 */
-	public List<Decree> unwrap() {
+	public List<SimpleDecree> unwrap() {
 		return body.get(0).body;
 	}
 

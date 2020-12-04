@@ -16,12 +16,12 @@ public class IterationDirective implements Directive {
 	public Edict compile(CompileContext compCTX) {
 		IterationEdict.Mode mode;
 
-		List<Decree> body = new ArrayList<>();
+		List<SimpleDecree> body = new ArrayList<>();
 
-		Iterator<Decree> dirIter = compCTX.directives;
+		Iterator<SimpleDecree> dirIter = compCTX.directives;
 		// :GroupDecree
 		while (dirIter.hasNext()) {
-			Decree decr = dirIter.next();
+			SimpleDecree decr = dirIter.next();
 			if (decr.isLiteral) {
 				body.add(decr);
 			} else {
@@ -73,7 +73,7 @@ class IterationEdict implements Edict {
 
 	private CLValue maxItrVal;
 
-	public IterationEdict(Mode mode, List<Decree> body, CLFormatter fmt, CLValue maxItr) {
+	public IterationEdict(Mode mode, List<SimpleDecree> body, CLFormatter fmt, CLValue maxItr) {
 		this.mode = mode;
 		this.body = new CLString(fmt.compile(body));
 

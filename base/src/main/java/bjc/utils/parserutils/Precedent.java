@@ -7,7 +7,7 @@ package bjc.utils.parserutils;
  *
  */
 @FunctionalInterface
-public interface IPrecedent {
+public interface Precedent {
 	/**
 	 * Create a new object with set precedence
 	 *
@@ -15,7 +15,7 @@ public interface IPrecedent {
 	 *                   The precedence of the object to handle
 	 * @return A new object with set precedence
 	 */
-	public static IPrecedent newSimplePrecedent(final int precedence) {
+	public static Precedent newSimplePrecedent(final int precedence) {
 		return () -> precedence;
 	}
 

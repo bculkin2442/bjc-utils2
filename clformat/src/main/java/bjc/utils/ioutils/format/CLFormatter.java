@@ -299,7 +299,7 @@ public class CLFormatter {
 			boolean isToplevel) throws IOException {
 		try {
 			while (cltok.hasNext()) {
-				Decree decr = cltok.next();
+				SimpleDecree decr = cltok.next();
 
 				if (decr.isLiteral) {
 					rw.write(decr.name);
@@ -411,7 +411,7 @@ public class CLFormatter {
 	 *
 	 * @return A set of edicts compiled from the decrees.
 	 */
-	public List<Edict> compile(Iterable<Decree> decrees) {
+	public List<Edict> compile(Iterable<SimpleDecree> decrees) {
 		// If we have no decrees, there are no edicts.
 		if (decrees == null) return new ArrayList<>();
 
@@ -444,7 +444,7 @@ public class CLFormatter {
 		List<Edict> result = new ArrayList<>();
 
 		while (cltok.hasNext()) {
-			Decree decr = cltok.next();
+			SimpleDecree decr = cltok.next();
 			String nam = decr.name;
 
 			CompileContext compCTX = new CompileContext(cltok, this, decr);
