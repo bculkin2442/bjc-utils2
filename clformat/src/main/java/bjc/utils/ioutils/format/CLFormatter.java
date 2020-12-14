@@ -357,7 +357,7 @@ public class CLFormatter {
 						 * implement floating point directives.
 						 */
 						throw new IllegalArgumentException(
-								"Floating-point directives aren't implemented yet.");
+								"For now, floating point directives are implemented via the `D directive. Use that instead");
 					case "W":
 						/*
 						 * @TODO
