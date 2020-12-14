@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.function.*;
 
 import bjc.funcdata.FunctionalList;
-import bjc.funcdata.IList;
+import bjc.funcdata.ListEx;
 
 /**
  * Utilities for manipulating FunctionalLists and regular Collections lists that
@@ -27,7 +27,7 @@ public class ListUtils {
 	 *
 	 * @return The collapsed string of tokens.
 	 */
-	public static String collapseTokens(final IList<String> input) {
+	public static String collapseTokens(final ListEx<String> input) {
 		if (input == null) throw new NullPointerException("Input must not be null");
 
 		return collapseTokens(input, "");
@@ -45,7 +45,7 @@ public class ListUtils {
 	 *
 	 * @return The collapsed string of tokens.
 	 */
-	public static String collapseTokens(final IList<String> input,
+	public static String collapseTokens(final ListEx<String> input,
 			final String seperator) {
 		if (input == null)          throw new NullPointerException("Input must not be null");
 		else if (seperator == null) throw new NullPointerException("Seperator must not be null");
@@ -89,9 +89,9 @@ public class ListUtils {
 	 * @return A new list containing the desired number of items randomly selected
 	 *         from the specified list without replacement.
 	 */
-	public static <E> IList<E> drawWithoutReplacement(final IList<E> list,
+	public static <E> ListEx<E> drawWithoutReplacement(final ListEx<E> list,
 			final int number, final Function<Integer, Integer> rng) {
-		final IList<E> selected = new FunctionalList<>(new ArrayList<>(number));
+		final ListEx<E> selected = new FunctionalList<>(new ArrayList<>(number));
 
 		final int total = list.getSize();
 
@@ -133,9 +133,9 @@ public class ListUtils {
 	 * @return A new list containing the desired number of items randomly selected
 	 *         from the specified list.
 	 */
-	public static <E> IList<E> drawWithReplacement(final IList<E> list, final int number,
+	public static <E> ListEx<E> drawWithReplacement(final ListEx<E> list, final int number,
 			final Function<Integer, Integer> rng) {
-		final IList<E> selected = new FunctionalList<>(new ArrayList<>(number));
+		final ListEx<E> selected = new FunctionalList<>(new ArrayList<>(number));
 
 		for (int i = 0; i < number; i++) selected.add(list.randItem(rng));
 
@@ -161,7 +161,7 @@ public class ListUtils {
 	 *
 	 * @return A list partitioned according to the above rules.
 	 */
-	public static <E> IList<IList<E>> groupPartition(final IList<E> input,
+	public static <E> ListEx<ListEx<E>> groupPartition(final ListEx<E> input,
 			final Function<E, Integer> counter, final int partitionSize) {
 		if (input == null) {
 			throw new NullPointerException("Input list must not be null");
@@ -176,10 +176,10 @@ public class ListUtils {
 		}
 
 		/* List that holds our results. */
-		final IList<IList<E>> returned = new FunctionalList<>();
+		final ListEx<ListEx<E>> returned = new FunctionalList<>();
 
 		/* List that holds elements rejected during current pass. */
-		final IList<E> rejected = new FunctionalList<>();
+		final ListEx<E> rejected = new FunctionalList<>();
 
 		final GroupPartIteration<E> it
 				= new GroupPartIteration<>(returned, rejected, partitionSize, counter);
@@ -215,10 +215,10 @@ public class ListUtils {
 	 * @return A list containing all the elements of the lists.
 	 */
 	@SafeVarargs
-	public static <E> IList<E> mergeLists(final IList<E>... lists) {
-		final IList<E> returned = new FunctionalList<>();
+	public static <E> ListEx<E> mergeLists(final ListEx<E>... lists) {
+		final ListEx<E> returned = new FunctionalList<>();
 
-		for (final IList<E> list : lists) {
+		for (final ListEx<E> list : lists) {
 			for (final E itm : list.toIterable()) returned.add(itm);
 		}
 
@@ -249,12 +249,12 @@ public class ListUtils {
 	 *                                  If the list couldn't be padded to the
 	 *                                  desired size.
 	 */
-	public static <E> IList<E> padList(final IList<E> list,
+	public static <E> ListEx<E> padList(final ListEx<E> list,
 			final Function<E, Integer> counter, final int size,
 			final Supplier<E> padder) {
 		int count = 0;
 
-		final IList<E> returned = new FunctionalList<>();
+		final ListEx<E> returned = new FunctionalList<>();
 
 		for (final E itm : list.toIterable()) {
 			count += counter.apply(itm);
@@ -433,12 +433,12 @@ public class ListUtils {
  */
 class GroupPartIteration<E> implements Consumer<E> {
 	/* The list we're returning. */
-	private final IList<IList<E>> returnedList;
+	private final ListEx<ListEx<E>> returnedList;
 
 	/* The current partition of the list. */
-	public IList<E> currentPartition;
+	public ListEx<E> currentPartition;
 	/* The items rejected from the current partition. */
-	private final IList<E> rejectedItems;
+	private final ListEx<E> rejectedItems;
 
 	/* The number of items in the current partition. */
 	private int numberInCurrentPartition;
@@ -465,7 +465,7 @@ class GroupPartIteration<E> implements Consumer<E> {
 	 * @param eleCount
 	 *                 The function to use to determine the value of an item.
 	 */
-	public GroupPartIteration(final IList<IList<E>> returned, final IList<E> rejects,
+	public GroupPartIteration(final ListEx<ListEx<E>> returned, final ListEx<E> rejects,
 			final int nPerPart, final Function<E, Integer> eleCount) {
 		this.returnedList = returned;
 		this.rejectedItems = rejects;

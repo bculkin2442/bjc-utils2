@@ -15,13 +15,13 @@ import bjc.utils.ioutils.format.*;
 public class InflectDirective implements Directive {
 	@Override
 	public Edict compile(CompileContext compCTX) {
-		List<Decree> body = new ArrayList<>();
+		List<SimpleDecree> body = new ArrayList<>();
 
 		int nestLevel = 1;
 
-		Iterator<Decree> dirIter = compCTX.directives;
+		Iterator<SimpleDecree> dirIter = compCTX.directives;
 		while (dirIter.hasNext()) {
-			Decree decr = dirIter.next();
+			SimpleDecree decr = dirIter.next();
 			if (decr.isLiteral) {
 				body.add(decr);
 
@@ -62,7 +62,7 @@ public class InflectDirective implements Directive {
 class InflectEdict implements Edict {
 	private CLString body;
 
-	public InflectEdict(List<Decree> body, CLFormatter fmt) {
+	public InflectEdict(List<SimpleDecree> body, CLFormatter fmt) {
 		this.body = new CLString(fmt.compile(body));
 	}
 

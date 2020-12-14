@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 import bjc.data.*;
 import bjc.funcdata.FunctionalList;
-import bjc.funcdata.IList;
+import bjc.funcdata.ListEx;
 import bjc.utils.parserutils.splitter.TokenSplitter;
 
 /**
@@ -28,7 +28,7 @@ public class TokenUtils {
 	 */
 	public static class StringTokenSplitter implements TokenSplitter {
 		@Override
-		public IList<String> split(final String input) {
+		public ListEx<String> split(final String input) {
 			return new FunctionalList<>(TokenUtils.removeDQuotedStrings(input));
 		}
 	}

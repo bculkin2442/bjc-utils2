@@ -2,7 +2,7 @@ package bjc.utils.examples.rangen;
 
 import bjc.funcdata.FunctionalList;
 import bjc.funcdata.FunctionalStringTokenizer;
-import bjc.funcdata.IList;
+import bjc.funcdata.ListEx;
 import bjc.utils.gen.RandomGrammar;
 
 /**
@@ -15,10 +15,10 @@ public class RandomStringExamples {
 	private static RandomGrammar<String> rg;
 
 	private static void addRule(final String rule, final String... cases) {
-		final IList<IList<String>> cses = new FunctionalList<>();
+		final ListEx<ListEx<String>> cses = new FunctionalList<>();
 
 		for (final String strang : cases) {
-			final IList<String> lst
+			final ListEx<String> lst
 					= FunctionalStringTokenizer.fromString(strang).toList(s -> s);
 
 			cses.add(lst);
@@ -56,7 +56,7 @@ public class RandomStringExamples {
 		addRule("<something>", "<activity>", "<activity> with <person>", "<object>");
 
 		for (int i = 0; i < 10; i++) {
-			final IList<String> ls = rg.generateListValues("<sentance>", " ");
+			final ListEx<String> ls = rg.generateListValues("<sentance>", " ");
 
 			final StringBuilder sb = new StringBuilder();
 			ls.forEach(sb::append);

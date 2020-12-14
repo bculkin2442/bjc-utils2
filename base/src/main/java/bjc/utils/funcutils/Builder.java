@@ -8,7 +8,7 @@ package bjc.utils.funcutils;
  * @param <E>
  *            The type of object being built.
  */
-public interface IBuilder<E> {
+public interface Builder<E> {
 	/**
 	 * Build the object this builder is building.
 	 *

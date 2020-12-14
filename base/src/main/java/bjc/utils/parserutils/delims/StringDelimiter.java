@@ -1,6 +1,6 @@
 package bjc.utils.parserutils.delims;
 
-import bjc.data.ITree;
+import bjc.data.Tree;
 
 /**
  * A sequence delimiter specialized for strings.
@@ -26,7 +26,7 @@ public class StringDelimiter extends SequenceDelimiter<String> {
 	 *
 	 * @see SequenceDelimiter
 	 */
-	public ITree<String> delimitSequence(final String... seq) throws DelimiterException {
+	public Tree<String> delimitSequence(final String... seq) throws DelimiterException {
 		return super.delimitSequence(
 				new SequenceCharacteristics<>("root", "contents", "subgroup"), seq);
 	}

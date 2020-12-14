@@ -34,7 +34,7 @@ public interface SimplePatttern<ReturnType> extends Pattern<ReturnType, Void> {
 	}
 	
 	@Override
-	default IPair<Boolean, Void> matches(Object input) {
-		return new Pair<>(doesMatch(input), null);
+	default Pair<Boolean, Void> matches(Object input) {
+		return new SimplePair<>(doesMatch(input), null);
 	}
 }

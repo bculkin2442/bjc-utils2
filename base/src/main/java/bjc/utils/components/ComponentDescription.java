@@ -5,7 +5,7 @@ package bjc.utils.components;
  *
  * @author ben
  */
-public class ComponentDescription implements IDescribedComponent {
+public class ComponentDescription implements DescribedComponent {
 	/* Check arguments are good. */
 	@SuppressWarnings("unused")
 	private static void sanityCheckArgs(final String name, final String author,
@@ -58,7 +58,7 @@ public class ComponentDescription implements IDescribedComponent {
 	@Override
 	public String getAuthor() {
 		if (author == null) {
-			return IDescribedComponent.super.getAuthor();
+			return DescribedComponent.super.getAuthor();
 		}
 
 		return author;
@@ -67,7 +67,7 @@ public class ComponentDescription implements IDescribedComponent {
 	@Override
 	public String getDescription() {
 		if (description == null) {
-			return IDescribedComponent.super.getDescription();
+			return DescribedComponent.super.getDescription();
 		}
 
 		return description;

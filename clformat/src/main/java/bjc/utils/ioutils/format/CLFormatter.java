@@ -8,7 +8,6 @@ import bjc.utils.ioutils.ReportWriter;
 import bjc.utils.ioutils.format.directives.*;
 
 // Grab our easy converters/constructors
-import static bjc.utils.funcutils.IteratorUtils.AI;
 import static bjc.utils.funcutils.IteratorUtils.I;
 
 /**
@@ -143,7 +142,7 @@ public class CLFormatter {
 	 *                     if something goes wrong during formatting the string.
 	 */
 	public String formatString(String format, Object... params) throws IOException {
-		return formatString(format, I(AI(params)));
+		return formatString(format, I(I(params)));
 	}
 
 	/**
@@ -300,7 +299,7 @@ public class CLFormatter {
 			boolean isToplevel) throws IOException {
 		try {
 			while (cltok.hasNext()) {
-				Decree decr = cltok.next();
+				SimpleDecree decr = cltok.next();
 
 				if (decr.isLiteral) {
 					rw.write(decr.name);
@@ -412,7 +411,7 @@ public class CLFormatter {
 	 *
 	 * @return A set of edicts compiled from the decrees.
 	 */
-	public List<Edict> compile(Iterable<Decree> decrees) {
+	public List<Edict> compile(Iterable<SimpleDecree> decrees) {
 		// If we have no decrees, there are no edicts.
 		if (decrees == null) return new ArrayList<>();
 
@@ -445,7 +444,7 @@ public class CLFormatter {
 		List<Edict> result = new ArrayList<>();
 
 		while (cltok.hasNext()) {
-			Decree decr = cltok.next();
+			SimpleDecree decr = cltok.next();
 			String nam = decr.name;
 
 			CompileContext compCTX = new CompileContext(cltok, this, decr);

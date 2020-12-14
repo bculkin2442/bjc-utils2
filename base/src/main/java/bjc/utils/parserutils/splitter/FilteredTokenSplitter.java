@@ -2,7 +2,7 @@ package bjc.utils.parserutils.splitter;
 
 import java.util.function.Predicate;
 
-import bjc.funcdata.IList;
+import bjc.funcdata.ListEx;
 
 /**
  * A token splitter that removes tokens that match a predicate from the stream
@@ -31,7 +31,7 @@ public class FilteredTokenSplitter implements TokenSplitter {
 	}
 
 	@Override
-	public IList<String> split(String input) {
+	public ListEx<String> split(String input) {
 		return source.split(input).getMatching(filter);
 	}
 }

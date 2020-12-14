@@ -29,9 +29,12 @@ public class FuncUtils {
 	 *
 	 * @return The function transformed into a unary function returning a function.
 	 */
-	public static <A, B, C> Function<A, Function<B, C>>
-			curry2(final BiFunction<A, B, C> func) {
-		return arg1 -> arg2 -> func.apply(arg1, arg2);
+	public static <A, B, C> Function<A, Function<B, C>> curry2(
+			final BiFunction<A, B, C> func)
+	{
+		return arg1 ->
+			arg2 ->
+				func.apply(arg1, arg2);
 	}
 
 	/**
@@ -43,14 +46,17 @@ public class FuncUtils {
 	 * @param cons
 	 *               The action to perform.
 	 */
-	public static void doTimes(final int nTimes, final Consumer<Integer> cons) {
-		for (int i = 0; i < nTimes; i++) {
-			cons.accept(i);
-		}
+	public static void doTimes(
+			final int nTimes,
+			final Consumer<Integer> cons) 
+	{
+		for (int i = 0; i < nTimes; i++) cons.accept(i);
 	}
 
 	/**
 	 * Return an operator that executes until it converges.
+	 * 
+	 * @param <T> The type the operator is on.
 	 *
 	 * @param op
 	 *                 The operator to execute.
@@ -62,12 +68,15 @@ public class FuncUtils {
 	 * @return The requested operator.
 	 */
 	public static <T> UnaryOperator<T> converge(final UnaryOperator<T> op,
-			final int maxTries) {
+			final int maxTries) 
+	{
 		return converge(op, Object::equals, maxTries);
 	}
 
 	/**
 	 * Return an operator that executes until it converges.
+	 * 
+	 * @param <T> The type the operator is on.
 	 *
 	 * @param op
 	 *                  The operator to execute.
@@ -81,11 +90,14 @@ public class FuncUtils {
 	 *
 	 * @return The requested operator.
 	 */
-	public static <T> UnaryOperator<T> converge(final UnaryOperator<T> op,
-			final BiPredicate<T, T> converged, final int maxTries) {
+	public static <T> UnaryOperator<T> converge(
+			final UnaryOperator<T> op,
+			final BiPredicate<T, T> converged,
+			final int maxTries) 
+	{
 		return val -> {
 			T newVal = op.apply(val);
-			T oldVal;
+			T oldVal = newVal;
 
 			int tries = 0;
 

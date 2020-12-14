@@ -6,7 +6,7 @@ import java.util.List;
 import javax.swing.filechooser.FileFilter;
 
 import bjc.funcdata.FunctionalList;
-import bjc.funcdata.IList;
+import bjc.funcdata.ListEx;
 
 /**
  * A file filter based on extensions.
@@ -20,7 +20,7 @@ public class ExtensionFileFilter extends FileFilter {
 	/**
 	 * The list holding all filtered extensions
 	 */
-	private final IList<String> extensions;
+	private final ListEx<String> extensions;
 
 	/**
 	 * Create a new filter only showing files with the specified extensions.

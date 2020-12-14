@@ -6,7 +6,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import bjc.funcdata.IList;
+import bjc.funcdata.ListEx;
 
 /**
  * Split a string into pieces around a regular expression, and offer an easy way
@@ -111,7 +111,7 @@ public class ConfigurableTokenSplitter extends SimpleTokenSplitter {
 	}
 
 	@Override
-	public IList<String> split(final String input) {
+	public ListEx<String> split(final String input) {
 		if (spliter == null)
 			throw new IllegalStateException("Must compile splitter before use");
 

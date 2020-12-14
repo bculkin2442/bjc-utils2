@@ -1,6 +1,6 @@
 package bjc.utils.components;
 
-import bjc.funcdata.IMap;
+import bjc.funcdata.MapEx;
 
 /**
  * A repository of components stored in memory.
@@ -10,9 +10,9 @@ import bjc.funcdata.IMap;
  * @param <ComponentType>
  *                        The type of component stored in the repository.
  */
-public class MemoryComponentRepository<ComponentType extends IDescribedComponent>
-		implements IComponentRepository<ComponentType> {
-	private final IMap<String, ComponentType> repo;
+public class MemoryComponentRepository<ComponentType extends DescribedComponent>
+		implements ComponentRepository<ComponentType> {
+	private final MapEx<String, ComponentType> repo;
 
 	private final String source;
 
@@ -22,7 +22,7 @@ public class MemoryComponentRepository<ComponentType extends IDescribedComponent
 	 * @param repo
 	 *             The set of components to use.
 	 */
-	public MemoryComponentRepository(IMap<String, ComponentType> repo) {
+	public MemoryComponentRepository(MapEx<String, ComponentType> repo) {
 		this(repo, "memory");
 	}
 
@@ -34,14 +34,14 @@ public class MemoryComponentRepository<ComponentType extends IDescribedComponent
 	 * @param source
 	 *               Where the components came from.
 	 */
-	public MemoryComponentRepository(IMap<String, ComponentType> repo, String source) {
+	public MemoryComponentRepository(MapEx<String, ComponentType> repo, String source) {
 		this.repo = repo;
 
 		this.source = source;
 	}
 
 	@Override
-	public IMap<String, ComponentType> getAll() {
+	public MapEx<String, ComponentType> getAll() {
 		return repo;
 	}
 

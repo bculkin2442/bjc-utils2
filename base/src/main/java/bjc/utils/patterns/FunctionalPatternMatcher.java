@@ -11,7 +11,7 @@ import bjc.functypes.*;
  * @param <InputType> The type to match against.
  */
 public class FunctionalPatternMatcher<ReturnType, InputType>
-	implements IPatternMatcher<ReturnType, InputType> {
+	implements PatternMatcher<ReturnType, InputType> {
 	
 	private final ThrowFunction<InputType, ReturnType, NonExhaustiveMatch> matcher;
 	

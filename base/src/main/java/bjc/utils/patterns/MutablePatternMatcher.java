@@ -13,9 +13,10 @@ import bjc.data.*;
  * @author Ben Culkin
  *
  * @param <ReturnType> The type returned by the pattern matcher.
+ * @param <InputType> The type of the input to match against.
  */
 public class MutablePatternMatcher<ReturnType, InputType>
-	implements IPatternMatcher<ReturnType, InputType>{
+	implements PatternMatcher<ReturnType, InputType> {
 	private final List<ComplexPattern<ReturnType, Object, InputType>> patterns;
 	
 	/**
@@ -45,15 +46,15 @@ public class MutablePatternMatcher<ReturnType, InputType>
 	@Override
 	public ReturnType matchFor(InputType input) throws NonExhaustiveMatch {
 		Iterator<ComplexPattern<ReturnType, Object, InputType>> iterator;
-		for (iterator = new NonCMEIterator<>(patterns);
-				iterator.hasNext();) {
+		iterator = new NonCMEIterator<>(patterns);
+		while(iterator.hasNext()) {
 			ComplexPattern<ReturnType, Object, InputType> pattern = iterator.next();
 			
-			IPair<Boolean, Object> matches = pattern.matches(input);
+			Pair<Boolean, Object> matches = pattern.matches(input);
 			
-			if (matches.getLeft()) {
-				pattern.apply(input, matches.getRight());
-			}
+			matches.doWith((bool, obj) -> {
+				if (bool) pattern.apply(input, obj);
+			});
 		}
 
 		throw new NonExhaustiveMatch("Non-exhaustive match against " + input);

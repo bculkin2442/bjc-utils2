@@ -6,8 +6,8 @@ import java.util.function.Function;
 
 import bjc.funcdata.FunctionalList;
 import bjc.funcdata.FunctionalMap;
-import bjc.funcdata.IList;
-import bjc.funcdata.IMap;
+import bjc.funcdata.ListEx;
+import bjc.funcdata.MapEx;
 import bjc.utils.funcutils.StringUtils;
 
 /**
@@ -25,7 +25,7 @@ public class ShuntingYard<TokenType> {
 	 * @author ben
 	 *
 	 */
-	public static enum Operator implements IPrecedent {
+	public static enum Operator implements Precedent {
 		/**
 		 * Represents addition.
 		 */
@@ -59,7 +59,7 @@ public class ShuntingYard<TokenType> {
 	/*
 	 * Holds all the shuntable operations.
 	 */
-	private IMap<String, IPrecedent> operators;
+	private MapEx<String, Precedent> operators;
 
 	/**
 	 * Create a new shunting yard with a default set of operators.
@@ -95,7 +95,7 @@ public class ShuntingYard<TokenType> {
 		/*
 		 * Create the precedence marker
 		 */
-		final IPrecedent prec = IPrecedent.newSimplePrecedent(precedence);
+		final Precedent prec = Precedent.newSimplePrecedent(precedence);
 
 		this.addOp(operator, prec);
 	}
@@ -109,7 +109,7 @@ public class ShuntingYard<TokenType> {
 	 * @param precedence
 	 *                   The precedence of the operator.
 	 */
-	public void addOp(final String operator, final IPrecedent precedence) {
+	public void addOp(final String operator, final Precedent precedence) {
 		/*
 		 * Complain about trying to add an incorrect operator
 		 */
@@ -158,7 +158,7 @@ public class ShuntingYard<TokenType> {
 	 *
 	 * @return A list of tokens in postfix notation.
 	 */
-	public IList<TokenType> postfix(final IList<String> input,
+	public ListEx<TokenType> postfix(final ListEx<String> input,
 			final Function<String, TokenType> transformer) {
 		/*
 		 * Check our input
@@ -169,7 +169,7 @@ public class ShuntingYard<TokenType> {
 		/*
 		 * Here's what we're handing back
 		 */
-		final IList<TokenType> output = new FunctionalList<>();
+		final ListEx<TokenType> output = new FunctionalList<>();
 
 		/*
 		 * The stack to put operators on

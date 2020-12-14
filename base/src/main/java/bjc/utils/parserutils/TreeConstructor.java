@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.function.*;
 
 import bjc.data.*;
-import bjc.funcdata.IList;
+import bjc.funcdata.ListEx;
 import bjc.utils.parserutils.TreeConstructor.*;
 
 /**
@@ -22,7 +22,7 @@ public class TreeConstructor {
 	 *                    The token type of the tree.
 	 */
 	public interface QueueFlattener<TokenType>
-			extends Function<Deque<ITree<TokenType>>, ITree<TokenType>> {
+			extends Function<Deque<Tree<TokenType>>, Tree<TokenType>> {
 		/*
 		 * Alias
 		 */
@@ -30,14 +30,14 @@ public class TreeConstructor {
 
 	/* Alias for constructor state. */
 	static final class ConstructorState<TokenType>
-			extends Pair<Deque<ITree<TokenType>>, ITree<TokenType>> {
-		public ConstructorState(final Deque<ITree<TokenType>> left,
-				final ITree<TokenType> right) {
+			extends SimplePair<Deque<Tree<TokenType>>, Tree<TokenType>> {
+		public ConstructorState(final Deque<Tree<TokenType>> left,
+				final Tree<TokenType> right) {
 			super(left, right);
 		}
 
 		public ConstructorState(
-				final IPair<Deque<ITree<TokenType>>, ITree<TokenType>> par) {
+				final Pair<Deque<Tree<TokenType>>, Tree<TokenType>> par) {
 			super(par.getLeft(), par.getRight());
 		}
 	}
@@ -59,8 +59,8 @@ public class TreeConstructor {
 	 *
 	 * @return A AST from the expression.
 	 */
-	public static <TokenType> ITree<TokenType> constructTree(
-			final IList<TokenType> tokens, final Predicate<TokenType> isOperator) {
+	public static <TokenType> Tree<TokenType> constructTree(
+			final ListEx<TokenType> tokens, final Predicate<TokenType> isOperator) {
 		/* Construct a tree with no special operators */
 		return constructTree(tokens, isOperator, op -> false, null);
 	}
@@ -92,8 +92,8 @@ public class TreeConstructor {
 	 * @return A AST from the expression.
 	 *
 	 */
-	public static <TokenType> ITree<TokenType> constructTree(
-			final IList<TokenType> tokens, final Predicate<TokenType> isOperator,
+	public static <TokenType> Tree<TokenType> constructTree(
+			final ListEx<TokenType> tokens, final Predicate<TokenType> isOperator,
 			final Predicate<TokenType> isSpecialOperator,
 			final Function<TokenType, QueueFlattener<TokenType>> handleSpecialOperator) {
 		/*
@@ -112,7 +112,7 @@ public class TreeConstructor {
 				= new ConstructorState<>(new LinkedList<>(), null);
 
 		/* Here is the state for the tree construction */
-		final IHolder<ConstructorState<TokenType>> initialState = new Identity<>(cstate);
+		final Holder<ConstructorState<TokenType>> initialState = new Identity<>(cstate);
 
 		/* Transform each of the tokens */
 		final TokenTransformer<TokenType> trans = new TokenTransformer<>(initialState,
@@ -152,11 +152,11 @@ class TokenTransformer<TokenType> implements Consumer<TokenType> {
 		}
 
 		private ConstructorState<TokenType>
-				handleOperator(final Deque<ITree<TokenType>> queuedASTs) {
+				handleOperator(final Deque<Tree<TokenType>> queuedASTs) {
 			/*
 			 * The AST we're going to hand back
 			 */
-			ITree<TokenType> newAST;
+			Tree<TokenType> newAST;
 
 			/*
 			 * Handle special operators
@@ -178,13 +178,13 @@ class TokenTransformer<TokenType> implements Consumer<TokenType> {
 				/*
 				 * Grab the two operands
 				 */
-				final ITree<TokenType> right = queuedASTs.pop();
-				final ITree<TokenType> left = queuedASTs.pop();
+				final Tree<TokenType> right = queuedASTs.pop();
+				final Tree<TokenType> left = queuedASTs.pop();
 
 				/*
 				 * Create a new AST
 				 */
-				newAST = new Tree<>(element, left, right);
+				newAST = new SimpleTree<>(element, left, right);
 			}
 
 			/*
@@ -200,7 +200,7 @@ class TokenTransformer<TokenType> implements Consumer<TokenType> {
 	}
 
 	/* The initial state of the transformer. */
-	private final IHolder<ConstructorState<TokenType>> initialState;
+	private final Holder<ConstructorState<TokenType>> initialState;
 
 	/* The predicate tot use to detect operators. */
 	private final Predicate<TokenType> operatorPredicate;
@@ -227,7 +227,7 @@ class TokenTransformer<TokenType> implements Consumer<TokenType> {
 	 *                              The function used for handling special
 	 *                              operators.
 	 */
-	public TokenTransformer(final IHolder<ConstructorState<TokenType>> initialState,
+	public TokenTransformer(final Holder<ConstructorState<TokenType>> initialState,
 			final Predicate<TokenType> operatorPredicate,
 			final Predicate<TokenType> isSpecialOperator,
 			final Function<TokenType, QueueFlattener<TokenType>> handleSpecialOperator) {
@@ -245,7 +245,7 @@ class TokenTransformer<TokenType> implements Consumer<TokenType> {
 		if (operatorPredicate.test(element)) {
 			initialState.transform(new OperatorHandler(element));
 		} else {
-			final ITree<TokenType> newAST = new Tree<>(element);
+			final Tree<TokenType> newAST = new SimpleTree<>(element);
 
 			/*
 			 * Insert the new tree into the AST
@@ -254,7 +254,7 @@ class TokenTransformer<TokenType> implements Consumer<TokenType> {
 					pair.bindLeft(queue -> {
 						queue.push(newAST);
 
-						return new Pair<>(queue, newAST);
+						return new SimplePair<>(queue, newAST);
 					})
 				)
 			);

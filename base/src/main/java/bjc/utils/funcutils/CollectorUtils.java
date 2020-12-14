@@ -2,8 +2,8 @@ package bjc.utils.funcutils;
 
 import java.util.stream.Collector;
 
-import bjc.data.IHolder;
-import bjc.data.IPair;
+import bjc.data.Holder;
+import bjc.data.Pair;
 
 /**
  * Utilities for producing implementations of {@link Collector}
@@ -38,8 +38,8 @@ public class CollectorUtils {
 	 * @return A collector that functions as mentioned above.
 	 */
 	public static <InitialType, AuxType1, AuxType2, FinalType1, FinalType2>
-			Collector<InitialType, IHolder<IPair<AuxType1, AuxType2>>,
-					IPair<FinalType1, FinalType2>>
+			Collector<InitialType, Holder<Pair<AuxType1, AuxType2>>,
+					Pair<FinalType1, FinalType2>>
 			compoundCollect(final Collector<InitialType, AuxType1, FinalType1> first,
 					final Collector<InitialType, AuxType2, FinalType2> second) {
 		return new CompoundCollector<>(first, second);

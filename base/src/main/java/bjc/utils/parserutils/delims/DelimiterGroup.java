@@ -11,12 +11,12 @@ import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 
-import bjc.data.IPair;
-import bjc.data.ITree;
 import bjc.data.Pair;
 import bjc.data.Tree;
+import bjc.data.SimplePair;
+import bjc.data.SimpleTree;
 import bjc.funcdata.FunctionalList;
-import bjc.funcdata.IList;
+import bjc.funcdata.ListEx;
 
 /**
  * Represents a possible delimiter group to match.
@@ -37,12 +37,12 @@ public class DelimiterGroup<T> {
 		/*
 		 * The contents of this group.
 		 */
-		private final Deque<ITree<T>> contents;
+		private final Deque<Tree<T>> contents;
 
 		/*
 		 * The contents of the current subgroup.
 		 */
-		private IList<ITree<T>> currentGroup;
+		private ListEx<Tree<T>> currentGroup;
 
 		/*
 		 * The token that opened the group, and any opening parameters.
@@ -74,7 +74,7 @@ public class DelimiterGroup<T> {
 		 * @param itm
 		 *            The item to add to this group instance.
 		 */
-		public void addItem(final ITree<T> itm) {
+		public void addItem(final Tree<T> itm) {
 			currentGroup.add(itm);
 		}
 
@@ -91,8 +91,8 @@ public class DelimiterGroup<T> {
 			/*
 			 * Add all of the contents to the subgroup.
 			 */
-			final ITree<T> subgroupContents = new Tree<>(chars.contents);
-			for (final ITree<T> itm : currentGroup) {
+			final Tree<T> subgroupContents = new SimpleTree<>(chars.contents);
+			for (final Tree<T> itm : currentGroup) {
 				subgroupContents.addChild(itm);
 			}
 
@@ -100,7 +100,7 @@ public class DelimiterGroup<T> {
 			 * Handle subordinate sub-groups.
 			 */
 			while (!contents.isEmpty()) {
-				final ITree<T> possibleSubordinate = contents.peek();
+				final Tree<T> possibleSubordinate = contents.peek();
 
 				/*
 				 * Subordinate lower priority subgroups.
@@ -118,8 +118,8 @@ public class DelimiterGroup<T> {
 				}
 			}
 
-			final Tree<T> subgroup
-					= new Tree<>(chars.subgroup, subgroupContents, new Tree<>(marker));
+			final SimpleTree<T> subgroup
+					= new SimpleTree<>(chars.subgroup, subgroupContents, new SimpleTree<>(marker));
 
 			contents.push(subgroup);
 
@@ -137,7 +137,7 @@ public class DelimiterGroup<T> {
 		 *
 		 * @return This group as a tree.
 		 */
-		public ITree<T> toTree(final T closer, final SequenceCharacteristics<T> chars) {
+		public Tree<T> toTree(final T closer, final SequenceCharacteristics<T> chars) {
 			/*
 			 * Mark any implied subgroups.
 			 */
@@ -146,7 +146,7 @@ public class DelimiterGroup<T> {
 			}
 
 			/* The resulting tree. */
-			final ITree<T> res = new Tree<>(chars.contents);
+			final Tree<T> res = new SimpleTree<>(chars.contents);
 
 			/*
 			 * Add either the contents of the current group, or subgroups if they're
@@ -162,7 +162,7 @@ public class DelimiterGroup<T> {
 				currentGroup.forEach(res::addChild);
 			}
 
-			return new Tree<>(groupName, new Tree<>(opener), res, new Tree<>(closer));
+			return new SimpleTree<>(groupName, new SimpleTree<>(opener), res, new SimpleTree<>(closer));
 		}
 
 		@Override
@@ -259,18 +259,18 @@ public class DelimiterGroup<T> {
 		 *
 		 * @return The name of the group T opens, or null if it doesn't open one.
 		 */
-		public IPair<T, T[]> doesOpen(final T marker) {
+		public Pair<T, T[]> doesOpen(final T marker) {
 			if (openDelimiters.containsKey(marker))
-				return new Pair<>(openDelimiters.get(marker), null);
+				return new SimplePair<>(openDelimiters.get(marker), null);
 
-			for (final Function<T, IPair<T, T[]>> pred : predOpeners) {
-				final IPair<T, T[]> par = pred.apply(marker);
+			for (final Function<T, Pair<T, T[]>> pred : predOpeners) {
+				final Pair<T, T[]> par = pred.apply(marker);
 
 				if (par.getLeft() != null)
 					return par;
 			}
 
-			return new Pair<>(null, null);
+			return new SimplePair<>(null, null);
 		}
 
 		/**
@@ -312,7 +312,7 @@ public class DelimiterGroup<T> {
 	private final Map<T, T> impliedSubgroups;
 
 	/* Allows more complex openings */
-	private final List<Function<T, IPair<T, T[]>>> predOpeners;
+	private final List<Function<T, Pair<T, T[]>>> predOpeners;
 
 	/* Allow more complex closings */
 	private final List<BiPredicate<T, T[]>> predClosers;
@@ -562,7 +562,7 @@ public class DelimiterGroup<T> {
 	 * @param pred
 	 *             The predicate that defines the opener and its parameters.
 	 */
-	public void addPredOpener(final Function<T, IPair<T, T[]>> pred) {
+	public void addPredOpener(final Function<T, Pair<T, T[]>> pred) {
 		predOpeners.add(pred);
 	}
 

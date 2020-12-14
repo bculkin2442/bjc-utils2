@@ -28,7 +28,7 @@ public class FormatParameters {
 	/**
 	 * The current decree.
 	 */
-	public Decree decr;
+	public SimpleDecree decr;
 
 	/**
 	 * The current format parameters.
@@ -66,7 +66,7 @@ public class FormatParameters {
 	 * @param formatter
 	 *                The formatter we are using
 	 */
-	public FormatParameters(ReportWriter writer, Object item, Decree decr,
+	public FormatParameters(ReportWriter writer, Object item, SimpleDecree decr,
 			Tape<Object> tParams, CLTokenizer dirIter, CLFormatter formatter) {
 		this.writer = writer;
 

@@ -1,7 +1,7 @@
 package bjc.utils.examples.rangen;
 
 import bjc.funcdata.FunctionalStringTokenizer;
-import bjc.funcdata.IList;
+import bjc.funcdata.ListEx;
 import bjc.utils.gen.WeightedGrammar;
 
 /**
@@ -15,7 +15,7 @@ public class DiabloItemGen {
 
 	private static void addCase(final String ruleName, final int probability,
 			final String ruleParts) {
-		final IList<String> parts = FunctionalStringTokenizer.fromString(ruleParts)
+		final ListEx<String> parts = FunctionalStringTokenizer.fromString(ruleParts)
 				.toList(strang -> strang);
 
 		rules.addCase(ruleName, probability, parts);
@@ -85,7 +85,7 @@ public class DiabloItemGen {
 		addInfixRules();
 
 		for (int i = 0; i < 100; i++) {
-			final IList<String> ls = rules.generateListValues("<item>", " ");
+			final ListEx<String> ls = rules.generateListValues("<item>", " ");
 
 			final StringBuilder sb = new StringBuilder();
 			ls.forEach(sb::append);

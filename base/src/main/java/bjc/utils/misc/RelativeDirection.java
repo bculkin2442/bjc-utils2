@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 
 import bjc.utils.exceptions.DirectionInvalid;
 import bjc.funcdata.FunctionalList;
-import bjc.funcdata.IList;
+import bjc.funcdata.ListEx;
 
 /**
  * Represents a direction that is relative to another direction
@@ -62,7 +62,7 @@ public enum RelativeDirection {
 							+ numDirections);
 		}
 
-		IList<RelativeDirection> relativeDirs = new FunctionalList<>(values());
+		ListEx<RelativeDirection> relativeDirs = new FunctionalList<>(values());
 
 		if (ignoreBackwards) {
 			relativeDirs.removeMatching(BACKWARD);

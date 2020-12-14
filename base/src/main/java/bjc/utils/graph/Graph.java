@@ -10,11 +10,11 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 
-import bjc.data.IHolder;
+import bjc.data.Holder;
 import bjc.data.Identity;
 import bjc.funcdata.FunctionalMap;
-import bjc.funcdata.IList;
-import bjc.funcdata.IMap;
+import bjc.funcdata.ListEx;
+import bjc.funcdata.MapEx;
 
 /**
  * A directed weighted graph, where the vertices have some arbitrary label.
@@ -47,7 +47,7 @@ public class Graph<T> {
 	}
 
 	/** The backing representation of the graph. */
-	private final IMap<T, IMap<T, Integer>> backing;
+	private final MapEx<T, MapEx<T, Integer>> backing;
 
 	/** Create a new empty graph. */
 	public Graph() {
@@ -120,7 +120,7 @@ public class Graph<T> {
 	 *               The vertex to use as a source.
 	 * @return All of the edges with the specified vertex as a source.
 	 */
-	public IMap<T, Integer> getEdges(final T source) {
+	public MapEx<T, Integer> getEdges(final T source) {
 		/* Can't find edges for a null source. */
 		if (source == null) {
 			throw new NullPointerException("The source cannot be null.");
@@ -159,7 +159,7 @@ public class Graph<T> {
 		final Set<T> visited = new HashSet<>();
 
 		/* Start at the initial vertex and visit it */
-		final IHolder<T> source = new Identity<>(getInitial());
+		final Holder<T> source = new Identity<>(getInitial());
 
 		visited.add(source.getValue());
 
@@ -177,7 +177,7 @@ public class Graph<T> {
 			);
 
 			/* Get the edge with the minimum distance. */
-			final IHolder<Edge<T>> minimum = new Identity<>(available.poll());
+			final Holder<Edge<T>> minimum = new Identity<>(available.poll());
 
 			/*
 			 * Only consider edges where we haven't visited the target of the edge.
@@ -213,7 +213,7 @@ public class Graph<T> {
 	 *
 	 * @return A unmodifiable set of all the vertices in the graph.
 	 */
-	public IList<T> getVertices() {
+	public ListEx<T> getVertices() {
 		return backing.keyList();
 	}
 
