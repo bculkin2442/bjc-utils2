@@ -38,3 +38,6 @@ fpLeader [\x00-\x20]*[+-]?(?:NaN|Infinity|
 # Miscellaneous validation regular expressions
 ##############################################
 intLiteral \A[+\-]\d+\Z
+
+readerLineComments (?:#.*\R)*
+readerLineBlock (\s*)\S.+\R(?:\1\s+\S.*\R)*
