@@ -1,17 +1,14 @@
 package bjc.utils.cli;
 
-/**
- * Generic implementation of a help topic.
+/** Generic implementation of a help topic.
  *
- * @author ben
- */
+ * @author ben */
 public class GenericHelp implements CommandHelp {
 	/* The strings for this help topic. */
 	private final String summary;
 	private final String description;
 
-	/**
-	 * Create a new help topic.
+	/** Create a new help topic.
 	 *
 	 * @param summary
 	 *                    The summary of this help topic.
@@ -31,9 +28,7 @@ public class GenericHelp implements CommandHelp {
 
 	@Override
 	public String getDescription() {
-		if (description == null) {
-			return summary;
-		}
+		if (description == null) return summary;
 
 		return description;
 	}

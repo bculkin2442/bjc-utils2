@@ -55,12 +55,12 @@ public class GenericCommandMode implements CommandMode {
 			throw new NullPointerException("Error output source must be non-null");
 
 		this.normalOutput = normalOutput;
-		this.errorOutput = errorOutput;
+		this.errorOutput  = errorOutput;
 
 		/* Initialize maps so that they sort in alphabetical order. */
 		commandHandlers = new FunctionalMap<>(new TreeMap<>());
 		defaultHandlers = new FunctionalMap<>(new TreeMap<>());
-		helpTopics = new FunctionalMap<>(new TreeMap<>());
+		helpTopics      = new FunctionalMap<>(new TreeMap<>());
 
 		/* Setup default commands. */
 		setupDefaultCommands();
@@ -84,17 +84,16 @@ public class GenericCommandMode implements CommandMode {
 		if (commandName == null) {
 			throw new NullPointerException("Command name must not be null");
 		} else if (aliasName == null) {
-			String msg = "Alias name must not be null";
-			throw new NullPointerException(msg);
+			throw new NullPointerException("Alias name must not be null");
 		} else if (!commandHandlers.containsKey(commandName)
 				&& !defaultHandlers.containsKey(commandName)) {
-			String msg = String.format("Cannot alias non-existant command '%s'",
+			String msg = String.format("Cannot alias non-existing command '%s'",
 					commandName);
 			throw new IllegalArgumentException(msg);
 		} else if (commandHandlers.containsKey(aliasName)
 				|| defaultHandlers.containsKey(aliasName)) {
 			String msg = String.format(
-					"Cannot bind alias '%s' to an already bound command.", aliasName);
+					"Cannot bind alias '%s' to an already used name.", aliasName);
 			throw new IllegalArgumentException(msg);
 		} else {
 			/* The command that will be aliased. */

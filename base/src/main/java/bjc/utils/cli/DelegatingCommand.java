@@ -21,6 +21,7 @@ class DelegatingCommand implements Command {
 
 	@Override
 	public Command aliased() {
+	    // Prevent double-indirections
 		return new DelegatingCommand(delegate);
 	}
 

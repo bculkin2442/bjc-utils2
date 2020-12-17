@@ -1,10 +1,8 @@
 package bjc.utils.cli;
 
-/**
- * Implementation of a help topic that doesn't exist.
+/** Implementation of a help topic that doesn't exist or isn't provided.
  *
- * @author ben
- */
+ * @author ben */
 public class NullHelp implements CommandHelp {
 	@Override
 	public String getDescription() {
@@ -15,5 +13,4 @@ public class NullHelp implements CommandHelp {
 	public String getSummary() {
 		return "No summary provided";
 	}
-
 }

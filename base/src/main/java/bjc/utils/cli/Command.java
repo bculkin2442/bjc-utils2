@@ -11,7 +11,9 @@ public interface Command {
 	 *
 	 * @return A command that serves as an alias to this one
 	 */
-	Command aliased();
+	default Command aliased() {
+	       return new DelegatingCommand(this);
+	};
 
 	/**
 	 * Get the handler that executes this command
