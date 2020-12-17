@@ -80,11 +80,12 @@ class DecimalEdict implements Edict {
 			}
 		}
 
-		StringBuffer work = new StringBuffer();
+		//StringBuffer work = new StringBuffer();
 
-		numForm.format(itemTape.item(), work, ZERO_FIELD);
+		//numForm.format(itemTape.item(), work, ZERO_FIELD);
 
-		formCTX.writer.write(work.toString());
+		// formCTX.writer.write(work.toString());
+		formCTX.writer.write(numForm.format(itemTape.item()));
 		itemTape.right();
 	}
 }

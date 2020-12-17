@@ -45,7 +45,7 @@ clFormatModifier (?:[@$:*]+)
 ## 1) A single, non-whitespace, non-/ character, optionally preceded by any
 ##    number of grave characters.
 ## 2) A name enclosed in /'s
-clFormatName (?:(?<name>`*?[\S&&[^/]])|(?:/(?<funcname>[\S&&[^/]]+)/))
+clFormatName (?:(?<name>`*[\S&&[^/]])|(?:/(?<funcname>[\S&&[^/]]+)/))
 
 #################################################
 # Generic format strings for regular expressions.
