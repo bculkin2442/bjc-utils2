@@ -34,5 +34,6 @@
 	<modules>
 		<module>base</module>
 		<module>clformat</module>
-	</modules>
+    <module>commander</module>
+  </modules>
 </project>
