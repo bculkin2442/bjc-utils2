@@ -93,11 +93,7 @@ class AestheticEdict implements Edict {
 		int minpad = minpadPar.asInt(itemTape,
 				"minumum amount of padding", "A", 0);
 
-	//	if (padBefore) doPadding(work, padchar, mincol, colinc, minpad);
-
 		work.append(itemString);
-
-	//	if (!padBefore) doPadding(work, padchar, mincol, colinc, minpad);
 
 		String padding = createPadding(work, padchar, mincol, colinc, minpad);
 		if (padBefore) work.insert(0, padding);
@@ -125,14 +121,5 @@ class AestheticEdict implements Edict {
 		}
 
 		return padding.toString();
-	}
-
-	private void doPadding(StringBuilder work, char padchar, int mincol, int colinc,
-			int minpad) {
-		for (int i = 0; i < minpad; i++) work.append(padchar);
-
-		for (int i = work.length(); i < mincol; i++) {
-			for (int k = 0; k < colinc; k++) work.append(padchar);
-		}
 	}
 }

@@ -48,8 +48,6 @@ public class DecimalDirective implements Directive {
 }
 
 class DecimalEdict implements Edict {
-	private static final FieldPosition ZERO_FIELD = new FieldPosition(0);
-
 	private CLValue decFormat;
 
 	public DecimalEdict(CLValue decForm) {
