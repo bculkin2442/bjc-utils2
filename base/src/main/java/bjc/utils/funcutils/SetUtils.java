@@ -15,8 +15,8 @@ public class SetUtils {
 	/**
 	 * Create a power-set (set of all subsets) of a given set.
 	 * 
-	 * @param originalSet
-	 *                    The set to create a power-set of.
+	 * @param <T> The type of elements contained in the set.
+	 * @param originalSet The set to create a power-set of.
 	 * @return The power-set of the set.
 	 */
 	public static <T> Set<Set<T>> powerSet(Set<T> originalSet) {
@@ -55,8 +55,8 @@ public class SetUtils {
 	/**
 	 * Utility method for set construction.
 	 * 
-	 * @param elms
-	 *             The elements to stick in the set.
+	 * @param <T> The type of elements in the set.
+	 * @param elms The elements to stick in the set.
 	 * @return A set containing the specified elements.
 	 */
 	@SafeVarargs

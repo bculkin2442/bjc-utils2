@@ -7,6 +7,7 @@ import bjc.data.*;
  * 
  * @author Ben Culkin
  * 
+ * @param <InputType> The type input to the pattern matcher.
  * @param <ReturnType> The type returned by the pattern.
  */
 public class SimplePatternMatcher<ReturnType, InputType>

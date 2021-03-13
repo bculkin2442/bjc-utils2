@@ -1,9 +1,6 @@
 package bjc.utils.funcutils;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.function.*;
 
 import bjc.funcdata.FunctionalList;
@@ -321,8 +318,9 @@ public class ListUtils {
 	 *
 	 * This is a version of Algorith P (Plain Changes) from Knuth (vol 4A, pg 322)
 	 *
-	 * @param list
-	 *             The list to generate permutations from.
+	 * @param <T> The type of elements in the list.
+	 * 
+	 * @param list The list to generate permutations from.
 	 * @return The list of permutations of the list.
 	 */
 	public static <T> List<List<T>> permuteList(List<T> list) {
@@ -343,19 +341,8 @@ public class ListUtils {
 			T elm1 = list.get(0);
 			T elm2 = list.get(1);
 
-			List<T> currPerm = new ArrayList<>(2);
-
-			currPerm.add(elm1);
-			currPerm.add(elm2);
-
-			permutes.add(currPerm);
-
-			currPerm = new ArrayList<>(2);
-
-			currPerm.add(elm2);
-			currPerm.add(elm1);
-
-			permutes.add(currPerm);
+			permutes.add(Arrays.asList(elm1, elm2));
+			permutes.add(Arrays.asList(elm2, elm1));
 
 			return permutes;
 		}

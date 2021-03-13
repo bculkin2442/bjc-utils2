@@ -15,10 +15,9 @@ public class TreeUtils {
 	/**
 	 * Convert a tree into a list of outline nodes that match a certain path.
 	 *
-	 * @param tre
-	 *                   The tree to outline.
-	 * @param leafMarker
-	 *                   The path to mark nodes with.
+	 * @param <T> The type of the values.
+	 * @param tre The tree to outline.
+	 * @param leafMarker The path to mark nodes with.
 	 * @return The list of marked paths.
 	 */
 	public static <T> ListEx<ListEx<T>> outlineTree(Tree<T> tre, Predicate<T> leafMarker) {
