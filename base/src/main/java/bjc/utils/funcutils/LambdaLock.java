@@ -30,8 +30,8 @@ public class LambdaLock {
 
 	/** Execute an action with the read lock taken.
 	 *
-	 * @param <T> The type of the result.
-	 *
+	 * @param <T> The type returned by the action.
+	 * 
 	 * @param supp The action to call.
 	 *
 	 * @return The result of the action. */
@@ -45,10 +45,11 @@ public class LambdaLock {
 		}
 	}
 
-	/** Execute an action with the write lock taken.
-	 *
-	 * @param <T> The type of the result.
-	 *
+	/**
+	 * Execute an action with the write lock taken.
+	 * 
+	 * @param <T> The type returned by the action.
+     * 
 	 * @param supp The action to call.
 	 *
 	 * @return The result of the action. */

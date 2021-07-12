@@ -36,6 +36,8 @@ public class TestUtils {
 		 * Even though it's awkward, the boolean has to come first. Otherwise, there are
 		 * cases where the compiler will get confused as to what the right value for T
 		 * is, and be unable to pick an overload.
+		 * 
+		 * This is a case where named parameter would be rather useful.
 		 */
 		assertIteratorEquals(src, vals);
 

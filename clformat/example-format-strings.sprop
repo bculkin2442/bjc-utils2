@@ -1,0 +1,6 @@
+# Dump hexadecimal output in some manner
+dumpHexOutput ~:{~8,'0X: ~2{~8@{~#     ~:;~2,'0X ~]~}  ~}~v@{  ~}~2{~8@{~A~} ~}~%~}
+# Print a list in proper English style (no Oxford comma)
+englishList ~#[ none~; ~A~; ~A and ~A:;~@{~#*[ ~A,~; and ~A~; ~A~]~}~]
+# An alternate variant which abbreviates long lists
+abbrevList ~#[NONE~;~a~;~a and ~a~:;~a, ~a~]~#[~; and ~a~:;, ~a, etc~]
