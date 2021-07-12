@@ -5,36 +5,28 @@ import static org.junit.Assert.assertEquals;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * Utilities for testing.
+/** Utilities for testing.
  *
- * @author bjculkin
- *
- */
+ * @author bjculkin */
 public class TestUtils {
-	/**
-	 * Assert an iterator provides a particular sequence of values.
+	/** Assert an iterator provides a particular sequence of values.
 	 *
-	 * @param src
-	 *             The iterator to pull values from.
-	 * @param vals
-	 *             The values to expect from the iterator.
-	 */
+	 * @param <T> The type of value.
+	 *
+	 * @param src The iterator to pull values from.
+	 * @param vals The values to expect from the iterator. */
 	@SafeVarargs
 	public static <T> void assertIteratorEquals(Iterator<T> src, T... vals) {
 		for (T val : vals) assertEquals(val, src.next());
 	}
 
-	/**
-	 * Assert an iterator provides a particular sequence of values.
+	/** Assert an iterator provides a particular sequence of values.
 	 *
-	 * @param src
-	 *                The iterator to pull values from.
-	 * @param hasMore
-	 *                The expected value of hasNext for the iterator.
-	 * @param vals
-	 *                The values to expect from the iterator.
-	 */
+	 * @param <T> The type of value.
+	 *
+	 * @param src The iterator to pull values from.
+	 * @param hasMore The expected value of hasNext for the iterator.
+	 * @param vals The values to expect from the iterator. */
 	@SafeVarargs
 	public static <T> void assertIteratorEquals(boolean hasMore, Iterator<T> src,
 			T... vals) {
@@ -50,15 +42,12 @@ public class TestUtils {
 		assertEquals(hasMore, src.hasNext());
 	}
 
-	/**
-	 * Assert that a list has a given set of contents.
+	/** Assert that a list has a given set of contents.
 	 *
-	 * @param src
-	 *             The list of actual elements.
+	 * @param <T> The type of value in the list.
 	 *
-	 * @param exps
-	 *             The list of expected elements.
-	 */
+	 * @param src The list of actual elements.
+	 * @param exps The list of expected elements. */
 	@SafeVarargs
 	public static <T> void assertListEquals(List<T> src, T... exps) {
 		assertEquals(exps.length, src.size());

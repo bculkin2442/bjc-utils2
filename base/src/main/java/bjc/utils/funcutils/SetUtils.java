@@ -5,20 +5,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Various utility functions dealing with sets.
+/** Various utility functions dealing with sets.
  * 
- * @author bjculkin
- *
- */
+ * @author bjculkin */
 public class SetUtils {
-	/**
-	 * Create a power-set (set of all subsets) of a given set.
+	/** Create a power-set (set of all subsets) of a given set.
 	 * 
-	 * @param originalSet
-	 *                    The set to create a power-set of.
-	 * @return The power-set of the set.
-	 */
+	 * @param <T> The type of element in the set.
+	 *
+	 * @param originalSet The set to create a power-set of.
+	 *
+	 * @return The power-set of the set. */
 	public static <T> Set<Set<T>> powerSet(Set<T> originalSet) {
 		Set<Set<T>> sets = new HashSet<>();
 
@@ -52,19 +49,17 @@ public class SetUtils {
 		return sets;
 	}
 
-	/**
-	 * Utility method for set construction.
+	/** Utility method for set construction.
 	 * 
-	 * @param elms
-	 *             The elements to stick in the set.
-	 * @return A set containing the specified elements.
-	 */
+	 * @param <T> The type of element in the set.
+	 *
+	 * @param elms The elements to stick in the set.
+	 *
+	 * @return A set containing the specified elements. */
 	@SafeVarargs
 	public static <T> Set<T> toSet(T... elms) {
 		Set<T> set = new HashSet<>();
-
 		for (T elm : elms) set.add(elm);
-
 		return set;
 	}
 }

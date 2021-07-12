@@ -13,10 +13,10 @@ import bjc.utils.ioutils.RuleBasedConfigReader;
  * The file format is based entirely off of pragma statements, and should have
  * at least one of each of the following statements
  * <ul>
- * <li>pragma name &lt;component-name&rt;</li>
- * <li>pragma author &lt;component-version&rt;</li>
- * <li>pragma description &lt;component-description&rt;</li>
- * <li>pragma version &lt;component-version&rt;</li>
+ * <li>pragma name &lt;component-name&gt;</li>
+ * <li>pragma author &lt;component-version&gt;</li>
+ * <li>pragma description &lt;component-description&gt;</li>
+ * <li>pragma version &lt;component-version&gt;</li>
  * </ul>
  * 
  * @author ben

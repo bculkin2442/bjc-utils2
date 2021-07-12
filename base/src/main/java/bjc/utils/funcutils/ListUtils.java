@@ -9,42 +9,32 @@ import java.util.function.*;
 import bjc.funcdata.FunctionalList;
 import bjc.funcdata.ListEx;
 
-/**
- * Utilities for manipulating FunctionalLists and regular Collections lists that
+/** Utilities for manipulating FunctionalLists and regular Collections lists that
  * don't belong in the class itself.
  *
- * @author ben
- */
+ * @author ben */
 public class ListUtils {
 	/* The max amount of times to try to partition things. */
 	private static final int MAX_NTRIESPART = 50;
 
-	/**
-	 * Collapse a string of tokens into a single string without adding any spaces.
+	/** Collapse a string of tokens into a single string without adding any spaces.
 	 *
-	 * @param input
-	 *              The list of tokens to collapse.
+	 * @param input The list of tokens to collapse.
 	 *
-	 * @return The collapsed string of tokens.
-	 */
+	 * @return The collapsed string of tokens. */
 	public static String collapseTokens(final ListEx<String> input) {
 		if (input == null) throw new NullPointerException("Input must not be null");
 
 		return collapseTokens(input, "");
 	}
 
-	/**
-	 * Collapse a string of tokens into a single string, adding the desired
+	/** Collapse a string of tokens into a single string, adding the desired
 	 * separator after each token.
 	 *
-	 * @param input
-	 *                  The list of tokens to collapse.
+	 * @param input The list of tokens to collapse.
+	 * @param seperator The separator to use for separating tokens.
 	 *
-	 * @param seperator
-	 *                  The separator to use for separating tokens.
-	 *
-	 * @return The collapsed string of tokens.
-	 */
+	 * @return The collapsed string of tokens. */
 	public static String collapseTokens(final ListEx<String> input,
 			final String seperator) {
 		if (input == null)          throw new NullPointerException("Input must not be null");
@@ -70,25 +60,17 @@ public class ListUtils {
 		}
 	}
 
-	/**
-	 * Select a number of random items from the list without replacement.
+	/** Select a number of random items from the list without replacement.
 	 *
-	 * @param <E>
-	 *               The type of items to select.
+	 * @param <E> The type of items to select.
 	 *
-	 * @param list
-	 *               The list to select from.
-	 *
-	 * @param number
-	 *               The number of items to selet.
-	 *
-	 * @param rng
-	 *               A function that creates a random number from 0 to the desired
+	 * @param list The list to select from.
+	 * @param number The number of items to selet.
+	 * @param rng A function that creates a random number from 0 to the desired
 	 *               number.
 	 *
 	 * @return A new list containing the desired number of items randomly selected
-	 *         from the specified list without replacement.
-	 */
+	 *         from the specified list without replacement. */
 	public static <E> ListEx<E> drawWithoutReplacement(final ListEx<E> list,
 			final int number, final Function<Integer, Integer> rng) {
 		final ListEx<E> selected = new FunctionalList<>(new ArrayList<>(number));
@@ -114,25 +96,17 @@ public class ListUtils {
 		return selected;
 	}
 
-	/**
-	 * Select a number of random items from the list, with replacement.
+	/** Select a number of random items from the list, with replacement.
 	 *
-	 * @param <E>
-	 *               The type of items to select.
+	 * @param <E> The type of items to select.
 	 *
-	 * @param list
-	 *               The list to select from.
-	 *
-	 * @param number
-	 *               The number of items to select.
-	 *
-	 * @param rng
-	 *               A function that creates a random number from 0 to the desired
+	 * @param list The list to select from.
+	 * @param number The number of items to select.
+	 * @param rng A function that creates a random number from 0 to the desired
 	 *               number.
 	 *
 	 * @return A new list containing the desired number of items randomly selected
-	 *         from the specified list.
-	 */
+	 *         from the specified list. */
 	public static <E> ListEx<E> drawWithReplacement(final ListEx<E> list, final int number,
 			final Function<Integer, Integer> rng) {
 		final ListEx<E> selected = new FunctionalList<>(new ArrayList<>(number));
@@ -142,25 +116,16 @@ public class ListUtils {
 		return selected;
 	}
 
-	/**
-	 * Partition a list into a list of lists, where each element can count for more
+	/** Partition a list into a list of lists, where each element can count for more
 	 * than one element in a partition.
 	 *
-	 * @param <E>
-	 *                      The type of elements in the list to partition.
+	 * @param <E> The type of elements in the list to partition.
 	 *
-	 * @param input
-	 *                      The list to partition.
+	 * @param input The list to partition.
+	 * @param counter The function to determine the count for each element for.
+	 * @param partitionSize The number of elements to put in each partition.
 	 *
-	 * @param counter
-	 *                      The function to determine the count for each element
-	 *                      for.
-	 *
-	 * @param partitionSize
-	 *                      The number of elements to put in each partition.
-	 *
-	 * @return A list partitioned according to the above rules.
-	 */
+	 * @return A list partitioned according to the above rules. */
 	public static <E> ListEx<ListEx<E>> groupPartition(final ListEx<E> input,
 			final Function<E, Integer> counter, final int partitionSize) {
 		if (input == null) {
@@ -203,17 +168,13 @@ public class ListUtils {
 		throw new IllegalArgumentException(msg);
 	}
 
-	/**
-	 * Merge the contents of a bunch of lists together into a single list.
+	/** Merge the contents of a bunch of lists together into a single list.
 	 *
-	 * @param <E>
-	 *              The type of value in this lists.
+	 * @param <E> The type of value in this lists.
 	 *
-	 * @param lists
-	 *              The values in the lists to merge.
+	 * @param lists The values in the lists to merge.
 	 *
-	 * @return A list containing all the elements of the lists.
-	 */
+	 * @return A list containing all the elements of the lists. */
 	@SafeVarargs
 	public static <E> ListEx<E> mergeLists(final ListEx<E>... lists) {
 		final ListEx<E> returned = new FunctionalList<>();
@@ -225,30 +186,19 @@ public class ListUtils {
 		return returned;
 	}
 
-	/**
-	 * Pad the provided list out to the desired size.
+	/** Pad the provided list out to the desired size.
 	 *
-	 * @param <E>
-	 *                The type of elements in the list.
+	 * @param <E> The type of elements in the list.
 	 *
-	 * @param list
-	 *                The list to pad out.
-	 *
-	 * @param counter
-	 *                The function to count elements with.
-	 *
-	 * @param size
-	 *                The desired size of the list.
-	 *
-	 * @param padder
-	 *                The function to get elements to pad with.
+	 * @param list The list to pad out.
+	 * @param counter The function to count elements with.
+	 * @param size The desired size of the list.
+	 * @param padder The function to get elements to pad with.
 	 *
 	 * @return The list, padded to the desired size.
 	 *
-	 * @throws IllegalArgumentException
-	 *                                  If the list couldn't be padded to the
-	 *                                  desired size.
-	 */
+	 * @throws IllegalArgumentException If the list couldn't be padded to the
+	 *                                  desired size. */
 	public static <E> ListEx<E> padList(final ListEx<E> list,
 			final Function<E, Integer> counter, final int size,
 			final Supplier<E> padder) {
@@ -296,13 +246,11 @@ public class ListUtils {
 		return returned;
 	}
 
-	/**
-	 * Convert a list of longs into an array of longs.
+	/** Convert a list of longs into an array of longs.
 	 *
-	 * @param list
-	 *             The list to convert.
-	 * @return The list as an array.
-	 */
+	 * @param list The list to convert.
+	 *
+	 * @return The list as an array. */
 	public static long[] toPrimitive(List<Long> list) {
 		long[] res = new long[list.size()];
 
@@ -316,15 +264,15 @@ public class ListUtils {
 		return res;
 	}
 
-	/**
-	 * Generate all of the permuations of a list.
+	/** Generate all of the permuations of a list.
 	 *
 	 * This is a version of Algorith P (Plain Changes) from Knuth (vol 4A, pg 322)
 	 *
-	 * @param list
-	 *             The list to generate permutations from.
-	 * @return The list of permutations of the list.
-	 */
+	 * @param <T> The type of element in the list.
+	 *
+	 * @param list The list to generate permutations from.
+	 *
+	 * @return The list of permutations of the list. */
 	public static <T> List<List<T>> permuteList(List<T> list) {
 		List<List<T>> permutes = new LinkedList<>();
 
@@ -423,14 +371,11 @@ public class ListUtils {
 	}
 }
 
-/**
- * Implements a single group partitioning pass on a list.
+/** Implements a single group partitioning pass on a list.
  *
  * @author ben
  *
- * @param <E>
- *            The type of element in the list being partitioned
- */
+ * @param <E> The type of element in the list being partitioned */
 class GroupPartIteration<E> implements Consumer<E> {
 	/* The list we're returning. */
 	private final ListEx<ListEx<E>> returnedList;
@@ -448,23 +393,14 @@ class GroupPartIteration<E> implements Consumer<E> {
 	/* The function to use to count an item. */
 	private final Function<E, Integer> elementCounter;
 
-	/**
-	 * Create a new group partitioning iteration.
+	/** Create a new group partitioning iteration.
 	 *
-	 * @param returned
-	 *                 The list containing all of the existing partitions.
-	 *
-	 * @param rejects
-	 *                 The items that have been rejected from a partition for being
+	 * @param returned The list containing all of the existing partitions.
+	 * @param rejects The items that have been rejected from a partition for being
 	 *                 too large.
-	 *
-	 * @param nPerPart
-	 *                 The combined value of items that should go into each
+	 * @param nPerPart The combined value of items that should go into each
 	 *                 partition.
-	 *
-	 * @param eleCount
-	 *                 The function to use to determine the value of an item.
-	 */
+	 * @param eleCount The function to use to determine the value of an item. */
 	public GroupPartIteration(final ListEx<ListEx<E>> returned, final ListEx<E> rejects,
 			final int nPerPart, final Function<E, Integer> eleCount) {
 		this.returnedList = returned;
@@ -478,8 +414,7 @@ class GroupPartIteration<E> implements Consumer<E> {
 
 	@Override
 	public void accept(final E value) {
-		final boolean shouldStartPartition
-				= numberInCurrentPartition >= numberPerPartition;
+		final boolean shouldStartPartition = numberInCurrentPartition >= numberPerPartition;
 
 		if (shouldStartPartition) {
 			returnedList.add(currentPartition);

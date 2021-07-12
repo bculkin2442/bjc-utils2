@@ -1,30 +1,20 @@
 package bjc.utils.ioutils.blocks;
 
-import java.io.IOException;
-import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
+import java.io.*;
+import java.util.function.*;
 
-/**
- * A block reader composed from functions.
+/** A block reader composed from functions.
  *
- * @author EVE
- *
- */
+ * @author EVE */
 public class BoundBlockReader implements BlockReader {
-	/**
-	 * A function that serves to close an I/O source.
+	/** A function that serves to close an I/O source.
 	 *
-	 * @author EVE
-	 *
-	 */
+	 * @author EVE */
 	@FunctionalInterface
 	public interface Closer {
-		/**
-		 * Close the I/O source this is attached to.
+		/** Close the I/O source this is attached to.
 		 *
-		 * @throws IOException
-		 *                     If something goes wrong
-		 */
+		 * @throws IOException If something goes wrong */
 		public void close() throws IOException;
 	}
 
@@ -36,21 +26,19 @@ public class BoundBlockReader implements BlockReader {
 
 	private int blockNo;
 
-	/**
-	 * Create a new bound block reader.
+	/** Create a new bound block reader.
 	 *
-	 * @param blockChecker
-	 *                     Predicate for checking if a block is available
-	 * @param blockGetter
-	 *                     Function to retrieve a block
-	 * @param blockCloser
-	 *                     Function to close a block source
-	 */
-	public BoundBlockReader(BooleanSupplier blockChecker, Supplier<Block> blockGetter,
-			Closer blockCloser) {
+	 * @param blockChecker Predicate for checking if a block is available
+	 * @param blockGetter Function to retrieve a block
+	 * @param blockCloser Function to close a block source */
+	public BoundBlockReader(
+			BooleanSupplier blockChecker,
+			Supplier<Block> blockGetter,
+			Closer blockCloser)
+	{
 		checker = blockChecker;
-		getter = blockGetter;
-		closer = blockCloser;
+		getter  = blockGetter;
+		closer  = blockCloser;
 
 		blockNo = 0;
 	}
@@ -72,9 +60,9 @@ public class BoundBlockReader implements BlockReader {
 			blockNo += 1;
 
 			return true;
+		} else {
+			return false;
 		}
-
-		return false;
 	}
 
 	@Override

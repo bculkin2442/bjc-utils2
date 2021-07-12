@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 /**
  * Splits a string on a delimiter, respecting grouping delimiters.
  *
- * By default, grouping delimiters are (), [], {}, and <>, as well as single and
+ * By default, grouping delimiters are (), [], {}, and &lt;&gt;, as well as single and
  * double quoted strings.
  *
  * @author bjculkin

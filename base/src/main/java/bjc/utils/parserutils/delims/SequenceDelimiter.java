@@ -45,14 +45,14 @@ public class SequenceDelimiter<T> {
 	 * grammar while obeying the defined grouping rules.
 	 *
 	 * <pre>
-	 *         <tree>     → (<data> | <subgroup> | <group>)*
-	 *         <subgroup> → <tree> <marker>
-	 *         <group>    → <open> <tree> <close>
+	 *         &lt;tree&gt;     → (&lt;data&gt; | &lt;subgroup&gt; | &lt;group&gt;)*
+	 *         &lt;subgroup&gt; → &lt;tree&gt; &lt;marker&gt;
+	 *         &lt;group&gt;    → &lt;open&gt; &lt;tree&gt; &lt;close&gt;
 	 *
-	 *         <data>     → STRING
-	 *         <open>     → STRING
-	 *         <close>    → STRING
-	 *         <marker>   → STRING
+	 *         &lt;data&gt;     → STRING
+	 *         &lt;open&gt;     → STRING
+	 *         &lt;close&gt;    → STRING
+	 *         &lt;marker&gt;   → STRING
 	 * </pre>
 	 *
 	 * @param chars

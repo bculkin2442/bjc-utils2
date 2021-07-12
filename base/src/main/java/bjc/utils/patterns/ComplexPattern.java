@@ -38,7 +38,7 @@ public interface ComplexPattern<ReturnType, PredType, InputType> {
 	/* Pattern producing functions */
 	
 	/**
-	 * Create a pattern composed from a predicate & a function.
+	 * Create a pattern composed from a predicate &amp; a function.
 	 * 
 	 * @param <RetType> The type returned by the pattern.
 	 * @param <PreType> The type used as intermediate state.
