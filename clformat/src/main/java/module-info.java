@@ -6,4 +6,5 @@ module clformat {
 	requires bjc.utils;
 	requires esodata;
 	requires inflexion;
+	requires junit;
 }
