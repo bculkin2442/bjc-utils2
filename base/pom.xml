@@ -103,6 +103,7 @@
 			<version>4.12</version>
 		</dependency>
 
+<!--
 		<dependency>
 			<groupId>org.junit.contrib</groupId>
 			<artifactId>junit-theories</artifactId>
@@ -120,7 +121,7 @@
 			<artifactId>junit-quickcheck-generators</artifactId>
 			<version>0.5</version>
 		</dependency>
-
+-->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>

@@ -1,6 +1,7 @@
 package bjc.utils.ioutils.blocks;
 
 import java.io.*;
+import java.util.Iterator;
 
 /** Utility methods for constructing instances of {@link BlockReader}
  *
@@ -58,5 +59,16 @@ public class BlockReaders {
 	 * @return A configured serial block reader. */
 	public static BlockReader serial(final BlockReader... readers) {
 		return new SerialBlockReader(readers);
+	}
+	
+	/**
+	 * Create a block reader from an iterator of blocks.
+	 * 
+	 * @param iter The iterator of blocks.
+	 * 
+	 * @return A block reader which returns blocks from the given iterator.
+	 */
+	public static BlockReader fromIterator(final Iterator<Block> iter) {
+		return new IteratorBlockReader(iter);
 	}
 }

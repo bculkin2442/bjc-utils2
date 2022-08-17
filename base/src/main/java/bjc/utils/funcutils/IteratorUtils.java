@@ -111,5 +111,5 @@ public class IteratorUtils {
 	{
 		Queue<ElementType> backer = new ArrayDeque<>();
 		return Pair.pair(backer::add, new QueueBackedIterator<>(backer));
-	}
+	}	
 }

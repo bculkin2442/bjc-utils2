@@ -3,7 +3,6 @@ module bjc.utils {
 	exports bjc.utils.funcutils;
 	exports bjc.utils.parserutils.splitter;
 	exports bjc.utils.ioutils;
-	exports bjc.utils.examples;
 	exports bjc.utils.misc;
 	exports bjc.utils.parserutils.delims;
 	exports bjc.utils.gen;
@@ -12,7 +11,6 @@ module bjc.utils {
 	exports bjc.utils.cli;
 	exports bjc.utils.gui.awt;
 	exports bjc.utils.gui.layout;
-	exports bjc.utils.examples.gen;
 	exports bjc.utils.math;
 	exports bjc.utils.gui;
 	exports bjc.utils.parserutils;
