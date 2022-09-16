@@ -79,8 +79,7 @@ public class MutablePatternMatcher<ReturnType, InputType>
 	 * 
 	 * @return Whether or not the pattern was removed.
 	 */
-	@SuppressWarnings("unlikely-arg-type")
-    public boolean removePattern(ComplexPattern<ReturnType, ?, InputType> pattern) {
+	public boolean removePattern(ComplexPattern<ReturnType, ?, InputType> pattern) {
 		return patterns.remove(pattern);
 	}
 }

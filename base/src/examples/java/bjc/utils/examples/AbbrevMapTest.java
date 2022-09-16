@@ -22,6 +22,7 @@ public class AbbrevMapTest {
 	 *             Unused CLI args.
 	 */
 	public static void main(final String[] args) {
+		@SuppressWarnings("resource")
 		final Scanner scn = new Scanner(System.in);
 
 		final AbbrevMap2 map = new AbbrevMap2();

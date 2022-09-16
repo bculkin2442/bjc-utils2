@@ -102,6 +102,8 @@ public class SerialBlockReader implements BlockReader {
 	@Override
 	public void close() throws IOException {
 		while (!readerQueue.isEmpty()) {
+			// We are explicitly closing these
+			@SuppressWarnings("resource")
 			final BlockReader reader = readerQueue.pop();
 
 			reader.close();

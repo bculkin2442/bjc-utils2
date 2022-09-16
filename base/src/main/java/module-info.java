@@ -1,3 +1,11 @@
+/**
+ * Various utilities and other things.
+ * 
+ * Just contains a whole bunch of useful things.
+ * 
+ * @author bjculkin
+ *
+ */
 module bjc.utils {
 	exports bjc.utils.exceptions;
 	exports bjc.utils.funcutils;
@@ -22,11 +30,11 @@ module bjc.utils {
 	exports bjc.utils.ioutils.properties;
 
 	requires commons.lang3;
-	requires esodata;
+	requires transitive esodata;
 	requires guava;
 	requires hamcrest.core;
 	requires icu4j;
-	requires java.desktop;
+	requires transitive java.desktop;
 	requires java.logging;
 	requires junit;
 }

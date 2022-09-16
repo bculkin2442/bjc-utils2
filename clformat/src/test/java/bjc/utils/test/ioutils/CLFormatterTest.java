@@ -101,13 +101,12 @@ public class CLFormatterTest {
 		assertEquals("XIV xiv", format("~@R ~(~@R~)", 14, 14));
 	}
 
-	// @Test
+//	@Test
 	public void testListPrinting() {
 		// Test printing a list
-		// String fmtStr = "Items:~#[ none~; ~A~; ~A and ~A~:;~@{~#[~; and~]
-		// ~A~^,~}~].";
-		String fmtStr
-				= "Items:~#[ none~; ~A~; ~A and ~A~:;~@{~#*[ ~A,~; and ~A~; ~A~]~}~].";
+		 String fmtStr = "Items:~#[ none~; ~A~; ~A and ~A~:;~@{~#[~; and~]~A~^,~}~].";
+//		String fmtStr
+//				= "Items:~#[ none~; ~A~; ~A and ~A~:;~@{~#*[ ~A,~; and ~A~; ~A~]~}~].";
 
 		fmt.DEBUG = true;
 		assertEquals("Items: none.", format(fmtStr));

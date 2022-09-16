@@ -17,45 +17,6 @@ import java.util.Set;
  *
  */
 public class SimpleProperties implements Map<String, String> {
-	/**
-	 * Exception thrown when there is a duplicate key, when they are forbidden.
-	 *
-	 * @author 15405
-	 *
-	 */
-	public static class DuplicateKeys extends RuntimeException {
-		private static final long serialVersionUID = -5521190136366024804L;
-
-		/**
-		 * Create a new duplicate key exception.
-		 *
-		 * @param keyName
-		 *                The name of the key that has been duplicated.
-		 */
-		public DuplicateKeys(String keyName) {
-			super(String.format("Duplicate value encountered for key '%s'", keyName));
-		}
-	}
-
-	/**
-	 * Exception thrown when a line is formattted incorrectly.
-	 * @author Ben Culkin
-	 *
-	 */
-	public static class InvalidLineFormat extends RuntimeException {
-		private static final long serialVersionUID = 5332131472090792841L;
-
-		/**
-		 * Create a new exception for an incorrectly formatted line.
-		 * @param lne The line that was incorrectly formatted.
-		 */
-		public InvalidLineFormat(String lne) {
-			super(String.format(
-					"Line '%s' is improperly formatted.\n\tExpected format is a string key, followed by a single space, followed by the value",
-					""));
-		}
-	}
-
 	private final Map<String, String> props;
 
 	/**
@@ -170,20 +131,17 @@ public class SimpleProperties implements Map<String, String> {
 		return props.isEmpty();
 	}
 
-	@SuppressWarnings("unlikely-arg-type")
-    @Override
+	@Override
 	public boolean containsKey(final Object key) {
 		return props.containsKey(key);
 	}
 
-	@SuppressWarnings("unlikely-arg-type")
-    @Override
+	@Override
 	public boolean containsValue(final Object value) {
 		return props.containsValue(value);
 	}
 
-	@SuppressWarnings("unlikely-arg-type")
-    @Override
+	@Override
 	public String get(final Object key) {
 		return props.get(key);
 	}
@@ -193,8 +151,7 @@ public class SimpleProperties implements Map<String, String> {
 		return props.put(key, value);
 	}
 
-	@SuppressWarnings("unlikely-arg-type")
-    @Override
+	@Override
 	public String remove(final Object key) {
 		return props.remove(key);
 	}

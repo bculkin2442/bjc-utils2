@@ -1,6 +1,12 @@
+/**
+ * CLI interface for various other libraries.
+ * 
+ * @author bjcul
+ *
+ */
 module commander {
 	exports bjc.commander;
 
-	requires bjc.utils;
+	requires transitive bjc.utils;
 	requires java.logging;
 }

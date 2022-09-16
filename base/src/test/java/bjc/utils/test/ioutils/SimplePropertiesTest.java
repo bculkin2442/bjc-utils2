@@ -6,9 +6,9 @@ import java.io.StringReader;
 
 import org.junit.Test;
 
+import bjc.utils.ioutils.DuplicateKeys;
+import bjc.utils.ioutils.InvalidLineFormat;
 import bjc.utils.ioutils.SimpleProperties;
-import bjc.utils.ioutils.SimpleProperties.DuplicateKeys;
-import bjc.utils.ioutils.SimpleProperties.InvalidLineFormat;
 
 /**
  * Tests for SimpleProperties.

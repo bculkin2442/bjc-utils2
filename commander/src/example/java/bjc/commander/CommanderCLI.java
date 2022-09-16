@@ -19,9 +19,9 @@ public class CommanderCLI {
     
         reader.ioReaders.put("stdio", new InputStreamReader(System.in));
     
-        Scanner input = new Scanner(System.in);
-        reader.run(input, "console", true);
-        input.close();
+        try (Scanner input = new Scanner(System.in)) {
+			reader.run(input, "console", true);
+		}
     }
 
 }

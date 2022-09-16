@@ -128,6 +128,8 @@ public class CLTokenizer implements Iterator<SimpleDecree> {
 				dir = new SimpleDecree(directiveName, isUser,
 						CLParameters.fromDirective(directiveParameterString),
 						CLModifiers.fromString(directiveModifierString));
+				
+				dir.setPosition(mat.start(), mat.end());
 			}
 
 			if (tmp.equals("")) {
@@ -138,7 +140,7 @@ public class CLTokenizer implements Iterator<SimpleDecree> {
 				return dcr;
 			}
 
-			return new SimpleDecree(sb.toString());
+			return new SimpleDecree(sb.toString(), mat.start(), mat.end());
 		}
 
 		mat.appendTail(sb);
@@ -182,7 +184,10 @@ public class CLTokenizer implements Iterator<SimpleDecree> {
 		GroupDecree newGroup = new GroupDecree();
 		newGroup.opening = openedWith;
 
-		if (!hasNext()) throw new NoSuchElementException("No decrees available");
+		if (!hasNext()) {
+			String fmt = "No decrees available for group starting with %s at %#s";
+			throw new NoSuchElementException(String.format(fmt, openedWith.name, openedWith.position));
+		}
 
 		ClauseDecree curClause = new ClauseDecree();
 
@@ -233,8 +238,8 @@ public class CLTokenizer implements Iterator<SimpleDecree> {
 
 		if (newGroup.closing == null) {
 			String msg = String.format(
-					"Did not find closing directive for group (wanted \"%s\", last decree was \"%s\")",
-					desiredClosing, curDecree.name);
+					"Did not find closing directive for group (wanted \"%s\", last decree was \"%s\" at %#s)",
+					desiredClosing, curDecree.name, curDecree.position);
 
 			throw new NoSuchElementException(msg);
 		}

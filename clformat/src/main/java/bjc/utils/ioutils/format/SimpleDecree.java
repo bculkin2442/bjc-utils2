@@ -1,5 +1,8 @@
 package bjc.utils.ioutils.format;
 
+import bjc.data.Pair;
+import bjc.data.SimplePair;
+
 /**
  * A decree is the building blocks of what we need to pick and call a directive.
  *
@@ -35,6 +38,11 @@ public class SimpleDecree implements Decree {
 	public CLModifiers modifiers;
 
 	/**
+	 * The position in the input this decree had
+	 */
+	public Pair<Integer, Integer> position;
+	
+	/**
 	 * Create a new blank decree.
 	 */
 	public SimpleDecree() {
@@ -53,6 +61,20 @@ public class SimpleDecree implements Decree {
 		this.isLiteral = true;
 	}
 
+	/**
+	 * Create a new literal text directive.
+	 *
+	 * @param txt
+	 *            The text of the directive.
+	 * @param start The starting position of this directive
+	 * @param end The ending position of this directive
+	 */
+	public SimpleDecree(String txt, int start, int end) {
+		this(txt);
+		
+		this.setPosition(start, end);
+	}
+	
 	/**
 	 * Create a new directive.
 	 *
@@ -120,6 +142,16 @@ public class SimpleDecree implements Decree {
 		else           return name.equals(nam);
 	}
 
+	/**
+	 * Set the position of this decree.
+	 * 
+	 * @param start The starting position of this decree
+	 * @param end The ending position of this decree
+	 */
+	public void setPosition(int start, int end) {
+		position = new SimplePair<>(start, end);
+	}
+	
 	@Override
 	public String toString() {
 		return String.format(
