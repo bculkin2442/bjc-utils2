@@ -21,10 +21,10 @@ import bjc.funcdata.MapEx;
  *
  * @author ben
  *
- * @param <T>
+ * @param <VertexLabel>
  *            The label for vertices.
  */
-public class Graph<T> {
+public class Graph<VertexLabel, EdgeLabel> {
 	/**
 	 * Create a graph from a list of edges.
 	 *
@@ -36,8 +36,8 @@ public class Graph<T> {
 	 *
 	 * @return A graph built from the provided edge-list.
 	 */
-	public static <E> Graph<E> fromEdgeList(final List<Edge<E>> edges) {
-		final Graph<E> g = new Graph<>();
+	public static <E, L> Graph<E, L> fromEdgeList(final List<Edge<E, L>> edges) {
+		final Graph<E, L> g = new Graph<>();
 
 		edges.forEach(edge -> {
 			g.addEdge(edge.getSource(), edge.getTarget(), edge.getDistance(), true);
@@ -47,7 +47,7 @@ public class Graph<T> {
 	}
 
 	/** The backing representation of the graph. */
-	private final MapEx<T, MapEx<T, Integer>> backing;
+	private final MapEx<VertexLabel, MapEx<VertexLabel, EdgeLabel>> backing;
 
 	/** Create a new empty graph. */
 	public Graph() {
@@ -63,31 +63,31 @@ public class Graph<T> {
 	 * @param target
 	 *                 The target vertex for this edge.
 	 *
-	 * @param distance
+	 * @param label
 	 *                 The distance from the source vertex to the target vertex.
 	 *
 	 * @param directed
 	 *                 Whether or not the edge is directed or not.
 	 */
-	public void addEdge(final T source, final T target, final int distance,
+	public void addEdge(final VertexLabel source, final VertexLabel target, final EdgeLabel label,
 			final boolean directed) {
 		/* Can't add edges with a null source or target. */
 		if (source == null)      throw new NullPointerException("The source vertex cannot be null");
 		else if (target == null) throw new NullPointerException("The target vertex cannot be null");
 
 		/* Initialize adjacency list for vertices if necessary. */
-		if (!backing.containsKey(source)) backing.put(source, new FunctionalMap<T, Integer>());
+		if (!backing.containsKey(source)) backing.put(source, new FunctionalMap<VertexLabel, EdgeLabel>());
 
 		/* Add the edge to the graph. */
-		backing.get(source).get().put(target, distance);
+		backing.get(source).get().put(target, label);
 
 		/* Handle possible directed edges. */
 		if (!directed) {
 			if (!backing.containsKey(target)) {
-				backing.put(target, new FunctionalMap<T, Integer>());
+				backing.put(target, new FunctionalMap<VertexLabel, EdgeLabel>());
 			}
 
-			backing.get(target).get().put(source, distance);
+			backing.get(target).get().put(source, label);
 		}
 	}
 
@@ -103,13 +103,13 @@ public class Graph<T> {
 	 * @param action
 	 *                The action to execute for matching edges.
 	 */
-	public void forAllEdgesMatchingAt(final T source,
-			final BiPredicate<T, Integer> matcher, final BiConsumer<T, Integer> action) {
+	public void forAllEdgesMatchingAt(final VertexLabel source,
+			final BiPredicate<VertexLabel, EdgeLabel> matcher, final BiConsumer<VertexLabel, EdgeLabel> action) {
 		if (matcher == null)     throw new NullPointerException("Matcher must not be null");
 		else if (action == null) throw new NullPointerException("Action must not be null");
 
-		getEdges(source).forEach((target, weight) -> {
-			if (matcher.test(target, weight)) action.accept(target, weight);
+		getEdges(source).forEach((target, label) -> {
+			if (matcher.test(target, label)) action.accept(target, label);
 		});
 	}
 
@@ -120,7 +120,7 @@ public class Graph<T> {
 	 *               The vertex to use as a source.
 	 * @return All of the edges with the specified vertex as a source.
 	 */
-	public MapEx<T, Integer> getEdges(final T source) {
+	public MapEx<VertexLabel, EdgeLabel> getEdges(final VertexLabel source) {
 		/* Can't find edges for a null source. */
 		if (source == null) {
 			throw new NullPointerException("The source cannot be null.");
@@ -136,68 +136,11 @@ public class Graph<T> {
 	 *
 	 * @return The initial vertex of the graph.
 	 */
-	public T getInitial() {
+	public VertexLabel getInitial() {
 		return backing.keyList().first();
 	}
 
-	/**
-	 * Uses Prim's algorothm to calculate a MST for the graph.
-	 *
-	 * If the graph is non-connected, this will lead to unpredictable results.
-	 *
-	 * @return A list of edges that constitute the MST.
-	 */
-	public List<Edge<T>> getMinimumSpanningTree() {
-		/* Set of all of the currently available edges. */
-		final Queue<Edge<T>> available = new PriorityQueue<>(10,
-				(left, right) -> left.getDistance() - right.getDistance());
-
-		/* The MST of the graph. */
-		final List<Edge<T>> minimums = new ArrayList<>();
-
-		/* The set of all of the visited vertices. */
-		final Set<T> visited = new HashSet<>();
-
-		/* Start at the initial vertex and visit it */
-		final Holder<T> source = new Identity<>(getInitial());
-
-		visited.add(source.getValue());
-
-		/* Make sure we visit all the nodes. */
-		while (visited.size() != getVertexCount()) {
-			/* Grab all edges adjacent to the provided edge. */
-
-			forAllEdgesMatchingAt(source.getValue(),
-					(target, weight) -> !visited.contains(target),
-					(target, weight) -> {
-						final T vert = source.unwrap(vertex -> vertex);
-
-						available.add(new Edge<>(vert, target, weight));
-					}
-			);
-
-			/* Get the edge with the minimum distance. */
-			final Holder<Edge<T>> minimum = new Identity<>(available.poll());
-
-			/*
-			 * Only consider edges where we haven't visited the target of the edge.
-			 */
-			while (visited.contains(minimum.getValue().getTarget())) {
-				minimum.transform(edge -> available.poll());
-			}
-
-			/* Add it to our MST. */
-			minimums.add(minimum.getValue());
-
-			/* Advance to the next node. */
-			source.transform(vertex -> minimum.unwrap(edge -> edge.getTarget()));
-
-			/* Visit this node. */
-			visited.add(source.getValue());
-		}
-
-		return minimums;
-	}
+	
 
 	/**
 	 * Get the count of the vertices in this graph.
@@ -213,7 +156,7 @@ public class Graph<T> {
 	 *
 	 * @return A unmodifiable set of all the vertices in the graph.
 	 */
-	public ListEx<T> getVertices() {
+	public ListEx<VertexLabel> getVertices() {
 		return backing.keyList();
 	}
 
@@ -226,7 +169,7 @@ public class Graph<T> {
 	 * @param target
 	 *               The target vertex for the edge.
 	 */
-	public void removeEdge(final T source, final T target) {
+	public void removeEdge(final VertexLabel source, final VertexLabel target) {
 		/* Can't remove things w/ null vertices. */
 		if (source == null) {
 			throw new NullPointerException("The source vertex cannot be null");
@@ -261,12 +204,12 @@ public class Graph<T> {
 	 *
 	 * @return A adjacency map representing this graph.
 	 */
-	public AdjacencyMap<T> toAdjacencyMap() {
-		final AdjacencyMap<T> adjacency = new AdjacencyMap<>(backing.keyList());
+	public AdjacencyMap<VertexLabel, EdgeLabel> toAdjacencyMap() {
+		final AdjacencyMap<VertexLabel, EdgeLabel> adjacency = new AdjacencyMap<>(backing.keyList());
 
 		backing.forEach((sourceKey, sourceValue) -> {
 			sourceValue.forEach((targetKey, targetValue) -> {
-				adjacency.setWeight(sourceKey, targetKey, targetValue);
+				adjacency.setLabel(sourceKey, targetKey, targetValue);
 			});
 		});
 

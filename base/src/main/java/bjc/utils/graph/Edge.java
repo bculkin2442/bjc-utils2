@@ -1,16 +1,17 @@
 package bjc.utils.graph;
 
+import java.util.Objects;
+
 /**
  * An edge in a weighted graph.
  *
  * @author ben
  *
- * @param <T>
- *            The type of the nodes in the graph.
+ * @param <T> The type of the nodes in the graph.
  */
-public class Edge<T> {
+public class Edge<T, W> {
 	/* The distance from initial to terminal node. */
-	private final int distance;
+	private final W distance;
 
 	/* The initial and terminal nodes of this edge. */
 	private final T source, target;
@@ -18,46 +19,21 @@ public class Edge<T> {
 	/**
 	 * Create a new edge with set parameters.
 	 *
-	 * @param initial
-	 *                 The initial node of the edge.
+	 * @param initial  The initial node of the edge.
 	 *
-	 * @param terminal
-	 *                 The terminal node of the edge.
+	 * @param terminal The terminal node of the edge.
 	 *
-	 * @param distance
-	 *                 The distance between initial and terminal edge.
+	 * @param distance The distance between initial and terminal edge.
 	 */
-	public Edge(final T initial, final T terminal, final int distance) {
-		if (initial == null)       throw new NullPointerException("Initial node must not be null");
-		else if (terminal == null) throw new NullPointerException("Terminal node must not be null");
+	public Edge(final T initial, final T terminal, final W distance) {
+		if (initial == null)
+			throw new NullPointerException("Initial node must not be null");
+		else if (terminal == null)
+			throw new NullPointerException("Terminal node must not be null");
 
 		this.source = initial;
 		this.target = terminal;
 		this.distance = distance;
-	}
-
-	@Override
-	public boolean equals(final Object obj) {
-		if (this == obj)                       return true;
-		else if (obj == null)                  return false;
-		else if (getClass() != obj.getClass()) return false;
-		else {
-			final Edge<?> other = (Edge<?>) obj;
-
-			if (distance != other.distance) {
-				return false;
-			} else if (source == null) {
-				if (other.source != null) return false;
-			} else if (!source.equals(other.source)) {
-				return false;
-			} else if (target == null) {
-				if (other.target != null) return false;
-			} else if (!target.equals(other.target)) {
-				return false;
-			}
-
-			return true;
-		}
 	}
 
 	/**
@@ -65,7 +41,7 @@ public class Edge<T> {
 	 *
 	 * @return The distance between the initial and terminal nodes of this edge.
 	 */
-	public int getDistance() {
+	public W getDistance() {
 		return distance;
 	}
 
@@ -88,24 +64,27 @@ public class Edge<T> {
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
+	public String toString() {
+		String msg = String.format("source vertex %s to target vertex %s with distance: %s", source, target, distance);
 
-		int result = 1;
-
-		result = prime * result + distance;
-		result = prime * result + (source == null ? 0 : source.hashCode());
-		result = prime * result + (target == null ? 0 : target.hashCode());
-
-		return result;
+		return msg;
 	}
 
 	@Override
-	public String toString() {
-		String msg
-				= String.format("source vertex %s to target vertex %s with distance: %s",
-						source, target, distance);
+	public int hashCode() {
+		return Objects.hash(distance, source, target);
+	}
 
-		return msg;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Edge<?, ?> other = (Edge<?, ?>) obj;
+		return Objects.equals(distance, other.distance) && Objects.equals(source, other.source)
+				&& Objects.equals(target, other.target);
 	}
 }

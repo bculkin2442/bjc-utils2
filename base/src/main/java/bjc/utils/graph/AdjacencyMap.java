@@ -22,7 +22,7 @@ import bjc.utils.funcutils.FuncUtils;
  * @param <T>
  *            The type of the nodes in the graph
  */
-public class AdjacencyMap<T> {
+public class AdjacencyMap<T, W> {
 	/**
 	 * Create an adjacency map from a stream of text
 	 *
@@ -31,11 +31,11 @@ public class AdjacencyMap<T> {
 	 *
 	 * @return An adjacency map defined by the text
 	 */
-	public static AdjacencyMap<Integer> fromStream(final InputStream stream) {
+	public static AdjacencyMap<Integer, Integer> fromStream(final InputStream stream) {
 		if (stream == null) throw new NullPointerException("Input source must not be null");
 
 		/* Create the adjacency map. */
-		AdjacencyMap<Integer> adjacency;
+		AdjacencyMap<Integer, Integer> adjacency;
 
 		try (Scanner input = new Scanner(stream)) {
 			input.useDelimiter("\n");
@@ -79,7 +79,7 @@ public class AdjacencyMap<T> {
 	}
 
 	/* Read a row of edges. */
-	private static void readRow(final AdjacencyMap<Integer> adjacency,
+	private static void readRow(final AdjacencyMap<Integer, Integer> adjacency,
 			final int vertexCount, final Holder<Integer> row, final String strang) {
 		final String[] parts = strang.split(" ");
 
@@ -106,7 +106,7 @@ public class AdjacencyMap<T> {
 				throw imex;
 			}
 
-			adjacency.setWeight(row.getValue(), column, weight);
+			adjacency.setLabel(row.getValue(), column, weight);
 
 			column++;
 		}
@@ -115,7 +115,7 @@ public class AdjacencyMap<T> {
 	}
 
 	/** The backing storage of the map */
-	private final MapEx<T, MapEx<T, Integer>> adjacency = new FunctionalMap<>();
+	private final MapEx<T, MapEx<T, W>> adjacency = new FunctionalMap<>();
 
 	/**
 	 * Create a new map from a set of vertices
@@ -127,10 +127,10 @@ public class AdjacencyMap<T> {
 		if (vertices == null) throw new NullPointerException("Vertices must not be null");
 
 		vertices.forEach(vertex -> {
-			final MapEx<T, Integer> row = new FunctionalMap<>();
+			final MapEx<T, W> row = new FunctionalMap<>();
 
 			vertices.forEach(target -> {
-				row.put(target, 0);
+				row.put(target, null);
 			});
 
 			adjacency.put(vertex, row);
@@ -147,7 +147,7 @@ public class AdjacencyMap<T> {
 
 		adjacency.forEach((sourceKey, sourceValue) -> {
 			sourceValue.forEach((targetKey, targetValue) -> {
-				final int inverseValue = adjacency.get(targetKey).get().get(sourceKey).get();
+				final W inverseValue = adjacency.get(targetKey).get().get(sourceKey).get();
 
 				if (targetValue != inverseValue) result.replace(false);
 			});
@@ -157,16 +157,16 @@ public class AdjacencyMap<T> {
 	}
 
 	/**
-	 * Set the weight of an edge.
+	 * Set the label of an edge.
 	 *
 	 * @param source
 	 *               The source node of the edge.
 	 * @param target
 	 *               The target node of the edge.
-	 * @param weight
+	 * @param label
 	 *               The weight of the edge.
 	 */
-	public void setWeight(final T source, final T target, final int weight) {
+	public void setLabel(final T source, final T target, final W label) {
 		if (source == null)      throw new NullPointerException("Source vertex must not be null");
 		else if (target == null) throw new NullPointerException("Target vertex must not be null");
 
@@ -180,7 +180,7 @@ public class AdjacencyMap<T> {
 			throw new IllegalArgumentException(msg);
 		}
 
-		adjacency.get(source).get().put(target, weight);
+		adjacency.get(source).get().put(target, label);
 	}
 
 	/**
@@ -188,8 +188,8 @@ public class AdjacencyMap<T> {
 	 *
 	 * @return The new representation of this graph.
 	 */
-	public Graph<T> toGraph() {
-		final Graph<T> ret = new Graph<>();
+	public Graph<T, W> toGraph() {
+		final Graph<T, W> ret = new Graph<>();
 
 		adjacency.forEach((sourceKey, sourceValue) -> {
 			sourceValue.forEach((targetKey, targetValue) -> {
@@ -209,16 +209,14 @@ public class AdjacencyMap<T> {
 	public void toStream(final OutputStream sink) {
 		if (sink == null) throw new NullPointerException("Output source must not be null");
 
-		final PrintStream outputPrinter = new PrintStream(sink);
+		try (PrintStream outputPrinter = new PrintStream(sink)) {
+			adjacency.forEach((sourceKey, sourceValue) -> {
+				sourceValue.forEach((targetKey, targetValue) -> {
+					outputPrinter.printf("%d", targetValue);
+				});
 
-		adjacency.forEach((sourceKey, sourceValue) -> {
-			sourceValue.forEach((targetKey, targetValue) -> {
-				outputPrinter.printf("%d", targetValue);
+				outputPrinter.println();
 			});
-
-			outputPrinter.println();
-		});
-
-		outputPrinter.close();
+		}
 	}
 }
