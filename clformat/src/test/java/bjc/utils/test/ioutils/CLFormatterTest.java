@@ -28,7 +28,7 @@ public class CLFormatterTest {
 	}
 
 	@Test
-	public void testDecimalPrinting() {
+	public void testNumberPrinting() {
 		// Test decimal printing
 		assertEquals("5", format("~D", 5));
 		assertEquals("  5", format("~3D", 5));
@@ -36,6 +36,11 @@ public class CLFormatterTest {
 		assertEquals("6|55|35", format("~,,'|,2:D", 0xFFFF));
 	}
 
+	@Test
+	public void testDecimalPrinting() {
+		assertFormat("5.5", "~`D", 5.5);
+	}
+	
 	@Test
 	public void testRadixPrinting() {
 		// Test radix printing

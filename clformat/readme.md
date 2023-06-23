@@ -15,7 +15,7 @@ directive is always started with a ~, and consists of the following parts.
 
 ### Prefix parameters
 Prefix parameters are used to configure options for a directive. These include
-things the number of columns to print a field in, or what radix to print a
+things like the number of columns to print a field in, or what radix to print a
 number in. They are separated from each other by commas.
 
 A prefix parameter can be one of the following:
@@ -102,6 +102,7 @@ implemented, as well as a short description of what that directive does
 | (   | Case        | Perform case-manipulation on text |
 | \`[ | Inflection  | Perform inflection on a format string |
 | T   | Tabulate    | Print something in a table-like format |
+| \`D | General Decimal | Print numbers using a Java NumberFormat |
 
 The following are directives that are not valid to use outside of specific other
 directives

@@ -6,7 +6,7 @@
 ## Has two parts
 ## 1) The optional set of prefix parameters
 ## 2) The optional modifier
-## Captures three things
+## Captures three or four things
 ## 1) The prefix parameters
 ## 2) The modifiers
 ## 3) The directive name

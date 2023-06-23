@@ -1,6 +1,6 @@
 package bjc.utils.graph;
 
-import bjc.functypes.Container;
+import bjc.typeclasses.Container;
 
 /**
  * A directed algebraic graph

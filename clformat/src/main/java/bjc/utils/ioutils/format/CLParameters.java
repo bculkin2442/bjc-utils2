@@ -1,7 +1,10 @@
 package bjc.utils.ioutils.format;
 
 import java.util.*;
+import java.util.function.Function;
 
+import bjc.data.Pair;
+import bjc.data.TransformIterator;
 import bjc.esodata.*;
 import bjc.utils.parserutils.TokenUtils;
 
@@ -28,6 +31,8 @@ public class CLParameters {
 	private Map<String, CLValue> namedParams;
 	private Map<String, Integer> nameIndices;
 
+	private Set<String> nonNumberedParams;
+	
 	/**
 	 * Create a new set of blank CL format parameters.
 	 */
@@ -69,6 +74,9 @@ public class CLParameters {
 
 		this.namedParams = namedParams;
 		this.nameIndices = new HashMap<>();
+		this.nonNumberedParams = new HashSet<>();
+		
+		nonNumberedParams.addAll(namedParams.keySet());
 
 		abbrevWords = new HashSet<>();
 		nameAbbrevs = new AbbrevMap2();
@@ -135,7 +143,8 @@ public class CLParameters {
 		}
 
 		nameIndices.put(opt.toUpperCase(), idx);
-
+		nonNumberedParams.remove(opt);
+		
 		if (doRefresh) refreshAbbrevs();
 	}
 
@@ -175,7 +184,8 @@ public class CLParameters {
 	 */
 	public static CLParameters fromDirective(String unsplit) {
 		List<String> lParams = new ArrayList<>();
-
+		Set<String> nonIndexParams = new HashSet<>();
+		
 		StringBuilder currParm = new StringBuilder();
 
 		char prevChar = ' ';
@@ -246,12 +256,16 @@ public class CLParameters {
 				namedParams.put(paramName.toUpperCase(), actVal);
 
 				if (setIndex) parameters.add(actVal);
+				else          nonIndexParams.add(paramName);
 			} else {
 				parameters.add(parseParam(param));
 			}
 		}
 
-		return new CLParameters(parameters.toArray(new CLValue[0]), namedParams);
+		CLParameters retVal = new CLParameters(parameters.toArray(new CLValue[0]), namedParams);
+		retVal.nonNumberedParams = nonIndexParams;
+		
+		return retVal;
 	}
 
 	// Actually parse the value for a parameter
@@ -555,5 +569,16 @@ public class CLParameters {
 		sb.append("]");
 
 		return sb.toString();
+	}
+	
+	/**
+	 * Get an iterator over all of the named parameters not bound to an index.
+	 * 
+	 * @return The described iterator
+	 */
+	public Iterator<Pair<String, CLValue>> getNonNumberedParams() {
+		return new TransformIterator<>(nonNumberedParams.iterator(), (val) -> {
+			return Pair.pair(val, namedParams.get(val));
+		});
 	}
 }
