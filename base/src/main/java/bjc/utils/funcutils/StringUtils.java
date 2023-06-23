@@ -312,4 +312,32 @@ public class StringUtils {
 			String... splits) {
 		return LevelSplitter.def.levelSplit(phrase, keepDelims, splits);
 	}
+	
+	/**
+	 * Convert a string into a pseudorandom anagram.
+	 * 
+	 * Works by swapping each character in the string with a random one.
+	 * 
+	 * @param s The string to convert.
+	 * 
+	 * @return A pseudo-random anagram
+	 */
+	public static String strfry(String s) {
+		char[] chars = s.toCharArray();
+		
+		int strlen = chars.length;
+		Random rng = new Random();
+
+		for (int i = 0; i < strlen; i++) {
+			int randIdx = rng.nextInt(strlen);
+
+			char source = chars[i];
+			char dest = chars[randIdx];
+			
+			chars[i] = dest;
+			chars[randIdx] = source;
+		}
+		
+		return String.valueOf(chars);
+	}
 }
