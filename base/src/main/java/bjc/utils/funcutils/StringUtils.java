@@ -129,8 +129,7 @@ public class StringUtils {
 	 * @return The sequence as an English list.
 	 */
 	public static String toEnglishList(final Object[] objects, final boolean and) {
-		if (and) return toEnglishList(objects, "and");
-		else     return toEnglishList(objects, "or");
+		return and ? toEnglishList(objects, "and") : toEnglishList(objects, "or");
 	}
 
 	/** Count the number of graphemes in a string.
@@ -190,8 +189,7 @@ public class StringUtils {
 		int idx = strang.indexOf(until);
 
 		if (idx == -1) {
-			if (allowFail) return strang;
-			else           return null;
+			return allowFail ? strang : null;
 		}
 
 		return strang.substring(0, strang.indexOf(until));

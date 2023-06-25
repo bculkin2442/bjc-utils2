@@ -1,20 +1,11 @@
 package bjc.utils.graph;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 
-import bjc.data.Holder;
-import bjc.data.Identity;
-import bjc.funcdata.FunctionalMap;
-import bjc.funcdata.ListEx;
-import bjc.funcdata.MapEx;
+import bjc.funcdata.*;
 
 /**
  * A directed weighted graph, where the vertices have some arbitrary label.
@@ -23,6 +14,7 @@ import bjc.funcdata.MapEx;
  *
  * @param <VertexLabel>
  *            The label for vertices.
+ * @param <EdgeLabel> The label for edges
  */
 public class Graph<VertexLabel, EdgeLabel> {
 	/**

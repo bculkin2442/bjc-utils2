@@ -5,11 +5,21 @@ import java.util.*;
 import bjc.data.Holder;
 import bjc.data.Identity;
 
+/**
+ * General graph utilities
+ * @author bjcul
+ *
+ */
 public class Graphs {
 	/**
 	 * Uses Prim's algorithm to calculate a MST for the graph.
 	 *
 	 * If the graph is non-connected, this will lead to unpredictable results.
+	 * 
+	 * @param grap The graph to calculate MST for
+	 * @param comp The comparator for the edges
+	 * @param <T> The vertex type
+	 * @param <L> The edge type
 	 *
 	 * @return A list of edges that constitute the MST.
 	 */

@@ -21,6 +21,7 @@ import bjc.utils.funcutils.FuncUtils;
  *
  * @param <T>
  *            The type of the nodes in the graph
+ * @param <W> The type of the weights
  */
 public class AdjacencyMap<T, W> {
 	/**

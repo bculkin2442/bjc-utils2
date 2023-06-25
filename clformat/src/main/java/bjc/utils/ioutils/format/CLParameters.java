@@ -1,8 +1,6 @@
 package bjc.utils.ioutils.format;
 
 import java.util.*;
-import java.util.function.Function;
-
 import bjc.data.Pair;
 import bjc.data.TransformIterator;
 import bjc.esodata.*;
@@ -344,7 +342,8 @@ public class CLParameters {
 			//
 			// Consider whether we should throw an exception here.
 			if (idx < 0 || idx >= params.length) return null;
-			else                                 return params[idx];
+			
+			return params[idx];
 		}
 
 		return null;

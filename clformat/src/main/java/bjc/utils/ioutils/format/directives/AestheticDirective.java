@@ -104,7 +104,7 @@ class AestheticEdict implements Edict {
 		itemTape.right();
 	}
 
-	private String createPadding(
+	private static String createPadding(
 			StringBuilder work,
 			char padchar,
 			int mincol,

@@ -8,6 +8,7 @@ import java.util.Objects;
  * @author ben
  *
  * @param <T> The type of the nodes in the graph.
+ * @param <W> The type of the weight
  */
 public class Edge<T, W> {
 	/* The distance from initial to terminal node. */

@@ -5,7 +5,6 @@ import java.util.function.*;
 import java.util.regex.*;
 
 import bjc.data.*;
-import bjc.functypes.ID;
 import bjc.functypes.Unit;
 
 /**
