@@ -7,6 +7,12 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.*;
 
+/**
+ * Implementation of {@link Terminal} using {@link Reader} and {@link Writer}
+ * 
+ * @author bjcul
+ *
+ */
 public class StreamTerminal implements Terminal, Runnable {
 	private SortedSet<Long> pendingRequests;
 	private ConcurrentMap<Long, String> pendingReplies;
@@ -23,6 +29,12 @@ public class StreamTerminal implements Terminal, Runnable {
 
 	private long currentRequest = -1;
 
+	/**
+	 * Create a new stream terminal.
+	 * 
+	 * @param input The input source
+	 * @param output The output source
+	 */
 	public StreamTerminal(Reader input, Writer output) {
 		this.inputScanner = new Scanner(input);
 		this.output = output;

@@ -60,24 +60,22 @@ public class DelimSplitterCLI {
 	 * Run the tester interface.
 	 */
 	private void runLoop() {
-		final Scanner scn = new Scanner(System.in);
-
-		System.out.print("Enter a command (blank line to quit): ");
-		String inp = scn.nextLine().trim();
-		System.out.println();
-
-		while (!inp.equals("")) {
-			handleCommand(inp, scn, true);
-
-			System.out.println();
-
+		try (Scanner scn = new Scanner(System.in)) {
 			System.out.print("Enter a command (blank line to quit): ");
-			inp = scn.nextLine();
-
+			String inp = scn.nextLine().trim();
 			System.out.println();
-		}
 
-		scn.close();
+			while (!inp.equals("")) {
+				handleCommand(inp, scn, true);
+
+				System.out.println();
+
+				System.out.print("Enter a command (blank line to quit): ");
+				inp = scn.nextLine();
+
+				System.out.println();
+			}
+		}
 	}
 
 	/*
@@ -221,6 +219,8 @@ public class DelimSplitterCLI {
 		}
 
 		try (FileInputStream fis = new FileInputStream(pth)) {
+			@SuppressWarnings("resource")
+			// Handled by above
 			final Scanner scn = new Scanner(fis);
 
 			while (scn.hasNextLine()) {
