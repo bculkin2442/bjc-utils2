@@ -7,6 +7,8 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.*;
 
+import bjc.data.Either;
+
 /**
  * Implementation of {@link Terminal} using {@link Reader} and {@link Writer}
  * 
@@ -149,6 +151,24 @@ public class StreamTerminal implements Terminal, Runnable {
 				return pendingReplies.get(id);
 		}
 	}
+	
+	@Override
+	public Optional<String> awaitReply(long id, TimeUnit unit, long delay) throws InterruptedException {
+		if (pendingReplies.containsKey(id))
+			return Optional.of(pendingReplies.get(id));
+		while (true) {
+			replyLock.lock();
+			boolean stat = replyCondition.await(delay, unit);
+			replyLock.unlock();
+			
+			// If we timed out, say so
+			if (stat == false) return Optional.empty();
+			// Explanation: Since the reply map is add-only, the lock isn't actually
+			// protecting anything. We just want to wait until a response is received.
+			if (pendingReplies.containsKey(id))
+				return Optional.of(pendingReplies.get(id));
+		}
+	}
 
 	@Override
 	public Optional<String> checkReply(long id) {
@@ -160,5 +180,10 @@ public class StreamTerminal implements Terminal, Runnable {
 		return awaitReply(submitRequest(req));
 	}
 	
-	// TODO add variants of the two blocking methods above with timeout support
+	@Override
+	public Either<String, Long> submitRequestSync(String req, TimeUnit unit, long delay) throws InterruptedException {
+		long id = submitRequest(req);
+		Optional<String> rep = awaitReply(id, unit, delay);
+		return rep.isEmpty() ? Either.right(id) : Either.left(rep.get());
+	}
 }
