@@ -3,7 +3,8 @@ package bjc.utils.test.cli;
 import static org.junit.Assert.*;
 
 import java.io.*;
-import java.util.Scanner;
+import java.util.*;
+import java.util.function.Consumer;
 
 import org.junit.Test;
 
@@ -36,7 +37,10 @@ public class StreamTerminalTest {
 			InputStreamReader outPipeReader = new InputStreamReader(outPipeIn);
 			OutputStreamWriter outPipeWriter = new OutputStreamWriter(outPipeOut);
 
-			StreamTerminal terminal = new StreamTerminal(inPipeReader, outPipeWriter);
+			List<String> repList = new ArrayList<>();
+			Consumer<String> repAction = repList::add;
+			
+			StreamTerminal terminal = new StreamTerminal(inPipeReader, outPipeWriter, "/", repAction);
 
 			long reqID1 = terminal.submitRequest("Request 1");
 			long reqID2 = terminal.submitRequest("Request 2");
@@ -45,8 +49,9 @@ public class StreamTerminalTest {
 			assertEquals(1, reqID2);
 
 			inPipeWriter.write("r 0,A\n");
-			inPipeWriter.write("r 1,B\n");
-			inPipeWriter.write("q\n");
+			inPipeWriter.write("/r 0,A\n");
+			inPipeWriter.write("/r 1,B\n");
+			inPipeWriter.write("/q\n");
 			inPipeWriter.flush();
 			inPipeWriter.close();
 
@@ -75,6 +80,9 @@ public class StreamTerminalTest {
 			
 			assertEquals("A", terminal.awaitReply(reqID1));
 			assertEquals("B", terminal.awaitReply(reqID2));
+			
+			assertEquals(1, repList.size());
+			assertEquals("r 0,A", repList.get(0));
 		} catch (IOException ioex) {
 			throw new RuntimeException(ioex);
 		} catch (InterruptedException iex) {
